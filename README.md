@@ -1,3 +1,3 @@
-= Quick Cache =
+# Quick Cache
 
 Caching plugin for WordPress®.
