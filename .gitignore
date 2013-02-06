@@ -1,0 +1,21 @@
+# Version Control Systems
+# Git/Subversion
+.git
+.svn
+
+# JetBrains
+# WebStorm/PhpStorm
+.idea
+
+# Local Dev Files
+._*
+
+# Annoying PC Files
+desktop.ini
+ehthumbs.db
+Thumbs.db
+
+# Annoying Mac Files
+.Spotlight-V100
+.DS_Store
+.Trashes

@@ -1,0 +1,131 @@
+# Auto-Detect (Default)
+* text=auto
+
+# JS/CSS Files
+*.js text
+*.css text
+
+# HTML Files
+*.html text
+*.htm text
+
+# Template Files
+*.tmpl text
+*.tpl text
+
+# PHP Files
+*.php text
+*.php~ text
+*.php4 text
+*.php5 text
+*.php6 text
+*.x-php text
+*.inc text
+
+# ASP Files
+*.asp text
+*.aspx text
+
+# Perl Scripts
+*.pl text
+*.cgi text
+
+# XML Files
+*.xml text
+*.svg text
+
+# Config Files
+*.ini text
+*.cfg text
+*.conf text
+*.htaccess text
+*.htaccess-apache text
+*.htpasswd text
+
+# Translation Files
+*.pot text
+
+# Batch Scripts
+*.bat text
+
+# Shell Scripts
+*.sh text
+
+# Database Files
+*.csv text
+*.sql text
+*.sqlite text
+
+# Log Files
+*.log text
+
+# Text Files
+*.txt text
+
+# Markdown Files
+*.md text
+
+# Image Files
+*.ai binary
+*.psd binary
+*.pspimage binary
+*.blend binary
+*.eps binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.bmp binary
+*.tif binary
+*.tiff binary
+
+# Doc Files
+*.pdf binary
+*.doc binary
+*.docx binary
+*.odt binary
+*.rtf binary
+
+# Audio/Video Files
+*.mp3 binary
+*.wav binary
+*.swf binary
+*.fla binary
+*.flv binary
+*.mp4 binary
+*.webm binary
+*.ogg binary
+*.mov binary
+*.qt binary
+*.wma binary
+*.wmv binary
+*.avi binary
+*.mid binary
+*.midi binary
+
+# Executable Files
+*.class binary
+*.exe binary
+*.dll binary
+*.com binary
+*.so binary
+
+* Font Files
+*.ttf binary
+*.otf binary
+
+# Archive Files
+*.7z binary
+*.dmg binary
+*.rar binary
+*.iso binary
+*.jar binary
+*.zip binary
+*.tar binary
+*.gtar binary
+*.tgz binary
+*.gz binary
+
+# Binary Files
+*.bin binary
