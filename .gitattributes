@@ -5,9 +5,20 @@
 *.js text
 *.css text
 
-# HTML Files
+# HTML/XML Files
 *.html text
 *.htm text
+*.shtml text
+*.xml text
+*.svg text
+*.xml text
+*.dtd text
+*.xhtml text
+*.xsl text
+*.xslt text
+*.xsd text
+*.hta text
+*.htc text
 
 # Template Files
 *.tmpl text
@@ -30,10 +41,6 @@
 *.pl text
 *.cgi text
 
-# XML Files
-*.xml text
-*.svg text
-
 # Config Files
 *.ini text
 *.cfg text
@@ -41,6 +48,7 @@
 *.htaccess text
 *.htaccess-apache text
 *.htpasswd text
+*.admins text
 
 # Translation Files
 *.pot text
@@ -86,6 +94,7 @@
 *.docx binary
 *.odt binary
 *.rtf binary
+*.xls binary
 
 # Audio/Video Files
 *.mp3 binary

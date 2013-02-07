@@ -37,7 +37,7 @@ if (!class_exists ("c_ws_plugin__qcache_readmes"))
 								@ini_set ("pcre.backtrack_limit", 10000000);
 								/**/
 								if (!function_exists ("NC_Markdown"))
-									include_once dirname (dirname (__FILE__)) . "/_xtnls/markdown/nc-markdown.inc.php";
+									include_once dirname (dirname (__FILE__)) . "/externals/markdown/nc-markdown.inc.php";
 								/**/
 								$rm = file_get_contents ($path); /* Get readme.txt file contents. */
 								$mb = function_exists ("mb_convert_encoding") ? @mb_convert_encoding ($rm, "UTF-8", $GLOBALS["WS_PLUGIN__"]["qcache"]["c"]["mb_detection_order"]) : $rm;
