@@ -1,28 +1,47 @@
-# Local Dev Files
+# NOTE: It is not absolutely required (but highly recommended) that you have: `ignorecase = true`
+# in your `.gitconfig` file to maximize compatibility with some of these exclusion patterns.
+
+# Local Dev
 ._*
 
-# JetBrains
+# Backups
+*~
+*.bak
+
+# IntelliJ
 .idea/
+*.iml
+*.ipr
+*.iws
 
 # VC Systems
-.svn/
 CVS/
 .cvsignore
+.svn/
+_svn/
 .hg/
 .hgignore
+SCCS/
+RCS/
 
-# Annoying PC Files
-[Dd]esktop.ini
-[Ee][Hh][Tt]humbs.db
-[Tt]humbs.db
+# PC Files
 $RECYCLE.BIN/
+Desktop.ini
+Thumbs.db
+ehthumbs.db
 
-# Annoying Mac Files
+# Mac Files
 .Spotlight-V100
 .AppleDouble
 .LSOverride
-._.DS_Store
 .DS_Store
 .Trashes
-Icon
+Icon?
+!Icons
 ._*
+
+# For shell glob patterns. This includes GIT files too. We simply maintain this list together with `.gitignore`.
+# ._*;*~;*.bak;.idea;*.iml;*.ipr;*.iws;.git;.gitignore;.gitattributes;CVS;.cvsignore;.svn;_svn;.hg;.hgignore;SCCS;RCS;$RECYCLE.BIN;Desktop.ini;Thumbs.db;ehthumbs.db;.Spotlight-V100;.AppleDouble;.LSOverride;.DS_Store;.Trashes
+
+# This list is for IntelliJ IDEA / PhpStorm `File Types` configuration. Some files we actually WANT to work with as part of a project.
+# .idea;*.iml;*.ipr;*.iws;.git;CVS;.cvsignore;.svn;_svn;.hg;.hgignore;SCCS;RCS;$RECYCLE.BIN;Desktop.ini;Thumbs.db;ehthumbs.db;.Spotlight-V100;.AppleDouble;.LSOverride;.DS_Store;.Trashes
