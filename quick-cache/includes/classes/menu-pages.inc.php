@@ -284,7 +284,7 @@ if(!class_exists("c_ws_plugin__qcache_menu_pages"))
 								wp_enqueue_script("jquery-sprintf", $GLOBALS["WS_PLUGIN__"]["qcache"]["c"]["dir_url"]."/includes/jquery/jquery.sprintf/jquery.sprintf-min.js", array("jquery"), c_ws_plugin__qcache_utilities::ver_checksum());
 								wp_enqueue_script("jquery-json-ps", $GLOBALS["WS_PLUGIN__"]["qcache"]["c"]["dir_url"]."/includes/jquery/jquery.json-ps/jquery.json-ps-min.js", array("jquery"), c_ws_plugin__qcache_utilities::ver_checksum());
 								wp_enqueue_script("jquery-ui-effects", $GLOBALS["WS_PLUGIN__"]["qcache"]["c"]["dir_url"]."/includes/jquery/jquery.ui-effects/jquery.ui-effects-min.js", array("jquery", "jquery-ui-core"), c_ws_plugin__qcache_utilities::ver_checksum());
-								wp_enqueue_script("ws-plugin--qcache-menu-pages", site_url("/?ws_plugin__qcache_menu_pages_js=".urlencode(mt_rand())), array("jquery", "thickbox", "media-upload", "jquery-sprintf", "jquery-json-ps", "jquery-ui-core", "jquery-ui-effects"), c_ws_plugin__qcache_utilities::ver_checksum());
+								wp_enqueue_script("ws-plugin--qcache-menu-pages", home_url("/?ws_plugin__qcache_menu_pages_js=".urlencode(mt_rand())), array("jquery", "thickbox", "media-upload", "jquery-sprintf", "jquery-json-ps", "jquery-ui-core", "jquery-ui-effects"), c_ws_plugin__qcache_utilities::ver_checksum());
 								/**/
 								do_action("ws_plugin__qcache_during_add_admin_scripts", get_defined_vars());
 							}
@@ -304,7 +304,7 @@ if(!class_exists("c_ws_plugin__qcache_menu_pages"))
 						if($_GET["page"] && preg_match("/ws-plugin--qcache-/", $_GET["page"]))
 							{
 								wp_enqueue_style("thickbox");
-								wp_enqueue_style("ws-plugin--qcache-menu-pages", site_url("/?ws_plugin__qcache_menu_pages_css=".urlencode(mt_rand())), array("thickbox"), c_ws_plugin__qcache_utilities::ver_checksum(), "all");
+								wp_enqueue_style("ws-plugin--qcache-menu-pages", home_url("/?ws_plugin__qcache_menu_pages_css=".urlencode(mt_rand())), array("thickbox"), c_ws_plugin__qcache_utilities::ver_checksum(), "all");
 								/**/
 								do_action("ws_plugin__qcache_during_add_admin_styles", get_defined_vars());
 							}
