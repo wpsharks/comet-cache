@@ -1,7 +1,7 @@
 === Quick Cache (Speed Without Compromise) ===
 
-Stable tag: 131031
-Requires at least: 3.3
+Stable tag: 131108
+Requires at least: 3.7
 Tested up to: 3.7.1
 Text Domain: quick-cache
 
@@ -16,7 +16,7 @@ Speed up your site ~ BIG Time! - If you care about the speed of your site, Quick
 
 == Installation ==
 
-**Quick Tip:** WordPress® can only deal with one cache plugin being activated at a time. Please uninstall any existing cache plugins that you've tried in the past. In other words, if you've installed W3 Total Cache, WP Super Cache, DB Cache Reloaded, or any other caching plugin, uninstall them all before installing Quick Cache. One way to check, is to make sure this file: `/wp-content/advanced-cache.php` is NOT present; and if it does exist, delete it before installing Quick Cache. That file will ONLY be present if you have a cache plugin already installed. If you don't see it, you're good.
+**Quick Tip:** WordPress® can only deal with one cache plugin being activated at a time. Please uninstall any existing cache plugins that you've tried in the past. In other words, if you've installed W3 Total Cache, WP Super Cache, DB Cache Reloaded, or any other caching plugin, uninstall them all before installing Quick Cache. One way to check, is to make sure this file: `wp-content/advanced-cache.php` and/or `wp-content/object-cache.php` are NOT present; and if they are, delete these files BEFORE installing Quick Cache. Those files will only be present if you have a caching plugin already installed. If you don't see them, you're ready to install Quick Cache :-).
 
 **Quick Cache is very easy to install (follow these instructions):**
 
@@ -26,11 +26,11 @@ Speed up your site ~ BIG Time! - If you care about the speed of your site, Quick
 
 **How do I know that Quick Cache is working?**
 
-First of all, make sure that you've enabled Quick Cache. After you activate the plugin, go to the Quick Cache options panel and enable it, then scroll to the bottom and click Save All Changes. All of the other options on that page are already pre-configured for typical usage. Skip them all for now. You can go back through all of them later and fine-tune things the way you like them.
+First of all, make sure that you've enabled Quick Cache. After you activate the plugin in WordPress, go to the Quick Cache options panel and enable caching (you can't miss the big yellow checkbox). Then scroll to the bottom and click Save All Changes. All of the other options on that page are already pre-configured for typical usage. Skip them all for now. You can go back through all of these later and fine-tune things the way you like them.
 
-Once Quick Cache has been enabled, **you'll need to log out**. Cache files are NOT served to visitors who are logged in, and that includes you too :-) Cache files are NOT served to recent commenters either. If you've commented (or replied to a comment lately); please clear your browser cookies before testing.
+Once Quick Cache has been enabled, **you'll need to log out** (and/or clear browser cookies). Cache files are NOT served to visitors who are logged in, and that includes you too :-) Cache files are NOT served to recent commenters either. If you've commented (or replied to a comment lately); please clear your browser cookies before testing.
 
-To verify that Quick Cache is working, navigate your site like a normal visitor would. Right-click on any page (choose View Source), then scroll to the very bottom of the document. At the bottom, you'll find comments that show Quick Cache stats and information. You should also notice that page-to-page navigation is lightning fast compared to what you experienced prior to installing Quick Cache.
+**To verify that Quick Cache is working**, navigate your site like a normal visitor would. Right-click on any page (choose View Source), then scroll to the very bottom of the document. At the bottom, you'll find comments that show Quick Cache stats and information. You should also notice that page-to-page navigation is lightning fast compared to what you experienced prior to installing Quick Cache.
 
 **Running Quick Cache On A WordPress® Multisite Installation**
 
@@ -40,7 +40,7 @@ WordPress® Multisite Networking is a special consideration in WordPress®. If Q
 
 If you care about the speed of your site, Quick Cache is one of those plugins that you absolutely MUST have installed :-) Quick Cache takes a real-time snapshot (building a cache) of every Page, Post, Category, Link, etc. These snapshots are then stored (cached) intuitively, so they can be referenced later, in order to save all of that processing time that has been dragging your site down and costing you money.
 
-The Quick Cache plugin uses configuration options that you select from the options panel. See: `Quick Cache -› Options` in your Dashboard. Once a file has been cached, Quick Cache uses advanced techniques that allow it to recognize when it should and should not serve a cached version of the file. The decision engine that drives these techniques is under your complete control through options on the back-end. By default, Quick Cache does not serve cached pages to users who are logged in, or to users who have left comments recently. Quick Cache also excludes administrative pages, login pages, POST/PUT/GET requests, CLI processes, and any additional User-Agents; or other special pattern matches that you want to add.
+The Quick Cache plugin uses configuration options that you select from the options panel. See: `Quick Cache -› Options` in your Dashboard. Once a file has been cached, Quick Cache uses advanced techniques that allow it to recognize when it should and should not serve a cached version of the file. By default, Quick Cache does not serve cached pages to users who are logged in, or to users who have left comments recently. Quick Cache also excludes administrative pages, login pages, POST/PUT/DELETE/GET(w/ query string) requests and/or CLI processes.
 
 == Screenshots ==
 
@@ -66,9 +66,9 @@ Quick Cache is extremely reliable, because it runs completely in PHP code, and d
 
 In addition, Quick Cache actually sends a no-cache header (yes, a no-cache header); which allows it to remain in control at all times. It might seem weird that a caching plugin would send a no-cache header :-). Well, no-cache headers are a key component in this plugin, and they will NOT affect performance negatively. On the contrary, this is how the system can accurately serve cache files to public users vs. users who are logged-in, commenters, etc.
 
-If you care about the speed of your site, Quick Cache is one of those plugins that you absolutely MUST have installed :-) Quick Cache takes a real-time snapshot (building a cache) of every Post, Page, Category, Link, etc. These snapshots are then stored (cached) intuitively, so they can be referenced later, in order to save all of that processing time that has been dragging your site down and costing you money.
+If you care about the speed of your site, Quick Cache is one of those plugins that you absolutely MUST have installed :-) Quick Cache takes a real-time snapshot (building a cache) of every Page, Post, Category, Link, etc. These snapshots are then stored (cached) intuitively, so they can be referenced later, in order to save all of that processing time that has been dragging your site down and costing you money.
 
-The Quick Cache plugin uses configuration options that you select from the options panel. See: `Quick Cache -› Options` in your Dashboard. Once a file has been cached, Quick Cache uses advanced techniques that allow it to recognize when it should and should not serve a cached version of the file. The decision engine that drives these techniques is under your complete control through options on the back-end. By default, Quick Cache does not serve cached pages to users who are logged in, or to users who have left comments recently. Quick Cache also excludes administrative pages, login pages, POST/PUT/GET requests, CLI processes, and any additional User-Agents; or other special pattern matches that you want to add.
+The Quick Cache plugin uses configuration options that you select from the options panel. See: `Quick Cache -› Options` in your Dashboard. Once a file has been cached, Quick Cache uses advanced techniques that allow it to recognize when it should and should not serve a cached version of the file. By default, Quick Cache does not serve cached pages to users who are logged in, or to users who have left comments recently. Quick Cache also excludes administrative pages, login pages, POST/PUT/DELETE/GET(w/ query string) requests and/or CLI processes.
 
 == Running Quick Cache On A WordPress® Multisite Installation ==
 
@@ -97,9 +97,9 @@ If your installation of Apache does not have `mod_deflate` installed. You can al
 = How do I know that Quick Cache is working the way it should be? =
 First of all, make sure that you've enabled Quick Cache. After you activate the plugin, go to the Quick Cache options panel and enable it, then scroll to the bottom and click Save All Changes. All of the other options on that page are already pre-configured for typical usage. Skip them all for now. You can go back through all of them later and fine-tune things the way you like them.
 
-Once Quick Cache has been enabled, **you'll need to log out**. Cache files are NOT served to visitors who are logged in, and that includes you too :-) Cache files are NOT served to recent commenters either. If you've commented (or replied to a comment lately); please clear your browser cookies before testing.
+Once Quick Cache has been enabled, **you'll need to log out** (and/or clear browser cookies). Cache files are NOT served to visitors who are logged in, and that includes you too :-) Cache files are NOT served to recent commenters either. If you've commented (or replied to a comment lately); please clear your browser cookies before testing.
 
-To verify that Quick Cache is working, navigate your site like a normal visitor would. Right-click on any page (choose View Source), then scroll to the very bottom of the document. At the bottom, you'll find comments that show Quick Cache stats and information. You should also notice that page-to-page navigation is lightning fast compared to what you experienced prior to installing Quick Cache.
+**To verify that Quick Cache is working**, navigate your site like a normal visitor would. Right-click on any page (choose View Source), then scroll to the very bottom of the document. At the bottom, you'll find comments that show Quick Cache stats and information. You should also notice that page-to-page navigation is lightning fast compared to what you experienced prior to installing Quick Cache.
 
 = What is the down side to running Quick Cache? =
 There is NOT one! Quick Cache is a MUST HAVE for every WordPress® powered site. In fact, we really can't think of any site running WordPress® that would want to be without it. To put it another way, the WordPress® software itself comes with a built in action reference for an `advanced-cache.php` file, because WordPress® developers realize the importance of such as plugin. The `/wp-content/advanced-cache.php` file is named as such, because the WordPress® developers expect it to be there when caching is enabled by a plugin. If you don't have the `/wp-content/advanced-cache.php` file yet, it is because you have not enabled Quick Cache from the options panel yet.
@@ -110,9 +110,9 @@ To understand how Quick Cache works, first you have to understand what a cached 
 In computer science, a cache (pronounced /kash/) is a collection of data duplicating original values stored elsewhere or computed earlier, where the original data is expensive to fetch (owing to longer access time) or to compute, compared to the cost of reading the cache. In other words, a cache is a temporary storage area where frequently accessed data can be stored for rapid access. Once the data is stored in the cache, it can be used in the future by accessing the cached copy rather than re-fetching or recomputing the original data.
 
 = Where & why are the cache files stored on my server? =
-The cache files are stored in a special directory: `/wp-content/cache/`. This directory needs to remain writable, just like the `/wp-content/uploads` directory on many WordPress® installations. The `/cache` directory is where MD5 hash files reside. These files are named (with an MD5 hash) according to your MD5 Version Salt and the `HTTP_HOST/REQUEST_URI`. Please see: `Quick Cache -› Options -› MD5 Version Salt` for further details.
+The cache files are stored in a special directory: `/wp-content/cache/`. This directory needs to remain writable, just like the `/wp-content/uploads` directory on many WordPress® installations. The `/cache` directory is where MD5 hash files reside. These files are named (with an MD5 hash) based on `HTTPS/HTTP_HOST/REQUEST_URI`. See also: `Dashboard -› Quick Cache -› Cache Directory/Expiration Time` for further details.
 
-Whenever a request comes in from someone on the web, Quick Cache checks to see if it can serve a cached file, it looks at your MD5 Version Salt, it looks at the `HTTP_HOST/REQUEST_URI`, then it checks the `/cache` directory. If a cache file has been built already, and it matches your `Salt.HTTP_HOST.REQUEST_URI` combination, and it is not too old (see: `Quick Cache -› Options -› Expiration`), then it will serve that file instead of asking WordPress® to regenerate it. This adds tremendous speed to your site and reduces server load.
+Whenever a request comes in from someone on the web, Quick Cache checks to see if it can serve a cached file; e.g. it looks at the `HTTPS/HTTP_HOST/REQUEST_URI` environent variables, then it checks the `/cache` directory. If a cache file has been built already, and it matches an existing `HTTPS.HTTP_HOST.REQUEST_URI` combination; and it is not too old (see: `Dashboard -› Quick Cache -› Cache Directory/Expiration Time`), then it will serve that file instead of asking WordPress® to regenerate it. This adds tremendous speed to your site and reduces server load.
 
 If you have GZIP compression enabled, then the cache file is also sent to the browser with compression (recommended). Modern web browsers that support this technique will definitely take advantage of it. After all, if it is easier to email a zip file, it's also easier to download a web page that way. That is why on-the-fly GZIP compression for web pages is recommended. This is supported by all modern browsers.
 
@@ -131,15 +131,12 @@ If you want to enable GZIP, create an `.htaccess` file in your WordPress® insta
 If your installation of Apache does not have `mod_deflate` installed. You can also enable GZIP compression using PHP configuration alone. In your `php.ini` file, you can simply add the following line anywhere: `zlib.output_compression = on`
 
 = What happens if a user logs in? Are cache files used then? =
-The decision engine that drives these techniques is under your complete control through options on the back-end. By default, Quick Cache does not serve cached pages to users who are logged in, or users who have left comments recently. Quick Cache also excludes administrative pages, login pages, POST/PUT/GET requests, CLI processes, and any additional User-Agents; or special pattern matches that you want to add. POST requests should never be cached. A CLI request is one that comes from the command line; commonly used by CRON jobs and other automated routines.
+By default, Quick Cache does NOT serve cached pages to users who are logged in, or to users who have left comments recently. Quick Cache also excludes administrative pages, login pages, POST/PUT/DELETE/GET(w/ query string) requests and/or CLI processes. That being said, the Pro version of Quick Cache DOES make it possible to cache pages even when users ARE logged-in; adding even more speed! This is particularly helpful on membership sites; e.g. sites that run plugins like s2Member™ for instance.
 
 = Will comments and other dynamic parts of my blog update immediately? =
-It depends on your configuration of Quick Cache. There is an automatic expiration system (the garbage collector), which runs through WordPress® behind-the-scene, according to your Expiration setting (see: `Quick Cache -› Options -› Expiration`). There is also a built-in expiration time on existing files that is checked before any cache file is served up, which also uses your Expiration setting. In addition; whenever you update a Post or a Page, Quick Cache can automatically prune that particular file from the cache so it instantly becomes fresh again. Otherwise, your visitors would need to wait for the previous cached version to expire. (see: `Quick Cache -› Options -› Dynamic Cache Pruning`).
+It depends on your configuration of Quick Cache. There is an automatic expiration system (the garbage collector), which runs through WordPress® behind-the-scene, according to your Expiration setting (see: `Dashboard -› Quick Cache -› Cache Directory/Expiration Time`). There is also a built-in expiration time on existing files that is checked before any cache file is served up, which also uses your Expiration setting. In addition; whenever you update a Post or a Page, Quick Cache can automatically prune that particular file from the cache so it instantly becomes fresh again. Otherwise, your visitors would need to wait for the previous cached version to expire.
 
-By default, Quick Cache does not serve cached pages to users who are logged in, or to users who have left comments recently. Quick Cache also excludes administrative pages, login pages, POST/PUT/GET requests, CLI processes, and any additional User-Agents; or special pattern matches that you want to add. POST requests should never be cached. A CLI request is one that comes from the command line; commonly used by CRON jobs and other automated routines.
-
-= Can I customize the way cache files are stored & served up? =
-Quick Cache provides you with the ability to customize the Salt used in MD5 hash generation for cache storage, and that directly affects the way they are served also. The ability to customize the Salt used in cache storage is important to advanced webmasters. Some sites offer unique services and serve special versions of certain files across different devices. The ability to control how different versions of pages are cached, is critical to advanced webmasters that need to tweak everything and customize the caching engine to their specific needs. See: `Quick Cache -› Options -› MD5 Version Salt` for further details. If you don't understand what a Salt is, or what an MD5 hash is, that is 100% ok :-) If you don't understand what it is, you probably don't need it. That simple :-) Using a custom Salt is a very advanced technique and it is NOT required to benefit from speed enhancements provided by Quick Cache.
+By default, Quick Cache does NOT serve cached pages to users who are logged in, or to users who have left comments recently. Quick Cache also excludes administrative pages, login pages, POST/PUT/DELETE/GET(w/ query string) requests and/or CLI processes.
 
 = How do I enable GZIP compression? Is GZIP supported? =
 There is no need to use an `.htaccess` file with this plugin; caching is handled by WordPress®/PHP alone. That being said, if you also want to take advantage of GZIP compression (and we do recommend this), then you WILL need an `.htaccess` file to accomplish that part. This plugin fully supports GZIP compression on its output. However, it does not handle GZIP compression directly. We purposely left GZIP compression out of this plugin, because GZIP compression is something that should really be enabled at the Apache level or inside your `php.ini` file. GZIP compression can be used for things like JavaScript and CSS files as well, so why bother turning it on for only WordPress-generated pages when you can enable GZIP at the server level and cover all the bases!
@@ -157,24 +154,6 @@ If you want to enable GZIP, create an `.htaccess` file in your WordPress® insta
 	</IfModule>
 
 If your installation of Apache does not have `mod_deflate` installed. You can also enable gzip compression using PHP configuration alone. In your `php.ini` file, you can simply add the following line anywhere: `zlib.output_compression = on`
-
-= How can I serve a different set of cache files to iPhone users? =
-Set your MD5 Version Salt to the following:
-
-	(stripos($_SERVER['HTTP_USER_AGENT'], 'iphone') !== FALSE) ? 'IPHONES' : '')
-
-This effectively creates two versions of the cache. When iPhones are detected, Quick Cache will prepend `IPHONES` to the `HTTP_HOST.REQUEST_URI`, before it generates the MD5 hash for storage.
-
-= How can I serve a different set of cache files based on a cookie? =
-Set your MD5 Version Salt to the following:
-
-	(!empty($_COOKIE['my_cookie']) && stripos($_COOKIE['my_cookie'], 'BlueLizards') !== FALSE) ? 'BlueLizards' : '')
-
-This effectively creates two versions of the cache. When `my_cookie` contains `BlueLizards`, Quick Cache will prepend `BlueLizards` to the `HTTP_HOST.REQUEST_URI`, before it generates the MD5 hash for storage. Another, even simpler way to handle this, would be to use the value of a specific cookie to generate multiple variations of the cache. So instead of the ternary expression shown above, you would simply set your Version Salt to:
-
-`(string)@$_COOKIE['my_cookie']`
-
-The value of `$_COOKIE['my_cookie']` is what would be used as your Version Salt. It would even be OK if `$_COOKIE['my_cookie']` was equal to an empty string. In that case the default version of the cache would be used.
 
 = I'm a plugin developer. How can I prevent certain files from being cached? =
 	define('QUICK_CACHE_ALLOWED', FALSE); // The easiest way.
@@ -194,13 +173,24 @@ That being said, you could set this to just `60 seconds` and you would still see
 
 == Upgrade Notice ==
 
-= v131031 =
-The latest version is a complete rewrite. The same functionality, but with significant changes to the underlying codebase.
+= v131108 =
+The latest version of Quick Cache is a complete rewrite. Faster! and even more dependable. NOTE: the free version of Quick Cache (this new LITE version); while it remains fully functional and is more-than-adequate for most sites; is now limited in some ways. The following advanced features from the previous release are no longer available in the lite version: a custom MD5 Version Salt, custom Exclusion Patterns, a Clear Cache button in admin bar. These, and MANY other brand new features are now available only in the pro version of the plugin. For further details, please see: <http://www.websharks-inc.com/r/quick-cache-pro/>.
 
 == Changelog ==
 
-= 131031 =
-* A complete rewrite. The same functionality, but with significant changes to the underlying codebase.
+= 131108 =
+* Updated to support all features and functionality of WordPress v3.7+ (this new release of Quick Cache requires WordPress v3.7+). The Quick Cache plugin is now being actively maintained and future updates and improvements will be released periodically by lead developer Jason Caldwell. The popularity of this plugin and recent acknowldegments at WordCamp in Boston have inspired Jason to revamp Quick Cache!
+* The latest version of Quick Cache is a complete rewrite. Faster! and even more dependable. NOTE: the free version of Quick Cache (this new LITE version); while it remains fully functional and is more-than-adequate for most sites; is now limited in some ways. The following advanced features from the previous release are no longer available in the lite version: a custom MD5 Version Salt; custom Exclusion Patterns; the Clear Cache button in the admin bar. These, and MANY other brand new features are now available only in the pro version of the plugin. For further details, please see: <http://www.websharks-inc.com/r/quick-cache-pro/>.
+* Bug fix. Quick Cache now considers the `HTTPS` evironment variable in order to prevent cache collisions on sites that serve pages over SSL. Nothing to configure, this is now built into the Quick Cache engine.
+* UI updates. An improved user interface makes configuring this plugin a dream! Quick Cache got an awesome makeover in this release.
+* Improved support for multisite networks. It's never been easier to run Quick Cache on a multisite network. For further details, please see: `Dashboard -› Network Admin -› Quick Cache` when/if you have Multisite Networking enabled in WordPress.
+* Update; PUT and DELETE requests are now considered by Quick Cache. By default, Quick Cache does NOT serve cached pages to users who are logged in, or to users who have left comments recently. Quick Cache also excludes administrative pages, login pages, POST/PUT/DELETE/GET(w/ query string) requests and/or CLI processes.
+* Dropping support for `ob_gzhandler()`; and the like. Quick Cache will now throw PHP exceptions to warn you about this should it be an issue in your hosting environment. If you want to enable GZIP, please follow the instructions provided by Quick Cache and avoid the use of `ob_gzhandler()` as this is not a recommended way to enable GZIP on any hosting platform.
+* Truly atomic cache file write updates. Removing support for SEM vs. FLOCK for file locking. Quick Cache no longer needs a mutex file. Cache file updates are written to a temp file and renamed for the best reliability and improved speed too!
+* Localization. Quick Cache is now translatable. This release adds support for gettext translations, a very popular method for translating WordPress plugins. All parts of the Quick Cache plugin can be localized now. The source code was updated with calls to the `__` function and a new text domain was added: `quick-cache`. PO translation files should be placed in your plugins directory, example: `/wp-content/plugins/quick-cache-en_US.mo`; or in `WP_LANG_DIR/plugins/quick-cache-en_US.mo`.
+* Capability requirement. This release of Quick Cache requires that an Administrator be logged-in with the Capability of `activate_plugins`. This is a default Capability that comes with the Administrator Role in WordPress. So, unless you've modified your WordPress Roles/Capabilities in some extremely creative way, this should not impact you; just something to be aware of.
+* **(Pro Version)** There is now a pro version of this plugin available. Please see: <http://www.websharks-inc.com/r/quick-cache-pro/>. The initial set of pro features include: the ability to cache logged-in users (VERY powerful, particularly for membership sites); a new improved "Clear Cache" button in the admin bar (along with an option to enable/disable this feature); the ability to disable Dashboard notifications related to automatic clearing/purging on change detections; Import/Export functionality for Quick Cache configuration files; URI exclusion patterns (now supporting wildcards); User-Agent exclusion patterns (now supporting wildcards); HTTP referrer exclusion patterns (now supporting wildcards); an MD5 Version Salt; and the ability to get support from lead developer Jason Caldwell if you're having trouble with any of these features.
+* **(Pro Version)** Regarding URI/User-Agent/HTTP Referrer exclusion patterns. If you configured any of these options in the previous release and would like to continue to use them in this release, please upgrade to the pro version or contact lead developer Jason Caldwell for assistance. Note: if you had these options configured in the previous release, once you upgrade to the pro version they will come back just like they were. Either that, or you may choose to continue using the previous version of Quick Cache where this functionality still exists.
 
 = 111203 =
 * Updated to support WordPress® v3.3. Backward compatibily remains for WordPress® v3.2.x.
