@@ -17,6 +17,13 @@ namespace quick_cache // Root namespace.
 		if(!defined('WPINC')) // MUST have WordPress.
 			exit('Do NOT access this file directly: '.basename(__FILE__));
 
+		if(class_exists('\\'.__NAMESPACE__.'\\plugin'))
+			return add_action('all_admin_notices', function () // Do NOT load in this case.
+				{
+					echo '<div class="error"><p>'. // Running multiple versions of this plugin at same time.
+					     __('Please disable the LITE version of Quick Cache before you activate the PRO version.',
+					        str_replace('_', '-', __NAMESPACE__)).'</p></div>';
+				});
 		class plugin // Base plugin class.
 		{
 			public $version = '131108'; // See: `readme.txt` file.
