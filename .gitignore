@@ -40,8 +40,11 @@ Icon?
 !Icons
 ._*
 
+# Amazon Web Services
+.elasticbeanstalk/
+
 # For shell glob patterns. This includes GIT files too. We simply maintain this list together with `.gitignore`.
-# ._*;*~;*.bak;.idea;*.iml;*.ipr;*.iws;.git;.gitignore;.gitattributes;CVS;.cvsignore;.svn;_svn;.hg;.hgignore;SCCS;RCS;$RECYCLE.BIN;Desktop.ini;Thumbs.db;ehthumbs.db;.Spotlight-V100;.AppleDouble;.LSOverride;.DS_Store;.Trashes
+# ._*;*~;*.bak;.idea;*.iml;*.ipr;*.iws;.git;.gitignore;.gitattributes;CVS;.cvsignore;.svn;_svn;.hg;.hgignore;SCCS;RCS;$RECYCLE.BIN;Desktop.ini;Thumbs.db;ehthumbs.db;.Spotlight-V100;.AppleDouble;.LSOverride;.DS_Store;.Trashes;.elasticbeanstalk
 
 # This list is for IntelliJ IDEA / PhpStorm `File Types` configuration. Some files we actually WANT to work with as part of a project.
 # .idea;*.iml;*.ipr;*.iws;.git;CVS;.cvsignore;.svn;_svn;.hg;.hgignore;SCCS;RCS;$RECYCLE.BIN;Desktop.ini;Thumbs.db;ehthumbs.db;.Spotlight-V100;.AppleDouble;.LSOverride;.DS_Store;.Trashes

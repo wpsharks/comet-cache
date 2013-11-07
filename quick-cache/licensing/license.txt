@@ -1,27 +1,23 @@
-Copyright: © 2009 WebSharks, Inc. ( coded in the USA )
-<mailto:support@websharks-inc.com> <http://www.websharks-inc.com/>
+Copyright: © 2013 WebSharks, Inc. (coded in the USA)
+<mailto:support@websharks-inc.com> <http://www.websharks-inc.com>
 
 Released under the terms of the GNU General Public License.
 <http://www.gnu.org/licenses/> - attached as [gpl.txt].
 
-Credits / Additional Acknowledgments:
+#### Credits / Additional Acknowledgments
 
 * Software designed for WordPress®.
 	- GPL License <http://codex.wordpress.org/GPL>
 	- WordPress® <http://wordpress.org>
 
-* JavaScript extensions require jQuery.
-	- GPL License <http://jquery.org/license>
+* Some JavaScript extensions require jQuery.
+	- GPL-Compatible License <http://jquery.org/license>
 	- jQuery <http://jquery.com/>
 
-* Readme parsing routines, powered (in part) by PHP Markdown.
-	- BSD / GPL Compatible License <http://michelf.com/projects/php-markdown/license/>
-	- PHP Markdown <http://michelf.com/projects/php-markdown/>
+* CSS framework and some JavaScript functionality provided by Bootstrap.
+	- GPL-Compatible License <http://getbootstrap.com/getting-started/#license-faqs>
+	- Bootstrap <http://getbootstrap.com/>
 
-* Administration panel (tools icon) was provided by Everaldo.com.
-	- LGPL License <http://www.everaldo.com/crystal/?action=license>
-	- Everaldo <http://www.everaldo.com/crystal/?action=downloads>
-
-* Administration panel (videos icon) was provided by David Vignoni.
-	- LGPL License <http://www.iconfinder.com/search/?q=iconset%3Anuvola2>
-	- David Vignoni <http://www.icon-king.com/>
+* Icons provided by Font Awesome.
+	- GPL-Compatible License <http://fortawesome.github.io/Font-Awesome/license/>
+	- Font Awesome <http://fortawesome.github.io/Font-Awesome/>
