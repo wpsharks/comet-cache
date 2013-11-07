@@ -16,6 +16,7 @@ Menu page styles.
 {
 	font-size     : 14px;
 	padding       : 25px;
+	min-width     : 800px;
 	margin        : 25px 25px 25px 5px;
 
 	border-radius : 5px;
