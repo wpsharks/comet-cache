@@ -48,6 +48,8 @@ Menu page styles.
 	font-size     : 90%;
 	color         : #EEEEEE;
 	background    : #222222;
+	overflow-x    : auto;
+	max-width     : 100%;
 
 	border-radius : 5px;
 	padding       : 10px;
