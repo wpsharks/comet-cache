@@ -314,9 +314,9 @@ Panel styles.
 }
 .pro-preview .plugin-menu-page-panel-heading:after
 {
-	content      : 'pro' !important;
 	font-variant : small-caps !important;
 	font-family  : sans-serif !important;
+	content      : 'pro version only' !important;
 }
 .plugin-menu-page-panel-body
 {
