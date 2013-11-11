@@ -207,8 +207,11 @@ Menu page styles.
 }
 .plugin-menu-page .monospace
 {
-	white-space : nowrap;
 	font-family : 'Monaco', 'Menlo', 'Consolas', 'Courier New', monospace;
+}
+.plugin-menu-page textarea.monospace
+{
+	white-space : pre;
 }
 .plugin-menu-page .clearfix:before,
 .plugin-menu-page .clearfix:after
