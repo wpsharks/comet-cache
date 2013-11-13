@@ -512,7 +512,7 @@ namespace quick_cache // Root namespace.
 
 							$cache_dir = ABSPATH.$this->options['cache_dir'];
 
-							if(!is_file($cache_dir.'/qc-advanced-cache.time'))
+							if(!is_file($cache_dir.'/qc-advanced-cache'))
 								$this->add_advanced_cache();
 						}
 
@@ -563,7 +563,7 @@ namespace quick_cache // Root namespace.
 							if(!file_put_contents($advanced_cache_file, $advanced_cache_contents))
 								return FALSE; // Failure; could not write file.
 
-							if(!file_put_contents($cache_dir.'/qc-advanced-cache.time', time()))
+							if(!file_put_contents($cache_dir.'/qc-advanced-cache', time()))
 								return FALSE; // Failure; could not write cache entry.
 
 							return TRUE; // All done :-)
