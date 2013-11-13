@@ -94,6 +94,7 @@ namespace quick_cache // Root namespace.
 
 							$this->cap = apply_filters(__METHOD__.'__cap', 'activate_plugins');
 
+							add_action('init', array($this, 'check_advanced_cache'));
 							add_action('wp_loaded', array($this, 'actions'));
 
 							add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_styles'));
@@ -305,7 +306,7 @@ namespace quick_cache // Root namespace.
 							set_time_limit(1800); // In case of HUGE sites w/ a very large directory.
 
 							while(($_file = $_basename = readdir($opendir)) !== FALSE && ($_file = $cache_dir.'/'.$_file))
-								if(is_file($_file) && strpos($_basename, 'qc-') === 0 && (!$is_multisite || strpos($_file, $md5_3) !== FALSE))
+								if(is_file($_file) && strpos($_basename, 'qc-c-') === 0 && (!$is_multisite || strpos($_file, $md5_3) !== FALSE))
 									if(!unlink($_file)) throw new \exception(sprintf(__('Unable to clear: `%1$s`.', $this->text_domain), $_file));
 									else $counter++; // Increment counter for each file we clear.
 
@@ -328,7 +329,7 @@ namespace quick_cache // Root namespace.
 							set_time_limit(1800); // In case of HUGE sites w/ a very large directory.
 
 							while(($_file = $_basename = readdir($opendir)) !== FALSE && ($_file = $cache_dir.'/'.$_file))
-								if(is_file($_file) && strpos($_basename, 'qc-') === 0 && filemtime($_file) < $max_age)
+								if(is_file($_file) && strpos($_basename, 'qc-c-') === 0 && filemtime($_file) < $max_age)
 									if(!unlink($_file)) throw new \exception(sprintf(__('Unable to purge: `%1$s`.', $this->text_domain), $_file));
 									else $counter++; // Increment counter for each file we purge.
 
@@ -501,11 +502,26 @@ namespace quick_cache // Root namespace.
 							return apply_filters(__METHOD__, $wp_config_file_contents, get_defined_vars());
 						}
 
+					public function check_advanced_cache()
+						{
+							if(!$this->options['enable'])
+								return; // Nothing to do.
+
+							if(!empty($_REQUEST[__NAMESPACE__]))
+								return; // Skip on plugin actions.
+
+							$cache_dir = ABSPATH.$this->options['cache_dir'];
+
+							if(!is_file($cache_dir.'/qc-advanced-cache.time'))
+								$this->add_advanced_cache();
+						}
+
 					public function add_advanced_cache()
 						{
 							if(!$this->remove_advanced_cache())
 								return FALSE; // Still exists.
 
+							$cache_dir               = ABSPATH.$this->options['cache_dir'];
 							$advanced_cache_file     = WP_CONTENT_DIR.'/advanced-cache.php';
 							$advanced_cache_template = dirname(__FILE__).'/includes/advanced-cache.tpl.php';
 
@@ -546,6 +562,9 @@ namespace quick_cache // Root namespace.
 
 							if(!file_put_contents($advanced_cache_file, $advanced_cache_contents))
 								return FALSE; // Failure; could not write file.
+
+							if(!file_put_contents($cache_dir.'/qc-advanced-cache.time', time()))
+								return FALSE; // Failure; could not write cache entry.
 
 							return TRUE; // All done :-)
 						}
