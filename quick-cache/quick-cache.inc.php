@@ -159,8 +159,8 @@ namespace quick_cache // Root namespace.
 							$_this = $this; // For callback handler below.
 							add_action('all_admin_notices', function () use ($_this) // Special notice.
 								{
-									echo '<div class="error"><p>'. // Warn site owners about this major rewrite.
-									     __('This version of Quick Cache is a complete rewrite. Please review your Quick Cache options carefully.', $_this->text_domain).'</p></div>';
+									echo '<div class="updated"><p>'. // Warn site owners about this major rewrite.
+									     __('This version of Quick Cache is a <strong>complete rewrite</strong>. Please review your Quick Cache options carefully.', $_this->text_domain).'</p></div>';
 								});
 							delete_option('ws_plugin__qcache_configured'); // One-time only.
 						}
