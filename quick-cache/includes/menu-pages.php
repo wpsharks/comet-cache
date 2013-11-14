@@ -29,7 +29,7 @@ namespace quick_cache // Root namespace.
 
 					echo '   <div class="plugin-menu-page-upsells">'."\n";
 					echo '      <a href="'.esc_attr(add_query_arg(urlencode_deep(array('page' => __NAMESPACE__, __NAMESPACE__.'_pro_preview' => '1')), self_admin_url('/admin.php'))).'"><i class="fa fa-eye"></i> Preview Pro Features</a>'."\n";
-					echo '      <a href="http://www.websharks-inc.com/r/quick-cache-pro/" target="_blank"><i class="fa fa-heart-o"></i> Pro Upgrade</a>'."\n";
+					echo '      <a href="http://www.websharks-inc.com/product/quick-cache/" target="_blank"><i class="fa fa-heart-o"></i> Pro Upgrade</a>'."\n";
 					echo '      <a href="http://www.websharks-inc.com/r/quick-cache-subscribe/" target="_blank"><i class="fa fa-envelope"></i> Quick Cache Updates (via Email)</a>'."\n";
 					echo '   </div>'."\n";
 
@@ -82,7 +82,7 @@ namespace quick_cache // Root namespace.
 					if(!empty($_REQUEST[__NAMESPACE__.'_pro_preview']))
 						{
 							echo '<div class="plugin-menu-page-notice info">'."\n";
-							echo '   <i class="fa fa-eye"></i> '.__('<strong>Pro Version Preview (see below)</strong> ~ New option panels. Please explore before <a href="http://www.websharks-inc.com/r/quick-cache-pro/" target="_blank">upgrading <i class="fa fa-heart-o"></i></a>.<br /><small>NOTE: the free version of Quick Cache (this LITE version); is more-than-adequate for most sites.<br />Please upgrade only if you desire advanced features or would like to support the developer.</small>', plugin()->text_domain)."\n";
+							echo '   <i class="fa fa-eye"></i> '.__('<strong>Pro Version Preview (see below)</strong> ~ New option panels. Please explore before <a href="http://www.websharks-inc.com/product/quick-cache/" target="_blank">upgrading <i class="fa fa-heart-o"></i></a>.<br /><small>NOTE: the free version of Quick Cache (this LITE version); is more-than-adequate for most sites.<br />Please upgrade only if you desire advanced features or would like to support the developer.</small>', plugin()->text_domain)."\n";
 							echo '</div>'."\n";
 						}
 					if(!plugin()->options['enable']) // Not enabled yet?
