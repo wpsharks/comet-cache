@@ -589,7 +589,12 @@ namespace quick_cache // Root namespace.
 							if(!file_put_contents($advanced_cache_file, $advanced_cache_contents))
 								return FALSE; // Failure; could not write file.
 
-							if(!file_put_contents($cache_dir.'/qc-advanced-cache', time()))
+							if(!is_dir($cache_dir) && mkdir($cache_dir, 0775, TRUE))
+								{
+									if(is_writable($cache_dir) && !is_file($cache_dir.'/.htaccess'))
+										file_put_contents($cache_dir.'/.htaccess', 'deny from all');
+								}
+							if(!is_dir($cache_dir) || !is_writable($cache_dir) || !file_put_contents($cache_dir.'/qc-advanced-cache', time()))
 								return FALSE; // Failure; could not write cache entry.
 
 							return TRUE; // All done :-)
