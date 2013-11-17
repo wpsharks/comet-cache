@@ -22,7 +22,7 @@ Speed up your site ~ BIG Time! - If you care about the speed of your site, Quick
 
 1. Upload the `/quick-cache` folder to your `/wp-content/plugins/` directory.
 2. Activate the plugin through the Plugins menu in WordPress®.
-3. Navigate to the Quick Cache panel & enable it.
+3. Navigate to the **Quick Cache** panel & enable it.
 
 **How do I know that Quick Cache is working?**
 
