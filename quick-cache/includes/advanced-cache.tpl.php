@@ -160,8 +160,9 @@ namespace quick_cache // Root namespace.
 					$content_type  = ''; // Initialize possible content type.
 
 					if(!$buffer_length) return $buffer; // Don't cache an empty buffer.
-					if($buffer_length <= 2000 && stripos($buffer, '<h1>Error') !== FALSE)
-						return $buffer; // Don't cache obvious errors.
+
+					if(strpos($buffer, '<body id="error-page">') !== FALSE)
+						return $buffer; // Don't cache WP errors.
 
 					foreach($headers as $_header) // Loop headers.
 						{
