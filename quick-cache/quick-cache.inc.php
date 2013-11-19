@@ -308,7 +308,7 @@ namespace quick_cache // Root namespace.
 							unset($_error); // Housekeeping.
 						}
 
-					public function clear_cache()
+					public function clear_cache($manually = FALSE)
 						{
 							$counter = 0; // Initialize.
 

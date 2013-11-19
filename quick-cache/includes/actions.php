@@ -21,7 +21,7 @@ namespace quick_cache // Root namespace.
 					if(empty($_REQUEST['_wpnonce']) || !wp_verify_nonce($_REQUEST['_wpnonce']))
 						return; // Unauthenticated POST data.
 
-					$counter = plugin()->clear_cache(); // Counter.
+					$counter = plugin()->clear_cache(TRUE); // Counter.
 
 					$redirect_to = self_admin_url('/admin.php'); // Redirect preparations.
 					$query_args  = array('page' => __NAMESPACE__, __NAMESPACE__.'__cache_cleared' => '1');
