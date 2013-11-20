@@ -12,7 +12,7 @@ Contributors: WebSharks, PriMoThemes
 Donate link: http://www.websharks-inc.com/r/wp-theme-plugin-donation/
 Tags: cache, quick cache, quick-cache, quickcache, speed, performance, loading, generation, execution, benchmark, benchmarking, debug, debugging, caching, cash, caching, cacheing, super cache, advanced cache, advanced-cache, wp-cache, wp cache, options panel included, websharks framework, w3c validated code, includes extensive documentation, highly extensible
 
-Speed up your site ~ BIG Time! - If you care about the speed of your site, Quick Cache is a plugin that you absolutely MUST have installed :-)
+Speed up your site (BIG time)! — Quick Cache provides reliable page caching for WordPress. Easy-to-use (very simple installation).
 
 == Description ==
 
