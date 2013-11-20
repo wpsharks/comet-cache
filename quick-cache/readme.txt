@@ -196,6 +196,8 @@ If your installation of Apache does not have `mod_deflate` installed. You can al
 - An MD5 Version Salt (customize the caching engine).
 - Rockstart support for all Quick Cache features.
 
+**TIP:** you can preview Pro features in the free version by clicking the "Preview Pro Features" link at the top of your Quick Cache options.
+
 == License ==
 
 Copyright: © 2013 [WebSharks, Inc.](http://www.websharks-inc.com/bizdev/) (coded in the USA)
