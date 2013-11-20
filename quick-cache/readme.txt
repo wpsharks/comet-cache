@@ -185,6 +185,8 @@ If your installation of Apache does not have `mod_deflate` installed. You can al
 
 == Pro Features ==
 
+= Quick Cache Pro (Features) =
+
 - The ability to cache logged-in users too! (VERY powerful, particularly for membership sites).
 - A new improved "Clear Cache" button in the admin bar (along with an option to enable/disable this feature).
 - The ability to disable Dashboard notifications related to automatic clearing/purging on change detections.
