@@ -116,9 +116,9 @@ In computer science, a cache (pronounced /kash/) is a collection of data duplica
 
 = Where & why are the cache files stored on my server? =
 
-The cache files are stored in a special directory: `/wp-content/cache/`. This directory needs to remain writable, just like the `/wp-content/uploads` directory on many WordPress® installations. The `/cache` directory is where MD5 hash files reside. These files are named (with an MD5 hash) based on `HTTPS/HTTP_HOST/REQUEST_URI`. See also: `Dashboard -› Quick Cache -› Cache Directory/Expiration Time` for further details.
+The cache files are stored in a special directory: `/wp-content/cache/`. This directory needs to remain writable, just like the `/wp-content/uploads` directory on many WordPress® installations. The `/cache` directory is where MD5 hash files reside. These files are named (with an MD5 hash) based on `HTTPS/HTTP_HOST/REQUEST_URI`. See also: **Dashboard -› Quick Cache -› Cache Directory/Expiration Time** for further details.
 
-Whenever a request comes in from someone on the web, Quick Cache checks to see if it can serve a cached file; e.g. it looks at the `HTTPS/HTTP_HOST/REQUEST_URI` environent variables, then it checks the `/cache` directory. If a cache file has been built already, and it matches an existing `HTTPS.HTTP_HOST.REQUEST_URI` combination; and it is not too old (see: `Dashboard -› Quick Cache -› Cache Directory/Expiration Time`), then it will serve that file instead of asking WordPress® to regenerate it. This adds tremendous speed to your site and reduces server load.
+Whenever a request comes in from someone on the web, Quick Cache checks to see if it can serve a cached file; e.g. it looks at the `HTTPS/HTTP_HOST/REQUEST_URI` environent variables, then it checks the `/cache` directory. If a cache file has been built already, and it matches an existing `HTTPS.HTTP_HOST.REQUEST_URI` combination; and it is not too old (see: **Dashboard -› Quick Cache -› Cache Directory/Expiration Time**), then it will serve that file instead of asking WordPress® to regenerate it. This adds tremendous speed to your site and reduces server load.
 
 If you have GZIP compression enabled, then the cache file is also sent to the browser with compression (recommended). Modern web browsers that support this technique will definitely take advantage of it. After all, if it is easier to email a zip file, it's also easier to download a web page that way. That is why on-the-fly GZIP compression for web pages is recommended. This is supported by all modern browsers.
 
@@ -142,7 +142,7 @@ By default, Quick Cache does NOT serve cached pages to users who are logged in, 
 
 = Will comments and other dynamic parts of my blog update immediately? =
 
-It depends on your configuration of Quick Cache. There is an automatic expiration system (the garbage collector), which runs through WordPress® behind-the-scene, according to your Expiration setting (see: `Dashboard -› Quick Cache -› Cache Directory/Expiration Time`). There is also a built-in expiration time on existing files that is checked before any cache file is served up, which also uses your Expiration setting. In addition; whenever you update a Post or a Page, Quick Cache can automatically prune that particular file from the cache so it instantly becomes fresh again. Otherwise, your visitors would need to wait for the previous cached version to expire.
+It depends on your configuration of Quick Cache. There is an automatic expiration system (the garbage collector), which runs through WordPress® behind-the-scene, according to your Expiration setting (see: **Dashboard -› Quick Cache -› Cache Directory/Expiration Time**). There is also a built-in expiration time on existing files that is checked before any cache file is served up, which also uses your Expiration setting. In addition; whenever you update a Post or a Page, Quick Cache can automatically prune that particular file from the cache so it instantly becomes fresh again. Otherwise, your visitors would need to wait for the previous cached version to expire.
 
 By default, Quick Cache does NOT serve cached pages to users who are logged in, or to users who have left comments recently. Quick Cache also excludes administrative pages, login pages, POST/PUT/DELETE/GET(w/ query string) requests and/or CLI processes.
 
@@ -166,6 +166,7 @@ If your installation of Apache does not have `mod_deflate` installed. You can al
 
 = I'm a plugin developer. How can I prevent certain files from being cached? =
 
+	<?php
 	define('QUICK_CACHE_ALLOWED', FALSE); // The easiest way.
 	// or $_SERVER['QUICK_CACHE_ALLOWED'] = FALSE; // Also very easy.
 	// or define('DONOTCACHEPAGE', TRUE); // For compatibility with other cache plugins.
@@ -196,7 +197,7 @@ The latest version of Quick Cache is a complete rewrite (OOP design). Faster! an
 * The latest version of Quick Cache is a complete rewrite (OOP design). Faster! and even more dependable. NOTE: the free version of Quick Cache (this new LITE version); while it remains fully functional and is more-than-adequate for most sites; is now limited in some ways. The following advanced features from the previous release are no longer available in the lite version: a custom MD5 Version Salt; custom Exclusion Patterns; the Clear Cache button in the admin bar. These, and MANY other brand new features are now available only in the pro version of the plugin. For further details, please see: <http://www.websharks-inc.com/product/quick-cache/>.
 * Bug fix. Quick Cache now considers the `HTTPS` evironment variable in order to prevent cache collisions on sites that serve pages over SSL. Nothing to configure, this is now built into the Quick Cache engine.
 * UI updates. An improved user interface makes configuring this plugin a dream! Quick Cache got an awesome makeover in this release.
-* Improved support for multisite networks. It's never been easier to run Quick Cache on a multisite network. For further details, please see: `Dashboard -› Network Admin -› Quick Cache` when/if you have Multisite Networking enabled in WordPress.
+* Improved support for multisite networks. It's never been easier to run Quick Cache on a multisite network. For further details, please see: **Dashboard -› Network Admin -› Quick Cache** when/if you have Multisite Networking enabled in WordPress.
 * Update; PUT and DELETE requests are now considered by Quick Cache. By default, Quick Cache does NOT serve cached pages to users who are logged in, or to users who have left comments recently. Quick Cache also excludes administrative pages, login pages, POST/PUT/DELETE/GET(w/ query string) requests and/or CLI processes.
 * Dropping support for `ob_gzhandler()`; and the like. Quick Cache will now throw PHP exceptions to warn you about this should it be an issue in your hosting environment. If you want to enable GZIP, please follow the instructions provided by Quick Cache and avoid the use of `ob_gzhandler()` as this is not a recommended way to enable GZIP on any hosting platform.
 * Truly atomic cache file write updates. Removing support for SEM vs. FLOCK for file locking. Quick Cache no longer needs a mutex file. Cache file updates are written to a temp file and renamed for the best reliability and improved speed too!
