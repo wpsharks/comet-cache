@@ -18,7 +18,7 @@ Speed up your site (BIG time)! — Quick Cache provides reliable page caching fo
 
 If you care about the speed of your site, Quick Cache is one of those plugins that you absolutely MUST have installed :-) Quick Cache takes a real-time snapshot (building a cache) of every Page, Post, Category, Link, etc. These snapshots are then stored (cached) intuitively, so they can be referenced later, in order to save all of that processing time that has been dragging your site down and costing you money.
 
-The Quick Cache plugin uses configuration options that you select from the options panel. See: `Quick Cache -› Options` in your Dashboard. Once a file has been cached, Quick Cache uses advanced techniques that allow it to recognize when it should and should not serve a cached version of the file. By default, Quick Cache does not serve cached pages to users who are logged in, or to users who have left comments recently. Quick Cache also excludes administrative pages, login pages, POST/PUT/DELETE/GET(w/ query string) requests and/or CLI processes.
+The Quick Cache plugin uses configuration options that you select from the options panel. See: **Quick Cache -› Options** in your Dashboard. Once a file has been cached, Quick Cache uses advanced techniques that allow it to recognize when it should and should not serve a cached version of the file. By default, Quick Cache does not serve cached pages to users who are logged in, or to users who have left comments recently. Quick Cache also excludes administrative pages, login pages, POST/PUT/DELETE/GET(w/ query string) requests and/or CLI processes.
 
 == Installation ==
 
@@ -70,7 +70,7 @@ In addition, Quick Cache actually sends a no-cache header (yes, a no-cache heade
 
 If you care about the speed of your site, Quick Cache is one of those plugins that you absolutely MUST have installed :-) Quick Cache takes a real-time snapshot (building a cache) of every Page, Post, Category, Link, etc. These snapshots are then stored (cached) intuitively, so they can be referenced later, in order to save all of that processing time that has been dragging your site down and costing you money.
 
-The Quick Cache plugin uses configuration options that you select from the options panel. See: `Quick Cache -› Options` in your Dashboard. Once a file has been cached, Quick Cache uses advanced techniques that allow it to recognize when it should and should not serve a cached version of the file. By default, Quick Cache does not serve cached pages to users who are logged in, or to users who have left comments recently. Quick Cache also excludes administrative pages, login pages, POST/PUT/DELETE/GET(w/ query string) requests and/or CLI processes.
+The Quick Cache plugin uses configuration options that you select from the options panel. See: **Quick Cache -› Options** in your Dashboard. Once a file has been cached, Quick Cache uses advanced techniques that allow it to recognize when it should and should not serve a cached version of the file. By default, Quick Cache does not serve cached pages to users who are logged in, or to users who have left comments recently. Quick Cache also excludes administrative pages, login pages, POST/PUT/DELETE/GET(w/ query string) requests and/or CLI processes.
 
 = Running Quick Cache On A WordPress® Multisite Installation =
 
