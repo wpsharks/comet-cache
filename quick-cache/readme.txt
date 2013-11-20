@@ -196,9 +196,9 @@ If your installation of Apache does not have `mod_deflate` installed. You can al
 - User-Agent exclusion patterns (now supporting wildcards too).
 - HTTP referrer exclusion patterns (now supporting wildcards too).
 - An MD5 Version Salt (customize the caching engine).
-- Rockstart support for all Quick Cache features.
+- Rockstar support for all Quick Cache features.
 
-**TIP:** you can preview Pro features in the free version by clicking the "Preview Pro Features" link at the top of your Quick Cache options.
+**TIP:** you can preview Pro features in the free version by clicking the "**Preview Pro Features**" link at the top of your Quick Cache options.
 
 == License ==
 
