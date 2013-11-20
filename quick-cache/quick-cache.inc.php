@@ -187,8 +187,14 @@ namespace quick_cache // Root namespace.
 
 					public function deactivate()
 						{
+							$this->remove_wp_cache_from_wp_config();
+							$this->remove_advanced_cache();
+							$this->clear_cache();
+
 							if(!$this->options['uninstall_on_deactivation'])
 								return; // Nothing to do here.
+
+							$this->delete_advanced_cache();
 
 							delete_option(__NAMESPACE__.'_options');
 							delete_option(__NAMESPACE__.'_notices');
@@ -199,9 +205,6 @@ namespace quick_cache // Root namespace.
 							delete_option('ws_plugin__qcache_configured');
 
 							wp_clear_scheduled_hook('_cron_'.__NAMESPACE__.'_cleanup');
-							$this->remove_wp_cache_from_wp_config();
-							$this->delete_advanced_cache();
-							$this->clear_cache();
 						}
 
 					public function is_pro_preview()
