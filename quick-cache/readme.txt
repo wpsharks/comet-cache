@@ -190,7 +190,7 @@ The latest version of Quick Cache is a complete rewrite (OOP design). Faster! an
 
 == Changelog ==
 
-= 131108 =
+= v131108 =
 
 * Updated to support all features and functionality of WordPress v3.7+ (this new release of Quick Cache requires WordPress v3.7+). The Quick Cache plugin is now being actively maintained and future updates and improvements will be released periodically by lead developer Jason Caldwell. The popularity of this plugin and recent acknowldegments at WordCamp in Boston have inspired Jason to revamp Quick Cache!
 * The latest version of Quick Cache is a complete rewrite (OOP design). Faster! and even more dependable. NOTE: the free version of Quick Cache (this new LITE version); while it remains fully functional and is more-than-adequate for most sites; is now limited in some ways. The following advanced features from the previous release are no longer available in the lite version: a custom MD5 Version Salt; custom Exclusion Patterns; the Clear Cache button in the admin bar. These, and MANY other brand new features are now available only in the pro version of the plugin. For further details, please see: <http://www.websharks-inc.com/product/quick-cache/>.
@@ -206,81 +206,81 @@ The latest version of Quick Cache is a complete rewrite (OOP design). Faster! an
 * **(Pro Version)** Regarding URI/User-Agent/HTTP Referrer exclusion patterns. If you configured any of these options in the previous release and would like to continue to use them in this release, please upgrade to the pro version or contact lead developer Jason Caldwell for assistance. Note: if you had these options configured in the previous release, once you upgrade to the pro version they will come back just like they were. Either that, or you may choose to continue using the previous version of Quick Cache where this functionality still exists.
 * Lite version source code now available on GitHub also: <https://github.com/WebSharks/Quick-Cache>.
 
-= 111203 =
+= v111203 =
 
 * Updated to support WordPress® v3.3. Backward compatibily remains for WordPress® v3.2.x.
 
-= 110720 =
+= v110720 =
 
 * Bug fix. Corrected XSS security issue associated with the handling of ``$_SERVER["REQUEST_URI"]`` inside the comment lines that Quick Cache introduces at the bottom of the source code.
 * Bug fix. Corrected cosmetic issue in WordPress v3.2 related to the positioning of the Clear Cache button.
 
-= 110709 =
+= v110709 =
 
 * Routine maintenance. No signifigant changes.
 
-= 110708 =
+= v110708 =
 
 * Routine maintenance. No signifigant changes.
 * Compatibility with WordPress v3.2.
 
-= 110523 =
+= v110523 =
 
 * **Versioning.** Starting with this release, versions will follow this format: `yymmdd`. The version for this release is: `110523`.
 * Routine maintenance. No signifigant changes.
 
-= 2.3.6 =
+= v2.3.6 =
 
 * Routine maintenance. No signifigant changes.
 
-= 2.3.5 =
+= v2.3.5 =
 
 * Bug fix. Under the right scenario, errors regarding the function `is_user_logged_in()` in the second phase of `advanced-cache.php` have been resolved in this release of Quick Cache.
 * Compatibility. Quick Cache is now capable of dealing with themes/plugins that attempt to use `ob_start("ob_gzhandler")` inside a `header.php` file, or in other places that may create a problem in the nesting order of output buffers. For instance, this release of Quick Cache resolves some incompatiblities with Headway themes for WordPress®. Please note that GZIP should be enabled at the Apache level ( i.e. with an .htaccess file ), or in PHP using `zlib.output_compression = on`. Both of these methods are preferred over `ob_start("ob_gzhandler")`. If you must use `ob_start("ob_gzhandler")`, please make this declaration inside your `/wp-config.php` file, and NOT inside `/header.php`, as this creates a problem that Quick Cache must work around, and could ultimately prevent GZIP from working at all if you do it this way. For further details on how to enable GZIP with Quick Cache, please see the included `/readme.txt` file.
 
-= 2.3.2 =
+= v2.3.2 =
 
 * Compatiblity. References to `dirname()` that were processed by the Quick Cache `/advanced-cache.php` handler should have been using `WP_CONTENT_DIR` for improved compatibility with WordPress® installations that may use non-standardized installation directories and/or symlinks.
 * New Filter available for developers. Multisite Super Admins can now give their Child Blog owners the ability to manually clear the cache for their own site in the Network. Quick Cache accomplishes this by making the "Clear Cache" button visible in the administrative header for Child Blog owners. If you wish to enable this, you can use this Filter: `add_filter("ws_plugin__qcache_ms_user_can_see_admin_header_controls", "__return_true");`. This button is always visible to Super Admins. Adding this Filter makes it visible to all child Blog Owners as well.
 
-= 2.3.1 =
+= v2.3.1 =
 
 * Framework updated; general cleanup.
 * Optimizations. Further internal optimizations applied through configuration checksums that allow Quick Cache to load with even less overhead now.
 * Bug fix. Quick Cache was suffering from a bug regression related to stale Last-Modified headers being sent with cached copies. This has been resolved in Quick Cache v2.3.1+.
 
-= 2.3 =
+= v2.3 =
 
 * Framework updated; general cleanup.
 * Updated with static class methods. Quick Cache now uses PHP's SPL autoload functionality to further optimize all of its routines.
 
-= 2.2.8 =
+= v2.2.8 =
 
 * Framework updated; general cleanup.
 * Updated for compatibility with WordPress® 3.1.
 
-= 2.2.7 =
+= v2.2.7 =
 
 * Framework updated. General cleanup.
 
-= 2.2.6 =
+= v2.2.6 =
 
 * Updated to disable caching on database failures that do not trigger a `5xx` error code. Quick Cache is now capable of disabling the cache engine dynamically on all database connection failures within WordPress®.
 
-= 2.2.5 =
+= v2.2.5 =
 
 * Updated to support all `5xx` error codes. Quick Cache now monitors the `status_header` function for `5xx` error codes. If a `5xx` status header is detected, caching is automatically disabled, as it should be.
 
-= 2.2.3 =
+= v2.2.3 =
 
 * Framework updated. General cleanup.
 
-= 2.2.2 =
+= v2.2.2 =
 
 * Minor updates to the Ajax clearing routines that were implemented in v2.2.1.
 * This update also adds compatibility with (offline) localhost installations of WordPress® (WAMP/MAMP).
 
-= 2.2.1 =
+= v2.2.1 =
 
 * Support for `glob()` has been added to Quick Cache. In previous versions, it was impossible to pinpoint a specific cache file through Dynamic Pruning routines ( at least, not with 100% accuracy ). This was because an MD5 Version Salt *could* have been generated; based on arbitrary conditionals, set by the site owner. Quick Cache now stores its cache files with three MD5 hash strings, producing longer file names; but with the added benefit of improved Multisite compatibility, and improvements in optimization overall. Quick Cache can now handle dynamic pruning with 100% accuracy. Even supporting complex Multisite installations, with or without `SUBDOMAIN_INSTALL`.
 * New feature. Quick Cache now integrates a `Clear Quick Cache` button into the WordPress® Dashboard. This makes it easy to force a "cache reset, via <code>ajax</code>", without having to navigate through the Quick Cache menu for this simple task. Another great benefit to this new button, is that it works in all Dashboard views, even in a Multisite installation across different backends. If you're running a Multisite installation, you can use this new button to clear the cache for a particular site/blog in your network, without interrupting others.
@@ -294,21 +294,21 @@ The latest version of Quick Cache is a complete rewrite (OOP design). Faster! an
 * Updated Dynamic Pruning Hooks for Custom Post Types, and Custom Taxonomies in WordPress® 3.0+.
 * Extended compatiblity for Quick Cache on SSL enabled blogs.
 
-= 2.1.9 =
+= v2.1.9 =
 
 * Framework updated; general cleanup.
 * Updated minimum requirements to WordPress® 3.0.
 
-= 2.1.8 =
+= v2.1.8 =
 
 * Framework updated to WS-P-3.0.
 
-= 2.1.7 =
+= v2.1.7 =
 
 * Bug fix. A bug related to gzinflate variations handled by the WP_Http class has been resolved. This was preventing Quick Cache from validating a custom MD5 Version Salt on some servers.
 * Framework updated to WS-P-2.3.
 
-= 2.1.6 =
+= v2.1.6 =
 
 * Auto-Cache Engine. References to `ws_plugin__qcache_curl_get()`, have been replaced by `c_ws_plugin__qcache_utils_urls::remote()`, which makes use of `wp_remote_request()` through the WP_Http class. This removes an absolute dependency on the cURL extension for PHP. This also gives Quick Cache/WordPress® the ability to decide with method of communication to use for HTTP requests; based on what the installation server has available. Note: this only affects the Auto-Cache Engine for Quick Cache, which is completely optional.
 * Compatibility. Quick Cache is now smarter about the way it reports errors. For example, when/if there are directory permission issues with your `wp-content` directory; Quick Cache can help with this, in a more intuitive fashion.
@@ -316,87 +316,87 @@ The latest version of Quick Cache is a complete rewrite (OOP design). Faster! an
 * Updated minimum requirements to WordPress® 2.9.2.
 * Framework updated to WS-P-2.2.
 
-= 2.1.5 =
+= v2.1.5 =
 
 * A new option for Dynamic Cache Pruning was added. You can now choose `Single + Front Page`. This makes it possible to Create or Edit a Post/Page, and have the cache automatically updated for that specific Post/Page. And.. in addition, your Front Page ( aka: Home Page ) will also be refreshed at the same time.
 * A minor bug was fixed in the Dynamic Cache Pruning routines. This bug was originally introduced in Quick Cache v2.1.1, and has now been corrected in v2.1.5. This bug, under certain circumstances, was preventing Quick Cache from locating an expired md5 cache file, for some Posts/Pages being updated.
 * Advanced feature addition. Quick Cache now comes bundled with a robust Auto-Cache Engine. This is an optional feature, for VERY advanced users. You'll find the new Auto-Cache Engine listed right along with all of the other Quick Cache options. This works in conjunction with an XML Sitemap.
 
-= 2.1.4 =
+= v2.1.4 =
 
 * Advanced feature addition. You can now prevent caching dynamically whenever pages on your site receive traffic from specific URLs, specific domains, or even specific word fragments found within the HTTP_REFERER. This feature is very advanced, and will NOT impact your site unless you decide to use it for one reason or another.
 
-= 2.1.3 =
+= v2.1.3 =
 
 * Added `De-Activation Safeguards` to the Quick Cache options panel.
 * Updated the Quick Cache options panel. It's been given a make-over.
 * Stable tag updated in support of tagged releases within the repository at WordPress.org.
 
-= 2.1.2 =
+= v2.1.2 =
 
 * WebSharks Framework for Plugins has been updated to P-2.1.
 * Updated caching routines in support of hosting providers running with CGI/FastCGI. Quick Cache has been tested with VPS.net, HostGator, BlueHost, (mt) Media Temple (gs) and (dv), The Rackspace Cloud, and several dedicated servers ( including some Amazon EC2 instances ) running with Apache; including support for both `mod_php` and also `CGI/FastCGI` implementations. Quick Cache should work fine with any Apache/PHP combination. Please report all bugs through the [Support Forum](http://www.primothemes.com/forums/viewforum.php?f=5).
 * An issue was discovered with WordPress® MU `/files/` being accessed through `htaccess/mod_rewrite`. Quick Cache has been updated to exclude all `/files/` served under WordPress® MU, which is the way it should be. Requests that contain `/files/` are a reference to WordPress® Media, and there is no reason, to cache, or send no-cache headers, for Media. Quick Cache now ignores all references to `/files/` under WordPress® MU. This problem was not affecting all installations of WPMU, because there already are/were scans in place for Content-Type headers. However, under some CGI/FastCGI implementations, this was not getting picked on WMPU with `mod_rewrite` rules. This has been resolved in v2.1.2.
 
-= 2.1.1 =
+= v2.1.1 =
 
 * A WPMU bug was corrected in Quick Cache v2.1.1. This bug was related to `HTTP_HOST` detection under WordPress® MU installations that were using sub-domains. Please thank `QuickSander` for reporting this important issue.
 
-= 2.1 =
+= v2.1 =
 
 * Quick Cache has added further support for themes and plugins that dynamically set `Content-Type` headers through PHP routines. Quick Cache is now smart enough to automatically disable itself whenever a theme or plugin sends a `Content-Type` header that would be incompatible with Quick Cache. In other words, any `Content-Type` header that is not a variation of `HTML, XHTML or XML`.
 * Quick Cache has also been upgraded to support the preservation of scripted headers sent by PHP routines. If a plugin or theme sends scripted headers ( using the `header()` function in PHP ), those headers will be preserved. They'll be stored along with the cache. This allows them to be sent back to the browser whenever a cached version is served on subsequent visits to the original file.
 * Compatability checked against WordPress.org 2.9.1, 2.9.2 &amp; WordPress MU 2.9.1, 2.9.2. Everything looks good. No changes required.
 
-= 2.0 =
+= v2.0 =
 
 * A few tweaks to the options panel.
 * Documentation updated, several small improvements in error reporting.
 * Additional error checking to support an even wider range of hosting providers.
 * Added automation routines for safe re-activation after an upgrade is performed.
 
-= 1.9 =
+= v1.9 =
 
 * Additional support added for WordPress® MU 2.8.6+.
 * Security file `quick-cache-mu.php` added specifically for MU installations. WordPress® MU is a special ( multi-user ) version of WordPress®. If you're running WordPress® MU, check the [readme.txt] file for WordPress® MU notations.
 
-= 1.8 =
+= v1.8 =
 
 * Re-organized core framework. Updated to: P-2.0.
 * Updated to support WP 2.9+.
 
-= 1.7 =
+= v1.7 =
 
 * Updated documentation. Added some additional code samples.
 * Tested with WP 2.8.5. Everything ok.
 
-= 1.6 =
+= v1.6 =
 
 * We've added the ability to enable Double-Caching ( client-side caching ). Full documentation is provided in the Quick Cache options panel. This feature is for those of you who just want blazing fast speed and are not concerned as much about reliability and control. We don't recommend turning this on unless you realize what you're doing.
 
-= 1.5 =
+= v1.5 =
 
 * Support for Dynamic Cache Pruning has been improved. Full documentation is provided in the Quick Cache options panel.
 * Additional feature-specific documentation has been added to assist novice webmasters during configuration.
 
-= 1.4 =
+= v1.4 =
 
 * Garbage collection has been further optimized for speed and performance on extremely high traffic sites.
 * PHP Ternary expressions are now supported in your Version Salt. This takes your Version Salt to a whole new level.
 * Additional code samples have been provided for Version Salts; showing you how to deal with mobile devices and other tricky situations.
 
-= 1.3 =
+= v1.3 =
 
 * We've implemented both Semaphore ( `sem_get` ) and `flock()` mutex. If you're on a Cloud Computing Model ( such as the Rackspace® Cloud ), then you'll want to go with flock() unless they tell you otherwise. In all other cases we recommend the use of Semaphores over Flock because it is generally more reliable. The folks over at Rackspace® have suggested the use of flock() because of the way their Cloud handles multi-threading. In either case, flock() will be fully functional in any hosting environment, so it makes a great fallback in case you experience any problems.
 
-= 1.2 =
+= v1.2 =
 
 * We've implemented a way for plugin developers to disallow caching during certain routines or on specific pages. You can set the following PHP Constant at runtime to disable caching. `define("QUICK_CACHE_ALLOWED", false)`. We have also added backward compatibility for WP Super Cache, so that `define("DONOTCACHEPAGE", true)` will also be supported by plugins that have previously been written for compatibility with Super Cache. In other words, Quick Cache looks for either of these two Constants.
 
-= 1.1 =
+= v1.1 =
 
 * Added the ability to create a Version Salt. This is a feature offered ONLY by Quick Cache. Full documentation is provided in the Quick Cache options panel. This can become very useful for sites that provide membership services or have lots and lots of plugins installed that makes their site incompatible with WP Super Cache. With Quick Cache, you'll now have more control over the entire caching process using a custom Version Salt tailored to your specific needs.
 
-= 1.0 =
+= v1.0 =
 
 * Initial release.
