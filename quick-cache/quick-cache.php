@@ -1,6 +1,6 @@
 <?php
 /*
-Version: 131108
+Version: 131121
 Text Domain: quick-cache
 Plugin Name: Quick Cache
 
