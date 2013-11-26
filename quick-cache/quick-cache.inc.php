@@ -458,7 +458,7 @@ namespace quick_cache // Root namespace.
 							if(is_file($abspath_wp_config = ABSPATH.'wp-config.php'))
 								$wp_config_file = $abspath_wp_config;
 
-							else if(is_file($dirname_abspath_wp_config = dirname(ABSPATH).'wp-config.php'))
+							else if(is_file($dirname_abspath_wp_config = dirname(ABSPATH).'/wp-config.php'))
 								$wp_config_file = $dirname_abspath_wp_config;
 
 							else $wp_config_file = ''; // Unable to find `/wp-config.php` file.
