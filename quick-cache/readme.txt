@@ -54,7 +54,7 @@ WordPress® Multisite Networking is a special consideration in WordPress®. If Q
 
 = EMERGENCY: If All Else Fails (How-To Remove Quick Cache) =
 
-Ordinarily you can just deactivate Quick Cache from the plugins menu in WordPress. However, if you're having a more serious issue, please following the instructions here.
+Ordinarily you can just deactivate Quick Cache from the plugins menu in WordPress. However, if you're having a more serious issue, please follow the instructions here.
 
 1. Log into your site via FTP; perhaps using [FileZilla](http://www.youtube.com/watch?v=joXUMhr8PhU).
 2. Delete this file: `/wp-content/advanced-cache.php`
@@ -154,7 +154,7 @@ That being said, you could set this to just `60 seconds` and you would still see
 
 = EMERGENCY: If all else fails, how can I remove Quick Cache? =
 
-Ordinarily you can just deactivate Quick Cache from the plugins menu in WordPress. However, if you're having a more serious issue, please following the instructions here.
+Ordinarily you can just deactivate Quick Cache from the plugins menu in WordPress. However, if you're having a more serious issue, please follow the instructions here.
 
 1. Log into your site via FTP; perhaps using [FileZilla](http://www.youtube.com/watch?v=joXUMhr8PhU).
 2. Delete this file: `/wp-content/advanced-cache.php`
@@ -207,7 +207,7 @@ If your installation of Apache does not have `mod_deflate` installed. You can al
 
 = EMERGENCY: If All Else Fails (How-To Remove Quick Cache) =
 
-Ordinarily you can just deactivate Quick Cache from the plugins menu in WordPress. However, if you're having a more serious issue, please following the instructions here.
+Ordinarily you can just deactivate Quick Cache from the plugins menu in WordPress. However, if you're having a more serious issue, please follow the instructions here.
 
 1. Log into your site via FTP; perhaps using [FileZilla](http://www.youtube.com/watch?v=joXUMhr8PhU).
 2. Delete this file: `/wp-content/advanced-cache.php`
