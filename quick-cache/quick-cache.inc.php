@@ -515,7 +515,7 @@ namespace quick_cache // Root namespace.
 							if(preg_match('/define\s*\(\s*([\'"])WP_CACHE\\1\s*,\s*(?:0|FALSE|NULL|([\'"])0?\\2)\s*\)\s*;/i', $wp_config_file_contents))
 								return $wp_config_file_contents; // It's already disabled; no need to modify this file.
 
-							if(!($wp_config_file_contents = preg_replace('/[ '."\t".']*define\s*\(\s*([\'"])WP_CACHE\\1\s*,\s*(?:\-?[0-9\.]+|TRUE|FALSE|NULL|([\'"])[^\'"]*\\2)\s*\)\s*;(?:'."\r\n".'|'."\r".'|'."\n".')?/i', '', $wp_config_file_contents)))
+							if(!($wp_config_file_contents = preg_replace('/[ '."\t".']*define\s*\(\s*([\'"])WP_CACHE\\1\s*,\s*(?:\-?[0-9\.]+|TRUE|FALSE|NULL|([\'"])[^\'"]*\\2)\s*\)\s*;/i', '', $wp_config_file_contents)))
 								return ''; // Failure; something went terribly wrong here.
 
 							if(preg_match('/([\'"])WP_CACHE\\1/i', $wp_config_file_contents))
