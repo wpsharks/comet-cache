@@ -70,7 +70,9 @@ namespace quick_cache // Root namespace.
 					if(!empty($_REQUEST[__NAMESPACE__.'__advanced_cache_add_failure']))
 						{
 							echo '<div class="plugin-menu-page-notice error">'."\n";
-							echo '   <i class="fa fa-thumbs-down"></i> '.__('Failed to update your <code>/wp-content/advanced-cache.php</code> file. Most likely a permissions error. Please create an empty file here: <code>/wp-content/advanced-cache.php</code> (just an empty PHP file, with nothing in it); give it permissions <code>644</code> or higher (perhaps <code>666</code>). Once you\'ve done this, please try again.', plugin()->text_domain)."\n";
+							if($_REQUEST[__NAMESPACE__.'__advanced_cache_add_failure'] === 'qc-advanced-cache')
+								echo '   <i class="fa fa-thumbs-down"></i> '.sprintf(__('Failed to update your <code>/wp-content/advanced-cache.php</code> file. Cannot write stat file: <code>%1$s/qc-advanced-cache</code>. Please be sure this directory exists (and that it\'s writable): <code>%1$s</code>. Please use directory permissions <code>755</code> or higher (perhaps <code>777</code>). Once you\'ve done this, please try again.', plugin()->text_domain), rtrim(plugin()->options['cache_dir'], '/'))."\n";
+							else echo '   <i class="fa fa-thumbs-down"></i> '.__('Failed to update your <code>/wp-content/advanced-cache.php</code> file. Most likely a permissions error. Please create an empty file here: <code>/wp-content/advanced-cache.php</code> (just an empty PHP file, with nothing in it); give it permissions <code>644</code> or higher (perhaps <code>666</code>). Once you\'ve done this, please try again.', plugin()->text_domain)."\n";
 							echo '</div>'."\n";
 						}
 					if(!empty($_REQUEST[__NAMESPACE__.'__advanced_cache_remove_failure']))

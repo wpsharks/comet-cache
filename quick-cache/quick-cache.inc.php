@@ -598,7 +598,7 @@ namespace quick_cache // Root namespace.
 										file_put_contents($cache_dir.'/.htaccess', 'deny from all');
 								}
 							if(!is_dir($cache_dir) || !is_writable($cache_dir) || !file_put_contents($cache_dir.'/qc-advanced-cache', time()))
-								return FALSE; // Failure; could not write cache entry.
+								return NULL; // Failure; could not write cache entry. Special return value (NULL) in this case.
 
 							return TRUE; // All done :-)
 						}

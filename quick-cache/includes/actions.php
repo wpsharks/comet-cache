@@ -54,18 +54,20 @@ namespace quick_cache // Root namespace.
 
 					if(plugin()->options['enable']) // Enable.
 						{
-							if(!plugin()->add_wp_cache_to_wp_config())
+							if(!($add_wp_cache_to_wp_config = plugin()->add_wp_cache_to_wp_config()))
 								$query_args[__NAMESPACE__.'__wp_config_wp_cache_add_failure'] = '1';
 
-							if(!plugin()->add_advanced_cache())
-								$query_args[__NAMESPACE__.'__advanced_cache_add_failure'] = '1';
+							if(!($add_advanced_cache = plugin()->add_advanced_cache()))
+								$query_args[__NAMESPACE__.'__advanced_cache_add_failure']
+									= ($add_advanced_cache === NULL)
+									? 'qc-advanced-cache' : '1';
 						}
 					else // We need to disable Quick Cache in this case.
 						{
-							if(!plugin()->remove_wp_cache_from_wp_config())
+							if(!($remove_wp_cache_from_wp_config = plugin()->remove_wp_cache_from_wp_config()))
 								$query_args[__NAMESPACE__.'__wp_config_wp_cache_remove_failure'] = '1';
 
-							if(!plugin()->remove_advanced_cache())
+							if(!($remove_advanced_cache = plugin()->remove_advanced_cache()))
 								$query_args[__NAMESPACE__.'__advanced_cache_remove_failure'] = '1';
 						}
 					$redirect_to = add_query_arg(urlencode_deep($query_args), $redirect_to);
@@ -90,18 +92,20 @@ namespace quick_cache // Root namespace.
 
 					if(plugin()->options['enable']) // Enable.
 						{
-							if(!plugin()->add_wp_cache_to_wp_config())
+							if(!($add_wp_cache_to_wp_config = plugin()->add_wp_cache_to_wp_config()))
 								$query_args[__NAMESPACE__.'__wp_config_wp_cache_add_failure'] = '1';
 
-							if(!plugin()->add_advanced_cache())
-								$query_args[__NAMESPACE__.'__advanced_cache_add_failure'] = '1';
+							if(!($add_advanced_cache = plugin()->add_advanced_cache()))
+								$query_args[__NAMESPACE__.'__advanced_cache_add_failure']
+									= ($add_advanced_cache === NULL)
+									? 'qc-advanced-cache' : '1';
 						}
 					else // We need to disable Quick Cache in this case.
 						{
-							if(!plugin()->remove_wp_cache_from_wp_config())
+							if(!($remove_wp_cache_from_wp_config = plugin()->remove_wp_cache_from_wp_config()))
 								$query_args[__NAMESPACE__.'__wp_config_wp_cache_remove_failure'] = '1';
 
-							if(!plugin()->remove_advanced_cache())
+							if(!($remove_advanced_cache = plugin()->remove_advanced_cache()))
 								$query_args[__NAMESPACE__.'__advanced_cache_remove_failure'] = '1';
 						}
 					$redirect_to = add_query_arg(urlencode_deep($query_args), $redirect_to);
