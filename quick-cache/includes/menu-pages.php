@@ -82,8 +82,8 @@ namespace quick_cache // Root namespace.
 					if(!empty($_REQUEST[__NAMESPACE__.'_pro_preview']))
 						{
 							echo '<div class="plugin-menu-page-notice info">'."\n";
-							echo '<a href="'.add_query_arg(urlencode_deep(array('page' => __NAMESPACE__)), self_admin_url('/admin.php')).'" class="pull-right"><i class="fa fa-eye-close"></i> '.__('Close Preview', plugin()->text_domain).'</a>'."\n";
-							echo '   <i class="fa fa-eye"></i> '.__('<strong>Pro Version Preview (see below)</strong> ~ New option panels. Please explore before <a href="http://www.websharks-inc.com/product/quick-cache/" target="_blank">upgrading <i class="fa fa-heart-o"></i></a>.<br /><small>NOTE: the free version of Quick Cache (this LITE version); is more-than-adequate for most sites.<br />Please upgrade only if you desire advanced features or would like to support the developer.</small>', plugin()->text_domain)."\n";
+							echo '<a href="'.add_query_arg(urlencode_deep(array('page' => __NAMESPACE__)), self_admin_url('/admin.php')).'" class="pull-right" style="margin:0 0 15px 25px; font-variant:small-caps; text-decoration:none;">'.__('close', plugin()->text_domain).' <i class="fa fa-eye-slash"></i></a>'."\n";
+							echo '   <i class="fa fa-eye"></i> '.__('<strong>Pro Features (Preview)</strong> ~ New option panels below. Please explore before <a href="http://www.websharks-inc.com/product/quick-cache/" target="_blank">upgrading <i class="fa fa-heart-o"></i></a>.<br /><small>NOTE: the free version of Quick Cache (this LITE version); is more-than-adequate for most sites. Please upgrade only if you desire advanced features or would like to support the developer.</small>', plugin()->text_domain)."\n";
 							echo '</div>'."\n";
 						}
 					if(!plugin()->options['enable']) // Not enabled yet?
