@@ -1,4 +1,0 @@
-# Configuration of directory indexes.
-# For added security (set these explicitly).
-Options -Indexes
-DirectoryIndex index.php
