@@ -41,8 +41,8 @@ namespace quick_cache // Root namespace.
 			public $md5_1 = ''; // Calculated cache file hash (MD5); for position number 1 in file name.
 			public $md5_2 = ''; // Calculated cache file hash (MD5); for position number 2 in file name.
 			public $md5_3 = ''; // Calculated cache file hash (MD5); for position number 3 in file name.
-			public $cache_file = ''; // Calculated location; defined by `maybe_start_output_buffering()`.
 			public $salt_location = ''; // Calculated location; defined by `maybe_start_output_buffering()`.
+			public $cache_file = ''; // Calculated location; defined by `maybe_start_output_buffering()`.
 			public $text_domain = ''; // Defined by class constructor; this is for translations.
 
 			public function __construct() // Class constructor/cache handler.
@@ -111,8 +111,8 @@ namespace quick_cache // Root namespace.
 					$this->md5_2 = md5($http_host_nps.$_SERVER['REQUEST_URI']);
 					$this->md5_3 = md5($http_host_nps.$host_dir_token);
 
-					$this->cache_file    = QUICK_CACHE_DIR.'/qc-c-'.$this->md5_1.'-'.$this->md5_2.'-'.$this->md5_3;
 					$this->salt_location = $protocol.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+					$this->cache_file    = QUICK_CACHE_DIR.'/qc-c-'.$this->md5_1.'-'.$this->md5_2.'-'.$this->md5_3;
 
 					if(is_file($this->cache_file) && filemtime($this->cache_file) >= strtotime('-'.QUICK_CACHE_MAX_AGE))
 						{

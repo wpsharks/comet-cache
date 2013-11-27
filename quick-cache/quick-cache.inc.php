@@ -9,7 +9,7 @@ namespace quick_cache // Root namespace.
 				class plugin // Base plugin class.
 				{
 					public $file = ''; // Defined by class constructor.
-					public $version = '131121'; // See: `readme.txt` file.
+					public $version = '131127'; // See: `readme.txt` file.
 					public $text_domain = ''; // Defined by class constructor.
 					public $default_options = array(); // Defined @ setup.
 					public $options = array(); // Defined @ setup.

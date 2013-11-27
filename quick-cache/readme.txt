@@ -1,6 +1,6 @@
 === Quick Cache (Speed Without Compromise) ===
 
-Stable tag: 131121
+Stable tag: 131127
 Requires at least: 3.7
 Tested up to: 3.7.1
 Text Domain: quick-cache
@@ -51,6 +51,17 @@ Once Quick Cache has been enabled, **you'll need to log out** (and/or clear brow
 = Running Quick Cache On A WordPress® Multisite Installation =
 
 WordPress® Multisite Networking is a special consideration in WordPress®. If Quick Cache is installed under a Multisite Network installation, it will be enabled for ALL blogs the same way. The centralized config options for Quick Cache, can only be modified by a Super Administrator operating on the main site. Quick Cache has internal processing routines that prevent configuration changes, including menu displays; for anyone other than a Super Administrator operating on the main site.
+
+= EMERGENCY: If All Else Fails (How-To Remove Quick Cache) =
+
+Ordinarily you can just deactivate Quick Cache from the plugins menu in WordPress. However, if you're having a more serious issue, please following the instructions here.
+
+1. Log into your site via FTP; perhaps using [FileZilla](http://www.youtube.com/watch?v=joXUMhr8PhU).
+2. Delete this file: `/wp-content/advanced-cache.php`
+3. Delete this directory: `/wp-content/plugins/quick-cache/`
+4. Remove this line from your `/wp-config.php` file: `define('WP_CACHE', TRUE);`
+
+Quick Cache is now completely uninstalled and you can start fresh :-)
 
 == Frequently Asked Questions ==
 
@@ -141,6 +152,17 @@ Keep in mind that your expiration setting is only one part of the big picture. Q
 
 That being said, you could set this to just `60 seconds` and you would still see huge differences in speed and performance. If you're just starting out with Quick Cache (perhaps a bit nervous about old cache files being served to your visitors); you could set this to something like `30 minutes` and experiment with it while you build confidence in Quick Cache. It's not necessary, but many site owners have reported this makes them feel like they're more-in-control when the cache has a short expiration time. All-in-all, it's a matter of preference :-)
 
+= EMERGENCY: If all else fails, how can I remove Quick Cache? =
+
+Ordinarily you can just deactivate Quick Cache from the plugins menu in WordPress. However, if you're having a more serious issue, please following the instructions here.
+
+1. Log into your site via FTP; perhaps using [FileZilla](http://www.youtube.com/watch?v=joXUMhr8PhU).
+2. Delete this file: `/wp-content/advanced-cache.php`
+3. Delete this directory: `/wp-content/plugins/quick-cache/`
+4. Remove this line from your `/wp-config.php` file: `define('WP_CACHE', TRUE);`
+
+Quick Cache is now completely uninstalled and you can start fresh :-)
+
 == Further Details ==
 
 = So Why Does WordPress® Need To Be Cached? =
@@ -183,6 +205,17 @@ If you want to enable GZIP, create an `.htaccess` file in your WordPress® insta
 
 If your installation of Apache does not have `mod_deflate` installed. You can also enable GZIP compression using PHP configuration alone. In your `php.ini` file, you can simply add the following line anywhere: `zlib.output_compression = on`
 
+= EMERGENCY: If All Else Fails (How-To Remove Quick Cache) =
+
+Ordinarily you can just deactivate Quick Cache from the plugins menu in WordPress. However, if you're having a more serious issue, please following the instructions here.
+
+1. Log into your site via FTP; perhaps using [FileZilla](http://www.youtube.com/watch?v=joXUMhr8PhU).
+2. Delete this file: `/wp-content/advanced-cache.php`
+3. Delete this directory: `/wp-content/plugins/quick-cache/`
+4. Remove this line from your `/wp-config.php` file: `define('WP_CACHE', TRUE);`
+
+Quick Cache is now completely uninstalled and you can start fresh :-)
+
 == Pro Features ==
 
 = Quick Cache Pro Features =
@@ -223,11 +256,23 @@ Released under the terms of the [GNU General Public License](http://www.gnu.org/
 
 == Upgrade Notice ==
 
-= v131121 =
+= v131127 =
 
 The latest version of Quick Cache is a complete rewrite (OOP design). Faster! and even more dependable. NOTE: the free version of Quick Cache (this new LITE version); while it remains fully functional and is more-than-adequate for most sites; is now limited in some ways. The following advanced features from the previous release are no longer available in the lite version: a custom MD5 Version Salt, custom Exclusion Patterns, a Clear Cache button in admin bar. These, and other features; are now available only in the pro version of the plugin. For further details, please see: <http://www.websharks-inc.com/product/quick-cache/>.
 
 == Changelog ==
+
+= v131127 =
+
+* **Compatibility.** This release improves PHP v5.3 detection. Quick Cache will now generate an administrative notice instead of a PHP exception; allowing the plugin to be activated, but without actually loading the plugin under this scenario. A notice to the site owner is helpful in cases where the plugin is NOT being updated through the Dashboard. This will remove the risk of crashing a site that's attempting to run Quick Cache w/o PHP v5.3+ installed. See also: <https://github.com/WebSharks/Quick-Cache/issues/13>
+* **New Pro Feature.** Clear Home Page (and/or Posts Page) on auto-purge. See: <https://github.com/WebSharks/Quick-Cache/issues/11>
+* **Bug Fix (Options -Indexes).** Removing unnecessary `.htaccess` file from the `/wp-content/plugins/quick-cache/` directory that prevented directory indexing, as this is not compatible in all hosting environents. See: <https://github.com/WebSharks/Quick-Cache/issues/9>
+* **Bug Fix (ABSPATH).** Incorrect detection of the `/wp-config.php` file on sites that move this file up one directory. Fixed in this release. See: <https://github.com/WebSharks/Quick-Cache/issues/7>
+* **Bug Fix (Parse Error).** Correcting code that deals with an edge case where the `/wp-config.php` file may become corrupted upon deactivation of the Quick Cache plugin through the WP Dashboard. Fixed in this release. See: <https://github.com/WebSharks/Quick-Cache/issues/6>
+* **Bug Fix (Error Reporting).** Improving error message via Dashboard whenever permissions are an issue in one specific scenario. See: <https://github.com/WebSharks/Quick-Cache/issues/16>
+* **Enhancement (Pro Preview).** Adding a more visible way to disable Pro Preview mode in the Lite version of Quick Cache. See: <https://github.com/WebSharks/Quick-Cache/issues/2>
+* **Emergency Scenario** Adding notes in several sections of the `reamde.txt` file regarding "what to do in an emergency scenario".
+* **See Also** <https://github.com/WebSharks/Quick-Cache/issues?page=1&state=closed>
 
 = v131121 =
 
