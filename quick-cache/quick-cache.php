@@ -10,7 +10,7 @@ Author URI: http://www.s2member.com
 Plugin URI: http://www.websharks-inc.com/product/quick-cache/
 Description: WordPress advanced cache plugin; speed without compromise!
 
-Speed up your site ~ BIG Time! - If you care about the speed of your site, Quick Cache is a plugin that you absolutely MUST have installed :-)
+Speed up your site (BIG time!) — Quick Cache provides reliable page caching for WordPress. Easy-to-use (very simple installation).
 */
 if(!defined('WPINC')) // MUST have WordPress.
 	exit('Do NOT access this file directly: '.basename(__FILE__));

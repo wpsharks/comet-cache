@@ -64,7 +64,7 @@ Menu page styles.
 .plugin-menu-page img.screenshot
 {
 	float         : right;
-	margin        : 0 0 0 25px;
+	margin        : 0 0 15px 25px;
 
 	border-radius : 5px;
 	border        : 1px solid #AFAFAF;
