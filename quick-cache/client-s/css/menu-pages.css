@@ -36,7 +36,6 @@ Menu page styles.
 }
 .plugin-menu-page code
 {
-	font-size   : 1em;
 	font-family : 'Monaco', 'Menlo', 'Consolas', 'Courier New', monospace;
 }
 .plugin-menu-page pre.code
