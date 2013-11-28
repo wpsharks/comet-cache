@@ -37,6 +37,7 @@ namespace quick_cache // Root namespace.
 		 */
 		class advanced_cache # `/wp-content/advanced-cache.php`
 		{
+			public $is_pro = FALSE; // Identifies the lite version of Quick Cache.
 			public $timer = 0; // Microtime; defined by class constructor for debugging purposes.
 			public $md5_1 = ''; // Calculated cache file hash (MD5); for position number 1 in file name.
 			public $md5_2 = ''; // Calculated cache file hash (MD5); for position number 2 in file name.
@@ -44,6 +45,7 @@ namespace quick_cache // Root namespace.
 			public $salt_location = ''; // Calculated location; defined by `maybe_start_output_buffering()`.
 			public $cache_file = ''; // Calculated location; defined by `maybe_start_output_buffering()`.
 			public $text_domain = ''; // Defined by class constructor; this is for translations.
+			public $hooks = array(); // Array of advanced cache plugin hooks.
 
 			public function __construct() // Class constructor/cache handler.
 				{
@@ -56,8 +58,22 @@ namespace quick_cache // Root namespace.
 					$this->timer       = microtime(TRUE);
 					$this->text_domain = str_replace('_', '-', __NAMESPACE__);
 
+					$this->load_ac_plugins();
 					$this->maybe_stop_browser_caching();
 					$this->maybe_start_output_buffering();
+				}
+
+			public function load_ac_plugins()
+				{
+					if(!is_dir(WP_CONTENT_DIR.'/ac-plugins'))
+						return; // Nothing to do here.
+
+					$GLOBALS[__NAMESPACE__.'__advanced_cache']
+						= $this; // Define now; so it's available for plugins.
+
+					foreach((array)glob(WP_CONTENT_DIR.'/ac-plugins/*.php') as $_ac_plugin)
+						if(is_file($_ac_plugin)) include_once $_ac_plugin;
+					unset($_ac_plugin); // Houskeeping.
 				}
 
 			public function maybe_stop_browser_caching()
@@ -107,11 +123,14 @@ namespace quick_cache // Root namespace.
 						}
 					else $host_dir_token = '/'; // Not multisite; or running it's own domain.
 
-					$this->md5_1 = md5($protocol.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
+					$version_salt // Give advanced cache plugins a chance.
+						= $this->apply_filters(__CLASS__.'__version_salt', '');
+
+					$this->md5_1 = md5($version_salt.$protocol.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
 					$this->md5_2 = md5($http_host_nps.$_SERVER['REQUEST_URI']);
 					$this->md5_3 = md5($http_host_nps.$host_dir_token);
 
-					$this->salt_location = $protocol.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+					$this->salt_location = ltrim($version_salt.' '.$protocol.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
 					$this->cache_file    = QUICK_CACHE_DIR.'/qc-c-'.$this->md5_1.'-'.$this->md5_2.'-'.$this->md5_3;
 
 					if(is_file($this->cache_file) && filemtime($this->cache_file) >= strtotime('-'.QUICK_CACHE_MAX_AGE))
@@ -293,6 +312,102 @@ namespace quick_cache // Root namespace.
 							return ($is = TRUE);
 
 					return ($is = FALSE);
+				}
+
+			public function hook_id($function)
+				{
+					if(is_string($function))
+						return $function;
+
+					if(is_object($function)) // Closure.
+						$function = array($function, '');
+					else $function = (array)$function;
+
+					if(is_object($function[0]))
+						return spl_object_hash($function[0]).$function[1];
+
+					else if(is_string($function[0]))
+						return $function[0].'::'.$function[1];
+
+					throw new \exception(__('Invalid hook.', $this->text_domain));
+				}
+
+			public function add_hook($hook, $function, $priority = 10, $accepted_args = 1)
+				{
+					$this->hooks[$hook][$priority][$this->hook_id($function)]
+						= array('function' => $function, 'accepted_args' => (integer)$accepted_args);
+					return TRUE; // Always returns true.
+				}
+
+			public function add_action() // Simple `add_hook()` alias.
+				{
+					return call_user_func_array(array($this, 'add_hook'), func_get_args());
+				}
+
+			public function add_filter() // Simple `add_hook()` alias.
+				{
+					return call_user_func_array(array($this, 'add_hook'), func_get_args());
+				}
+
+			public function remove_hook($hook, $function, $priority = 10)
+				{
+					if(!isset($this->hooks[$hook][$priority][$this->hook_id($function)]))
+						return FALSE; // Nothing to remove in this case.
+
+					unset($this->hooks[$hook][$priority][$this->hook_id($function)]);
+					if(!$this->hooks[$hook][$priority]) unset($this->hooks[$hook][$priority]);
+					return TRUE; // Existed before it was removed in this case.
+				}
+
+			public function remove_action() // Simple `remove_hook()` alias.
+				{
+					return call_user_func_array(array($this, 'remove_hook'), func_get_args());
+				}
+
+			public function remove_filter() // Simple `remove_hook()` alias.
+				{
+					return call_user_func_array(array($this, 'remove_hook'), func_get_args());
+				}
+
+			public function do_action($hook)
+				{
+					if(empty($this->hooks[$hook]))
+						return; // No hooks.
+
+					$hook_actions = $this->hooks[$hook];
+					ksort($hook_actions); // Sort by priority.
+
+					$args = func_get_args(); // We'll need these below.
+					foreach($hook_actions as $_hook_action) foreach($_hook_action as $_action)
+						{
+							if(!isset($_action['function'], $_action['accepted_args']))
+								continue; // Not a valid filter in this case.
+
+							call_user_func_array($_action['function'], array_slice($args, 1, $_action['accepted_args']));
+						}
+					unset($_hook_action, $_action); // Housekeeping.
+				}
+
+			public function apply_filters($hook, $value)
+				{
+					if(empty($this->hooks[$hook]))
+						return $value; // No hooks.
+
+					$hook_filters = $this->hooks[$hook];
+					ksort($hook_filters); // Sort by priority.
+
+					$args = func_get_args(); // We'll need these below.
+					foreach($hook_filters as $_hook_filter) foreach($_hook_filter as $_filter)
+						{
+							if(!isset($_filter['function'], $_filter['accepted_args']))
+								continue; // Not a valid filter in this case.
+
+							$args[1] = $value; // Continously update the argument `$value`.
+							$value   = call_user_func_array($_filter['function'], array_slice($args, 1, $_filter['accepted_args']));
+						}
+					unset($_hook_filter, $_filter); // Housekeeping.
+
+					return $value; // With applied filters.
 				}
 		}
 

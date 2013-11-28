@@ -8,6 +8,7 @@ namespace quick_cache // Root namespace.
 			{
 				class plugin // Base plugin class.
 				{
+					public $is_pro = FALSE; // Lite version flag.
 					public $file = ''; // Defined by class constructor.
 					public $version = '131127'; // See: `readme.txt` file.
 					public $text_domain = ''; // Defined by class constructor.
