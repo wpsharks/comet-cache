@@ -116,6 +116,7 @@ namespace quick_cache // Root namespace.
 							add_action('comment_post', array($this, 'auto_purge_comment_post_cache'));
 							add_action('edit_comment', array($this, 'auto_purge_comment_post_cache'));
 							add_action('delete_comment', array($this, 'auto_purge_comment_post_cache'));
+							add_action('wp_set_comment_status', array($this, 'auto_purge_comment_post_cache'));
 
 							add_action('create_term', array($this, 'auto_clear_cache'));
 							add_action('edit_terms', array($this, 'auto_clear_cache'));
