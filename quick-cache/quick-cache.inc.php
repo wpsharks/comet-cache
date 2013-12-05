@@ -334,7 +334,8 @@ namespace quick_cache // Root namespace.
 							$http_host_nps = preg_replace('/\:[0-9]+$/', '', $_SERVER['HTTP_HOST']);
 							$md5_3         = md5($http_host_nps.$host_dir_token);
 
-							set_time_limit(1800); // In case of HUGE sites w/ a very large directory.
+							// @TODO When set_time_limit() is disabled by PHP configuration, display a warning message to users upon plugin activation
+							@set_time_limit(1800); // In case of HUGE sites w/ a very large directory. Errors are ignored in case `set_time_limit()` is disabled.
 
 							while(($_file = $_basename = readdir($opendir)) !== FALSE && ($_file = $cache_dir.'/'.$_file))
 								if(is_file($_file) && strpos($_basename, 'qc-c-') === 0 && (!$is_multisite || strpos($_file, $md5_3) !== FALSE))
@@ -357,7 +358,8 @@ namespace quick_cache // Root namespace.
 							if(!is_dir($cache_dir) || !($opendir = opendir($cache_dir)))
 								return $counter; // Nothing we can do.
 
-							set_time_limit(1800); // In case of HUGE sites w/ a very large directory.
+							// @TODO When set_time_limit() is disabled by PHP configuration, display a warning message to users upon plugin activation
+							@set_time_limit(1800); // In case of HUGE sites w/ a very large directory. Errors are ignored in case `set_time_limit()` is disabled.
 
 							while(($_file = $_basename = readdir($opendir)) !== FALSE && ($_file = $cache_dir.'/'.$_file))
 								if(is_file($_file) && strpos($_basename, 'qc-c-') === 0 && filemtime($_file) < $max_age)
