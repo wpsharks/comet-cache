@@ -1,6 +1,6 @@
 === Quick Cache (Speed Without Compromise) ===
 
-Stable tag: 131128
+Stable tag: 131205
 Requires at least: 3.7
 Tested up to: 3.7.1
 Text Domain: quick-cache
@@ -256,11 +256,17 @@ Released under the terms of the [GNU General Public License](http://www.gnu.org/
 
 == Upgrade Notice ==
 
-= v131128 =
+= v131205 =
 
 Requires PHP v5.3+. The latest version of Quick Cache is a complete rewrite (OOP design). Faster! and even more dependable. NOTE: the free version of Quick Cache (this new LITE version); while it remains fully functional and is more-than-adequate for most sites; is now limited in some ways. The following advanced features from the previous release are no longer available in the lite version: a custom MD5 Version Salt, custom Exclusion Patterns, a Clear Cache button in admin bar. These, and other features; are now available only in the pro version of the plugin. For further details, please see: <http://www.websharks-inc.com/product/quick-cache/>.
 
 == Changelog ==
+
+= v131205 =
+
+* Added hook to `wp_set_comment_status` to purge the comment cache when a comment status changes.
+* Ignore `set_time_limit()` errors in case function is disabled in PHP configuration. This is a temporary fix and will be handled more appropriately in a future maintenance release. See also: <https://github.com/WebSharks/Quick-Cache/issues/20>
+* Added Raam Dev to the contributors list. Raam will now be leading the development of Quick Cache and Quick Cache Pro.
 
 = v131128 =
 
