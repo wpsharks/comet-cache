@@ -116,7 +116,7 @@ namespace quick_cache // Root namespace.
 					$protocol      = $this->is_ssl() ? 'https://' : 'http://';
 					$http_host_nps = preg_replace('/\:[0-9]+$/', '', $_SERVER['HTTP_HOST']);
 
-					if(is_multisite() && (!defined('SUBDOMAIN_INSTALL') || !SUBDOMAIN_INSTALL))
+					if(is_multisite() && (!defined('SUBDOMAIN_INSTALL') || !SUBDOMAIN_INSTALL) && (!defined('VHOST') || !VHOST))
 						{ // Multisite w/ sub-directories; need first sub-directory.
 							list($host_dir_token) = explode('/', trim($_SERVER['REQUEST_URI'], '/'));
 							$host_dir_token = (strlen($host_dir_token)) ? '/'.$host_dir_token.'/' : '/';
