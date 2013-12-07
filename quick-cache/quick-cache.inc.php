@@ -340,7 +340,7 @@ namespace quick_cache // Root namespace.
 							$http_host_nps  = preg_replace('/\:[0-9]+$/', '', $_SERVER['HTTP_HOST']);
 							$host_dir_token = '/'; // Assume NOT multisite; or running it's own domain.
 
-							if($is_multisite && (!defined('SUBDOMAIN_INSTALL') || !SUBDOMAIN_INSTALL) && (!defined('VHOST') || !VHOST))
+							if($is_multisite && (!defined('SUBDOMAIN_INSTALL') || !SUBDOMAIN_INSTALL))
 								{ // Multisite w/ sub-directories; need sub-directory. We MUST validate against blog paths too.
 
 									list($host_dir_token) = explode('/', trim($_SERVER['REQUEST_URI'], '/'));
