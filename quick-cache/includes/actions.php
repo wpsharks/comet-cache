@@ -45,7 +45,8 @@ namespace quick_cache // Root namespace.
 					   || strpos(basename(plugin()->options['cache_dir']), 'wp-') === 0 // Reserved name?
 					) plugin()->options['cache_dir'] = plugin()->default_options['cache_dir'];
 
-					update_option(__NAMESPACE__.'_options', $args);
+					update_option(__NAMESPACE__.'_options', $args); // Blog-specific.
+					if(is_multisite()) update_site_option(__NAMESPACE__.'_options', $args);
 
 					$redirect_to = self_admin_url('/admin.php'); // Redirect preparations.
 					$query_args  = array('page' => __NAMESPACE__, __NAMESPACE__.'__updated' => '1');
@@ -85,7 +86,8 @@ namespace quick_cache // Root namespace.
 					if(empty($_REQUEST['_wpnonce']) || !wp_verify_nonce($_REQUEST['_wpnonce']))
 						return; // Unauthenticated POST data.
 
-					delete_option(__NAMESPACE__.'_options');
+					delete_option(__NAMESPACE__.'_options'); // Blog-specific.
+					if(is_multisite()) delete_site_option(__NAMESPACE__.'_options');
 
 					$redirect_to = self_admin_url('/admin.php'); // Redirect preparations.
 					$query_args  = array('page' => __NAMESPACE__, __NAMESPACE__.'__restored' => '1');

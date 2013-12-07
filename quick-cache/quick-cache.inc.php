@@ -52,6 +52,8 @@ namespace quick_cache // Root namespace.
 								'uninstall_on_deactivation' => '0' // `0|1`.
 							); // Default options are merged with those defined by the site owner.
 							$options               = (is_array($options = get_option(__NAMESPACE__.'_options'))) ? $options : array();
+							if(is_multisite() && is_array($site_options = get_site_option(__NAMESPACE__.'_options')))
+								$options = array_merge($options, $site_options); // Multisite network options.
 
 							if(!$options && is_array($old_options = get_option('ws_plugin__qcache_options')) && $old_options)
 								{
@@ -139,7 +141,8 @@ namespace quick_cache // Root namespace.
 									wp_schedule_event(time() + 60, 'daily', '_cron_'.__NAMESPACE__.'_cleanup');
 
 									$this->options['crons_setup'] = (string)time();
-									update_option(__NAMESPACE__.'_options', $this->options);
+									update_option(__NAMESPACE__.'_options', $this->options); // Blog-specific.
+									if(is_multisite()) update_site_option(__NAMESPACE__.'_options', $this->options);
 								}
 							add_action('_cron_'.__NAMESPACE__.'_cleanup', array($this, 'purge_cache'));
 
