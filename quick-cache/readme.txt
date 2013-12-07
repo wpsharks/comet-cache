@@ -1,6 +1,6 @@
 === Quick Cache (Speed Without Compromise) ===
 
-Stable tag: 131205
+Stable tag: 131206
 Requires at least: 3.7
 Tested up to: 3.7.1
 Text Domain: quick-cache
@@ -256,11 +256,17 @@ Released under the terms of the [GNU General Public License](http://www.gnu.org/
 
 == Upgrade Notice ==
 
-= v131205 =
+= v131206 =
 
 Requires PHP v5.3+. The latest version of Quick Cache is a complete rewrite (OOP design). Faster! and even more dependable. NOTE: the free version of Quick Cache (this new LITE version); while it remains fully functional and is more-than-adequate for most sites; is now limited in some ways. The following advanced features from the previous release are no longer available in the lite version: a custom MD5 Version Salt, custom Exclusion Patterns, a Clear Cache button in admin bar. These, and other features; are now available only in the pro version of the plugin. For further details, please see: <http://www.websharks-inc.com/product/quick-cache/>.
 
 == Changelog ==
+
+= v131206 =
+
+* **New Pro Feature**. It's now possible for developers to add custom PHP code to the cache clearing routines (e.g. custom code which might consider things like APC or memcache also). This requires [Quick Cache Pro](http://www.websharks-inc.com/product/quick-cache/). Please check your Dashboard under: **Quick Cache Pro -› Clearing the Cache**. See also: [this screenshot](https://f.cloud.github.com/assets/1563559/1692324/7ae902c4-5e78-11e3-98ba-acbb08b30585.png).
+* **Multisite Bug Fix**. Unable to clear the cache when running sub-directories. See: <https://github.com/WebSharks/Quick-Cache/issues/30>
+* **Multisite Bug Fix**. The "Clear Cache" button was not displayed for child blogs in a network. Fixed in this release.
 
 = v131205 =
 
