@@ -61,6 +61,8 @@ namespace quick_cache // Root namespace.
 								$query_args[__NAMESPACE__.'__advanced_cache_add_failure']
 									= ($add_advanced_cache === NULL)
 									? 'qc-advanced-cache' : '1';
+
+							plugin()->update_blog_paths();
 						}
 					else // We need to disable Quick Cache in this case.
 						{
@@ -99,6 +101,8 @@ namespace quick_cache // Root namespace.
 								$query_args[__NAMESPACE__.'__advanced_cache_add_failure']
 									= ($add_advanced_cache === NULL)
 									? 'qc-advanced-cache' : '1';
+
+							plugin()->update_blog_paths();
 						}
 					else // We need to disable Quick Cache in this case.
 						{

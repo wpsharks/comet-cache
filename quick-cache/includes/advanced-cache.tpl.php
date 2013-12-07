@@ -113,16 +113,21 @@ namespace quick_cache // Root namespace.
 
 					if(!QUICK_CACHE_GET_REQUESTS && $this->is_get_request_w_query() && empty($_GET['qcAC'])) return;
 
-					$protocol      = $this->is_ssl() ? 'https://' : 'http://';
-					$http_host_nps = preg_replace('/\:[0-9]+$/', '', $_SERVER['HTTP_HOST']);
+					$protocol       = $this->is_ssl() ? 'https://' : 'http://';
+					$http_host_nps  = preg_replace('/\:[0-9]+$/', '', $_SERVER['HTTP_HOST']);
+					$host_dir_token = '/'; // Assume NOT multisite; or running it's own domain.
 
 					if(is_multisite() && (!defined('SUBDOMAIN_INSTALL') || !SUBDOMAIN_INSTALL) && (!defined('VHOST') || !VHOST))
-						{ // Multisite w/ sub-directories; need first sub-directory.
-							list($host_dir_token) = explode('/', trim($_SERVER['REQUEST_URI'], '/'));
-							$host_dir_token = (strlen($host_dir_token)) ? '/'.$host_dir_token.'/' : '/';
-						}
-					else $host_dir_token = '/'; // Not multisite; or running it's own domain.
+						{ // Multisite w/ sub-directories; need sub-directory. We MUST validate against blog paths too.
 
+							list($host_dir_token) = explode('/', trim($_SERVER['REQUEST_URI'], '/'));
+							$host_dir_token = (isset($host_dir_token[0])) ? '/'.$host_dir_token.'/' : '/';
+
+							if($host_dir_token !== '/' // Perhaps NOT the main site?
+							   && (!is_file(QUICK_CACHE_DIR.'/qc-blog-paths') // NOT a read/valid blog path?
+							       || !in_array($host_dir_token, unserialize(file_get_contents(QUICK_CACHE_DIR.'/qc-blog-paths')), TRUE))
+							) $host_dir_token = '/'; // Main site; e.g. this is NOT a real/valid child blog path.
+						}
 					$version_salt // Give advanced cache plugins a chance.
 						= $this->apply_filters(__CLASS__.'__version_salt', '');
 

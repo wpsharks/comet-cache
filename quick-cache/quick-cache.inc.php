@@ -89,6 +89,7 @@ namespace quick_cache // Root namespace.
 							$this->cap = apply_filters(__METHOD__.'__cap', 'activate_plugins');
 
 							add_action('init', array($this, 'check_advanced_cache'));
+							add_action('init', array($this, 'check_blog_paths'));
 							add_action('wp_loaded', array($this, 'actions'));
 
 							add_action('admin_init', array($this, 'check_version'));
@@ -126,6 +127,8 @@ namespace quick_cache // Root namespace.
 							add_action('edit_link', array($this, 'auto_clear_cache'));
 							add_action('delete_link', array($this, 'auto_clear_cache'));
 
+							add_filter('enable_live_network_counts', array($this, 'update_blog_paths'));
+
 							if((integer)$this->options['crons_setup'] < 1382523750)
 								{
 									wp_clear_scheduled_hook('_cron_'.__NAMESPACE__.'_cleanup');
@@ -144,6 +147,12 @@ namespace quick_cache // Root namespace.
 							do_action(__METHOD__.'_complete', get_defined_vars());
 						}
 
+					/** @return \wpdb Reference for IDEs. */
+					public function wpdb() // Shortcut for other routines.
+						{
+							return $GLOBALS['wpdb'];
+						}
+
 					public function activate()
 						{
 							$this->setup(); // Setup routines.
@@ -153,6 +162,7 @@ namespace quick_cache // Root namespace.
 
 							$this->add_wp_cache_to_wp_config();
 							$this->add_advanced_cache();
+							$this->update_blog_paths();
 							$this->auto_clear_cache();
 						}
 
@@ -168,6 +178,7 @@ namespace quick_cache // Root namespace.
 
 							$this->add_wp_cache_to_wp_config();
 							$this->add_advanced_cache();
+							$this->update_blog_paths();
 							$this->auto_clear_cache();
 
 							$notices   = (is_array($notices = get_option(__NAMESPACE__.'_notices'))) ? $notices : array();
@@ -322,17 +333,22 @@ namespace quick_cache // Root namespace.
 							if(!is_dir($cache_dir) || !($opendir = opendir($cache_dir)))
 								return $counter; // Nothing we can do.
 
-							$is_multisite = is_multisite(); // Cache this here.
+							$is_multisite   = is_multisite(); // Cache this here.
+							$http_host_nps  = preg_replace('/\:[0-9]+$/', '', $_SERVER['HTTP_HOST']);
+							$host_dir_token = '/'; // Assume NOT multisite; or running it's own domain.
 
 							if($is_multisite && (!defined('SUBDOMAIN_INSTALL') || !SUBDOMAIN_INSTALL) && (!defined('VHOST') || !VHOST))
-								{ // Multisite w/ sub-directories; need first sub-directory.
-									list($host_dir_token) = explode('/', trim($_SERVER['REQUEST_URI'], '/'));
-									$host_dir_token = (strlen($host_dir_token)) ? '/'.$host_dir_token.'/' : '/';
-								}
-							else $host_dir_token = '/'; // Not multisite; or running it's own domain.
+								{ // Multisite w/ sub-directories; need sub-directory. We MUST validate against blog paths too.
 
-							$http_host_nps = preg_replace('/\:[0-9]+$/', '', $_SERVER['HTTP_HOST']);
-							$md5_3         = md5($http_host_nps.$host_dir_token);
+									list($host_dir_token) = explode('/', trim($_SERVER['REQUEST_URI'], '/'));
+									$host_dir_token = (isset($host_dir_token[0])) ? '/'.$host_dir_token.'/' : '/';
+
+									if($host_dir_token !== '/' // Perhaps NOT the main site?
+									   && (!is_file($cache_dir.'/qc-blog-paths') // NOT a read/valid blog path?
+									       || !in_array($host_dir_token, unserialize(file_get_contents($cache_dir.'/qc-blog-paths')), TRUE))
+									) $host_dir_token = '/'; // Main site; e.g. this is NOT a real/valid child blog path.
+								}
+							$md5_3 = md5($http_host_nps.$host_dir_token); // See: `includes/advanced-cache.tpl.php`.
 
 							// @TODO When set_time_limit() is disabled by PHP configuration, display a warning message to users upon plugin activation
 							@set_time_limit(1800); // In case of HUGE sites w/ a very large directory. Errors are ignored in case `set_time_limit()` is disabled.
@@ -644,6 +660,47 @@ namespace quick_cache // Root namespace.
 								return FALSE; // Not possible; or outright failure.
 
 							return TRUE; // Deletion success.
+						}
+
+					public function check_blog_paths()
+						{
+							if(!$this->options['enable'])
+								return; // Nothing to do.
+
+							if(!is_multisite()) return; // N/A.
+
+							if(!empty($_REQUEST[__NAMESPACE__]))
+								return; // Skip on plugin actions.
+
+							$cache_dir = ABSPATH.$this->options['cache_dir'];
+
+							if(!is_file($cache_dir.'/qc-blog-paths'))
+								$this->update_blog_paths();
+						}
+
+					public function update_blog_paths($enable_live_network_counts = NULL)
+						{
+							$value = // This hook actually rides on a filter.
+								$enable_live_network_counts; // Filter value.
+
+							if(!$this->options['enable'])
+								return $value; // Nothing to do.
+
+							if(!is_multisite()) return $value; // N/A.
+
+							$cache_dir = ABSPATH.$this->options['cache_dir'];
+
+							if(!is_dir($cache_dir) && mkdir($cache_dir, 0775, TRUE))
+								{
+									if(is_writable($cache_dir) && !is_file($cache_dir.'/.htaccess'))
+										file_put_contents($cache_dir.'/.htaccess', 'deny from all');
+								}
+							if(is_dir($cache_dir) && is_writable($cache_dir))
+								{
+									$query = "SELECT `path` FROM `".esc_sql($this->wpdb()->blogs)."` WHERE `deleted` <= '0'";
+									file_put_contents($cache_dir.'/qc-blog-paths', serialize($this->wpdb()->get_col($query)));
+								}
+							return $value; // Pass through untouched (always).
 						}
 				}
 
