@@ -341,9 +341,16 @@ namespace quick_cache // Root namespace.
 							$host_dir_token = '/'; // Assume NOT multisite; or running it's own domain.
 
 							if($is_multisite && (!defined('SUBDOMAIN_INSTALL') || !SUBDOMAIN_INSTALL))
-								{ // Multisite w/ sub-directories; need sub-directory. We MUST validate against blog paths too.
+								{ // Multisite w/ sub-directories; need a valid sub-directory token.
 
-									list($host_dir_token) = explode('/', trim($_SERVER['REQUEST_URI'], '/'));
+									$base = '/'; // Initial default value.
+									if(defined('PATH_CURRENT_SITE')) $base = PATH_CURRENT_SITE;
+									else if(!empty($GLOBALS['base'])) $base = $GLOBALS['base'];
+
+									$uri_minus_base = // Supports `/sub-dir/child-blog-sub-dir/` also.
+										preg_replace('/^'.preg_quote($base, '/').'/', '', $_SERVER['REQUEST_URI']);
+
+									list($host_dir_token) = explode('/', trim($uri_minus_base, '/'));
 									$host_dir_token = (isset($host_dir_token[0])) ? '/'.$host_dir_token.'/' : '/';
 
 									if($host_dir_token !== '/' // Perhaps NOT the main site?
