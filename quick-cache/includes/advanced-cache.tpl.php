@@ -105,9 +105,9 @@ namespace quick_cache // Root namespace.
 					if(isset($_SERVER['REMOTE_ADDR'], $_SERVER['SERVER_ADDR']) && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR'])
 						if(!$this->is_auto_cache_engine() && !$this->is_localhost()) return;
 
-					if(preg_match('/\/(?:wp\-[^\/]+|xmlrpc)\.php[?$]/', $_SERVER['REQUEST_URI'])) return;
-					if(is_admin() || preg_match('/\/wp-admin[\/?$]/', $_SERVER['REQUEST_URI'])) return;
-					if(is_multisite() && preg_match('/\/files[\/?$])/', $_SERVER['REQUEST_URI'])) return;
+					if(preg_match('/\/(?:wp\-[^\/]+|xmlrpc)\.php(?:[?]|$)/', $_SERVER['REQUEST_URI'])) return;
+					if(is_admin() || preg_match('/\/wp-admin(?:[\/?]|$)/', $_SERVER['REQUEST_URI'])) return;
+					if(is_multisite() && preg_match('/\/files(?:[\/?]|$)/', $_SERVER['REQUEST_URI'])) return;
 
 					if($this->is_like_user_logged_in()) return; // Lite version cannot enable user caching.
 
