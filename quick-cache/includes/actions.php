@@ -13,6 +13,23 @@ namespace quick_cache // Root namespace.
 						if(method_exists($this, $action)) $this->{$action}($args);
 				}
 
+			public function wipe_cache($args)
+				{
+					if(!current_user_can(plugin()->network_cap))
+						return; // Nothing to do.
+
+					if(empty($_REQUEST['_wpnonce']) || !wp_verify_nonce($_REQUEST['_wpnonce']))
+						return; // Unauthenticated POST data.
+
+					$counter = plugin()->wipe_cache(TRUE); // Counter.
+
+					$redirect_to = self_admin_url('/admin.php'); // Redirect preparations.
+					$query_args  = array('page' => __NAMESPACE__, __NAMESPACE__.'__cache_wiped' => '1');
+					$redirect_to = add_query_arg(urlencode_deep($query_args), $redirect_to);
+
+					wp_redirect($redirect_to).exit(); // All done :-)
+				}
+
 			public function clear_cache($args)
 				{
 					if(!current_user_can(plugin()->cap))
