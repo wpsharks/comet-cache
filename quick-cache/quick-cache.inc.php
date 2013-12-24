@@ -177,12 +177,13 @@ namespace quick_cache // Root namespace.
 							$this->options['version'] = $this->version;
 							update_option(__NAMESPACE__.'_options', $this->options);
 
-							if(!$this->options['enable']) return; // Nothing more to do.
-
-							$this->add_wp_cache_to_wp_config();
-							$this->add_advanced_cache();
-							$this->update_blog_paths();
-							$this->auto_clear_cache();
+							if($this->options['enable']) // Only if enabled.
+								{
+									$this->add_wp_cache_to_wp_config();
+									$this->add_advanced_cache();
+									$this->update_blog_paths();
+								}
+							$this->clear_cache(); // Always clear the cache in this scenario.
 
 							$notices   = (is_array($notices = get_option(__NAMESPACE__.'_notices'))) ? $notices : array();
 							$notices[] = __('<strong>Quick Cache:</strong> detected a new version of itself. Recompiling w/ latest version... clearing cache... all done :-)', $this->text_domain);
