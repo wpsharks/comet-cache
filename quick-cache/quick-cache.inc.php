@@ -434,7 +434,7 @@ namespace quick_cache // Root namespace.
 
 							$counter = $this->wipe_cache();
 
-							if($counter && $this->options['change_notifications_enable'] && is_admin())
+							if($counter && is_admin()) // Change notifications cannot be turned off in the lite version.
 								{
 									$notices   = (is_array($notices = get_option(__NAMESPACE__.'_notices'))) ? $notices : array();
 									$notices[] = '<img src="'.esc_attr($this->url('/client-s/images/wipe.png')).'" style="float:left; margin:0 10px 0 0; border:0;" />'.
