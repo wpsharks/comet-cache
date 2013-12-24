@@ -437,7 +437,7 @@ namespace quick_cache // Root namespace.
 							if($counter && $this->options['change_notifications_enable'] && is_admin())
 								{
 									$notices   = (is_array($notices = get_option(__NAMESPACE__.'_notices'))) ? $notices : array();
-									$notices[] = '<img src="'.esc_attr($this->url('/client-s/images/clear.png')).'" style="float:left; margin:0 10px 0 0; border:0;" />'.
+									$notices[] = '<img src="'.esc_attr($this->url('/client-s/images/wipe.png')).'" style="float:left; margin:0 10px 0 0; border:0;" />'.
 									             __('<strong>Quick Cache:</strong> detected significant changes. Found cache files (auto-wiping).', $this->text_domain);
 									update_option(__NAMESPACE__.'_notices', $notices);
 								}
