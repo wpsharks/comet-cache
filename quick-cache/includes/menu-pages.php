@@ -13,7 +13,12 @@ namespace quick_cache // Root namespace.
 
 					echo '<div class="plugin-menu-page-heading">'."\n";
 
-					echo '   <button type="button" class="plugin-menu-page-clear-cache" style="float:right;" title="'.__('Clear Cache (Start Fresh)', plugin()->text_domain).'"'. // Clear the cache (default method for doing so).
+					if(is_multisite()) // Wipes entire cache (e.g. this clears ALL sites in a network).
+						echo '   <button type="button" class="plugin-menu-page-wipe-cache" style="float:right; margin-left:15px;" title="'.esc_attr(__('Wipe Cache (Start Fresh); clears the cache for all sites in this network at once!', plugin()->text_domain)).'"'.
+						     '      data-action="'.esc_attr(add_query_arg(urlencode_deep(array('page' => __NAMESPACE__, '_wpnonce' => wp_create_nonce(), __NAMESPACE__ => array('wipe_cache' => '1'))), self_admin_url('/admin.php'))).'">'.
+						     '      '.__('Wipe', plugin()->text_domain).' <img src="'.esc_attr(plugin()->url('/client-s/images/wipe.png')).'" style="width:16px; height:16px;" /></button>'."\n";
+
+					echo '   <button type="button" class="plugin-menu-page-clear-cache" style="float:right;" title="'.esc_attr(__('Clear Cache (Start Fresh)', plugin()->text_domain).((is_multisite()) ? __('; affects the current site only.', plugin()->text_domain) : '')).'"'.
 					     '      data-action="'.esc_attr(add_query_arg(urlencode_deep(array('page' => __NAMESPACE__, '_wpnonce' => wp_create_nonce(), __NAMESPACE__ => array('clear_cache' => '1'))), self_admin_url('/admin.php'))).'">'.
 					     '      '.__('Clear', plugin()->text_domain).' <img src="'.esc_attr(plugin()->url('/client-s/images/clear.png')).'" style="width:16px; height:16px;" /></button>'."\n";
 
@@ -49,10 +54,16 @@ namespace quick_cache // Root namespace.
 							echo '   <i class="fa fa-thumbs-up"></i> '.__('Default options successfully restored.', plugin()->text_domain)."\n";
 							echo '</div>'."\n";
 						}
+					if(!empty($_REQUEST[__NAMESPACE__.'__cache_wiped']))
+						{
+							echo '<div class="plugin-menu-page-notice notice">'."\n";
+							echo '   <img src="'.esc_attr(plugin()->url('/client-s/images/wipe.png')).'" /> '.__('Cache wiped across all sites; recreation will occur automatically over time.', plugin()->text_domain)."\n";
+							echo '</div>'."\n";
+						}
 					if(!empty($_REQUEST[__NAMESPACE__.'__cache_cleared']))
 						{
 							echo '<div class="plugin-menu-page-notice notice">'."\n";
-							echo '   <img src="'.esc_attr(plugin()->url('/client-s/images/clear.png')).'" /> '.__('Cache reset for this site; recreation will occur automatically over time.', plugin()->text_domain)."\n";
+							echo '   <img src="'.esc_attr(plugin()->url('/client-s/images/clear.png')).'" /> '.__('Cache cleared for this site; recreation will occur automatically over time.', plugin()->text_domain)."\n";
 							echo '</div>'."\n";
 						}
 					if(!empty($_REQUEST[__NAMESPACE__.'__wp_config_wp_cache_add_failure']))
