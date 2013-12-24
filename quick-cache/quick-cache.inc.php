@@ -746,6 +746,10 @@ namespace quick_cache // Root namespace.
 
 							$cache_dir = ABSPATH.$this->options['cache_dir'];
 
+							$base = '/'; // Initial default value.
+							if(defined('PATH_CURRENT_SITE')) $base = PATH_CURRENT_SITE;
+							else if(!empty($GLOBALS['base'])) $base = $GLOBALS['base'];
+
 							if(!is_dir($cache_dir) && mkdir($cache_dir, 0775, TRUE))
 								{
 									if(is_writable($cache_dir) && !is_file($cache_dir.'/.htaccess'))
@@ -753,8 +757,14 @@ namespace quick_cache // Root namespace.
 								}
 							if(is_dir($cache_dir) && is_writable($cache_dir))
 								{
-									$query = "SELECT `path` FROM `".esc_sql($this->wpdb()->blogs)."` WHERE `deleted` <= '0'";
-									file_put_contents($cache_dir.'/qc-blog-paths', serialize($this->wpdb()->get_col($query)));
+									$paths = // Collect child blog paths from the WordPress database.
+										$this->wpdb()->get_col("SELECT `path` FROM `".esc_sql($this->wpdb()->blogs)."` WHERE `deleted` <= '0'");
+
+									foreach($paths as &$_path) // Strip base; these need to match `$host_dir_token`.
+										$_path = '/'.ltrim(preg_replace('/^'.preg_quote($base, '/').'/', '', $_path), '/');
+									unset($_path); // Housekeeping.
+
+									file_put_contents($cache_dir.'/qc-blog-paths', serialize($paths));
 								}
 							return $value; // Pass through untouched (always).
 						}
