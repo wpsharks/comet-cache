@@ -37,20 +37,22 @@ namespace quick_cache // Root namespace.
 							load_plugin_textdomain($this->text_domain);
 
 							$this->default_options = array( // Default options.
-								'version'                   => $this->version,
+								'version'                       => $this->version,
 
-								'crons_setup'               => '0', // `0` or timestamp.
+								'crons_setup'                   => '0', // `0` or timestamp.
 
-								'enable'                    => '0', // `0|1`.
-								'debugging_enable'          => '1', // `0|1`.
-								'allow_browser_cache'       => '0', // `0|1`.
+								'enable'                        => '0', // `0|1`.
+								'debugging_enable'              => '1', // `0|1`.
+								'cache_purge_home_page_enable'  => '1', // `0|1`.
+								'cache_purge_posts_page_enable' => '1', // `0|1`.
+								'allow_browser_cache'           => '0', // `0|1`.
 
-								'cache_dir'                 => '/wp-content/cache', // Relative to `ABSPATH`.
-								'cache_max_age'             => '7 days', // `strtotime()` compatible.
+								'cache_dir'                     => '/wp-content/cache', // Relative to `ABSPATH`.
+								'cache_max_age'                 => '7 days', // `strtotime()` compatible.
 
-								'get_requests'              => '0', // `0|1`.
+								'get_requests'                  => '0', // `0|1`.
 
-								'uninstall_on_deactivation' => '0' // `0|1`.
+								'uninstall_on_deactivation'     => '0' // `0|1`.
 							); // Default options are merged with those defined by the site owner.
 							$options               = (is_array($options = get_option(__NAMESPACE__.'_options'))) ? $options : array();
 							if(is_multisite() && is_array($site_options = get_site_option(__NAMESPACE__.'_options')))
@@ -473,9 +475,15 @@ namespace quick_cache // Root namespace.
 							if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
 								return $counter; // Nothing to do.
 
+							if ( get_post_status ( $id ) == 'auto-draft' )
+								return $counter; // Nothing to do.
+
 							$cache_dir = ABSPATH.$this->options['cache_dir'];
 
 							if(!is_dir($cache_dir)) return $counter; // Nothing to do.
+
+							$counter += $this->auto_purge_home_page_cache(); // If enabled and necessary.
+							$counter += $this->auto_purge_posts_page_cache(); // If enabled & applicable.
 
 							if(!($permalink = get_permalink($id))) return $counter; // Nothing we can do.
 
@@ -501,6 +509,96 @@ namespace quick_cache // Root namespace.
 									$_notices   = (is_array($_notices = get_option(__NAMESPACE__.'_notices'))) ? $_notices : array();
 									$_notices[] = '<img src="'.esc_attr($this->url('/client-s/images/clear.png')).'" style="float:left; margin:0 10px 0 0; border:0;" />'.
 									              sprintf(__('<strong>Quick Cache:</strong> detected changes. Found cache file(s) for %1$s ID: <code>%2$s</code> (auto-purging).', $this->text_domain), $type_singular_name, $id);
+									update_option(__NAMESPACE__.'_notices', $_notices);
+								}
+							unset($_file, $_notices); // Just a little housekeeping.
+
+							return apply_filters(__METHOD__, $counter, get_defined_vars());
+						}
+
+					public function auto_purge_home_page_cache()
+						{
+							$counter = 0; // Initialize.
+
+							if(!$this->options['enable'])
+								return $counter; // Nothing to do.
+
+							if(!$this->options['cache_purge_home_page_enable'])
+								return $counter; // Nothing to do.
+
+							$cache_dir = ABSPATH.$this->options['cache_dir'];
+
+							if(!is_dir($cache_dir)) return $counter; // Nothing to do.
+
+							if(!($parts = parse_url(home_url('/'))) || empty($parts['path']))
+								return $counter; // Nothing we can do.
+
+							$http_host_nps = preg_replace('/\:[0-9]+$/', '', $_SERVER['HTTP_HOST']);
+							$md5_2         = md5($http_host_nps.$parts['path'].((!empty($parts['query'])) ? '?'.$parts['query'] : ''));
+
+							foreach((array)glob($cache_dir.'/qc-c-*-'.$md5_2.'-*', GLOB_NOSORT) as $_file) if($_file && is_file($_file))
+								{
+									if(!unlink($_file)) // If file deletion fails; stop here w/ exception.
+										throw new \exception(sprintf(__('Unable to auto-purge: `%1$s`.', $this->text_domain), $_file));
+									$counter++; // Increment counter for each file purge.
+
+									if(!empty($_notices) || !is_admin()) // Change notifications cannot be turned off in the lite version.
+										continue; // Stop here; we already issued a notice, or this notice is N/A.
+
+									$_notices   = (is_array($_notices = get_option(__NAMESPACE__.'_notices'))) ? $_notices : array();
+									$_notices[] = '<img src="'.esc_attr($this->url('/client-s/images/clear.png')).'" style="float:left; margin:0 10px 0 0; border:0;" />'.
+									              __('<strong>Quick Cache:</strong> detected changes. Found cache file(s) for the designated "Home Page" (auto-purging).', $this->text_domain);
+									update_option(__NAMESPACE__.'_notices', $_notices);
+								}
+							unset($_file, $_notices); // Just a little housekeeping.
+
+							return apply_filters(__METHOD__, $counter, get_defined_vars());
+						}
+
+					public function auto_purge_posts_page_cache()
+						{
+							$counter = 0; // Initialize.
+
+							if(!$this->options['enable'])
+								return $counter; // Nothing to do.
+
+							if(!$this->options['cache_purge_posts_page_enable'])
+								return $counter; // Nothing to do.
+
+							$cache_dir = ABSPATH.$this->options['cache_dir'];
+
+							if(!is_dir($cache_dir)) return $counter; // Nothing to do.
+
+							$show_on_front  = get_option('show_on_front');
+							$page_for_posts = get_option('page_for_posts');
+
+							if(!in_array($show_on_front, array('posts', 'page'), TRUE))
+								return $counter; // Nothing we can do in this case.
+
+							if($show_on_front === 'page' && !$page_for_posts)
+								return $counter; // Nothing we can do.
+
+							if($show_on_front === 'posts') $posts_page = home_url('/');
+							else if($show_on_front === 'page') $posts_page = get_permalink($page_for_posts);
+
+							if(empty($posts_page) || !($parts = parse_url($posts_page)) || empty($parts['path']))
+								return $counter; // Nothing we can do.
+
+							$http_host_nps = preg_replace('/\:[0-9]+$/', '', $_SERVER['HTTP_HOST']);
+							$md5_2         = md5($http_host_nps.$parts['path'].((!empty($parts['query'])) ? '?'.$parts['query'] : ''));
+
+							foreach((array)glob($cache_dir.'/qc-c-*-'.$md5_2.'-*', GLOB_NOSORT) as $_file) if($_file && is_file($_file))
+								{
+									if(!unlink($_file)) // If file deletion fails; stop here w/ exception.
+										throw new \exception(sprintf(__('Unable to auto-purge: `%1$s`.', $this->text_domain), $_file));
+									$counter++; // Increment counter for each file purge.
+
+									if(!empty($_notices) || !is_admin()) // Change notifications cannot be turned off in the lite version.
+										continue; // Stop here; we already issued a notice, or this notice is N/A.
+
+									$_notices   = (is_array($_notices = get_option(__NAMESPACE__.'_notices'))) ? $_notices : array();
+									$_notices[] = '<img src="'.esc_attr($this->url('/client-s/images/clear.png')).'" style="float:left; margin:0 10px 0 0; border:0;" />'.
+									              __('<strong>Quick Cache:</strong> detected changes. Found cache file(s) for the designated "Posts Page" (auto-purging).', $this->text_domain);
 									update_option(__NAMESPACE__.'_notices', $_notices);
 								}
 							unset($_file, $_notices); // Just a little housekeeping.
