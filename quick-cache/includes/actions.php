@@ -68,7 +68,7 @@ namespace quick_cache // Root namespace.
 					$redirect_to = self_admin_url('/admin.php'); // Redirect preparations.
 					$query_args  = array('page' => __NAMESPACE__, __NAMESPACE__.'__updated' => '1');
 
-					plugin()->auto_clear_cache(); // May produce a notice.
+					plugin()->auto_wipe_cache(); // May produce a notice.
 
 					if(plugin()->options['enable']) // Enable.
 						{
@@ -111,7 +111,7 @@ namespace quick_cache // Root namespace.
 					$redirect_to = self_admin_url('/admin.php'); // Redirect preparations.
 					$query_args  = array('page' => __NAMESPACE__, __NAMESPACE__.'__restored' => '1');
 
-					plugin()->auto_clear_cache(); // May produce a notice.
+					plugin()->auto_wipe_cache(); // May produce a notice.
 
 					if(plugin()->options['enable']) // Enable.
 						{
