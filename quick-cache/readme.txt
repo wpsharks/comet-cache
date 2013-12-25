@@ -1,8 +1,8 @@
 === Quick Cache (Speed Without Compromise) ===
 
-Stable tag: 131206
+Stable tag: 131224
 Requires at least: 3.7
-Tested up to: 3.7.1
+Tested up to: 3.8
 Text Domain: quick-cache
 
 License: GPLv2 or later
@@ -256,11 +256,24 @@ Released under the terms of the [GNU General Public License](http://www.gnu.org/
 
 == Upgrade Notice ==
 
-= v131206 =
+= v131224 =
 
 Requires PHP v5.3+. The latest version of Quick Cache is a complete rewrite (OOP design). Faster! and even more dependable. NOTE: the free version of Quick Cache (this new LITE version); while it remains fully functional and is more-than-adequate for most sites; is now limited in some ways. The following advanced features from the previous release are no longer available in the lite version: a custom MD5 Version Salt, custom Exclusion Patterns, a Clear Cache button in admin bar. These, and other features; are now available only in the pro version of the plugin. For further details, please see: <http://www.websharks-inc.com/product/quick-cache/>.
 
 == Changelog ==
+
+= v131224 =
+
+* **New Lite Enhancement**. The Home Page cache and Posts Page cache are now automatically purged when necessary (such as when a new post is published). See: <https://github.com/WebSharks/Quick-Cache/issues/40>
+* Improved Quick Cache version check notice.
+* Improved Quick Cache options validation.
+* **Bug Fix**. Quick Cache was previously not properly excluding systematic WordPress areas reliably, e.g. any file that begins with `wp-` and/or the `xmlrpc` file. These are now properly auto-excluded. On Multisite installations, `/files/` is also auto-excluded from being cached. This bug required fixing incorrect instances of `[?$]` in regex patterns. See: <https://github.com/WebSharks/Quick-Cache/issues/41>
+* **Multisite Enhancement**. When running Quick Cache on Multisite Network installation, only allow the plugin to be "Network Activated" (becuase that is how Quick Cache is designed to work). See: <https://github.com/WebSharks/Quick-Cache/issues/50>
+* **Multisite Enhancement**. New 'Wipe' button allows a site owner to clear (wipe) the cache for all sites in a Multisite Network at once. See: <https://github.com/WebSharks/Quick-Cache/issues/48>
+* **Multisite Bug Fix**. Clearing the cache on a Multisite Network configured to use sub-directories now works properly. See: <https://github.com/WebSharks/Quick-Cache/issues/39>
+* **Multisite Bug Fix**. Fixed unmatched closing parenthesis in regex. See: <https://github.com/WebSharks/Quick-Cache/issues/37>
+* **Multisite Bug Fix**. Added support for `PATH_CURRENT_SITE` and `$GLOBALS['base']`.
+* **Multisite Bug Fix**. Removed depreciated VHOST code that was causing issues with clearing the cache.
 
 = v131206 =
 

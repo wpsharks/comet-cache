@@ -10,7 +10,7 @@ namespace quick_cache // Root namespace.
 				{
 					public $is_pro = FALSE; // Lite version flag.
 					public $file = ''; // Defined by class constructor.
-					public $version = '131206'; // See: `readme.txt` file.
+					public $version = '131224'; // See: `readme.txt` file.
 					public $text_domain = ''; // Defined by class constructor.
 					public $default_options = array(); // Defined @ setup.
 					public $options = array(); // Defined @ setup.
