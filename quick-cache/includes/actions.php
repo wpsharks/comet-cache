@@ -137,6 +137,42 @@ namespace quick_cache // Root namespace.
 
 					wp_redirect($redirect_to).exit(); // All done :-)
 				}
+
+			public function dismiss_notice($args)
+				{
+					if(!current_user_can(plugin()->cap))
+						return; // Nothing to do.
+
+					if(empty($_REQUEST['_wpnonce']) || !wp_verify_nonce($_REQUEST['_wpnonce']))
+						return; // Unauthenticated POST data.
+
+					$args = array_map('trim', stripslashes_deep((array)$args));
+					if(empty($args['key'])) return; // Nothing to dismiss.
+
+					$notices = (is_array($notices = get_option(__NAMESPACE__.'_notices'))) ? $notices : array();
+					unset($notices[$args['key']]); // Dismiss this notice.
+					update_option(__NAMESPACE__.'_notices', $notices);
+
+					wp_redirect(remove_query_arg(__NAMESPACE__)).exit();
+				}
+
+			public function dismiss_error($args)
+				{
+					if(!current_user_can(plugin()->cap))
+						return; // Nothing to do.
+
+					if(empty($_REQUEST['_wpnonce']) || !wp_verify_nonce($_REQUEST['_wpnonce']))
+						return; // Unauthenticated POST data.
+
+					$args = array_map('trim', stripslashes_deep((array)$args));
+					if(empty($args['key'])) return; // Nothing to dismiss.
+
+					$errors = (is_array($errors = get_option(__NAMESPACE__.'_errors'))) ? $errors : array();
+					unset($errors[$args['key']]); // Dismiss this error.
+					update_option(__NAMESPACE__.'_errors', $errors);
+
+					wp_redirect(remove_query_arg(__NAMESPACE__)).exit();
+				}
 		}
 
 		new actions(); // Initialize/handle actions.
