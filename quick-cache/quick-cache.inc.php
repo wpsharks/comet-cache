@@ -297,7 +297,7 @@ namespace quick_cache // Root namespace.
 
 					public function add_menu_pages()
 						{
-							if(!is_multisite()) return; // Multisite networks MUST use network admin area.
+							if(is_multisite()) return; // Multisite networks MUST use network admin area.
 
 							add_menu_page(__('Quick Cache', $this->text_domain), __('Quick Cache', $this->text_domain),
 							              $this->cap, __NAMESPACE__, array($this, 'menu_page_options'),
