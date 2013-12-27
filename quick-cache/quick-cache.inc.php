@@ -106,6 +106,7 @@ namespace quick_cache // Root namespace.
 
 							add_action('all_admin_notices', array($this, 'all_admin_notices'));
 							add_action('all_admin_notices', array($this, 'all_admin_errors'));
+
 							add_action('network_admin_menu', array($this, 'add_network_menu_pages'));
 							add_action('admin_menu', array($this, 'add_menu_pages'));
 
@@ -289,17 +290,18 @@ namespace quick_cache // Root namespace.
 
 					public function add_network_menu_pages()
 						{
-							add_menu_page(__('Quick Cache', $this->text_domain), // Menu page for plugin options/config.
-							              __('Quick Cache', $this->text_domain), $this->network_cap, __NAMESPACE__, array($this, 'menu_page_options'),
+							add_menu_page(__('Quick Cache', $this->text_domain), __('Quick Cache', $this->text_domain),
+							              $this->network_cap, __NAMESPACE__, array($this, 'menu_page_options'),
 							              $this->url('/client-s/images/menu-icon.png'));
 						}
 
 					public function add_menu_pages()
 						{
-							if(!is_multisite()) // Multisite networks must use the network administrative area.
-								add_menu_page(__('Quick Cache', $this->text_domain), // Menu page for plugin options/config.
-								              __('Quick Cache', $this->text_domain), $this->cap, __NAMESPACE__, array($this, 'menu_page_options'),
-								              $this->url('/client-s/images/menu-icon.png'));
+							if(is_multisite()) return; // Multisite networks MUST use network admin area.
+
+							add_menu_page(__('Quick Cache', $this->text_domain), __('Quick Cache', $this->text_domain),
+							              $this->cap, __NAMESPACE__, array($this, 'menu_page_options'),
+							              $this->url('/client-s/images/menu-icon.png'));
 						}
 
 					public function menu_page_options()
@@ -311,26 +313,54 @@ namespace quick_cache // Root namespace.
 
 					public function all_admin_notices()
 						{
-							$notices = (is_array($notices = get_option(__NAMESPACE__.'_notices'))) ? $notices : array();
-							if($notices) delete_option(__NAMESPACE__.'_notices'); // Process one-time only.
+							if(($notices = (is_array($notices = get_option(__NAMESPACE__.'_notices'))) ? $notices : array()))
+								{
+									$notices = $updated_notices = array_unique($notices); // De-dupe.
 
-							$notices = array_unique($notices); // Don't show dupes.
+									foreach(array_keys($updated_notices) as $_key) if(strpos($_key, 'persistent-') !== 0)
+										unset($updated_notices[$_key]); // Leave persistent notices; ditch others.
+									unset($_key); // Housekeeping after updating notices.
 
-							if(current_user_can($this->cap)) foreach($notices as $_notice)
-								echo apply_filters(__METHOD__.'__notice', '<div class="updated"><p>'.$_notice.'</p></div>', get_defined_vars());
-							unset($_notice); // Housekeeping.
+									update_option(__NAMESPACE__.'_notices', $updated_notices);
+								}
+							if(current_user_can($this->cap)) foreach($notices as $_key => $_notice)
+								{
+									$_dismiss = ''; // Initialize empty string; e.g. reset value on each pass.
+									if(strpos($_key, 'persistent-') === 0) // A dismissal link is needed in this case?
+										{
+											$_dismiss_css = 'display:inline-block; float:right; margin:0 0 0 15px; text-decoration:none; font-weight:bold;';
+											$_dismiss     = add_query_arg(urlencode_deep(array(__NAMESPACE__ => array('dismiss_notice' => array('key' => $_key)), '_wpnonce' => wp_create_nonce())));
+											$_dismiss     = '<a style="'.esc_attr($_dismiss_css).'" href="'.esc_attr($_dismiss).'">'.__('dismiss &times;', $this->text_domain).'</a>';
+										}
+									echo apply_filters(__METHOD__.'__notice', '<div class="updated"><p>'.$_notice.$_dismiss.'</p></div>', get_defined_vars());
+								}
+							unset($_key, $_notice, $_dismiss_css, $_dismiss); // Housekeeping.
 						}
 
 					public function all_admin_errors()
 						{
-							$errors = (is_array($errors = get_option(__NAMESPACE__.'_errors'))) ? $errors : array();
-							if($errors) delete_option(__NAMESPACE__.'_errors'); // Process one-time only.
+							if(($errors = (is_array($errors = get_option(__NAMESPACE__.'_errors'))) ? $errors : array()))
+								{
+									$errors = $updated_errors = array_unique($errors); // De-dupe.
 
-							$errors = array_unique($errors); // Don't show dupes.
+									foreach(array_keys($updated_errors) as $_key) if(strpos($_key, 'persistent-') !== 0)
+										unset($updated_errors[$_key]); // Leave persistent errors; ditch others.
+									unset($_key); // Housekeeping after updating notices.
 
-							if(current_user_can($this->cap)) foreach($errors as $_error)
-								echo apply_filters(__METHOD__.'__error', '<div class="error"><p>'.$_error.'</p></div>', get_defined_vars());
-							unset($_error); // Housekeeping.
+									update_option(__NAMESPACE__.'_errors', $updated_errors);
+								}
+							if(current_user_can($this->cap)) foreach($errors as $_key => $_error)
+								{
+									$_dismiss = ''; // Initialize empty string; e.g. reset value on each pass.
+									if(strpos($_key, 'persistent-') === 0) // A dismissal link is needed in this case?
+										{
+											$_dismiss_css = 'display:inline-block; float:right; margin:0 0 0 15px; text-decoration:none; font-weight:bold;';
+											$_dismiss     = add_query_arg(urlencode_deep(array(__NAMESPACE__ => array('dismiss_error' => array('key' => $_key)), '_wpnonce' => wp_create_nonce())));
+											$_dismiss     = '<a style="'.esc_attr($_dismiss_css).'" href="'.esc_attr($_dismiss).'">'.__('dismiss &times;', $this->text_domain).'</a>';
+										}
+									echo apply_filters(__METHOD__.'__error', '<div class="error"><p>'.$_error.$_dismiss.'</p></div>', get_defined_vars());
+								}
+							unset($_key, $_error, $_dismiss_css, $_dismiss); // Housekeeping.
 						}
 
 					public function wipe_cache($manually = FALSE)
@@ -475,7 +505,7 @@ namespace quick_cache // Root namespace.
 							if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
 								return $counter; // Nothing to do.
 
-							if ( get_post_status ( $id ) == 'auto-draft' )
+							if(get_post_status($id) == 'auto-draft')
 								return $counter; // Nothing to do.
 
 							$cache_dir = ABSPATH.$this->options['cache_dir'];

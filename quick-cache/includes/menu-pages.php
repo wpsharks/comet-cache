@@ -34,8 +34,8 @@ namespace quick_cache // Root namespace.
 
 					echo '   <div class="plugin-menu-page-upsells">'."\n";
 					echo '      <a href="'.esc_attr(add_query_arg(urlencode_deep(array('page' => __NAMESPACE__, __NAMESPACE__.'_pro_preview' => '1')), self_admin_url('/admin.php'))).'"><i class="fa fa-eye"></i> Preview Pro Features</a>'."\n";
-					echo '      <a href="http://www.websharks-inc.com/product/quick-cache/" target="_blank"><i class="fa fa-heart-o"></i> Pro Upgrade</a>'."\n";
-					echo '      <a href="http://www.websharks-inc.com/r/quick-cache-subscribe/" target="_blank"><i class="fa fa-envelope"></i> Quick Cache Updates (via Email)</a>'."\n";
+					echo '      <a href="'.esc_attr('http://www.websharks-inc.com/product/'.str_replace('_', '-', __NAMESPACE__).'/').'" target="_blank"><i class="fa fa-heart-o"></i> '.__('Pro Upgrade', plugin()->text_domain).'</a>'."\n";
+					echo '      <a href="'.esc_attr('http://www.websharks-inc.com/r/'.str_replace('_', '-', __NAMESPACE__).'-subscribe/').'" target="_blank"><i class="fa fa-envelope"></i> '.__('Newsletter (Subscribe)', plugin()->text_domain).'</a>'."\n";
 					echo '   </div>'."\n";
 
 					echo '   <img src="'.plugin()->url('/client-s/images/options.png').'" alt="'.esc_attr(__('Plugin Options', plugin()->text_domain)).'" />'."\n";
@@ -429,6 +429,7 @@ namespace quick_cache // Root namespace.
 							echo '</div>'."\n";
 						}
 					echo '<div class="plugin-menu-page-save">'."\n";
+					echo '   <input type="hidden" name="'.esc_attr(__NAMESPACE__).'[save_options][crons_setup]" value="'.esc_attr(plugin()->options['crons_setup']).'" autocomplete="off" />'."\n";
 					echo '   <button type="submit">'.__('Save All Changes', plugin()->text_domain).' <i class="fa fa-save"></i></button>'."\n";
 					echo '</div>'."\n";
 
