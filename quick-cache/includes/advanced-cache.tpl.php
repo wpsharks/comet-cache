@@ -25,6 +25,7 @@ namespace quick_cache // Root namespace.
 		if(!defined('QUICK_CACHE_DEBUGGING_ENABLE')) define('QUICK_CACHE_DEBUGGING_ENABLE', '%%QUICK_CACHE_DEBUGGING_ENABLE%%');
 		if(!defined('QUICK_CACHE_ALLOW_BROWSER_CACHE')) define('QUICK_CACHE_ALLOW_BROWSER_CACHE', '%%QUICK_CACHE_ALLOW_BROWSER_CACHE%%');
 		if(!defined('QUICK_CACHE_GET_REQUESTS')) define('QUICK_CACHE_GET_REQUESTS', '%%QUICK_CACHE_GET_REQUESTS%%');
+		if(!defined('QUICK_CACHE_FEEDS_ENABLE')) define('QUICK_CACHE_FEEDS_ENABLE', '%%QUICK_CACHE_FEEDS_ENABLE%%');
 
 		/*
 		 * Cache directory. Max age; e.g. `7 days` — anything compatible w/ `strtotime()`.
@@ -104,6 +105,8 @@ namespace quick_cache // Root namespace.
 
 					if(isset($_SERVER['REMOTE_ADDR'], $_SERVER['SERVER_ADDR']) && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR'])
 						if(!$this->is_auto_cache_engine() && !$this->is_localhost()) return;
+
+					if(!QUICK_CACHE_FEEDS_ENABLE && $this->is_feed()) return;
 
 					if(preg_match('/\/(?:wp\-[^\/]+|xmlrpc)\.php(?:[?]|$)/', $_SERVER['REQUEST_URI'])) return;
 					if(is_admin() || preg_match('/\/wp-admin(?:[\/?]|$)/', $_SERVER['REQUEST_URI'])) return;
@@ -302,6 +305,20 @@ namespace quick_cache // Root namespace.
 					if(!empty($_SERVER['HTTP_USER_AGENT']))
 						if(stripos($_SERVER['HTTP_USER_AGENT'], __NAMESPACE__) !== FALSE)
 							return ($is = TRUE);
+
+					return ($is = FALSE);
+				}
+
+			public function is_feed()
+				{
+					static $is; // Cache.
+					if(isset($is)) return $is;
+
+					if(preg_match('/\/feed(?:[\/?]|$)/', $_SERVER['REQUEST_URI']))
+						return ($is = TRUE);
+
+					if(isset($_REQUEST['feed']))
+						return ($is = TRUE);
 
 					return ($is = FALSE);
 				}

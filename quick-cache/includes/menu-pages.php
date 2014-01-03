@@ -292,6 +292,25 @@ namespace quick_cache // Root namespace.
 
 					echo '</div>'."\n";
 
+					echo '<div class="plugin-menu-page-panel">'."\n";
+
+					echo '   <div class="plugin-menu-page-panel-heading">'."\n";
+					echo '      <i class="fa fa-gears"></i> '.__('RSS, RDF, and Atom Feeds', plugin()->text_domain)."\n";
+					echo '   </div>'."\n";
+
+					echo '   <div class="plugin-menu-page-panel-body clearfix">'."\n";
+					echo '      <i class="fa fa-question-circle fa-4x" style="float:right; margin: 0 0 0 25px;"></i>'."\n";
+					echo '      <h3>'.__('Caching Enabled for RSS, RDF, Atom Feeds?', plugin()->text_domain).'</h3>'."\n";
+					echo '      <p>'.__('This should almost ALWAYS be set to <code>No</code>. UNLESS, you\'re sure that you want to cache your feeds. If you use a web feed management provider like Google® Feedburner and you set this option to <code>Yes</code>, you may experience delays in the detection of new posts.', plugin()->text_domain).'</p>'."\n";
+					echo '      <p><select name="'.esc_attr(__NAMESPACE__).'[save_options][feeds_enable]">'."\n";
+					echo '            <option value="0"'.selected(plugin()->options['feeds_enable'], '0', FALSE).'>'.__('No, do NOT cache (or serve a cache file) when displaying a feed.', plugin()->text_domain).'</option>'."\n";
+					echo '            <option value="1"'.selected(plugin()->options['feeds_enable'], '1', FALSE).'>'.__('Yes, I would like to cache feed URLs.', plugin()->text_domain).'</option>'."\n";
+					echo '         </select></p>'."\n";
+					echo '      <p class="info">'.__('<strong>Note:</strong> This option affects all feeds served by WordPress, including the site feed, the site comment feed, post-specific comment feeds, author feeds, search feeds, and category and tag feeds. See also: <a href="http://codex.wordpress.org/WordPress_Feeds" target="_blank">WordPress Feeds</a>.', plugin()->text_domain).'</p>'."\n";
+					echo '   </div>'."\n";
+
+					echo '</div>'."\n";
+
 					if(plugin()->is_pro_preview())
 						{
 							echo '<div class="plugin-menu-page-panel pro-preview">'."\n";

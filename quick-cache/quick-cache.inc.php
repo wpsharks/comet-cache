@@ -51,6 +51,7 @@ namespace quick_cache // Root namespace.
 								'cache_max_age'                 => '7 days', // `strtotime()` compatible.
 
 								'get_requests'                  => '0', // `0|1`.
+								'feeds_enable'                  => '0', // `0|1`.
 
 								'uninstall_on_deactivation'     => '0' // `0|1`.
 							); // Default options are merged with those defined by the site owner.
