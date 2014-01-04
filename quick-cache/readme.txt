@@ -1,6 +1,6 @@
 === Quick Cache (Speed Without Compromise) ===
 
-Stable tag: 131224
+Stable tag: 140104
 Requires at least: 3.7
 Tested up to: 3.8
 Text Domain: quick-cache
@@ -229,6 +229,7 @@ Quick Cache is now completely uninstalled and you can start fresh :-)
 - User-Agent exclusion patterns (now supporting wildcards too).
 - HTTP referrer exclusion patterns (now supporting wildcards too).
 - An MD5 Version Salt (customize the caching engine).
+- An Automatic Updater to update Quick Cache Pro from your WordPress Dashboard.
 - Rockstar support for all Quick Cache features.
 
 **TIP:** you can preview Pro features in the free version by clicking the "**Preview Pro Features**" link at the top of your Quick Cache options.
@@ -256,11 +257,16 @@ Released under the terms of the [GNU General Public License](http://www.gnu.org/
 
 == Upgrade Notice ==
 
-= v131224 =
+= v140104 =
 
 Requires PHP v5.3+. The latest version of Quick Cache is a complete rewrite (OOP design). Faster! and even more dependable. NOTE: the free version of Quick Cache (this new LITE version); while it remains fully functional and is more-than-adequate for most sites; is now limited in some ways. The following advanced features from the previous release are no longer available in the lite version: a custom MD5 Version Salt, custom Exclusion Patterns, a Clear Cache button in admin bar. These, and other features; are now available only in the pro version of the plugin. For further details, please see: <http://www.websharks-inc.com/product/quick-cache/>.
 
 == Changelog ==
+
+= v140104 =
+
+* **New Options for Feed Caching**. It's now possible to control RSS, RDF, and Atom Feed caching. The new default is for feed caching to be disabled, which resolves an issue where new posts don't show up in the feed until the cache is cleared. This version of Quick Cache disables feed caching to prevent this from happening. If you wish to cache feeds, you can enable feed caching in the options. See: <https://github.com/WebSharks/Quick-Cache/issues/44>
+* **New Automatic Updater for Quick Cache Pro**. Quick Cache Pro now includes an automatic updater which lets you to keep Quick Cache Pro updated right from within your WordPress Dashboard. To upgrade to a new version of Quick Cache Pro using the Automatic Updater, simply fill in your WebSharks-Inc.com credentials in the new Plugin Updater sub-panel (**Quick Cache Pro -› Plugin Updater**). See: <https://github.com/WebSharks/Quick-Cache/issues/21>
 
 = v131224 =
 

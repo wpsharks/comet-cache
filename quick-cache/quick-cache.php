@@ -1,6 +1,6 @@
 <?php
 /*
-Version: 131224
+Version: 140104
 Text Domain: quick-cache
 Plugin Name: Quick Cache
 Network: true

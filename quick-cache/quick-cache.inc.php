@@ -10,7 +10,7 @@ namespace quick_cache // Root namespace.
 				{
 					public $is_pro = FALSE; // Lite version flag.
 					public $file = ''; // Defined by class constructor.
-					public $version = '131224'; // See: `readme.txt` file.
+					public $version = '140104'; // See: `readme.txt` file.
 					public $text_domain = ''; // Defined by class constructor.
 					public $default_options = array(); // Defined @ setup.
 					public $options = array(); // Defined @ setup.
@@ -194,6 +194,7 @@ namespace quick_cache // Root namespace.
 
 							$notices   = (is_array($notices = get_option(__NAMESPACE__.'_notices'))) ? $notices : array();
 							$notices[] = __('<strong>Quick Cache:</strong> detected a new version of itself. Recompiling w/ latest version... wiping the cache... all done :-)', $this->text_domain);
+							$notices[] = __('<strong>Quick Cache Feature Notice:</strong> This version of Quick Cache adds new options for Feed caching. Feed caching is now disabled by default. If you wish to enable feed caching, please visit the Quick Cache options panel.', $this->text_domain);
 							update_option(__NAMESPACE__.'_notices', $notices);
 						}
 
