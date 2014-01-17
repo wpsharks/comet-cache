@@ -133,6 +133,7 @@
 
 # Other misc files.
 *.bat text
+*.bash text
 *.bin binary
 *.class binary
 *.com binary
