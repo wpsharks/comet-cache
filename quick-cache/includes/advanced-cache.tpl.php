@@ -262,7 +262,14 @@ namespace quick_cache // Root namespace.
 					static $is; // Cache.
 					if(isset($is)) return $is;
 
+					/* This checks for a PHP session; i.e. session_start() in PHP where you're dealing with a user session.
+					 * WordPress itself does not use sessions, but some plugins/themes do. If you have a theme/plugin using
+					 * sessions, and there is an active session open, we consider you logged in; and thus, no caching.
+					 * SID is a PHP internal constant to identify a PHP session. It's the same regardless of the app. If PHP
+					 * starts a session, SID is defined.
+					 */
 					if(defined('SID') && SID) return ($is = TRUE); // Session.
+
 					$logged_in_cookies[] = 'comment_author_'; // Comment (and/or reply) authors.
 					$logged_in_cookies[] = 'wp-postpass_'; // Password access to protected posts.
 
