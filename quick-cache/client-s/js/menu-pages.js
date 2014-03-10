@@ -28,7 +28,7 @@
 					if(typeof data.confirmation !== 'string' || confirm(data.confirmation))
 						location.href = data.action;
 				});
-				$('select[name$="_enable\\]"], select[name$="_enable_flavor\\]"]', $menuPage).on('change', function()
+				$('select[name$="_enable\\]"], select[name$="_enable_flavor\\]"]', $menuPage).not('.no-if-enabled').on('change', function()
 				{
 					var $this = $(this), thisName = $this[0].name, thisValue = $this.val(),
 						$thisPanel = $this.closest('.plugin-menu-page-panel');
