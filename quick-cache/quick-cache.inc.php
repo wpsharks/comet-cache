@@ -37,23 +37,23 @@ namespace quick_cache // Root namespace.
 							load_plugin_textdomain($this->text_domain);
 
 							$this->default_options = array( // Default options.
-								'version'                       => $this->version,
+							                                'version'                       => $this->version,
 
-								'crons_setup'                   => '0', // `0` or timestamp.
+							                                'crons_setup'                   => '0', // `0` or timestamp.
 
-								'enable'                        => '0', // `0|1`.
-								'debugging_enable'              => '1', // `0|1`.
-								'cache_purge_home_page_enable'  => '1', // `0|1`.
-								'cache_purge_posts_page_enable' => '1', // `0|1`.
-								'allow_browser_cache'           => '0', // `0|1`.
+							                                'enable'                        => '0', // `0|1`.
+							                                'debugging_enable'              => '1', // `0|1`.
+							                                'cache_purge_home_page_enable'  => '1', // `0|1`.
+							                                'cache_purge_posts_page_enable' => '1', // `0|1`.
+							                                'allow_browser_cache'           => '0', // `0|1`.
 
-								'cache_dir'                     => '/wp-content/cache', // Relative to `ABSPATH`.
-								'cache_max_age'                 => '7 days', // `strtotime()` compatible.
+							                                'cache_dir'                     => '/wp-content/cache', // Relative to `ABSPATH`.
+							                                'cache_max_age'                 => '7 days', // `strtotime()` compatible.
 
-								'get_requests'                  => '0', // `0|1`.
-								'feeds_enable'                  => '0', // `0|1`.
+							                                'get_requests'                  => '0', // `0|1`.
+							                                'feeds_enable'                  => '0', // `0|1`.
 
-								'uninstall_on_deactivation'     => '0' // `0|1`.
+							                                'uninstall_on_deactivation'     => '0' // `0|1`.
 							); // Default options are merged with those defined by the site owner.
 							$options               = (is_array($options = get_option(__NAMESPACE__.'_options'))) ? $options : array();
 							if(is_multisite() && is_array($site_options = get_site_option(__NAMESPACE__.'_options')))
@@ -91,6 +91,9 @@ namespace quick_cache // Root namespace.
 							$this->default_options = apply_filters(__METHOD__.'__default_options', $this->default_options, get_defined_vars());
 							$this->options         = array_merge($this->default_options, $options); // This considers old options also.
 							$this->options         = apply_filters(__METHOD__.'__options', $this->options, get_defined_vars());
+
+							// Improving security. Force a leading slash; never allow a trailing slash.
+							$this->options['cache_dir'] = '/'.trim($this->options['cache_dir'], '\\/'." \t\n\r\0\x0B");
 
 							$this->network_cap = apply_filters(__METHOD__.'__network_cap', 'manage_network_plugins');
 							$this->cap         = apply_filters(__METHOD__.'__cap', 'activate_plugins');
@@ -370,20 +373,26 @@ namespace quick_cache // Root namespace.
 							$counter = 0; // Initialize.
 
 							$cache_dir = ABSPATH.$this->options['cache_dir'];
-
-							if(!is_dir($cache_dir) || !($opendir = opendir($cache_dir)))
-								return $counter; // Nothing we can do.
+							if(!is_dir($cache_dir)) return $counter; // Nothing we can do.
 
 							// @TODO When set_time_limit() is disabled by PHP configuration, display a warning message to users upon plugin activation
 							@set_time_limit(1800); // In case of HUGE sites w/ a very large directory. Errors are ignored in case `set_time_limit()` is disabled.
 
-							while(($_file = $_basename = readdir($opendir)) !== FALSE && ($_file = $cache_dir.'/'.$_file))
-								if(is_file($_file) && strpos($_basename, 'qc-c-') === 0) // No further conditions when wiping the cache.
-									if(!unlink($_file)) throw new \exception(sprintf(__('Unable to wipe: `%1$s`.', $this->text_domain), $_file));
-									else $counter++; // Increment counter for each file we wipe.
+							/** @var $_dir_file \RecursiveDirectoryIterator For IDEs. */
+							foreach($this->dir_regex_iteration($cache_dir, '/.+/') as $_dir_file)
+								{
+									if($_dir_file->isFile() && strpos($_dir_file->getSubpathname(), '/') !== FALSE)
+										// Don't delete files in the immediate directory; e.g. `qc-advanced-cache` or `.htaccess`, etc.
+										// Actual `http|https/...` cache files are nested. Files in the immediate directory are for other purposes.
+										if(!unlink($_dir_file->getPathname())) // Throw exception if unable to delete.
+											throw new \exception(sprintf(__('Unable to wipe file: `%1$s`.', $this->text_domain), $_dir_file->getPathname()));
+										else $counter++; // Increment counter for each file we purge.
 
-							unset($_file, $_basename); // Just a little housekeeping.
-							closedir($opendir); // Housekeeping.
+									else if($_dir_file->isDir()) // Directories are last in the iteration.
+										if(!rmdir($_dir_file->getPathname())) // Throw exception if unable to delete.
+											throw new \exception(sprintf(__('Unable to wipe dir: `%1$s`.', $this->text_domain), $_dir_file->getPathname()));
+								}
+							unset($_dir_file); // Just a little housekeeping.
 
 							return apply_filters(__METHOD__, $counter, get_defined_vars());
 						}
@@ -393,15 +402,10 @@ namespace quick_cache // Root namespace.
 							$counter = 0; // Initialize.
 
 							$cache_dir = ABSPATH.$this->options['cache_dir'];
+							if(!is_dir($cache_dir)) return $counter; // Nothing to do.
 
-							if(!is_dir($cache_dir) || !($opendir = opendir($cache_dir)))
-								return $counter; // Nothing we can do.
-
-							$is_multisite   = is_multisite(); // Cache this here.
-							$http_host_nps  = preg_replace('/\:[0-9]+$/', '', $_SERVER['HTTP_HOST']);
 							$host_dir_token = '/'; // Assume NOT multisite; or running it's own domain.
-
-							if($is_multisite && (!defined('SUBDOMAIN_INSTALL') || !SUBDOMAIN_INSTALL))
+							if(is_multisite() && (!defined('SUBDOMAIN_INSTALL') || !SUBDOMAIN_INSTALL))
 								{ // Multisite w/ sub-directories; need a valid sub-directory token.
 
 									$base = '/'; // Initial default value.
@@ -419,42 +423,55 @@ namespace quick_cache // Root namespace.
 									       || !in_array($host_dir_token, unserialize(file_get_contents($cache_dir.'/qc-blog-paths')), TRUE))
 									) $host_dir_token = '/'; // Main site; e.g. this is NOT a real/valid child blog path.
 								}
-							$md5_3 = md5($http_host_nps.$host_dir_token); // See: `includes/advanced-cache.tpl.php`.
-
 							// @TODO When set_time_limit() is disabled by PHP configuration, display a warning message to users upon plugin activation
 							@set_time_limit(1800); // In case of HUGE sites w/ a very large directory. Errors are ignored in case `set_time_limit()` is disabled.
 
-							while(($_file = $_basename = readdir($opendir)) !== FALSE && ($_file = $cache_dir.'/'.$_file))
-								if(is_file($_file) && strpos($_basename, 'qc-c-') === 0 && (!$is_multisite || strpos($_file, $md5_3) !== FALSE))
-									if(!unlink($_file)) throw new \exception(sprintf(__('Unable to clear: `%1$s`.', $this->text_domain), $_file));
-									else $counter++; // Increment counter for each file we clear.
+							$url                  = 'http://'.$_SERVER['HTTP_HOST'].$host_dir_token;
+							$cache_path_no_scheme = ltrim(strstr($this->url_to_cache_path($url), '/'), '/');
+							$regex                = '/^'.preg_quote($cache_dir, '/'). // Consider all schemes.
+							                        '\/[^\/]+\/'.preg_quote($cache_path_no_scheme, '/').'(?:\/|$)/';
 
-							unset($_file, $_basename); // Just a little housekeeping.
-							closedir($opendir); // Housekeeping.
+							/** @var $_dir_file \RecursiveDirectoryIterator For IDEs. */
+							foreach($this->dir_regex_iteration($cache_dir, $regex) as $_dir_file)
+								{
+									if($_dir_file->isFile() && strpos($_dir_file->getSubpathname(), '/') !== FALSE)
+										// Don't delete files in the immediate directory; e.g. `qc-advanced-cache` or `.htaccess`, etc.
+										// Actual `http|https/...` cache files are nested. Files in the immediate directory are for other purposes.
+										if(!unlink($_dir_file->getPathname())) // Throw exception if unable to delete.
+											throw new \exception(sprintf(__('Unable to clear file: `%1$s`.', $this->text_domain), $_dir_file->getPathname()));
+										else $counter++; // Increment counter for each file we purge.
+
+									else if($_dir_file->isDir()) // Directories are last in the iteration.
+										if(!rmdir($_dir_file->getPathname())) // Throw exception if unable to delete.
+											throw new \exception(sprintf(__('Unable to clear dir: `%1$s`.', $this->text_domain), $_dir_file->getPathname()));
+								}
+							unset($_dir_file); // Just a little housekeeping.
 
 							return apply_filters(__METHOD__, $counter, get_defined_vars());
 						}
 
-					public function purge_cache()
+					public function purge_cache() // i.e. the Quick Cache garbage collector.
 						{
 							$counter = 0; // Initialize.
 
 							$cache_dir = ABSPATH.$this->options['cache_dir'];
 							$max_age   = strtotime('-'.$this->options['cache_max_age']);
-
-							if(!is_dir($cache_dir) || !($opendir = opendir($cache_dir)))
-								return $counter; // Nothing we can do.
+							if(!is_dir($cache_dir)) return $counter; // Nothing to do.
 
 							// @TODO When set_time_limit() is disabled by PHP configuration, display a warning message to users upon plugin activation
 							@set_time_limit(1800); // In case of HUGE sites w/ a very large directory. Errors are ignored in case `set_time_limit()` is disabled.
 
-							while(($_file = $_basename = readdir($opendir)) !== FALSE && ($_file = $cache_dir.'/'.$_file))
-								if(is_file($_file) && strpos($_basename, 'qc-c-') === 0 && filemtime($_file) < $max_age)
-									if(!unlink($_file)) throw new \exception(sprintf(__('Unable to purge: `%1$s`.', $this->text_domain), $_file));
-									else $counter++; // Increment counter for each file we purge.
-
-							unset($_file, $_basename); // Just a little housekeeping.
-							closedir($opendir); // Housekeeping.
+							/** @var $_file \RecursiveDirectoryIterator For IDEs. */
+							foreach($this->dir_regex_iteration($cache_dir, '/.+/') as $_file) if($_file->isFile())
+								{
+									if($_file->getMTime() < $max_age && strpos($_file->getSubpathname(), '/') !== FALSE)
+										// Don't delete files in the immediate directory; e.g. `qc-advanced-cache` or `.htaccess`, etc.
+										// Actual `http|https/...` cache files are nested. Files in the immediate directory are for other purposes.
+										if(!unlink($_file->getPathname())) // Throw exception if unable to delete.
+											throw new \exception(sprintf(__('Unable to purge file: `%1$s`.', $this->text_domain), $_file->getPathname()));
+										else $counter++; // Increment counter for each file we purge.
+								}
+							unset($_file); // Just a little housekeeping.
 
 							return apply_filters(__METHOD__, $counter, get_defined_vars());
 						}
@@ -519,23 +536,26 @@ namespace quick_cache // Root namespace.
 
 							if(!($permalink = get_permalink($id))) return $counter; // Nothing we can do.
 
-							if(!($parts = parse_url($permalink)) || empty($parts['path']))
-								return $counter; // Nothing we can do.
-
-							$http_host_nps = preg_replace('/\:[0-9]+$/', '', $_SERVER['HTTP_HOST']);
-							$md5_2         = md5($http_host_nps.$parts['path'].((!empty($parts['query'])) ? '?'.$parts['query'] : ''));
-
 							if(($type = get_post_type($id)) && ($type = get_post_type_object($type)) && !empty($type->labels->singular_name))
 								$type_singular_name = $type->labels->singular_name; // Singular name for the post type.
 							else $type_singular_name = __('Post', $this->text_domain); // Default value.
 
-							foreach((array)glob($cache_dir.'/qc-c-*-'.$md5_2.'-*', GLOB_NOSORT) as $_file) if($_file && is_file($_file))
+							$regex = '/^'.preg_quote($cache_dir, '/').
+							         '\/'.preg_quote($this->url_to_cache_path($permalink, FALSE), '/').
+							         '(?:\.(?:q|u|v)\/[^\/]+\/?)*$/';
+
+							/** @var $_file \RecursiveDirectoryIterator For IDEs. */
+							foreach($this->dir_regex_iteration($cache_dir, $regex) as $_file) if($_file->isFile())
 								{
-									if(!unlink($_file)) // If file deletion fails; stop here w/ exception.
-										throw new \exception(sprintf(__('Unable to auto-purge: `%1$s`.', $this->text_domain), $_file));
+									if(strpos($_file->getSubpathname(), '/') === FALSE) continue;
+									// Don't delete files in the immediate directory; e.g. `qc-advanced-cache` or `.htaccess`, etc.
+									// Actual `http|https/...` cache files are nested. Files in the immediate directory are for other purposes.
+
+									if(!unlink($_file->getPathname())) // Throw exception if unable to delete.
+										throw new \exception(sprintf(__('Unable to auto-purge file: `%1$s`.', $this->text_domain), $_file->getPathname()));
 									$counter++; // Increment counter for each file purge.
 
-									if(!empty($_notices) || !is_admin()) // Change notifications cannot be turned off in the lite version.
+									if(!empty($_notices) || !$this->options['change_notifications_enable'] || !is_admin())
 										continue; // Stop here; we already issued a notice, or this notice is N/A.
 
 									$_notices   = (is_array($_notices = get_option(__NAMESPACE__.'_notices'))) ? $_notices : array();
@@ -559,22 +579,24 @@ namespace quick_cache // Root namespace.
 								return $counter; // Nothing to do.
 
 							$cache_dir = ABSPATH.$this->options['cache_dir'];
-
 							if(!is_dir($cache_dir)) return $counter; // Nothing to do.
 
-							if(!($parts = parse_url(home_url('/'))) || empty($parts['path']))
-								return $counter; // Nothing we can do.
+							$regex = '/^'.preg_quote($cache_dir, '/').
+							         '\/'.preg_quote($this->url_to_cache_path(home_url('/'), FALSE), '/').
+							         '(?:\.(?:q|u|v)\/[^\/]+\/?)*$/';
 
-							$http_host_nps = preg_replace('/\:[0-9]+$/', '', $_SERVER['HTTP_HOST']);
-							$md5_2         = md5($http_host_nps.$parts['path'].((!empty($parts['query'])) ? '?'.$parts['query'] : ''));
-
-							foreach((array)glob($cache_dir.'/qc-c-*-'.$md5_2.'-*', GLOB_NOSORT) as $_file) if($_file && is_file($_file))
+							/** @var $_file \RecursiveDirectoryIterator For IDEs. */
+							foreach($this->dir_regex_iteration($cache_dir, $regex) as $_file) if($_file->isFile())
 								{
-									if(!unlink($_file)) // If file deletion fails; stop here w/ exception.
-										throw new \exception(sprintf(__('Unable to auto-purge: `%1$s`.', $this->text_domain), $_file));
+									if(strpos($_file->getSubpathname(), '/') === FALSE) continue;
+									// Don't delete files in the immediate directory; e.g. `qc-advanced-cache` or `.htaccess`, etc.
+									// Actual `http|https/...` cache files are nested. Files in the immediate directory are for other purposes.
+
+									if(!unlink($_file->getPathname())) // Throw exception if unable to delete.
+										throw new \exception(sprintf(__('Unable to auto-purge file: `%1$s`.', $this->text_domain), $_file->getPathname()));
 									$counter++; // Increment counter for each file purge.
 
-									if(!empty($_notices) || !is_admin()) // Change notifications cannot be turned off in the lite version.
+									if(!empty($_notices) || !$this->options['change_notifications_enable'] || !is_admin())
 										continue; // Stop here; we already issued a notice, or this notice is N/A.
 
 									$_notices   = (is_array($_notices = get_option(__NAMESPACE__.'_notices'))) ? $_notices : array();
@@ -598,7 +620,6 @@ namespace quick_cache // Root namespace.
 								return $counter; // Nothing to do.
 
 							$cache_dir = ABSPATH.$this->options['cache_dir'];
-
 							if(!is_dir($cache_dir)) return $counter; // Nothing to do.
 
 							$show_on_front  = get_option('show_on_front');
@@ -612,20 +633,24 @@ namespace quick_cache // Root namespace.
 
 							if($show_on_front === 'posts') $posts_page = home_url('/');
 							else if($show_on_front === 'page') $posts_page = get_permalink($page_for_posts);
+							if(empty($posts_page)) return $counter; // Nothing we can do.
 
-							if(empty($posts_page) || !($parts = parse_url($posts_page)) || empty($parts['path']))
-								return $counter; // Nothing we can do.
+							$regex = '/^'.preg_quote($cache_dir, '/').
+							         '\/'.preg_quote($this->url_to_cache_path($posts_page, FALSE), '/').
+							         '(?:\.(?:q|u|v)\/[^\/]+\/?)*$/';
 
-							$http_host_nps = preg_replace('/\:[0-9]+$/', '', $_SERVER['HTTP_HOST']);
-							$md5_2         = md5($http_host_nps.$parts['path'].((!empty($parts['query'])) ? '?'.$parts['query'] : ''));
-
-							foreach((array)glob($cache_dir.'/qc-c-*-'.$md5_2.'-*', GLOB_NOSORT) as $_file) if($_file && is_file($_file))
+							/** @var $_file \RecursiveDirectoryIterator For IDEs. */
+							foreach($this->dir_regex_iteration($cache_dir, $regex) as $_file) if($_file->isFile())
 								{
-									if(!unlink($_file)) // If file deletion fails; stop here w/ exception.
-										throw new \exception(sprintf(__('Unable to auto-purge: `%1$s`.', $this->text_domain), $_file));
+									if(strpos($_file->getSubpathname(), '/') === FALSE) continue;
+									// Don't delete files in the immediate directory; e.g. `qc-advanced-cache` or `.htaccess`, etc.
+									// Actual `http|https/...` cache files are nested. Files in the immediate directory are for other purposes.
+
+									if(!unlink($_file->getPathname())) // Throw exception if unable to delete.
+										throw new \exception(sprintf(__('Unable to auto-purge file: `%1$s`.', $this->text_domain), $_file->getPathname()));
 									$counter++; // Increment counter for each file purge.
 
-									if(!empty($_notices) || !is_admin()) // Change notifications cannot be turned off in the lite version.
+									if(!empty($_notices) || !$this->options['change_notifications_enable'] || !is_admin())
 										continue; // Stop here; we already issued a notice, or this notice is N/A.
 
 									$_notices   = (is_array($_notices = get_option(__NAMESPACE__.'_notices'))) ? $_notices : array();
@@ -897,6 +922,80 @@ namespace quick_cache // Root namespace.
 									file_put_contents($cache_dir.'/qc-blog-paths', serialize($paths));
 								}
 							return $value; // Pass through untouched (always).
+						}
+
+					public function url_to_cache_path($url, $with_query = TRUE, $with_user_token = '', $with_version_salt = '')
+						{
+							$url               = trim((string)$url);
+							$with_user_token   = (string)$with_user_token;
+							$with_version_salt = trim((string)$with_version_salt);
+
+							if($url && strpos($url, '://') === FALSE)
+								$url = '//'.ltrim($url, '/');
+
+							if(!$url || !($url = parse_url($url)))
+								return ''; // Invalid URL.
+
+							$cache_path = ''; // Initialize.
+
+							if(!empty($url['scheme']))
+								$cache_path .= $url['scheme'].'/';
+							else $cache_path .= is_ssl() ? 'https/' : 'http/';
+
+							if(!empty($url['host']))
+								$cache_path .= $url['host'].'/';
+							else $cache_path .= $_SERVER['HTTP_HOST'].'/';
+
+							if(isset($url['path']) && strlen($url['path']))
+								$cache_path .= $url['path'].'/';
+
+							$cache_path = str_replace('.', '-', $cache_path);
+
+							if($with_query && isset($url['query']) && strlen($url['query']))
+								$cache_path = rtrim($cache_path, '/').'.q/'.md5($url['query']).'/';
+
+							if(strlen($with_user_token)) // This is a user token (string).
+								$cache_path = rtrim($cache_path, '/').'.u/'.str_replace(array('/', '\\'), '-', $with_user_token).'/';
+
+							if(strlen($with_version_salt)) // Allow a version salt to be `0` if desirable.
+								$cache_path = rtrim($cache_path, '/').'.v/'.str_replace(array('/', '\\'), '-', $with_version_salt).'/';
+
+							$cache_path = trim(preg_replace('/\/+/', '/', $cache_path), '/');
+							$cache_path = preg_replace('/[^a-z0-9.\/]/i', '-', $cache_path);
+
+							return $cache_path;
+						}
+
+					public function dir_regex_iteration($dir, $regex)
+						{
+							$dir_iterator      = new \RecursiveDirectoryIterator($dir, \FilesystemIterator::KEY_AS_PATHNAME | \FilesystemIterator::CURRENT_AS_SELF | \FilesystemIterator::FOLLOW_SYMLINKS | \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::UNIX_PATHS);
+							$iterator_iterator = new \RecursiveIteratorIterator($dir_iterator, \RecursiveIteratorIterator::CHILD_FIRST);
+							$regex_iterator    = new \RegexIterator($iterator_iterator, $regex, \RegexIterator::MATCH, \RegexIterator::USE_KEY);
+
+							return apply_filters(__METHOD__, $regex_iterator, get_defined_vars());
+						}
+
+					public function function_is_possible($function)
+						{
+							static $disabled_functions; // Static cache.
+
+							if(!isset($disabled_functions) && function_exists('ini_get'))
+								{
+									$disabled_functions = array();
+
+									if(($disable_functions = trim(ini_get('disable_functions'))))
+										$disabled_functions = array_merge($disabled_functions, preg_split('/[\s;,]+/', strtolower($disable_functions), NULL, PREG_SPLIT_NO_EMPTY));
+
+									if(($blacklist_functions = trim(ini_get('suhosin.executor.func.blacklist'))))
+										$disabled_functions = array_merge($disabled_functions, preg_split('/[\s;,]+/', strtolower($blacklist_functions), NULL, PREG_SPLIT_NO_EMPTY));
+								}
+							$possible = TRUE; // Assume it is.. (intialize).
+
+							if(!function_exists($function) || !is_callable($function)
+							   || ($disabled_functions && in_array(strtolower($function), $disabled_functions, TRUE))
+							) $possible = FALSE; // Not possible.
+
+							return apply_filters(__METHOD__, $possible, get_defined_vars());
 						}
 				}
 
