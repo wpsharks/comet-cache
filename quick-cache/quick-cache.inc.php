@@ -47,7 +47,7 @@ namespace quick_cache // Root namespace.
 							                                'cache_purge_posts_page_enable' => '1', // `0|1`.
 							                                'allow_browser_cache'           => '0', // `0|1`.
 
-							                                'cache_dir'                     => '/wp-content/cache', // Relative to `ABSPATH`.
+							                                'cache_dir'                     => 'wp-content/cache', // Relative to `ABSPATH`.
 							                                'cache_max_age'                 => '7 days', // `strtotime()` compatible.
 
 							                                'get_requests'                  => '0', // `0|1`.
@@ -88,12 +88,10 @@ namespace quick_cache // Root namespace.
 									if(!isset($options['version_salt']) && isset($old_options['version_salt']))
 										$options['version_salt'] = (string)$old_options['version_salt'];
 								}
-							$this->default_options = apply_filters(__METHOD__.'__default_options', $this->default_options, get_defined_vars());
-							$this->options         = array_merge($this->default_options, $options); // This considers old options also.
-							$this->options         = apply_filters(__METHOD__.'__options', $this->options, get_defined_vars());
-
-							// Improving security. Force a leading slash; never allow a trailing slash.
-							$this->options['cache_dir'] = '/'.trim($this->options['cache_dir'], '\\/'." \t\n\r\0\x0B");
+							$this->default_options      = apply_filters(__METHOD__.'__default_options', $this->default_options, get_defined_vars());
+							$this->options              = array_merge($this->default_options, $options); // This considers old options also.
+							$this->options              = apply_filters(__METHOD__.'__options', $this->options, get_defined_vars());
+							$this->options['cache_dir'] = trim($this->options['cache_dir'], '\\/'." \t\n\r\0\x0B");
 
 							$this->network_cap = apply_filters(__METHOD__.'__network_cap', 'manage_network_plugins');
 							$this->cap         = apply_filters(__METHOD__.'__cap', 'activate_plugins');

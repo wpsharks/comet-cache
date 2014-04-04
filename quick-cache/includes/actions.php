@@ -56,8 +56,8 @@ namespace quick_cache // Root namespace.
 						return; // Unauthenticated POST data.
 
 					$args = array_map('trim', stripslashes_deep((array)$args));
-					if(isset($args['cache_dir'])) // Force a leading slash; no trailing slash.
-						$args['cache_dir'] = '/'.trim($args['cache_dir'], '\\/'." \t\n\r\0\x0B");
+					if(isset($args['cache_dir'])) // No leading/trailing slashes please.
+						$args['cache_dir'] = trim($args['cache_dir'], '\\/'." \t\n\r\0\x0B");
 					plugin()->options = array_merge(plugin()->default_options, $args);
 
 					if(!trim(plugin()->options['cache_dir'], '\\/'." \t\n\r\0\x0B") // Empty (do not allow).
