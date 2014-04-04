@@ -925,7 +925,7 @@ namespace quick_cache // Root namespace.
 					public function url_to_cache_path($url, $with_query = TRUE, $with_user_token = '', $with_version_salt = '')
 						{
 							$url               = trim((string)$url);
-							$with_user_token   = (string)$with_user_token;
+							$with_user_token   = trim((string)$with_user_token);
 							$with_version_salt = trim((string)$with_version_salt);
 
 							if($url && strpos($url, '://') === FALSE)
