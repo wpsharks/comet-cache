@@ -220,11 +220,12 @@ namespace quick_cache // Root namespace.
 			const CACHE_PATH_NO_SCHEME = 1; // Exclude scheme.
 			const CACHE_PATH_NO_HOST = 2; // Exclude host (i.e. domain name).
 			const CACHE_PATH_NO_PATH = 4; // Exclude path (i.e. the request URI).
-			const CACHE_PATH_NO_QUV = 8; // Exclude query, user & version salt.
-			const CACHE_PATH_NO_QUERY = 16; // Exclude query string.
-			const CACHE_PATH_NO_USER = 32; // Exclude user token.
-			const CACHE_PATH_NO_VSALT = 64; // Exclude version salt.
-			const CACHE_PATH_NO_EXT = 128; // Exclude extension.
+			const CACHE_PATH_NO_PATH_INDEX = 8; // Exclude path index (i.e. no default `index`).
+			const CACHE_PATH_NO_QUV = 16; // Exclude query, user & version salt.
+			const CACHE_PATH_NO_QUERY = 32; // Exclude query string.
+			const CACHE_PATH_NO_USER = 64; // Exclude user token.
+			const CACHE_PATH_NO_VSALT = 128; // Exclude version salt.
+			const CACHE_PATH_NO_EXT = 256; // Exclude extension.
 
 			public function url_to_cache_path($url, $with_user_token = '', $with_version_salt = '', $flags = 0)
 				{
@@ -255,7 +256,7 @@ namespace quick_cache // Root namespace.
 						{
 							if(!empty($url['path']) && strlen($url['path'] = trim($url['path'], '\\/'." \t\n\r\0\x0B")))
 								$cache_path .= $url['path'].'/';
-							else $cache_path .= 'index/';
+									else if(!($flags & $this::CACHE_PATH_NO_PATH_INDEX)) $cache_path .= 'index/';
 						}
 					$cache_path = str_replace('.', '-', $cache_path);
 

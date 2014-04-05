@@ -425,9 +425,10 @@ namespace quick_cache // Root namespace.
 							@set_time_limit(1800); // In case of HUGE sites w/ a very large directory. Errors are ignored in case `set_time_limit()` is disabled.
 
 							$url                          = 'http://'.$_SERVER['HTTP_HOST'].$host_dir_token;
-							$cache_path_no_scheme_quv_ext = $this->url_to_cache_path($url, '', '', $this::CACHE_PATH_NO_SCHEME | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT);
+							$cache_path_no_scheme_quv_ext = $this->url_to_cache_path($url, '', '', $this::CACHE_PATH_NO_SCHEME | $this::CACHE_PATH_NO_PATH_INDEX | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT);
 							$regex                        = '/^'.preg_quote($cache_dir, '/'). // Consider all schemes; all paths; and all possible variations.
-							                                '\/[^\/]+\/'.preg_quote($cache_path_no_scheme_quv_ext, '/').'[.\/]/';
+							                                '\/[^\/]+\/'.preg_quote($cache_path_no_scheme_quv_ext, '/').
+							                                '(?:\/index)?[.\/]/';
 
 							/** @var $_dir_file \RecursiveDirectoryIterator For IDEs. */
 							foreach($this->dir_regex_iteration($cache_dir, $regex) as $_dir_file)
@@ -538,10 +539,10 @@ namespace quick_cache // Root namespace.
 								$type_singular_name = $type->labels->singular_name; // Singular name for the post type.
 							else $type_singular_name = __('Post', $this->text_domain); // Default value.
 
-							$cache_path_no_scheme_quv_ext = $this->url_to_cache_path($permalink, '', '', $this::CACHE_PATH_NO_SCHEME | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT);
+							$cache_path_no_scheme_quv_ext = $this->url_to_cache_path($permalink, '', '', $this::CACHE_PATH_NO_SCHEME | $this::CACHE_PATH_NO_PATH_INDEX | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT);
 							$regex                        = '/^'.preg_quote($cache_dir, '/'). // Consider all schemes; all path paginations; and all possible variations.
 							                                '\/[^\/]+\/'.preg_quote($cache_path_no_scheme_quv_ext, '/').
-							                                '(?:\.|\/(?:page|comment\-page)\/[0-9]+[.\/])/';
+							                                '(?:\/index)?(?:\.|\/(?:page|comment\-page)\/[0-9]+[.\/])/';
 
 							/** @var $_file \RecursiveDirectoryIterator For IDEs. */
 							foreach($this->dir_regex_iteration($cache_dir, $regex) as $_file) if($_file->isFile())
@@ -580,10 +581,10 @@ namespace quick_cache // Root namespace.
 							$cache_dir = ABSPATH.$this->options['cache_dir'];
 							if(!is_dir($cache_dir)) return $counter; // Nothing to do.
 
-							$cache_path_no_scheme_quv_ext = $this->url_to_cache_path(home_url('/'), '', '', $this::CACHE_PATH_NO_SCHEME | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT);
+							$cache_path_no_scheme_quv_ext = $this->url_to_cache_path(home_url('/'), '', '', $this::CACHE_PATH_NO_SCHEME | $this::CACHE_PATH_NO_PATH_INDEX | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT);
 							$regex                        = '/^'.preg_quote($cache_dir, '/'). // Consider all schemes; all path paginations; and all possible variations.
 							                                '\/[^\/]+\/'.preg_quote($cache_path_no_scheme_quv_ext, '/').
-							                                '(?:\.|\/(?:page|comment\-page)\/[0-9]+[.\/])/';
+							                                '(?:\/index)?(?:\.|\/(?:page|comment\-page)\/[0-9]+[.\/])/';
 
 							/** @var $_file \RecursiveDirectoryIterator For IDEs. */
 							foreach($this->dir_regex_iteration($cache_dir, $regex) as $_file) if($_file->isFile())
@@ -635,10 +636,10 @@ namespace quick_cache // Root namespace.
 							else if($show_on_front === 'page') $posts_page = get_permalink($page_for_posts);
 							if(empty($posts_page)) return $counter; // Nothing we can do.
 
-							$cache_path_no_scheme_quv_ext = $this->url_to_cache_path($posts_page, '', '', $this::CACHE_PATH_NO_SCHEME | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT);
+							$cache_path_no_scheme_quv_ext = $this->url_to_cache_path($posts_page, '', '', $this::CACHE_PATH_NO_SCHEME | $this::CACHE_PATH_NO_PATH_INDEX | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT);
 							$regex                        = '/^'.preg_quote($cache_dir, '/'). // Consider all schemes; all path paginations; and all possible variations.
 							                                '\/[^\/]+\/'.preg_quote($cache_path_no_scheme_quv_ext, '/').
-							                                '(?:\.|\/(?:page|comment\-page)\/[0-9]+[.\/])/';
+							                                '(?:\/index)?(?:\.|\/(?:page|comment\-page)\/[0-9]+[.\/])/';
 
 							/** @var $_file \RecursiveDirectoryIterator For IDEs. */
 							foreach($this->dir_regex_iteration($cache_dir, $regex) as $_file) if($_file->isFile())
@@ -931,11 +932,12 @@ namespace quick_cache // Root namespace.
 					const CACHE_PATH_NO_SCHEME = 1; // Exclude scheme.
 					const CACHE_PATH_NO_HOST = 2; // Exclude host (i.e. domain name).
 					const CACHE_PATH_NO_PATH = 4; // Exclude path (i.e. the request URI).
-					const CACHE_PATH_NO_QUV = 8; // Exclude query, user & version salt.
-					const CACHE_PATH_NO_QUERY = 16; // Exclude query string.
-					const CACHE_PATH_NO_USER = 32; // Exclude user token.
-					const CACHE_PATH_NO_VSALT = 64; // Exclude version salt.
-					const CACHE_PATH_NO_EXT = 128; // Exclude extension.
+					const CACHE_PATH_NO_PATH_INDEX = 8; // Exclude path index (i.e. no default `index`).
+					const CACHE_PATH_NO_QUV = 16; // Exclude query, user & version salt.
+					const CACHE_PATH_NO_QUERY = 32; // Exclude query string.
+					const CACHE_PATH_NO_USER = 64; // Exclude user token.
+					const CACHE_PATH_NO_VSALT = 128; // Exclude version salt.
+					const CACHE_PATH_NO_EXT = 256; // Exclude extension.
 
 					public function url_to_cache_path($url, $with_user_token = '', $with_version_salt = '', $flags = 0)
 						{
@@ -966,7 +968,7 @@ namespace quick_cache // Root namespace.
 								{
 									if(!empty($url['path']) && strlen($url['path'] = trim($url['path'], '\\/'." \t\n\r\0\x0B")))
 										$cache_path .= $url['path'].'/';
-									else $cache_path .= 'index/';
+									else if(!($flags & $this::CACHE_PATH_NO_PATH_INDEX)) $cache_path .= 'index/';
 								}
 							$cache_path = str_replace('.', '-', $cache_path);
 
