@@ -241,7 +241,7 @@ namespace quick_cache // Root namespace.
 
 					if(!empty($url['path']) && strlen($url['path'] = trim($url['path'], '\\/'." \t\n\r\0\x0B")))
 						$cache_path .= $url['path'].'/';
-					else $cache_path .= 'index.html/';
+					else $cache_path .= 'index/';
 
 					$cache_path = str_replace('~', '-', $cache_path);
 
@@ -257,7 +257,7 @@ namespace quick_cache // Root namespace.
 					$cache_path = trim(preg_replace('/\/+/', '/', $cache_path), '/');
 					$cache_path = preg_replace('/[^a-z0-9\/~.]/i', '-', $cache_path);
 
-					return $cache_path;
+					return $cache_path.'.html';
 				}
 
 			public function is_post_put_del_request()
