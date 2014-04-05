@@ -424,10 +424,10 @@ namespace quick_cache // Root namespace.
 							// @TODO When set_time_limit() is disabled by PHP configuration, display a warning message to users upon plugin activation
 							@set_time_limit(1800); // In case of HUGE sites w/ a very large directory. Errors are ignored in case `set_time_limit()` is disabled.
 
-							$url                  = 'http://'.$_SERVER['HTTP_HOST'].$host_dir_token;
-							$cache_path_no_scheme = ltrim(strstr($this->url_to_cache_path($url), '/'), '/');
-							$regex                = '/^'.preg_quote($cache_dir, '/'). // Consider all schemes.
-							                        '\/[^\/]+\/'.preg_quote($cache_path_no_scheme, '/').'(?:\/|$)/';
+							$url                          = 'http://'.$_SERVER['HTTP_HOST'].$host_dir_token;
+							$cache_path_no_scheme_quv_ext = $this->url_to_cache_path($url, '', '', $this::CACHE_PATH_NO_SCHEME | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT);
+							$regex                        = '/^'.preg_quote($cache_dir, '/'). // Consider all schemes; all paths; and all possible variations.
+							                                '\/[^\/]+\/'.preg_quote($cache_path_no_scheme_quv_ext, '/').'[.\/]/';
 
 							/** @var $_dir_file \RecursiveDirectoryIterator For IDEs. */
 							foreach($this->dir_regex_iteration($cache_dir, $regex) as $_dir_file)
@@ -538,9 +538,10 @@ namespace quick_cache // Root namespace.
 								$type_singular_name = $type->labels->singular_name; // Singular name for the post type.
 							else $type_singular_name = __('Post', $this->text_domain); // Default value.
 
-							$regex = '/^'.preg_quote($cache_dir, '/').
-							         '\/'.preg_quote($this->url_to_cache_path($permalink, FALSE), '/').
-							         '(?:~(?:q|u|v)\/[^\/]+\/?)*$/';
+							$cache_path_no_scheme_quv_ext = $this->url_to_cache_path($permalink, '', '', $this::CACHE_PATH_NO_SCHEME | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT);
+							$regex                        = '/^'.preg_quote($cache_dir, '/'). // Consider all schemes; all path paginations; and all possible variations.
+							                                '\/[^\/]+\/'.preg_quote($cache_path_no_scheme_quv_ext, '/').
+							                                '(?:\.|\/(?:page|comment\-page)\/[0-9]+[.\/])/';
 
 							/** @var $_file \RecursiveDirectoryIterator For IDEs. */
 							foreach($this->dir_regex_iteration($cache_dir, $regex) as $_file) if($_file->isFile())
@@ -579,9 +580,10 @@ namespace quick_cache // Root namespace.
 							$cache_dir = ABSPATH.$this->options['cache_dir'];
 							if(!is_dir($cache_dir)) return $counter; // Nothing to do.
 
-							$regex = '/^'.preg_quote($cache_dir, '/').
-							         '\/'.preg_quote($this->url_to_cache_path(home_url('/'), FALSE), '/').
-							         '(?:~(?:q|u|v)\/[^\/]+\/?)*$/';
+							$cache_path_no_scheme_quv_ext = $this->url_to_cache_path(home_url('/'), '', '', $this::CACHE_PATH_NO_SCHEME | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT);
+							$regex                        = '/^'.preg_quote($cache_dir, '/'). // Consider all schemes; all path paginations; and all possible variations.
+							                                '\/[^\/]+\/'.preg_quote($cache_path_no_scheme_quv_ext, '/').
+							                                '(?:\.|\/(?:page|comment\-page)\/[0-9]+[.\/])/';
 
 							/** @var $_file \RecursiveDirectoryIterator For IDEs. */
 							foreach($this->dir_regex_iteration($cache_dir, $regex) as $_file) if($_file->isFile())
@@ -633,9 +635,10 @@ namespace quick_cache // Root namespace.
 							else if($show_on_front === 'page') $posts_page = get_permalink($page_for_posts);
 							if(empty($posts_page)) return $counter; // Nothing we can do.
 
-							$regex = '/^'.preg_quote($cache_dir, '/').
-							         '\/'.preg_quote($this->url_to_cache_path($posts_page, FALSE), '/').
-							         '(?:~(?:q|u|v)\/[^\/]+\/?)*$/';
+							$cache_path_no_scheme_quv_ext = $this->url_to_cache_path($posts_page, '', '', $this::CACHE_PATH_NO_SCHEME | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT);
+							$regex                        = '/^'.preg_quote($cache_dir, '/'). // Consider all schemes; all path paginations; and all possible variations.
+							                                '\/[^\/]+\/'.preg_quote($cache_path_no_scheme_quv_ext, '/').
+							                                '(?:\.|\/(?:page|comment\-page)\/[0-9]+[.\/])/';
 
 							/** @var $_file \RecursiveDirectoryIterator For IDEs. */
 							foreach($this->dir_regex_iteration($cache_dir, $regex) as $_file) if($_file->isFile())
@@ -923,10 +926,20 @@ namespace quick_cache // Root namespace.
 						}
 
 					/*
-					 * See also: `advanced-cache.tpl.php` for a duplicate of this method.
+					 * See also: `advanced-cache.tpl.php` duplicate.
 					 */
-					public function url_to_cache_path($url, $with_query = TRUE, $with_user_token = '', $with_version_salt = '')
+					const CACHE_PATH_NO_SCHEME = 1; // Exclude scheme.
+					const CACHE_PATH_NO_HOST = 2; // Exclude host (i.e. domain name).
+					const CACHE_PATH_NO_PATH = 4; // Exclude path (i.e. the request URI).
+					const CACHE_PATH_NO_QUV = 8; // Exclude query, user & version salt.
+					const CACHE_PATH_NO_QUERY = 16; // Exclude query string.
+					const CACHE_PATH_NO_USER = 32; // Exclude user token.
+					const CACHE_PATH_NO_VSALT = 64; // Exclude version salt.
+					const CACHE_PATH_NO_EXT = 128; // Exclude extension.
+
+					public function url_to_cache_path($url, $with_user_token = '', $with_version_salt = '', $flags = 0)
 						{
+							$cache_path        = ''; // Initialize.
 							$url               = trim((string)$url);
 							$with_user_token   = trim((string)$with_user_token);
 							$with_version_salt = trim((string)$with_version_salt);
@@ -937,35 +950,47 @@ namespace quick_cache // Root namespace.
 							if(!$url || !($url = parse_url($url)))
 								return ''; // Invalid URL.
 
-							$cache_path = ''; // Initialize.
+							if(!($flags & $this::CACHE_PATH_NO_SCHEME))
+								{
+									if(!empty($url['scheme']))
+										$cache_path .= $url['scheme'].'/';
+									else $cache_path .= is_ssl() ? 'https/' : 'http/';
+								}
+							if(!($flags & $this::CACHE_PATH_NO_HOST))
+								{
+									if(!empty($url['host']))
+										$cache_path .= $url['host'].'/';
+									else $cache_path .= $_SERVER['HTTP_HOST'].'/';
+								}
+							if(!($flags & $this::CACHE_PATH_NO_PATH))
+								{
+									if(!empty($url['path']) && strlen($url['path'] = trim($url['path'], '\\/'." \t\n\r\0\x0B")))
+										$cache_path .= $url['path'].'/';
+									else $cache_path .= 'index/';
+								}
+							$cache_path = str_replace('.', '-', $cache_path);
 
-							if(!empty($url['scheme']))
-								$cache_path .= $url['scheme'].'/';
-							else $cache_path .= is_ssl() ? 'https/' : 'http/';
+							if(!($flags & $this::CACHE_PATH_NO_QUV))
+								{
+									if(!($flags & $this::CACHE_PATH_NO_QUERY))
+										if(isset($url['query']) && $url['query'] !== '')
+											$cache_path = rtrim($cache_path, '/').'.q/'.md5($url['query']).'/';
 
-							if(!empty($url['host']))
-								$cache_path .= $url['host'].'/';
-							else $cache_path .= $_SERVER['HTTP_HOST'].'/';
+									if(!($flags & $this::CACHE_PATH_NO_USER))
+										if($with_user_token !== '') // Allow a `0` value if desirable.
+											$cache_path = rtrim($cache_path, '/').'.u/'.str_replace(array('/', '\\'), '-', $with_user_token).'/';
 
-							if(!empty($url['path']) && strlen($url['path'] = trim($url['path'], '\\/'." \t\n\r\0\x0B")))
-								$cache_path .= $url['path'].'/';
-							else $cache_path .= 'index/';
-
-							$cache_path = str_replace('~', '-', $cache_path);
-
-							if($with_query && isset($url['query']) && strlen($url['query']))
-								$cache_path = rtrim($cache_path, '/').'~q/'.md5($url['query']).'/';
-
-							if(strlen($with_user_token)) // This is a user token (string).
-								$cache_path = rtrim($cache_path, '/').'~u/'.str_replace(array('/', '\\'), '-', $with_user_token).'/';
-
-							if(strlen($with_version_salt)) // Allow a version salt to be `0` if desirable.
-								$cache_path = rtrim($cache_path, '/').'~v/'.str_replace(array('/', '\\'), '-', $with_version_salt).'/';
-
+									if(!($flags & $this::CACHE_PATH_NO_VSALT))
+										if($with_version_salt !== '') // Allow a `0` value if desirable.
+											$cache_path = rtrim($cache_path, '/').'.v/'.str_replace(array('/', '\\'), '-', $with_version_salt).'/';
+								}
 							$cache_path = trim(preg_replace('/\/+/', '/', $cache_path), '/');
-							$cache_path = preg_replace('/[^a-z0-9\/~.]/i', '-', $cache_path);
+							$cache_path = preg_replace('/[^a-z0-9\/.]/i', '-', $cache_path);
 
-							return $cache_path.'.html';
+							if(!($flags & $this::CACHE_PATH_NO_EXT))
+								$cache_path .= '.html';
+
+							return $cache_path;
 						}
 
 					public function dir_regex_iteration($dir, $regex)

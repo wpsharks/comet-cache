@@ -119,7 +119,7 @@ namespace quick_cache // Root namespace.
 
 					$this->protocol      = $this->is_ssl() ? 'https://' : 'http://';
 					$this->version_salt  = $this->apply_filters(__CLASS__.'__version_salt', '');
-					$this->cache_path    = $this->url_to_cache_path($this->protocol.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'], TRUE, '', $this->version_salt);
+					$this->cache_path    = $this->url_to_cache_path($this->protocol.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'], '', $this->version_salt);
 					$this->cache_file    = QUICK_CACHE_DIR.'/'.$this->cache_path; // NOT considering a user cache at all in the lite version.
 					$this->salt_location = ltrim($this->version_salt.' '.$this->protocol.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
 
@@ -213,12 +213,22 @@ namespace quick_cache // Root namespace.
 				}
 
 			/*
-			 * See also: `quick-cache.inc.php` for a duplicate of this method.
+			 * See also: `quick-cache.inc.php` duplicate.
 			 * NOTE: the call to `is_ssl()` in this duplicate uses `$this->is_ssl()` because `is_ssl()`
 			 *    may NOT be available in this routine; i.e. it's not been loaded up yet.
 			 */
-			public function url_to_cache_path($url, $with_query = TRUE, $with_user_token = '', $with_version_salt = '')
+			const CACHE_PATH_NO_SCHEME = 1; // Exclude scheme.
+			const CACHE_PATH_NO_HOST = 2; // Exclude host (i.e. domain name).
+			const CACHE_PATH_NO_PATH = 4; // Exclude path (i.e. the request URI).
+			const CACHE_PATH_NO_QUV = 8; // Exclude query, user & version salt.
+			const CACHE_PATH_NO_QUERY = 16; // Exclude query string.
+			const CACHE_PATH_NO_USER = 32; // Exclude user token.
+			const CACHE_PATH_NO_VSALT = 64; // Exclude version salt.
+			const CACHE_PATH_NO_EXT = 128; // Exclude extension.
+
+			public function url_to_cache_path($url, $with_user_token = '', $with_version_salt = '', $flags = 0)
 				{
+					$cache_path        = ''; // Initialize.
 					$url               = trim((string)$url);
 					$with_user_token   = trim((string)$with_user_token);
 					$with_version_salt = trim((string)$with_version_salt);
@@ -229,35 +239,47 @@ namespace quick_cache // Root namespace.
 					if(!$url || !($url = parse_url($url)))
 						return ''; // Invalid URL.
 
-					$cache_path = ''; // Initialize.
+					if(!($flags & $this::CACHE_PATH_NO_SCHEME))
+						{
+							if(!empty($url['scheme']))
+								$cache_path .= $url['scheme'].'/';
+							else $cache_path .= $this->is_ssl() ? 'https/' : 'http/';
+						}
+					if(!($flags & $this::CACHE_PATH_NO_HOST))
+						{
+							if(!empty($url['host']))
+								$cache_path .= $url['host'].'/';
+							else $cache_path .= $_SERVER['HTTP_HOST'].'/';
+						}
+					if(!($flags & $this::CACHE_PATH_NO_PATH))
+						{
+							if(!empty($url['path']) && strlen($url['path'] = trim($url['path'], '\\/'." \t\n\r\0\x0B")))
+								$cache_path .= $url['path'].'/';
+							else $cache_path .= 'index/';
+						}
+					$cache_path = str_replace('.', '-', $cache_path);
 
-					if(!empty($url['scheme']))
-						$cache_path .= $url['scheme'].'/';
-					else $cache_path .= $this->is_ssl() ? 'https/' : 'http/';
+					if(!($flags & $this::CACHE_PATH_NO_QUV))
+						{
+							if(!($flags & $this::CACHE_PATH_NO_QUERY))
+								if(isset($url['query']) && $url['query'] !== '')
+									$cache_path = rtrim($cache_path, '/').'.q/'.md5($url['query']).'/';
 
-					if(!empty($url['host']))
-						$cache_path .= $url['host'].'/';
-					else $cache_path .= $_SERVER['HTTP_HOST'].'/';
+							if(!($flags & $this::CACHE_PATH_NO_USER))
+								if($with_user_token !== '') // Allow a `0` value if desirable.
+									$cache_path = rtrim($cache_path, '/').'.u/'.str_replace(array('/', '\\'), '-', $with_user_token).'/';
 
-					if(!empty($url['path']) && strlen($url['path'] = trim($url['path'], '\\/'." \t\n\r\0\x0B")))
-						$cache_path .= $url['path'].'/';
-					else $cache_path .= 'index/';
-
-					$cache_path = str_replace('~', '-', $cache_path);
-
-					if($with_query && isset($url['query']) && strlen($url['query']))
-						$cache_path = rtrim($cache_path, '/').'~q/'.md5($url['query']).'/';
-
-					if(strlen($with_user_token)) // This is a user token (string).
-						$cache_path = rtrim($cache_path, '/').'~u/'.str_replace(array('/', '\\'), '-', $with_user_token).'/';
-
-					if(strlen($with_version_salt)) // Allow a version salt to be `0` if desirable.
-						$cache_path = rtrim($cache_path, '/').'~v/'.str_replace(array('/', '\\'), '-', $with_version_salt).'/';
-
+							if(!($flags & $this::CACHE_PATH_NO_VSALT))
+								if($with_version_salt !== '') // Allow a `0` value if desirable.
+									$cache_path = rtrim($cache_path, '/').'.v/'.str_replace(array('/', '\\'), '-', $with_version_salt).'/';
+						}
 					$cache_path = trim(preg_replace('/\/+/', '/', $cache_path), '/');
-					$cache_path = preg_replace('/[^a-z0-9\/~.]/i', '-', $cache_path);
+					$cache_path = preg_replace('/[^a-z0-9\/.]/i', '-', $cache_path);
 
-					return $cache_path.'.html';
+					if(!($flags & $this::CACHE_PATH_NO_EXT))
+						$cache_path .= '.html';
+
+					return $cache_path;
 				}
 
 			public function is_post_put_del_request()
