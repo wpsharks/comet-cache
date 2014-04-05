@@ -189,7 +189,7 @@ namespace quick_cache // Root namespace.
 					if(!is_dir(QUICK_CACHE_DIR) && mkdir(QUICK_CACHE_DIR, 0775, TRUE))
 						{
 							if(is_writable(QUICK_CACHE_DIR) && !is_file(QUICK_CACHE_DIR.'/.htaccess'))
-								file_put_contents(QUICK_CACHE_DIR.'/.htaccess', 'deny from all');
+								file_put_contents(QUICK_CACHE_DIR.'/.htaccess', $this->htaccess_deny);
 						}
 					if(!is_dir(QUICK_CACHE_DIR) || !is_writable(QUICK_CACHE_DIR)) // Must have this directory.
 						throw new \exception(sprintf(__('Cache directory not writable. Quick Cache needs this directory please: `%1$s`. Set permissions to `755` or higher; `777` might be needed in some cases.', $this->text_domain), QUICK_CACHE_DIR));
@@ -256,7 +256,7 @@ namespace quick_cache // Root namespace.
 						{
 							if(!empty($url['path']) && strlen($url['path'] = trim($url['path'], '\\/'." \t\n\r\0\x0B")))
 								$cache_path .= $url['path'].'/';
-									else if(!($flags & $this::CACHE_PATH_NO_PATH_INDEX)) $cache_path .= 'index/';
+							else if(!($flags & $this::CACHE_PATH_NO_PATH_INDEX)) $cache_path .= 'index/';
 						}
 					$cache_path = str_replace('.', '-', $cache_path);
 
@@ -495,6 +495,8 @@ namespace quick_cache // Root namespace.
 
 					return $value; // With applied filters.
 				}
+
+			public $htaccess_deny = "<IfModule authz_core_module>\n\tRequire all denied\n</IfModule>\n<IfModule !authz_core_module>\n\tdeny from all\n</IfModule>";
 		}
 
 		function __($string, $text_domain) // Polyfill `\__()`.

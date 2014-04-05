@@ -828,7 +828,7 @@ namespace quick_cache // Root namespace.
 							if(!is_dir($cache_dir) && mkdir($cache_dir, 0775, TRUE))
 								{
 									if(is_writable($cache_dir) && !is_file($cache_dir.'/.htaccess'))
-										file_put_contents($cache_dir.'/.htaccess', 'deny from all');
+										file_put_contents($cache_dir.'/.htaccess', $this->htaccess_deny);
 								}
 							if(!is_dir($cache_dir) || !is_writable($cache_dir) || !file_put_contents($cache_dir.'/qc-advanced-cache', time()))
 								return NULL; // Failure; could not write cache entry. Special return value (NULL) in this case.
@@ -910,7 +910,7 @@ namespace quick_cache // Root namespace.
 							if(!is_dir($cache_dir) && mkdir($cache_dir, 0775, TRUE))
 								{
 									if(is_writable($cache_dir) && !is_file($cache_dir.'/.htaccess'))
-										file_put_contents($cache_dir.'/.htaccess', 'deny from all');
+										file_put_contents($cache_dir.'/.htaccess', $this->htaccess_deny);
 								}
 							if(is_dir($cache_dir) && is_writable($cache_dir))
 								{
@@ -1026,6 +1026,8 @@ namespace quick_cache // Root namespace.
 
 							return apply_filters(__METHOD__, $possible, get_defined_vars());
 						}
+
+					public $htaccess_deny = "<IfModule authz_core_module>\n\tRequire all denied\n</IfModule>\n<IfModule !authz_core_module>\n\tdeny from all\n</IfModule>";
 				}
 
 				/**
