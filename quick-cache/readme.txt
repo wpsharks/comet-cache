@@ -237,6 +237,13 @@ Quick Cache is now completely uninstalled and you can start fresh :-)
 
 **TIP:** you can preview Pro features in the free version by clicking the "**Preview Pro Features**" link at the top of your Quick Cache options.
 
+== Software Requirements ==
+
+In addition to the [WordPress Requirements](http://wordpress.org/about/requirements/), Quick Cache requires the following minimum versions:
+
+- PHP 5.3+
+- Apache 2.1+
+
 == License ==
 
 Copyright: © 2013 [WebSharks, Inc.](http://www.websharks-inc.com/bizdev/) (coded in the USA)
