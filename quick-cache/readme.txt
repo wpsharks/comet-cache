@@ -93,13 +93,14 @@ If you have GZIP compression enabled, then the cache file is also sent to the br
 
 If you want to enable GZIP, create an `.htaccess` file in your WordPress® installation directory and put the following few lines in it. Alternatively, if you already have an `.htaccess` file, just add these lines to it, and that is all there is to it. GZIP is now enabled!
 
-	<IfModule mod_deflate.c>
-		<IfModule mod_filter.c>
-			AddOutputFilterByType DEFLATE text/plain text/html application/x-httpd-php-source
+	<IfModule deflate_module>
+		<IfModule filter_module>
+			AddOutputFilterByType DEFLATE text/plain text/html
 			AddOutputFilterByType DEFLATE text/xml application/xml application/xhtml+xml application/xml-dtd
 			AddOutputFilterByType DEFLATE application/rdf+xml application/rss+xml application/atom+xml image/svg+xml
 			AddOutputFilterByType DEFLATE text/css text/javascript application/javascript application/x-javascript
-			AddOutputFilterByType DEFLATE font/truetype application/x-font-ttf font/opentype application/x-font-otf
+			AddOutputFilterByType DEFLATE font/otf font/opentype application/font-otf application/x-font-otf
+			AddOutputFilterByType DEFLATE font/ttf font/truetype application/font-ttf application/x-font-ttf
 		</IfModule>
 	</IfModule>
 
@@ -121,13 +122,14 @@ There is no need to use an `.htaccess` file with this plugin; caching is handled
 
 If you want to enable GZIP, create an `.htaccess` file in your WordPress® installation directory and put the following few lines in it. Alternatively, if you already have an `.htaccess` file, just add these lines to it, and that is all there is to it. GZIP is now enabled!
 
-	<IfModule mod_deflate.c>
-		<IfModule mod_filter.c>
-			AddOutputFilterByType DEFLATE text/plain text/html application/x-httpd-php-source
+	<IfModule deflate_module>
+		<IfModule filter_module>
+			AddOutputFilterByType DEFLATE text/plain text/html
 			AddOutputFilterByType DEFLATE text/xml application/xml application/xhtml+xml application/xml-dtd
 			AddOutputFilterByType DEFLATE application/rdf+xml application/rss+xml application/atom+xml image/svg+xml
 			AddOutputFilterByType DEFLATE text/css text/javascript application/javascript application/x-javascript
-			AddOutputFilterByType DEFLATE font/truetype application/x-font-ttf font/opentype application/x-font-otf
+			AddOutputFilterByType DEFLATE font/otf font/opentype application/font-otf application/x-font-otf
+			AddOutputFilterByType DEFLATE font/ttf font/truetype application/font-ttf application/x-font-ttf
 		</IfModule>
 	</IfModule>
 
@@ -193,13 +195,14 @@ You don't have to use an `.htaccess` file to enjoy the performance enhancements 
 
 If you want to enable GZIP, create an `.htaccess` file in your WordPress® installation directory and put the following few lines in it. Alternatively, if you already have an `.htaccess` file, just add these lines to it, and that is all there is to it. GZIP is now enabled!
 
-	<IfModule mod_deflate.c>
-		<IfModule mod_filter.c>
-			AddOutputFilterByType DEFLATE text/plain text/html application/x-httpd-php-source
+	<IfModule deflate_module>
+		<IfModule filter_module>
+			AddOutputFilterByType DEFLATE text/plain text/html
 			AddOutputFilterByType DEFLATE text/xml application/xml application/xhtml+xml application/xml-dtd
 			AddOutputFilterByType DEFLATE application/rdf+xml application/rss+xml application/atom+xml image/svg+xml
 			AddOutputFilterByType DEFLATE text/css text/javascript application/javascript application/x-javascript
-			AddOutputFilterByType DEFLATE font/truetype application/x-font-ttf font/opentype application/x-font-otf
+			AddOutputFilterByType DEFLATE font/otf font/opentype application/font-otf application/x-font-otf
+			AddOutputFilterByType DEFLATE font/ttf font/truetype application/font-ttf application/x-font-ttf
 		</IfModule>
 	</IfModule>
 
