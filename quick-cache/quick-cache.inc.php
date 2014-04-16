@@ -976,13 +976,13 @@ namespace quick_cache // Root namespace.
 							return $cache_path;
 						}
 
-					public function host_token()
+					public function host_token($dashify = FALSE)
 						{
-							return trim(preg_replace('/[^a-z0-9]/i', '', $_SERVER['HTTP_HOST']), '-');
-							// Do not filter; exists in advanced-cache too.
+							$host = strtolower($_SERVER['HTTP_HOST']);
+							return ($dashify) ? trim(preg_replace('/[^a-z0-9\/]/i', '-', $host), '-') : $host;
 						}
 
-					public function host_dir_token()
+					public function host_dir_token($dashify = FALSE)
 						{
 							$cache_dir      = ABSPATH.$this->options['cache_dir'];
 							$host_dir_token = '/'; // Assume NOT multisite; or running it's own domain.
@@ -1005,7 +1005,7 @@ namespace quick_cache // Root namespace.
 									       || !in_array($host_dir_token, unserialize(file_get_contents($cache_dir.'/qc-blog-paths')), TRUE))
 									) $host_dir_token = '/'; // Main site; e.g. this is NOT a real/valid child blog path.
 								}
-							return $host_dir_token; // Do not filter; exists in advanced-cache too.
+							return ($dashify) ? trim(preg_replace('/[^a-z0-9\/]/i', '-', $host_dir_token), '-') : $host_dir_token;
 						}
 
 					public function dir_regex_iteration($dir, $regex)
