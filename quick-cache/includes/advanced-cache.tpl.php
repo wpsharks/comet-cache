@@ -159,8 +159,11 @@ namespace quick_cache // Root namespace.
 					if(function_exists('zlib_get_coding_type') && zlib_get_coding_type() && (!($zlib_oc = ini_get('zlib.output_compression')) || !preg_match('/^(?:1|on|yes|true)$/i', $zlib_oc)))
 						throw new \exception(__('Unable to cache already-compressed output. Please use `mod_deflate` w/ Apache; or use `zlib.output_compression` in your `php.ini` file. Quick Cache is NOT compatible with `ob_gzhandler()` and others like this.', $this->text_domain));
 
-					if(function_exists('is_maintenance') && is_maintenance()) return $buffer; # http://wordpress.org/extend/plugins/maintenance-mode
-					if(function_exists('did_action') && did_action('wm_head')) return $buffer; # http://wordpress.org/extend/plugins/wp-maintenance-mode
+					if(function_exists('is_maintenance') && is_maintenance())
+						return $buffer; // <http://wordpress.org/extend/plugins/maintenance-mode>
+
+					if(function_exists('did_action') && did_action('wm_head'))
+						return $buffer; // <http://wordpress.org/extend/plugins/wp-maintenance-mode>
 
 					$buffer        = trim($buffer); // Trim buffer.
 					$cache         = $buffer; // Initialize cache value.
@@ -173,38 +176,39 @@ namespace quick_cache // Root namespace.
 					if(strpos($buffer, '<body id="error-page">') !== FALSE)
 						return $buffer; // Don't cache WP errors.
 
-					foreach($headers as $_header) // Loop headers.
+					foreach($headers as $_header)
 						{
-							if(preg_match('/^(?:Retry\-After\:|Status\:\s+[^2]|HTTP\/1\.[01]\s+[^2])/i', $_header))
-								return $buffer; // Don't cache errors (anything that's NOT a 2xx status).
-							if(stripos($_header, 'Content-Type:') === 0) $content_type = $_header; // Last one.
+							if(stripos($_header, 'Content-Type:') === 0)
+								$content_type = $_header; // Last one.
+
+							else if(preg_match('/^(?:Retry\-After\:\s+(?P<retry>.+)|Status\:\s+(?P<status>[0-9]+)|HTTP\/[0-9]+\.[0-9]+\s+(?P<http_status>[0-9]+))/i', $_header, $_m))
+								if(!empty($_m['retry']) || (!empty($_m['status']) && $_m['status'][0] !== '2' && $_m['status'] !== '404')
+								   || (!empty($_m['http_status']) && $_m['http_status'][0] !== '2' && $_m['http_status'] !== '404')
+								) return $buffer; // Don't cache (anything that's NOT a 2xx or 404 status).
 						}
 					unset($_header); // Just a little houskeeping.
 
-					if($content_type) // If we found a Content-Type; make sure it's XML/HTML code.
-						if(!preg_match('/xhtml|html|xml|'.preg_quote(__NAMESPACE__, '/').'/i', $content_type)) return $buffer;
+					if($content_type && !preg_match('/xhtml|html|xml|'.preg_quote(__NAMESPACE__, '/').'/i', $content_type))
+						return $buffer; // Don't cache anything that is NOT XML/HTML code.
 
 					// Caching occurs here; we're good-to-go now :-)
 
-					if(!is_dir(QUICK_CACHE_DIR) && mkdir(QUICK_CACHE_DIR, 0775, TRUE))
-						{
-							if(is_writable(QUICK_CACHE_DIR) && !is_file(QUICK_CACHE_DIR.'/.htaccess'))
-								file_put_contents(QUICK_CACHE_DIR.'/.htaccess', $this->htaccess_deny);
-						}
-					if(!is_dir(QUICK_CACHE_DIR) || !is_writable(QUICK_CACHE_DIR)) // Must have this directory.
-						throw new \exception(sprintf(__('Cache directory not writable. Quick Cache needs this directory please: `%1$s`. Set permissions to `755` or higher; `777` might be needed in some cases.', $this->text_domain), QUICK_CACHE_DIR));
+					if(!is_dir(QUICK_CACHE_DIR) && mkdir(QUICK_CACHE_DIR, 0775, TRUE) && !is_file(QUICK_CACHE_DIR.'/.htaccess'))
+						file_put_contents(QUICK_CACHE_DIR.'/.htaccess', $this->htaccess_deny); // We know it's writable here.
 
-					if(!is_dir($cache_file_dir = dirname($this->cache_file))) mkdir($cache_file_dir, 0775, TRUE);
-					if(!is_dir($cache_file_dir) || !is_writable($cache_file_dir)) // Must have this sub-directory (or sub-directories; plural).
+					if(!is_dir($cache_file_dir = dirname($this->cache_file))) $cache_file_dir_writable = mkdir($cache_file_dir, 0775, TRUE);
+					if(empty($cache_file_dir_writable) && !is_writable($cache_file_dir)) // Only check if it's writable, if we didn't just successfully create it.
 						throw new \exception(sprintf(__('Cache directory not writable. Quick Cache needs this directory please: `%1$s`. Set permissions to `755` or higher; `777` might be needed in some cases.', $this->text_domain), $cache_file_dir));
 
 					if(QUICK_CACHE_DEBUGGING_ENABLE) // Debugging messages enabled; or no?
 						{
 							$total_time = number_format(microtime(TRUE) - $this->timer, 5, '.', '');
-							$cache .= "\n".'<!-- '.htmlspecialchars(sprintf(__('Quick Cache file built for (%1$s) in %2$s seconds, on: %3$s.', $this->text_domain), $this->salt_location, $total_time, date('M jS, Y @ g:i a T'))).' -->';
+							$cache .= "\n".'<!-- '.htmlspecialchars(sprintf(__('Quick Cache file built for (%1$s) in %2$s seconds, on: %3$s.', $this->text_domain),
+							                                                $this->salt_location, $total_time, date('M jS, Y @ g:i a T'))).' -->';
 							$cache .= "\n".'<!-- '.htmlspecialchars(sprintf(__('This Quick Cache file will auto-expire (and be rebuilt) on: %1$s (based on your configured expiration time).', $this->text_domain), date('M jS, Y @ g:i a T', strtotime('+'.QUICK_CACHE_MAX_AGE)))).' -->';
 						}
 					$cache_file_tmp = $this->cache_file.'.'.uniqid('', TRUE).'.tmp'; // Cache creation is atomic; e.g. tmp file w/ rename.
+
 					if(file_put_contents($cache_file_tmp, serialize($headers).'<!--headers-->'.$cache) && rename($cache_file_tmp, $this->cache_file))
 						return $cache; // Return the newly built cache; with possible debug information also.
 
@@ -281,6 +285,36 @@ namespace quick_cache // Root namespace.
 						$cache_path .= '.html';
 
 					return $cache_path;
+				}
+
+			public function host_token()
+				{
+					return trim(preg_replace('/[^a-z0-9]/i', '', $_SERVER['HTTP_HOST']), '-');
+				}
+
+			public function host_dir_token()
+				{
+					$host_dir_token = '/'; // Assume NOT multisite; or running it's own domain.
+
+					if(is_multisite() && (!defined('SUBDOMAIN_INSTALL') || !SUBDOMAIN_INSTALL))
+						{ // Multisite w/ sub-directories; need a valid sub-directory token.
+
+							$base = '/'; // Initial default value.
+							if(defined('PATH_CURRENT_SITE')) $base = PATH_CURRENT_SITE;
+							else if(!empty($GLOBALS['base'])) $base = $GLOBALS['base'];
+
+							$uri_minus_base = // Supports `/sub-dir/child-blog-sub-dir/` also.
+								preg_replace('/^'.preg_quote($base, '/').'/', '', $_SERVER['REQUEST_URI']);
+
+							list($host_dir_token) = explode('/', trim($uri_minus_base, '/'));
+							$host_dir_token = (isset($host_dir_token[0])) ? '/'.$host_dir_token.'/' : '/';
+
+							if($host_dir_token !== '/' // Perhaps NOT the main site?
+							   && (!is_file(QUICK_CACHE_DIR.'/qc-blog-paths') // NOT a read/valid blog path?
+							       || !in_array($host_dir_token, unserialize(file_get_contents(QUICK_CACHE_DIR.'/qc-blog-paths')), TRUE))
+							) $host_dir_token = '/'; // Main site; e.g. this is NOT a real/valid child blog path.
+						}
+					return $host_dir_token;
 				}
 
 			public function is_post_put_del_request()
