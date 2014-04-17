@@ -2,7 +2,7 @@
 
 Stable tag: 140104
 Requires at least: 3.7
-Tested up to: 3.8
+Tested up to: 3.9
 Text Domain: quick-cache
 
 License: GPLv2 or later
