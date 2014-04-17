@@ -402,29 +402,10 @@ namespace quick_cache // Root namespace.
 							$cache_dir = ABSPATH.$this->options['cache_dir'];
 							if(!is_dir($cache_dir)) return $counter; // Nothing to do.
 
-							$host_dir_token = '/'; // Assume NOT multisite; or running it's own domain.
-							if(is_multisite() && (!defined('SUBDOMAIN_INSTALL') || !SUBDOMAIN_INSTALL))
-								{ // Multisite w/ sub-directories; need a valid sub-directory token.
-
-									$base = '/'; // Initial default value.
-									if(defined('PATH_CURRENT_SITE')) $base = PATH_CURRENT_SITE;
-									else if(!empty($GLOBALS['base'])) $base = $GLOBALS['base'];
-
-									$uri_minus_base = // Supports `/sub-dir/child-blog-sub-dir/` also.
-										preg_replace('/^'.preg_quote($base, '/').'/', '', $_SERVER['REQUEST_URI']);
-
-									list($host_dir_token) = explode('/', trim($uri_minus_base, '/'));
-									$host_dir_token = (isset($host_dir_token[0])) ? '/'.$host_dir_token.'/' : '/';
-
-									if($host_dir_token !== '/' // Perhaps NOT the main site?
-									   && (!is_file($cache_dir.'/qc-blog-paths') // NOT a read/valid blog path?
-									       || !in_array($host_dir_token, unserialize(file_get_contents($cache_dir.'/qc-blog-paths')), TRUE))
-									) $host_dir_token = '/'; // Main site; e.g. this is NOT a real/valid child blog path.
-								}
 							// @TODO When set_time_limit() is disabled by PHP configuration, display a warning message to users upon plugin activation
 							@set_time_limit(1800); // In case of HUGE sites w/ a very large directory. Errors are ignored in case `set_time_limit()` is disabled.
 
-							$url                          = 'http://'.$_SERVER['HTTP_HOST'].$host_dir_token;
+							$url                          = 'http://'.$_SERVER['HTTP_HOST'].$this->host_dir_token();
 							$cache_path_no_scheme_quv_ext = $this->url_to_cache_path($url, '', '', $this::CACHE_PATH_NO_SCHEME | $this::CACHE_PATH_NO_PATH_INDEX | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT);
 							$regex                        = '/^'.preg_quote($cache_dir, '/'). // Consider all schemes; all paths; and all possible variations.
 							                                '\/[^\/]+\/'.preg_quote($cache_path_no_scheme_quv_ext, '/').
@@ -993,6 +974,38 @@ namespace quick_cache // Root namespace.
 								$cache_path .= '.html';
 
 							return $cache_path;
+						}
+
+					public function host_token($dashify = FALSE)
+						{
+							$host = strtolower($_SERVER['HTTP_HOST']);
+							return ($dashify) ? trim(preg_replace('/[^a-z0-9\/]/i', '-', $host), '-') : $host;
+						}
+
+					public function host_dir_token($dashify = FALSE)
+						{
+							$cache_dir      = ABSPATH.$this->options['cache_dir'];
+							$host_dir_token = '/'; // Assume NOT multisite; or running it's own domain.
+
+							if(is_multisite() && (!defined('SUBDOMAIN_INSTALL') || !SUBDOMAIN_INSTALL))
+								{ // Multisite w/ sub-directories; need a valid sub-directory token.
+
+									$base = '/'; // Initial default value.
+									if(defined('PATH_CURRENT_SITE')) $base = PATH_CURRENT_SITE;
+									else if(!empty($GLOBALS['base'])) $base = $GLOBALS['base'];
+
+									$uri_minus_base = // Supports `/sub-dir/child-blog-sub-dir/` also.
+										preg_replace('/^'.preg_quote($base, '/').'/', '', $_SERVER['REQUEST_URI']);
+
+									list($host_dir_token) = explode('/', trim($uri_minus_base, '/'));
+									$host_dir_token = (isset($host_dir_token[0])) ? '/'.$host_dir_token.'/' : '/';
+
+									if($host_dir_token !== '/' // Perhaps NOT the main site?
+									   && (!is_file($cache_dir.'/qc-blog-paths') // NOT a read/valid blog path?
+									       || !in_array($host_dir_token, unserialize(file_get_contents($cache_dir.'/qc-blog-paths')), TRUE))
+									) $host_dir_token = '/'; // Main site; e.g. this is NOT a real/valid child blog path.
+								}
+							return ($dashify) ? trim(preg_replace('/[^a-z0-9\/]/i', '-', $host_dir_token), '-') : $host_dir_token;
 						}
 
 					public function dir_regex_iteration($dir, $regex)
