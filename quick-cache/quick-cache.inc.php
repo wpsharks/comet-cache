@@ -139,7 +139,7 @@ namespace quick_cache // Root namespace.
 
 							add_filter('enable_live_network_counts', array($this, 'update_blog_paths'));
 
-							add_filter('plugin_action_links_' . str_ireplace('.inc', '', plugin_basename( $this->file )), array($this, 'add_settings_link'));
+							add_filter('plugin_action_links_' . plugin_basename( $this->file ), array($this, 'add_settings_link'));
 
 							if((integer)$this->options['crons_setup'] < 1382523750)
 								{
@@ -912,6 +912,8 @@ namespace quick_cache // Root namespace.
 
 					public function add_settings_link( $links ) {
 						$links[] = '<a href="options-general.php?page=quick_cache">Settings</a>';
+						$links[] = '<br/><a href="'.esc_attr(add_query_arg(urlencode_deep(array('page' => __NAMESPACE__, __NAMESPACE__.'_pro_preview' => '1')), self_admin_url('/admin.php'))).'">Preview Pro Features</a>';
+						$links[] = '<a href="'.esc_attr('http://www.websharks-inc.com/product/'.str_replace('_', '-', __NAMESPACE__).'/').'" target="_blank">Upgrade</a>';
 						return $links;
 					}
 
