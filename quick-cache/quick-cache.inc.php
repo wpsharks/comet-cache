@@ -28,7 +28,6 @@ namespace quick_cache // Root namespace.
 							add_action('after_setup_theme', array($this, 'setup'));
 							register_activation_hook($this->file, array($this, 'activate'));
 							register_deactivation_hook($this->file, array($this, 'deactivate'));
-							add_filter('plugin_action_links_' . str_ireplace('.inc', '', plugin_basename(__FILE__)), array($this, 'add_settings_link'));
 						}
 
 					public function setup()
@@ -139,6 +138,8 @@ namespace quick_cache // Root namespace.
 							add_action('delete_link', array($this, 'auto_clear_cache'));
 
 							add_filter('enable_live_network_counts', array($this, 'update_blog_paths'));
+
+							add_filter('plugin_action_links_' . str_ireplace('.inc', '', plugin_basename( $this->file )), array($this, 'add_settings_link'));
 
 							if((integer)$this->options['crons_setup'] < 1382523750)
 								{
