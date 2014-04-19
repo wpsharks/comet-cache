@@ -167,7 +167,9 @@ namespace quick_cache // Root namespace.
 					if(function_exists('zlib_get_coding_type') && zlib_get_coding_type() && (!($zlib_oc = ini_get('zlib.output_compression')) || !preg_match('/^(?:1|on|yes|true)$/i', $zlib_oc)))
 						throw new \exception(__('Unable to cache already-compressed output. Please use `mod_deflate` w/ Apache; or use `zlib.output_compression` in your `php.ini` file. Quick Cache is NOT compatible with `ob_gzhandler()` and others like this.', $this->text_domain));
 
-					$is_404 = (function_exists('is_404') && is_404());
+					$is_wp_loaded = (isset($GLOBALS['wp']) && did_action('wp'));
+					$is_404       = ($is_wp_loaded && is_404()); // May not call `is_404()` until `wp` has been fired; i.e. after the query.
+
 					if($is_404 && !QUICK_CACHE_CACHE_404_REQUESTS)
 						return $buffer; // Not caching 404 errors.
 
