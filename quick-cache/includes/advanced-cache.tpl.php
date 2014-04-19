@@ -26,12 +26,18 @@ namespace quick_cache // Root namespace.
 		if(!defined('QUICK_CACHE_ALLOW_BROWSER_CACHE')) define('QUICK_CACHE_ALLOW_BROWSER_CACHE', '%%QUICK_CACHE_ALLOW_BROWSER_CACHE%%');
 		if(!defined('QUICK_CACHE_GET_REQUESTS')) define('QUICK_CACHE_GET_REQUESTS', '%%QUICK_CACHE_GET_REQUESTS%%');
 		if(!defined('QUICK_CACHE_FEEDS_ENABLE')) define('QUICK_CACHE_FEEDS_ENABLE', '%%QUICK_CACHE_FEEDS_ENABLE%%');
+		if(!defined('QUICK_CACHE_CACHE_404_REQUESTS')) define('QUICK_CACHE_CACHE_404_REQUESTS', '%%QUICK_CACHE_CACHE_404_REQUESTS%%');
 
 		/*
 		 * Cache directory. Max age; e.g. `7 days` — anything compatible w/ `strtotime()`.
 		 */
 		if(!defined('QUICK_CACHE_DIR')) define('QUICK_CACHE_DIR', ABSPATH.'%%QUICK_CACHE_DIR%%');
 		if(!defined('QUICK_CACHE_MAX_AGE')) define('QUICK_CACHE_MAX_AGE', '%%QUICK_CACHE_MAX_AGE%%');
+
+		/*
+		 * A unique filename for the special 404 Cache File (used when 404 caching is enabled).
+		 */
+		if(!defined('QUICK_CACHE_404_CACHE_FILENAME')) define('QUICK_CACHE_404_CACHE_FILENAME', '----404----');
 
 		/*
 		 * The heart of Quick Cache.
@@ -45,6 +51,7 @@ namespace quick_cache // Root namespace.
 			public $version_salt = ''; // Calculated version salt; set by filters only in the lite version.
 			public $cache_path = ''; // Calculated cache path; absolute relative (no leading/trailing slashes).
 			public $cache_file = ''; // Calculated location; defined by `maybe_start_output_buffering()`.
+			public $cache_file_404 = ''; // Calculated location; defined by `maybe_start_output_buffering()`.
 			public $salt_location = ''; // Calculated location; defined by `maybe_start_output_buffering()`.
 			public $text_domain = ''; // Defined by class constructor; this is for translations.
 			public $hooks = array(); // Array of advanced cache plugin hooks.
@@ -121,6 +128,7 @@ namespace quick_cache // Root namespace.
 					$this->version_salt  = $this->apply_filters(__CLASS__.'__version_salt', '');
 					$this->cache_path    = $this->url_to_cache_path($this->protocol.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'], '', $this->version_salt);
 					$this->cache_file    = QUICK_CACHE_DIR.'/'.$this->cache_path; // NOT considering a user cache at all in the lite version.
+					$this->cache_file_404 = QUICK_CACHE_DIR.'/'.$this->url_to_cache_path($this->protocol.$_SERVER['HTTP_HOST'].'/'.QUICK_CACHE_404_CACHE_FILENAME);
 					$this->salt_location = ltrim($this->version_salt.' '.$this->protocol.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
 
 					if(is_file($this->cache_file) && filemtime($this->cache_file) >= strtotime('-'.QUICK_CACHE_MAX_AGE))
@@ -159,6 +167,10 @@ namespace quick_cache // Root namespace.
 					if(function_exists('zlib_get_coding_type') && zlib_get_coding_type() && (!($zlib_oc = ini_get('zlib.output_compression')) || !preg_match('/^(?:1|on|yes|true)$/i', $zlib_oc)))
 						throw new \exception(__('Unable to cache already-compressed output. Please use `mod_deflate` w/ Apache; or use `zlib.output_compression` in your `php.ini` file. Quick Cache is NOT compatible with `ob_gzhandler()` and others like this.', $this->text_domain));
 
+					$is_404 = (function_exists('is_404') && is_404());
+					if($is_404 && !QUICK_CACHE_CACHE_404_REQUESTS)
+						return $buffer; // Not caching 404 errors.
+
 					if(function_exists('is_maintenance') && is_maintenance())
 						return $buffer; // <http://wordpress.org/extend/plugins/maintenance-mode>
 
@@ -180,7 +192,21 @@ namespace quick_cache // Root namespace.
 						{
 							if(stripos($_header, 'Content-Type:') === 0)
 								$content_type = $_header; // Last one.
-
+							/*
+							 * A Retry-After header indicates the site is temporarily unavailable.
+							 *    i.e. That the site is down; or is in maintenance mode.
+							 *    I've seen maintenance mode plugins for WP set this.
+							 *
+							 * A Status header indicates that a plugin may have set a particular HTTP status code.
+							 *    While WP itself no longer sends this, it's good to check for plugins that do.
+							 * ~ NOTE: We should request that the WP core function `status_header()` start sending this.
+							 *
+							 * An HTTP status code set by WP core function `status_header()`.
+							 * ~ NOTE: at this time the `headers_list()` function does NOT include this header unfortunately.
+							 *    Therefore, the routine below which looks for this header will NOT find it under any circumstance.
+							 *    Tested and confirmed. See also: <http://www.php.net/manual/en/function.headers-list.php>
+							 *    That said, I think we should leave it here in case a future version of PHP corrects this behavior.
+							 */
 							else if(preg_match('/^(?:Retry\-After\:\s+(?P<retry>.+)|Status\:\s+(?P<status>[0-9]+)|HTTP\/[0-9]+\.[0-9]+\s+(?P<http_status>[0-9]+))/i', $_header, $_m))
 								if(!empty($_m['retry']) || (!empty($_m['status']) && $_m['status'][0] !== '2' && $_m['status'] !== '404')
 								   || (!empty($_m['http_status']) && $_m['http_status'][0] !== '2' && $_m['http_status'] !== '404')
@@ -200,6 +226,17 @@ namespace quick_cache // Root namespace.
 					if(empty($cache_file_dir_writable) && !is_writable($cache_file_dir)) // Only check if it's writable, if we didn't just successfully create it.
 						throw new \exception(sprintf(__('Cache directory not writable. Quick Cache needs this directory please: `%1$s`. Set permissions to `755` or higher; `777` might be needed in some cases.', $this->text_domain), $cache_file_dir));
 
+					/*
+					 * Is this a 404 and the 404 cache file already exists?
+					 * Then lets symlink this 404 cache file to the existing cache file.
+					 * and return the cache; with possible debug information also.
+					 */
+					if($is_404 && is_file($this->cache_file_404))
+						{
+							symlink($this->cache_file_404, $this->cache_file);
+							return $cache; // Nothing more to do here.
+						}
+
 					if(QUICK_CACHE_DEBUGGING_ENABLE) // Debugging messages enabled; or no?
 						{
 							$total_time = number_format(microtime(TRUE) - $this->timer, 5, '.', '');
@@ -209,7 +246,18 @@ namespace quick_cache // Root namespace.
 						}
 					$cache_file_tmp = $this->cache_file.'.'.uniqid('', TRUE).'.tmp'; // Cache creation is atomic; e.g. tmp file w/ rename.
 
-					if(file_put_contents($cache_file_tmp, serialize($headers).'<!--headers-->'.$cache) && rename($cache_file_tmp, $this->cache_file))
+					/*
+					 * This is NOT a 404, or it is 404 and the 404 cache file doesn't yet exist (so we need to create it).
+					 */
+					if($is_404) // This is a 404; let's create 404 cache file and symlink to it.
+						{
+							if(file_put_contents($cache_file_tmp, serialize($headers).'<!--headers-->'.$cache) && rename($cache_file_tmp, $this->cache_file_404))
+								{
+									symlink($this->cache_file_404, $this->cache_file);
+									return $cache; // Return the newly built cache; with possible debug information also.
+								}
+						} // NOT a 404; let's write a new cache file.
+					else if(file_put_contents($cache_file_tmp, serialize($headers).'<!--headers-->'.$cache) && rename($cache_file_tmp, $this->cache_file))
 						return $cache; // Return the newly built cache; with possible debug information also.
 
 					@unlink($cache_file_tmp); // Clean this up (if it exists); and throw an exception with information for the site owner.

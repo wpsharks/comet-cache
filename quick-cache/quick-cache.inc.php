@@ -28,6 +28,7 @@ namespace quick_cache // Root namespace.
 							add_action('after_setup_theme', array($this, 'setup'));
 							register_activation_hook($this->file, array($this, 'activate'));
 							register_deactivation_hook($this->file, array($this, 'deactivate'));
+							add_filter('plugin_action_links_' . str_ireplace('.inc', '', plugin_basename(__FILE__)), array($this, 'add_settings_link'));
 						}
 
 					public function setup()
@@ -52,6 +53,7 @@ namespace quick_cache // Root namespace.
 
 							                                'get_requests'                  => '0', // `0|1`.
 							                                'feeds_enable'                  => '0', // `0|1`.
+							                                'cache_404_requests'            => '0', // `0|1`.
 
 							                                'uninstall_on_deactivation'     => '0' // `0|1`.
 							); // Default options are merged with those defined by the site owner.
@@ -906,6 +908,11 @@ namespace quick_cache // Root namespace.
 								}
 							return $value; // Pass through untouched (always).
 						}
+
+					public function add_settings_link( $links ) {
+						$links[] = '<a href="options-general.php?page=quick_cache">Settings</a>';
+						return $links;
+					}
 
 					/*
 					 * See also: `advanced-cache.tpl.php` duplicate.
