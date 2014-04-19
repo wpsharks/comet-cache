@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="generator" content="ApiGen 2.8.0" />
+	<meta name="robots" content="noindex" />
+
+	<title>File quick-cache/includes/advanced-cache.tpl.php | Quick Cache Lite</title>
+
+	<script type="text/javascript" src="resources/combined.js?2507565882"></script>
+	<script type="text/javascript" src="elementlist.js?4283955498"></script>
+	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3403148767" />
+
+</head>
+
+<body>
+<div id="left">
+	<div id="menu">
+		<a href="index.html" title="Overview"><span>Overview</span></a>
+
+
+		<div id="groups">
+			<h3>Namespaces</h3>
+			<ul>
+				<li><a href="namespace-None.html">None</a>
+						</li>
+				<li class="active"><a href="namespace-quick_cache.html">quick_cache</a>
+						</li>
+			</ul>
+		</div>
+
+		<hr />
+
+
+		<div id="elements">
+			<h3>Classes</h3>
+			<ul>
+				<li><a href="class-quick_cache.actions.html">actions</a></li>
+				<li><a href="class-quick_cache.advanced_cache.html">advanced_cache</a></li>
+				<li><a href="class-quick_cache.menu_pages.html">menu_pages</a></li>
+				<li><a href="class-quick_cache.plugin.html">plugin</a></li>
+			</ul>
+
+
+
+
+
+			<h3>Functions</h3>
+			<ul>
+				<li class="active"><a href="function-quick_cache.__.html">__</a></li>
+				<li><a href="function-quick_cache.plugin.html">plugin</a></li>
+			</ul>
+		</div>
+	</div>
+</div>
+
+<div id="splitter"></div>
+
+<div id="right">
+<div id="rightInner">
+	<form id="search">
+		<input type="hidden" name="cx" value="" />
+		<input type="hidden" name="ie" value="UTF-8" />
+		<input type="text" name="q" class="text" />
+		<input type="submit" value="Search" />
+	</form>
+
+	<div id="navigation">
+		<ul>
+			<li>
+				<a href="index.html" title="Overview"><span>Overview</span></a>
+			</li>
+			<li>
+				<a href="namespace-quick_cache.html" title="Summary of quick_cache"><span>Namespace</span></a>
+			</li>
+			<li>
+				<a href="function-quick_cache.__.html" title="Summary of quick_cache\__"><span>Function</span></a>
+			</li>
+		</ul>
+		<ul>
+			<li>
+				<a href="tree.html" title="Tree view of classes, interfaces, traits and exceptions"><span>Tree</span></a>
+			</li>
+			<li>
+				<a href="deprecated.html" title="List of deprecated elements"><span>Deprecated</span></a>
+			</li>
+			<li>
+				<a href="todo.html" title="Todo list"><span>Todo</span></a>
+			</li>
+		</ul>
+		<ul>
+			<li>
+				<a href="quick-cache-lite-api-documentation.zip" title="Download documentation as ZIP archive"><span>Download</span></a>
+			</li>
+		</ul>
+	</div>
+
+<pre><code><span id="1" class="l"><a class="l" href="#1">  1: </a><span class="xlang">&lt;?php</span>
+</span><span id="2" class="l"><a class="l" href="#2">  2: </a><span class="php-keyword1">namespace</span> quick_cache <span class="php-comment">// Root namespace.</span>
+</span><span id="3" class="l"><a class="l" href="#3">  3: </a>    {
+</span><span id="4" class="l"><a class="l" href="#4">  4: </a>        <span class="php-keyword1">if</span>(!<span class="php-keyword2">defined</span>(<span class="php-quote">'WPINC'</span>)) <span class="php-comment">// MUST have WordPress.</span>
+</span><span id="5" class="l"><a class="l" href="#5">  5: </a>            <span class="php-keyword1">exit</span>(<span class="php-quote">'Do NOT access this file directly: '</span>.<span class="php-keyword2">basename</span>(__FILE__));
+</span><span id="6" class="l"><a class="l" href="#6">  6: </a>
+</span><span id="7" class="l"><a class="l" href="#7">  7: </a>        <span class="php-comment">/*
+</span></span><span id="8" class="l"><a class="l" href="#8">  8: </a><span class="php-comment">         * This file serves as a template for the Quick Cache plugin in WordPress.
+</span></span><span id="9" class="l"><a class="l" href="#9">  9: </a><span class="php-comment">         * The Quick Cache plugin will fill the `%%` replacement codes automatically.
+</span></span><span id="10" class="l"><a class="l" href="#10"> 10: </a><span class="php-comment">         *    e.g. this file becomes: `/wp-content/advanced-cache.php`.
+</span></span><span id="11" class="l"><a class="l" href="#11"> 11: </a><span class="php-comment">         *
+</span></span><span id="12" class="l"><a class="l" href="#12"> 12: </a><span class="php-comment">         * Or, if you prefer; you can set the PHP constants below in your `/wp-config.php` file.
+</span></span><span id="13" class="l"><a class="l" href="#13"> 13: </a><span class="php-comment">         * Then, you could simply drop this file into: `/wp-content/advanced-cache.php` on your own :-)
+</span></span><span id="14" class="l"><a class="l" href="#14"> 14: </a><span class="php-comment">         * ~ Be sure to setup a CRON job that clears your `QUICK_CACHE_DIR` periodically.
+</span></span><span id="15" class="l"><a class="l" href="#15"> 15: </a><span class="php-comment">         */</span>
+</span><span id="16" class="l"><a class="l" href="#16"> 16: </a>
+</span><span id="17" class="l"><a class="l" href="#17"> 17: </a>        <span class="php-comment">/*
+</span></span><span id="18" class="l"><a class="l" href="#18"> 18: </a><span class="php-comment">         * Quick Cache configuration constants.
+</span></span><span id="19" class="l"><a class="l" href="#19"> 19: </a><span class="php-comment">         * ----------------------------------------------------------------------------
+</span></span><span id="20" class="l"><a class="l" href="#20"> 20: </a><span class="php-comment">         */</span>
+</span><span id="21" class="l"><a class="l" href="#21"> 21: </a>        <span class="php-comment">/*
+</span></span><span id="22" class="l"><a class="l" href="#22"> 22: </a><span class="php-comment">         * These work as boolean flags.
+</span></span><span id="23" class="l"><a class="l" href="#23"> 23: </a><span class="php-comment">         */</span>
+</span><span id="24" class="l"><a class="l" href="#24"> 24: </a>        <span class="php-keyword1">if</span>(!<span class="php-keyword2">defined</span>(<span class="php-quote">'QUICK_CACHE_ENABLE'</span>)) <span class="php-keyword2">define</span>(<span class="php-quote">'QUICK_CACHE_ENABLE'</span>, <span class="php-quote">'%%QUICK_CACHE_ENABLE%%'</span>);
+</span><span id="25" class="l"><a class="l" href="#25"> 25: </a>        <span class="php-keyword1">if</span>(!<span class="php-keyword2">defined</span>(<span class="php-quote">'QUICK_CACHE_DEBUGGING_ENABLE'</span>)) <span class="php-keyword2">define</span>(<span class="php-quote">'QUICK_CACHE_DEBUGGING_ENABLE'</span>, <span class="php-quote">'%%QUICK_CACHE_DEBUGGING_ENABLE%%'</span>);
+</span><span id="26" class="l"><a class="l" href="#26"> 26: </a>        <span class="php-keyword1">if</span>(!<span class="php-keyword2">defined</span>(<span class="php-quote">'QUICK_CACHE_ALLOW_BROWSER_CACHE'</span>)) <span class="php-keyword2">define</span>(<span class="php-quote">'QUICK_CACHE_ALLOW_BROWSER_CACHE'</span>, <span class="php-quote">'%%QUICK_CACHE_ALLOW_BROWSER_CACHE%%'</span>);
+</span><span id="27" class="l"><a class="l" href="#27"> 27: </a>        <span class="php-keyword1">if</span>(!<span class="php-keyword2">defined</span>(<span class="php-quote">'QUICK_CACHE_GET_REQUESTS'</span>)) <span class="php-keyword2">define</span>(<span class="php-quote">'QUICK_CACHE_GET_REQUESTS'</span>, <span class="php-quote">'%%QUICK_CACHE_GET_REQUESTS%%'</span>);
+</span><span id="28" class="l"><a class="l" href="#28"> 28: </a>        <span class="php-keyword1">if</span>(!<span class="php-keyword2">defined</span>(<span class="php-quote">'QUICK_CACHE_FEEDS_ENABLE'</span>)) <span class="php-keyword2">define</span>(<span class="php-quote">'QUICK_CACHE_FEEDS_ENABLE'</span>, <span class="php-quote">'%%QUICK_CACHE_FEEDS_ENABLE%%'</span>);
+</span><span id="29" class="l"><a class="l" href="#29"> 29: </a>        <span class="php-keyword1">if</span>(!<span class="php-keyword2">defined</span>(<span class="php-quote">'QUICK_CACHE_CACHE_404_REQUESTS'</span>)) <span class="php-keyword2">define</span>(<span class="php-quote">'QUICK_CACHE_CACHE_404_REQUESTS'</span>, <span class="php-quote">'%%QUICK_CACHE_CACHE_404_REQUESTS%%'</span>);
+</span><span id="30" class="l"><a class="l" href="#30"> 30: </a>
+</span><span id="31" class="l"><a class="l" href="#31"> 31: </a>        <span class="php-comment">/*
+</span></span><span id="32" class="l"><a class="l" href="#32"> 32: </a><span class="php-comment">         * Cache directory. Max age; e.g. `7 days` — anything compatible w/ `strtotime()`.
+</span></span><span id="33" class="l"><a class="l" href="#33"> 33: </a><span class="php-comment">         */</span>
+</span><span id="34" class="l"><a class="l" href="#34"> 34: </a>        <span class="php-keyword1">if</span>(!<span class="php-keyword2">defined</span>(<span class="php-quote">'QUICK_CACHE_DIR'</span>)) <span class="php-keyword2">define</span>(<span class="php-quote">'QUICK_CACHE_DIR'</span>, ABSPATH.<span class="php-quote">'%%QUICK_CACHE_DIR%%'</span>);
+</span><span id="35" class="l"><a class="l" href="#35"> 35: </a>        <span class="php-keyword1">if</span>(!<span class="php-keyword2">defined</span>(<span class="php-quote">'QUICK_CACHE_MAX_AGE'</span>)) <span class="php-keyword2">define</span>(<span class="php-quote">'QUICK_CACHE_MAX_AGE'</span>, <span class="php-quote">'%%QUICK_CACHE_MAX_AGE%%'</span>);
+</span><span id="36" class="l"><a class="l" href="#36"> 36: </a>
+</span><span id="37" class="l"><a class="l" href="#37"> 37: </a>        <span class="php-comment">/*
+</span></span><span id="38" class="l"><a class="l" href="#38"> 38: </a><span class="php-comment">         * A unique filename for the special 404 Cache File (used when 404 caching is enabled).
+</span></span><span id="39" class="l"><a class="l" href="#39"> 39: </a><span class="php-comment">         */</span>
+</span><span id="40" class="l"><a class="l" href="#40"> 40: </a>        <span class="php-keyword1">if</span>(!<span class="php-keyword2">defined</span>(<span class="php-quote">'QUICK_CACHE_404_CACHE_FILENAME'</span>)) <span class="php-keyword2">define</span>(<span class="php-quote">'QUICK_CACHE_404_CACHE_FILENAME'</span>, <span class="php-quote">'----404----'</span>);
+</span><span id="41" class="l"><a class="l" href="#41"> 41: </a>
+</span><span id="42" class="l"><a class="l" href="#42"> 42: </a>        <span class="php-comment">/*
+</span></span><span id="43" class="l"><a class="l" href="#43"> 43: </a><span class="php-comment">         * The heart of Quick Cache.
+</span></span><span id="44" class="l"><a class="l" href="#44"> 44: </a><span class="php-comment">         */</span>
+</span><span id="45" class="l"><a class="l" href="#45"> 45: </a>
+</span><span id="46" class="l"><a class="l" href="#46"> 46: </a>        <span class="php-keyword1">class</span> <a id="advanced_cache" href="#advanced_cache">advanced_cache</a> <span class="php-comment"># `/wp-content/advanced-cache.php`</span>
+</span><span id="47" class="l"><a class="l" href="#47"> 47: </a>        {
+</span><span id="48" class="l"><a class="l" href="#48"> 48: </a>            <span class="php-keyword1">public</span> <span class="php-var"><a id="$is_pro" href="#$is_pro">$is_pro</a></span> = <span class="php-keyword1">FALSE</span>; <span class="php-comment">// Identifies the lite version of Quick Cache.</span>
+</span><span id="49" class="l"><a class="l" href="#49"> 49: </a>            <span class="php-keyword1">public</span> <span class="php-var"><a id="$timer" href="#$timer">$timer</a></span> = <span class="php-num">0</span>; <span class="php-comment">// Microtime; defined by class constructor for debugging purposes.</span>
+</span><span id="50" class="l"><a class="l" href="#50"> 50: </a>            <span class="php-keyword1">public</span> <span class="php-var"><a id="$protocol" href="#$protocol">$protocol</a></span> = <span class="php-quote">''</span>; <span class="php-comment">// Calculated protocol; one of `http://` or `https://`.</span>
+</span><span id="51" class="l"><a class="l" href="#51"> 51: </a>            <span class="php-keyword1">public</span> <span class="php-var"><a id="$version_salt" href="#$version_salt">$version_salt</a></span> = <span class="php-quote">''</span>; <span class="php-comment">// Calculated version salt; set by filters only in the lite version.</span>
+</span><span id="52" class="l"><a class="l" href="#52"> 52: </a>            <span class="php-keyword1">public</span> <span class="php-var"><a id="$cache_path" href="#$cache_path">$cache_path</a></span> = <span class="php-quote">''</span>; <span class="php-comment">// Calculated cache path; absolute relative (no leading/trailing slashes).</span>
+</span><span id="53" class="l"><a class="l" href="#53"> 53: </a>            <span class="php-keyword1">public</span> <span class="php-var"><a id="$cache_file" href="#$cache_file">$cache_file</a></span> = <span class="php-quote">''</span>; <span class="php-comment">// Calculated location; defined by `maybe_start_output_buffering()`.</span>
+</span><span id="54" class="l"><a class="l" href="#54"> 54: </a>            <span class="php-keyword1">public</span> <span class="php-var"><a id="$cache_file_404" href="#$cache_file_404">$cache_file_404</a></span> = <span class="php-quote">''</span>; <span class="php-comment">// Calculated location; defined by `maybe_start_output_buffering()`.</span>
+</span><span id="55" class="l"><a class="l" href="#55"> 55: </a>            <span class="php-keyword1">public</span> <span class="php-var"><a id="$salt_location" href="#$salt_location">$salt_location</a></span> = <span class="php-quote">''</span>; <span class="php-comment">// Calculated location; defined by `maybe_start_output_buffering()`.</span>
+</span><span id="56" class="l"><a class="l" href="#56"> 56: </a>            <span class="php-keyword1">public</span> <span class="php-var"><a id="$text_domain" href="#$text_domain">$text_domain</a></span> = <span class="php-quote">''</span>; <span class="php-comment">// Defined by class constructor; this is for translations.</span>
+</span><span id="57" class="l"><a class="l" href="#57"> 57: </a>            <span class="php-keyword1">public</span> <span class="php-var"><a id="$hooks" href="#$hooks">$hooks</a></span> = <span class="php-keyword1">array</span>(); <span class="php-comment">// Array of advanced cache plugin hooks.</span>
+</span><span id="58" class="l"><a class="l" href="#58"> 58: </a>
+</span><span id="59" class="l"><a class="l" href="#59"> 59: </a>            <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="___construct" href="#___construct">__construct</a>() <span class="php-comment">// Class constructor/cache handler.</span>
+</span><span id="60" class="l"><a class="l" href="#60"> 60: </a>                {
+</span><span id="61" class="l"><a class="l" href="#61"> 61: </a>                    <span class="php-keyword1">if</span>(!WP_CACHE || !QUICK_CACHE_ENABLE)
+</span><span id="62" class="l"><a class="l" href="#62"> 62: </a>                        <span class="php-keyword1">return</span>; <span class="php-comment">// Not enabled.</span>
+</span><span id="63" class="l"><a class="l" href="#63"> 63: </a>
+</span><span id="64" class="l"><a class="l" href="#64"> 64: </a>                    <span class="php-keyword1">if</span>(<span class="php-keyword2">defined</span>(<span class="php-quote">'WP_INSTALLING'</span>) || <span class="php-keyword2">defined</span>(<span class="php-quote">'RELOCATE'</span>))
+</span><span id="65" class="l"><a class="l" href="#65"> 65: </a>                        <span class="php-keyword1">return</span>; <span class="php-comment">// N/A; installing|relocating.</span>
+</span><span id="66" class="l"><a class="l" href="#66"> 66: </a>
+</span><span id="67" class="l"><a class="l" href="#67"> 67: </a>                    <span class="php-var">$this</span>-&gt;timer       = <span class="php-keyword2">microtime</span>(<span class="php-keyword1">TRUE</span>);
+</span><span id="68" class="l"><a class="l" href="#68"> 68: </a>                    <span class="php-var">$this</span>-&gt;text_domain = <span class="php-keyword2">str_replace</span>(<span class="php-quote">'_'</span>, <span class="php-quote">'-'</span>, __NAMESPACE__);
+</span><span id="69" class="l"><a class="l" href="#69"> 69: </a>
+</span><span id="70" class="l"><a class="l" href="#70"> 70: </a>                    <span class="php-var">$this</span>-&gt;load_ac_plugins();
+</span><span id="71" class="l"><a class="l" href="#71"> 71: </a>                    <span class="php-var">$this</span>-&gt;maybe_stop_browser_caching();
+</span><span id="72" class="l"><a class="l" href="#72"> 72: </a>                    <span class="php-var">$this</span>-&gt;maybe_start_output_buffering();
+</span><span id="73" class="l"><a class="l" href="#73"> 73: </a>                }
+</span><span id="74" class="l"><a class="l" href="#74"> 74: </a>
+</span><span id="75" class="l"><a class="l" href="#75"> 75: </a>            <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_load_ac_plugins" href="#_load_ac_plugins">load_ac_plugins</a>()
+</span><span id="76" class="l"><a class="l" href="#76"> 76: </a>                {
+</span><span id="77" class="l"><a class="l" href="#77"> 77: </a>                    <span class="php-keyword1">if</span>(!<span class="php-keyword2">is_dir</span>(WP_CONTENT_DIR.<span class="php-quote">'/ac-plugins'</span>))
+</span><span id="78" class="l"><a class="l" href="#78"> 78: </a>                        <span class="php-keyword1">return</span>; <span class="php-comment">// Nothing to do here.</span>
+</span><span id="79" class="l"><a class="l" href="#79"> 79: </a>
+</span><span id="80" class="l"><a class="l" href="#80"> 80: </a>                    <span class="php-var">$GLOBALS</span>[__NAMESPACE__.<span class="php-quote">'__advanced_cache'</span>]
+</span><span id="81" class="l"><a class="l" href="#81"> 81: </a>                        = <span class="php-var">$this</span>; <span class="php-comment">// Define now; so it's available for plugins.</span>
+</span><span id="82" class="l"><a class="l" href="#82"> 82: </a>
+</span><span id="83" class="l"><a class="l" href="#83"> 83: </a>                    <span class="php-keyword1">foreach</span>((<span class="php-keyword1">array</span>)<span class="php-keyword2">glob</span>(WP_CONTENT_DIR.<span class="php-quote">'/ac-plugins/*.php'</span>) <span class="php-keyword1">as</span> <span class="php-var">$_ac_plugin</span>)
+</span><span id="84" class="l"><a class="l" href="#84"> 84: </a>                        <span class="php-keyword1">if</span>(<span class="php-keyword2">is_file</span>(<span class="php-var">$_ac_plugin</span>)) <span class="php-keyword1">include_once</span> <span class="php-var">$_ac_plugin</span>;
+</span><span id="85" class="l"><a class="l" href="#85"> 85: </a>                    <span class="php-keyword1">unset</span>(<span class="php-var">$_ac_plugin</span>); <span class="php-comment">// Houskeeping.</span>
+</span><span id="86" class="l"><a class="l" href="#86"> 86: </a>                }
+</span><span id="87" class="l"><a class="l" href="#87"> 87: </a>
+</span><span id="88" class="l"><a class="l" href="#88"> 88: </a>            <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_maybe_stop_browser_caching" href="#_maybe_stop_browser_caching">maybe_stop_browser_caching</a>()
+</span><span id="89" class="l"><a class="l" href="#89"> 89: </a>                {
+</span><span id="90" class="l"><a class="l" href="#90"> 90: </a>                    <span class="php-keyword1">if</span>(!<span class="php-keyword1">empty</span>(<span class="php-var">$_GET</span>[<span class="php-quote">'qcABC'</span>])) <span class="php-keyword1">return</span>;
+</span><span id="91" class="l"><a class="l" href="#91"> 91: </a>                    <span class="php-keyword1">if</span>(QUICK_CACHE_ALLOW_BROWSER_CACHE) <span class="php-keyword1">return</span>;
+</span><span id="92" class="l"><a class="l" href="#92"> 92: </a>
+</span><span id="93" class="l"><a class="l" href="#93"> 93: </a>                    <span class="php-keyword2">header_remove</span>(<span class="php-quote">'Last-Modified'</span>);
+</span><span id="94" class="l"><a class="l" href="#94"> 94: </a>                    <span class="php-keyword2">header</span>(<span class="php-quote">'Expires: Wed, 11 Jan 1984 05:00:00 GMT'</span>);
+</span><span id="95" class="l"><a class="l" href="#95"> 95: </a>                    <span class="php-keyword2">header</span>(<span class="php-quote">'Cache-Control: no-cache, must-revalidate, max-age=0'</span>);
+</span><span id="96" class="l"><a class="l" href="#96"> 96: </a>                    <span class="php-keyword2">header</span>(<span class="php-quote">'Pragma: no-cache'</span>);
+</span><span id="97" class="l"><a class="l" href="#97"> 97: </a>                }
+</span><span id="98" class="l"><a class="l" href="#98"> 98: </a>
+</span><span id="99" class="l"><a class="l" href="#99"> 99: </a>            <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_maybe_start_output_buffering" href="#_maybe_start_output_buffering">maybe_start_output_buffering</a>()
+</span><span id="100" class="l"><a class="l" href="#100">100: </a>                {
+</span><span id="101" class="l"><a class="l" href="#101">101: </a>                    <span class="php-keyword1">if</span>(<span class="php-keyword1">empty</span>(<span class="php-var">$_SERVER</span>[<span class="php-quote">'HTTP_HOST'</span>])) <span class="php-keyword1">return</span>;
+</span><span id="102" class="l"><a class="l" href="#102">102: </a>                    <span class="php-keyword1">if</span>(<span class="php-keyword1">empty</span>(<span class="php-var">$_SERVER</span>[<span class="php-quote">'REQUEST_URI'</span>])) <span class="php-keyword1">return</span>;
+</span><span id="103" class="l"><a class="l" href="#103">103: </a>                    <span class="php-keyword1">if</span>(<span class="php-keyword2">strtoupper</span>(PHP_SAPI) === <span class="php-quote">'CLI'</span>) <span class="php-keyword1">return</span>;
+</span><span id="104" class="l"><a class="l" href="#104">104: </a>
+</span><span id="105" class="l"><a class="l" href="#105">105: </a>                    <span class="php-keyword1">if</span>(<span class="php-keyword2">defined</span>(<span class="php-quote">'DONOTCACHEPAGE'</span>)) <span class="php-keyword1">return</span>;
+</span><span id="106" class="l"><a class="l" href="#106">106: </a>                    <span class="php-keyword1">if</span>(<span class="php-keyword1">isset</span>(<span class="php-var">$_SERVER</span>[<span class="php-quote">'DONOTCACHEPAGE'</span>])) <span class="php-keyword1">return</span>;
+</span><span id="107" class="l"><a class="l" href="#107">107: </a>
+</span><span id="108" class="l"><a class="l" href="#108">108: </a>                    <span class="php-keyword1">if</span>(<span class="php-keyword1">isset</span>(<span class="php-var">$_GET</span>[<span class="php-quote">'qcAC'</span>]) &amp;&amp; !<span class="php-var">$_GET</span>[<span class="php-quote">'qcAC'</span>]) <span class="php-keyword1">return</span>;
+</span><span id="109" class="l"><a class="l" href="#109">109: </a>                    <span class="php-keyword1">if</span>(<span class="php-keyword2">defined</span>(<span class="php-quote">'QUICK_CACHE_ALLOWED'</span>) &amp;&amp; !QUICK_CACHE_ALLOWED) <span class="php-keyword1">return</span>;
+</span><span id="110" class="l"><a class="l" href="#110">110: </a>                    <span class="php-keyword1">if</span>(<span class="php-keyword1">isset</span>(<span class="php-var">$_SERVER</span>[<span class="php-quote">'QUICK_CACHE_ALLOWED'</span>]) &amp;&amp; !<span class="php-var">$_SERVER</span>[<span class="php-quote">'QUICK_CACHE_ALLOWED'</span>]) <span class="php-keyword1">return</span>;
+</span><span id="111" class="l"><a class="l" href="#111">111: </a>
+</span><span id="112" class="l"><a class="l" href="#112">112: </a>                    <span class="php-keyword1">if</span>(<span class="php-var">$this</span>-&gt;is_post_put_del_request()) <span class="php-keyword1">return</span>; <span class="php-comment">// Do not cache `POST|PUT|DELETE` requests (ever).</span>
+</span><span id="113" class="l"><a class="l" href="#113">113: </a>
+</span><span id="114" class="l"><a class="l" href="#114">114: </a>                    <span class="php-keyword1">if</span>(<span class="php-keyword1">isset</span>(<span class="php-var">$_SERVER</span>[<span class="php-quote">'REMOTE_ADDR'</span>], <span class="php-var">$_SERVER</span>[<span class="php-quote">'SERVER_ADDR'</span>]) &amp;&amp; <span class="php-var">$_SERVER</span>[<span class="php-quote">'REMOTE_ADDR'</span>] === <span class="php-var">$_SERVER</span>[<span class="php-quote">'SERVER_ADDR'</span>])
+</span><span id="115" class="l"><a class="l" href="#115">115: </a>                        <span class="php-keyword1">if</span>(!<span class="php-var">$this</span>-&gt;is_auto_cache_engine() &amp;&amp; !<span class="php-var">$this</span>-&gt;is_localhost()) <span class="php-keyword1">return</span>;
+</span><span id="116" class="l"><a class="l" href="#116">116: </a>
+</span><span id="117" class="l"><a class="l" href="#117">117: </a>                    <span class="php-keyword1">if</span>(!QUICK_CACHE_FEEDS_ENABLE &amp;&amp; <span class="php-var">$this</span>-&gt;is_feed()) <span class="php-keyword1">return</span>;
+</span><span id="118" class="l"><a class="l" href="#118">118: </a>
+</span><span id="119" class="l"><a class="l" href="#119">119: </a>                    <span class="php-keyword1">if</span>(<span class="php-keyword2">preg_match</span>(<span class="php-quote">'/\/(?:wp\-[^\/]+|xmlrpc)\.php(?:[?]|$)/'</span>, <span class="php-var">$_SERVER</span>[<span class="php-quote">'REQUEST_URI'</span>])) <span class="php-keyword1">return</span>;
+</span><span id="120" class="l"><a class="l" href="#120">120: </a>                    <span class="php-keyword1">if</span>(is_admin() || <span class="php-keyword2">preg_match</span>(<span class="php-quote">'/\/wp-admin(?:[\/?]|$)/'</span>, <span class="php-var">$_SERVER</span>[<span class="php-quote">'REQUEST_URI'</span>])) <span class="php-keyword1">return</span>;
+</span><span id="121" class="l"><a class="l" href="#121">121: </a>                    <span class="php-keyword1">if</span>(is_multisite() &amp;&amp; <span class="php-keyword2">preg_match</span>(<span class="php-quote">'/\/files(?:[\/?]|$)/'</span>, <span class="php-var">$_SERVER</span>[<span class="php-quote">'REQUEST_URI'</span>])) <span class="php-keyword1">return</span>;
+</span><span id="122" class="l"><a class="l" href="#122">122: </a>
+</span><span id="123" class="l"><a class="l" href="#123">123: </a>                    <span class="php-keyword1">if</span>(<span class="php-var">$this</span>-&gt;is_like_user_logged_in()) <span class="php-keyword1">return</span>; <span class="php-comment">// Lite version cannot enable user caching.</span>
+</span><span id="124" class="l"><a class="l" href="#124">124: </a>
+</span><span id="125" class="l"><a class="l" href="#125">125: </a>                    <span class="php-keyword1">if</span>(!QUICK_CACHE_GET_REQUESTS &amp;&amp; <span class="php-var">$this</span>-&gt;is_get_request_w_query() &amp;&amp; <span class="php-keyword1">empty</span>(<span class="php-var">$_GET</span>[<span class="php-quote">'qcAC'</span>])) <span class="php-keyword1">return</span>;
+</span><span id="126" class="l"><a class="l" href="#126">126: </a>
+</span><span id="127" class="l"><a class="l" href="#127">127: </a>                    <span class="php-var">$this</span>-&gt;protocol      = <span class="php-var">$this</span>-&gt;is_ssl() ? <span class="php-quote">'https://'</span> : <span class="php-quote">'http://'</span>;
+</span><span id="128" class="l"><a class="l" href="#128">128: </a>                    <span class="php-var">$this</span>-&gt;version_salt  = <span class="php-var">$this</span>-&gt;apply_filters(__CLASS__.<span class="php-quote">'__version_salt'</span>, <span class="php-quote">''</span>);
+</span><span id="129" class="l"><a class="l" href="#129">129: </a>                    <span class="php-var">$this</span>-&gt;cache_path    = <span class="php-var">$this</span>-&gt;url_to_cache_path(<span class="php-var">$this</span>-&gt;protocol.<span class="php-var">$_SERVER</span>[<span class="php-quote">'HTTP_HOST'</span>].<span class="php-var">$_SERVER</span>[<span class="php-quote">'REQUEST_URI'</span>], <span class="php-quote">''</span>, <span class="php-var">$this</span>-&gt;version_salt);
+</span><span id="130" class="l"><a class="l" href="#130">130: </a>                    <span class="php-var">$this</span>-&gt;cache_file    = QUICK_CACHE_DIR.<span class="php-quote">'/'</span>.<span class="php-var">$this</span>-&gt;cache_path; <span class="php-comment">// NOT considering a user cache at all in the lite version.</span>
+</span><span id="131" class="l"><a class="l" href="#131">131: </a>                    <span class="php-var">$this</span>-&gt;cache_file_404 = QUICK_CACHE_DIR.<span class="php-quote">'/'</span>.<span class="php-var">$this</span>-&gt;url_to_cache_path(<span class="php-var">$this</span>-&gt;protocol.<span class="php-var">$_SERVER</span>[<span class="php-quote">'HTTP_HOST'</span>].<span class="php-quote">'/'</span>.QUICK_CACHE_404_CACHE_FILENAME);
+</span><span id="132" class="l"><a class="l" href="#132">132: </a>                    <span class="php-var">$this</span>-&gt;salt_location = <span class="php-keyword2">ltrim</span>(<span class="php-var">$this</span>-&gt;version_salt.<span class="php-quote">' '</span>.<span class="php-var">$this</span>-&gt;protocol.<span class="php-var">$_SERVER</span>[<span class="php-quote">'HTTP_HOST'</span>].<span class="php-var">$_SERVER</span>[<span class="php-quote">'REQUEST_URI'</span>]);
+</span><span id="133" class="l"><a class="l" href="#133">133: </a>
+</span><span id="134" class="l"><a class="l" href="#134">134: </a>                    <span class="php-keyword1">if</span>(<span class="php-keyword2">is_file</span>(<span class="php-var">$this</span>-&gt;cache_file) &amp;&amp; <span class="php-keyword2">filemtime</span>(<span class="php-var">$this</span>-&gt;cache_file) &gt;= <span class="php-keyword2">strtotime</span>(<span class="php-quote">'-'</span>.QUICK_CACHE_MAX_AGE))
+</span><span id="135" class="l"><a class="l" href="#135">135: </a>                        {
+</span><span id="136" class="l"><a class="l" href="#136">136: </a>                            <span class="php-keyword1">list</span>(<span class="php-var">$headers</span>, <span class="php-var">$cache</span>) = <span class="php-keyword2">explode</span>(<span class="php-quote">'&lt;!--headers--&gt;'</span>, <span class="php-keyword2">file_get_contents</span>(<span class="php-var">$this</span>-&gt;cache_file), <span class="php-num">2</span>);
+</span><span id="137" class="l"><a class="l" href="#137">137: </a>
+</span><span id="138" class="l"><a class="l" href="#138">138: </a>                            <span class="php-var">$headers_list</span> = <span class="php-keyword2">headers_list</span>(); <span class="php-comment">// Headers already sent (or ready to be sent).</span>
+</span><span id="139" class="l"><a class="l" href="#139">139: </a>                            <span class="php-keyword1">foreach</span>(<span class="php-keyword2">unserialize</span>(<span class="php-var">$headers</span>) <span class="php-keyword1">as</span> <span class="php-var">$_header</span>) <span class="php-comment">// Preserves original headers sent with this file.</span>
+</span><span id="140" class="l"><a class="l" href="#140">140: </a>                                <span class="php-keyword1">if</span>(!<span class="php-keyword2">in_array</span>(<span class="php-var">$_header</span>, <span class="php-var">$headers_list</span>) &amp;&amp; <span class="php-keyword2">stripos</span>(<span class="php-var">$_header</span>, <span class="php-quote">'Last-Modified:'</span>) !== <span class="php-num">0</span>) <span class="php-keyword2">header</span>(<span class="php-var">$_header</span>);
+</span><span id="141" class="l"><a class="l" href="#141">141: </a>                            <span class="php-keyword1">unset</span>(<span class="php-var">$_header</span>); <span class="php-comment">// Just a little housekeeping.</span>
+</span><span id="142" class="l"><a class="l" href="#142">142: </a>
+</span><span id="143" class="l"><a class="l" href="#143">143: </a>                            <span class="php-keyword1">if</span>(QUICK_CACHE_DEBUGGING_ENABLE) <span class="php-comment">// Debugging messages enabled; or no?</span>
+</span><span id="144" class="l"><a class="l" href="#144">144: </a>                                {
+</span><span id="145" class="l"><a class="l" href="#145">145: </a>                                    <span class="php-var">$total_time</span> = <span class="php-keyword2">number_format</span>(<span class="php-keyword2">microtime</span>(<span class="php-keyword1">TRUE</span>) - <span class="php-var">$this</span>-&gt;timer, <span class="php-num">5</span>, <span class="php-quote">'.'</span>, <span class="php-quote">''</span>);
+</span><span id="146" class="l"><a class="l" href="#146">146: </a>                                    <span class="php-var">$cache</span> .= <span class="php-quote">&quot;\n&quot;</span>.<span class="php-quote">'&lt;!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ --&gt;'</span>;
+</span><span id="147" class="l"><a class="l" href="#147">147: </a>                                    <span class="php-comment">// translators: This string is actually NOT translatable because the `__()` function is not available at this point in the processing.</span>
+</span><span id="148" class="l"><a class="l" href="#148">148: </a>                                    <span class="php-var">$cache</span> .= <span class="php-quote">&quot;\n&quot;</span>.<span class="php-quote">'&lt;!-- '</span>.<span class="php-keyword2">htmlspecialchars</span>(<span class="php-keyword2">sprintf</span>(__(<span class="php-quote">'Quick Cache fully functional :-) Cache file served for (%1$s) in %2$s seconds, on: %3$s.'</span>, <span class="php-var">$this</span>-&gt;text_domain), <span class="php-var">$this</span>-&gt;salt_location, <span class="php-var">$total_time</span>, <span class="php-keyword2">date</span>(<span class="php-quote">'M jS, Y @ g:i a T'</span>))).<span class="php-quote">' --&gt;'</span>;
+</span><span id="149" class="l"><a class="l" href="#149">149: </a>                                }
+</span><span id="150" class="l"><a class="l" href="#150">150: </a>                            <span class="php-keyword1">exit</span>(<span class="php-var">$cache</span>); <span class="php-comment">// Exit with cache contents.</span>
+</span><span id="151" class="l"><a class="l" href="#151">151: </a>                        }
+</span><span id="152" class="l"><a class="l" href="#152">152: </a>                    <span class="php-keyword1">else</span> <span class="php-keyword2">ob_start</span>(<span class="php-keyword1">array</span>(<span class="php-var">$this</span>, <span class="php-quote">'output_buffer_callback_handler'</span>, <span class="php-num">0</span>, <span class="php-num">0</span>)); <span class="php-comment">// Start locked output buffering.</span>
+</span><span id="153" class="l"><a class="l" href="#153">153: </a>                }
+</span><span id="154" class="l"><a class="l" href="#154">154: </a>
+</span><span id="155" class="l"><a class="l" href="#155">155: </a>            <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_output_buffer_callback_handler" href="#_output_buffer_callback_handler">output_buffer_callback_handler</a>(<span class="php-var">$buffer</span>)
+</span><span id="156" class="l"><a class="l" href="#156">156: </a>                {
+</span><span id="157" class="l"><a class="l" href="#157">157: </a>                    <span class="php-keyword1">if</span>(<span class="php-keyword2">defined</span>(<span class="php-quote">'DONOTCACHEPAGE'</span>)) <span class="php-keyword1">return</span> <span class="php-var">$buffer</span>;
+</span><span id="158" class="l"><a class="l" href="#158">158: </a>                    <span class="php-keyword1">if</span>(<span class="php-keyword1">isset</span>(<span class="php-var">$_SERVER</span>[<span class="php-quote">'DONOTCACHEPAGE'</span>])) <span class="php-keyword1">return</span> <span class="php-var">$buffer</span>;
+</span><span id="159" class="l"><a class="l" href="#159">159: </a>
+</span><span id="160" class="l"><a class="l" href="#160">160: </a>                    <span class="php-keyword1">if</span>(<span class="php-keyword1">isset</span>(<span class="php-var">$_GET</span>[<span class="php-quote">'qcAC'</span>]) &amp;&amp; !<span class="php-var">$_GET</span>[<span class="php-quote">'qcAC'</span>]) <span class="php-keyword1">return</span> <span class="php-var">$buffer</span>;
+</span><span id="161" class="l"><a class="l" href="#161">161: </a>                    <span class="php-keyword1">if</span>(<span class="php-keyword2">defined</span>(<span class="php-quote">'QUICK_CACHE_ALLOWED'</span>) &amp;&amp; !QUICK_CACHE_ALLOWED) <span class="php-keyword1">return</span> <span class="php-var">$buffer</span>;
+</span><span id="162" class="l"><a class="l" href="#162">162: </a>                    <span class="php-keyword1">if</span>(<span class="php-keyword1">isset</span>(<span class="php-var">$_SERVER</span>[<span class="php-quote">'QUICK_CACHE_ALLOWED'</span>]) &amp;&amp; !<span class="php-var">$_SERVER</span>[<span class="php-quote">'QUICK_CACHE_ALLOWED'</span>]) <span class="php-keyword1">return</span> <span class="php-var">$buffer</span>;
+</span><span id="163" class="l"><a class="l" href="#163">163: </a>
+</span><span id="164" class="l"><a class="l" href="#164">164: </a>                    <span class="php-keyword1">if</span>(<span class="php-var">$this</span>-&gt;is_like_user_logged_in()) <span class="php-keyword1">return</span> <span class="php-var">$buffer</span>; <span class="php-comment">// Lite version cannot enable user caching.</span>
+</span><span id="165" class="l"><a class="l" href="#165">165: </a>                    <span class="php-keyword1">if</span>(<span class="php-keyword2">function_exists</span>(<span class="php-quote">'is_user_logged_in'</span>) &amp;&amp; is_user_logged_in()) <span class="php-keyword1">return</span> <span class="php-var">$buffer</span>;
+</span><span id="166" class="l"><a class="l" href="#166">166: </a>
+</span><span id="167" class="l"><a class="l" href="#167">167: </a>                    <span class="php-keyword1">if</span>(<span class="php-keyword2">function_exists</span>(<span class="php-quote">'zlib_get_coding_type'</span>) &amp;&amp; <span class="php-keyword2">zlib_get_coding_type</span>() &amp;&amp; (!(<span class="php-var">$zlib_oc</span> = <span class="php-keyword2">ini_get</span>(<span class="php-quote">'zlib.output_compression'</span>)) || !<span class="php-keyword2">preg_match</span>(<span class="php-quote">'/^(?:1|on|yes|true)$/i'</span>, <span class="php-var">$zlib_oc</span>)))
+</span><span id="168" class="l"><a class="l" href="#168">168: </a>                        <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> \exception(__(<span class="php-quote">'Unable to cache already-compressed output. Please use `mod_deflate` w/ Apache; or use `zlib.output_compression` in your `php.ini` file. Quick Cache is NOT compatible with `ob_gzhandler()` and others like this.'</span>, <span class="php-var">$this</span>-&gt;text_domain));
+</span><span id="169" class="l"><a class="l" href="#169">169: </a>
+</span><span id="170" class="l"><a class="l" href="#170">170: </a>                    <span class="php-var">$is_404</span> = (<span class="php-keyword2">function_exists</span>(<span class="php-quote">'is_404'</span>) &amp;&amp; is_404());
+</span><span id="171" class="l"><a class="l" href="#171">171: </a>                    <span class="php-keyword1">if</span>(<span class="php-var">$is_404</span> &amp;&amp; !QUICK_CACHE_CACHE_404_REQUESTS)
+</span><span id="172" class="l"><a class="l" href="#172">172: </a>                        <span class="php-keyword1">return</span> <span class="php-var">$buffer</span>; <span class="php-comment">// Not caching 404 errors.</span>
+</span><span id="173" class="l"><a class="l" href="#173">173: </a>
+</span><span id="174" class="l"><a class="l" href="#174">174: </a>                    <span class="php-keyword1">if</span>(<span class="php-keyword2">function_exists</span>(<span class="php-quote">'is_maintenance'</span>) &amp;&amp; is_maintenance())
+</span><span id="175" class="l"><a class="l" href="#175">175: </a>                        <span class="php-keyword1">return</span> <span class="php-var">$buffer</span>; <span class="php-comment">// &lt;http://wordpress.org/extend/plugins/maintenance-mode&gt;</span>
+</span><span id="176" class="l"><a class="l" href="#176">176: </a>
+</span><span id="177" class="l"><a class="l" href="#177">177: </a>                    <span class="php-keyword1">if</span>(<span class="php-keyword2">function_exists</span>(<span class="php-quote">'did_action'</span>) &amp;&amp; did_action(<span class="php-quote">'wm_head'</span>))
+</span><span id="178" class="l"><a class="l" href="#178">178: </a>                        <span class="php-keyword1">return</span> <span class="php-var">$buffer</span>; <span class="php-comment">// &lt;http://wordpress.org/extend/plugins/wp-maintenance-mode&gt;</span>
+</span><span id="179" class="l"><a class="l" href="#179">179: </a>
+</span><span id="180" class="l"><a class="l" href="#180">180: </a>                    <span class="php-var">$buffer</span>        = <span class="php-keyword2">trim</span>(<span class="php-var">$buffer</span>); <span class="php-comment">// Trim buffer.</span>
+</span><span id="181" class="l"><a class="l" href="#181">181: </a>                    <span class="php-var">$cache</span>         = <span class="php-var">$buffer</span>; <span class="php-comment">// Initialize cache value.</span>
+</span><span id="182" class="l"><a class="l" href="#182">182: </a>                    <span class="php-var">$buffer_length</span> = <span class="php-keyword2">strlen</span>(<span class="php-var">$buffer</span>); <span class="php-comment">// Call this ONE time here.</span>
+</span><span id="183" class="l"><a class="l" href="#183">183: </a>                    <span class="php-var">$headers</span>       = <span class="php-keyword2">headers_list</span>(); <span class="php-comment">// Need these headers below.</span>
+</span><span id="184" class="l"><a class="l" href="#184">184: </a>                    <span class="php-var">$content_type</span>  = <span class="php-quote">''</span>; <span class="php-comment">// Initialize possible content type.</span>
+</span><span id="185" class="l"><a class="l" href="#185">185: </a>
+</span><span id="186" class="l"><a class="l" href="#186">186: </a>                    <span class="php-keyword1">if</span>(!<span class="php-var">$buffer_length</span>) <span class="php-keyword1">return</span> <span class="php-var">$buffer</span>; <span class="php-comment">// Don't cache an empty buffer.</span>
+</span><span id="187" class="l"><a class="l" href="#187">187: </a>
+</span><span id="188" class="l"><a class="l" href="#188">188: </a>                    <span class="php-keyword1">if</span>(<span class="php-keyword2">strpos</span>(<span class="php-var">$buffer</span>, <span class="php-quote">'&lt;body id=&quot;error-page&quot;&gt;'</span>) !== <span class="php-keyword1">FALSE</span>)
+</span><span id="189" class="l"><a class="l" href="#189">189: </a>                        <span class="php-keyword1">return</span> <span class="php-var">$buffer</span>; <span class="php-comment">// Don't cache WP errors.</span>
+</span><span id="190" class="l"><a class="l" href="#190">190: </a>
+</span><span id="191" class="l"><a class="l" href="#191">191: </a>                    <span class="php-keyword1">foreach</span>(<span class="php-var">$headers</span> <span class="php-keyword1">as</span> <span class="php-var">$_header</span>)
+</span><span id="192" class="l"><a class="l" href="#192">192: </a>                        {
+</span><span id="193" class="l"><a class="l" href="#193">193: </a>                            <span class="php-keyword1">if</span>(<span class="php-keyword2">stripos</span>(<span class="php-var">$_header</span>, <span class="php-quote">'Content-Type:'</span>) === <span class="php-num">0</span>)
+</span><span id="194" class="l"><a class="l" href="#194">194: </a>                                <span class="php-var">$content_type</span> = <span class="php-var">$_header</span>; <span class="php-comment">// Last one.</span>
+</span><span id="195" class="l"><a class="l" href="#195">195: </a>                            <span class="php-comment">/*
+</span></span><span id="196" class="l"><a class="l" href="#196">196: </a><span class="php-comment">                             * A Retry-After header indicates the site is temporarily unavailable.
+</span></span><span id="197" class="l"><a class="l" href="#197">197: </a><span class="php-comment">                             *    i.e. That the site is down; or is in maintenance mode.
+</span></span><span id="198" class="l"><a class="l" href="#198">198: </a><span class="php-comment">                             *    I've seen maintenance mode plugins for WP set this.
+</span></span><span id="199" class="l"><a class="l" href="#199">199: </a><span class="php-comment">                             *
+</span></span><span id="200" class="l"><a class="l" href="#200">200: </a><span class="php-comment">                             * A Status header indicates that a plugin may have set a particular HTTP status code.
+</span></span><span id="201" class="l"><a class="l" href="#201">201: </a><span class="php-comment">                             *    While WP itself no longer sends this, it's good to check for plugins that do.
+</span></span><span id="202" class="l"><a class="l" href="#202">202: </a><span class="php-comment">                             * ~ NOTE: We should request that the WP core function `status_header()` start sending this.
+</span></span><span id="203" class="l"><a class="l" href="#203">203: </a><span class="php-comment">                             *
+</span></span><span id="204" class="l"><a class="l" href="#204">204: </a><span class="php-comment">                             * An HTTP status code set by WP core function `status_header()`.
+</span></span><span id="205" class="l"><a class="l" href="#205">205: </a><span class="php-comment">                             * ~ NOTE: at this time the `headers_list()` function does NOT include this header unfortunately.
+</span></span><span id="206" class="l"><a class="l" href="#206">206: </a><span class="php-comment">                             *    Therefore, the routine below which looks for this header will NOT find it under any circumstance.
+</span></span><span id="207" class="l"><a class="l" href="#207">207: </a><span class="php-comment">                             *    Tested and confirmed. See also: &lt;http://www.php.net/manual/en/function.headers-list.php&gt;
+</span></span><span id="208" class="l"><a class="l" href="#208">208: </a><span class="php-comment">                             *    That said, I think we should leave it here in case a future version of PHP corrects this behavior.
+</span></span><span id="209" class="l"><a class="l" href="#209">209: </a><span class="php-comment">                             */</span>
+</span><span id="210" class="l"><a class="l" href="#210">210: </a>                            <span class="php-keyword1">else</span> <span class="php-keyword1">if</span>(<span class="php-keyword2">preg_match</span>(<span class="php-quote">'/^(?:Retry\-After\:\s+(?P&lt;retry&gt;.+)|Status\:\s+(?P&lt;status&gt;[0-9]+)|HTTP\/[0-9]+\.[0-9]+\s+(?P&lt;http_status&gt;[0-9]+))/i'</span>, <span class="php-var">$_header</span>, <span class="php-var">$_m</span>))
+</span><span id="211" class="l"><a class="l" href="#211">211: </a>                                <span class="php-keyword1">if</span>(!<span class="php-keyword1">empty</span>(<span class="php-var">$_m</span>[<span class="php-quote">'retry'</span>]) || (!<span class="php-keyword1">empty</span>(<span class="php-var">$_m</span>[<span class="php-quote">'status'</span>]) &amp;&amp; <span class="php-var">$_m</span>[<span class="php-quote">'status'</span>][<span class="php-num">0</span>] !== <span class="php-quote">'2'</span> &amp;&amp; <span class="php-var">$_m</span>[<span class="php-quote">'status'</span>] !== <span class="php-quote">'404'</span>)
+</span><span id="212" class="l"><a class="l" href="#212">212: </a>                                   || (!<span class="php-keyword1">empty</span>(<span class="php-var">$_m</span>[<span class="php-quote">'http_status'</span>]) &amp;&amp; <span class="php-var">$_m</span>[<span class="php-quote">'http_status'</span>][<span class="php-num">0</span>] !== <span class="php-quote">'2'</span> &amp;&amp; <span class="php-var">$_m</span>[<span class="php-quote">'http_status'</span>] !== <span class="php-quote">'404'</span>)
+</span><span id="213" class="l"><a class="l" href="#213">213: </a>                                ) <span class="php-keyword1">return</span> <span class="php-var">$buffer</span>; <span class="php-comment">// Don't cache (anything that's NOT a 2xx or 404 status).</span>
+</span><span id="214" class="l"><a class="l" href="#214">214: </a>                        }
+</span><span id="215" class="l"><a class="l" href="#215">215: </a>                    <span class="php-keyword1">unset</span>(<span class="php-var">$_header</span>); <span class="php-comment">// Just a little houskeeping.</span>
+</span><span id="216" class="l"><a class="l" href="#216">216: </a>
+</span><span id="217" class="l"><a class="l" href="#217">217: </a>                    <span class="php-keyword1">if</span>(<span class="php-var">$content_type</span> &amp;&amp; !<span class="php-keyword2">preg_match</span>(<span class="php-quote">'/xhtml|html|xml|'</span>.<span class="php-keyword2">preg_quote</span>(__NAMESPACE__, <span class="php-quote">'/'</span>).<span class="php-quote">'/i'</span>, <span class="php-var">$content_type</span>))
+</span><span id="218" class="l"><a class="l" href="#218">218: </a>                        <span class="php-keyword1">return</span> <span class="php-var">$buffer</span>; <span class="php-comment">// Don't cache anything that is NOT XML/HTML code.</span>
+</span><span id="219" class="l"><a class="l" href="#219">219: </a>
+</span><span id="220" class="l"><a class="l" href="#220">220: </a>                    <span class="php-comment">// Caching occurs here; we're good-to-go now :-)</span>
+</span><span id="221" class="l"><a class="l" href="#221">221: </a>
+</span><span id="222" class="l"><a class="l" href="#222">222: </a>                    <span class="php-keyword1">if</span>(!<span class="php-keyword2">is_dir</span>(QUICK_CACHE_DIR) &amp;&amp; <span class="php-keyword2">mkdir</span>(QUICK_CACHE_DIR, <span class="php-num">0775</span>, <span class="php-keyword1">TRUE</span>) &amp;&amp; !<span class="php-keyword2">is_file</span>(QUICK_CACHE_DIR.<span class="php-quote">'/.htaccess'</span>))
+</span><span id="223" class="l"><a class="l" href="#223">223: </a>                        <span class="php-keyword2">file_put_contents</span>(QUICK_CACHE_DIR.<span class="php-quote">'/.htaccess'</span>, <span class="php-var">$this</span>-&gt;htaccess_deny); <span class="php-comment">// We know it's writable here.</span>
+</span><span id="224" class="l"><a class="l" href="#224">224: </a>
+</span><span id="225" class="l"><a class="l" href="#225">225: </a>                    <span class="php-keyword1">if</span>(!<span class="php-keyword2">is_dir</span>(<span class="php-var">$cache_file_dir</span> = <span class="php-keyword2">dirname</span>(<span class="php-var">$this</span>-&gt;cache_file))) <span class="php-var">$cache_file_dir_writable</span> = <span class="php-keyword2">mkdir</span>(<span class="php-var">$cache_file_dir</span>, <span class="php-num">0775</span>, <span class="php-keyword1">TRUE</span>);
+</span><span id="226" class="l"><a class="l" href="#226">226: </a>                    <span class="php-keyword1">if</span>(<span class="php-keyword1">empty</span>(<span class="php-var">$cache_file_dir_writable</span>) &amp;&amp; !<span class="php-keyword2">is_writable</span>(<span class="php-var">$cache_file_dir</span>)) <span class="php-comment">// Only check if it's writable, if we didn't just successfully create it.</span>
+</span><span id="227" class="l"><a class="l" href="#227">227: </a>                        <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> \exception(<span class="php-keyword2">sprintf</span>(__(<span class="php-quote">'Cache directory not writable. Quick Cache needs this directory please: `%1$s`. Set permissions to `755` or higher; `777` might be needed in some cases.'</span>, <span class="php-var">$this</span>-&gt;text_domain), <span class="php-var">$cache_file_dir</span>));
+</span><span id="228" class="l"><a class="l" href="#228">228: </a>
+</span><span id="229" class="l"><a class="l" href="#229">229: </a>                    <span class="php-comment">/*
+</span></span><span id="230" class="l"><a class="l" href="#230">230: </a><span class="php-comment">                     * Is this a 404 and the 404 cache file already exists?
+</span></span><span id="231" class="l"><a class="l" href="#231">231: </a><span class="php-comment">                     * Then lets symlink this 404 cache file to the existing cache file.
+</span></span><span id="232" class="l"><a class="l" href="#232">232: </a><span class="php-comment">                     * and return the cache; with possible debug information also.
+</span></span><span id="233" class="l"><a class="l" href="#233">233: </a><span class="php-comment">                     */</span>
+</span><span id="234" class="l"><a class="l" href="#234">234: </a>                    <span class="php-keyword1">if</span>(<span class="php-var">$is_404</span> &amp;&amp; <span class="php-keyword2">is_file</span>(<span class="php-var">$this</span>-&gt;cache_file_404))
+</span><span id="235" class="l"><a class="l" href="#235">235: </a>                        {
+</span><span id="236" class="l"><a class="l" href="#236">236: </a>                            <span class="php-keyword2">symlink</span>(<span class="php-var">$this</span>-&gt;cache_file_404, <span class="php-var">$this</span>-&gt;cache_file);
+</span><span id="237" class="l"><a class="l" href="#237">237: </a>                            <span class="php-keyword1">return</span> <span class="php-var">$cache</span>; <span class="php-comment">// Nothing more to do here.</span>
+</span><span id="238" class="l"><a class="l" href="#238">238: </a>                        }
+</span><span id="239" class="l"><a class="l" href="#239">239: </a>
+</span><span id="240" class="l"><a class="l" href="#240">240: </a>                    <span class="php-keyword1">if</span>(QUICK_CACHE_DEBUGGING_ENABLE) <span class="php-comment">// Debugging messages enabled; or no?</span>
+</span><span id="241" class="l"><a class="l" href="#241">241: </a>                        {
+</span><span id="242" class="l"><a class="l" href="#242">242: </a>                            <span class="php-var">$total_time</span> = <span class="php-keyword2">number_format</span>(<span class="php-keyword2">microtime</span>(<span class="php-keyword1">TRUE</span>) - <span class="php-var">$this</span>-&gt;timer, <span class="php-num">5</span>, <span class="php-quote">'.'</span>, <span class="php-quote">''</span>);
+</span><span id="243" class="l"><a class="l" href="#243">243: </a>                            <span class="php-var">$cache</span> .= <span class="php-quote">&quot;\n&quot;</span>.<span class="php-quote">'&lt;!-- '</span>.<span class="php-keyword2">htmlspecialchars</span>(<span class="php-keyword2">sprintf</span>(__(<span class="php-quote">'Quick Cache file built for (%1$s) in %2$s seconds, on: %3$s.'</span>, <span class="php-var">$this</span>-&gt;text_domain),
+</span><span id="244" class="l"><a class="l" href="#244">244: </a>                                                                            <span class="php-var">$this</span>-&gt;salt_location, <span class="php-var">$total_time</span>, <span class="php-keyword2">date</span>(<span class="php-quote">'M jS, Y @ g:i a T'</span>))).<span class="php-quote">' --&gt;'</span>;
+</span><span id="245" class="l"><a class="l" href="#245">245: </a>                            <span class="php-var">$cache</span> .= <span class="php-quote">&quot;\n&quot;</span>.<span class="php-quote">'&lt;!-- '</span>.<span class="php-keyword2">htmlspecialchars</span>(<span class="php-keyword2">sprintf</span>(__(<span class="php-quote">'This Quick Cache file will auto-expire (and be rebuilt) on: %1$s (based on your configured expiration time).'</span>, <span class="php-var">$this</span>-&gt;text_domain), <span class="php-keyword2">date</span>(<span class="php-quote">'M jS, Y @ g:i a T'</span>, <span class="php-keyword2">strtotime</span>(<span class="php-quote">'+'</span>.QUICK_CACHE_MAX_AGE)))).<span class="php-quote">' --&gt;'</span>;
+</span><span id="246" class="l"><a class="l" href="#246">246: </a>                        }
+</span><span id="247" class="l"><a class="l" href="#247">247: </a>                    <span class="php-var">$cache_file_tmp</span> = <span class="php-var">$this</span>-&gt;cache_file.<span class="php-quote">'.'</span>.<span class="php-keyword2">uniqid</span>(<span class="php-quote">''</span>, <span class="php-keyword1">TRUE</span>).<span class="php-quote">'.tmp'</span>; <span class="php-comment">// Cache creation is atomic; e.g. tmp file w/ rename.</span>
+</span><span id="248" class="l"><a class="l" href="#248">248: </a>
+</span><span id="249" class="l"><a class="l" href="#249">249: </a>                    <span class="php-comment">/*
+</span></span><span id="250" class="l"><a class="l" href="#250">250: </a><span class="php-comment">                     * This is NOT a 404, or it is 404 and the 404 cache file doesn't yet exist (so we need to create it).
+</span></span><span id="251" class="l"><a class="l" href="#251">251: </a><span class="php-comment">                     */</span>
+</span><span id="252" class="l"><a class="l" href="#252">252: </a>                    <span class="php-keyword1">if</span>(<span class="php-var">$is_404</span>) <span class="php-comment">// This is a 404; let's create 404 cache file and symlink to it.</span>
+</span><span id="253" class="l"><a class="l" href="#253">253: </a>                        {
+</span><span id="254" class="l"><a class="l" href="#254">254: </a>                            <span class="php-keyword1">if</span>(<span class="php-keyword2">file_put_contents</span>(<span class="php-var">$cache_file_tmp</span>, <span class="php-keyword2">serialize</span>(<span class="php-var">$headers</span>).<span class="php-quote">'&lt;!--headers--&gt;'</span>.<span class="php-var">$cache</span>) &amp;&amp; <span class="php-keyword2">rename</span>(<span class="php-var">$cache_file_tmp</span>, <span class="php-var">$this</span>-&gt;cache_file_404))
+</span><span id="255" class="l"><a class="l" href="#255">255: </a>                                {
+</span><span id="256" class="l"><a class="l" href="#256">256: </a>                                    <span class="php-keyword2">symlink</span>(<span class="php-var">$this</span>-&gt;cache_file_404, <span class="php-var">$this</span>-&gt;cache_file);
+</span><span id="257" class="l"><a class="l" href="#257">257: </a>                                    <span class="php-keyword1">return</span> <span class="php-var">$cache</span>; <span class="php-comment">// Return the newly built cache; with possible debug information also.</span>
+</span><span id="258" class="l"><a class="l" href="#258">258: </a>                                }
+</span><span id="259" class="l"><a class="l" href="#259">259: </a>                        } <span class="php-comment">// NOT a 404; let's write a new cache file.</span>
+</span><span id="260" class="l"><a class="l" href="#260">260: </a>                    <span class="php-keyword1">else</span> <span class="php-keyword1">if</span>(<span class="php-keyword2">file_put_contents</span>(<span class="php-var">$cache_file_tmp</span>, <span class="php-keyword2">serialize</span>(<span class="php-var">$headers</span>).<span class="php-quote">'&lt;!--headers--&gt;'</span>.<span class="php-var">$cache</span>) &amp;&amp; <span class="php-keyword2">rename</span>(<span class="php-var">$cache_file_tmp</span>, <span class="php-var">$this</span>-&gt;cache_file))
+</span><span id="261" class="l"><a class="l" href="#261">261: </a>                        <span class="php-keyword1">return</span> <span class="php-var">$cache</span>; <span class="php-comment">// Return the newly built cache; with possible debug information also.</span>
+</span><span id="262" class="l"><a class="l" href="#262">262: </a>
+</span><span id="263" class="l"><a class="l" href="#263">263: </a>                    @<span class="php-keyword2">unlink</span>(<span class="php-var">$cache_file_tmp</span>); <span class="php-comment">// Clean this up (if it exists); and throw an exception with information for the site owner.</span>
+</span><span id="264" class="l"><a class="l" href="#264">264: </a>                    <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> \exception(<span class="php-keyword2">sprintf</span>(__(<span class="php-quote">'Quick Cache: failed to write cache file for: `%1$s`; possible permissions issue (or race condition), please check your cache directory: `%2$s`.'</span>, <span class="php-var">$this</span>-&gt;text_domain), <span class="php-var">$_SERVER</span>[<span class="php-quote">'REQUEST_URI'</span>], QUICK_CACHE_DIR));
+</span><span id="265" class="l"><a class="l" href="#265">265: </a>                }
+</span><span id="266" class="l"><a class="l" href="#266">266: </a>
+</span><span id="267" class="l"><a class="l" href="#267">267: </a>            <span class="php-comment">/*
+</span></span><span id="268" class="l"><a class="l" href="#268">268: </a><span class="php-comment">             * See also: `quick-cache.inc.php` duplicate.
+</span></span><span id="269" class="l"><a class="l" href="#269">269: </a><span class="php-comment">             * NOTE: the call to `is_ssl()` in this duplicate uses `$this-&gt;is_ssl()` because `is_ssl()`
+</span></span><span id="270" class="l"><a class="l" href="#270">270: </a><span class="php-comment">             *    may NOT be available in this routine; i.e. it's not been loaded up yet.
+</span></span><span id="271" class="l"><a class="l" href="#271">271: </a><span class="php-comment">             */</span>
+</span><span id="272" class="l"><a class="l" href="#272">272: </a>            <span class="php-keyword1">const</span> <a id="CACHE_PATH_NO_SCHEME" href="#CACHE_PATH_NO_SCHEME">CACHE_PATH_NO_SCHEME</a> = <span class="php-num">1</span>; <span class="php-comment">// Exclude scheme.</span>
+</span><span id="273" class="l"><a class="l" href="#273">273: </a>            <span class="php-keyword1">const</span> <a id="CACHE_PATH_NO_HOST" href="#CACHE_PATH_NO_HOST">CACHE_PATH_NO_HOST</a> = <span class="php-num">2</span>; <span class="php-comment">// Exclude host (i.e. domain name).</span>
+</span><span id="274" class="l"><a class="l" href="#274">274: </a>            <span class="php-keyword1">const</span> <a id="CACHE_PATH_NO_PATH" href="#CACHE_PATH_NO_PATH">CACHE_PATH_NO_PATH</a> = <span class="php-num">4</span>; <span class="php-comment">// Exclude path (i.e. the request URI).</span>
+</span><span id="275" class="l"><a class="l" href="#275">275: </a>            <span class="php-keyword1">const</span> <a id="CACHE_PATH_NO_PATH_INDEX" href="#CACHE_PATH_NO_PATH_INDEX">CACHE_PATH_NO_PATH_INDEX</a> = <span class="php-num">8</span>; <span class="php-comment">// Exclude path index (i.e. no default `index`).</span>
+</span><span id="276" class="l"><a class="l" href="#276">276: </a>            <span class="php-keyword1">const</span> <a id="CACHE_PATH_NO_QUV" href="#CACHE_PATH_NO_QUV">CACHE_PATH_NO_QUV</a> = <span class="php-num">16</span>; <span class="php-comment">// Exclude query, user &amp; version salt.</span>
+</span><span id="277" class="l"><a class="l" href="#277">277: </a>            <span class="php-keyword1">const</span> <a id="CACHE_PATH_NO_QUERY" href="#CACHE_PATH_NO_QUERY">CACHE_PATH_NO_QUERY</a> = <span class="php-num">32</span>; <span class="php-comment">// Exclude query string.</span>
+</span><span id="278" class="l"><a class="l" href="#278">278: </a>            <span class="php-keyword1">const</span> <a id="CACHE_PATH_NO_USER" href="#CACHE_PATH_NO_USER">CACHE_PATH_NO_USER</a> = <span class="php-num">64</span>; <span class="php-comment">// Exclude user token.</span>
+</span><span id="279" class="l"><a class="l" href="#279">279: </a>            <span class="php-keyword1">const</span> <a id="CACHE_PATH_NO_VSALT" href="#CACHE_PATH_NO_VSALT">CACHE_PATH_NO_VSALT</a> = <span class="php-num">128</span>; <span class="php-comment">// Exclude version salt.</span>
+</span><span id="280" class="l"><a class="l" href="#280">280: </a>            <span class="php-keyword1">const</span> <a id="CACHE_PATH_NO_EXT" href="#CACHE_PATH_NO_EXT">CACHE_PATH_NO_EXT</a> = <span class="php-num">256</span>; <span class="php-comment">// Exclude extension.</span>
+</span><span id="281" class="l"><a class="l" href="#281">281: </a>
+</span><span id="282" class="l"><a class="l" href="#282">282: </a>            <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_url_to_cache_path" href="#_url_to_cache_path">url_to_cache_path</a>(<span class="php-var">$url</span>, <span class="php-var">$with_user_token</span> = <span class="php-quote">''</span>, <span class="php-var">$with_version_salt</span> = <span class="php-quote">''</span>, <span class="php-var">$flags</span> = <span class="php-num">0</span>)
+</span><span id="283" class="l"><a class="l" href="#283">283: </a>                {
+</span><span id="284" class="l"><a class="l" href="#284">284: </a>                    <span class="php-var">$cache_path</span>        = <span class="php-quote">''</span>; <span class="php-comment">// Initialize.</span>
+</span><span id="285" class="l"><a class="l" href="#285">285: </a>                    <span class="php-var">$url</span>               = <span class="php-keyword2">trim</span>((string)<span class="php-var">$url</span>);
+</span><span id="286" class="l"><a class="l" href="#286">286: </a>                    <span class="php-var">$with_user_token</span>   = <span class="php-keyword2">trim</span>((string)<span class="php-var">$with_user_token</span>);
+</span><span id="287" class="l"><a class="l" href="#287">287: </a>                    <span class="php-var">$with_version_salt</span> = <span class="php-keyword2">trim</span>((string)<span class="php-var">$with_version_salt</span>);
+</span><span id="288" class="l"><a class="l" href="#288">288: </a>
+</span><span id="289" class="l"><a class="l" href="#289">289: </a>                    <span class="php-keyword1">if</span>(<span class="php-var">$url</span> &amp;&amp; <span class="php-keyword2">strpos</span>(<span class="php-var">$url</span>, <span class="php-quote">'://'</span>) === <span class="php-keyword1">FALSE</span>)
+</span><span id="290" class="l"><a class="l" href="#290">290: </a>                        <span class="php-var">$url</span> = <span class="php-quote">'//'</span>.<span class="php-keyword2">ltrim</span>(<span class="php-var">$url</span>, <span class="php-quote">'/'</span>);
+</span><span id="291" class="l"><a class="l" href="#291">291: </a>
+</span><span id="292" class="l"><a class="l" href="#292">292: </a>                    <span class="php-keyword1">if</span>(!<span class="php-var">$url</span> || !(<span class="php-var">$url</span> = <span class="php-keyword2">parse_url</span>(<span class="php-var">$url</span>)))
+</span><span id="293" class="l"><a class="l" href="#293">293: </a>                        <span class="php-keyword1">return</span> <span class="php-quote">''</span>; <span class="php-comment">// Invalid URL.</span>
+</span><span id="294" class="l"><a class="l" href="#294">294: </a>
+</span><span id="295" class="l"><a class="l" href="#295">295: </a>                    <span class="php-keyword1">if</span>(!(<span class="php-var">$flags</span> &amp; <span class="php-var">$this</span>::CACHE_PATH_NO_SCHEME))
+</span><span id="296" class="l"><a class="l" href="#296">296: </a>                        {
+</span><span id="297" class="l"><a class="l" href="#297">297: </a>                            <span class="php-keyword1">if</span>(!<span class="php-keyword1">empty</span>(<span class="php-var">$url</span>[<span class="php-quote">'scheme'</span>]))
+</span><span id="298" class="l"><a class="l" href="#298">298: </a>                                <span class="php-var">$cache_path</span> .= <span class="php-var">$url</span>[<span class="php-quote">'scheme'</span>].<span class="php-quote">'/'</span>;
+</span><span id="299" class="l"><a class="l" href="#299">299: </a>                            <span class="php-keyword1">else</span> <span class="php-var">$cache_path</span> .= <span class="php-var">$this</span>-&gt;is_ssl() ? <span class="php-quote">'https/'</span> : <span class="php-quote">'http/'</span>;
+</span><span id="300" class="l"><a class="l" href="#300">300: </a>                        }
+</span><span id="301" class="l"><a class="l" href="#301">301: </a>                    <span class="php-keyword1">if</span>(!(<span class="php-var">$flags</span> &amp; <span class="php-var">$this</span>::CACHE_PATH_NO_HOST))
+</span><span id="302" class="l"><a class="l" href="#302">302: </a>                        {
+</span><span id="303" class="l"><a class="l" href="#303">303: </a>                            <span class="php-keyword1">if</span>(!<span class="php-keyword1">empty</span>(<span class="php-var">$url</span>[<span class="php-quote">'host'</span>]))
+</span><span id="304" class="l"><a class="l" href="#304">304: </a>                                <span class="php-var">$cache_path</span> .= <span class="php-var">$url</span>[<span class="php-quote">'host'</span>].<span class="php-quote">'/'</span>;
+</span><span id="305" class="l"><a class="l" href="#305">305: </a>                            <span class="php-keyword1">else</span> <span class="php-var">$cache_path</span> .= <span class="php-var">$_SERVER</span>[<span class="php-quote">'HTTP_HOST'</span>].<span class="php-quote">'/'</span>;
+</span><span id="306" class="l"><a class="l" href="#306">306: </a>                        }
+</span><span id="307" class="l"><a class="l" href="#307">307: </a>                    <span class="php-keyword1">if</span>(!(<span class="php-var">$flags</span> &amp; <span class="php-var">$this</span>::CACHE_PATH_NO_PATH))
+</span><span id="308" class="l"><a class="l" href="#308">308: </a>                        {
+</span><span id="309" class="l"><a class="l" href="#309">309: </a>                            <span class="php-keyword1">if</span>(!<span class="php-keyword1">empty</span>(<span class="php-var">$url</span>[<span class="php-quote">'path'</span>]) &amp;&amp; <span class="php-keyword2">strlen</span>(<span class="php-var">$url</span>[<span class="php-quote">'path'</span>] = <span class="php-keyword2">trim</span>(<span class="php-var">$url</span>[<span class="php-quote">'path'</span>], <span class="php-quote">'\\/'</span>.<span class="php-quote">&quot; \t\n\r\0\x0B&quot;</span>)))
+</span><span id="310" class="l"><a class="l" href="#310">310: </a>                                <span class="php-var">$cache_path</span> .= <span class="php-var">$url</span>[<span class="php-quote">'path'</span>].<span class="php-quote">'/'</span>;
+</span><span id="311" class="l"><a class="l" href="#311">311: </a>                            <span class="php-keyword1">else</span> <span class="php-keyword1">if</span>(!(<span class="php-var">$flags</span> &amp; <span class="php-var">$this</span>::CACHE_PATH_NO_PATH_INDEX)) <span class="php-var">$cache_path</span> .= <span class="php-quote">'index/'</span>;
+</span><span id="312" class="l"><a class="l" href="#312">312: </a>                        }
+</span><span id="313" class="l"><a class="l" href="#313">313: </a>                    <span class="php-var">$cache_path</span> = <span class="php-keyword2">str_replace</span>(<span class="php-quote">'.'</span>, <span class="php-quote">'-'</span>, <span class="php-var">$cache_path</span>);
+</span><span id="314" class="l"><a class="l" href="#314">314: </a>
+</span><span id="315" class="l"><a class="l" href="#315">315: </a>                    <span class="php-keyword1">if</span>(!(<span class="php-var">$flags</span> &amp; <span class="php-var">$this</span>::CACHE_PATH_NO_QUV))
+</span><span id="316" class="l"><a class="l" href="#316">316: </a>                        {
+</span><span id="317" class="l"><a class="l" href="#317">317: </a>                            <span class="php-keyword1">if</span>(!(<span class="php-var">$flags</span> &amp; <span class="php-var">$this</span>::CACHE_PATH_NO_QUERY))
+</span><span id="318" class="l"><a class="l" href="#318">318: </a>                                <span class="php-keyword1">if</span>(<span class="php-keyword1">isset</span>(<span class="php-var">$url</span>[<span class="php-quote">'query'</span>]) &amp;&amp; <span class="php-var">$url</span>[<span class="php-quote">'query'</span>] !== <span class="php-quote">''</span>)
+</span><span id="319" class="l"><a class="l" href="#319">319: </a>                                    <span class="php-var">$cache_path</span> = <span class="php-keyword2">rtrim</span>(<span class="php-var">$cache_path</span>, <span class="php-quote">'/'</span>).<span class="php-quote">'.q/'</span>.<span class="php-keyword2">md5</span>(<span class="php-var">$url</span>[<span class="php-quote">'query'</span>]).<span class="php-quote">'/'</span>;
+</span><span id="320" class="l"><a class="l" href="#320">320: </a>
+</span><span id="321" class="l"><a class="l" href="#321">321: </a>                            <span class="php-keyword1">if</span>(!(<span class="php-var">$flags</span> &amp; <span class="php-var">$this</span>::CACHE_PATH_NO_USER))
+</span><span id="322" class="l"><a class="l" href="#322">322: </a>                                <span class="php-keyword1">if</span>(<span class="php-var">$with_user_token</span> !== <span class="php-quote">''</span>) <span class="php-comment">// Allow a `0` value if desirable.</span>
+</span><span id="323" class="l"><a class="l" href="#323">323: </a>                                    <span class="php-var">$cache_path</span> = <span class="php-keyword2">rtrim</span>(<span class="php-var">$cache_path</span>, <span class="php-quote">'/'</span>).<span class="php-quote">'.u/'</span>.<span class="php-keyword2">str_replace</span>(<span class="php-keyword1">array</span>(<span class="php-quote">'/'</span>, <span class="php-quote">'\\'</span>), <span class="php-quote">'-'</span>, <span class="php-var">$with_user_token</span>).<span class="php-quote">'/'</span>;
+</span><span id="324" class="l"><a class="l" href="#324">324: </a>
+</span><span id="325" class="l"><a class="l" href="#325">325: </a>                            <span class="php-keyword1">if</span>(!(<span class="php-var">$flags</span> &amp; <span class="php-var">$this</span>::CACHE_PATH_NO_VSALT))
+</span><span id="326" class="l"><a class="l" href="#326">326: </a>                                <span class="php-keyword1">if</span>(<span class="php-var">$with_version_salt</span> !== <span class="php-quote">''</span>) <span class="php-comment">// Allow a `0` value if desirable.</span>
+</span><span id="327" class="l"><a class="l" href="#327">327: </a>                                    <span class="php-var">$cache_path</span> = <span class="php-keyword2">rtrim</span>(<span class="php-var">$cache_path</span>, <span class="php-quote">'/'</span>).<span class="php-quote">'.v/'</span>.<span class="php-keyword2">str_replace</span>(<span class="php-keyword1">array</span>(<span class="php-quote">'/'</span>, <span class="php-quote">'\\'</span>), <span class="php-quote">'-'</span>, <span class="php-var">$with_version_salt</span>).<span class="php-quote">'/'</span>;
+</span><span id="328" class="l"><a class="l" href="#328">328: </a>                        }
+</span><span id="329" class="l"><a class="l" href="#329">329: </a>                    <span class="php-var">$cache_path</span> = <span class="php-keyword2">trim</span>(<span class="php-keyword2">preg_replace</span>(<span class="php-quote">'/\/+/'</span>, <span class="php-quote">'/'</span>, <span class="php-var">$cache_path</span>), <span class="php-quote">'/'</span>);
+</span><span id="330" class="l"><a class="l" href="#330">330: </a>                    <span class="php-var">$cache_path</span> = <span class="php-keyword2">preg_replace</span>(<span class="php-quote">'/[^a-z0-9\/.]/i'</span>, <span class="php-quote">'-'</span>, <span class="php-var">$cache_path</span>);
+</span><span id="331" class="l"><a class="l" href="#331">331: </a>
+</span><span id="332" class="l"><a class="l" href="#332">332: </a>                    <span class="php-keyword1">if</span>(!(<span class="php-var">$flags</span> &amp; <span class="php-var">$this</span>::CACHE_PATH_NO_EXT))
+</span><span id="333" class="l"><a class="l" href="#333">333: </a>                        <span class="php-var">$cache_path</span> .= <span class="php-quote">'.html'</span>;
+</span><span id="334" class="l"><a class="l" href="#334">334: </a>
+</span><span id="335" class="l"><a class="l" href="#335">335: </a>                    <span class="php-keyword1">return</span> <span class="php-var">$cache_path</span>;
+</span><span id="336" class="l"><a class="l" href="#336">336: </a>                }
+</span><span id="337" class="l"><a class="l" href="#337">337: </a>
+</span><span id="338" class="l"><a class="l" href="#338">338: </a>            <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_host_token" href="#_host_token">host_token</a>(<span class="php-var">$dashify</span> = <span class="php-keyword1">FALSE</span>)
+</span><span id="339" class="l"><a class="l" href="#339">339: </a>                {
+</span><span id="340" class="l"><a class="l" href="#340">340: </a>                    <span class="php-var">$host</span> = <span class="php-keyword2">strtolower</span>(<span class="php-var">$_SERVER</span>[<span class="php-quote">'HTTP_HOST'</span>]);
+</span><span id="341" class="l"><a class="l" href="#341">341: </a>                    <span class="php-keyword1">return</span> (<span class="php-var">$dashify</span>) ? <span class="php-keyword2">trim</span>(<span class="php-keyword2">preg_replace</span>(<span class="php-quote">'/[^a-z0-9\/]/i'</span>, <span class="php-quote">'-'</span>, <span class="php-var">$host</span>), <span class="php-quote">'-'</span>) : <span class="php-var">$host</span>;
+</span><span id="342" class="l"><a class="l" href="#342">342: </a>                }
+</span><span id="343" class="l"><a class="l" href="#343">343: </a>
+</span><span id="344" class="l"><a class="l" href="#344">344: </a>            <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_host_dir_token" href="#_host_dir_token">host_dir_token</a>(<span class="php-var">$dashify</span> = <span class="php-keyword1">FALSE</span>)
+</span><span id="345" class="l"><a class="l" href="#345">345: </a>                {
+</span><span id="346" class="l"><a class="l" href="#346">346: </a>                    <span class="php-var">$host_dir_token</span> = <span class="php-quote">'/'</span>; <span class="php-comment">// Assume NOT multisite; or running it's own domain.</span>
+</span><span id="347" class="l"><a class="l" href="#347">347: </a>
+</span><span id="348" class="l"><a class="l" href="#348">348: </a>                    <span class="php-keyword1">if</span>(is_multisite() &amp;&amp; (!<span class="php-keyword2">defined</span>(<span class="php-quote">'SUBDOMAIN_INSTALL'</span>) || !SUBDOMAIN_INSTALL))
+</span><span id="349" class="l"><a class="l" href="#349">349: </a>                        { <span class="php-comment">// Multisite w/ sub-directories; need a valid sub-directory token.</span>
+</span><span id="350" class="l"><a class="l" href="#350">350: </a>
+</span><span id="351" class="l"><a class="l" href="#351">351: </a>                            <span class="php-var">$base</span> = <span class="php-quote">'/'</span>; <span class="php-comment">// Initial default value.</span>
+</span><span id="352" class="l"><a class="l" href="#352">352: </a>                            <span class="php-keyword1">if</span>(<span class="php-keyword2">defined</span>(<span class="php-quote">'PATH_CURRENT_SITE'</span>)) <span class="php-var">$base</span> = PATH_CURRENT_SITE;
+</span><span id="353" class="l"><a class="l" href="#353">353: </a>                            <span class="php-keyword1">else</span> <span class="php-keyword1">if</span>(!<span class="php-keyword1">empty</span>(<span class="php-var">$GLOBALS</span>[<span class="php-quote">'base'</span>])) <span class="php-var">$base</span> = <span class="php-var">$GLOBALS</span>[<span class="php-quote">'base'</span>];
+</span><span id="354" class="l"><a class="l" href="#354">354: </a>
+</span><span id="355" class="l"><a class="l" href="#355">355: </a>                            <span class="php-var">$uri_minus_base</span> = <span class="php-comment">// Supports `/sub-dir/child-blog-sub-dir/` also.</span>
+</span><span id="356" class="l"><a class="l" href="#356">356: </a>                                <span class="php-keyword2">preg_replace</span>(<span class="php-quote">'/^'</span>.<span class="php-keyword2">preg_quote</span>(<span class="php-var">$base</span>, <span class="php-quote">'/'</span>).<span class="php-quote">'/'</span>, <span class="php-quote">''</span>, <span class="php-var">$_SERVER</span>[<span class="php-quote">'REQUEST_URI'</span>]);
+</span><span id="357" class="l"><a class="l" href="#357">357: </a>
+</span><span id="358" class="l"><a class="l" href="#358">358: </a>                            <span class="php-keyword1">list</span>(<span class="php-var">$host_dir_token</span>) = <span class="php-keyword2">explode</span>(<span class="php-quote">'/'</span>, <span class="php-keyword2">trim</span>(<span class="php-var">$uri_minus_base</span>, <span class="php-quote">'/'</span>));
+</span><span id="359" class="l"><a class="l" href="#359">359: </a>                            <span class="php-var">$host_dir_token</span> = (<span class="php-keyword1">isset</span>(<span class="php-var">$host_dir_token</span>[<span class="php-num">0</span>])) ? <span class="php-quote">'/'</span>.<span class="php-var">$host_dir_token</span>.<span class="php-quote">'/'</span> : <span class="php-quote">'/'</span>;
+</span><span id="360" class="l"><a class="l" href="#360">360: </a>
+</span><span id="361" class="l"><a class="l" href="#361">361: </a>                            <span class="php-keyword1">if</span>(<span class="php-var">$host_dir_token</span> !== <span class="php-quote">'/'</span> <span class="php-comment">// Perhaps NOT the main site?</span>
+</span><span id="362" class="l"><a class="l" href="#362">362: </a>                               &amp;&amp; (!<span class="php-keyword2">is_file</span>(QUICK_CACHE_DIR.<span class="php-quote">'/qc-blog-paths'</span>) <span class="php-comment">// NOT a read/valid blog path?</span>
+</span><span id="363" class="l"><a class="l" href="#363">363: </a>                                   || !<span class="php-keyword2">in_array</span>(<span class="php-var">$host_dir_token</span>, <span class="php-keyword2">unserialize</span>(<span class="php-keyword2">file_get_contents</span>(QUICK_CACHE_DIR.<span class="php-quote">'/qc-blog-paths'</span>)), <span class="php-keyword1">TRUE</span>))
+</span><span id="364" class="l"><a class="l" href="#364">364: </a>                            ) <span class="php-var">$host_dir_token</span> = <span class="php-quote">'/'</span>; <span class="php-comment">// Main site; e.g. this is NOT a real/valid child blog path.</span>
+</span><span id="365" class="l"><a class="l" href="#365">365: </a>                        }
+</span><span id="366" class="l"><a class="l" href="#366">366: </a>                    <span class="php-keyword1">return</span> (<span class="php-var">$dashify</span>) ? <span class="php-keyword2">trim</span>(<span class="php-keyword2">preg_replace</span>(<span class="php-quote">'/[^a-z0-9\/]/i'</span>, <span class="php-quote">'-'</span>, <span class="php-var">$host_dir_token</span>), <span class="php-quote">'-'</span>) : <span class="php-var">$host_dir_token</span>;
+</span><span id="367" class="l"><a class="l" href="#367">367: </a>                }
+</span><span id="368" class="l"><a class="l" href="#368">368: </a>
+</span><span id="369" class="l"><a class="l" href="#369">369: </a>            <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_is_post_put_del_request" href="#_is_post_put_del_request">is_post_put_del_request</a>()
+</span><span id="370" class="l"><a class="l" href="#370">370: </a>                {
+</span><span id="371" class="l"><a class="l" href="#371">371: </a>                    <span class="php-keyword1">static</span> <span class="php-var"><a id="$is" href="#$is">$is</a></span>; <span class="php-comment">// Cache.</span>
+</span><span id="372" class="l"><a class="l" href="#372">372: </a>                    <span class="php-keyword1">if</span>(<span class="php-keyword1">isset</span>(<span class="php-var">$is</span>)) <span class="php-keyword1">return</span> <span class="php-var">$is</span>;
+</span><span id="373" class="l"><a class="l" href="#373">373: </a>
+</span><span id="374" class="l"><a class="l" href="#374">374: </a>                    <span class="php-keyword1">if</span>(!<span class="php-keyword1">empty</span>(<span class="php-var">$_SERVER</span>[<span class="php-quote">'REQUEST_METHOD'</span>]))
+</span><span id="375" class="l"><a class="l" href="#375">375: </a>                        <span class="php-keyword1">if</span>(<span class="php-keyword2">in_array</span>(<span class="php-keyword2">strtoupper</span>(<span class="php-var">$_SERVER</span>[<span class="php-quote">'REQUEST_METHOD'</span>]), <span class="php-keyword1">array</span>(<span class="php-quote">'POST'</span>, <span class="php-quote">'PUT'</span>, <span class="php-quote">'DELETE'</span>), <span class="php-keyword1">TRUE</span>))
+</span><span id="376" class="l"><a class="l" href="#376">376: </a>                            <span class="php-keyword1">return</span> (<span class="php-var">$is</span> = <span class="php-keyword1">TRUE</span>);
+</span><span id="377" class="l"><a class="l" href="#377">377: </a>
+</span><span id="378" class="l"><a class="l" href="#378">378: </a>                    <span class="php-keyword1">return</span> (<span class="php-var">$is</span> = <span class="php-keyword1">FALSE</span>);
+</span><span id="379" class="l"><a class="l" href="#379">379: </a>                }
+</span><span id="380" class="l"><a class="l" href="#380">380: </a>
+</span><span id="381" class="l"><a class="l" href="#381">381: </a>            <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_is_get_request_w_query" href="#_is_get_request_w_query">is_get_request_w_query</a>()
+</span><span id="382" class="l"><a class="l" href="#382">382: </a>                {
+</span><span id="383" class="l"><a class="l" href="#383">383: </a>                    <span class="php-keyword1">static</span> <span class="php-var"><a id="$is" href="#$is">$is</a></span>; <span class="php-comment">// Cache.</span>
+</span><span id="384" class="l"><a class="l" href="#384">384: </a>                    <span class="php-keyword1">if</span>(<span class="php-keyword1">isset</span>(<span class="php-var">$is</span>)) <span class="php-keyword1">return</span> <span class="php-var">$is</span>;
+</span><span id="385" class="l"><a class="l" href="#385">385: </a>
+</span><span id="386" class="l"><a class="l" href="#386">386: </a>                    <span class="php-keyword1">if</span>(!<span class="php-keyword1">empty</span>(<span class="php-var">$_GET</span>) || (<span class="php-keyword1">isset</span>(<span class="php-var">$_SERVER</span>[<span class="php-quote">'QUERY_STRING'</span>]) &amp;&amp; <span class="php-keyword2">strlen</span>(<span class="php-var">$_SERVER</span>[<span class="php-quote">'QUERY_STRING'</span>])))
+</span><span id="387" class="l"><a class="l" href="#387">387: </a>                        <span class="php-keyword1">if</span>(!(<span class="php-keyword1">isset</span>(<span class="php-var">$_GET</span>[<span class="php-quote">'qcABC'</span>]) &amp;&amp; <span class="php-keyword2">count</span>(<span class="php-var">$_GET</span>) === <span class="php-num">1</span>)) <span class="php-comment">// Ignore this special case.</span>
+</span><span id="388" class="l"><a class="l" href="#388">388: </a>                            <span class="php-keyword1">return</span> (<span class="php-var">$is</span> = <span class="php-keyword1">TRUE</span>);
+</span><span id="389" class="l"><a class="l" href="#389">389: </a>
+</span><span id="390" class="l"><a class="l" href="#390">390: </a>                    <span class="php-keyword1">return</span> (<span class="php-var">$is</span> = <span class="php-keyword1">FALSE</span>);
+</span><span id="391" class="l"><a class="l" href="#391">391: </a>                }
+</span><span id="392" class="l"><a class="l" href="#392">392: </a>
+</span><span id="393" class="l"><a class="l" href="#393">393: </a>            <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_is_like_user_logged_in" href="#_is_like_user_logged_in">is_like_user_logged_in</a>()
+</span><span id="394" class="l"><a class="l" href="#394">394: </a>                {
+</span><span id="395" class="l"><a class="l" href="#395">395: </a>                    <span class="php-keyword1">static</span> <span class="php-var"><a id="$is" href="#$is">$is</a></span>; <span class="php-comment">// Cache.</span>
+</span><span id="396" class="l"><a class="l" href="#396">396: </a>                    <span class="php-keyword1">if</span>(<span class="php-keyword1">isset</span>(<span class="php-var">$is</span>)) <span class="php-keyword1">return</span> <span class="php-var">$is</span>;
+</span><span id="397" class="l"><a class="l" href="#397">397: </a>
+</span><span id="398" class="l"><a class="l" href="#398">398: </a>                    <span class="php-comment">/* This checks for a PHP session; i.e. session_start() in PHP where you're dealing with a user session.
+</span></span><span id="399" class="l"><a class="l" href="#399">399: </a><span class="php-comment">                     * WordPress itself does not use sessions, but some plugins/themes do. If you have a theme/plugin using
+</span></span><span id="400" class="l"><a class="l" href="#400">400: </a><span class="php-comment">                     * sessions, and there is an active session open, we consider you logged in; and thus, no caching.
+</span></span><span id="401" class="l"><a class="l" href="#401">401: </a><span class="php-comment">                     * SID is a PHP internal constant to identify a PHP session. It's the same regardless of the app. If PHP
+</span></span><span id="402" class="l"><a class="l" href="#402">402: </a><span class="php-comment">                     * starts a session, SID is defined.
+</span></span><span id="403" class="l"><a class="l" href="#403">403: </a><span class="php-comment">                     */</span>
+</span><span id="404" class="l"><a class="l" href="#404">404: </a>                    <span class="php-keyword1">if</span>(<span class="php-keyword2">defined</span>(<span class="php-quote">'SID'</span>) &amp;&amp; SID) <span class="php-keyword1">return</span> (<span class="php-var">$is</span> = <span class="php-keyword1">TRUE</span>); <span class="php-comment">// Session.</span>
+</span><span id="405" class="l"><a class="l" href="#405">405: </a>
+</span><span id="406" class="l"><a class="l" href="#406">406: </a>                    <span class="php-var">$logged_in_cookies</span>[] = <span class="php-quote">'comment_author_'</span>; <span class="php-comment">// Comment (and/or reply) authors.</span>
+</span><span id="407" class="l"><a class="l" href="#407">407: </a>                    <span class="php-var">$logged_in_cookies</span>[] = <span class="php-quote">'wp-postpass_'</span>; <span class="php-comment">// Password access to protected posts.</span>
+</span><span id="408" class="l"><a class="l" href="#408">408: </a>
+</span><span id="409" class="l"><a class="l" href="#409">409: </a>                    <span class="php-var">$logged_in_cookies</span>[] = (<span class="php-keyword2">defined</span>(<span class="php-quote">'AUTH_COOKIE'</span>)) ? AUTH_COOKIE : <span class="php-quote">'wordpress_'</span>;
+</span><span id="410" class="l"><a class="l" href="#410">410: </a>                    <span class="php-var">$logged_in_cookies</span>[] = (<span class="php-keyword2">defined</span>(<span class="php-quote">'SECURE_AUTH_COOKIE'</span>)) ? SECURE_AUTH_COOKIE : <span class="php-quote">'wordpress_sec_'</span>;
+</span><span id="411" class="l"><a class="l" href="#411">411: </a>                    <span class="php-var">$logged_in_cookies</span>[] = (<span class="php-keyword2">defined</span>(<span class="php-quote">'LOGGED_IN_COOKIE'</span>)) ? LOGGED_IN_COOKIE : <span class="php-quote">'wordpress_logged_in_'</span>;
+</span><span id="412" class="l"><a class="l" href="#412">412: </a>                    <span class="php-var">$logged_in_cookies</span>   = <span class="php-quote">'/^(?:'</span>.<span class="php-keyword2">implode</span>(<span class="php-quote">'|'</span>, <span class="php-keyword2">array_map</span>(<span class="php-keyword1">function</span> (<span class="php-var">$logged_in_cookie</span>)
+</span><span id="413" class="l"><a class="l" href="#413">413: </a>                            {
+</span><span id="414" class="l"><a class="l" href="#414">414: </a>                                <span class="php-keyword1">return</span> <span class="php-keyword2">preg_quote</span>(<span class="php-var">$logged_in_cookie</span>, <span class="php-quote">'/'</span>); <span class="php-comment">// Escape.</span>
+</span><span id="415" class="l"><a class="l" href="#415">415: </a>
+</span><span id="416" class="l"><a class="l" href="#416">416: </a>                            }, <span class="php-var">$logged_in_cookies</span>)).<span class="php-quote">')/'</span>;
+</span><span id="417" class="l"><a class="l" href="#417">417: </a>                    <span class="php-var">$test_cookie</span>         = (<span class="php-keyword2">defined</span>(<span class="php-quote">'TEST_COOKIE'</span>)) ? TEST_COOKIE : <span class="php-quote">'wordpress_test_cookie'</span>;
+</span><span id="418" class="l"><a class="l" href="#418">418: </a>
+</span><span id="419" class="l"><a class="l" href="#419">419: </a>                    <span class="php-keyword1">foreach</span>(<span class="php-var">$_COOKIE</span> <span class="php-keyword1">as</span> <span class="php-var">$_key</span> =&gt; <span class="php-var">$_value</span>) <span class="php-keyword1">if</span>(<span class="php-var">$_key</span> !== <span class="php-var">$test_cookie</span>)
+</span><span id="420" class="l"><a class="l" href="#420">420: </a>                        <span class="php-keyword1">if</span>(<span class="php-keyword2">preg_match</span>(<span class="php-var">$logged_in_cookies</span>, <span class="php-var">$_key</span>) &amp;&amp; <span class="php-var">$_value</span>) <span class="php-keyword1">return</span> (<span class="php-var">$is</span> = <span class="php-keyword1">TRUE</span>);
+</span><span id="421" class="l"><a class="l" href="#421">421: </a>                    <span class="php-keyword1">unset</span>(<span class="php-var">$_key</span>, <span class="php-var">$_value</span>); <span class="php-comment">// Housekeeping.</span>
+</span><span id="422" class="l"><a class="l" href="#422">422: </a>
+</span><span id="423" class="l"><a class="l" href="#423">423: </a>                    <span class="php-keyword1">return</span> (<span class="php-var">$is</span> = <span class="php-keyword1">FALSE</span>);
+</span><span id="424" class="l"><a class="l" href="#424">424: </a>                }
+</span><span id="425" class="l"><a class="l" href="#425">425: </a>
+</span><span id="426" class="l"><a class="l" href="#426">426: </a>            <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_is_localhost" href="#_is_localhost">is_localhost</a>()
+</span><span id="427" class="l"><a class="l" href="#427">427: </a>                {
+</span><span id="428" class="l"><a class="l" href="#428">428: </a>                    <span class="php-keyword1">static</span> <span class="php-var"><a id="$is" href="#$is">$is</a></span>; <span class="php-comment">// Cache.</span>
+</span><span id="429" class="l"><a class="l" href="#429">429: </a>                    <span class="php-keyword1">if</span>(<span class="php-keyword1">isset</span>(<span class="php-var">$is</span>)) <span class="php-keyword1">return</span> <span class="php-var">$is</span>;
+</span><span id="430" class="l"><a class="l" href="#430">430: </a>
+</span><span id="431" class="l"><a class="l" href="#431">431: </a>                    <span class="php-keyword1">if</span>(<span class="php-keyword2">defined</span>(<span class="php-quote">'LOCALHOST'</span>) &amp;&amp; LOCALHOST) <span class="php-keyword1">return</span> (<span class="php-var">$is</span> = <span class="php-keyword1">TRUE</span>);
+</span><span id="432" class="l"><a class="l" href="#432">432: </a>
+</span><span id="433" class="l"><a class="l" href="#433">433: </a>                    <span class="php-keyword1">if</span>(!<span class="php-keyword2">defined</span>(<span class="php-quote">'LOCALHOST'</span>) &amp;&amp; !<span class="php-keyword1">empty</span>(<span class="php-var">$_SERVER</span>[<span class="php-quote">'HTTP_HOST'</span>]))
+</span><span id="434" class="l"><a class="l" href="#434">434: </a>                        <span class="php-keyword1">if</span>(<span class="php-keyword2">preg_match</span>(<span class="php-quote">'/localhost|127\.0\.0\.1/i'</span>, <span class="php-var">$_SERVER</span>[<span class="php-quote">'HTTP_HOST'</span>]))
+</span><span id="435" class="l"><a class="l" href="#435">435: </a>                            <span class="php-keyword1">return</span> (<span class="php-var">$is</span> = <span class="php-keyword1">TRUE</span>);
+</span><span id="436" class="l"><a class="l" href="#436">436: </a>
+</span><span id="437" class="l"><a class="l" href="#437">437: </a>                    <span class="php-keyword1">return</span> (<span class="php-var">$is</span> = <span class="php-keyword1">FALSE</span>);
+</span><span id="438" class="l"><a class="l" href="#438">438: </a>                }
+</span><span id="439" class="l"><a class="l" href="#439">439: </a>
+</span><span id="440" class="l"><a class="l" href="#440">440: </a>            <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_is_auto_cache_engine" href="#_is_auto_cache_engine">is_auto_cache_engine</a>()
+</span><span id="441" class="l"><a class="l" href="#441">441: </a>                {
+</span><span id="442" class="l"><a class="l" href="#442">442: </a>                    <span class="php-keyword1">static</span> <span class="php-var"><a id="$is" href="#$is">$is</a></span>; <span class="php-comment">// Cache.</span>
+</span><span id="443" class="l"><a class="l" href="#443">443: </a>                    <span class="php-keyword1">if</span>(<span class="php-keyword1">isset</span>(<span class="php-var">$is</span>)) <span class="php-keyword1">return</span> <span class="php-var">$is</span>;
+</span><span id="444" class="l"><a class="l" href="#444">444: </a>
+</span><span id="445" class="l"><a class="l" href="#445">445: </a>                    <span class="php-keyword1">if</span>(!<span class="php-keyword1">empty</span>(<span class="php-var">$_SERVER</span>[<span class="php-quote">'HTTP_USER_AGENT'</span>]))
+</span><span id="446" class="l"><a class="l" href="#446">446: </a>                        <span class="php-keyword1">if</span>(<span class="php-keyword2">stripos</span>(<span class="php-var">$_SERVER</span>[<span class="php-quote">'HTTP_USER_AGENT'</span>], __NAMESPACE__) !== <span class="php-keyword1">FALSE</span>)
+</span><span id="447" class="l"><a class="l" href="#447">447: </a>                            <span class="php-keyword1">return</span> (<span class="php-var">$is</span> = <span class="php-keyword1">TRUE</span>);
+</span><span id="448" class="l"><a class="l" href="#448">448: </a>
+</span><span id="449" class="l"><a class="l" href="#449">449: </a>                    <span class="php-keyword1">return</span> (<span class="php-var">$is</span> = <span class="php-keyword1">FALSE</span>);
+</span><span id="450" class="l"><a class="l" href="#450">450: </a>                }
+</span><span id="451" class="l"><a class="l" href="#451">451: </a>
+</span><span id="452" class="l"><a class="l" href="#452">452: </a>            <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_is_feed" href="#_is_feed">is_feed</a>()
+</span><span id="453" class="l"><a class="l" href="#453">453: </a>                {
+</span><span id="454" class="l"><a class="l" href="#454">454: </a>                    <span class="php-keyword1">static</span> <span class="php-var"><a id="$is" href="#$is">$is</a></span>; <span class="php-comment">// Cache.</span>
+</span><span id="455" class="l"><a class="l" href="#455">455: </a>                    <span class="php-keyword1">if</span>(<span class="php-keyword1">isset</span>(<span class="php-var">$is</span>)) <span class="php-keyword1">return</span> <span class="php-var">$is</span>;
+</span><span id="456" class="l"><a class="l" href="#456">456: </a>
+</span><span id="457" class="l"><a class="l" href="#457">457: </a>                    <span class="php-keyword1">if</span>(<span class="php-keyword2">preg_match</span>(<span class="php-quote">'/\/feed(?:[\/?]|$)/'</span>, <span class="php-var">$_SERVER</span>[<span class="php-quote">'REQUEST_URI'</span>]))
+</span><span id="458" class="l"><a class="l" href="#458">458: </a>                        <span class="php-keyword1">return</span> (<span class="php-var">$is</span> = <span class="php-keyword1">TRUE</span>);
+</span><span id="459" class="l"><a class="l" href="#459">459: </a>
+</span><span id="460" class="l"><a class="l" href="#460">460: </a>                    <span class="php-keyword1">if</span>(<span class="php-keyword1">isset</span>(<span class="php-var">$_REQUEST</span>[<span class="php-quote">'feed'</span>]))
+</span><span id="461" class="l"><a class="l" href="#461">461: </a>                        <span class="php-keyword1">return</span> (<span class="php-var">$is</span> = <span class="php-keyword1">TRUE</span>);
+</span><span id="462" class="l"><a class="l" href="#462">462: </a>
+</span><span id="463" class="l"><a class="l" href="#463">463: </a>                    <span class="php-keyword1">return</span> (<span class="php-var">$is</span> = <span class="php-keyword1">FALSE</span>);
+</span><span id="464" class="l"><a class="l" href="#464">464: </a>                }
+</span><span id="465" class="l"><a class="l" href="#465">465: </a>
+</span><span id="466" class="l"><a class="l" href="#466">466: </a>            <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_is_ssl" href="#_is_ssl">is_ssl</a>()
+</span><span id="467" class="l"><a class="l" href="#467">467: </a>                {
+</span><span id="468" class="l"><a class="l" href="#468">468: </a>                    <span class="php-keyword1">static</span> <span class="php-var"><a id="$is" href="#$is">$is</a></span>; <span class="php-comment">// Cache.</span>
+</span><span id="469" class="l"><a class="l" href="#469">469: </a>                    <span class="php-keyword1">if</span>(<span class="php-keyword1">isset</span>(<span class="php-var">$is</span>)) <span class="php-keyword1">return</span> <span class="php-var">$is</span>;
+</span><span id="470" class="l"><a class="l" href="#470">470: </a>
+</span><span id="471" class="l"><a class="l" href="#471">471: </a>                    <span class="php-keyword1">if</span>(!<span class="php-keyword1">empty</span>(<span class="php-var">$_SERVER</span>[<span class="php-quote">'SERVER_PORT'</span>]))
+</span><span id="472" class="l"><a class="l" href="#472">472: </a>                        <span class="php-keyword1">if</span>(<span class="php-var">$_SERVER</span>[<span class="php-quote">'SERVER_PORT'</span>] === <span class="php-quote">'443'</span>)
+</span><span id="473" class="l"><a class="l" href="#473">473: </a>                            <span class="php-keyword1">return</span> (<span class="php-var">$is</span> = <span class="php-keyword1">TRUE</span>);
+</span><span id="474" class="l"><a class="l" href="#474">474: </a>
+</span><span id="475" class="l"><a class="l" href="#475">475: </a>                    <span class="php-keyword1">if</span>(!<span class="php-keyword1">empty</span>(<span class="php-var">$_SERVER</span>[<span class="php-quote">'HTTPS'</span>]))
+</span><span id="476" class="l"><a class="l" href="#476">476: </a>                        <span class="php-keyword1">if</span>(<span class="php-var">$_SERVER</span>[<span class="php-quote">'HTTPS'</span>] === <span class="php-quote">'1'</span> || <span class="php-keyword2">strcasecmp</span>(<span class="php-var">$_SERVER</span>[<span class="php-quote">'HTTPS'</span>], <span class="php-quote">'on'</span>) === <span class="php-num">0</span>)
+</span><span id="477" class="l"><a class="l" href="#477">477: </a>                            <span class="php-keyword1">return</span> (<span class="php-var">$is</span> = <span class="php-keyword1">TRUE</span>);
+</span><span id="478" class="l"><a class="l" href="#478">478: </a>
+</span><span id="479" class="l"><a class="l" href="#479">479: </a>                    <span class="php-keyword1">if</span>(!<span class="php-keyword1">empty</span>(<span class="php-var">$_SERVER</span>[<span class="php-quote">'HTTP_X_FORWARDED_PROTO'</span>]))
+</span><span id="480" class="l"><a class="l" href="#480">480: </a>                        <span class="php-keyword1">if</span>(<span class="php-keyword2">strcasecmp</span>(<span class="php-var">$_SERVER</span>[<span class="php-quote">'HTTP_X_FORWARDED_PROTO'</span>], <span class="php-quote">'https'</span>) === <span class="php-num">0</span>)
+</span><span id="481" class="l"><a class="l" href="#481">481: </a>                            <span class="php-keyword1">return</span> (<span class="php-var">$is</span> = <span class="php-keyword1">TRUE</span>);
+</span><span id="482" class="l"><a class="l" href="#482">482: </a>
+</span><span id="483" class="l"><a class="l" href="#483">483: </a>                    <span class="php-keyword1">return</span> (<span class="php-var">$is</span> = <span class="php-keyword1">FALSE</span>);
+</span><span id="484" class="l"><a class="l" href="#484">484: </a>                }
+</span><span id="485" class="l"><a class="l" href="#485">485: </a>
+</span><span id="486" class="l"><a class="l" href="#486">486: </a>            <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_hook_id" href="#_hook_id">hook_id</a>(<span class="php-var">$function</span>)
+</span><span id="487" class="l"><a class="l" href="#487">487: </a>                {
+</span><span id="488" class="l"><a class="l" href="#488">488: </a>                    <span class="php-keyword1">if</span>(<span class="php-keyword2">is_string</span>(<span class="php-var">$function</span>))
+</span><span id="489" class="l"><a class="l" href="#489">489: </a>                        <span class="php-keyword1">return</span> <span class="php-var">$function</span>;
+</span><span id="490" class="l"><a class="l" href="#490">490: </a>
+</span><span id="491" class="l"><a class="l" href="#491">491: </a>                    <span class="php-keyword1">if</span>(<span class="php-keyword2">is_object</span>(<span class="php-var">$function</span>)) <span class="php-comment">// Closure.</span>
+</span><span id="492" class="l"><a class="l" href="#492">492: </a>                        <span class="php-var">$function</span> = <span class="php-keyword1">array</span>(<span class="php-var">$function</span>, <span class="php-quote">''</span>);
+</span><span id="493" class="l"><a class="l" href="#493">493: </a>                    <span class="php-keyword1">else</span> <span class="php-var">$function</span> = (<span class="php-keyword1">array</span>)<span class="php-var">$function</span>;
+</span><span id="494" class="l"><a class="l" href="#494">494: </a>
+</span><span id="495" class="l"><a class="l" href="#495">495: </a>                    <span class="php-keyword1">if</span>(<span class="php-keyword2">is_object</span>(<span class="php-var">$function</span>[<span class="php-num">0</span>]))
+</span><span id="496" class="l"><a class="l" href="#496">496: </a>                        <span class="php-keyword1">return</span> <span class="php-keyword2">spl_object_hash</span>(<span class="php-var">$function</span>[<span class="php-num">0</span>]).<span class="php-var">$function</span>[<span class="php-num">1</span>];
+</span><span id="497" class="l"><a class="l" href="#497">497: </a>
+</span><span id="498" class="l"><a class="l" href="#498">498: </a>                    <span class="php-keyword1">else</span> <span class="php-keyword1">if</span>(<span class="php-keyword2">is_string</span>(<span class="php-var">$function</span>[<span class="php-num">0</span>]))
+</span><span id="499" class="l"><a class="l" href="#499">499: </a>                        <span class="php-keyword1">return</span> <span class="php-var">$function</span>[<span class="php-num">0</span>].<span class="php-quote">'::'</span>.<span class="php-var">$function</span>[<span class="php-num">1</span>];
+</span><span id="500" class="l"><a class="l" href="#500">500: </a>
+</span><span id="501" class="l"><a class="l" href="#501">501: </a>                    <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> \exception(__(<span class="php-quote">'Invalid hook.'</span>, <span class="php-var">$this</span>-&gt;text_domain));
+</span><span id="502" class="l"><a class="l" href="#502">502: </a>                }
+</span><span id="503" class="l"><a class="l" href="#503">503: </a>
+</span><span id="504" class="l"><a class="l" href="#504">504: </a>            <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_add_hook" href="#_add_hook">add_hook</a>(<span class="php-var">$hook</span>, <span class="php-var">$function</span>, <span class="php-var">$priority</span> = <span class="php-num">10</span>, <span class="php-var">$accepted_args</span> = <span class="php-num">1</span>)
+</span><span id="505" class="l"><a class="l" href="#505">505: </a>                {
+</span><span id="506" class="l"><a class="l" href="#506">506: </a>                    <span class="php-var">$this</span>-&gt;hooks[<span class="php-var">$hook</span>][<span class="php-var">$priority</span>][<span class="php-var">$this</span>-&gt;hook_id(<span class="php-var">$function</span>)]
+</span><span id="507" class="l"><a class="l" href="#507">507: </a>                        = <span class="php-keyword1">array</span>(<span class="php-quote">'function'</span> =&gt; <span class="php-var">$function</span>, <span class="php-quote">'accepted_args'</span> =&gt; (integer)<span class="php-var">$accepted_args</span>);
+</span><span id="508" class="l"><a class="l" href="#508">508: </a>                    <span class="php-keyword1">return</span> <span class="php-keyword1">TRUE</span>; <span class="php-comment">// Always returns true.</span>
+</span><span id="509" class="l"><a class="l" href="#509">509: </a>                }
+</span><span id="510" class="l"><a class="l" href="#510">510: </a>
+</span><span id="511" class="l"><a class="l" href="#511">511: </a>            <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_add_action" href="#_add_action">add_action</a>() <span class="php-comment">// Simple `add_hook()` alias.</span>
+</span><span id="512" class="l"><a class="l" href="#512">512: </a>                {
+</span><span id="513" class="l"><a class="l" href="#513">513: </a>                    <span class="php-keyword1">return</span> <span class="php-keyword2">call_user_func_array</span>(<span class="php-keyword1">array</span>(<span class="php-var">$this</span>, <span class="php-quote">'add_hook'</span>), <span class="php-keyword2">func_get_args</span>());
+</span><span id="514" class="l"><a class="l" href="#514">514: </a>                }
+</span><span id="515" class="l"><a class="l" href="#515">515: </a>
+</span><span id="516" class="l"><a class="l" href="#516">516: </a>            <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_add_filter" href="#_add_filter">add_filter</a>() <span class="php-comment">// Simple `add_hook()` alias.</span>
+</span><span id="517" class="l"><a class="l" href="#517">517: </a>                {
+</span><span id="518" class="l"><a class="l" href="#518">518: </a>                    <span class="php-keyword1">return</span> <span class="php-keyword2">call_user_func_array</span>(<span class="php-keyword1">array</span>(<span class="php-var">$this</span>, <span class="php-quote">'add_hook'</span>), <span class="php-keyword2">func_get_args</span>());
+</span><span id="519" class="l"><a class="l" href="#519">519: </a>                }
+</span><span id="520" class="l"><a class="l" href="#520">520: </a>
+</span><span id="521" class="l"><a class="l" href="#521">521: </a>            <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_remove_hook" href="#_remove_hook">remove_hook</a>(<span class="php-var">$hook</span>, <span class="php-var">$function</span>, <span class="php-var">$priority</span> = <span class="php-num">10</span>)
+</span><span id="522" class="l"><a class="l" href="#522">522: </a>                {
+</span><span id="523" class="l"><a class="l" href="#523">523: </a>                    <span class="php-keyword1">if</span>(!<span class="php-keyword1">isset</span>(<span class="php-var">$this</span>-&gt;hooks[<span class="php-var">$hook</span>][<span class="php-var">$priority</span>][<span class="php-var">$this</span>-&gt;hook_id(<span class="php-var">$function</span>)]))
+</span><span id="524" class="l"><a class="l" href="#524">524: </a>                        <span class="php-keyword1">return</span> <span class="php-keyword1">FALSE</span>; <span class="php-comment">// Nothing to remove in this case.</span>
+</span><span id="525" class="l"><a class="l" href="#525">525: </a>
+</span><span id="526" class="l"><a class="l" href="#526">526: </a>                    <span class="php-keyword1">unset</span>(<span class="php-var">$this</span>-&gt;hooks[<span class="php-var">$hook</span>][<span class="php-var">$priority</span>][<span class="php-var">$this</span>-&gt;hook_id(<span class="php-var">$function</span>)]);
+</span><span id="527" class="l"><a class="l" href="#527">527: </a>                    <span class="php-keyword1">if</span>(!<span class="php-var">$this</span>-&gt;hooks[<span class="php-var">$hook</span>][<span class="php-var">$priority</span>]) <span class="php-keyword1">unset</span>(<span class="php-var">$this</span>-&gt;hooks[<span class="php-var">$hook</span>][<span class="php-var">$priority</span>]);
+</span><span id="528" class="l"><a class="l" href="#528">528: </a>                    <span class="php-keyword1">return</span> <span class="php-keyword1">TRUE</span>; <span class="php-comment">// Existed before it was removed in this case.</span>
+</span><span id="529" class="l"><a class="l" href="#529">529: </a>                }
+</span><span id="530" class="l"><a class="l" href="#530">530: </a>
+</span><span id="531" class="l"><a class="l" href="#531">531: </a>            <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_remove_action" href="#_remove_action">remove_action</a>() <span class="php-comment">// Simple `remove_hook()` alias.</span>
+</span><span id="532" class="l"><a class="l" href="#532">532: </a>                {
+</span><span id="533" class="l"><a class="l" href="#533">533: </a>                    <span class="php-keyword1">return</span> <span class="php-keyword2">call_user_func_array</span>(<span class="php-keyword1">array</span>(<span class="php-var">$this</span>, <span class="php-quote">'remove_hook'</span>), <span class="php-keyword2">func_get_args</span>());
+</span><span id="534" class="l"><a class="l" href="#534">534: </a>                }
+</span><span id="535" class="l"><a class="l" href="#535">535: </a>
+</span><span id="536" class="l"><a class="l" href="#536">536: </a>            <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_remove_filter" href="#_remove_filter">remove_filter</a>() <span class="php-comment">// Simple `remove_hook()` alias.</span>
+</span><span id="537" class="l"><a class="l" href="#537">537: </a>                {
+</span><span id="538" class="l"><a class="l" href="#538">538: </a>                    <span class="php-keyword1">return</span> <span class="php-keyword2">call_user_func_array</span>(<span class="php-keyword1">array</span>(<span class="php-var">$this</span>, <span class="php-quote">'remove_hook'</span>), <span class="php-keyword2">func_get_args</span>());
+</span><span id="539" class="l"><a class="l" href="#539">539: </a>                }
+</span><span id="540" class="l"><a class="l" href="#540">540: </a>
+</span><span id="541" class="l"><a class="l" href="#541">541: </a>            <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_do_action" href="#_do_action">do_action</a>(<span class="php-var">$hook</span>)
+</span><span id="542" class="l"><a class="l" href="#542">542: </a>                {
+</span><span id="543" class="l"><a class="l" href="#543">543: </a>                    <span class="php-keyword1">if</span>(<span class="php-keyword1">empty</span>(<span class="php-var">$this</span>-&gt;hooks[<span class="php-var">$hook</span>]))
+</span><span id="544" class="l"><a class="l" href="#544">544: </a>                        <span class="php-keyword1">return</span>; <span class="php-comment">// No hooks.</span>
+</span><span id="545" class="l"><a class="l" href="#545">545: </a>
+</span><span id="546" class="l"><a class="l" href="#546">546: </a>                    <span class="php-var">$hook_actions</span> = <span class="php-var">$this</span>-&gt;hooks[<span class="php-var">$hook</span>];
+</span><span id="547" class="l"><a class="l" href="#547">547: </a>                    <span class="php-keyword2">ksort</span>(<span class="php-var">$hook_actions</span>); <span class="php-comment">// Sort by priority.</span>
+</span><span id="548" class="l"><a class="l" href="#548">548: </a>
+</span><span id="549" class="l"><a class="l" href="#549">549: </a>                    <span class="php-var">$args</span> = <span class="php-keyword2">func_get_args</span>(); <span class="php-comment">// We'll need these below.</span>
+</span><span id="550" class="l"><a class="l" href="#550">550: </a>                    <span class="php-keyword1">foreach</span>(<span class="php-var">$hook_actions</span> <span class="php-keyword1">as</span> <span class="php-var">$_hook_action</span>) <span class="php-keyword1">foreach</span>(<span class="php-var">$_hook_action</span> <span class="php-keyword1">as</span> <span class="php-var">$_action</span>)
+</span><span id="551" class="l"><a class="l" href="#551">551: </a>                        {
+</span><span id="552" class="l"><a class="l" href="#552">552: </a>                            <span class="php-keyword1">if</span>(!<span class="php-keyword1">isset</span>(<span class="php-var">$_action</span>[<span class="php-quote">'function'</span>], <span class="php-var">$_action</span>[<span class="php-quote">'accepted_args'</span>]))
+</span><span id="553" class="l"><a class="l" href="#553">553: </a>                                <span class="php-keyword1">continue</span>; <span class="php-comment">// Not a valid filter in this case.</span>
+</span><span id="554" class="l"><a class="l" href="#554">554: </a>
+</span><span id="555" class="l"><a class="l" href="#555">555: </a>                            <span class="php-keyword2">call_user_func_array</span>(<span class="php-var">$_action</span>[<span class="php-quote">'function'</span>], <span class="php-keyword2">array_slice</span>(<span class="php-var">$args</span>, <span class="php-num">1</span>, <span class="php-var">$_action</span>[<span class="php-quote">'accepted_args'</span>]));
+</span><span id="556" class="l"><a class="l" href="#556">556: </a>                        }
+</span><span id="557" class="l"><a class="l" href="#557">557: </a>                    <span class="php-keyword1">unset</span>(<span class="php-var">$_hook_action</span>, <span class="php-var">$_action</span>); <span class="php-comment">// Housekeeping.</span>
+</span><span id="558" class="l"><a class="l" href="#558">558: </a>                }
+</span><span id="559" class="l"><a class="l" href="#559">559: </a>
+</span><span id="560" class="l"><a class="l" href="#560">560: </a>            <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_apply_filters" href="#_apply_filters">apply_filters</a>(<span class="php-var">$hook</span>, <span class="php-var">$value</span>)
+</span><span id="561" class="l"><a class="l" href="#561">561: </a>                {
+</span><span id="562" class="l"><a class="l" href="#562">562: </a>                    <span class="php-keyword1">if</span>(<span class="php-keyword1">empty</span>(<span class="php-var">$this</span>-&gt;hooks[<span class="php-var">$hook</span>]))
+</span><span id="563" class="l"><a class="l" href="#563">563: </a>                        <span class="php-keyword1">return</span> <span class="php-var">$value</span>; <span class="php-comment">// No hooks.</span>
+</span><span id="564" class="l"><a class="l" href="#564">564: </a>
+</span><span id="565" class="l"><a class="l" href="#565">565: </a>                    <span class="php-var">$hook_filters</span> = <span class="php-var">$this</span>-&gt;hooks[<span class="php-var">$hook</span>];
+</span><span id="566" class="l"><a class="l" href="#566">566: </a>                    <span class="php-keyword2">ksort</span>(<span class="php-var">$hook_filters</span>); <span class="php-comment">// Sort by priority.</span>
+</span><span id="567" class="l"><a class="l" href="#567">567: </a>
+</span><span id="568" class="l"><a class="l" href="#568">568: </a>                    <span class="php-var">$args</span> = <span class="php-keyword2">func_get_args</span>(); <span class="php-comment">// We'll need these below.</span>
+</span><span id="569" class="l"><a class="l" href="#569">569: </a>                    <span class="php-keyword1">foreach</span>(<span class="php-var">$hook_filters</span> <span class="php-keyword1">as</span> <span class="php-var">$_hook_filter</span>) <span class="php-keyword1">foreach</span>(<span class="php-var">$_hook_filter</span> <span class="php-keyword1">as</span> <span class="php-var">$_filter</span>)
+</span><span id="570" class="l"><a class="l" href="#570">570: </a>                        {
+</span><span id="571" class="l"><a class="l" href="#571">571: </a>                            <span class="php-keyword1">if</span>(!<span class="php-keyword1">isset</span>(<span class="php-var">$_filter</span>[<span class="php-quote">'function'</span>], <span class="php-var">$_filter</span>[<span class="php-quote">'accepted_args'</span>]))
+</span><span id="572" class="l"><a class="l" href="#572">572: </a>                                <span class="php-keyword1">continue</span>; <span class="php-comment">// Not a valid filter in this case.</span>
+</span><span id="573" class="l"><a class="l" href="#573">573: </a>
+</span><span id="574" class="l"><a class="l" href="#574">574: </a>                            <span class="php-var">$args</span>[<span class="php-num">1</span>] = <span class="php-var">$value</span>; <span class="php-comment">// Continously update the argument `$value`.</span>
+</span><span id="575" class="l"><a class="l" href="#575">575: </a>                            <span class="php-var">$value</span>   = <span class="php-keyword2">call_user_func_array</span>(<span class="php-var">$_filter</span>[<span class="php-quote">'function'</span>], <span class="php-keyword2">array_slice</span>(<span class="php-var">$args</span>, <span class="php-num">1</span>, <span class="php-var">$_filter</span>[<span class="php-quote">'accepted_args'</span>]));
+</span><span id="576" class="l"><a class="l" href="#576">576: </a>                        }
+</span><span id="577" class="l"><a class="l" href="#577">577: </a>                    <span class="php-keyword1">unset</span>(<span class="php-var">$_hook_filter</span>, <span class="php-var">$_filter</span>); <span class="php-comment">// Housekeeping.</span>
+</span><span id="578" class="l"><a class="l" href="#578">578: </a>
+</span><span id="579" class="l"><a class="l" href="#579">579: </a>                    <span class="php-keyword1">return</span> <span class="php-var">$value</span>; <span class="php-comment">// With applied filters.</span>
+</span><span id="580" class="l"><a class="l" href="#580">580: </a>                }
+</span><span id="581" class="l"><a class="l" href="#581">581: </a>
+</span><span id="582" class="l"><a class="l" href="#582">582: </a>            <span class="php-keyword1">public</span> <span class="php-var"><a id="$htaccess_deny" href="#$htaccess_deny">$htaccess_deny</a></span> = <span class="php-quote">&quot;&lt;IfModule authz_core_module&gt;\n\tRequire all denied\n&lt;/IfModule&gt;\n&lt;IfModule !authz_core_module&gt;\n\tdeny from all\n&lt;/IfModule&gt;&quot;</span>;
+</span><span id="583" class="l"><a class="l" href="#583">583: </a>        }
+</span><span id="584" class="l"><a class="l" href="#584">584: </a>
+</span><span id="585" class="l"><a class="l" href="#585">585: </a>        <span class="php-keyword1">function</span> <a id="___" href="#___">__</a>(<span class="php-var">$string</span>, <span class="php-var">$text_domain</span>) <span class="php-comment">// Polyfill `\__()`.</span>
+</span><span id="586" class="l"><a class="l" href="#586">586: </a>            {
+</span><span id="587" class="l"><a class="l" href="#587">587: </a>                <span class="php-keyword1">static</span> <span class="php-var"><a id="$__exists" href="#$__exists">$__exists</a></span>; <span class="php-comment">// Static cache.</span>
+</span><span id="588" class="l"><a class="l" href="#588">588: </a>
+</span><span id="589" class="l"><a class="l" href="#589">589: </a>                <span class="php-keyword1">if</span>((<span class="php-var">$__exists</span> || <span class="php-keyword2">function_exists</span>(<span class="php-quote">'__'</span>)) &amp;&amp; (<span class="php-var">$__exists</span> = <span class="php-keyword1">TRUE</span>))
+</span><span id="590" class="l"><a class="l" href="#590">590: </a>                    <span class="php-keyword1">return</span> \__(<span class="php-var">$string</span>, <span class="php-var">$text_domain</span>);
+</span><span id="591" class="l"><a class="l" href="#591">591: </a>
+</span><span id="592" class="l"><a class="l" href="#592">592: </a>                <span class="php-keyword1">return</span> <span class="php-var">$string</span>; <span class="php-comment">// Not possible (yet).</span>
+</span><span id="593" class="l"><a class="l" href="#593">593: </a>            }
+</span><span id="594" class="l"><a class="l" href="#594">594: </a>
+</span><span id="595" class="l"><a class="l" href="#595">595: </a>        <span class="php-var">$GLOBALS</span>[__NAMESPACE__.<span class="php-quote">'__advanced_cache'</span>] = <span class="php-keyword1">new</span> advanced_cache();
+</span><span id="596" class="l"><a class="l" href="#596">596: </a></span>    }</code></pre>
+
+	<div id="footer">
+		Quick Cache Lite API documentation generated by <a href="http://apigen.org">ApiGen 2.8.0</a>
+	</div>
+</div>
+</div>
+</body>
+</html>
