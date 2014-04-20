@@ -47,14 +47,69 @@ namespace quick_cache // Root namespace.
 		{
 			public $is_pro = FALSE; // Identifies the lite version of Quick Cache.
 			public $timer = 0; // Microtime; defined by class constructor for debugging purposes.
+
 			public $protocol = ''; // Calculated protocol; one of `http://` or `https://`.
 			public $version_salt = ''; // Calculated version salt; set by filters only in the lite version.
 			public $cache_path = ''; // Calculated cache path; absolute relative (no leading/trailing slashes).
 			public $cache_file = ''; // Calculated location; defined by `maybe_start_output_buffering()`.
 			public $cache_file_404 = ''; // Calculated location; defined by `maybe_start_output_buffering()`.
 			public $salt_location = ''; // Calculated location; defined by `maybe_start_output_buffering()`.
-			public $text_domain = ''; // Defined by class constructor; this is for translations.
+
+			public $postload = array(); // Off by default; just an empty array.
+			public $is_wp_loaded_query = FALSE; // See: `wp_main_query_postload()`.
+			public $is_404 = FALSE; // Set on `wp` by `wp_main_query_postload()`.
+			public $site_url = ''; // Set on `wp` by `wp_main_query_postload()`.
+			public $home_url = ''; // Set on `wp` by `wp_main_query_postload()`.
+			public $plugin_file = ''; // Set on `wp` by `wp_main_query_postload()`.
+
+			public $text_domain = ''; // Defined by class constructor; for translations.
 			public $hooks = array(); // Array of advanced cache plugin hooks.
+
+			const NC_DEBUG_PHP_SAPI_CLI = 'nc_debug_php_sapi_cli';
+
+			const NC_DEBUG_QCAC_GET_VAR = 'nc_debug_qcac_get_var';
+
+			const NC_DEBUG_NO_SERVER_HTTP_HOST = 'nc_debug_no_server_http_host';
+
+			const NC_DEBUG_NO_SERVER_REQUEST_URI = 'nc_debug_no_server_request_uri';
+
+			const NC_DEBUG_QUICK_CACHE_ALLOWED_CONSTANT = 'nc_debug_quick_cache_allowed_constant';
+
+			const NC_DEBUG_QUICK_CACHE_ALLOWED_SERVER_VAR = 'nc_debug_quick_cache_allowed_server_var';
+
+			const NC_DEBUG_DONOTCACHEPAGE_CONSTANT = 'nc_debug_donotcachepage_constant';
+
+			const NC_DEBUG_DONOTCACHEPAGE_SERVER_VAR = 'nc_debug_donotcachepage_server_var';
+
+			const NC_DEBUG_POST_PUT_DEL_REQUEST = 'nc_debug_post_put_del_request';
+
+			const NC_DEBUG_SELF_SERVE_REQUEST = 'nc_debug_self_serve_request';
+
+			const NC_DEBUG_FEED_REQUEST = 'nc_debug_feed_request';
+
+			const NC_DEBUG_WP_SYSTEMATICS = 'nc_debug_wp_systematics';
+
+			const NC_DEBUG_WP_ADMIN = 'nc_debug_wp_admin';
+
+			const NC_DEBUG_MS_FILES = 'nc_debug_ms_files';
+
+			const NC_DEBUG_IS_LIKE_LOGGED_IN_USER = 'nc_debug_is_like_logged_in_user';
+
+			const NC_DEBUG_IS_LOGGED_IN_USER = 'nc_debug_is_logged_in_user';
+
+			const NC_DEBUG_GET_REQUEST_QUERIES = 'nc_debug_get_request_queries';
+
+			const NC_DEBUG_404_REQUEST = 'nc_debug_404_request';
+
+			const NC_DEBUG_MAINTENANCE_PLUGIN = 'nc_debug_maintenance_plugin';
+
+			const NC_DEBUG_WP_ERROR_PAGE = 'nc_debug_wp_error_page';
+
+			const NC_DEBUG_UNCACHEABLE_CONTENT_TYPE = 'nc_debug_uncacheable_content_type';
+
+			const NC_DEBUG_UNCACHEABLE_STATUS = 'nc_debug_uncacheable_status';
+
+			const NC_DEBUG_1ST_TIME_404_SYMLINK = 'nc_debug_1st_time_404_symlink';
 
 			public function __construct() // Class constructor/cache handler.
 				{
@@ -98,38 +153,61 @@ namespace quick_cache // Root namespace.
 
 			public function maybe_start_output_buffering()
 				{
-					if(empty($_SERVER['HTTP_HOST'])) return;
-					if(empty($_SERVER['REQUEST_URI'])) return;
-					if(strtoupper(PHP_SAPI) === 'CLI') return;
+					if(strtoupper(PHP_SAPI) === 'CLI')
+						return $this->maybe_set_debug_info($this::NC_DEBUG_PHP_SAPI_CLI);
 
-					if(defined('DONOTCACHEPAGE')) return;
-					if(isset($_SERVER['DONOTCACHEPAGE'])) return;
+					if(empty($_SERVER['HTTP_HOST']))
+						return $this->maybe_set_debug_info($this::NC_DEBUG_NO_SERVER_HTTP_HOST);
 
-					if(isset($_GET['qcAC']) && !$_GET['qcAC']) return;
-					if(defined('QUICK_CACHE_ALLOWED') && !QUICK_CACHE_ALLOWED) return;
-					if(isset($_SERVER['QUICK_CACHE_ALLOWED']) && !$_SERVER['QUICK_CACHE_ALLOWED']) return;
+					if(empty($_SERVER['REQUEST_URI']))
+						return $this->maybe_set_debug_info($this::NC_DEBUG_NO_SERVER_REQUEST_URI);
 
-					if($this->is_post_put_del_request()) return; // Do not cache `POST|PUT|DELETE` requests (ever).
+					if(isset($_GET['qcAC']) && !$_GET['qcAC'])
+						return $this->maybe_set_debug_info($this::NC_DEBUG_QCAC_GET_VAR);
+
+					if(defined('QUICK_CACHE_ALLOWED') && !QUICK_CACHE_ALLOWED)
+						return $this->maybe_set_debug_info($this::NC_DEBUG_QUICK_CACHE_ALLOWED_CONSTANT);
+
+					if(isset($_SERVER['QUICK_CACHE_ALLOWED']) && !$_SERVER['QUICK_CACHE_ALLOWED'])
+						return $this->maybe_set_debug_info($this::NC_DEBUG_QUICK_CACHE_ALLOWED_SERVER_VAR);
+
+					if(defined('DONOTCACHEPAGE'))
+						return $this->maybe_set_debug_info($this::NC_DEBUG_DONOTCACHEPAGE_CONSTANT);
+
+					if(isset($_SERVER['DONOTCACHEPAGE']))
+						return $this->maybe_set_debug_info($this::NC_DEBUG_DONOTCACHEPAGE_SERVER_VAR);
+
+					if($this->is_post_put_del_request())
+						return $this->maybe_set_debug_info($this::NC_DEBUG_POST_PUT_DEL_REQUEST);
 
 					if(isset($_SERVER['REMOTE_ADDR'], $_SERVER['SERVER_ADDR']) && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR'])
-						if(!$this->is_auto_cache_engine() && !$this->is_localhost()) return;
+						if(!$this->is_auto_cache_engine() && !$this->is_localhost())
+							return $this->maybe_set_debug_info($this::NC_DEBUG_SELF_SERVE_REQUEST);
 
-					if(!QUICK_CACHE_FEEDS_ENABLE && $this->is_feed()) return;
+					if(!QUICK_CACHE_FEEDS_ENABLE && $this->is_feed())
+						return $this->maybe_set_debug_info($this::NC_DEBUG_FEED_REQUEST);
 
-					if(preg_match('/\/(?:wp\-[^\/]+|xmlrpc)\.php(?:[?]|$)/', $_SERVER['REQUEST_URI'])) return;
-					if(is_admin() || preg_match('/\/wp-admin(?:[\/?]|$)/', $_SERVER['REQUEST_URI'])) return;
-					if(is_multisite() && preg_match('/\/files(?:[\/?]|$)/', $_SERVER['REQUEST_URI'])) return;
+					if(preg_match('/\/(?:wp\-[^\/]+|xmlrpc)\.php(?:[?]|$)/', $_SERVER['REQUEST_URI']))
+						return $this->maybe_set_debug_info($this::NC_DEBUG_WP_SYSTEMATICS);
 
-					if($this->is_like_user_logged_in()) return; // Lite version cannot enable user caching.
+					if(is_admin() || preg_match('/\/wp-admin(?:[\/?]|$)/', $_SERVER['REQUEST_URI']))
+						return $this->maybe_set_debug_info($this::NC_DEBUG_WP_ADMIN);
 
-					if(!QUICK_CACHE_GET_REQUESTS && $this->is_get_request_w_query() && empty($_GET['qcAC'])) return;
+					if(is_multisite() && preg_match('/\/files(?:[\/?]|$)/', $_SERVER['REQUEST_URI']))
+						return $this->maybe_set_debug_info($this::NC_DEBUG_MS_FILES);
 
-					$this->protocol      = $this->is_ssl() ? 'https://' : 'http://';
-					$this->version_salt  = $this->apply_filters(__CLASS__.'__version_salt', '');
-					$this->cache_path    = $this->url_to_cache_path($this->protocol.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'], '', $this->version_salt);
-					$this->cache_file    = QUICK_CACHE_DIR.'/'.$this->cache_path; // NOT considering a user cache at all in the lite version.
+					if($this->is_like_user_logged_in())
+						return $this->maybe_set_debug_info($this::NC_DEBUG_IS_LIKE_LOGGED_IN_USER);
+
+					if($this->is_get_request_w_query() && empty($_GET['qcAC']))
+						return $this->maybe_set_debug_info($this::NC_DEBUG_GET_REQUEST_QUERIES);
+
+					$this->protocol       = $this->is_ssl() ? 'https://' : 'http://';
+					$this->version_salt   = $this->apply_filters(__CLASS__.'__version_salt', '');
+					$this->cache_path     = $this->url_to_cache_path($this->protocol.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'], '', $this->version_salt);
+					$this->cache_file     = QUICK_CACHE_DIR.'/'.$this->cache_path; // NOT considering a user cache at all in the lite version.
 					$this->cache_file_404 = QUICK_CACHE_DIR.'/'.$this->url_to_cache_path($this->protocol.$_SERVER['HTTP_HOST'].'/'.QUICK_CACHE_404_CACHE_FILENAME);
-					$this->salt_location = ltrim($this->version_salt.' '.$this->protocol.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
+					$this->salt_location  = ltrim($this->version_salt.' '.$this->protocol.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
 
 					if(is_file($this->cache_file) && filemtime($this->cache_file) >= strtotime('-'.QUICK_CACHE_MAX_AGE))
 						{
@@ -140,7 +218,7 @@ namespace quick_cache // Root namespace.
 								if(!in_array($_header, $headers_list) && stripos($_header, 'Last-Modified:') !== 0) header($_header);
 							unset($_header); // Just a little housekeeping.
 
-							if(QUICK_CACHE_DEBUGGING_ENABLE) // Debugging messages enabled; or no?
+							if(QUICK_CACHE_DEBUGGING_ENABLE && $this->is_html_xml_doc($cache)) // Only if HTML comments are possible.
 								{
 									$total_time = number_format(microtime(TRUE) - $this->timer, 5, '.', '');
 									$cache .= "\n".'<!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->';
@@ -149,77 +227,130 @@ namespace quick_cache // Root namespace.
 								}
 							exit($cache); // Exit with cache contents.
 						}
-					else ob_start(array($this, 'output_buffer_callback_handler'), 0, 0); // Start locked output buffering.
+					else // Start buffering output; we may need to cache the HTML generated by this request.
+						{
+							register_shutdown_function(array($this, 'disable_wp_ob_end_flush_all_e_notice'));
+							ob_start(array($this, 'output_buffer_callback_handler'), 0, 0); // Start locked output buffering.
+						}
+					return NULL; // Return value not applicable.
 				}
 
-			public function output_buffer_callback_handler($buffer)
+			public function maybe_set_debug_info($reason_code, $reason = '')
 				{
-					if(defined('DONOTCACHEPAGE')) return $buffer;
-					if(isset($_SERVER['DONOTCACHEPAGE'])) return $buffer;
+					if(!QUICK_CACHE_DEBUGGING_ENABLE)
+						return; // Nothing to do.
 
-					if(isset($_GET['qcAC']) && !$_GET['qcAC']) return $buffer;
-					if(defined('QUICK_CACHE_ALLOWED') && !QUICK_CACHE_ALLOWED) return $buffer;
-					if(isset($_SERVER['QUICK_CACHE_ALLOWED']) && !$_SERVER['QUICK_CACHE_ALLOWED']) return $buffer;
+					$reason = (string)$reason;
+					if(!($reason_code = (string)$reason_code))
+						return; // Not applicable.
 
-					if($this->is_like_user_logged_in()) return $buffer; // Lite version cannot enable user caching.
-					if(function_exists('is_user_logged_in') && is_user_logged_in()) return $buffer;
+					$this->postload['with_debug_info'] = array('reason_code' => $reason_code, 'reason' => $reason);
+				}
 
-					if(function_exists('zlib_get_coding_type') && zlib_get_coding_type() && (!($zlib_oc = ini_get('zlib.output_compression')) || !preg_match('/^(?:1|on|yes|true)$/i', $zlib_oc)))
+			public function maybe_set_debug_info_postload()
+				{
+					if(!QUICK_CACHE_DEBUGGING_ENABLE)
+						return; // Nothing to do.
+
+					if(is_admin()) return; // Not applicable.
+
+					if(strtoupper(PHP_SAPI) === 'CLI')
+						return; // Let's not run the risk here.
+
+					if(empty($this->postload['with_debug_info']) || !is_array($this->postload['with_debug_info']))
+						return; // Nothing to do in this case either.
+
+					if(!isset($this->postload['with_debug_info']['reason_code'], $this->postload['with_debug_info']['reason']))
+						return; // Nothing to do in this case either.
+
+					$_this = $this; // Need this reference in the closure below (PHP v.5.3 compat).
+					add_action('shutdown', function () use ($_this) // Debug info in the shutdown phase.
+						{
+							if($_this->is_cacheable_content_type() && (is_404() || is_front_page() || is_home() || is_singular() || is_archive() || is_post_type_archive() || is_tax() || is_search() || is_feed()))
+								echo (string)$_this->maybe_add_nc_debug_info(NULL, $_this->postload['with_debug_info']['reason_code'], $_this->postload['with_debug_info']['reason']);
+						}, -(PHP_INT_MAX - 10));
+				}
+
+			/**
+			 * @param \WP_Query $wp_query
+			 */
+			public function wp_main_query_postload($wp_query) // Fires on `wp` action hook.
+				{
+					if($this->is_wp_loaded_query || is_admin())
+						return; // Nothing to do.
+
+					if(!($wp_query instanceof \WP_Query) || !$wp_query->is_main_query())
+						return; // Not applicable; i.e. NOT the main query.
+
+					$this->is_wp_loaded_query = TRUE;
+					$this->is_404             = is_404();
+					$this->site_url           = site_url();
+					$this->home_url           = home_url();
+
+					if(function_exists('\\'.__NAMESPACE__.'\\plugin'))
+						$this->plugin_file = plugin()->file;
+				}
+
+			public function disable_wp_ob_end_flush_all_e_notice()
+				{
+					error_reporting(error_reporting() ^ E_NOTICE);
+				}
+
+			public function output_buffer_callback_handler($buffer, $phase)
+				{
+					if($phase !== (PHP_OUTPUT_HANDLER_START | PHP_OUTPUT_HANDLER_END))
+						// Quick Cache does NOT chunk it's output buffering; so this should never happen.
+						throw new \exception(sprintf(__('Unexpected OB phase: `%1$s`.', $this->text_domain), $phase));
+
+					# Exclusion checks; there are MANY of these...
+
+					$cache = trim((string)$buffer);
+					if(!isset($cache[0])) // Allows a `0`.
+						return FALSE; // Don't cache an empty buffer.
+
+					if(isset($_GET['qcAC']) && !$_GET['qcAC'])
+						return $this->maybe_add_nc_debug_info($buffer, $this::NC_DEBUG_QCAC_GET_VAR);
+
+					if(defined('QUICK_CACHE_ALLOWED') && !QUICK_CACHE_ALLOWED)
+						return $this->maybe_add_nc_debug_info($buffer, $this::NC_DEBUG_QUICK_CACHE_ALLOWED_CONSTANT);
+
+					if(isset($_SERVER['QUICK_CACHE_ALLOWED']) && !$_SERVER['QUICK_CACHE_ALLOWED'])
+						return $this->maybe_add_nc_debug_info($buffer, $this::NC_DEBUG_QUICK_CACHE_ALLOWED_SERVER_VAR);
+
+					if(defined('DONOTCACHEPAGE')) // WP Super Cache compatible.
+						return $this->maybe_add_nc_debug_info($buffer, $this::NC_DEBUG_DONOTCACHEPAGE_CONSTANT);
+
+					if(isset($_SERVER['DONOTCACHEPAGE'])) // WP Super Cache compatible.
+						return $this->maybe_add_nc_debug_info($buffer, $this::NC_DEBUG_DONOTCACHEPAGE_SERVER_VAR);
+
+					if($this->is_like_user_logged_in())
+						return $this->maybe_add_nc_debug_info($buffer, $this::NC_DEBUG_IS_LIKE_LOGGED_IN_USER);
+
+					if(function_exists('is_user_logged_in') && is_user_logged_in())
+						return $this->maybe_add_nc_debug_info($buffer, $this::NC_DEBUG_IS_LOGGED_IN_USER);
+
+					if(function_exists('zlib_get_coding_type') && zlib_get_coding_type() && (!($zlib_oc = ini_get('zlib.output_compression')) || !filter_var($zlib_oc, FILTER_VALIDATE_BOOLEAN)))
 						throw new \exception(__('Unable to cache already-compressed output. Please use `mod_deflate` w/ Apache; or use `zlib.output_compression` in your `php.ini` file. Quick Cache is NOT compatible with `ob_gzhandler()` and others like this.', $this->text_domain));
 
-					$is_wp_loaded = (isset($GLOBALS['wp']) && did_action('wp'));
-					$is_404       = ($is_wp_loaded && is_404()); // May not call `is_404()` until `wp` has been fired; i.e. after the query.
+					if($this->is_404 && !QUICK_CACHE_CACHE_404_REQUESTS) // Not caching 404 errors.
+						return $this->maybe_add_nc_debug_info($buffer, $this::NC_DEBUG_404_REQUEST);
 
-					if($is_404 && !QUICK_CACHE_CACHE_404_REQUESTS)
-						return $buffer; // Not caching 404 errors.
+					if(function_exists('is_maintenance') && is_maintenance()) // <http://wordpress.org/extend/plugins/maintenance-mode>
+						return $this->maybe_add_nc_debug_info($buffer, $this::NC_DEBUG_MAINTENANCE_PLUGIN);
 
-					if(function_exists('is_maintenance') && is_maintenance())
-						return $buffer; // <http://wordpress.org/extend/plugins/maintenance-mode>
+					if(function_exists('did_action') && did_action('wm_head')) // <http://wordpress.org/extend/plugins/wp-maintenance-mode>
+						return $this->maybe_add_nc_debug_info($buffer, $this::NC_DEBUG_MAINTENANCE_PLUGIN);
 
-					if(function_exists('did_action') && did_action('wm_head'))
-						return $buffer; // <http://wordpress.org/extend/plugins/wp-maintenance-mode>
+					if(strpos($cache, '<body id="error-page">') !== FALSE)
+						return $this->maybe_add_nc_debug_info($buffer, $this::NC_DEBUG_WP_ERROR_PAGE);
 
-					$buffer        = trim($buffer); // Trim buffer.
-					$cache         = $buffer; // Initialize cache value.
-					$buffer_length = strlen($buffer); // Call this ONE time here.
-					$headers       = headers_list(); // Need these headers below.
-					$content_type  = ''; // Initialize possible content type.
+					if(!$this->is_cacheable_content_type())
+						return $this->maybe_add_nc_debug_info($buffer, $this::NC_DEBUG_UNCACHEABLE_CONTENT_TYPE);
 
-					if(!$buffer_length) return $buffer; // Don't cache an empty buffer.
+					if(!$this->is_cacheable_status())
+						return $this->maybe_add_nc_debug_info($buffer, $this::NC_DEBUG_UNCACHEABLE_STATUS);
 
-					if(strpos($buffer, '<body id="error-page">') !== FALSE)
-						return $buffer; // Don't cache WP errors.
-
-					foreach($headers as $_header)
-						{
-							if(stripos($_header, 'Content-Type:') === 0)
-								$content_type = $_header; // Last one.
-							/*
-							 * A Retry-After header indicates the site is temporarily unavailable.
-							 *    i.e. That the site is down; or is in maintenance mode.
-							 *    I've seen maintenance mode plugins for WP set this.
-							 *
-							 * A Status header indicates that a plugin may have set a particular HTTP status code.
-							 *    While WP itself no longer sends this, it's good to check for plugins that do.
-							 * ~ NOTE: We should request that the WP core function `status_header()` start sending this.
-							 *
-							 * An HTTP status code set by WP core function `status_header()`.
-							 * ~ NOTE: at this time the `headers_list()` function does NOT include this header unfortunately.
-							 *    Therefore, the routine below which looks for this header will NOT find it under any circumstance.
-							 *    Tested and confirmed. See also: <http://www.php.net/manual/en/function.headers-list.php>
-							 *    That said, I think we should leave it here in case a future version of PHP corrects this behavior.
-							 */
-							else if(preg_match('/^(?:Retry\-After\:\s+(?P<retry>.+)|Status\:\s+(?P<status>[0-9]+)|HTTP\/[0-9]+\.[0-9]+\s+(?P<http_status>[0-9]+))/i', $_header, $_m))
-								if(!empty($_m['retry']) || (!empty($_m['status']) && $_m['status'][0] !== '2' && $_m['status'] !== '404')
-								   || (!empty($_m['http_status']) && $_m['http_status'][0] !== '2' && $_m['http_status'] !== '404')
-								) return $buffer; // Don't cache (anything that's NOT a 2xx or 404 status).
-						}
-					unset($_header); // Just a little houskeeping.
-
-					if($content_type && !preg_match('/xhtml|html|xml|'.preg_quote(__NAMESPACE__, '/').'/i', $content_type))
-						return $buffer; // Don't cache anything that is NOT XML/HTML code.
-
-					// Caching occurs here; we're good-to-go now :-)
+					# Cache directory checks. The cache file directory is created here if necessary.
 
 					if(!is_dir(QUICK_CACHE_DIR) && mkdir(QUICK_CACHE_DIR, 0775, TRUE) && !is_file(QUICK_CACHE_DIR.'/.htaccess'))
 						file_put_contents(QUICK_CACHE_DIR.'/.htaccess', $this->htaccess_deny); // We know it's writable here.
@@ -228,18 +359,16 @@ namespace quick_cache // Root namespace.
 					if(empty($cache_file_dir_writable) && !is_writable($cache_file_dir)) // Only check if it's writable, if we didn't just successfully create it.
 						throw new \exception(sprintf(__('Cache directory not writable. Quick Cache needs this directory please: `%1$s`. Set permissions to `755` or higher; `777` might be needed in some cases.', $this->text_domain), $cache_file_dir));
 
-					/*
-					 * Is this a 404 and the 404 cache file already exists?
-					 * Then lets symlink this 404 cache file to the existing cache file.
-					 * and return the cache; with possible debug information also.
-					 */
-					if($is_404 && is_file($this->cache_file_404))
-						{
-							symlink($this->cache_file_404, $this->cache_file);
-							return $cache; // Nothing more to do here.
-						}
+					# This is where a new 404 request might be detected for the first time; and where the 404 error file already exists in this case.
 
-					if(QUICK_CACHE_DEBUGGING_ENABLE) // Debugging messages enabled; or no?
+					if($this->is_404 && is_file($this->cache_file_404))
+						if(!symlink($this->cache_file_404, $this->cache_file))
+							throw new \exception(sprintf(__('Unable to create symlink: `%1$s` » `%2$s`. Possible permissions issue (or race condition), please check your cache directory: `%3$s`.', $this->text_domain), $this->cache_file, $this->cache_file_404, QUICK_CACHE_DIR));
+						else return $this->maybe_add_nc_debug_info($buffer, $this::NC_DEBUG_1ST_TIME_404_SYMLINK);
+
+					/* ------- Otherwise, we need to construct & store a new cache file. -------- */
+
+					if(QUICK_CACHE_DEBUGGING_ENABLE && $this->is_html_xml_doc($cache)) // Only if HTML comments are possible.
 						{
 							$total_time = number_format(microtime(TRUE) - $this->timer, 5, '.', '');
 							$cache .= "\n".'<!-- '.htmlspecialchars(sprintf(__('Quick Cache file built for (%1$s) in %2$s seconds, on: %3$s.', $this->text_domain),
@@ -247,23 +376,135 @@ namespace quick_cache // Root namespace.
 							$cache .= "\n".'<!-- '.htmlspecialchars(sprintf(__('This Quick Cache file will auto-expire (and be rebuilt) on: %1$s (based on your configured expiration time).', $this->text_domain), date('M jS, Y @ g:i a T', strtotime('+'.QUICK_CACHE_MAX_AGE)))).' -->';
 						}
 					$cache_file_tmp = $this->cache_file.'.'.uniqid('', TRUE).'.tmp'; // Cache creation is atomic; e.g. tmp file w/ rename.
-
 					/*
 					 * This is NOT a 404, or it is 404 and the 404 cache file doesn't yet exist (so we need to create it).
 					 */
-					if($is_404) // This is a 404; let's create 404 cache file and symlink to it.
+					if($this->is_404) // This is a 404; let's create 404 cache file and symlink to it.
 						{
-							if(file_put_contents($cache_file_tmp, serialize($headers).'<!--headers-->'.$cache) && rename($cache_file_tmp, $this->cache_file_404))
-								{
-									symlink($this->cache_file_404, $this->cache_file);
+							if(file_put_contents($cache_file_tmp, serialize(headers_list()).'<!--headers-->'.$cache) && rename($cache_file_tmp, $this->cache_file_404))
+								if(symlink($this->cache_file_404, $this->cache_file)) // If this fails an exception will be thrown down below.
 									return $cache; // Return the newly built cache; with possible debug information also.
-								}
+
 						} // NOT a 404; let's write a new cache file.
-					else if(file_put_contents($cache_file_tmp, serialize($headers).'<!--headers-->'.$cache) && rename($cache_file_tmp, $this->cache_file))
+					else if(file_put_contents($cache_file_tmp, serialize(headers_list()).'<!--headers-->'.$cache) && rename($cache_file_tmp, $this->cache_file))
 						return $cache; // Return the newly built cache; with possible debug information also.
 
 					@unlink($cache_file_tmp); // Clean this up (if it exists); and throw an exception with information for the site owner.
 					throw new \exception(sprintf(__('Quick Cache: failed to write cache file for: `%1$s`; possible permissions issue (or race condition), please check your cache directory: `%2$s`.', $this->text_domain), $_SERVER['REQUEST_URI'], QUICK_CACHE_DIR));
+				}
+
+			public function maybe_add_nc_debug_info($doc = NULL, $reason_code = '', $reason = '')
+				{
+					if(!QUICK_CACHE_DEBUGGING_ENABLE)
+						return $doc; // Nothing to do.
+
+					if(isset($doc)) // Allow a NULL value through.
+						// This way it can be bypassed in a case where all we want is
+						//    just the debug info itself; e.g. when we want the return value.
+						if(!$this->is_html_xml_doc($doc = (string)$doc))
+							return $doc; // Nothing to do.
+
+					$doc    = (string)$doc;
+					$reason = (string)$reason;
+					if(!($reason_code = (string)$reason_code))
+						return $doc; // Not applicable.
+
+					if(!$reason) switch($reason_code)
+					{
+						case $this::NC_DEBUG_PHP_SAPI_CLI:
+								$reason = __('because `PHP_SAPI` reports that you are currently running from the command line.', $this->text_domain);
+								break; // Break switch handler.
+
+						case $this::NC_DEBUG_QCAC_GET_VAR:
+								$reason = __('because `$_GET[\'qcAC\']` is set to a boolean-ish FALSE value.', $this->text_domain);
+								break; // Break switch handler.
+
+						case $this::NC_DEBUG_NO_SERVER_HTTP_HOST:
+								$reason = __('because `$_SERVER[\'HTTP_HOST\']` is missing from your server configuration.', $this->text_domain);
+								break; // Break switch handler.
+
+						case $this::NC_DEBUG_NO_SERVER_REQUEST_URI:
+								$reason = __('because `$_SERVER[\'REQUEST_URI\']` is missing from your server configuration.', $this->text_domain);
+								break; // Break switch handler.
+
+						case $this::NC_DEBUG_QUICK_CACHE_ALLOWED_CONSTANT:
+								$reason = __('because the PHP constant `QUICK_CACHE_ALLOWED` has been set to a boolean-ish `FALSE` value at runtime. Perhaps by WordPress itself, or by one of your themes/plugins. This usually means that you have a theme/plugin intentionally disabling the cache on this page; and it\'s usually for a very good reason.', $this->text_domain);
+								break; // Break switch handler.
+
+						case $this::NC_DEBUG_QUICK_CACHE_ALLOWED_SERVER_VAR:
+								$reason = __('because the environment variable `$_SERVER[\'QUICK_CACHE_ALLOWED\']` has been set to a boolean-ish `FALSE` value at runtime. Perhaps by WordPress itself, or by one of your themes/plugins. This usually means that you have a theme/plugin intentionally disabling the cache on this page; and it\'s usually for a very good reason.', $this->text_domain);
+								break; // Break switch handler.
+
+						case $this::NC_DEBUG_DONOTCACHEPAGE_CONSTANT:
+								$reason = __('because the PHP constant `DONOTCACHEPAGE` has been set at runtime. Perhaps by WordPress itself, or by one of your themes/plugins. This usually means that you have a theme/plugin intentionally disabling the cache on this page; and it\'s usually for a very good reason.', $this->text_domain);
+								break; // Break switch handler.
+
+						case $this::NC_DEBUG_DONOTCACHEPAGE_SERVER_VAR:
+								$reason = __('because the environment variable `$_SERVER[\'DONOTCACHEPAGE\']` has been set at runtime. Perhaps by WordPress itself, or by one of your themes/plugins. This usually means that you have a theme/plugin intentionally disabling the cache on this page; and it\'s usually for a very good reason.', $this->text_domain);
+								break; // Break switch handler.
+
+						case $this::NC_DEBUG_POST_PUT_DEL_REQUEST:
+								$reason = __('because `$_SERVER[\'REQUEST_METHOD\']` is `POST`, `PUT` or `DELETE`. These request types should never (ever) be cached in any way.', $this->text_domain);
+								break; // Break switch handler.
+
+						case $this::NC_DEBUG_SELF_SERVE_REQUEST:
+								$reason = __('because `$_SERVER[\'REMOTE_ADDR\']` === `$_SERVER[\'SERVER_ADDR\']`; i.e. a self-serve request. DEVELOPER TIP: if you are testing on a localhost installation, please add `define(\'LOCALHOST\', TRUE);` to your `/wp-config.php` file while you run tests :-) Remove it (or set it to a `FALSE` value) once you go live on the web.', $this->text_domain);
+								break; // Break switch handler.
+
+						case $this::NC_DEBUG_FEED_REQUEST:
+								$reason = __('because `$_SERVER[\'REQUEST_URI\']` indicates this is a `/feed`; and the configuration of this site says not to cache XML-based feeds.', $this->text_domain);
+								break; // Break switch handler.
+
+						case $this::NC_DEBUG_WP_SYSTEMATICS:
+								$reason = __('because `$_SERVER[\'REQUEST_URI\']` indicates this is a `wp-` or `xmlrpc` file; i.e. a WordPress systematic file. WordPress systematics are never (ever) cached in any way.', $this->text_domain);
+								break; // Break switch handler.
+
+						case $this::NC_DEBUG_WP_ADMIN:
+								$reason = __('because `$_SERVER[\'REQUEST_URI\']` or the `is_admin()` function indicates this is an administrative area of the site.', $this->text_domain);
+								break; // Break switch handler.
+
+						case $this::NC_DEBUG_MS_FILES:
+								$reason = __('because `$_SERVER[\'REQUEST_URI\']` indicates this is a Multisite Network; and this was a request for `/files/*`, not a page.', $this->text_domain);
+								break; // Break switch handler.
+
+						case $this::NC_DEBUG_IS_LOGGED_IN_USER:
+						case $this::NC_DEBUG_IS_LIKE_LOGGED_IN_USER:
+								$reason = __('because the current user visiting this page (usually YOU), appears to be logged-in. The current configuration says NOT to cache pages for logged-in visitors. This message may also appear if you have an active PHP session on this site, or if you\'ve left (or replied to) a comment recently. If this message continues, please clear your cookies and try again.', $this->text_domain);
+								break; // Break switch handler.
+
+						case $this::NC_DEBUG_GET_REQUEST_QUERIES:
+								$reason = __('because `$_GET` contains query string data. The current configuration says NOT to cache GET requests with a query string.', $this->text_domain);
+								break; // Break switch handler.
+
+						case $this::NC_DEBUG_404_REQUEST:
+								$reason = __('because the WordPress `is_404()` Conditional Tag says the current page is a 404 error. The current configuration says NOT to cache 404 errors.', $this->text_domain);
+								break; // Break switch handler.
+
+						case $this::NC_DEBUG_MAINTENANCE_PLUGIN:
+								$reason = __('because a plugin running on this installation says this page is in Maintenance Mode; i.e. is not available publicly at this time.', $this->text_domain);
+								break; // Break switch handler.
+
+						case $this::NC_DEBUG_WP_ERROR_PAGE:
+								$reason = __('because the contents of this document contain `<body id="error-page">`, which indicates this is an auto-generated WordPress error message.', $this->text_domain);
+								break; // Break switch handler.
+
+						case $this::NC_DEBUG_UNCACHEABLE_CONTENT_TYPE:
+								$reason = __('because a `Content-Type:` header was set via PHP at runtime. The header contains a MIME type which is NOT a variation of HTML or XML. This header might have been set by your hosting company, by WordPress itself; or by one of your themes/plugins.', $this->text_domain);
+								break; // Break switch handler.
+
+						case $this::NC_DEBUG_UNCACHEABLE_STATUS:
+								$reason = __('because a `Status:` header (or an `HTTP/` header) was set via PHP at runtime. The header contains a non-`2xx` status code. This indicates the current page was not loaded successfully. This header might have been set by your hosting company, by WordPress itself; or by one of your themes/plugins.', $this->text_domain);
+								break; // Break switch handler.
+
+						case $this::NC_DEBUG_1ST_TIME_404_SYMLINK:
+								$reason = __('because the WordPress `is_404()` Conditional Tag says the current page is a 404 error; and this is the 1st time it\'s happened on this page. Your current configuration says that 404 errors SHOULD be cached. If you reload this page (assuming you don\'t clear the cache before you do so); you should get a cached version of your 404 error document. This message occurs ONCE for each new/unique 404 error request.', $this->text_domain);
+								break; // Break switch handler.
+
+						default: // Default case handler.
+							$reason = __('due to an unexpected behavior in the application. Please report this as a bug!', $this->text_domain);
+							break; // Break switch handler.
+					}
+					return $doc."\n".'<!-- '.htmlspecialchars(sprintf(__('Quick Cache is NOT caching this page, %1$s', $this->text_domain), $reason)).' -->';
 				}
 
 			/*
@@ -339,12 +580,22 @@ namespace quick_cache // Root namespace.
 
 			public function host_token($dashify = FALSE)
 				{
-					$host = strtolower($_SERVER['HTTP_HOST']);
-					return ($dashify) ? trim(preg_replace('/[^a-z0-9\/]/i', '-', $host), '-') : $host;
+					$dashify = (integer)$dashify;
+					static $tokens = array(); // Static cache.
+					if(isset($tokens[$dashify])) return $tokens[$dashify];
+
+					$host        = strtolower($_SERVER['HTTP_HOST']);
+					$token_value = ($dashify) ? trim(preg_replace('/[^a-z0-9\/]/i', '-', $host), '-') : $host;
+
+					return ($tokens[$dashify] = $token_value);
 				}
 
 			public function host_dir_token($dashify = FALSE)
 				{
+					$dashify = (integer)$dashify;
+					static $tokens = array(); // Static cache.
+					if(isset($tokens[$dashify])) return $tokens[$dashify];
+
 					$host_dir_token = '/'; // Assume NOT multisite; or running it's own domain.
 
 					if(is_multisite() && (!defined('SUBDOMAIN_INSTALL') || !SUBDOMAIN_INSTALL))
@@ -365,7 +616,9 @@ namespace quick_cache // Root namespace.
 							       || !in_array($host_dir_token, unserialize(file_get_contents(QUICK_CACHE_DIR.'/qc-blog-paths')), TRUE))
 							) $host_dir_token = '/'; // Main site; e.g. this is NOT a real/valid child blog path.
 						}
-					return ($dashify) ? trim(preg_replace('/[^a-z0-9\/]/i', '-', $host_dir_token), '-') : $host_dir_token;
+					$token_value = ($dashify) ? trim(preg_replace('/[^a-z0-9\/]/i', '-', $host_dir_token), '-') : $host_dir_token;
+
+					return ($tokens[$dashify] = $token_value);
 				}
 
 			public function is_post_put_del_request()
@@ -485,6 +738,50 @@ namespace quick_cache // Root namespace.
 					return ($is = FALSE);
 				}
 
+			public function is_html_xml_doc($doc)
+				{
+					if(($doc = (string)$doc))
+						if(stripos($doc, '</html>') !== FALSE || stripos($doc, '<?xml') === 0)
+							return TRUE;
+					return FALSE; // Not an HTML/XML document.
+				}
+
+			public function is_cacheable_content_type()
+				{
+					static $is; // Cache.
+					if(isset($is)) return $is;
+
+					foreach(headers_list() as $_header)
+						if(stripos($_header, 'Content-Type:') === 0)
+							$content_type = $_header; // Last one.
+					unset($_header); // Just a little housekeeping.
+
+					if(isset($content_type[0]) && stripos($content_type, 'html') === FALSE && stripos($content_type, 'xml') === FALSE && stripos($content_type, __NAMESPACE__) === FALSE)
+						return ($is = FALSE); // Do NOT cache data sent by scripts serving other MIME types.
+
+					return ($is = TRUE); // Assume that it is by default, we are within WP after all.
+				}
+
+			public function is_cacheable_status()
+				{
+					static $is; // Cache.
+					if(isset($is)) return $is;
+
+					/*
+					 * @raamdev PHP's `headers_list()` currently does NOT include `HTTP/` headers.
+					 *    This means the following routine will never catch a status sent by `status_header()`.
+					 *    We need to open a TRAC ticket about this. WordPress would (ideally) set a `Status:` header too.
+					 */
+					foreach(headers_list() as $_header)
+						if(preg_match('/^(?:Retry\-After\:\s+(?P<retry>.+)|Status\:\s+(?P<status>[0-9]+)|HTTP\/[0-9]+\.[0-9]+\s+(?P<http_status>[0-9]+))/i', $_header, $_m))
+							if(!empty($_m['retry']) || (!empty($_m['status']) && $_m['status'][0] !== '2' && $_m['status'] !== '404')
+							   || (!empty($_m['http_status']) && $_m['http_status'][0] !== '2' && $_m['http_status'] !== '404')
+							) return ($is = FALSE); // Don't cache (anything that's NOT a 2xx or 404 status).
+					unset($_header); // Just a little housekeeping.
+
+					return ($is = TRUE); // Assume that it is by default, we are within WP after all.
+				}
+
 			public function hook_id($function)
 				{
 					if(is_string($function))
@@ -595,4 +892,17 @@ namespace quick_cache // Root namespace.
 			}
 
 		$GLOBALS[__NAMESPACE__.'__advanced_cache'] = new advanced_cache();
+	}
+namespace // Global namespace.
+	{
+		function wp_cache_postload() // See: `wp-settings.php`.
+			{
+				$advanced_cache = $GLOBALS['quick_cache__advanced_cache'];
+				/** * @var $advanced_cache \quick_cache\advanced_cache */
+
+				if(!empty($advanced_cache->postload['with_debug_info']))
+					$advanced_cache->maybe_set_debug_info_postload();
+
+				add_action('wp', array($advanced_cache, 'wp_main_query_postload'), PHP_INT_MAX);
+			}
 	}

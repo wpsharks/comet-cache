@@ -139,7 +139,7 @@ namespace quick_cache // Root namespace.
 
 							add_filter('enable_live_network_counts', array($this, 'update_blog_paths'));
 
-							add_filter('plugin_action_links_' . plugin_basename( $this->file ), array($this, 'add_settings_link'));
+							add_filter('plugin_action_links_'.plugin_basename($this->file), array($this, 'add_settings_link'));
 
 							if((integer)$this->options['crons_setup'] < 1382523750)
 								{
@@ -910,12 +910,13 @@ namespace quick_cache // Root namespace.
 							return $value; // Pass through untouched (always).
 						}
 
-					public function add_settings_link( $links ) {
-						$links[] = '<a href="options-general.php?page=quick_cache">Settings</a>';
-						$links[] = '<br/><a href="'.esc_attr(add_query_arg(urlencode_deep(array('page' => __NAMESPACE__, __NAMESPACE__.'_pro_preview' => '1')), self_admin_url('/admin.php'))).'">Preview Pro Features</a>';
-						$links[] = '<a href="'.esc_attr('http://www.websharks-inc.com/product/'.str_replace('_', '-', __NAMESPACE__).'/').'" target="_blank">Upgrade</a>';
-						return $links;
-					}
+					public function add_settings_link($links)
+						{
+							$links[] = '<a href="options-general.php?page=quick_cache">Settings</a>';
+							$links[] = '<br/><a href="'.esc_attr(add_query_arg(urlencode_deep(array('page' => __NAMESPACE__, __NAMESPACE__.'_pro_preview' => '1')), self_admin_url('/admin.php'))).'">Preview Pro Features</a>';
+							$links[] = '<a href="'.esc_attr('http://www.websharks-inc.com/product/'.str_replace('_', '-', __NAMESPACE__).'/').'" target="_blank">Upgrade</a>';
+							return $links;
+						}
 
 					/*
 					 * See also: `advanced-cache.tpl.php` duplicate.
@@ -988,12 +989,22 @@ namespace quick_cache // Root namespace.
 
 					public function host_token($dashify = FALSE)
 						{
-							$host = strtolower($_SERVER['HTTP_HOST']);
-							return ($dashify) ? trim(preg_replace('/[^a-z0-9\/]/i', '-', $host), '-') : $host;
+							$dashify = (integer)$dashify;
+							static $tokens = array(); // Static cache.
+							if(isset($tokens[$dashify])) return $tokens[$dashify];
+
+							$host        = strtolower($_SERVER['HTTP_HOST']);
+							$token_value = ($dashify) ? trim(preg_replace('/[^a-z0-9\/]/i', '-', $host), '-') : $host;
+
+							return ($tokens[$dashify] = $token_value);
 						}
 
 					public function host_dir_token($dashify = FALSE)
 						{
+							$dashify = (integer)$dashify;
+							static $tokens = array(); // Static cache.
+							if(isset($tokens[$dashify])) return $tokens[$dashify];
+
 							$cache_dir      = ABSPATH.$this->options['cache_dir'];
 							$host_dir_token = '/'; // Assume NOT multisite; or running it's own domain.
 
@@ -1015,7 +1026,9 @@ namespace quick_cache // Root namespace.
 									       || !in_array($host_dir_token, unserialize(file_get_contents($cache_dir.'/qc-blog-paths')), TRUE))
 									) $host_dir_token = '/'; // Main site; e.g. this is NOT a real/valid child blog path.
 								}
-							return ($dashify) ? trim(preg_replace('/[^a-z0-9\/]/i', '-', $host_dir_token), '-') : $host_dir_token;
+							$token_value = ($dashify) ? trim(preg_replace('/[^a-z0-9\/]/i', '-', $host_dir_token), '-') : $host_dir_token;
+
+							return ($tokens[$dashify] = $token_value);
 						}
 
 					public function dir_regex_iteration($dir, $regex)
