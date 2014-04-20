@@ -266,7 +266,7 @@ namespace quick_cache // Root namespace.
 					$_this = $this; // Need this reference in the closure below (PHP v.5.3 compat).
 					add_action('shutdown', function () use ($_this) // Debug info in the shutdown phase.
 						{
-							if($_this->is_cacheable_content_type() && (is_404() || is_front_page() || is_home() || is_singular() || is_archive() || is_post_type_archive() || is_tax() || is_search() || is_feed()))
+							if($_this->has_a_cacheable_content_type() && (is_404() || is_front_page() || is_home() || is_singular() || is_archive() || is_post_type_archive() || is_tax() || is_search() || is_feed()))
 								echo (string)$_this->maybe_add_nc_debug_info(NULL, $_this->postload['with_debug_info']['reason_code'], $_this->postload['with_debug_info']['reason']);
 						}, -(PHP_INT_MAX - 10));
 				}
@@ -341,10 +341,10 @@ namespace quick_cache // Root namespace.
 					if(strpos($cache, '<body id="error-page">') !== FALSE)
 						return $this->maybe_add_nc_debug_info($buffer, $this::NC_DEBUG_WP_ERROR_PAGE);
 
-					if(!$this->is_cacheable_content_type())
+					if(!$this->has_a_cacheable_content_type())
 						return $this->maybe_add_nc_debug_info($buffer, $this::NC_DEBUG_UNCACHEABLE_CONTENT_TYPE);
 
-					if(!$this->is_cacheable_status())
+					if(!$this->has_a_cacheable_status())
 						return $this->maybe_add_nc_debug_info($buffer, $this::NC_DEBUG_UNCACHEABLE_STATUS);
 
 					# Cache directory checks. The cache file directory is created here if necessary.
@@ -368,6 +368,7 @@ namespace quick_cache // Root namespace.
 					if(QUICK_CACHE_DEBUGGING_ENABLE && $this->is_html_xml_doc($cache)) // Only if HTML comments are possible.
 						{
 							$total_time = number_format(microtime(TRUE) - $this->timer, 5, '.', '');
+							$cache .= "\n".'<!-- '.htmlspecialchars(sprintf(__('Quick Cache file on disk: %1$s', $this->text_domain), str_replace(ABSPATH, '', $this->is_404 ? $this->cache_file_404 : $this->cache_file))).' -->';
 							$cache .= "\n".'<!-- '.htmlspecialchars(sprintf(__('Quick Cache file built for (%1$s) in %2$s seconds, on: %3$s.', $this->text_domain),
 							                                                ($this->is_404) ? '404 [error document]' : $this->salt_location, $total_time, date('M jS, Y @ g:i a T'))).' -->';
 							$cache .= "\n".'<!-- '.htmlspecialchars(sprintf(__('This Quick Cache file will auto-expire (and be rebuilt) on: %1$s (based on your configured expiration time).', $this->text_domain), date('M jS, Y @ g:i a T', strtotime('+'.QUICK_CACHE_MAX_AGE)))).' -->';
@@ -743,10 +744,10 @@ namespace quick_cache // Root namespace.
 					return FALSE; // Not an HTML/XML document.
 				}
 
-			public function is_cacheable_content_type()
+			public function has_a_cacheable_content_type()
 				{
-					static $is; // Cache.
-					if(isset($is)) return $is;
+					static $has; // Cache.
+					if(isset($has)) return $has;
 
 					foreach(headers_list() as $_header)
 						if(stripos($_header, 'Content-Type:') === 0)
@@ -754,15 +755,15 @@ namespace quick_cache // Root namespace.
 					unset($_header); // Just a little housekeeping.
 
 					if(isset($content_type[0]) && stripos($content_type, 'html') === FALSE && stripos($content_type, 'xml') === FALSE && stripos($content_type, __NAMESPACE__) === FALSE)
-						return ($is = FALSE); // Do NOT cache data sent by scripts serving other MIME types.
+						return ($has = FALSE); // Do NOT cache data sent by scripts serving other MIME types.
 
-					return ($is = TRUE); // Assume that it is by default, we are within WP after all.
+					return ($has = TRUE); // Assume that it is by default, we are within WP after all.
 				}
 
-			public function is_cacheable_status()
+			public function has_a_cacheable_status()
 				{
-					static $is; // Cache.
-					if(isset($is)) return $is;
+					static $has; // Cache.
+					if(isset($has)) return $has;
 
 					/*
 					 * @raamdev PHP's `headers_list()` currently does NOT include `HTTP/` headers.
@@ -773,10 +774,10 @@ namespace quick_cache // Root namespace.
 						if(preg_match('/^(?:Retry\-After\:\s+(?P<retry>.+)|Status\:\s+(?P<status>[0-9]+)|HTTP\/[0-9]+\.[0-9]+\s+(?P<http_status>[0-9]+))/i', $_header, $_m))
 							if(!empty($_m['retry']) || (!empty($_m['status']) && $_m['status'][0] !== '2' && $_m['status'] !== '404')
 							   || (!empty($_m['http_status']) && $_m['http_status'][0] !== '2' && $_m['http_status'] !== '404')
-							) return ($is = FALSE); // Don't cache (anything that's NOT a 2xx or 404 status).
+							) return ($has = FALSE); // Don't cache (anything that's NOT a 2xx or 404 status).
 					unset($_header); // Just a little housekeeping.
 
-					return ($is = TRUE); // Assume that it is by default, we are within WP after all.
+					return ($has = TRUE); // Assume that it is by default, we are within WP after all.
 				}
 
 			public function hook_id($function)
