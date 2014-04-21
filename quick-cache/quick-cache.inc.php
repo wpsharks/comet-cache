@@ -36,6 +36,9 @@ namespace quick_cache // Root namespace.
 
 							load_plugin_textdomain($this->text_domain);
 
+							$wp_content_dir_relative = // Considers custom `WP_CONTENT_DIR` locations.
+								rtrim(str_replace(ABSPATH, '', WP_CONTENT_DIR), '/'); // No trailing slash.
+
 							$this->default_options = array( // Default options.
 							                                'version'                       => $this->version,
 
@@ -47,7 +50,7 @@ namespace quick_cache // Root namespace.
 							                                'cache_purge_posts_page_enable' => '1', // `0|1`.
 							                                'allow_browser_cache'           => '0', // `0|1`.
 
-							                                'cache_dir'                     => 'wp-content/cache', // Relative to `ABSPATH`.
+							                                'cache_dir'                     => $wp_content_dir_relative.'/cache',
 							                                'cache_max_age'                 => '7 days', // `strtotime()` compatible.
 
 							                                'get_requests'                  => '0', // `0|1`.
@@ -89,9 +92,10 @@ namespace quick_cache // Root namespace.
 									if(!isset($options['version_salt']) && isset($old_options['version_salt']))
 										$options['version_salt'] = (string)$old_options['version_salt'];
 								}
-							$this->default_options      = apply_filters(__METHOD__.'__default_options', $this->default_options, get_defined_vars());
-							$this->options              = array_merge($this->default_options, $options); // This considers old options also.
-							$this->options              = apply_filters(__METHOD__.'__options', $this->options, get_defined_vars());
+							$this->default_options = apply_filters(__METHOD__.'__default_options', $this->default_options, get_defined_vars());
+							$this->options         = array_merge($this->default_options, $options); // This considers old options also.
+							$this->options         = apply_filters(__METHOD__.'__options', $this->options, get_defined_vars());
+
 							$this->options['cache_dir'] = trim($this->options['cache_dir'], '\\/'." \t\n\r\0\x0B");
 
 							$this->network_cap = apply_filters(__METHOD__.'__network_cap', 'manage_network_plugins');
@@ -139,8 +143,9 @@ namespace quick_cache // Root namespace.
 
 							add_filter('enable_live_network_counts', array($this, 'update_blog_paths'));
 
-							add_filter('plugin_action_links_' . plugin_basename( $this->file ), array($this, 'add_settings_link'));
+							add_filter('plugin_action_links_'.plugin_basename($this->file), array($this, 'add_settings_link'));
 
+							add_filter('cron_schedules', array($this, 'extend_cron_schedules'));
 							if((integer)$this->options['crons_setup'] < 1382523750)
 								{
 									wp_clear_scheduled_hook('_cron_'.__NAMESPACE__.'_cleanup');
@@ -367,6 +372,13 @@ namespace quick_cache // Root namespace.
 									echo apply_filters(__METHOD__.'__error', '<div class="error"><p>'.$_error.$_dismiss.'</p></div>', get_defined_vars());
 								}
 							unset($_key, $_error, $_dismiss_css, $_dismiss); // Housekeeping.
+						}
+
+					public function extend_cron_schedules($schedules)
+						{
+							$schedules['every15m'] = array('interval' => 900, 'display' => __('Every 15 Minutes', $this->text_domain));
+
+							return apply_filters(__METHOD__, $schedules, get_defined_vars());
 						}
 
 					public function wipe_cache($manually = FALSE)
@@ -827,7 +839,7 @@ namespace quick_cache // Root namespace.
 							if(!is_file($advanced_cache_file)) return TRUE; // Already gone.
 
 							if(is_readable($advanced_cache_file) && filesize($advanced_cache_file) === 0)
-								return TRUE; // Already gone; e.g. it's empty already.
+								return TRUE; // Already gone; i.e. it's empty already.
 
 							if(!is_writable($advanced_cache_file)) return FALSE; // Not possible.
 
@@ -910,12 +922,14 @@ namespace quick_cache // Root namespace.
 							return $value; // Pass through untouched (always).
 						}
 
-					public function add_settings_link( $links ) {
-						$links[] = '<a href="options-general.php?page=quick_cache">Settings</a>';
-						$links[] = '<br/><a href="'.esc_attr(add_query_arg(urlencode_deep(array('page' => __NAMESPACE__, __NAMESPACE__.'_pro_preview' => '1')), self_admin_url('/admin.php'))).'">Preview Pro Features</a>';
-						$links[] = '<a href="'.esc_attr('http://www.websharks-inc.com/product/'.str_replace('_', '-', __NAMESPACE__).'/').'" target="_blank">Upgrade</a>';
-						return $links;
-					}
+					public function add_settings_link($links)
+						{
+							$links[] = '<a href="options-general.php?page='.urlencode(__NAMESPACE__).'">'.__('Settings', $this->text_domain).'</a>';
+							$links[] = '<br/><a href="'.esc_attr(add_query_arg(urlencode_deep(array('page' => __NAMESPACE__, __NAMESPACE__.'_pro_preview' => '1')), self_admin_url('/admin.php'))).'">'.__('Preview Pro Features', $this->text_domain).'</a>';
+							$links[] = '<a href="'.esc_attr('http://www.websharks-inc.com/product/'.str_replace('_', '-', __NAMESPACE__).'/').'" target="_blank">'.__('Upgrade', $this->text_domain).'</a>';
+
+							return apply_filters(__METHOD__, $links, get_defined_vars());
+						}
 
 					/*
 					 * See also: `advanced-cache.tpl.php` duplicate.
@@ -988,12 +1002,22 @@ namespace quick_cache // Root namespace.
 
 					public function host_token($dashify = FALSE)
 						{
-							$host = strtolower($_SERVER['HTTP_HOST']);
-							return ($dashify) ? trim(preg_replace('/[^a-z0-9\/]/i', '-', $host), '-') : $host;
+							$dashify = (integer)$dashify;
+							static $tokens = array(); // Static cache.
+							if(isset($tokens[$dashify])) return $tokens[$dashify];
+
+							$host        = strtolower($_SERVER['HTTP_HOST']);
+							$token_value = ($dashify) ? trim(preg_replace('/[^a-z0-9\/]/i', '-', $host), '-') : $host;
+
+							return ($tokens[$dashify] = $token_value);
 						}
 
 					public function host_dir_token($dashify = FALSE)
 						{
+							$dashify = (integer)$dashify;
+							static $tokens = array(); // Static cache.
+							if(isset($tokens[$dashify])) return $tokens[$dashify];
+
 							$cache_dir      = ABSPATH.$this->options['cache_dir'];
 							$host_dir_token = '/'; // Assume NOT multisite; or running it's own domain.
 
@@ -1015,7 +1039,9 @@ namespace quick_cache // Root namespace.
 									       || !in_array($host_dir_token, unserialize(file_get_contents($cache_dir.'/qc-blog-paths')), TRUE))
 									) $host_dir_token = '/'; // Main site; e.g. this is NOT a real/valid child blog path.
 								}
-							return ($dashify) ? trim(preg_replace('/[^a-z0-9\/]/i', '-', $host_dir_token), '-') : $host_dir_token;
+							$token_value = ($dashify) ? trim(preg_replace('/[^a-z0-9\/]/i', '-', $host_dir_token), '-') : $host_dir_token;
+
+							return ($tokens[$dashify] = $token_value);
 						}
 
 					public function dir_regex_iteration($dir, $regex)
