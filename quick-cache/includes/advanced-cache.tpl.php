@@ -60,6 +60,8 @@ namespace quick_cache // Root namespace.
 			public $is_404 = FALSE; // Set on `wp` by `wp_main_query_postload()`.
 			public $site_url = ''; // Set on `wp` by `wp_main_query_postload()`.
 			public $home_url = ''; // Set on `wp` by `wp_main_query_postload()`.
+			public $is_user_logged_in = FALSE; // Set on `wp` by `wp_main_query_postload()`.
+			public $is_maintenance = FALSE; // Set on `wp` by `wp_main_query_postload()`.
 			public $plugin_file = ''; // Set on `wp` by `wp_main_query_postload()`.
 
 			public $text_domain = ''; // Defined by class constructor; for translations.
@@ -196,7 +198,7 @@ namespace quick_cache // Root namespace.
 					if(is_multisite() && preg_match('/\/files(?:[\/?]|$)/', $_SERVER['REQUEST_URI']))
 						return $this->maybe_set_debug_info($this::NC_DEBUG_MS_FILES);
 
-					if($this->is_like_user_logged_in())
+					if($this->is_like_user_logged_in()) // Commenters, password-protected access, or actually logged-in.
 						return $this->maybe_set_debug_info($this::NC_DEBUG_IS_LIKE_LOGGED_IN_USER);
 
 					if(!QUICK_CACHE_GET_REQUESTS && $this->is_get_request_w_query() && (!isset($_GET['qcAC']) || !filter_var($_GET['qcAC'], FILTER_VALIDATE_BOOLEAN)))
@@ -283,6 +285,8 @@ namespace quick_cache // Root namespace.
 					$this->is_404             = is_404();
 					$this->site_url           = site_url();
 					$this->home_url           = home_url();
+					$this->is_user_logged_in  = is_user_logged_in();
+					$this->is_maintenance     = function_exists('is_maintenance') && is_maintenance();
 
 					if(function_exists('\\'.__NAMESPACE__.'\\plugin'))
 						$this->plugin_file = plugin()->file;
@@ -320,32 +324,29 @@ namespace quick_cache // Root namespace.
 					if(isset($_SERVER['DONOTCACHEPAGE'])) // WP Super Cache compatible.
 						return $this->maybe_add_nc_debug_info($buffer, $this::NC_DEBUG_DONOTCACHEPAGE_SERVER_VAR);
 
-					if($this->is_like_user_logged_in())
-						return $this->maybe_add_nc_debug_info($buffer, $this::NC_DEBUG_IS_LIKE_LOGGED_IN_USER);
-
-					if(function_exists('is_user_logged_in') && is_user_logged_in())
+					if($this->is_user_logged_in) // Actually logged into the site.
 						return $this->maybe_add_nc_debug_info($buffer, $this::NC_DEBUG_IS_LOGGED_IN_USER);
 
-					if(function_exists('zlib_get_coding_type') && zlib_get_coding_type() && (!($zlib_oc = ini_get('zlib.output_compression')) || !filter_var($zlib_oc, FILTER_VALIDATE_BOOLEAN)))
-						throw new \exception(__('Unable to cache already-compressed output. Please use `mod_deflate` w/ Apache; or use `zlib.output_compression` in your `php.ini` file. Quick Cache is NOT compatible with `ob_gzhandler()` and others like this.', $this->text_domain));
+					if($this->is_like_user_logged_in()) // Commenters, password-protected access, or actually logged-in.
+						return $this->maybe_add_nc_debug_info($buffer, $this::NC_DEBUG_IS_LIKE_LOGGED_IN_USER); // This uses a separate debug notice.
 
 					if($this->is_404 && !QUICK_CACHE_CACHE_404_REQUESTS) // Not caching 404 errors.
 						return $this->maybe_add_nc_debug_info($buffer, $this::NC_DEBUG_404_REQUEST);
 
-					if(function_exists('is_maintenance') && is_maintenance()) // <http://wordpress.org/extend/plugins/maintenance-mode>
-						return $this->maybe_add_nc_debug_info($buffer, $this::NC_DEBUG_MAINTENANCE_PLUGIN);
-
-					if(function_exists('did_action') && did_action('wm_head')) // <http://wordpress.org/extend/plugins/wp-maintenance-mode>
-						return $this->maybe_add_nc_debug_info($buffer, $this::NC_DEBUG_MAINTENANCE_PLUGIN);
-
 					if(strpos($cache, '<body id="error-page">') !== FALSE)
 						return $this->maybe_add_nc_debug_info($buffer, $this::NC_DEBUG_WP_ERROR_PAGE);
 
-					if(!$this->has_a_cacheable_content_type())
+					if(!$this->has_a_cacheable_content_type()) // Exclude non-HTML/XML content types.
 						return $this->maybe_add_nc_debug_info($buffer, $this::NC_DEBUG_UNCACHEABLE_CONTENT_TYPE);
 
-					if(!$this->has_a_cacheable_status())
+					if(!$this->has_a_cacheable_status()) // This will catch WP Maintenance Mode too.
 						return $this->maybe_add_nc_debug_info($buffer, $this::NC_DEBUG_UNCACHEABLE_STATUS);
+
+					if($this->is_maintenance) // <http://wordpress.org/extend/plugins/maintenance-mode>
+						return $this->maybe_add_nc_debug_info($buffer, $this::NC_DEBUG_MAINTENANCE_PLUGIN);
+
+					if(function_exists('zlib_get_coding_type') && zlib_get_coding_type() && (!($zlib_oc = ini_get('zlib.output_compression')) || !filter_var($zlib_oc, FILTER_VALIDATE_BOOLEAN)))
+						throw new \exception(__('Unable to cache already-compressed output. Please use `mod_deflate` w/ Apache; or use `zlib.output_compression` in your `php.ini` file. Quick Cache is NOT compatible with `ob_gzhandler()` and others like this.', $this->text_domain));
 
 					# Cache directory checks. The cache file directory is created here if necessary.
 
@@ -368,7 +369,7 @@ namespace quick_cache // Root namespace.
 					if(QUICK_CACHE_DEBUGGING_ENABLE && $this->is_html_xml_doc($cache)) // Only if HTML comments are possible.
 						{
 							$total_time = number_format(microtime(TRUE) - $this->timer, 5, '.', '');
-							$cache .= "\n".'<!-- '.htmlspecialchars(sprintf(__('Quick Cache file on disk: %1$s', $this->text_domain), str_replace(ABSPATH, '', $this->is_404 ? $this->cache_file_404 : $this->cache_file))).' -->';
+							$cache .= "\n".'<!-- '.htmlspecialchars(sprintf(__('Quick Cache file path: %1$s', $this->text_domain), str_replace(ABSPATH, '', $this->is_404 ? $this->cache_file_404 : $this->cache_file))).' -->';
 							$cache .= "\n".'<!-- '.htmlspecialchars(sprintf(__('Quick Cache file built for (%1$s) in %2$s seconds, on: %3$s.', $this->text_domain),
 							                                                ($this->is_404) ? '404 [error document]' : $this->salt_location, $total_time, date('M jS, Y @ g:i a T'))).' -->';
 							$cache .= "\n".'<!-- '.htmlspecialchars(sprintf(__('This Quick Cache file will auto-expire (and be rebuilt) on: %1$s (based on your configured expiration time).', $this->text_domain), date('M jS, Y @ g:i a T', strtotime('+'.QUICK_CACHE_MAX_AGE)))).' -->';
