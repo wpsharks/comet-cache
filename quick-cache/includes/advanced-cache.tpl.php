@@ -105,6 +105,8 @@ namespace quick_cache // Root namespace.
 
 			const NC_DEBUG_MAINTENANCE_PLUGIN = 'nc_debug_maintenance_plugin';
 
+			const NC_DEBUG_OB_ZLIB_CODING_TYPE = 'nc_debug_ob_zlib_coding_type';
+
 			const NC_DEBUG_WP_ERROR_PAGE = 'nc_debug_wp_error_page';
 
 			const NC_DEBUG_UNCACHEABLE_CONTENT_TYPE = 'nc_debug_uncacheable_content_type';
@@ -183,8 +185,7 @@ namespace quick_cache // Root namespace.
 						return $this->maybe_set_debug_info($this::NC_DEBUG_POST_PUT_DEL_REQUEST);
 
 					if(isset($_SERVER['REMOTE_ADDR'], $_SERVER['SERVER_ADDR']) && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR'])
-						if(!$this->is_auto_cache_engine() && !$this->is_localhost())
-							return $this->maybe_set_debug_info($this::NC_DEBUG_SELF_SERVE_REQUEST);
+						if(!$this->is_localhost()) return $this->maybe_set_debug_info($this::NC_DEBUG_SELF_SERVE_REQUEST);
 
 					if(!QUICK_CACHE_FEEDS_ENABLE && $this->is_feed())
 						return $this->maybe_set_debug_info($this::NC_DEBUG_FEED_REQUEST);
@@ -294,7 +295,7 @@ namespace quick_cache // Root namespace.
 
 			public function disable_wp_ob_end_flush_all_e_notice()
 				{
-					error_reporting(error_reporting() ^ E_NOTICE);
+					error_reporting(error_reporting() & ~E_NOTICE);
 				}
 
 			public function output_buffer_callback_handler($buffer, $phase)
@@ -345,8 +346,9 @@ namespace quick_cache // Root namespace.
 					if($this->is_maintenance) // <http://wordpress.org/extend/plugins/maintenance-mode>
 						return $this->maybe_add_nc_debug_info($buffer, $this::NC_DEBUG_MAINTENANCE_PLUGIN);
 
-					if(function_exists('zlib_get_coding_type') && zlib_get_coding_type() && (!($zlib_oc = ini_get('zlib.output_compression')) || !filter_var($zlib_oc, FILTER_VALIDATE_BOOLEAN)))
-						throw new \exception(__('Unable to cache already-compressed output. Please use `mod_deflate` w/ Apache; or use `zlib.output_compression` in your `php.ini` file. Quick Cache is NOT compatible with `ob_gzhandler()` and others like this.', $this->text_domain));
+					if(function_exists('zlib_get_coding_type') && zlib_get_coding_type()
+					   && (!($zlib_oc = ini_get('zlib.output_compression')) || !filter_var($zlib_oc, FILTER_VALIDATE_BOOLEAN))
+					) return $this->maybe_add_nc_debug_info($buffer, $this::NC_DEBUG_OB_ZLIB_CODING_TYPE);
 
 					# Cache directory checks. The cache file directory is created here if necessary.
 
@@ -395,7 +397,7 @@ namespace quick_cache // Root namespace.
 			public function maybe_add_nc_debug_info($doc = NULL, $reason_code = '', $reason = '')
 				{
 					if(!QUICK_CACHE_DEBUGGING_ENABLE)
-						return $doc; // Nothing to do.
+						return (string)$doc; // Nothing to do.
 
 					if(isset($doc)) // Allow a NULL value through.
 						// This way it can be bypassed in a case where all we want is
@@ -481,6 +483,10 @@ namespace quick_cache // Root namespace.
 
 						case $this::NC_DEBUG_MAINTENANCE_PLUGIN:
 								$reason = __('because a plugin running on this installation says this page is in Maintenance Mode; i.e. is not available publicly at this time.', $this->text_domain);
+								break; // Break switch handler.
+
+						case $this::NC_DEBUG_OB_ZLIB_CODING_TYPE:
+								$reason = __('because Quick Cache is unable to cache already-compressed output. Please use `mod_deflate` w/ Apache; or use `zlib.output_compression` in your `php.ini` file. Quick Cache is NOT compatible with `ob_gzhandler()` and others like this.', $this->text_domain);
 								break; // Break switch handler.
 
 						case $this::NC_DEBUG_WP_ERROR_PAGE:
@@ -686,18 +692,6 @@ namespace quick_cache // Root namespace.
 
 					if(!defined('LOCALHOST') && !empty($_SERVER['HTTP_HOST']))
 						if(preg_match('/localhost|127\.0\.0\.1/i', $_SERVER['HTTP_HOST']))
-							return ($is = TRUE);
-
-					return ($is = FALSE);
-				}
-
-			public function is_auto_cache_engine()
-				{
-					static $is; // Cache.
-					if(isset($is)) return $is;
-
-					if(!empty($_SERVER['HTTP_USER_AGENT']))
-						if(stripos($_SERVER['HTTP_USER_AGENT'], __NAMESPACE__) !== FALSE)
 							return ($is = TRUE);
 
 					return ($is = FALSE);
