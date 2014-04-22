@@ -975,7 +975,9 @@ namespace quick_cache // Root namespace.
 										$cache_path .= $url['path'].'/';
 									else if(!($flags & $this::CACHE_PATH_NO_PATH_INDEX)) $cache_path .= 'index/';
 								}
-							$cache_path = str_replace('.', '-', $cache_path);
+							if(seems_utf8($cache_path))
+								$cache_path = mb_strtolower($cache_path, 'UTF-8');
+							$cache_path = str_replace('.', '-', strtolower($cache_path));
 
 							if(!($flags & $this::CACHE_PATH_NO_QUV))
 								{
