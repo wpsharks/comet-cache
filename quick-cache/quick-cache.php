@@ -24,4 +24,7 @@ if(version_compare(PHP_VERSION, '5.3', '<'))
 			}
 		add_action('all_admin_notices', 'quick_cache_php53_dashboard_notice');
 	}
-else require_once dirname(__FILE__).'/quick-cache.inc.php';
+else {
+	require_once dirname(__FILE__).'/quick-cache.inc.php';
+	require_once dirname(__FILE__).'/includes/api-class.php';
+}
