@@ -975,7 +975,7 @@ namespace quick_cache // Root namespace.
 										$cache_path .= $url['path'].'/';
 									else if(!($flags & $this::CACHE_PATH_NO_PATH_INDEX)) $cache_path .= 'index/';
 								}
-							if(seems_utf8($cache_path))
+							if($this->is_extension_loaded('mbstring') && mb_check_encoding($cache_path, 'UTF-8'))
 								$cache_path = mb_strtolower($cache_path, 'UTF-8');
 							$cache_path = str_replace('.', '-', strtolower($cache_path));
 
@@ -1053,6 +1053,13 @@ namespace quick_cache // Root namespace.
 							$regex_iterator    = new \RegexIterator($iterator_iterator, $regex, \RegexIterator::MATCH, \RegexIterator::USE_KEY);
 
 							return apply_filters(__METHOD__, $regex_iterator, get_defined_vars());
+						}
+
+					public function is_extension_loaded($extension)
+						{
+							static $is = array(); // Static cache.
+							if(isset($is[$extension])) return $is[$extension];
+							return ($is[$extension] = extension_loaded($extension));
 						}
 
 					public function function_is_possible($function)
