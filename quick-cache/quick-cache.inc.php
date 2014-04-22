@@ -1088,6 +1088,7 @@ namespace quick_cache // Root namespace.
 					}
 
 				$GLOBALS[__NAMESPACE__] = new plugin(); // New plugin instance.
+				require_once dirname(__FILE__).'/includes/api-class.php';
 			}
 		else add_action('all_admin_notices', function () // Do NOT load in this case.
 			{
