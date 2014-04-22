@@ -385,7 +385,39 @@ namespace quick_cache // Root namespace.
 
 							echo '</div>'."\n";
 						}
+					if(plugin()->is_pro_preview())
+						{
+							echo '<div class="plugin-menu-page-panel pro-preview">'."\n";
 
+							echo '   <div class="plugin-menu-page-panel-heading">'."\n";
+							echo '      <i class="fa fa-gears"></i> '.__('Auto-Cache Engine', plugin()->text_domain)."\n";
+							echo '   </div>'."\n";
+
+							echo '   <div class="plugin-menu-page-panel-body clearfix">'."\n";
+							echo '      <i class="fa fa-question-circle fa-4x" style="float:right; margin: 0 0 0 25px;"></i>'."\n";
+							echo '      <h3>'.__('Enable the Auto-Cache Engine?', plugin()->text_domain).'</h3>'."\n";
+							echo '      <p>'.__('After using Quick Cache for awhile (or any other page caching plugin, for that matter); it becomes obvious that at some point (based on your configured Expiration Time) Quick Cache has to refresh itself. It does this by ditching its cached version of a page, reloading the database-driven content, and then recreating the cache with the latest data. This is a never ending regeneration cycle that is based entirely on your configured Expiration Time.', plugin()->text_domain).'</p>'."\n";
+							echo '      <p>'.__('Understanding this, you can see that 99% of your visitors are going to receive a lightning fast response from your server. However, there will always be around 1% of your visitors that land on a page for the very first time (before it\'s been cached), or land on a page that needs to have its cache regenerated, because the existing cache has become outdated. We refer to this as a <em>First-Come Slow-Load Issue</em>. Not a huge problem, but if you\'re optimizing your site for every once of speed possible, the Auto-Cache Engine can help with this. The Auto-Cache Engine has been designed to combat this issue by taking on the responsibility of being that first visitor to a page that has not yet been cached, or has an expired cache. The Auto-Cache Engine is powered, in part, by <a href="http://codex.wordpress.org/Category:WP-Cron_Functions" target="_blank">WP-Cron</a> (already built into WordPress). The Auto-Cache Engine runs at 15-minute intervals via WP-Cron. It also uses the <a href="http://core.trac.wordpress.org/browser/trunk/wp-includes/http.php" target="_blank">WP_Http</a> class, which is also built into WordPress already.', plugin()->text_domain).'</p>'."\n";
+							echo '      <p>'.__('The Auto-Cache Engine obtains its list of URLs to auto-cache, from two different sources. It can read an <a href="http://wordpress.org/extend/plugins/google-sitemap-generator/" target="_blank">XML Sitemap</a> and/or a list of specific URLs that you supply. If you supply both sources, it will use both sources collectively. The Auto-Cache Engine takes ALL of your other configuration options into consideration too, including your Expiration Time, as well as any cache exclusion rules.', plugin()->text_domain).'</p>'."\n";
+							echo '      <p><select name="'.esc_attr(__NAMESPACE__).'[save_options][auto_cache_enable]">'."\n";
+							echo '            <option value="0" selected="selected">'.__('No, leave the Auto-Cache Engine disabled please.', plugin()->text_domain).'</option>'."\n";
+							echo '            <option value="1">'.__('Yes, I want the Auto-Cache Engine to keep pages cached automatically.', plugin()->text_domain).'</option>'."\n";
+							echo '         </select></p>'."\n";
+							echo '      <hr />'."\n";
+							echo '      <div class="plugin-menu-page-panel-if-enabled">'."\n";
+							echo '         <h3>'.__('XML Sitemap URL (or an XML Sitemap Index)', plugin()->text_domain).'</h3>'."\n";
+							echo '         <table style="width:100%;"><tr><td style="width:1px; font-weight:bold; white-space:nowrap;">'.esc_html(site_url('/')).'</td><td><input type="text" name="'.esc_attr(__NAMESPACE__).'[save_options][auto_cache_sitemap_url]" value="" /></td></tr></table>'."\n";
+							echo '         <h3>'.__('A List of URLs to Auto-Cache (One Per Line)', plugin()->text_domain).'</h3>'."\n";
+							echo '         <p><textarea name="'.esc_attr(__NAMESPACE__).'[save_options][auto_cache_other_urls]" rows="5" spellcheck="false" class="monospace"></textarea></p>'."\n";
+							echo '         <hr />'."\n";
+							echo '         <h3>'.__('Auto-Cache User-Agent String', plugin()->text_domain).'</h3>'."\n";
+							echo '         <table style="width:100%;"><tr><td><input type="text" name="'.esc_attr(__NAMESPACE__).'[save_options][auto_cache_user_agent]" value="" /></td><td style="width:1px; font-weight:bold; white-space:nowrap;">; '.esc_html(__NAMESPACE__.' '.plugin()->version).'</td></tr></table>'."\n";
+							echo '         <p class="info" style="display:block;">'.__('This is how the Auto-Cache Engine identifies itself when connecting to URLs. See <a href="http://en.wikipedia.org/wiki/User_agent" target="_blank">User Agent</a> in the Wikipedia.', plugin()->text_domain).'</p>'."\n";
+							echo '      </div>'."\n";
+							echo '   </div>'."\n";
+
+							echo '</div>'."\n";
+						}
 					if(plugin()->is_pro_preview())
 						{
 							echo '<div class="plugin-menu-page-panel pro-preview">'."\n";
@@ -463,7 +495,6 @@ namespace quick_cache // Root namespace.
 
 							echo '</div>'."\n";
 						}
-
 					echo '<div class="plugin-menu-page-panel">'."\n";
 
 					echo '   <div class="plugin-menu-page-panel-heading">'."\n";
