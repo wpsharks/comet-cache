@@ -558,7 +558,7 @@ namespace quick_cache // Root namespace.
 										throw new \exception(sprintf(__('Unable to auto-purge file: `%1$s`.', $this->text_domain), $_file->getPathname()));
 									$counter++; // Increment counter for each file purge.
 
-									if(!empty($_notices) || !$this->options['change_notifications_enable'] || !is_admin())
+									if(!empty($_notices) || !is_admin())
 										continue; // Stop here; we already issued a notice, or this notice is N/A.
 
 									$_notices   = (is_array($_notices = get_option(__NAMESPACE__.'_notices'))) ? $_notices : array();
@@ -600,7 +600,7 @@ namespace quick_cache // Root namespace.
 										throw new \exception(sprintf(__('Unable to auto-purge file: `%1$s`.', $this->text_domain), $_file->getPathname()));
 									$counter++; // Increment counter for each file purge.
 
-									if(!empty($_notices) || !$this->options['change_notifications_enable'] || !is_admin())
+									if(!empty($_notices) || !is_admin())
 										continue; // Stop here; we already issued a notice, or this notice is N/A.
 
 									$_notices   = (is_array($_notices = get_option(__NAMESPACE__.'_notices'))) ? $_notices : array();
@@ -655,7 +655,7 @@ namespace quick_cache // Root namespace.
 										throw new \exception(sprintf(__('Unable to auto-purge file: `%1$s`.', $this->text_domain), $_file->getPathname()));
 									$counter++; // Increment counter for each file purge.
 
-									if(!empty($_notices) || !$this->options['change_notifications_enable'] || !is_admin())
+									if(!empty($_notices) || !is_admin())
 										continue; // Stop here; we already issued a notice, or this notice is N/A.
 
 									$_notices   = (is_array($_notices = get_option(__NAMESPACE__.'_notices'))) ? $_notices : array();
@@ -772,7 +772,7 @@ namespace quick_cache // Root namespace.
 												throw new \exception(sprintf(__('Unable to auto-purge file: `%1$s`.', $this->text_domain), $_file->getPathname()));
 											$counter++; // Increment counter for each file purge.
 
-											if(!empty($_notices) || !$this->options['change_notifications_enable'] || !is_admin())
+											if(!empty($_notices) || !is_admin())
 												continue; // Stop here; we already issued a notice, or this notice is N/A.
 
 											$_notices   = (is_array($_notices = get_option(__NAMESPACE__.'_notices'))) ? $_notices : array();
