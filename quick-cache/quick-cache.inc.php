@@ -8,9 +8,35 @@ namespace quick_cache // Root namespace.
 			{
 				class plugin // Base plugin class.
 				{
-					public $is_pro = FALSE; // Lite version flag.
-					public $file = ''; // Defined by class constructor.
-					public $version = '140104'; // See: `readme.txt` file.
+					/**
+					 * Pro version flag.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @var boolean TRUE for pro version; FALSE for lite version.
+					 */
+					public $is_pro = FALSE;
+
+					/**
+					 * Stub `__FILE__` location.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @var string Current `__FILE__` from the stub; NOT from this file.
+					 *    Note that Quick Cache has a stub loader that checks for PHP v5.3 compat;
+					 *    which is why we have this property. This is the stub `__FILE__`.
+					 */
+					public $file = '';
+
+					/**
+					 * Version string in YYMMDD[+build] format.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @var string Current version of the software.
+					 */
+					public $version = '140104';
+
 					public $text_domain = ''; // Defined by class constructor.
 					public $default_options = array(); // Defined @ setup.
 					public $options = array(); // Defined @ setup.
