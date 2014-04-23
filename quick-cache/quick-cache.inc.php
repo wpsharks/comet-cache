@@ -643,6 +643,18 @@ namespace quick_cache
 							return apply_filters(__METHOD__, $counter, get_defined_vars());
 						}
 
+					/**
+					 * Clears cache files for the current blog.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @param boolean $manually Defaults to a `FALSE` value.
+					 *    Pass as TRUE if the clearing is done manually by the site owner.
+					 *
+					 * @return integer Total files cleared by this routine (if any).
+					 *
+					 * @throws \exception If a clearing failure occurs.
+					 */
 					public function clear_cache($manually = FALSE)
 						{
 							$counter = 0; // Initialize.
@@ -678,7 +690,16 @@ namespace quick_cache
 							return apply_filters(__METHOD__, $counter, get_defined_vars());
 						}
 
-					public function purge_cache() // i.e. the Quick Cache garbage collector.
+					/**
+					 * Purges expired cache files for the current blog.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @return integer Total files purged by this routine (if any).
+					 *
+					 * @throws \exception If a purge failure occurs.
+					 */
+					public function purge_cache()
 						{
 							$counter = 0; // Initialize.
 
@@ -704,6 +725,16 @@ namespace quick_cache
 							return apply_filters(__METHOD__, $counter, get_defined_vars());
 						}
 
+					/**
+					 * Automatically wipes out all cache files in the cache directory.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @return integer Total files wiped by this routine (if any).
+					 *
+					 * @note Unlike many of the other `auto_` methods, this one is NOT currently attached to any hooks.
+					 *    This is called upon whenever QC options are saved and/or restored though.
+					 */
 					public function auto_wipe_cache()
 						{
 							$counter = 0; // Initialize.
@@ -723,6 +754,29 @@ namespace quick_cache
 							return apply_filters(__METHOD__, $counter, get_defined_vars());
 						}
 
+					/**
+					 * Automatically clears all cache files for the current blog.
+					 *
+					 * @attaches-to `switch_theme` hook.
+					 *
+					 * @attaches-to `wp_create_nav_menu` hook.
+					 * @attaches-to `wp_update_nav_menu` hook.
+					 * @attaches-to `wp_delete_nav_menu` hook.
+					 *
+					 * @attaches-to `create_term` hook.
+					 * @attaches-to `edit_terms` hook.
+					 * @attaches-to `delete_term` hook.
+					 *
+					 * @attaches-to `add_link` hook.
+					 * @attaches-to `edit_link` hook.
+					 * @attaches-to `delete_link` hook.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @return integer Total files cleared by this routine (if any).
+					 *
+					 * @note This is also called upon during plugin activation.
+					 */
 					public function auto_clear_cache()
 						{
 							$counter = 0; // Initialize.
