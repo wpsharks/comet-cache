@@ -796,6 +796,26 @@ namespace quick_cache
 							return apply_filters(__METHOD__, $counter, get_defined_vars());
 						}
 
+					/**
+					 * Automatically purge cache files for a particular post.
+					 *
+					 * @attaches-to `save_post` hook.
+					 * @attaches-to `delete_post` hook.
+					 * @attaches-to `clean_post_cache` hook.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @param integer $id A WordPress post ID.
+					 *
+					 * @return integer Total files cleared by this routine (if any).
+					 *
+					 * @throws \exception If a purge failure occurs.
+					 *
+					 * @note This is also called upon by other routines which listen for
+					 *    events that are indirectly associated with a post ID.
+					 *
+					 * @see auto_purge_comment_post_cache()
+					 */
 					public function auto_purge_post_cache($id)
 						{
 							$counter = 0; // Initialize.
