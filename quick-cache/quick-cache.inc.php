@@ -1167,6 +1167,26 @@ namespace quick_cache
 								$this->add_advanced_cache();
 						}
 
+					/**
+					 * Creates and adds the `advanced-cache.php` file.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @note Many of the Quick Cache option values become PHP Constants in the `advanced-cache.php` file.
+					 *    We take an option key (e.g. `version_salt`) and prefix it with `quick_cache_`.
+					 *    Then we convert it to uppercase (e.g. `QUICK_CACHE_VERSION_SALT`) and wrap
+					 *    it with double percent signs to form a replacement codes.
+					 *    ex: `%%QUICK_CACHE_VERSION_SALT%%`
+					 *
+					 * @note There are a few special options considered by this routine which actually
+					 *    get converted to regex patterns before they become replacement codes.
+					 *
+					 * @note In the case of a version salt, a PHP syntax is performed also.
+					 *
+					 * @return boolean|null Returns `TRUE` on success. `FALSE` or `NULL` on failure.
+					 *    A special `NULL` return value indicates success with a single failure
+					 *    that is specifically related to the `qc-advanced-cache` file.
+					 */
 					public function add_advanced_cache()
 						{
 							if(!$this->remove_advanced_cache())
