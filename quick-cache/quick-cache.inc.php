@@ -100,6 +100,8 @@ namespace quick_cache
 
 					/**
 					 * Quick Cache plugin constructor.
+					 *
+					 * @since 140422 First documented version.
 					 */
 					public function __construct()
 						{
@@ -114,6 +116,11 @@ namespace quick_cache
 							register_deactivation_hook($this->file, array($this, 'deactivate'));
 						}
 
+					/**
+					 * Setup the Quick Cache plugin.
+					 *
+					 * @since 140422 First documented version.
+					 */
 					public function setup()
 						{
 							do_action('before__'.__METHOD__, get_defined_vars());
@@ -249,12 +256,25 @@ namespace quick_cache
 							do_action(__METHOD__.'_complete', get_defined_vars());
 						}
 
-					/** @return \wpdb Reference for IDEs. */
+					/**
+					 * WordPress database instance.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @return \wpdb Reference for IDEs.
+					 */
 					public function wpdb() // Shortcut for other routines.
 						{
 							return $GLOBALS['wpdb'];
 						}
 
+					/**
+					 * Plugin activation hook.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @attaches-to {@link \register_activation_hook()}
+					 */
 					public function activate()
 						{
 							$this->setup(); // Setup routines.
@@ -268,6 +288,13 @@ namespace quick_cache
 							$this->auto_clear_cache();
 						}
 
+					/**
+					 * Check current plugin version that installed in WP.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @attaches-to `admin_init` hook.
+					 */
 					public function check_version()
 						{
 							if(version_compare($this->options['version'], $this->version, '>='))
@@ -291,6 +318,13 @@ namespace quick_cache
 							update_option(__NAMESPACE__.'_notices', $notices);
 						}
 
+					/**
+					 * Display notice to site owners using a really old version of Quick Cache.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @attaches-to `admin_init` hook.
+					 */
 					public function rewrite_notice()
 						{
 							if(!get_option('ws_plugin__qcache_configured'))
@@ -303,6 +337,13 @@ namespace quick_cache
 							update_option(__NAMESPACE__.'_notices', $notices);
 						}
 
+					/**
+					 * Plugin deactivation hook.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @attaches-to {@link \register_deactivation_hook()}
+					 */
 					public function deactivate()
 						{
 							$this->remove_wp_cache_from_wp_config();
@@ -325,6 +366,13 @@ namespace quick_cache
 							wp_clear_scheduled_hook('_cron_'.__NAMESPACE__.'_cleanup');
 						}
 
+					/**
+					 * Current request is for a pro version preview?
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @return boolean TRUE if the current request is for a pro preview.
+					 */
 					public function is_pro_preview()
 						{
 							static $is;
@@ -336,6 +384,16 @@ namespace quick_cache
 							return ($is = FALSE);
 						}
 
+					/**
+					 * URL to a Quick Cache plugin file.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @param string $file Optional file path; relative to plugin directory.
+					 * @param string $scheme Optional URL scheme; defaults to the current scheme.
+					 *
+					 * @return string URL to plugin directory; or to the specified `$file` if applicable.
+					 */
 					public function url($file = '', $scheme = '')
 						{
 							static $plugin_directory; // Static cache.
