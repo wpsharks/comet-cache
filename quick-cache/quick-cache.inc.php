@@ -409,11 +409,29 @@ namespace quick_cache
 							return apply_filters(__METHOD__, $url, get_defined_vars());
 						}
 
+					/**
+					 * Escape single quotes.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @param string  $string Input string to escape.
+					 * @param integer $times Optional. Defaults to one escape char; e.g. `\'`.
+					 *    If you need to escape more than once, set this to something > `1`.
+					 *
+					 * @return string Escaped string; e.g. `Raam\'s the lead developer`.
+					 */
 					public function esc_sq($string, $times = 1)
 						{
 							return str_replace("'", str_repeat('\\', abs($times))."'", (string)$string);
 						}
 
+					/**
+					 * Plugin action handler.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @attaches-to `wp_loaded` hook.
+					 */
 					public function actions()
 						{
 							if(empty($_REQUEST[__NAMESPACE__])) return;
@@ -421,6 +439,13 @@ namespace quick_cache
 							require_once dirname(__FILE__).'/includes/actions.php';
 						}
 
+					/**
+					 * Adds CSS for administrative menu pages.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @attaches-to `admin_enqueue_scripts` hook.
+					 */
 					public function enqueue_admin_styles()
 						{
 							if(empty($_GET['page']) || strpos($_GET['page'], __NAMESPACE__) !== 0)
@@ -431,6 +456,13 @@ namespace quick_cache
 							wp_enqueue_style(__NAMESPACE__, $this->url('/client-s/css/menu-pages.min.css'), $deps, $this->version, 'all');
 						}
 
+					/**
+					 * Adds JS for administrative menu pages.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @attaches-to `admin_enqueue_scripts` hook.
+					 */
 					public function enqueue_admin_scripts()
 						{
 							if(empty($_GET['page']) || strpos($_GET['page'], __NAMESPACE__) !== 0)
