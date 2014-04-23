@@ -1393,6 +1393,17 @@ namespace quick_cache
 							return $value; // Pass through untouched (always).
 						}
 
+					/**
+					 * Adds link(s) to Quick Cache row on the WP plugins page.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @attaches-to `plugin_action_links_'.plugin_basename($this->file)` filter.
+					 *
+					 * @param array $links An array of the existing links provided by WordPress.
+					 *
+					 * @return array Revised array of links.
+					 */
 					public function add_settings_link($links)
 						{
 							$links[] = '<a href="options-general.php?page='.urlencode(__NAMESPACE__).'">'.__('Settings', $this->text_domain).'</a>';
@@ -1403,18 +1414,103 @@ namespace quick_cache
 						}
 
 					/*
-					 * See also: `advanced-cache.tpl.php` duplicate.
+					 * See also: `advanced-cache.tpl.php` duplicate of this section.
+					 *    @TODO Find a way to centralize this section so it can be shared between both classes easily.
 					 */
-					const CACHE_PATH_NO_SCHEME = 1; // Exclude scheme.
-					const CACHE_PATH_NO_HOST = 2; // Exclude host (i.e. domain name).
-					const CACHE_PATH_NO_PATH = 4; // Exclude path (i.e. the request URI).
-					const CACHE_PATH_NO_PATH_INDEX = 8; // Exclude path index (i.e. no default `index`).
-					const CACHE_PATH_NO_QUV = 16; // Exclude query, user & version salt.
-					const CACHE_PATH_NO_QUERY = 32; // Exclude query string.
-					const CACHE_PATH_NO_USER = 64; // Exclude user token.
-					const CACHE_PATH_NO_VSALT = 128; // Exclude version salt.
-					const CACHE_PATH_NO_EXT = 256; // Exclude extension.
 
+					/**
+					 * Exclude scheme from cache path.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @var integer Part of a bitmask.
+					 */
+					const CACHE_PATH_NO_SCHEME = 1;
+
+					/**
+					 * Exclude host (i.e. domain name) from cache path.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @var integer Part of a bitmask.
+					 */
+					const CACHE_PATH_NO_HOST = 2;
+
+					/**
+					 * Exclude path from cache path.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @var integer Part of a bitmask.
+					 */
+					const CACHE_PATH_NO_PATH = 4;
+
+					/**
+					 * Exclude path index (i.e. no default `index`) from cache path.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @var integer Part of a bitmask.
+					 */
+					const CACHE_PATH_NO_PATH_INDEX = 8;
+
+					/**
+					 * Exclude query, user & version salt from cache path.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @var integer Part of a bitmask.
+					 */
+					const CACHE_PATH_NO_QUV = 16;
+
+					/**
+					 * Exclude query string from cache path.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @var integer Part of a bitmask.
+					 */
+					const CACHE_PATH_NO_QUERY = 32;
+
+					/**
+					 * Exclude user token from cache path.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @var integer Part of a bitmask.
+					 */
+					const CACHE_PATH_NO_USER = 64;
+
+					/**
+					 * Exclude version salt from cache path.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @var integer Part of a bitmask.
+					 */
+					const CACHE_PATH_NO_VSALT = 128;
+
+					/**
+					 * Exclude extension from cache path.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @var integer Part of a bitmask.
+					 */
+					const CACHE_PATH_NO_EXT = 256;
+
+					/**
+					 * Converts a URL into a `cache/path`.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @param string  $url The input URL to convert.
+					 * @param string  $with_user_token Optional user token (if applicable).
+					 * @param string  $with_version_salt Optional version salt (if applicable).
+					 * @param integer $flags Optional flags; a bitmask provided by `CACHE_PATH_*` constants.
+					 *
+					 * @return string The resulting `cache/path` based on the input `$url`.
+					 */
 					public function url_to_cache_path($url, $with_user_token = '', $with_version_salt = '', $flags = 0)
 						{
 							$cache_path        = ''; // Initialize.

@@ -534,17 +534,103 @@ namespace quick_cache // Root namespace.
 			 * See also: `quick-cache.inc.php` duplicate.
 			 * NOTE: the call to `is_ssl()` in this duplicate uses `$this->is_ssl()` because `is_ssl()`
 			 *    may NOT be available in this routine; i.e. it's not been loaded up yet.
+			 *
+			 * @TODO Find a way to centralize this section so it can be shared between both classes easily.
 			 */
-			const CACHE_PATH_NO_SCHEME = 1; // Exclude scheme.
-			const CACHE_PATH_NO_HOST = 2; // Exclude host (i.e. domain name).
-			const CACHE_PATH_NO_PATH = 4; // Exclude path (i.e. the request URI).
-			const CACHE_PATH_NO_PATH_INDEX = 8; // Exclude path index (i.e. no default `index`).
-			const CACHE_PATH_NO_QUV = 16; // Exclude query, user & version salt.
-			const CACHE_PATH_NO_QUERY = 32; // Exclude query string.
-			const CACHE_PATH_NO_USER = 64; // Exclude user token.
-			const CACHE_PATH_NO_VSALT = 128; // Exclude version salt.
-			const CACHE_PATH_NO_EXT = 256; // Exclude extension.
 
+			/**
+			 * Exclude scheme from cache path.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var integer Part of a bitmask.
+			 */
+			const CACHE_PATH_NO_SCHEME = 1;
+
+			/**
+			 * Exclude host (i.e. domain name) from cache path.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var integer Part of a bitmask.
+			 */
+			const CACHE_PATH_NO_HOST = 2;
+
+			/**
+			 * Exclude path from cache path.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var integer Part of a bitmask.
+			 */
+			const CACHE_PATH_NO_PATH = 4;
+
+			/**
+			 * Exclude path index (i.e. no default `index`) from cache path.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var integer Part of a bitmask.
+			 */
+			const CACHE_PATH_NO_PATH_INDEX = 8;
+
+			/**
+			 * Exclude query, user & version salt from cache path.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var integer Part of a bitmask.
+			 */
+			const CACHE_PATH_NO_QUV = 16;
+
+			/**
+			 * Exclude query string from cache path.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var integer Part of a bitmask.
+			 */
+			const CACHE_PATH_NO_QUERY = 32;
+
+			/**
+			 * Exclude user token from cache path.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var integer Part of a bitmask.
+			 */
+			const CACHE_PATH_NO_USER = 64;
+
+			/**
+			 * Exclude version salt from cache path.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var integer Part of a bitmask.
+			 */
+			const CACHE_PATH_NO_VSALT = 128;
+
+			/**
+			 * Exclude extension from cache path.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var integer Part of a bitmask.
+			 */
+			const CACHE_PATH_NO_EXT = 256;
+
+			/**
+			 * Converts a URL into a `cache/path`.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @param string  $url The input URL to convert.
+			 * @param string  $with_user_token Optional user token (if applicable).
+			 * @param string  $with_version_salt Optional version salt (if applicable).
+			 * @param integer $flags Optional flags; a bitmask provided by `CACHE_PATH_*` constants.
+			 *
+			 * @return string The resulting `cache/path` based on the input `$url`.
+			 */
 			public function url_to_cache_path($url, $with_user_token = '', $with_version_salt = '', $flags = 0)
 				{
 					$cache_path        = ''; // Initialize.
