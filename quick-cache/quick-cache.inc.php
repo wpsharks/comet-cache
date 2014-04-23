@@ -51,13 +51,57 @@ namespace quick_cache
 					 */
 					public $version = '140104';
 
-					public $text_domain = ''; // Defined by class constructor.
-					public $default_options = array(); // Defined @ setup.
-					public $options = array(); // Defined @ setup.
-					public $network_cap = ''; // Defined @ setup.
-					public $cap = ''; // Defined @ setup.
+					/**
+					 * Plugin text domain for translations.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @var string Plugin text domain; set by constructor.
+					 */
+					public $text_domain = '';
 
-					public function __construct() // Constructor.
+					/**
+					 * An array of all default option values.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @var array Default options array; set by constructor.
+					 */
+					public $default_options = array();
+
+					/**
+					 * Configured option values.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @var array Options configured by site owner; set by constructor.
+					 */
+					public $options = array();
+
+					/**
+					 * Network capability requirement.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @var string WordPress capability required to
+					 *    administer QC in a multisite network.
+					 */
+					public $network_cap = '';
+
+					/**
+					 * General capability requirement.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @var string WordPress capability required to
+					 *    administer QC in any environment; i.e. in multisite or otherwise.
+					 */
+					public $cap = '';
+
+					/**
+					 * Quick Cache plugin constructor.
+					 */
+					public function __construct()
 						{
 							if(strpos(__NAMESPACE__, '\\') !== FALSE) // Sanity check.
 								throw new \exception('Not a root namespace: `'.__NAMESPACE__.'`.');
