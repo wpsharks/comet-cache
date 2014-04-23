@@ -1,12 +1,26 @@
 <?php
-namespace quick_cache // Root namespace.
+/**
+ * Quick Cache Plugin
+ *
+ * @package quick_cache\plugin
+ * @since 140422 First documented version.
+ * @copyright WebSharks, Inc. <http://www.websharks-inc.com>
+ * @license GNU General Public License, version 2
+ */
+namespace quick_cache
 	{
 		if(!defined('WPINC')) // MUST have WordPress.
 			exit('Do NOT access this file directly: '.basename(__FILE__));
 
 		if(!class_exists('\\'.__NAMESPACE__.'\\plugin'))
 			{
-				class plugin // Base plugin class.
+				/**
+				 * Quick Cache Plugin
+				 *
+				 * @package quick_cache\plugin
+				 * @since 140422 First documented version.
+				 */
+				class plugin
 				{
 					/**
 					 * Pro version flag.
