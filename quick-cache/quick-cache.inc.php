@@ -508,8 +508,8 @@ namespace quick_cache
 					 *
 					 * @since 140422 First documented version.
 					 *
-					 * @see {@link add_network_menu_pages()}
-					 * @see {@link add_menu_pages()}
+					 * @see add_network_menu_pages()
+					 * @see add_menu_pages()
 					 */
 					public function menu_page_options()
 						{
@@ -518,6 +518,13 @@ namespace quick_cache
 							$menu_pages->options();
 						}
 
+					/**
+					 * Render admin notices; across all admin dashboard views.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @attaches-to `all_admin_notices` hook.
+					 */
 					public function all_admin_notices()
 						{
 							if(($notices = (is_array($notices = get_option(__NAMESPACE__.'_notices'))) ? $notices : array()))
@@ -544,6 +551,13 @@ namespace quick_cache
 							unset($_key, $_notice, $_dismiss_css, $_dismiss); // Housekeeping.
 						}
 
+					/**
+					 * Render admin errors; across all admin dashboard views.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @attaches-to `all_admin_notices` hook.
+					 */
 					public function all_admin_errors()
 						{
 							if(($errors = (is_array($errors = get_option(__NAMESPACE__.'_errors'))) ? $errors : array()))
@@ -570,6 +584,17 @@ namespace quick_cache
 							unset($_key, $_error, $_dismiss_css, $_dismiss); // Housekeeping.
 						}
 
+					/**
+					 * Extends WP-Cron schedules.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @attaches-to `cron_schedules` filter.
+					 *
+					 * @param array $schedules An array of the current schedules.
+					 *
+					 * @return array Revised array of WP-Cron schedules.
+					 */
 					public function extend_cron_schedules($schedules)
 						{
 							$schedules['every15m'] = array('interval' => 900, 'display' => __('Every 15 Minutes', $this->text_domain));
@@ -577,6 +602,18 @@ namespace quick_cache
 							return apply_filters(__METHOD__, $schedules, get_defined_vars());
 						}
 
+					/**
+					 * Wipes out all cache files in the cache directory.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @param boolean $manually Defaults to a `FALSE` value.
+					 *    Pass as TRUE if the wipe is done manually by the site owner.
+					 *
+					 * @return integer Total files wiped by this routine (if any).
+					 *
+					 * @throws \exception If a wipe failure occurs.
+					 */
 					public function wipe_cache($manually = FALSE)
 						{
 							$counter = 0; // Initialize.
