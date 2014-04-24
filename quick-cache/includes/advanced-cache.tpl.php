@@ -8,36 +8,82 @@ namespace quick_cache // Root namespace.
 		 * This file serves as a template for the Quick Cache plugin in WordPress.
 		 * The Quick Cache plugin will fill the `%%` replacement codes automatically.
 		 *    e.g. this file becomes: `/wp-content/advanced-cache.php`.
-		 *
-		 * Or, if you prefer; you can set the PHP constants below in your `/wp-config.php` file.
-		 * Then, you could simply drop this file into: `/wp-content/advanced-cache.php` on your own :-)
-		 * ~ Be sure to setup a CRON job that clears your `QUICK_CACHE_DIR` periodically.
 		 */
 
 		/*
 		 * Quick Cache configuration constants.
 		 * ----------------------------------------------------------------------------
 		 */
-		/*
-		 * These work as boolean flags.
-		 */
-		if(!defined('QUICK_CACHE_ENABLE')) define('QUICK_CACHE_ENABLE', '%%QUICK_CACHE_ENABLE%%');
-		if(!defined('QUICK_CACHE_DEBUGGING_ENABLE')) define('QUICK_CACHE_DEBUGGING_ENABLE', '%%QUICK_CACHE_DEBUGGING_ENABLE%%');
-		if(!defined('QUICK_CACHE_ALLOW_BROWSER_CACHE')) define('QUICK_CACHE_ALLOW_BROWSER_CACHE', '%%QUICK_CACHE_ALLOW_BROWSER_CACHE%%');
-		if(!defined('QUICK_CACHE_GET_REQUESTS')) define('QUICK_CACHE_GET_REQUESTS', '%%QUICK_CACHE_GET_REQUESTS%%');
-		if(!defined('QUICK_CACHE_FEEDS_ENABLE')) define('QUICK_CACHE_FEEDS_ENABLE', '%%QUICK_CACHE_FEEDS_ENABLE%%');
-		if(!defined('QUICK_CACHE_CACHE_404_REQUESTS')) define('QUICK_CACHE_CACHE_404_REQUESTS', '%%QUICK_CACHE_CACHE_404_REQUESTS%%');
 
-		/*
-		 * Cache directory. Max age; e.g. `7 days` — anything compatible w/ `strtotime()`.
+		/**
+		 * Is this Quick Cache Pro?
+		 *
+		 * @since 140422 First documented version.
+		 *
+		 * @var string|integer|boolean A boolean-ish value; e.g. `1` or `0`.
 		 */
-		if(!defined('QUICK_CACHE_DIR')) define('QUICK_CACHE_DIR', ABSPATH.'%%QUICK_CACHE_DIR%%');
-		if(!defined('QUICK_CACHE_MAX_AGE')) define('QUICK_CACHE_MAX_AGE', '%%QUICK_CACHE_MAX_AGE%%');
+		define('QUICK_CACHE_PRO', FALSE); // Note that we do NOT check `if(defined())` here.
+
+		if(!defined('QUICK_CACHE_ENABLE'))
+			/**
+			 * Is Quick Cache enabled?
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string|integer|boolean A boolean-ish value; e.g. `1` or `0`.
+			 */
+			define('QUICK_CACHE_ENABLE', '%%QUICK_CACHE_ENABLE%%');
+
+		if(!defined('QUICK_CACHE_DEBUGGING_ENABLE'))
+			/**
+			 * Is Quick Cache debugging enabled?
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string|integer|boolean A boolean-ish value; e.g. `1` or `0`.
+			 */
+			define('QUICK_CACHE_DEBUGGING_ENABLE', '%%QUICK_CACHE_DEBUGGING_ENABLE%%');
+
+		if(!defined('QUICK_CACHE_ALLOW_BROWSER_CACHE'))
+			/**
+			 * Should Quick Cache allow browsers to cache each document?
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string|integer|boolean A boolean-ish value; e.g. `1` or `0`.
+			 *
+			 * @note If this is a `FALSE` (or an empty) value; Quick Cache will send no-cache headers.
+			 *    If `TRUE`, Quick Cache will NOT send no-cache headers.
+			 */
+			define('QUICK_CACHE_ALLOW_BROWSER_CACHE', '%%QUICK_CACHE_ALLOW_BROWSER_CACHE%%');
+
+		if(!defined('QUICK_CACHE_GET_REQUESTS'))
+			define('QUICK_CACHE_GET_REQUESTS', '%%QUICK_CACHE_GET_REQUESTS%%');
+
+		if(!defined('QUICK_CACHE_FEEDS_ENABLE'))
+			define('QUICK_CACHE_FEEDS_ENABLE', '%%QUICK_CACHE_FEEDS_ENABLE%%');
+
+		if(!defined('QUICK_CACHE_CACHE_404_REQUESTS'))
+			define('QUICK_CACHE_CACHE_404_REQUESTS', '%%QUICK_CACHE_CACHE_404_REQUESTS%%');
+
+		if(!defined('QUICK_CACHE_DIR'))
+			/**
+			 * Directory used to store cache files; relative to `ABSPATH`.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string Directory relative to `ABSPATH`.
+			 */
+			define('QUICK_CACHE_DIR', ABSPATH.'%%QUICK_CACHE_DIR%%');
+
+		if(!defined('QUICK_CACHE_MAX_AGE'))
+			define('QUICK_CACHE_MAX_AGE', '%%QUICK_CACHE_MAX_AGE%%');
 
 		/*
 		 * A unique filename for the special 404 Cache File (used when 404 caching is enabled).
 		 */
-		if(!defined('QUICK_CACHE_404_CACHE_FILENAME')) define('QUICK_CACHE_404_CACHE_FILENAME', '----404----');
+		if(!defined('QUICK_CACHE_404_CACHE_FILENAME'))
+			define('QUICK_CACHE_404_CACHE_FILENAME', '----404----');
 
 		/*
 		 * The heart of Quick Cache.
