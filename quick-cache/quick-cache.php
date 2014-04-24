@@ -16,12 +16,6 @@ Speed up your site (BIG time!) — Quick Cache provides reliable page caching fo
 if(!defined('WPINC')) // MUST have WordPress.
 	exit('Do NOT access this file directly: '.basename(__FILE__));
 
-if(version_compare(PHP_VERSION, '5.3', '<'))
-	{
-		function quick_cache_php53_dashboard_notice()
-			{
-				echo __('<div class="error"><p>Plugin NOT active. This version of Quick Cache requires PHP v5.3+.</p></div>', 'quick-cache');
-			}
-		add_action('all_admin_notices', 'quick_cache_php53_dashboard_notice');
-	}
-else require_once dirname(__FILE__).'/quick-cache.inc.php';
+if(require(dirname(__FILE__).'/includes/wp-php53.php')) // TRUE if running PHP v5.3+.
+	require_once dirname(__FILE__).'/quick-cache.inc.php';
+else wp_php53_notice('Quick Cache');
