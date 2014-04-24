@@ -784,11 +784,56 @@ namespace quick_cache
 						$this->plugin_file = plugin()->file;
 				}
 
+			/**
+			 * This turns off `E_NOTICE` level errors in the shutdown phase to prevent the WP core function
+			 *    {@link \wp_ob_end_flush_all()} from triggering `WP_DEBUG` notices.
+			 *
+			 *    Ideally we would NOT do this. However, there is little choice.
+			 *    This is what makes it possible for Quick Cache to use a locked output buffer.
+			 *    e.g. `ob_start(handler, 0, 0)`. Having a locked output buffer makes Quick Cache more dependable.
+			 *
+			 *    In cases where there are theme/plugin conflicts, more of these should be reported to us now; i.e. site owners may
+			 *    report `WP_DEBUG` notices regarding failed attempts to close/clean/flush an out-of-order output handler.
+			 *    These can be caused by a rogue theme/plugin that is doing things w/ buffers that it should not be.
+			 *
+			 *    The disabling of `E_NOTICE` here only impacts the PHP shutdown phase.
+			 *    i.e. Anything registered in PHP via {@link \register_shutdown_function()}.
+			 *    e.g. {@link \wp_ob_end_flush_all()} runs in the shutdown phase.
+			 *
+			 *    This will NOT prevent `E_NOTICE` level errors from being triggered when a
+			 *    theme/plugin does something out-of-order with an output buffer. Want WANT to see those!
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @IMPORTANT I suspect we will see some reports of this suddenly showing up on sites where a conflict currently exists.
+			 *    Of course, that will be a GOOD thing in most cases, because QC will have not been working properly for sites with conflicts anyway.
+			 *    Having said that, a sudden change like this could bring a site down completely, instead of just serving a corrupted cache every once in awhile.
+			 *    I'm not overly concerned about it though, because they're just notices; a site running in `WP_DEBUG` mode is usually not a live site anyway.
+			 *
+			 * @see https://github.com/WebSharks/Quick-Cache/issues/97
+			 */
 			public function disable_wp_ob_end_flush_all_e_notice()
 				{
 					error_reporting(error_reporting() & ~E_NOTICE);
 				}
 
+			/**
+			 * Output buffer handler; i.e. the cache file generator.
+			 *
+			 * @note We CANNOT depend on any WP functionality here; it will cause problems.
+			 *    Anything we need from WP should be saved in the postload phase as a scalar value.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @param string  $buffer The buffer from {@link \ob_start()}.
+			 * @param integer $phase A set of bitmask flags.
+			 *
+			 * @return string|boolean The output buffer, or `FALSE` to indicate no change.
+			 *
+			 * @throws \exception If unable to handle output buffering for any reason.
+			 *
+			 * @attaches-to {@link \ob_start()}
+			 */
 			public function output_buffer_callback_handler($buffer, $phase)
 				{
 					if($phase !== (PHP_OUTPUT_HANDLER_START | PHP_OUTPUT_HANDLER_END))
@@ -885,6 +930,17 @@ namespace quick_cache
 					throw new \exception(sprintf(__('Quick Cache: failed to write cache file for: `%1$s`; possible permissions issue (or race condition), please check your cache directory: `%2$s`.', $this->text_domain), $_SERVER['REQUEST_URI'], QUICK_CACHE_DIR));
 				}
 
+			/**
+			 * Appends `NC_DEBUG_` info (if applicable).
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @param string $doc Input string to append debug info to.
+			 * @param string $reason_code One of the `NC_DEBUG_` constants.
+			 * @param string $reason Optional; to override the default description with a custom message.
+			 *
+			 * @return string The `$doc` with debug info appended (if applicable).
+			 */
 			public function maybe_add_nc_debug_info($doc = NULL, $reason_code = '', $reason = '')
 				{
 					if(!QUICK_CACHE_DEBUGGING_ENABLE)
@@ -1004,11 +1060,8 @@ namespace quick_cache
 				}
 
 			/*
-			 * See also: `quick-cache.inc.php` duplicate.
-			 * NOTE: the call to `is_ssl()` in this duplicate uses `$this->is_ssl()` because `is_ssl()`
-			 *    may NOT be available in this routine; i.e. it's not been loaded up yet.
-			 *
-			 * @TODO Find a way to centralize this section so it can be shared between both classes easily.
+			 * See also: `quick-cache.inc.php` duplicates.
+			 *    @TODO Find a way to centralize this section so it can be shared between both classes easily.
 			 */
 
 			/**
@@ -1233,6 +1286,15 @@ namespace quick_cache
 					return ($tokens[$dashify] = $token_value);
 				}
 
+			/**
+			 * Is the current request method `POST|PUT|DELETE`?
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @return boolean `TRUE` if yes; else `FALSE`.
+			 *
+			 * @note The return value of this function is cached to reduce overhead on repeat calls.
+			 */
 			public function is_post_put_del_request()
 				{
 					static $is; // Cache.
