@@ -220,6 +220,8 @@ namespace quick_cache
 							add_action('delete_post', array($this, 'auto_purge_post_cache'));
 							add_action('clean_post_cache', array($this, 'auto_purge_post_cache'));
 
+							add_action('transition_post_status', array($this, 'auto_purge_post_cache_transition'), 10, 3);
+
 							add_action('added_term_relationship', array($this, 'auto_purge_post_terms_cache'), 10, 1);
 							add_action('delete_term_relationships', array($this, 'auto_purge_post_terms_cache'), 10, 1);
 
@@ -812,6 +814,9 @@ namespace quick_cache
 					 * @since 140422 First documented version.
 					 *
 					 * @param integer $id A WordPress post ID.
+					 * @param bool $force_purge Defaults to a `FALSE` value.
+					 *    Pass as TRUE if purge should be done for `draft`, `pending`,
+					 *    or `future` post statuses.
 					 *
 					 * @return integer Total files purged by this routine (if any).
 					 *
@@ -821,8 +826,9 @@ namespace quick_cache
 					 *    events that are indirectly associated with a post ID.
 					 *
 					 * @see auto_purge_comment_post_cache()
+					 * @see auto_purge_post_cache_transition()
 					 */
-					public function auto_purge_post_cache($id)
+					public function auto_purge_post_cache($id, $force_purge=FALSE)
 						{
 							$counter = 0; // Initialize.
 
@@ -833,6 +839,15 @@ namespace quick_cache
 								return $counter; // Nothing to do.
 
 							if(get_post_status($id) == 'auto-draft')
+								return $counter; // Nothing to do.
+
+							if(get_post_status($id) == 'draft' && !$force_purge)
+								return $counter; // Nothing to do.
+
+							if(get_post_status($id) == 'pending' && !$force_purge)
+								return $counter; // Nothing to do.
+
+							if(get_post_status($id) == 'future' && !$force_purge)
 								return $counter; // Nothing to do.
 
 							$cache_dir = ABSPATH.$this->options['cache_dir'];
@@ -877,6 +892,42 @@ namespace quick_cache
 
 							return apply_filters(__METHOD__, $counter, get_defined_vars());
 						}
+
+					/**
+					 * Automatically purge cache files for a particular post when transitioning
+					 *    from `publish` or `private` post status to `draft`, `future`, or `private`.
+					 *
+					 * @attaches-to `transition_post_status` hook.
+					 *
+					 * @since 14xxxx First documented version.
+					 *
+					 * @param string  $new_status New post status.
+					 * @param string  $old_status Old post status.
+					 * @param object  $post       Post object.
+					 *
+					 * @return integer Total files purged by this routine (if any).
+					 *
+					 * @throws \exception If a purge failure occurs.
+					 *
+					 * @note This is also called upon by other routines which listen for
+					 *    events that are indirectly associated with a post ID.
+					 *
+					 * @see auto_purge_comment_post_cache()
+					 */
+					public function auto_purge_post_cache_transition($new_status, $old_status, $post) {
+						$counter = 0; // Initialize.
+
+						if(!$this->options['enable'])
+							return $counter; // Nothing to do.
+
+						if($old_status !== 'publish' && $old_status !== 'private')
+							return $counter; // Nothing to do.
+
+						if($new_status === 'draft' || $new_status === 'future' || $new_status === 'private')
+							$counter = $this->auto_purge_post_cache($post->ID, $force_purge=TRUE);
+
+						return apply_filters(__METHOD__, $counter, get_defined_vars());
+					}
 
 					/**
 					 * Automatically purges cache files for the home page.
