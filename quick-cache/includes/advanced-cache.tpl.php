@@ -689,6 +689,18 @@ namespace quick_cache // Root namespace.
 					return $cache_path;
 				}
 
+			/**
+			 * Produces a token based on the current `$_SERVER['HTTP_HOST']`.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @param boolean $dashify Optional, defaults to a `FALSE` value.
+			 *    If `TRUE`, the token is returned with dashes in place of `[^a-z0-9\/]`.
+			 *
+			 * @return string Token based on the current `$_SERVER['HTTP_HOST']`.
+			 *
+			 * @note The return value of this function is cached to reduce overhead on repeat calls.
+			 */
 			public function host_token($dashify = FALSE)
 				{
 					$dashify = (integer)$dashify;
@@ -701,6 +713,22 @@ namespace quick_cache // Root namespace.
 					return ($tokens[$dashify] = $token_value);
 				}
 
+			/**
+			 * Produces a token based on the current blog sub-directory
+			 *    (i.e. in the case of a sub-directory multisite network).
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @param boolean $dashify Optional, defaults to a `FALSE` value.
+			 *    If `TRUE`, the token is returned with dashes in place of `[^a-z0-9\/]`.
+			 *
+			 * @return string Produces a token based on the current blog sub-directory
+			 *    (i.e. in the case of a sub-directory multisite network).
+			 *
+			 * @note The return value of this function is cached to reduce overhead on repeat calls.
+			 *
+			 * @see plugin\update_blog_paths()
+			 */
 			public function host_dir_token($dashify = FALSE)
 				{
 					$dashify = (integer)$dashify;
