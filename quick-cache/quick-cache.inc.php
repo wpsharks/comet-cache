@@ -131,24 +131,27 @@ namespace quick_cache
 								rtrim(str_replace(ABSPATH, '', WP_CONTENT_DIR), '/'); // No trailing slash.
 
 							$this->default_options = array( // Default options.
-							                                'version'                       => $this->version,
+							                                'version'                          => $this->version,
 
-							                                'crons_setup'                   => '0', // `0` or timestamp.
+							                                'crons_setup'                      => '0', // `0` or timestamp.
 
-							                                'enable'                        => '0', // `0|1`.
-							                                'debugging_enable'              => '1', // `0|1`.
-							                                'cache_purge_home_page_enable'  => '1', // `0|1`.
-							                                'cache_purge_posts_page_enable' => '1', // `0|1`.
-							                                'allow_browser_cache'           => '0', // `0|1`.
+							                                'enable'                           => '0', // `0|1`.
+							                                'debugging_enable'                 => '1', // `0|1`.
+							                                'cache_purge_home_page_enable'     => '1', // `0|1`.
+							                                'cache_purge_posts_page_enable'    => '1', // `0|1`.
+							                                'cache_purge_term_category_enable' => '1', // `0|1`.
+							                                'cache_purge_term_post_tag_enable' => '1', // `0|1`.
+							                                'cache_purge_term_other_enable'    => '1', // `0|1`.
+							                                'allow_browser_cache'              => '0', // `0|1`.
 
-							                                'cache_dir'                     => $wp_content_dir_relative.'/cache',
-							                                'cache_max_age'                 => '7 days', // `strtotime()` compatible.
+							                                'cache_dir'                        => $wp_content_dir_relative.'/cache',
+							                                'cache_max_age'                    => '7 days', // `strtotime()` compatible.
 
-							                                'get_requests'                  => '0', // `0|1`.
-							                                'feeds_enable'                  => '0', // `0|1`.
-							                                'cache_404_requests'            => '0', // `0|1`.
+							                                'get_requests'                     => '0', // `0|1`.
+							                                'feeds_enable'                     => '0', // `0|1`.
+							                                'cache_404_requests'               => '0', // `0|1`.
 
-							                                'uninstall_on_deactivation'     => '0' // `0|1`.
+							                                'uninstall_on_deactivation'        => '0' // `0|1`.
 							); // Default options are merged with those defined by the site owner.
 							$options               = (is_array($options = get_option(__NAMESPACE__.'_options'))) ? $options : array();
 							if(is_multisite() && is_array($site_options = get_site_option(__NAMESPACE__.'_options')))
@@ -216,6 +219,9 @@ namespace quick_cache
 							add_action('save_post', array($this, 'auto_purge_post_cache'));
 							add_action('delete_post', array($this, 'auto_purge_post_cache'));
 							add_action('clean_post_cache', array($this, 'auto_purge_post_cache'));
+
+							add_action('added_term_relationship', array($this, 'auto_purge_post_terms_cache'), 10, 1);
+							add_action('delete_term_relationships', array($this, 'auto_purge_post_terms_cache'), 10, 1);
 
 							add_action('trackback_post', array($this, 'auto_purge_comment_post_cache'));
 							add_action('pingback_post', array($this, 'auto_purge_comment_post_cache'));
@@ -835,6 +841,7 @@ namespace quick_cache
 
 							$counter += $this->auto_purge_home_page_cache(); // If enabled and necessary.
 							$counter += $this->auto_purge_posts_page_cache(); // If enabled & applicable.
+							$counter += $this->auto_purge_post_terms_cache($id); // If enabled and applicable.
 
 							if(!($permalink = get_permalink($id))) return $counter; // Nothing we can do.
 
@@ -858,7 +865,7 @@ namespace quick_cache
 										throw new \exception(sprintf(__('Unable to auto-purge file: `%1$s`.', $this->text_domain), $_file->getPathname()));
 									$counter++; // Increment counter for each file purge.
 
-									if(!empty($_notices) || !$this->options['change_notifications_enable'] || !is_admin())
+									if(!empty($_notices) || !is_admin())
 										continue; // Stop here; we already issued a notice, or this notice is N/A.
 
 									$_notices   = (is_array($_notices = get_option(__NAMESPACE__.'_notices'))) ? $_notices : array();
@@ -914,7 +921,7 @@ namespace quick_cache
 										throw new \exception(sprintf(__('Unable to auto-purge file: `%1$s`.', $this->text_domain), $_file->getPathname()));
 									$counter++; // Increment counter for each file purge.
 
-									if(!empty($_notices) || !$this->options['change_notifications_enable'] || !is_admin())
+									if(!empty($_notices) || !is_admin())
 										continue; // Stop here; we already issued a notice, or this notice is N/A.
 
 									$_notices   = (is_array($_notices = get_option(__NAMESPACE__.'_notices'))) ? $_notices : array();
@@ -983,7 +990,7 @@ namespace quick_cache
 										throw new \exception(sprintf(__('Unable to auto-purge file: `%1$s`.', $this->text_domain), $_file->getPathname()));
 									$counter++; // Increment counter for each file purge.
 
-									if(!empty($_notices) || !$this->options['change_notifications_enable'] || !is_admin())
+									if(!empty($_notices) || !is_admin())
 										continue; // Stop here; we already issued a notice, or this notice is N/A.
 
 									$_notices   = (is_array($_notices = get_option(__NAMESPACE__.'_notices'))) ? $_notices : array();
@@ -992,6 +999,145 @@ namespace quick_cache
 									update_option(__NAMESPACE__.'_notices', $_notices);
 								}
 							unset($_file, $_notices); // Just a little housekeeping.
+
+							return apply_filters(__METHOD__, $counter, get_defined_vars());
+						}
+
+					/**
+					 * Automatically purge cache files for terms associated with a post.
+					 *
+					 * @attaches-to `added_term_relationship` hook.
+					 * @attaches-to `delete_term_relationships` hook.
+					 *
+					 * @since 14XXXX First documented version.
+					 *
+					 * @param integer $id A WordPress post ID.
+					 *
+					 * @return integer Total files purged by this routine (if any).
+					 *
+					 * @throws \exception If a purge failure occurs.
+					 *
+					 * @note In addition to the hooks this is attached to, it is also
+					 *    called upon by {@link auto_purge_post_cache()}.
+					 *
+					 * @see auto_purge_post_cache()
+					 */
+					public function auto_purge_post_terms_cache($id)
+						{
+							$counter = 0; // Initialize
+
+							if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
+								return $counter; // Nothing to do.
+
+							// @TODO Add option to UI to disable clearing term cache when saving as Draft
+							// By default, clearing the tag cache when saving as Draft is enabled because
+							// the post might be going from Published -> Draft, in which case the Tag
+							// archive cache should be updated. Some site-owners might want to disable
+							// this behavior.
+
+							if(!$this->options['enable'])
+								return $counter; // Nothing to do.
+
+							if(!$this->options['cache_purge_term_category_enable'] &&
+							   !$this->options['cache_purge_term_post_tag_enable'] &&
+							   !$this->options['cache_purge_term_other_enable']
+							)
+								return $counter; // Nothing to do.
+
+							if(get_post_status($id) === 'auto-draft')
+								return $counter; // Nothing to do.
+
+							$cache_dir = ABSPATH.$this->options['cache_dir'];
+							if(!is_dir($cache_dir)) return $counter; // Nothing to do.
+
+							/*
+							 * Build an array of available taxonomies for this post (as taxonomy objects)
+							 */
+							$taxonomies = get_object_taxonomies(get_post($id), 'objects');
+							if(!is_array($taxonomies)) return $counter; // Nothing to do
+
+							/*
+							 * Build an array of terms associated with this post for each taxonomy.
+							 * Also save taxonomy label information for Dashboard messaging later.
+							 */
+							$terms           = array();
+							$taxonomy_labels = array();
+							foreach($taxonomies as $_taxonomy)
+								{
+									// Check if this is a term we should purge
+									if($_taxonomy->name === 'category' && !$this->options['cache_purge_term_category_enable'])
+										continue;
+									if($_taxonomy->name === 'post_tag' && !$this->options['cache_purge_term_post_tag_enable'])
+										continue;
+									if($_taxonomy->name !== 'category' && $_taxonomy->name !== 'post_tag' && !$this->options['cache_purge_term_other_enable'])
+										continue;
+
+									if(is_array($_terms = wp_get_post_terms($id, $_taxonomy->name)))
+										{
+											$terms = array_merge($terms, $_terms);
+
+											// Improve Dashboard messaging by getting the Taxonomy label (e.g., "Tag" instead of "post_tag")
+											// If we don't have a Singular Name for this taxonomy, use the taxonomy name itself
+											if(empty($_taxonomy->labels->singular_name) || $_taxonomy->labels->singular_name === '')
+												$taxonomy_labels[$_taxonomy->name] = $_taxonomy->name;
+											else
+												$taxonomy_labels[$_taxonomy->name] = $_taxonomy->labels->singular_name;
+										}
+								}
+							unset($_taxonomy, $_terms);
+							if(empty($terms)) return $counter; // Nothing to do.
+
+							/*
+							 * Build an array of terms with Term Names, Permalinks, and associated Taxonomy labels
+							 */
+							$terms_to_purge = array();
+							$_i         = 0;
+							foreach($terms as $_term)
+								{
+									if(($_link = get_term_link($_term)))
+										{
+											$terms_to_purge[$_i]['permalink'] = $_link; // E.g., "http://jason.websharks-inc.net/category/uncategorized/"
+											$terms_to_purge[$_i]['term_name'] = $_term->name; // E.g., "Uncategorized"
+											if(!empty($taxonomy_labels[$_term->taxonomy])) // E.g., "Tag" or "Category"
+												$terms_to_purge[$_i]['taxonomy_label'] = $taxonomy_labels[$_term->taxonomy];
+											else
+												$terms_to_purge[$_i]['taxonomy_label'] = $_term->taxonomy; // e.g., "post_tag" or "category"
+										}
+									$_i++;
+								}
+							unset($_term, $_link, $_i);
+							if(empty($terms_to_purge)) return $counter; // Nothing to do.
+
+							foreach($terms_to_purge as $_term)
+								{
+									$cache_path_no_scheme_quv_ext = $this->url_to_cache_path($_term['permalink'], '', '', $this::CACHE_PATH_NO_SCHEME | $this::CACHE_PATH_NO_PATH_INDEX | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT);
+									$regex                        = '/^'.preg_quote($cache_dir, '/'). // Consider all schemes; all path paginations; and all possible variations.
+									                                '\/[^\/]+\/'.preg_quote($cache_path_no_scheme_quv_ext, '/').
+									                                '(?:\/index)?(?:\.|\/(?:page|comment\-page)\/[0-9]+[.\/])/';
+
+									$_i = 0;
+									/** @var $_file \RecursiveDirectoryIterator For IDEs. */
+									foreach($this->dir_regex_iteration($cache_dir, $regex) as $_file) if($_file->isFile() || $_file->isLink())
+										{
+											if(strpos($_file->getSubpathname(), '/') === FALSE) continue;
+											// Don't delete files in the immediate directory; e.g. `qc-advanced-cache` or `.htaccess`, etc.
+											// Actual `http|https/...` cache files are nested. Files in the immediate directory are for other purposes.
+
+											if(!unlink($_file->getPathname())) // Throw exception if unable to delete.
+												throw new \exception(sprintf(__('Unable to auto-purge file: `%1$s`.', $this->text_domain), $_file->getPathname()));
+											$counter++; // Increment counter for each file purge.
+
+											if(!is_admin() || $_i > 100)
+												continue; // Stop here; we're at our max number of notices or this notice is N/A.
+
+											$_i++;
+											$_notices   = (is_array($_notices = get_option(__NAMESPACE__.'_notices'))) ? $_notices : array();
+											$_notices[] = '<img src="'.esc_attr($this->url('/client-s/images/clear.png')).'" style="float:left; margin:0 10px 0 0; border:0;" />'.
+											              sprintf(__('<strong>Quick Cache:</strong> detected changes. Found cache files for %1$s: <code>%2$s</code> (auto-purging).', $this->text_domain), $_term['taxonomy_label'], $_term['term_name']);
+											update_option(__NAMESPACE__.'_notices', $_notices);
+										}
+								}
+							unset($_term, $_file, $_notices, $_i); // Just a little housekeeping.
 
 							return apply_filters(__METHOD__, $counter, get_defined_vars());
 						}
