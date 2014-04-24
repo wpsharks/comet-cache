@@ -1,28 +1,29 @@
 <?php
-namespace quick_cache // Root namespace.
+/**
+ * Quick Cache (Advanced Cache Handler)
+ *
+ * This file serves as a template for the Quick Cache plugin in WordPress.
+ * The Quick Cache plugin will fill the `%%` replacement codes automatically.
+ *    This file becomes: `/wp-content/advanced-cache.php`.
+ *
+ * @package quick_cache\advanced_cache
+ * @since 140422 First documented version.
+ * @copyright WebSharks, Inc. <http://www.websharks-inc.com>
+ * @license GNU General Public License, version 2
+ */
+namespace quick_cache
 	{
 		if(!defined('WPINC')) // MUST have WordPress.
 			exit('Do NOT access this file directly: '.basename(__FILE__));
 
-		/*
-		 * This file serves as a template for the Quick Cache plugin in WordPress.
-		 * The Quick Cache plugin will fill the `%%` replacement codes automatically.
-		 *    e.g. this file becomes: `/wp-content/advanced-cache.php`.
-		 */
-
-		/*
-		 * Quick Cache configuration constants.
-		 * ----------------------------------------------------------------------------
-		 */
-
 		/**
-		 * Is this Quick Cache Pro?
+		 * Quick Cache Pro flag.
 		 *
 		 * @since 140422 First documented version.
 		 *
 		 * @var string|integer|boolean A boolean-ish value; e.g. `1` or `0`.
 		 */
-		define('QUICK_CACHE_PRO', FALSE); // Note that we do NOT check `if(defined())` here.
+		define('QUICK_CACHE_PRO', TRUE); // Note that we do NOT check `if(defined())` here.
 
 		if(!defined('QUICK_CACHE_ENABLE'))
 			/**
@@ -46,7 +47,7 @@ namespace quick_cache // Root namespace.
 
 		if(!defined('QUICK_CACHE_ALLOW_BROWSER_CACHE'))
 			/**
-			 * Should Quick Cache allow browsers to cache each document?
+			 * Allow browsers to cache each document?
 			 *
 			 * @since 140422 First documented version.
 			 *
@@ -58,13 +59,34 @@ namespace quick_cache // Root namespace.
 			define('QUICK_CACHE_ALLOW_BROWSER_CACHE', '%%QUICK_CACHE_ALLOW_BROWSER_CACHE%%');
 
 		if(!defined('QUICK_CACHE_GET_REQUESTS'))
+			/**
+			 * Cache `$_GET` requests w/ a query string?
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string|integer|boolean A boolean-ish value; e.g. `1` or `0`.
+			 */
 			define('QUICK_CACHE_GET_REQUESTS', '%%QUICK_CACHE_GET_REQUESTS%%');
 
-		if(!defined('QUICK_CACHE_FEEDS_ENABLE'))
-			define('QUICK_CACHE_FEEDS_ENABLE', '%%QUICK_CACHE_FEEDS_ENABLE%%');
-
 		if(!defined('QUICK_CACHE_CACHE_404_REQUESTS'))
+			/**
+			 * Cache 404 errors?
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string|integer|boolean A boolean-ish value; e.g. `1` or `0`.
+			 */
 			define('QUICK_CACHE_CACHE_404_REQUESTS', '%%QUICK_CACHE_CACHE_404_REQUESTS%%');
+
+		if(!defined('QUICK_CACHE_FEEDS_ENABLE'))
+			/**
+			 * Cache XML/RSS/Atom feeds?
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string|integer|boolean A boolean-ish value; e.g. `1` or `0`.
+			 */
+			define('QUICK_CACHE_FEEDS_ENABLE', '%%QUICK_CACHE_FEEDS_ENABLE%%');
 
 		if(!defined('QUICK_CACHE_DIR'))
 			/**
@@ -72,23 +94,37 @@ namespace quick_cache // Root namespace.
 			 *
 			 * @since 140422 First documented version.
 			 *
-			 * @var string Directory relative to `ABSPATH`.
+			 * @var string Absolute server directory path.
 			 */
 			define('QUICK_CACHE_DIR', ABSPATH.'%%QUICK_CACHE_DIR%%');
 
 		if(!defined('QUICK_CACHE_MAX_AGE'))
+			/**
+			 * Cache expiration time.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string Anything compatible with PHP's {@link \strtotime()}.
+			 */
 			define('QUICK_CACHE_MAX_AGE', '%%QUICK_CACHE_MAX_AGE%%');
 
-		/*
-		 * A unique filename for the special 404 Cache File (used when 404 caching is enabled).
-		 */
 		if(!defined('QUICK_CACHE_404_CACHE_FILENAME'))
+			/**
+			 * 404 file name (if applicable).
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string A unique file name that will not conflict with real paths.
+			 *    This should NOT include the extension; basename only please.
+			 */
 			define('QUICK_CACHE_404_CACHE_FILENAME', '----404----');
 
-		/*
-		 * The heart of Quick Cache.
+		/**
+		 * Quick Cache (Advanced Cache Handler)
+		 *
+		 * @package quick_cache\advanced_cache
+		 * @since 140422 First documented version.
 		 */
-
 		class advanced_cache # `/wp-content/advanced-cache.php`
 		{
 			public $is_pro = FALSE; // Identifies the lite version of Quick Cache.
