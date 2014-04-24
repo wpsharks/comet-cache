@@ -761,6 +761,7 @@ namespace quick_cache // Root namespace.
 									                                '\/[^\/]+\/'.preg_quote($cache_path_no_scheme_quv_ext, '/').
 									                                '(?:\/index)?(?:\.|\/(?:page|comment\-page)\/[0-9]+[.\/])/';
 
+									$_i = 0;
 									/** @var $_file \RecursiveDirectoryIterator For IDEs. */
 									foreach($this->dir_regex_iteration($cache_dir, $regex) as $_file) if($_file->isFile() || $_file->isLink())
 										{
@@ -772,16 +773,17 @@ namespace quick_cache // Root namespace.
 												throw new \exception(sprintf(__('Unable to auto-purge file: `%1$s`.', $this->text_domain), $_file->getPathname()));
 											$counter++; // Increment counter for each file purge.
 
-											if(!empty($_notices) || !is_admin())
-												continue; // Stop here; we already issued a notice, or this notice is N/A.
+											if(!is_admin() || $_i > 100)
+												continue; // Stop here; we're at our max number of notices or this notice is N/A.
 
+											$_i++;
 											$_notices   = (is_array($_notices = get_option(__NAMESPACE__.'_notices'))) ? $_notices : array();
 											$_notices[] = '<img src="'.esc_attr($this->url('/client-s/images/clear.png')).'" style="float:left; margin:0 10px 0 0; border:0;" />'.
 											              sprintf(__('<strong>Quick Cache:</strong> detected changes. Found cache files for %1$s: <code>%2$s</code> (auto-purging).', $this->text_domain), $_term['taxonomy_label'], $_term['term_name']);
 											update_option(__NAMESPACE__.'_notices', $_notices);
 										}
 								}
-							unset($_term, $_file, $_notices); // Just a little housekeeping.
+							unset($_term, $_file, $_notices, $_i); // Just a little housekeeping.
 
 							return apply_filters(__METHOD__, $counter, get_defined_vars());
 						}
