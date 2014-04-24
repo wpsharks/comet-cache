@@ -556,6 +556,11 @@ namespace quick_cache
 					$this->maybe_start_output_buffering();
 				}
 
+			/**
+			 * Loads any advanced cache plugin files found inside `/wp-content/ac-plugins`.
+			 *
+			 * @since 140422 First documented version.
+			 */
 			public function load_ac_plugins()
 				{
 					if(!is_dir(WP_CONTENT_DIR.'/ac-plugins'))
@@ -569,6 +574,11 @@ namespace quick_cache
 					unset($_ac_plugin); // Houskeeping.
 				}
 
+			/**
+			 * Sends no-cache headers (if applicable).
+			 *
+			 * @since 140422 First documented version.
+			 */
 			public function maybe_stop_browser_caching()
 				{
 					if(!empty($_GET['qcABC'])) return;
@@ -580,6 +590,14 @@ namespace quick_cache
 					header('Pragma: no-cache');
 				}
 
+			/**
+			 * Start output buffering (if applicable); or serve a cache file (if possible).
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @note This is a vital part of Quick Cache. This method serves existing (fresh) cache files.
+			 *    It is also responsible for beginning the process of collecting the output buffer.
+			 */
 			public function maybe_start_output_buffering()
 				{
 					if(strtoupper(PHP_SAPI) === 'CLI')
@@ -664,6 +682,14 @@ namespace quick_cache
 					return NULL; // Return value not applicable.
 				}
 
+			/**
+			 * Used to setup debug info (if enabled).
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @param string $reason_code One of the `NC_DEBUG_` constants.
+			 * @param string $reason Optionally override the built-in description with a custom message.
+			 */
 			public function maybe_set_debug_info($reason_code, $reason = '')
 				{
 					if(!QUICK_CACHE_DEBUGGING_ENABLE)
