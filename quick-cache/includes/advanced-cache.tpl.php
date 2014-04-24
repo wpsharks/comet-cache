@@ -224,31 +224,171 @@ namespace quick_cache
 			 */
 			public $http_status;
 
-			public $is_wp_loaded_query = FALSE; // See: `wp_main_query_postload()`.
-			public $is_404 = FALSE; // Set on `wp` by `wp_main_query_postload()`.
-			public $site_url = ''; // Set on `wp` by `wp_main_query_postload()`.
-			public $home_url = ''; // Set on `wp` by `wp_main_query_postload()`.
-			public $is_user_logged_in = FALSE; // Set on `wp` by `wp_main_query_postload()`.
-			public $is_maintenance = FALSE; // Set on `wp` by `wp_main_query_postload()`.
-			public $plugin_file = ''; // Set on `wp` by `wp_main_query_postload()`.
+			/**
+			 * Have we caught the main WP loaded being loaded yet?
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var boolean `TRUE` if main query has been loaded; else `FALSE`.
+			 *
+			 * @see wp_main_query_postload()
+			 */
+			public $is_wp_loaded_query = FALSE;
 
-			public $text_domain = ''; // Defined by class constructor; for translations.
-			public $hooks = array(); // Array of advanced cache plugin hooks.
+			/**
+			 * Is the current request a WordPress 404 error?
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var boolean `TRUE` if is a 404 error; else `FALSE`.
+			 *
+			 * @see wp_main_query_postload()
+			 */
+			public $is_404 = FALSE;
 
+			/**
+			 * Current WordPress {@link \site_url()}.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string Current WordPress {@link \site_url()}.
+			 *
+			 * @see wp_main_query_postload()
+			 */
+			public $site_url = '';
+
+			/**
+			 * Current WordPress {@link \home_url()}.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string Current WordPress {@link \home_url()}.
+			 *
+			 * @see wp_main_query_postload()
+			 */
+			public $home_url = '';
+
+			/**
+			 * Flag for {@link \is_user_loged_in()}.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var boolean `TRUE` if {@link \is_user_loged_in()}; else `FALSE`.
+			 *
+			 * @see wp_main_query_postload()
+			 */
+			public $is_user_logged_in = FALSE;
+
+			/**
+			 * Flag for {@link \is_maintenance()}.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var boolean `TRUE` if {@link \is_maintenance()}; else `FALSE`.
+			 *
+			 * @see wp_main_query_postload()
+			 */
+			public $is_maintenance = FALSE;
+
+			/**
+			 * Value for {@link plugin::$file()}.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string The value of {@link plugin::$file()}.
+			 *
+			 * @see wp_main_query_postload()
+			 */
+			public $plugin_file = '';
+
+			/**
+			 * Text domain for translations; based on `__NAMESPACE__`.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string Defined by class constructor; for translations.
+			 */
+			public $text_domain = '';
+
+			/**
+			 * Array of hooks added by plugins.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var array An array of any hooks added by plugins.
+			 */
+			public $hooks = array();
+
+			/**
+			 * No-cache because of the current {@link \PHP_SAPI}.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string A unique string identifier in the set of `NC_DEBUG_` constants.
+			 */
 			const NC_DEBUG_PHP_SAPI_CLI = 'nc_debug_php_sapi_cli';
 
+			/**
+			 * No-cache because the current request includes the `?qcAC=0` parameter.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string A unique string identifier in the set of `NC_DEBUG_` constants.
+			 */
 			const NC_DEBUG_QCAC_GET_VAR = 'nc_debug_qcac_get_var';
 
+			/**
+			 * No-cache because of a missing `$_SERVER['HTTP_HOST']`.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string A unique string identifier in the set of `NC_DEBUG_` constants.
+			 */
 			const NC_DEBUG_NO_SERVER_HTTP_HOST = 'nc_debug_no_server_http_host';
 
+			/**
+			 * No-cache because of a missing `$_SERVER['REQUEST_URI']`.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string A unique string identifier in the set of `NC_DEBUG_` constants.
+			 */
 			const NC_DEBUG_NO_SERVER_REQUEST_URI = 'nc_debug_no_server_request_uri';
 
+			/**
+			 * No-cache because the {@link \QUICK_CACHE_ALLOWED} constant says not to.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string A unique string identifier in the set of `NC_DEBUG_` constants.
+			 */
 			const NC_DEBUG_QUICK_CACHE_ALLOWED_CONSTANT = 'nc_debug_quick_cache_allowed_constant';
 
+			/**
+			 * No-cache because the `$_SERVER['QUICK_CACHE_ALLOWED']` environment variable says not to.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string A unique string identifier in the set of `NC_DEBUG_` constants.
+			 */
 			const NC_DEBUG_QUICK_CACHE_ALLOWED_SERVER_VAR = 'nc_debug_quick_cache_allowed_server_var';
 
+			/**
+			 * No-cache because the {@link \DONOTCACHEPAGE} constant says not to.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string A unique string identifier in the set of `NC_DEBUG_` constants.
+			 */
 			const NC_DEBUG_DONOTCACHEPAGE_CONSTANT = 'nc_debug_donotcachepage_constant';
 
+			/**
+			 * No-cache because the `$_SERVER['DONOTCACHEPAGE']` environment variable says not to.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string A unique string identifier in the set of `NC_DEBUG_` constants.
+			 */
 			const NC_DEBUG_DONOTCACHEPAGE_SERVER_VAR = 'nc_debug_donotcachepage_server_var';
 
 			const NC_DEBUG_POST_PUT_DEL_REQUEST = 'nc_debug_post_put_del_request';
@@ -1204,6 +1344,16 @@ namespace quick_cache
 			public $htaccess_deny = "<IfModule authz_core_module>\n\tRequire all denied\n</IfModule>\n<IfModule !authz_core_module>\n\tdeny from all\n</IfModule>";
 		}
 
+		/**
+		 * Polyfill for {@link \__()}.
+		 *
+		 * @since 140422 First documented version.
+		 *
+		 * @param string $string String to translate.
+		 * @param string $text_domain Plugin text domain.
+		 *
+		 * @return string Possibly translated string.
+		 */
 		function __($string, $text_domain) // Polyfill `\__()`.
 			{
 				static $__exists; // Static cache.
@@ -1214,6 +1364,13 @@ namespace quick_cache
 				return $string; // Not possible (yet).
 			}
 
+		/**
+		 * Global Quick Cache {@link advanced_cache} instance.
+		 *
+		 * @since 140422 First documented version.
+		 *
+		 * @var advanced_cache Global instance reference.
+		 */
 		$GLOBALS[__NAMESPACE__.'__advanced_cache'] = new advanced_cache();
 	}
 namespace // Global namespace.
