@@ -913,6 +913,17 @@ namespace quick_cache // Root namespace.
 					return ($has = TRUE); // Assume that it is by default, we are within WP after all.
 				}
 
+			/**
+			 * Checks if a PHP extension is loaded up.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @param string $extension A PHP extension slug (i.e. extension name).
+			 *
+			 * @return boolean `TRUE` if the extension is loaded; else `FALSE`.
+			 *
+			 * @note The return value of this function is cached to reduce overhead on repeat calls.
+			 */
 			public function is_extension_loaded($extension)
 				{
 					static $is = array(); // Static cache.
@@ -1016,6 +1027,13 @@ namespace quick_cache // Root namespace.
 					return $value; // With applied filters.
 				}
 
+			/**
+			 * Apache `.htaccess` rules that deny public access to the contents of a directory.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string `.htaccess` fules.
+			 */
 			public $htaccess_deny = "<IfModule authz_core_module>\n\tRequire all denied\n</IfModule>\n<IfModule !authz_core_module>\n\tdeny from all\n</IfModule>";
 		}
 
