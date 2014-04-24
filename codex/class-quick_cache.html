@@ -4,7 +4,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="generator" content="ApiGen 2.8.0" />
 
-	<title>Class quick_cache\actions | Quick Cache Lite</title>
+	<title>Class quick_cache | Quick Cache Lite</title>
 
 	<script type="text/javascript" src="resources/combined.js?2507565882"></script>
 	<script type="text/javascript" src="elementlist.js?1733873414"></script>
@@ -21,9 +21,9 @@
 		<div id="groups">
 			<h3>Namespaces</h3>
 			<ul>
-				<li><a href="namespace-None.html">None</a>
+				<li class="active"><a href="namespace-None.html">None</a>
 						</li>
-				<li class="active"><a href="namespace-quick_cache.html">quick_cache</a>
+				<li><a href="namespace-quick_cache.html">quick_cache</a>
 						</li>
 			</ul>
 		</div>
@@ -34,10 +34,7 @@
 		<div id="elements">
 			<h3>Classes</h3>
 			<ul>
-				<li class="active"><a href="class-quick_cache.actions.html">actions</a></li>
-				<li><a href="class-quick_cache.advanced_cache.html">advanced_cache</a></li>
-				<li><a href="class-quick_cache.menu_pages.html">menu_pages</a></li>
-				<li><a href="class-quick_cache.plugin.html">plugin</a></li>
+				<li class="active"><a href="class-quick_cache.html">quick_cache</a></li>
 			</ul>
 
 
@@ -46,8 +43,8 @@
 
 			<h3>Functions</h3>
 			<ul>
-				<li><a href="function-quick_cache.__.html">__</a></li>
-				<li><a href="function-quick_cache.plugin.html">plugin</a></li>
+				<li><a href="function-quick_cache_php53_dashboard_notice.html">quick_cache_php53_dashboard_notice</a></li>
+				<li><a href="function-wp_cache_postload.html">wp_cache_postload</a></li>
 			</ul>
 		</div>
 	</div>
@@ -70,7 +67,7 @@
 				<a href="index.html" title="Overview"><span>Overview</span></a>
 			</li>
 			<li>
-				<a href="namespace-quick_cache.html" title="Summary of quick_cache"><span>Namespace</span></a>
+				<a href="namespace-None.html" title="Summary of None"><span>Namespace</span></a>
 			</li>
 			<li class="active">
 <span>Class</span>			</li>
@@ -94,11 +91,11 @@
 	</div>
 
 <div id="content" class="class">
-	<h1>Class actions</h1>
+	<h1>Class quick_cache</h1>
 
 
 	<div class="description">
-	
+	<p>Quick Cache API Class.</p>
 
 	</div>
 
@@ -113,28 +110,33 @@
 	<div class="info">
 		
 		
-		<b>Namespace:</b> <a href="namespace-quick_cache.html">quick_cache</a><br />
 		
+		<b>Package:</b> quick\cache\api<br />
 
-		<b>Located at</b> <a href="source-class-quick_cache.actions.html#7-178" title="Go to source code">quick-cache/includes/actions.php</a><br />
+				<b>Copyright:</b>
+				<p>WebSharks, Inc. <a href="http://www.websharks-inc.com">http://www.websharks-inc.com</a></p>
+<br />
+				<b>License:</b>
+				<a href="GNU">General Public License, version 2</a><br />
+		<b>Located at</b> <a href="source-class-quick_cache.html#35-87" title="Go to source code">quick-cache/includes/api-class.php</a><br />
 	</div>
 
 
 
 	<table class="summary" id="methods">
 	<caption>Methods summary</caption>
-	<tr data-order="__construct" id="___construct">
+	<tr data-order="plugin" id="_plugin">
 
 		<td class="attributes"><code>
-			 public 
-			
+			 public static
+			<code><a href="class-quick_cache.plugin.html">quick_cache\plugin</a></code>
 			
 			</code>
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#___construct">#</a>
-		<code><a href="source-class-quick_cache.actions.html#9-14" title="Go to source code">__construct</a>( )</code>
+		<a class="anchor" href="#_plugin">#</a>
+		<code><a href="source-class-quick_cache.html#40-46" title="Go to source code">plugin</a>( )</code>
 
 		<div class="description short">
 			
@@ -147,6 +149,11 @@
 
 
 
+				<h4>Returns</h4>
+				<div class="list">
+					<code><code><a href="class-quick_cache.plugin.html">quick_cache\plugin</a></code></code><br><p>instance.</p>
+<br />
+				</div>
 
 
 
@@ -154,18 +161,18 @@
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="wipe_cache" id="_wipe_cache">
+	<tr data-order="version" id="_version">
 
 		<td class="attributes"><code>
-			 public 
-			
+			 public static
+			string
 			
 			</code>
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_wipe_cache">#</a>
-		<code><a href="source-class-quick_cache.actions.html#16-31" title="Go to source code">wipe_cache</a>( <span>mixed <var>$args</var></span> )</code>
+		<a class="anchor" href="#_version">#</a>
+		<code><a href="source-class-quick_cache.html#48-54" title="Go to source code">version</a>( )</code>
 
 		<div class="description short">
 			
@@ -178,6 +185,11 @@
 
 
 
+				<h4>Returns</h4>
+				<div class="list">
+					<code>string</code><br><p>Current version string.</p>
+<br />
+				</div>
 
 
 
@@ -185,18 +197,18 @@
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="clear_cache" id="_clear_cache">
+	<tr data-order="options" id="_options">
 
 		<td class="attributes"><code>
-			 public 
-			
+			 public static
+			array
 			
 			</code>
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_clear_cache">#</a>
-		<code><a href="source-class-quick_cache.actions.html#33-48" title="Go to source code">clear_cache</a>( <span>mixed <var>$args</var></span> )</code>
+		<a class="anchor" href="#_options">#</a>
+		<code><a href="source-class-quick_cache.html#56-62" title="Go to source code">options</a>( )</code>
 
 		<div class="description short">
 			
@@ -209,6 +221,11 @@
 
 
 
+				<h4>Returns</h4>
+				<div class="list">
+					<code>array</code><br><p>Current array of options.</p>
+<br />
+				</div>
 
 
 
@@ -216,18 +233,18 @@
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="save_options" id="_save_options">
+	<tr data-order="purge" id="_purge">
 
 		<td class="attributes"><code>
-			 public 
-			
+			 public static
+			integer
 			
 			</code>
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_save_options">#</a>
-		<code><a href="source-class-quick_cache.actions.html#50-98" title="Go to source code">save_options</a>( <span>mixed <var>$args</var></span> )</code>
+		<a class="anchor" href="#_purge">#</a>
+		<code><a href="source-class-quick_cache.html#64-70" title="Go to source code">purge</a>( )</code>
 
 		<div class="description short">
 			
@@ -240,6 +257,11 @@
 
 
 
+				<h4>Returns</h4>
+				<div class="list">
+					<code>integer</code><br><p>Total files purged (if any).</p>
+<br />
+				</div>
 
 
 
@@ -247,18 +269,18 @@
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="restore_default_options" id="_restore_default_options">
+	<tr data-order="clear" id="_clear">
 
 		<td class="attributes"><code>
-			 public 
-			
+			 public static
+			integer
 			
 			</code>
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_restore_default_options">#</a>
-		<code><a href="source-class-quick_cache.actions.html#100-141" title="Go to source code">restore_default_options</a>( <span>mixed <var>$args</var></span> )</code>
+		<a class="anchor" href="#_clear">#</a>
+		<code><a href="source-class-quick_cache.html#72-78" title="Go to source code">clear</a>( )</code>
 
 		<div class="description short">
 			
@@ -271,6 +293,11 @@
 
 
 
+				<h4>Returns</h4>
+				<div class="list">
+					<code>integer</code><br><p>Total files cleared (if any).</p>
+<br />
+				</div>
 
 
 
@@ -278,18 +305,18 @@
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="dismiss_notice" id="_dismiss_notice">
+	<tr data-order="wipe" id="_wipe">
 
 		<td class="attributes"><code>
-			 public 
-			
+			 public static
+			integer
 			
 			</code>
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_dismiss_notice">#</a>
-		<code><a href="source-class-quick_cache.actions.html#143-159" title="Go to source code">dismiss_notice</a>( <span>mixed <var>$args</var></span> )</code>
+		<a class="anchor" href="#_wipe">#</a>
+		<code><a href="source-class-quick_cache.html#80-86" title="Go to source code">wipe</a>( )</code>
 
 		<div class="description short">
 			
@@ -302,37 +329,11 @@
 
 
 
-
-
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="dismiss_error" id="_dismiss_error">
-
-		<td class="attributes"><code>
-			 public 
-			
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_dismiss_error">#</a>
-		<code><a href="source-class-quick_cache.actions.html#161-177" title="Go to source code">dismiss_error</a>( <span>mixed <var>$args</var></span> )</code>
-
-		<div class="description short">
-			
-
-		</div>
-
-		<div class="description detailed hidden">
-			
-
-
-
-
+				<h4>Returns</h4>
+				<div class="list">
+					<code>integer</code><br><p>Total files wiped (if any).</p>
+<br />
+				</div>
 
 
 
