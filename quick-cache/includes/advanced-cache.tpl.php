@@ -1635,16 +1635,39 @@ namespace quick_cache
 					return TRUE; // Existed before it was removed in this case.
 				}
 
+			/**
+			 * Removes an action.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @return boolean `TRUE` if removed; else `FALSE` if not removed for any reason.
+			 *
+			 * @see remove_hook()
+			 */
 			public function remove_action() // Simple `remove_hook()` alias.
 				{
 					return call_user_func_array(array($this, 'remove_hook'), func_get_args());
 				}
 
+			/**
+			 * Removes a filter.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @return boolean `TRUE` if removed; else `FALSE` if not removed for any reason.
+			 *
+			 * @see remove_hook()
+			 */
 			public function remove_filter() // Simple `remove_hook()` alias.
 				{
 					return call_user_func_array(array($this, 'remove_hook'), func_get_args());
 				}
 
+			/**
+			 * Runs any callables attached to an action.
+			 *
+			 * @since 140422 First documented version.
+			 */
 			public function do_action($hook)
 				{
 					if(empty($this->hooks[$hook]))
@@ -1664,6 +1687,16 @@ namespace quick_cache
 					unset($_hook_action, $_action); // Housekeeping.
 				}
 
+			/**
+			 * Runs any callables attached to a filter.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @param string $hook The name of a filter hook.
+			 * @param mixed  $value The value to filter.
+			 *
+			 * @return mixed The filtered `$value`.
+			 */
 			public function apply_filters($hook, $value)
 				{
 					if(empty($this->hooks[$hook]))
