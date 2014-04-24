@@ -1,23 +1,109 @@
 <?php
-namespace quick_cache // Root namespace.
+/**
+ * Quick Cache Plugin
+ *
+ * @package quick_cache\plugin
+ * @since 140422 First documented version.
+ * @copyright WebSharks, Inc. <http://www.websharks-inc.com>
+ * @license GNU General Public License, version 2
+ */
+namespace quick_cache
 	{
 		if(!defined('WPINC')) // MUST have WordPress.
 			exit('Do NOT access this file directly: '.basename(__FILE__));
 
 		if(!class_exists('\\'.__NAMESPACE__.'\\plugin'))
 			{
-				class plugin // Base plugin class.
+				/**
+				 * Quick Cache Plugin
+				 *
+				 * @package quick_cache\plugin
+				 * @since 140422 First documented version.
+				 */
+				class plugin
 				{
-					public $is_pro = FALSE; // Lite version flag.
-					public $file = ''; // Defined by class constructor.
-					public $version = '140104'; // See: `readme.txt` file.
-					public $text_domain = ''; // Defined by class constructor.
-					public $default_options = array(); // Defined @ setup.
-					public $options = array(); // Defined @ setup.
-					public $network_cap = ''; // Defined @ setup.
-					public $cap = ''; // Defined @ setup.
+					/**
+					 * Pro version flag.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @var boolean TRUE for pro version; FALSE for lite version.
+					 */
+					public $is_pro = FALSE;
 
-					public function __construct() // Constructor.
+					/**
+					 * Stub `__FILE__` location.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @var string Current `__FILE__` from the stub; NOT from this file.
+					 *    Note that Quick Cache has a stub loader that checks for PHP v5.3 compat;
+					 *    which is why we have this property. This is the stub `__FILE__`.
+					 */
+					public $file = '';
+
+					/**
+					 * Version string in YYMMDD[+build] format.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @var string Current version of the software.
+					 */
+					public $version = '140104';
+
+					/**
+					 * Plugin text domain for translations.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @var string Plugin text domain; set by constructor.
+					 */
+					public $text_domain = '';
+
+					/**
+					 * An array of all default option values.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @var array Default options array; set by constructor.
+					 */
+					public $default_options = array();
+
+					/**
+					 * Configured option values.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @var array Options configured by site owner; set by constructor.
+					 */
+					public $options = array();
+
+					/**
+					 * Network capability requirement.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @var string WordPress capability required to
+					 *    administer QC in a multisite network.
+					 */
+					public $network_cap = '';
+
+					/**
+					 * General capability requirement.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @var string WordPress capability required to
+					 *    administer QC in any environment; i.e. in multisite or otherwise.
+					 */
+					public $cap = '';
+
+					/**
+					 * Quick Cache plugin constructor.
+					 *
+					 * @since 140422 First documented version.
+					 */
+					public function __construct()
 						{
 							if(strpos(__NAMESPACE__, '\\') !== FALSE) // Sanity check.
 								throw new \exception('Not a root namespace: `'.__NAMESPACE__.'`.');
@@ -30,6 +116,11 @@ namespace quick_cache // Root namespace.
 							register_deactivation_hook($this->file, array($this, 'deactivate'));
 						}
 
+					/**
+					 * Setup the Quick Cache plugin.
+					 *
+					 * @since 140422 First documented version.
+					 */
 					public function setup()
 						{
 							do_action('before__'.__METHOD__, get_defined_vars());
@@ -171,12 +262,25 @@ namespace quick_cache // Root namespace.
 							do_action(__METHOD__.'_complete', get_defined_vars());
 						}
 
-					/** @return \wpdb Reference for IDEs. */
+					/**
+					 * WordPress database instance.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @return \wpdb Reference for IDEs.
+					 */
 					public function wpdb() // Shortcut for other routines.
 						{
 							return $GLOBALS['wpdb'];
 						}
 
+					/**
+					 * Plugin activation hook.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @attaches-to {@link \register_activation_hook()}
+					 */
 					public function activate()
 						{
 							$this->setup(); // Setup routines.
@@ -190,6 +294,13 @@ namespace quick_cache // Root namespace.
 							$this->auto_clear_cache();
 						}
 
+					/**
+					 * Check current plugin version that installed in WP.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @attaches-to `admin_init` hook.
+					 */
 					public function check_version()
 						{
 							if(version_compare($this->options['version'], $this->version, '>='))
@@ -213,6 +324,13 @@ namespace quick_cache // Root namespace.
 							update_option(__NAMESPACE__.'_notices', $notices);
 						}
 
+					/**
+					 * Display notice to site owners using a really old version of Quick Cache.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @attaches-to `admin_init` hook.
+					 */
 					public function rewrite_notice()
 						{
 							if(!get_option('ws_plugin__qcache_configured'))
@@ -225,6 +343,13 @@ namespace quick_cache // Root namespace.
 							update_option(__NAMESPACE__.'_notices', $notices);
 						}
 
+					/**
+					 * Plugin deactivation hook.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @attaches-to {@link \register_deactivation_hook()}
+					 */
 					public function deactivate()
 						{
 							$this->remove_wp_cache_from_wp_config();
@@ -247,6 +372,13 @@ namespace quick_cache // Root namespace.
 							wp_clear_scheduled_hook('_cron_'.__NAMESPACE__.'_cleanup');
 						}
 
+					/**
+					 * Current request is for a pro version preview?
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @return boolean TRUE if the current request is for a pro preview.
+					 */
 					public function is_pro_preview()
 						{
 							static $is;
@@ -258,6 +390,16 @@ namespace quick_cache // Root namespace.
 							return ($is = FALSE);
 						}
 
+					/**
+					 * URL to a Quick Cache plugin file.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @param string $file Optional file path; relative to plugin directory.
+					 * @param string $scheme Optional URL scheme; defaults to the current scheme.
+					 *
+					 * @return string URL to plugin directory; or to the specified `$file` if applicable.
+					 */
 					public function url($file = '', $scheme = '')
 						{
 							static $plugin_directory; // Static cache.
@@ -273,11 +415,29 @@ namespace quick_cache // Root namespace.
 							return apply_filters(__METHOD__, $url, get_defined_vars());
 						}
 
+					/**
+					 * Escape single quotes.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @param string  $string Input string to escape.
+					 * @param integer $times Optional. Defaults to one escape char; e.g. `\'`.
+					 *    If you need to escape more than once, set this to something > `1`.
+					 *
+					 * @return string Escaped string; e.g. `Raam\'s the lead developer`.
+					 */
 					public function esc_sq($string, $times = 1)
 						{
 							return str_replace("'", str_repeat('\\', abs($times))."'", (string)$string);
 						}
 
+					/**
+					 * Plugin action handler.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @attaches-to `wp_loaded` hook.
+					 */
 					public function actions()
 						{
 							if(empty($_REQUEST[__NAMESPACE__])) return;
@@ -285,6 +445,13 @@ namespace quick_cache // Root namespace.
 							require_once dirname(__FILE__).'/includes/actions.php';
 						}
 
+					/**
+					 * Adds CSS for administrative menu pages.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @attaches-to `admin_enqueue_scripts` hook.
+					 */
 					public function enqueue_admin_styles()
 						{
 							if(empty($_GET['page']) || strpos($_GET['page'], __NAMESPACE__) !== 0)
@@ -295,6 +462,13 @@ namespace quick_cache // Root namespace.
 							wp_enqueue_style(__NAMESPACE__, $this->url('/client-s/css/menu-pages.min.css'), $deps, $this->version, 'all');
 						}
 
+					/**
+					 * Adds JS for administrative menu pages.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @attaches-to `admin_enqueue_scripts` hook.
+					 */
 					public function enqueue_admin_scripts()
 						{
 							if(empty($_GET['page']) || strpos($_GET['page'], __NAMESPACE__) !== 0)
@@ -305,6 +479,13 @@ namespace quick_cache // Root namespace.
 							wp_enqueue_script(__NAMESPACE__, $this->url('/client-s/js/menu-pages.min.js'), $deps, $this->version, TRUE);
 						}
 
+					/**
+					 * Creates network admin menu pages.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @attaches-to `network_admin_menu` hook.
+					 */
 					public function add_network_menu_pages()
 						{
 							add_menu_page(__('Quick Cache', $this->text_domain), __('Quick Cache', $this->text_domain),
@@ -312,6 +493,13 @@ namespace quick_cache // Root namespace.
 							              $this->url('/client-s/images/menu-icon.png'));
 						}
 
+					/**
+					 * Creates admin menu pages.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @attaches-to `admin_menu` hook.
+					 */
 					public function add_menu_pages()
 						{
 							if(is_multisite()) return; // Multisite networks MUST use network admin area.
@@ -321,6 +509,14 @@ namespace quick_cache // Root namespace.
 							              $this->url('/client-s/images/menu-icon.png'));
 						}
 
+					/**
+					 * Loads the admin menu page options.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @see add_network_menu_pages()
+					 * @see add_menu_pages()
+					 */
 					public function menu_page_options()
 						{
 							require_once dirname(__FILE__).'/includes/menu-pages.php';
@@ -328,6 +524,13 @@ namespace quick_cache // Root namespace.
 							$menu_pages->options();
 						}
 
+					/**
+					 * Render admin notices; across all admin dashboard views.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @attaches-to `all_admin_notices` hook.
+					 */
 					public function all_admin_notices()
 						{
 							if(($notices = (is_array($notices = get_option(__NAMESPACE__.'_notices'))) ? $notices : array()))
@@ -354,6 +557,13 @@ namespace quick_cache // Root namespace.
 							unset($_key, $_notice, $_dismiss_css, $_dismiss); // Housekeeping.
 						}
 
+					/**
+					 * Render admin errors; across all admin dashboard views.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @attaches-to `all_admin_notices` hook.
+					 */
 					public function all_admin_errors()
 						{
 							if(($errors = (is_array($errors = get_option(__NAMESPACE__.'_errors'))) ? $errors : array()))
@@ -380,6 +590,17 @@ namespace quick_cache // Root namespace.
 							unset($_key, $_error, $_dismiss_css, $_dismiss); // Housekeeping.
 						}
 
+					/**
+					 * Extends WP-Cron schedules.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @attaches-to `cron_schedules` filter.
+					 *
+					 * @param array $schedules An array of the current schedules.
+					 *
+					 * @return array Revised array of WP-Cron schedules.
+					 */
 					public function extend_cron_schedules($schedules)
 						{
 							$schedules['every15m'] = array('interval' => 900, 'display' => __('Every 15 Minutes', $this->text_domain));
@@ -387,6 +608,18 @@ namespace quick_cache // Root namespace.
 							return apply_filters(__METHOD__, $schedules, get_defined_vars());
 						}
 
+					/**
+					 * Wipes out all cache files in the cache directory.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @param boolean $manually Defaults to a `FALSE` value.
+					 *    Pass as TRUE if the wipe is done manually by the site owner.
+					 *
+					 * @return integer Total files wiped by this routine (if any).
+					 *
+					 * @throws \exception If a wipe failure occurs.
+					 */
 					public function wipe_cache($manually = FALSE)
 						{
 							$counter = 0; // Initialize.
@@ -416,6 +649,18 @@ namespace quick_cache // Root namespace.
 							return apply_filters(__METHOD__, $counter, get_defined_vars());
 						}
 
+					/**
+					 * Clears cache files for the current blog.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @param boolean $manually Defaults to a `FALSE` value.
+					 *    Pass as TRUE if the clearing is done manually by the site owner.
+					 *
+					 * @return integer Total files cleared by this routine (if any).
+					 *
+					 * @throws \exception If a clearing failure occurs.
+					 */
 					public function clear_cache($manually = FALSE)
 						{
 							$counter = 0; // Initialize.
@@ -451,7 +696,16 @@ namespace quick_cache // Root namespace.
 							return apply_filters(__METHOD__, $counter, get_defined_vars());
 						}
 
-					public function purge_cache() // i.e. the Quick Cache garbage collector.
+					/**
+					 * Purges expired cache files for the current blog.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @return integer Total files purged by this routine (if any).
+					 *
+					 * @throws \exception If a purge failure occurs.
+					 */
+					public function purge_cache()
 						{
 							$counter = 0; // Initialize.
 
@@ -477,6 +731,16 @@ namespace quick_cache // Root namespace.
 							return apply_filters(__METHOD__, $counter, get_defined_vars());
 						}
 
+					/**
+					 * Automatically wipes out all cache files in the cache directory.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @return integer Total files wiped by this routine (if any).
+					 *
+					 * @note Unlike many of the other `auto_` methods, this one is NOT currently attached to any hooks.
+					 *    This is called upon whenever QC options are saved and/or restored though.
+					 */
 					public function auto_wipe_cache()
 						{
 							$counter = 0; // Initialize.
@@ -496,6 +760,29 @@ namespace quick_cache // Root namespace.
 							return apply_filters(__METHOD__, $counter, get_defined_vars());
 						}
 
+					/**
+					 * Automatically clears all cache files for the current blog.
+					 *
+					 * @attaches-to `switch_theme` hook.
+					 *
+					 * @attaches-to `wp_create_nav_menu` hook.
+					 * @attaches-to `wp_update_nav_menu` hook.
+					 * @attaches-to `wp_delete_nav_menu` hook.
+					 *
+					 * @attaches-to `create_term` hook.
+					 * @attaches-to `edit_terms` hook.
+					 * @attaches-to `delete_term` hook.
+					 *
+					 * @attaches-to `add_link` hook.
+					 * @attaches-to `edit_link` hook.
+					 * @attaches-to `delete_link` hook.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @return integer Total files cleared by this routine (if any).
+					 *
+					 * @note This is also called upon during plugin activation.
+					 */
 					public function auto_clear_cache()
 						{
 							$counter = 0; // Initialize.
@@ -515,6 +802,26 @@ namespace quick_cache // Root namespace.
 							return apply_filters(__METHOD__, $counter, get_defined_vars());
 						}
 
+					/**
+					 * Automatically purge cache files for a particular post.
+					 *
+					 * @attaches-to `save_post` hook.
+					 * @attaches-to `delete_post` hook.
+					 * @attaches-to `clean_post_cache` hook.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @param integer $id A WordPress post ID.
+					 *
+					 * @return integer Total files purged by this routine (if any).
+					 *
+					 * @throws \exception If a purge failure occurs.
+					 *
+					 * @note This is also called upon by other routines which listen for
+					 *    events that are indirectly associated with a post ID.
+					 *
+					 * @see auto_purge_comment_post_cache()
+					 */
 					public function auto_purge_post_cache($id)
 						{
 							$counter = 0; // Initialize.
@@ -571,6 +878,20 @@ namespace quick_cache // Root namespace.
 							return apply_filters(__METHOD__, $counter, get_defined_vars());
 						}
 
+					/**
+					 * Automatically purges cache files for the home page.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @return integer Total files purged by this routine (if any).
+					 *
+					 * @throws \exception If a purge failure occurs.
+					 *
+					 * @note Unlike many of the other `auto_` methods, this one is NOT currently
+					 *    attached to any hooks. However, it is called upon by {@link auto_purge_post_cache()}.
+					 *
+					 * @see auto_purge_post_cache()
+					 */
 					public function auto_purge_home_page_cache()
 						{
 							$counter = 0; // Initialize.
@@ -613,6 +934,20 @@ namespace quick_cache // Root namespace.
 							return apply_filters(__METHOD__, $counter, get_defined_vars());
 						}
 
+					/**
+					 * Automatically purges cache files for the posts page.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @return integer Total files purged by this routine (if any).
+					 *
+					 * @throws \exception If a purge failure occurs.
+					 *
+					 * @note Unlike many of the other `auto_` methods, this one is NOT currently
+					 *    attached to any hooks. However, it is called upon by {@link auto_purge_post_cache()}.
+					 *
+					 * @see auto_purge_post_cache()
+					 */
 					public function auto_purge_posts_page_cache()
 						{
 							$counter = 0; // Initialize.
@@ -668,6 +1003,25 @@ namespace quick_cache // Root namespace.
 							return apply_filters(__METHOD__, $counter, get_defined_vars());
 						}
 
+					/**
+					 * Automatically purge cache files for terms associated with a post.
+					 *
+					 * @attaches-to `added_term_relationship` hook.
+					 * @attaches-to `delete_term_relationships` hook.
+					 *
+					 * @since 14XXXX First documented version.
+					 *
+					 * @param integer $id A WordPress post ID.
+					 *
+					 * @return integer Total files purged by this routine (if any).
+					 *
+					 * @throws \exception If a purge failure occurs.
+					 *
+					 * @note In addition to the hooks this is attached to, it is also
+					 *    called upon by {@link auto_purge_post_cache()}.
+					 *
+					 * @see auto_purge_post_cache()
+					 */
 					public function auto_purge_post_terms_cache($id)
 						{
 							$counter = 0; // Initialize
@@ -788,6 +1142,25 @@ namespace quick_cache // Root namespace.
 							return apply_filters(__METHOD__, $counter, get_defined_vars());
 						}
 
+					/**
+					 * Automatically purges cache files for a post associated with a particular comment.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @attaches-to `trackback_post` hook.
+					 * @attaches-to `pingback_post` hook.
+					 * @attaches-to `comment_post` hook.
+					 *
+					 * @attaches-to `edit_comment` hook.
+					 * @attaches-to `delete_comment` hook.
+					 * @attaches-to `wp_set_comment_status` hook.
+					 *
+					 * @param integer $id A WordPress comment ID.
+					 *
+					 * @return integer Total files purged by this routine (if any).
+					 *
+					 * @see auto_purge_post_cache()
+					 */
 					public function auto_purge_comment_post_cache($id)
 						{
 							$counter = 0; // Initialize.
@@ -809,6 +1182,14 @@ namespace quick_cache // Root namespace.
 							return apply_filters(__METHOD__, $counter, get_defined_vars());
 						}
 
+					/**
+					 * Finds absolute server path to `/wp-config.php` file.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @return string Absolute server path to `/wp-config.php` file;
+					 *    else an empty string if unable to locate the file.
+					 */
 					public function find_wp_config_file()
 						{
 							if(is_file($abspath_wp_config = ABSPATH.'wp-config.php'))
@@ -822,6 +1203,14 @@ namespace quick_cache // Root namespace.
 							return apply_filters(__METHOD__, $wp_config_file, get_defined_vars());
 						}
 
+					/**
+					 * Adds `define('WP_CACHE', TRUE);` to the `/wp-config.php` file.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @return string The new contents of the updated `/wp-config.php` file;
+					 *    else an empty string if unable to add the `WP_CACHE` constant.
+					 */
 					public function add_wp_cache_to_wp_config()
 						{
 							if(!$this->options['enable'])
@@ -856,6 +1245,14 @@ namespace quick_cache // Root namespace.
 							return apply_filters(__METHOD__, $wp_config_file_contents, get_defined_vars());
 						}
 
+					/**
+					 * Removes `define('WP_CACHE', TRUE);` from the `/wp-config.php` file.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @return string The new contents of the updated `/wp-config.php` file;
+					 *    else an empty string if unable to remove the `WP_CACHE` constant.
+					 */
 					public function remove_wp_cache_from_wp_config()
 						{
 							if(!($wp_config_file = $this->find_wp_config_file()))
@@ -887,6 +1284,21 @@ namespace quick_cache // Root namespace.
 							return apply_filters(__METHOD__, $wp_config_file_contents, get_defined_vars());
 						}
 
+					/**
+					 * Checks to make sure the `qc-advanced-cache` file still exists;
+					 *    and if it doesn't, the `advanced-cache.php` is regenerated automatically.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @note This runs so that remote deployments which completely wipe out an
+					 *    existing set of website files (like the AWS Elastic Beanstalk does) will NOT cause Quick Cache
+					 *    to stop functioning due to the lack of an `advanced-cache.php` file, which is generated by Quick Cache.
+					 *
+					 *    For instance, if you have a Git repo with all of your site files; when you push those files
+					 *    to your website to deploy them, you most likely do NOT have the `advanced-cache.php` file.
+					 *    Quick Cache creates this file on its own. Thus, if it's missing (and QC is active)
+					 *    we simply regenerate the file automatically to keep Quick Cache running.
+					 */
 					public function check_advanced_cache()
 						{
 							if(!$this->options['enable'])
@@ -901,6 +1313,26 @@ namespace quick_cache // Root namespace.
 								$this->add_advanced_cache();
 						}
 
+					/**
+					 * Creates and adds the `advanced-cache.php` file.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @note Many of the Quick Cache option values become PHP Constants in the `advanced-cache.php` file.
+					 *    We take an option key (e.g. `version_salt`) and prefix it with `quick_cache_`.
+					 *    Then we convert it to uppercase (e.g. `QUICK_CACHE_VERSION_SALT`) and wrap
+					 *    it with double percent signs to form a replacement codes.
+					 *    ex: `%%QUICK_CACHE_VERSION_SALT%%`
+					 *
+					 * @note There are a few special options considered by this routine which actually
+					 *    get converted to regex patterns before they become replacement codes.
+					 *
+					 * @note In the case of a version salt, a PHP syntax is performed also.
+					 *
+					 * @return boolean|null `TRUE` on success. `FALSE` or `NULL` on failure.
+					 *    A special `NULL` return value indicates success with a single failure
+					 *    that is specifically related to the `qc-advanced-cache` file.
+					 */
 					public function add_advanced_cache()
 						{
 							if(!$this->remove_advanced_cache())
@@ -959,6 +1391,25 @@ namespace quick_cache // Root namespace.
 							return TRUE; // All done :-)
 						}
 
+					/**
+					 * Removes the `advanced-cache.php` file.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @return boolean `TRUE` on success. `FALSE` on failure.
+					 *
+					 * @note The `advanced-cache.php` file is NOT actually deleted by this routine.
+					 *    Instead of deleting the file, we simply empty it out so that it's `0` bytes in size.
+					 *
+					 *    The reason for this is to preserve any file permissions set by the site owner.
+					 *    If the site owner previously allowed this specific file to become writable, we don't want to
+					 *    lose that permission by deleting the file; forcing the site owner to do it all over again later.
+					 *
+					 *    An example of where this is useful is when a site owner deactivates the QC plugin,
+					 *    but later they decide that QC really is the most awesome plugin in the world and they turn it back on.
+					 *
+					 * @see delete_advanced_cache()
+					 */
 					public function remove_advanced_cache()
 						{
 							$advanced_cache_file = WP_CONTENT_DIR.'/advanced-cache.php';
@@ -982,6 +1433,17 @@ namespace quick_cache // Root namespace.
 							return TRUE; // Removal success.
 						}
 
+					/**
+					 * Deletes the `advanced-cache.php` file.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @return boolean `TRUE` on success. `FALSE` on failure.
+					 *
+					 * @note The `advanced-cache.php` file is deleted by this routine.
+					 *
+					 * @see remove_advanced_cache()
+					 */
 					public function delete_advanced_cache()
 						{
 							$advanced_cache_file = WP_CONTENT_DIR.'/advanced-cache.php';
@@ -998,6 +1460,21 @@ namespace quick_cache // Root namespace.
 							return TRUE; // Deletion success.
 						}
 
+					/**
+					 * Checks to make sure the `qc-blog-paths` file still exists;
+					 *    and if it doesn't, the `qc-blog-paths` file is regenerated automatically.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @note This runs so that remote deployments which completely wipe out an
+					 *    existing set of website files (like the AWS Elastic Beanstalk does) will NOT cause Quick Cache
+					 *    to stop functioning due to the lack of a `qc-blog-paths` file, which is generated by Quick Cache.
+					 *
+					 *    For instance, if you have a Git repo with all of your site files; when you push those files
+					 *    to your website to deploy them, you most likely do NOT have the `qc-blog-paths` file.
+					 *    Quick Cache creates this file on its own. Thus, if it's missing (and QC is active)
+					 *    we simply regenerate the file automatically to keep Quick Cache running.
+					 */
 					public function check_blog_paths()
 						{
 							if(!$this->options['enable'])
@@ -1014,6 +1491,19 @@ namespace quick_cache // Root namespace.
 								$this->update_blog_paths();
 						}
 
+					/**
+					 * Creates and/or updates the `qc-blog-paths` file.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @attaches-to `enable_live_network_counts` filter.
+					 *
+					 * @param mixed $enable_live_network_counts Optional, defaults to a `NULL` value.
+					 *
+					 * @return mixed The value of `$enable_live_network_counts` (passes through).
+					 *
+					 * @note While this routine is attached to a WP filter, we also call upon it directly at times.
+					 */
 					public function update_blog_paths($enable_live_network_counts = NULL)
 						{
 							$value = // This hook actually rides on a filter.
@@ -1049,6 +1539,17 @@ namespace quick_cache // Root namespace.
 							return $value; // Pass through untouched (always).
 						}
 
+					/**
+					 * Adds link(s) to Quick Cache row on the WP plugins page.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @attaches-to `plugin_action_links_'.plugin_basename($this->file)` filter.
+					 *
+					 * @param array $links An array of the existing links provided by WordPress.
+					 *
+					 * @return array Revised array of links.
+					 */
 					public function add_settings_link($links)
 						{
 							$links[] = '<a href="options-general.php?page='.urlencode(__NAMESPACE__).'">'.__('Settings', $this->text_domain).'</a>';
@@ -1059,18 +1560,103 @@ namespace quick_cache // Root namespace.
 						}
 
 					/*
-					 * See also: `advanced-cache.tpl.php` duplicate.
+					 * See also: `advanced-cache.tpl.php` duplicates.
+					 *    @TODO Find a way to centralize this section so it can be shared between both classes easily.
 					 */
-					const CACHE_PATH_NO_SCHEME = 1; // Exclude scheme.
-					const CACHE_PATH_NO_HOST = 2; // Exclude host (i.e. domain name).
-					const CACHE_PATH_NO_PATH = 4; // Exclude path (i.e. the request URI).
-					const CACHE_PATH_NO_PATH_INDEX = 8; // Exclude path index (i.e. no default `index`).
-					const CACHE_PATH_NO_QUV = 16; // Exclude query, user & version salt.
-					const CACHE_PATH_NO_QUERY = 32; // Exclude query string.
-					const CACHE_PATH_NO_USER = 64; // Exclude user token.
-					const CACHE_PATH_NO_VSALT = 128; // Exclude version salt.
-					const CACHE_PATH_NO_EXT = 256; // Exclude extension.
 
+					/**
+					 * Exclude scheme from cache path.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @var integer Part of a bitmask.
+					 */
+					const CACHE_PATH_NO_SCHEME = 1;
+
+					/**
+					 * Exclude host (i.e. domain name) from cache path.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @var integer Part of a bitmask.
+					 */
+					const CACHE_PATH_NO_HOST = 2;
+
+					/**
+					 * Exclude path from cache path.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @var integer Part of a bitmask.
+					 */
+					const CACHE_PATH_NO_PATH = 4;
+
+					/**
+					 * Exclude path index (i.e. no default `index`) from cache path.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @var integer Part of a bitmask.
+					 */
+					const CACHE_PATH_NO_PATH_INDEX = 8;
+
+					/**
+					 * Exclude query, user & version salt from cache path.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @var integer Part of a bitmask.
+					 */
+					const CACHE_PATH_NO_QUV = 16;
+
+					/**
+					 * Exclude query string from cache path.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @var integer Part of a bitmask.
+					 */
+					const CACHE_PATH_NO_QUERY = 32;
+
+					/**
+					 * Exclude user token from cache path.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @var integer Part of a bitmask.
+					 */
+					const CACHE_PATH_NO_USER = 64;
+
+					/**
+					 * Exclude version salt from cache path.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @var integer Part of a bitmask.
+					 */
+					const CACHE_PATH_NO_VSALT = 128;
+
+					/**
+					 * Exclude extension from cache path.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @var integer Part of a bitmask.
+					 */
+					const CACHE_PATH_NO_EXT = 256;
+
+					/**
+					 * Converts a URL into a `cache/path`.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @param string  $url The input URL to convert.
+					 * @param string  $with_user_token Optional user token (if applicable).
+					 * @param string  $with_version_salt Optional version salt (if applicable).
+					 * @param integer $flags Optional flags; a bitmask provided by `CACHE_PATH_*` constants.
+					 *
+					 * @return string The resulting `cache/path` based on the input `$url`.
+					 */
 					public function url_to_cache_path($url, $with_user_token = '', $with_version_salt = '', $flags = 0)
 						{
 							$cache_path        = ''; // Initialize.
@@ -1129,6 +1715,18 @@ namespace quick_cache // Root namespace.
 							return $cache_path;
 						}
 
+					/**
+					 * Produces a token based on the current `$_SERVER['HTTP_HOST']`.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @param boolean $dashify Optional, defaults to a `FALSE` value.
+					 *    If `TRUE`, the token is returned with dashes in place of `[^a-z0-9\/]`.
+					 *
+					 * @return string Token based on the current `$_SERVER['HTTP_HOST']`.
+					 *
+					 * @note The return value of this function is cached to reduce overhead on repeat calls.
+					 */
 					public function host_token($dashify = FALSE)
 						{
 							$dashify = (integer)$dashify;
@@ -1141,6 +1739,22 @@ namespace quick_cache // Root namespace.
 							return ($tokens[$dashify] = $token_value);
 						}
 
+					/**
+					 * Produces a token based on the current blog sub-directory
+					 *    (i.e. in the case of a sub-directory multisite network).
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @param boolean $dashify Optional, defaults to a `FALSE` value.
+					 *    If `TRUE`, the token is returned with dashes in place of `[^a-z0-9\/]`.
+					 *
+					 * @return string Produces a token based on the current blog sub-directory
+					 *    (i.e. in the case of a sub-directory multisite network).
+					 *
+					 * @note The return value of this function is cached to reduce overhead on repeat calls.
+					 *
+					 * @see update_blog_paths()
+					 */
 					public function host_dir_token($dashify = FALSE)
 						{
 							$dashify = (integer)$dashify;
@@ -1173,6 +1787,17 @@ namespace quick_cache // Root namespace.
 							return ($tokens[$dashify] = $token_value);
 						}
 
+					/**
+					 * Recursive directory iterator based on a regex pattern.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @param string $dir An absolute server directory path.
+					 * @param string $regex A regex pattern; compares to each full file path.
+					 *
+					 * @return \RegexIterator Navigable with {@link \foreach()}; where each item
+					 *    is a {@link \RecursiveDirectoryIterator}.
+					 */
 					public function dir_regex_iteration($dir, $regex)
 						{
 							$dir_iterator      = new \RecursiveDirectoryIterator($dir, \FilesystemIterator::KEY_AS_PATHNAME | \FilesystemIterator::CURRENT_AS_SELF | \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::UNIX_PATHS);
@@ -1182,6 +1807,17 @@ namespace quick_cache // Root namespace.
 							return apply_filters(__METHOD__, $regex_iterator, get_defined_vars());
 						}
 
+					/**
+					 * Checks if a PHP extension is loaded up.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @param string $extension A PHP extension slug (i.e. extension name).
+					 *
+					 * @return boolean `TRUE` if the extension is loaded; else `FALSE`.
+					 *
+					 * @note The return value of this function is cached to reduce overhead on repeat calls.
+					 */
 					public function is_extension_loaded($extension)
 						{
 							static $is = array(); // Static cache.
@@ -1189,6 +1825,22 @@ namespace quick_cache // Root namespace.
 							return ($is[$extension] = extension_loaded($extension));
 						}
 
+					/*
+					 * ------------ end section to centralize in a future release.
+					 */
+
+					/**
+					 * Is a particular function possible in every way?
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @param string $function A PHP function (or user function) to check.
+					 *
+					 * @return string `TRUE` if the function is possible; else `FALSE`.
+					 *
+					 * @note This checks (among other things) if the function exists and that it's callable.
+					 *    It also checks the currently configured `disable_functions` and `suhosin.executor.func.blacklist`.
+					 */
 					public function function_is_possible($function)
 						{
 							static $disabled_functions; // Static cache.
@@ -1212,10 +1864,22 @@ namespace quick_cache // Root namespace.
 							return apply_filters(__METHOD__, $possible, get_defined_vars());
 						}
 
+					/**
+					 * Apache `.htaccess` rules that deny public access to the contents of a directory.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @var string `.htaccess` fules.
+					 */
 					public $htaccess_deny = "<IfModule authz_core_module>\n\tRequire all denied\n</IfModule>\n<IfModule !authz_core_module>\n\tdeny from all\n</IfModule>";
 				}
 
 				/**
+				 * Used internally by other Quick Cache classes as an easy way to reference
+				 *    the core {@link plugin} class instance for Quick Cache.
+				 *
+				 * @since 140422 First documented version.
+				 *
 				 * @return plugin Class instance.
 				 */
 				function plugin() // Easy reference.
@@ -1223,7 +1887,17 @@ namespace quick_cache // Root namespace.
 						return $GLOBALS[__NAMESPACE__];
 					}
 
+				/**
+				 * A global reference to the Quick Cache plugin.
+				 *
+				 * @since 140422 First documented version.
+				 *
+				 * @var plugin $GLOBALS [__NAMESPACE__]
+				 */
 				$GLOBALS[__NAMESPACE__] = new plugin(); // New plugin instance.
+				/*
+				 * API class inclusion; depends on {@link $GLOBALS[__NAMESPACE__]}.
+				 */
 				require_once dirname(__FILE__).'/includes/api-class.php';
 			}
 		else add_action('all_admin_notices', function () // Do NOT load in this case.
