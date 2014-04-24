@@ -391,39 +391,156 @@ namespace quick_cache
 			 */
 			const NC_DEBUG_DONOTCACHEPAGE_SERVER_VAR = 'nc_debug_donotcachepage_server_var';
 
+			/**
+			 * No-cache because the current request method is `POST|PUT|DELETE`.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string A unique string identifier in the set of `NC_DEBUG_` constants.
+			 */
 			const NC_DEBUG_POST_PUT_DEL_REQUEST = 'nc_debug_post_put_del_request';
 
+			/**
+			 * No-cache because the current request originated from the server itself.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string A unique string identifier in the set of `NC_DEBUG_` constants.
+			 */
 			const NC_DEBUG_SELF_SERVE_REQUEST = 'nc_debug_self_serve_request';
 
+			/**
+			 * No-cache because the current request is for a feed.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string A unique string identifier in the set of `NC_DEBUG_` constants.
+			 */
 			const NC_DEBUG_FEED_REQUEST = 'nc_debug_feed_request';
 
+			/**
+			 * No-cache because the current request is systematic.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string A unique string identifier in the set of `NC_DEBUG_` constants.
+			 */
 			const NC_DEBUG_WP_SYSTEMATICS = 'nc_debug_wp_systematics';
 
+			/**
+			 * No-cache because the current request is for an administrative area.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string A unique string identifier in the set of `NC_DEBUG_` constants.
+			 */
 			const NC_DEBUG_WP_ADMIN = 'nc_debug_wp_admin';
 
+			/**
+			 * No-cache because the current request is multisite `/files/`.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string A unique string identifier in the set of `NC_DEBUG_` constants.
+			 */
 			const NC_DEBUG_MS_FILES = 'nc_debug_ms_files';
 
+			/**
+			 * No-cache because the current user is like a logged-in user.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string A unique string identifier in the set of `NC_DEBUG_` constants.
+			 */
 			const NC_DEBUG_IS_LIKE_LOGGED_IN_USER = 'nc_debug_is_like_logged_in_user';
 
+			/**
+			 * No-cache because the current user is logged into the site.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string A unique string identifier in the set of `NC_DEBUG_` constants.
+			 */
 			const NC_DEBUG_IS_LOGGED_IN_USER = 'nc_debug_is_logged_in_user';
 
+			/**
+			 * No-cache because the current request contains a query string.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string A unique string identifier in the set of `NC_DEBUG_` constants.
+			 */
 			const NC_DEBUG_GET_REQUEST_QUERIES = 'nc_debug_get_request_queries';
 
+			/**
+			 * No-cache because the current request is a 404 error.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string A unique string identifier in the set of `NC_DEBUG_` constants.
+			 */
 			const NC_DEBUG_404_REQUEST = 'nc_debug_404_request';
 
+			/**
+			 * No-cache because the requested page is currently in maintenance mode.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string A unique string identifier in the set of `NC_DEBUG_` constants.
+			 */
 			const NC_DEBUG_MAINTENANCE_PLUGIN = 'nc_debug_maintenance_plugin';
 
+			/**
+			 * No-cache because the current request is being compressed by an incompatible ZLIB coding type.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string A unique string identifier in the set of `NC_DEBUG_` constants.
+			 */
 			const NC_DEBUG_OB_ZLIB_CODING_TYPE = 'nc_debug_ob_zlib_coding_type';
 
+			/**
+			 * No-cache because the current request resulted in a WP error message.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string A unique string identifier in the set of `NC_DEBUG_` constants.
+			 */
 			const NC_DEBUG_WP_ERROR_PAGE = 'nc_debug_wp_error_page';
 
+			/**
+			 * No-cache because the current request is serving an uncacheable content type.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string A unique string identifier in the set of `NC_DEBUG_` constants.
+			 */
 			const NC_DEBUG_UNCACHEABLE_CONTENT_TYPE = 'nc_debug_uncacheable_content_type';
 
+			/**
+			 * No-cache because the current request sent a non-2xx & non-404 status code.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string A unique string identifier in the set of `NC_DEBUG_` constants.
+			 */
 			const NC_DEBUG_UNCACHEABLE_STATUS = 'nc_debug_uncacheable_status';
 
+			/**
+			 * No-cache because this is a new 404 error that we are symlinking.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string A unique string identifier in the set of `NC_DEBUG_` constants.
+			 */
 			const NC_DEBUG_1ST_TIME_404_SYMLINK = 'nc_debug_1st_time_404_symlink';
 
-			public function __construct() // Class constructor/cache handler.
+			/**
+			 * Class constructor/cache handler.
+			 *
+			 * @since 140422 First documented version.
+			 */
+			public function __construct()
 				{
 					if(!WP_CACHE || !QUICK_CACHE_ENABLE)
 						return; // Not enabled.
