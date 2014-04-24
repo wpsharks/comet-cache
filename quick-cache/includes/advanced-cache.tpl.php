@@ -127,10 +127,33 @@ namespace quick_cache
 		 */
 		class advanced_cache # `/wp-content/advanced-cache.php`
 		{
-			public $is_pro = FALSE; // Identifies the lite version of Quick Cache.
-			public $timer = 0; // Microtime; defined by class constructor for debugging purposes.
+			/**
+			 * Identifies the pro version of Quick Cache.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var boolean `TRUE` for Quick Cache Pro; else `FALSE`.
+			 */
+			public $is_pro = FALSE;
 
-			public $protocol = ''; // Calculated protocol; one of `http://` or `https://`.
+			/**
+			 * Microtime; defined by class constructor for debugging purposes.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var float Result of a call to {@link \microtime()}.
+			 */
+			public $timer = 0;
+
+			/**
+			 * Calculated protocol; one of `http://` or `https://`.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var float One of `http://` or `https://`.
+			 */
+			public $protocol = '';
+
 			public $version_salt = ''; // Calculated version salt; set by filters only in the lite version.
 			public $cache_path = ''; // Calculated cache path; absolute relative (no leading/trailing slashes).
 			public $cache_file = ''; // Calculated location; defined by `maybe_start_output_buffering()`.
