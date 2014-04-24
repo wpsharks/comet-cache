@@ -1538,6 +1538,17 @@ namespace quick_cache
 					return ($is[$extension] = extension_loaded($extension));
 				}
 
+			/**
+			 * Assigns an ID to each callable attached to a hook/filter.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @param string|callable|mixed $function A string or a callable.
+			 *
+			 * @return string Hook ID for the given `$function`.
+			 *
+			 * @throws \exception If the hook/function is invalid (i.e. it's not possible to generate an ID).
+			 */
 			public function hook_id($function)
 				{
 					if(is_string($function))
@@ -1556,6 +1567,18 @@ namespace quick_cache
 					throw new \exception(__('Invalid hook.', $this->text_domain));
 				}
 
+			/**
+			 * Adds a new hook (works with both actions & filters).
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @param string                $hook The name of a hook to attach to.
+			 * @param string|callable|mixed $function A string or a callable.
+			 * @param integer               $priority Hook priority; defaults to `10`.
+			 * @param integer               $accepted_args Max number of args that should be passed to the `$function`.
+			 *
+			 * @return boolean This always returns a `TRUE` value.
+			 */
 			public function add_hook($hook, $function, $priority = 10, $accepted_args = 1)
 				{
 					$this->hooks[$hook][$priority][$this->hook_id($function)]
@@ -1563,16 +1586,45 @@ namespace quick_cache
 					return TRUE; // Always returns true.
 				}
 
+			/**
+			 * Adds a new action hook.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @return boolean This always returns a `TRUE` value.
+			 *
+			 * @see add_hook()
+			 */
 			public function add_action() // Simple `add_hook()` alias.
 				{
 					return call_user_func_array(array($this, 'add_hook'), func_get_args());
 				}
 
+			/**
+			 * Adds a new filter.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @return boolean This always returns a `TRUE` value.
+			 *
+			 * @see add_hook()
+			 */
 			public function add_filter() // Simple `add_hook()` alias.
 				{
 					return call_user_func_array(array($this, 'add_hook'), func_get_args());
 				}
 
+			/**
+			 * Removes a hook (works with both actions & filters).
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @param string                $hook The name of a hook to remove.
+			 * @param string|callable|mixed $function A string or a callable.
+			 * @param integer               $priority Hook priority; defaults to `10`.
+			 *
+			 * @return boolean `TRUE` if removed; else `FALSE` if not removed for any reason.
+			 */
 			public function remove_hook($hook, $function, $priority = 10)
 				{
 					if(!isset($this->hooks[$hook][$priority][$this->hook_id($function)]))
