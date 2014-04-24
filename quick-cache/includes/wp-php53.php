@@ -6,7 +6,7 @@ if(!function_exists('wp_php53'))
 		 */
 		function wp_php53()
 			{
-				return version_compare(PHP_VERSION, '5.7', '>=');
+				return version_compare(PHP_VERSION, '5.3', '>=');
 			}
 	}
 if(!function_exists('wp_php53_notice'))
