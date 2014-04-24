@@ -1,122 +1,546 @@
 <?php
-namespace quick_cache // Root namespace.
+/**
+ * Quick Cache (Advanced Cache Handler)
+ *
+ * This file serves as a template for the Quick Cache plugin in WordPress.
+ * The Quick Cache plugin will fill the `%%` replacement codes automatically.
+ *    This file becomes: `/wp-content/advanced-cache.php`.
+ *
+ * @package quick_cache\advanced_cache
+ * @since 140422 First documented version.
+ * @copyright WebSharks, Inc. <http://www.websharks-inc.com>
+ * @license GNU General Public License, version 2
+ */
+namespace quick_cache
 	{
 		if(!defined('WPINC')) // MUST have WordPress.
 			exit('Do NOT access this file directly: '.basename(__FILE__));
 
-		/*
-		 * This file serves as a template for the Quick Cache plugin in WordPress.
-		 * The Quick Cache plugin will fill the `%%` replacement codes automatically.
-		 *    e.g. this file becomes: `/wp-content/advanced-cache.php`.
+		/**
+		 * Quick Cache Pro flag.
 		 *
-		 * Or, if you prefer; you can set the PHP constants below in your `/wp-config.php` file.
-		 * Then, you could simply drop this file into: `/wp-content/advanced-cache.php` on your own :-)
-		 * ~ Be sure to setup a CRON job that clears your `QUICK_CACHE_DIR` periodically.
+		 * @since 140422 First documented version.
+		 *
+		 * @var string|integer|boolean A boolean-ish value; e.g. `1` or `0`.
 		 */
+		define('QUICK_CACHE_PRO', TRUE); // Note that we do NOT check `if(defined())` here.
 
-		/*
-		 * Quick Cache configuration constants.
-		 * ----------------------------------------------------------------------------
-		 */
-		/*
-		 * These work as boolean flags.
-		 */
-		if(!defined('QUICK_CACHE_ENABLE')) define('QUICK_CACHE_ENABLE', '%%QUICK_CACHE_ENABLE%%');
-		if(!defined('QUICK_CACHE_DEBUGGING_ENABLE')) define('QUICK_CACHE_DEBUGGING_ENABLE', '%%QUICK_CACHE_DEBUGGING_ENABLE%%');
-		if(!defined('QUICK_CACHE_ALLOW_BROWSER_CACHE')) define('QUICK_CACHE_ALLOW_BROWSER_CACHE', '%%QUICK_CACHE_ALLOW_BROWSER_CACHE%%');
-		if(!defined('QUICK_CACHE_GET_REQUESTS')) define('QUICK_CACHE_GET_REQUESTS', '%%QUICK_CACHE_GET_REQUESTS%%');
-		if(!defined('QUICK_CACHE_FEEDS_ENABLE')) define('QUICK_CACHE_FEEDS_ENABLE', '%%QUICK_CACHE_FEEDS_ENABLE%%');
-		if(!defined('QUICK_CACHE_CACHE_404_REQUESTS')) define('QUICK_CACHE_CACHE_404_REQUESTS', '%%QUICK_CACHE_CACHE_404_REQUESTS%%');
+		if(!defined('QUICK_CACHE_ENABLE'))
+			/**
+			 * Is Quick Cache enabled?
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string|integer|boolean A boolean-ish value; e.g. `1` or `0`.
+			 */
+			define('QUICK_CACHE_ENABLE', '%%QUICK_CACHE_ENABLE%%');
 
-		/*
-		 * Cache directory. Max age; e.g. `7 days` — anything compatible w/ `strtotime()`.
-		 */
-		if(!defined('QUICK_CACHE_DIR')) define('QUICK_CACHE_DIR', ABSPATH.'%%QUICK_CACHE_DIR%%');
-		if(!defined('QUICK_CACHE_MAX_AGE')) define('QUICK_CACHE_MAX_AGE', '%%QUICK_CACHE_MAX_AGE%%');
+		if(!defined('QUICK_CACHE_DEBUGGING_ENABLE'))
+			/**
+			 * Is Quick Cache debugging enabled?
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string|integer|boolean A boolean-ish value; e.g. `1` or `0`.
+			 */
+			define('QUICK_CACHE_DEBUGGING_ENABLE', '%%QUICK_CACHE_DEBUGGING_ENABLE%%');
 
-		/*
-		 * A unique filename for the special 404 Cache File (used when 404 caching is enabled).
-		 */
-		if(!defined('QUICK_CACHE_404_CACHE_FILENAME')) define('QUICK_CACHE_404_CACHE_FILENAME', '----404----');
+		if(!defined('QUICK_CACHE_ALLOW_BROWSER_CACHE'))
+			/**
+			 * Allow browsers to cache each document?
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string|integer|boolean A boolean-ish value; e.g. `1` or `0`.
+			 *
+			 * @note If this is a `FALSE` (or an empty) value; Quick Cache will send no-cache headers.
+			 *    If `TRUE`, Quick Cache will NOT send no-cache headers.
+			 */
+			define('QUICK_CACHE_ALLOW_BROWSER_CACHE', '%%QUICK_CACHE_ALLOW_BROWSER_CACHE%%');
 
-		/*
-		 * The heart of Quick Cache.
-		 */
+		if(!defined('QUICK_CACHE_GET_REQUESTS'))
+			/**
+			 * Cache `$_GET` requests w/ a query string?
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string|integer|boolean A boolean-ish value; e.g. `1` or `0`.
+			 */
+			define('QUICK_CACHE_GET_REQUESTS', '%%QUICK_CACHE_GET_REQUESTS%%');
 
+		if(!defined('QUICK_CACHE_CACHE_404_REQUESTS'))
+			/**
+			 * Cache 404 errors?
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string|integer|boolean A boolean-ish value; e.g. `1` or `0`.
+			 */
+			define('QUICK_CACHE_CACHE_404_REQUESTS', '%%QUICK_CACHE_CACHE_404_REQUESTS%%');
+
+		if(!defined('QUICK_CACHE_FEEDS_ENABLE'))
+			/**
+			 * Cache XML/RSS/Atom feeds?
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string|integer|boolean A boolean-ish value; e.g. `1` or `0`.
+			 */
+			define('QUICK_CACHE_FEEDS_ENABLE', '%%QUICK_CACHE_FEEDS_ENABLE%%');
+
+		if(!defined('QUICK_CACHE_DIR'))
+			/**
+			 * Directory used to store cache files; relative to `ABSPATH`.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string Absolute server directory path.
+			 */
+			define('QUICK_CACHE_DIR', ABSPATH.'%%QUICK_CACHE_DIR%%');
+
+		if(!defined('QUICK_CACHE_MAX_AGE'))
+			/**
+			 * Cache expiration time.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string Anything compatible with PHP's {@link \strtotime()}.
+			 */
+			define('QUICK_CACHE_MAX_AGE', '%%QUICK_CACHE_MAX_AGE%%');
+
+		if(!defined('QUICK_CACHE_404_CACHE_FILENAME'))
+			/**
+			 * 404 file name (if applicable).
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string A unique file name that will not conflict with real paths.
+			 *    This should NOT include the extension; basename only please.
+			 */
+			define('QUICK_CACHE_404_CACHE_FILENAME', '----404----');
+
+		/**
+		 * Quick Cache (Advanced Cache Handler)
+		 *
+		 * @package quick_cache\advanced_cache
+		 * @since 140422 First documented version.
+		 */
 		class advanced_cache # `/wp-content/advanced-cache.php`
 		{
-			public $is_pro = FALSE; // Identifies the lite version of Quick Cache.
-			public $timer = 0; // Microtime; defined by class constructor for debugging purposes.
+			/**
+			 * Identifies the pro version of Quick Cache.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var boolean `TRUE` for Quick Cache Pro; else `FALSE`.
+			 */
+			public $is_pro = FALSE;
 
-			public $protocol = ''; // Calculated protocol; one of `http://` or `https://`.
-			public $version_salt = ''; // Calculated version salt; set by filters only in the lite version.
-			public $cache_path = ''; // Calculated cache path; absolute relative (no leading/trailing slashes).
-			public $cache_file = ''; // Calculated location; defined by `maybe_start_output_buffering()`.
-			public $cache_file_404 = ''; // Calculated location; defined by `maybe_start_output_buffering()`.
-			public $salt_location = ''; // Calculated location; defined by `maybe_start_output_buffering()`.
+			/**
+			 * Microtime; defined by class constructor for debugging purposes.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var float Result of a call to {@link \microtime()}.
+			 */
+			public $timer = 0;
 
-			public $postload = array(); // Off by default; just an empty array.
-			public $http_status; // See `maybe_filter_status_header_postload()`.
-			public $is_wp_loaded_query = FALSE; // See: `wp_main_query_postload()`.
-			public $is_404 = FALSE; // Set on `wp` by `wp_main_query_postload()`.
-			public $site_url = ''; // Set on `wp` by `wp_main_query_postload()`.
-			public $home_url = ''; // Set on `wp` by `wp_main_query_postload()`.
-			public $is_user_logged_in = FALSE; // Set on `wp` by `wp_main_query_postload()`.
-			public $is_maintenance = FALSE; // Set on `wp` by `wp_main_query_postload()`.
-			public $plugin_file = ''; // Set on `wp` by `wp_main_query_postload()`.
+			/**
+			 * Calculated protocol; one of `http://` or `https://`.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var float One of `http://` or `https://`.
+			 */
+			public $protocol = '';
 
-			public $text_domain = ''; // Defined by class constructor; for translations.
-			public $hooks = array(); // Array of advanced cache plugin hooks.
+			/**
+			 * Calculated version salt; set by site configuration data.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string|mixed Any scalar value does fine.
+			 */
+			public $version_salt = '';
 
+			/**
+			 * Calculated cache path for the current request;
+			 *    absolute relative (no leading/trailing slashes).
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string Absolute relative (no leading/trailing slashes).
+			 *    Defined by {@link maybe_start_output_buffering()}.
+			 */
+			public $cache_path = '';
+
+			/**
+			 * Calculated cache file location for the current request; absolute path.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string Cache file location for the current request; absolute path.
+			 *    Defined by {@link maybe_start_output_buffering()}.
+			 */
+			public $cache_file = '';
+
+			/**
+			 * Centralized 404 cache file location; absolute path.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string Centralized 404 cache file location; absolute path.
+			 *    Defined by {@link maybe_start_output_buffering()}.
+			 */
+			public $cache_file_404 = '';
+
+			/**
+			 * A possible version salt (string value); followed by the current request location.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string Version salt (string value); followed by the current request location.
+			 *    Defined by {@link maybe_start_output_buffering()}.
+			 */
+			public $salt_location = '';
+
+			/**
+			 * Array of data targeted at the postload phase.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var array Data and/or flags that work with various postload handlers.
+			 */
+			public $postload = array();
+
+			/**
+			 * Last HTTP status code passed through {@link \status_header}.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var null|integer Last HTTP status code (if applicable).
+			 *
+			 * @see maybe_filter_status_header_postload()
+			 */
+			public $http_status;
+
+			/**
+			 * Have we caught the main WP loaded being loaded yet?
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var boolean `TRUE` if main query has been loaded; else `FALSE`.
+			 *
+			 * @see wp_main_query_postload()
+			 */
+			public $is_wp_loaded_query = FALSE;
+
+			/**
+			 * Is the current request a WordPress 404 error?
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var boolean `TRUE` if is a 404 error; else `FALSE`.
+			 *
+			 * @see wp_main_query_postload()
+			 */
+			public $is_404 = FALSE;
+
+			/**
+			 * Current WordPress {@link \site_url()}.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string Current WordPress {@link \site_url()}.
+			 *
+			 * @see wp_main_query_postload()
+			 */
+			public $site_url = '';
+
+			/**
+			 * Current WordPress {@link \home_url()}.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string Current WordPress {@link \home_url()}.
+			 *
+			 * @see wp_main_query_postload()
+			 */
+			public $home_url = '';
+
+			/**
+			 * Flag for {@link \is_user_loged_in()}.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var boolean `TRUE` if {@link \is_user_loged_in()}; else `FALSE`.
+			 *
+			 * @see wp_main_query_postload()
+			 */
+			public $is_user_logged_in = FALSE;
+
+			/**
+			 * Flag for {@link \is_maintenance()}.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var boolean `TRUE` if {@link \is_maintenance()}; else `FALSE`.
+			 *
+			 * @see wp_main_query_postload()
+			 */
+			public $is_maintenance = FALSE;
+
+			/**
+			 * Value for {@link plugin::$file()}.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string The value of {@link plugin::$file()}.
+			 *
+			 * @see wp_main_query_postload()
+			 */
+			public $plugin_file = '';
+
+			/**
+			 * Text domain for translations; based on `__NAMESPACE__`.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string Defined by class constructor; for translations.
+			 */
+			public $text_domain = '';
+
+			/**
+			 * Array of hooks added by plugins.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var array An array of any hooks added by plugins.
+			 */
+			public $hooks = array();
+
+			/**
+			 * No-cache because of the current {@link \PHP_SAPI}.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string A unique string identifier in the set of `NC_DEBUG_` constants.
+			 */
 			const NC_DEBUG_PHP_SAPI_CLI = 'nc_debug_php_sapi_cli';
 
+			/**
+			 * No-cache because the current request includes the `?qcAC=0` parameter.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string A unique string identifier in the set of `NC_DEBUG_` constants.
+			 */
 			const NC_DEBUG_QCAC_GET_VAR = 'nc_debug_qcac_get_var';
 
+			/**
+			 * No-cache because of a missing `$_SERVER['HTTP_HOST']`.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string A unique string identifier in the set of `NC_DEBUG_` constants.
+			 */
 			const NC_DEBUG_NO_SERVER_HTTP_HOST = 'nc_debug_no_server_http_host';
 
+			/**
+			 * No-cache because of a missing `$_SERVER['REQUEST_URI']`.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string A unique string identifier in the set of `NC_DEBUG_` constants.
+			 */
 			const NC_DEBUG_NO_SERVER_REQUEST_URI = 'nc_debug_no_server_request_uri';
 
+			/**
+			 * No-cache because the {@link \QUICK_CACHE_ALLOWED} constant says not to.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string A unique string identifier in the set of `NC_DEBUG_` constants.
+			 */
 			const NC_DEBUG_QUICK_CACHE_ALLOWED_CONSTANT = 'nc_debug_quick_cache_allowed_constant';
 
+			/**
+			 * No-cache because the `$_SERVER['QUICK_CACHE_ALLOWED']` environment variable says not to.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string A unique string identifier in the set of `NC_DEBUG_` constants.
+			 */
 			const NC_DEBUG_QUICK_CACHE_ALLOWED_SERVER_VAR = 'nc_debug_quick_cache_allowed_server_var';
 
+			/**
+			 * No-cache because the {@link \DONOTCACHEPAGE} constant says not to.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string A unique string identifier in the set of `NC_DEBUG_` constants.
+			 */
 			const NC_DEBUG_DONOTCACHEPAGE_CONSTANT = 'nc_debug_donotcachepage_constant';
 
+			/**
+			 * No-cache because the `$_SERVER['DONOTCACHEPAGE']` environment variable says not to.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string A unique string identifier in the set of `NC_DEBUG_` constants.
+			 */
 			const NC_DEBUG_DONOTCACHEPAGE_SERVER_VAR = 'nc_debug_donotcachepage_server_var';
 
+			/**
+			 * No-cache because the current request method is `POST|PUT|DELETE`.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string A unique string identifier in the set of `NC_DEBUG_` constants.
+			 */
 			const NC_DEBUG_POST_PUT_DEL_REQUEST = 'nc_debug_post_put_del_request';
 
+			/**
+			 * No-cache because the current request originated from the server itself.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string A unique string identifier in the set of `NC_DEBUG_` constants.
+			 */
 			const NC_DEBUG_SELF_SERVE_REQUEST = 'nc_debug_self_serve_request';
 
+			/**
+			 * No-cache because the current request is for a feed.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string A unique string identifier in the set of `NC_DEBUG_` constants.
+			 */
 			const NC_DEBUG_FEED_REQUEST = 'nc_debug_feed_request';
 
+			/**
+			 * No-cache because the current request is systematic.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string A unique string identifier in the set of `NC_DEBUG_` constants.
+			 */
 			const NC_DEBUG_WP_SYSTEMATICS = 'nc_debug_wp_systematics';
 
+			/**
+			 * No-cache because the current request is for an administrative area.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string A unique string identifier in the set of `NC_DEBUG_` constants.
+			 */
 			const NC_DEBUG_WP_ADMIN = 'nc_debug_wp_admin';
 
+			/**
+			 * No-cache because the current request is multisite `/files/`.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string A unique string identifier in the set of `NC_DEBUG_` constants.
+			 */
 			const NC_DEBUG_MS_FILES = 'nc_debug_ms_files';
 
+			/**
+			 * No-cache because the current user is like a logged-in user.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string A unique string identifier in the set of `NC_DEBUG_` constants.
+			 */
 			const NC_DEBUG_IS_LIKE_LOGGED_IN_USER = 'nc_debug_is_like_logged_in_user';
 
+			/**
+			 * No-cache because the current user is logged into the site.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string A unique string identifier in the set of `NC_DEBUG_` constants.
+			 */
 			const NC_DEBUG_IS_LOGGED_IN_USER = 'nc_debug_is_logged_in_user';
 
+			/**
+			 * No-cache because the current request contains a query string.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string A unique string identifier in the set of `NC_DEBUG_` constants.
+			 */
 			const NC_DEBUG_GET_REQUEST_QUERIES = 'nc_debug_get_request_queries';
 
+			/**
+			 * No-cache because the current request is a 404 error.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string A unique string identifier in the set of `NC_DEBUG_` constants.
+			 */
 			const NC_DEBUG_404_REQUEST = 'nc_debug_404_request';
 
+			/**
+			 * No-cache because the requested page is currently in maintenance mode.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string A unique string identifier in the set of `NC_DEBUG_` constants.
+			 */
 			const NC_DEBUG_MAINTENANCE_PLUGIN = 'nc_debug_maintenance_plugin';
 
+			/**
+			 * No-cache because the current request is being compressed by an incompatible ZLIB coding type.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string A unique string identifier in the set of `NC_DEBUG_` constants.
+			 */
 			const NC_DEBUG_OB_ZLIB_CODING_TYPE = 'nc_debug_ob_zlib_coding_type';
 
+			/**
+			 * No-cache because the current request resulted in a WP error message.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string A unique string identifier in the set of `NC_DEBUG_` constants.
+			 */
 			const NC_DEBUG_WP_ERROR_PAGE = 'nc_debug_wp_error_page';
 
+			/**
+			 * No-cache because the current request is serving an uncacheable content type.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string A unique string identifier in the set of `NC_DEBUG_` constants.
+			 */
 			const NC_DEBUG_UNCACHEABLE_CONTENT_TYPE = 'nc_debug_uncacheable_content_type';
 
+			/**
+			 * No-cache because the current request sent a non-2xx & non-404 status code.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string A unique string identifier in the set of `NC_DEBUG_` constants.
+			 */
 			const NC_DEBUG_UNCACHEABLE_STATUS = 'nc_debug_uncacheable_status';
 
+			/**
+			 * No-cache because this is a new 404 error that we are symlinking.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string A unique string identifier in the set of `NC_DEBUG_` constants.
+			 */
 			const NC_DEBUG_1ST_TIME_404_SYMLINK = 'nc_debug_1st_time_404_symlink';
 
-			public function __construct() // Class constructor/cache handler.
+			/**
+			 * Class constructor/cache handler.
+			 *
+			 * @since 140422 First documented version.
+			 */
+			public function __construct()
 				{
 					if(!WP_CACHE || !QUICK_CACHE_ENABLE)
 						return; // Not enabled.
@@ -132,6 +556,11 @@ namespace quick_cache // Root namespace.
 					$this->maybe_start_output_buffering();
 				}
 
+			/**
+			 * Loads any advanced cache plugin files found inside `/wp-content/ac-plugins`.
+			 *
+			 * @since 140422 First documented version.
+			 */
 			public function load_ac_plugins()
 				{
 					if(!is_dir(WP_CONTENT_DIR.'/ac-plugins'))
@@ -145,6 +574,11 @@ namespace quick_cache // Root namespace.
 					unset($_ac_plugin); // Houskeeping.
 				}
 
+			/**
+			 * Sends no-cache headers (if applicable).
+			 *
+			 * @since 140422 First documented version.
+			 */
 			public function maybe_stop_browser_caching()
 				{
 					if(!empty($_GET['qcABC'])) return;
@@ -156,6 +590,14 @@ namespace quick_cache // Root namespace.
 					header('Pragma: no-cache');
 				}
 
+			/**
+			 * Start output buffering (if applicable); or serve a cache file (if possible).
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @note This is a vital part of Quick Cache. This method serves existing (fresh) cache files.
+			 *    It is also responsible for beginning the process of collecting the output buffer.
+			 */
 			public function maybe_start_output_buffering()
 				{
 					if(strtoupper(PHP_SAPI) === 'CLI')
@@ -240,6 +682,14 @@ namespace quick_cache // Root namespace.
 					return NULL; // Return value not applicable.
 				}
 
+			/**
+			 * Used to setup debug info (if enabled).
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @param string $reason_code One of the `NC_DEBUG_` constants.
+			 * @param string $reason Optionally override the built-in description with a custom message.
+			 */
 			public function maybe_set_debug_info($reason_code, $reason = '')
 				{
 					if(!QUICK_CACHE_DEBUGGING_ENABLE)
@@ -252,6 +702,11 @@ namespace quick_cache // Root namespace.
 					$this->postload['with_debug_info'] = array('reason_code' => $reason_code, 'reason' => $reason);
 				}
 
+			/**
+			 * Filters WP {@link \status_header()} (if applicable).
+			 *
+			 * @since 140422 First documented version.
+			 */
 			public function maybe_filter_status_header_postload()
 				{
 					if(empty($this->postload['filter_status_header']))
@@ -268,6 +723,11 @@ namespace quick_cache // Root namespace.
 						}, PHP_INT_MAX, 2);
 				}
 
+			/**
+			 * Appends `NC_DEBUG_` info in the WordPress `shutdown` phase (if applicable).
+			 *
+			 * @since 140422 First documented version.
+			 */
 			public function maybe_set_debug_info_postload()
 				{
 					if(!QUICK_CACHE_DEBUGGING_ENABLE)
@@ -292,7 +752,20 @@ namespace quick_cache // Root namespace.
 						}, -(PHP_INT_MAX - 10));
 				}
 
-			public function wp_main_query_postload() // Fires on `wp` action hook.
+			/**
+			 * Grab details from WP and the Quick Cache plugin itself,
+			 *    after the main query is loaded (if at all possible).
+			 *
+			 * This is where we have a chance to grab any values we need from WordPress; or from the QC plugin.
+			 *    It is EXTREMEMLY important that we NOT attempt to grab any object references here.
+			 *    Anything acquired in this phase should be stored as a scalar value.
+			 *    See {@link output_buffer_callback_handler()} for further details.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @attaches-to `wp` hook.
+			 */
+			public function wp_main_query_postload()
 				{
 					if($this->is_wp_loaded_query || is_admin())
 						return; // Nothing to do.
@@ -311,11 +784,56 @@ namespace quick_cache // Root namespace.
 						$this->plugin_file = plugin()->file;
 				}
 
+			/**
+			 * This turns off `E_NOTICE` level errors in the shutdown phase to prevent the WP core function
+			 *    {@link \wp_ob_end_flush_all()} from triggering `WP_DEBUG` notices.
+			 *
+			 *    Ideally we would NOT do this. However, there is little choice.
+			 *    This is what makes it possible for Quick Cache to use a locked output buffer.
+			 *    e.g. `ob_start(handler, 0, 0)`. Having a locked output buffer makes Quick Cache more dependable.
+			 *
+			 *    In cases where there are theme/plugin conflicts, more of these should be reported to us now; i.e. site owners may
+			 *    report `WP_DEBUG` notices regarding failed attempts to close/clean/flush an out-of-order output handler.
+			 *    These can be caused by a rogue theme/plugin that is doing things w/ buffers that it should not be.
+			 *
+			 *    The disabling of `E_NOTICE` here only impacts the PHP shutdown phase.
+			 *    i.e. Anything registered in PHP via {@link \register_shutdown_function()}.
+			 *    e.g. {@link \wp_ob_end_flush_all()} runs in the shutdown phase.
+			 *
+			 *    This will NOT prevent `E_NOTICE` level errors from being triggered when a
+			 *    theme/plugin does something out-of-order with an output buffer. Want WANT to see those!
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @IMPORTANT I suspect we will see some reports of this suddenly showing up on sites where a conflict currently exists.
+			 *    Of course, that will be a GOOD thing in most cases, because QC will have not been working properly for sites with conflicts anyway.
+			 *    Having said that, a sudden change like this could bring a site down completely, instead of just serving a corrupted cache every once in awhile.
+			 *    I'm not overly concerned about it though, because they're just notices; a site running in `WP_DEBUG` mode is usually not a live site anyway.
+			 *
+			 * @see https://github.com/WebSharks/Quick-Cache/issues/97
+			 */
 			public function disable_wp_ob_end_flush_all_e_notice()
 				{
 					error_reporting(error_reporting() & ~E_NOTICE);
 				}
 
+			/**
+			 * Output buffer handler; i.e. the cache file generator.
+			 *
+			 * @note We CANNOT depend on any WP functionality here; it will cause problems.
+			 *    Anything we need from WP should be saved in the postload phase as a scalar value.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @param string  $buffer The buffer from {@link \ob_start()}.
+			 * @param integer $phase A set of bitmask flags.
+			 *
+			 * @return string|boolean The output buffer, or `FALSE` to indicate no change.
+			 *
+			 * @throws \exception If unable to handle output buffering for any reason.
+			 *
+			 * @attaches-to {@link \ob_start()}
+			 */
 			public function output_buffer_callback_handler($buffer, $phase)
 				{
 					if($phase !== (PHP_OUTPUT_HANDLER_START | PHP_OUTPUT_HANDLER_END))
@@ -412,6 +930,17 @@ namespace quick_cache // Root namespace.
 					throw new \exception(sprintf(__('Quick Cache: failed to write cache file for: `%1$s`; possible permissions issue (or race condition), please check your cache directory: `%2$s`.', $this->text_domain), $_SERVER['REQUEST_URI'], QUICK_CACHE_DIR));
 				}
 
+			/**
+			 * Appends `NC_DEBUG_` info (if applicable).
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @param string $doc Input string to append debug info to.
+			 * @param string $reason_code One of the `NC_DEBUG_` constants.
+			 * @param string $reason Optional; to override the default description with a custom message.
+			 *
+			 * @return string The `$doc` with debug info appended (if applicable).
+			 */
 			public function maybe_add_nc_debug_info($doc = NULL, $reason_code = '', $reason = '')
 				{
 					if(!QUICK_CACHE_DEBUGGING_ENABLE)
@@ -531,20 +1060,103 @@ namespace quick_cache // Root namespace.
 				}
 
 			/*
-			 * See also: `quick-cache.inc.php` duplicate.
-			 * NOTE: the call to `is_ssl()` in this duplicate uses `$this->is_ssl()` because `is_ssl()`
-			 *    may NOT be available in this routine; i.e. it's not been loaded up yet.
+			 * See also: `quick-cache.inc.php` duplicates.
+			 *    @TODO Find a way to centralize this section so it can be shared between both classes easily.
 			 */
-			const CACHE_PATH_NO_SCHEME = 1; // Exclude scheme.
-			const CACHE_PATH_NO_HOST = 2; // Exclude host (i.e. domain name).
-			const CACHE_PATH_NO_PATH = 4; // Exclude path (i.e. the request URI).
-			const CACHE_PATH_NO_PATH_INDEX = 8; // Exclude path index (i.e. no default `index`).
-			const CACHE_PATH_NO_QUV = 16; // Exclude query, user & version salt.
-			const CACHE_PATH_NO_QUERY = 32; // Exclude query string.
-			const CACHE_PATH_NO_USER = 64; // Exclude user token.
-			const CACHE_PATH_NO_VSALT = 128; // Exclude version salt.
-			const CACHE_PATH_NO_EXT = 256; // Exclude extension.
 
+			/**
+			 * Exclude scheme from cache path.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var integer Part of a bitmask.
+			 */
+			const CACHE_PATH_NO_SCHEME = 1;
+
+			/**
+			 * Exclude host (i.e. domain name) from cache path.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var integer Part of a bitmask.
+			 */
+			const CACHE_PATH_NO_HOST = 2;
+
+			/**
+			 * Exclude path from cache path.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var integer Part of a bitmask.
+			 */
+			const CACHE_PATH_NO_PATH = 4;
+
+			/**
+			 * Exclude path index (i.e. no default `index`) from cache path.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var integer Part of a bitmask.
+			 */
+			const CACHE_PATH_NO_PATH_INDEX = 8;
+
+			/**
+			 * Exclude query, user & version salt from cache path.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var integer Part of a bitmask.
+			 */
+			const CACHE_PATH_NO_QUV = 16;
+
+			/**
+			 * Exclude query string from cache path.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var integer Part of a bitmask.
+			 */
+			const CACHE_PATH_NO_QUERY = 32;
+
+			/**
+			 * Exclude user token from cache path.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var integer Part of a bitmask.
+			 */
+			const CACHE_PATH_NO_USER = 64;
+
+			/**
+			 * Exclude version salt from cache path.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var integer Part of a bitmask.
+			 */
+			const CACHE_PATH_NO_VSALT = 128;
+
+			/**
+			 * Exclude extension from cache path.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var integer Part of a bitmask.
+			 */
+			const CACHE_PATH_NO_EXT = 256;
+
+			/**
+			 * Converts a URL into a `cache/path`.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @param string  $url The input URL to convert.
+			 * @param string  $with_user_token Optional user token (if applicable).
+			 * @param string  $with_version_salt Optional version salt (if applicable).
+			 * @param integer $flags Optional flags; a bitmask provided by `CACHE_PATH_*` constants.
+			 *
+			 * @return string The resulting `cache/path` based on the input `$url`.
+			 */
 			public function url_to_cache_path($url, $with_user_token = '', $with_version_salt = '', $flags = 0)
 				{
 					$cache_path        = ''; // Initialize.
@@ -603,6 +1215,18 @@ namespace quick_cache // Root namespace.
 					return $cache_path;
 				}
 
+			/**
+			 * Produces a token based on the current `$_SERVER['HTTP_HOST']`.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @param boolean $dashify Optional, defaults to a `FALSE` value.
+			 *    If `TRUE`, the token is returned with dashes in place of `[^a-z0-9\/]`.
+			 *
+			 * @return string Token based on the current `$_SERVER['HTTP_HOST']`.
+			 *
+			 * @note The return value of this function is cached to reduce overhead on repeat calls.
+			 */
 			public function host_token($dashify = FALSE)
 				{
 					$dashify = (integer)$dashify;
@@ -615,6 +1239,22 @@ namespace quick_cache // Root namespace.
 					return ($tokens[$dashify] = $token_value);
 				}
 
+			/**
+			 * Produces a token based on the current blog sub-directory
+			 *    (i.e. in the case of a sub-directory multisite network).
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @param boolean $dashify Optional, defaults to a `FALSE` value.
+			 *    If `TRUE`, the token is returned with dashes in place of `[^a-z0-9\/]`.
+			 *
+			 * @return string Produces a token based on the current blog sub-directory
+			 *    (i.e. in the case of a sub-directory multisite network).
+			 *
+			 * @note The return value of this function is cached to reduce overhead on repeat calls.
+			 *
+			 * @see plugin\update_blog_paths()
+			 */
 			public function host_dir_token($dashify = FALSE)
 				{
 					$dashify = (integer)$dashify;
@@ -646,6 +1286,15 @@ namespace quick_cache // Root namespace.
 					return ($tokens[$dashify] = $token_value);
 				}
 
+			/**
+			 * Is the current request method `POST|PUT|DELETE`?
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @return boolean `TRUE` if yes; else `FALSE`.
+			 *
+			 * @note The return value of this function is cached to reduce overhead on repeat calls.
+			 */
 			public function is_post_put_del_request()
 				{
 					static $is; // Cache.
@@ -658,6 +1307,15 @@ namespace quick_cache // Root namespace.
 					return ($is = FALSE);
 				}
 
+			/**
+			 * Does the current request include a query string?
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @return boolean `TRUE` if yes; else `FALSE`.
+			 *
+			 * @note The return value of this function is cached to reduce overhead on repeat calls.
+			 */
 			public function is_get_request_w_query()
 				{
 					static $is; // Cache.
@@ -670,6 +1328,15 @@ namespace quick_cache // Root namespace.
 					return ($is = FALSE);
 				}
 
+			/**
+			 * Should the current user be considered a logged-in user?
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @return boolean `TRUE` if yes; else `FALSE`.
+			 *
+			 * @note The return value of this function is cached to reduce overhead on repeat calls.
+			 */
 			public function is_like_user_logged_in()
 				{
 					static $is; // Cache.
@@ -703,6 +1370,15 @@ namespace quick_cache // Root namespace.
 					return ($is = FALSE);
 				}
 
+			/**
+			 * Are we in a LOCALHOST environment?
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @return boolean `TRUE` if yes; else `FALSE`.
+			 *
+			 * @note The return value of this function is cached to reduce overhead on repeat calls.
+			 */
 			public function is_localhost()
 				{
 					static $is; // Cache.
@@ -717,6 +1393,15 @@ namespace quick_cache // Root namespace.
 					return ($is = FALSE);
 				}
 
+			/**
+			 * Is the current request for a feed?
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @return boolean `TRUE` if yes; else `FALSE`.
+			 *
+			 * @note The return value of this function is cached to reduce overhead on repeat calls.
+			 */
 			public function is_feed()
 				{
 					static $is; // Cache.
@@ -731,6 +1416,15 @@ namespace quick_cache // Root namespace.
 					return ($is = FALSE);
 				}
 
+			/**
+			 * Is the current request over SSL?
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @return boolean `TRUE` if yes; else `FALSE`.
+			 *
+			 * @note The return value of this function is cached to reduce overhead on repeat calls.
+			 */
 			public function is_ssl()
 				{
 					static $is; // Cache.
@@ -751,6 +1445,15 @@ namespace quick_cache // Root namespace.
 					return ($is = FALSE);
 				}
 
+			/**
+			 * Is a document/string an HTML/XML doc; or no?
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @param string $doc Input string/document to check.
+			 *
+			 * @return boolean `TRUE` if yes; else `FALSE`.
+			 */
 			public function is_html_xml_doc($doc)
 				{
 					if(($doc = (string)$doc))
@@ -759,6 +1462,15 @@ namespace quick_cache // Root namespace.
 					return FALSE; // Not an HTML/XML document.
 				}
 
+			/**
+			 * Does the current request have a cacheable content type?
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @return boolean `TRUE` if yes; else `FALSE`.
+			 *
+			 * @note The return value of this function is cached to reduce overhead on repeat calls.
+			 */
 			public function has_a_cacheable_content_type()
 				{
 					static $has; // Cache.
@@ -775,6 +1487,15 @@ namespace quick_cache // Root namespace.
 					return ($has = TRUE); // Assume that it is by default, we are within WP after all.
 				}
 
+			/**
+			 * Does the current request have a cacheable HTTP status code?
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @return boolean `TRUE` if yes; else `FALSE`.
+			 *
+			 * @note The return value of this function is cached to reduce overhead on repeat calls.
+			 */
 			public function has_a_cacheable_status()
 				{
 					static $has; // Cache.
@@ -799,6 +1520,17 @@ namespace quick_cache // Root namespace.
 					return ($has = TRUE); // Assume that it is by default, we are within WP after all.
 				}
 
+			/**
+			 * Checks if a PHP extension is loaded up.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @param string $extension A PHP extension slug (i.e. extension name).
+			 *
+			 * @return boolean `TRUE` if the extension is loaded; else `FALSE`.
+			 *
+			 * @note The return value of this function is cached to reduce overhead on repeat calls.
+			 */
 			public function is_extension_loaded($extension)
 				{
 					static $is = array(); // Static cache.
@@ -806,6 +1538,17 @@ namespace quick_cache // Root namespace.
 					return ($is[$extension] = extension_loaded($extension));
 				}
 
+			/**
+			 * Assigns an ID to each callable attached to a hook/filter.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @param string|callable|mixed $function A string or a callable.
+			 *
+			 * @return string Hook ID for the given `$function`.
+			 *
+			 * @throws \exception If the hook/function is invalid (i.e. it's not possible to generate an ID).
+			 */
 			public function hook_id($function)
 				{
 					if(is_string($function))
@@ -824,6 +1567,18 @@ namespace quick_cache // Root namespace.
 					throw new \exception(__('Invalid hook.', $this->text_domain));
 				}
 
+			/**
+			 * Adds a new hook (works with both actions & filters).
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @param string                $hook The name of a hook to attach to.
+			 * @param string|callable|mixed $function A string or a callable.
+			 * @param integer               $priority Hook priority; defaults to `10`.
+			 * @param integer               $accepted_args Max number of args that should be passed to the `$function`.
+			 *
+			 * @return boolean This always returns a `TRUE` value.
+			 */
 			public function add_hook($hook, $function, $priority = 10, $accepted_args = 1)
 				{
 					$this->hooks[$hook][$priority][$this->hook_id($function)]
@@ -831,16 +1586,45 @@ namespace quick_cache // Root namespace.
 					return TRUE; // Always returns true.
 				}
 
+			/**
+			 * Adds a new action hook.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @return boolean This always returns a `TRUE` value.
+			 *
+			 * @see add_hook()
+			 */
 			public function add_action() // Simple `add_hook()` alias.
 				{
 					return call_user_func_array(array($this, 'add_hook'), func_get_args());
 				}
 
+			/**
+			 * Adds a new filter.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @return boolean This always returns a `TRUE` value.
+			 *
+			 * @see add_hook()
+			 */
 			public function add_filter() // Simple `add_hook()` alias.
 				{
 					return call_user_func_array(array($this, 'add_hook'), func_get_args());
 				}
 
+			/**
+			 * Removes a hook (works with both actions & filters).
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @param string                $hook The name of a hook to remove.
+			 * @param string|callable|mixed $function A string or a callable.
+			 * @param integer               $priority Hook priority; defaults to `10`.
+			 *
+			 * @return boolean `TRUE` if removed; else `FALSE` if not removed for any reason.
+			 */
 			public function remove_hook($hook, $function, $priority = 10)
 				{
 					if(!isset($this->hooks[$hook][$priority][$this->hook_id($function)]))
@@ -851,16 +1635,39 @@ namespace quick_cache // Root namespace.
 					return TRUE; // Existed before it was removed in this case.
 				}
 
+			/**
+			 * Removes an action.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @return boolean `TRUE` if removed; else `FALSE` if not removed for any reason.
+			 *
+			 * @see remove_hook()
+			 */
 			public function remove_action() // Simple `remove_hook()` alias.
 				{
 					return call_user_func_array(array($this, 'remove_hook'), func_get_args());
 				}
 
+			/**
+			 * Removes a filter.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @return boolean `TRUE` if removed; else `FALSE` if not removed for any reason.
+			 *
+			 * @see remove_hook()
+			 */
 			public function remove_filter() // Simple `remove_hook()` alias.
 				{
 					return call_user_func_array(array($this, 'remove_hook'), func_get_args());
 				}
 
+			/**
+			 * Runs any callables attached to an action.
+			 *
+			 * @since 140422 First documented version.
+			 */
 			public function do_action($hook)
 				{
 					if(empty($this->hooks[$hook]))
@@ -880,6 +1687,16 @@ namespace quick_cache // Root namespace.
 					unset($_hook_action, $_action); // Housekeeping.
 				}
 
+			/**
+			 * Runs any callables attached to a filter.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @param string $hook The name of a filter hook.
+			 * @param mixed  $value The value to filter.
+			 *
+			 * @return mixed The filtered `$value`.
+			 */
 			public function apply_filters($hook, $value)
 				{
 					if(empty($this->hooks[$hook]))
@@ -902,9 +1719,26 @@ namespace quick_cache // Root namespace.
 					return $value; // With applied filters.
 				}
 
+			/**
+			 * Apache `.htaccess` rules that deny public access to the contents of a directory.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string `.htaccess` fules.
+			 */
 			public $htaccess_deny = "<IfModule authz_core_module>\n\tRequire all denied\n</IfModule>\n<IfModule !authz_core_module>\n\tdeny from all\n</IfModule>";
 		}
 
+		/**
+		 * Polyfill for {@link \__()}.
+		 *
+		 * @since 140422 First documented version.
+		 *
+		 * @param string $string String to translate.
+		 * @param string $text_domain Plugin text domain.
+		 *
+		 * @return string Possibly translated string.
+		 */
 		function __($string, $text_domain) // Polyfill `\__()`.
 			{
 				static $__exists; // Static cache.
@@ -915,10 +1749,24 @@ namespace quick_cache // Root namespace.
 				return $string; // Not possible (yet).
 			}
 
+		/**
+		 * Global Quick Cache {@link advanced_cache} instance.
+		 *
+		 * @since 140422 First documented version.
+		 *
+		 * @var advanced_cache Global instance reference.
+		 */
 		$GLOBALS[__NAMESPACE__.'__advanced_cache'] = new advanced_cache();
 	}
 namespace // Global namespace.
 	{
+		/**
+		 * Postload event handler; overrides core WP function.
+		 *
+		 * @since 140422 First documented version.
+		 *
+		 * @note See `/wp-settings.php` around line #226.
+		 */
 		function wp_cache_postload() // See: `wp-settings.php`.
 			{
 				$advanced_cache = $GLOBALS['quick_cache__advanced_cache'];
