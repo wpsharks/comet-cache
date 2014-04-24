@@ -702,6 +702,11 @@ namespace quick_cache
 					$this->postload['with_debug_info'] = array('reason_code' => $reason_code, 'reason' => $reason);
 				}
 
+			/**
+			 * Filters WP {@link \status_header()} (if applicable).
+			 *
+			 * @since 140422 First documented version.
+			 */
 			public function maybe_filter_status_header_postload()
 				{
 					if(empty($this->postload['filter_status_header']))
@@ -718,6 +723,11 @@ namespace quick_cache
 						}, PHP_INT_MAX, 2);
 				}
 
+			/**
+			 * Appends `NC_DEBUG_` info in the WordPress `shutdown` phase (if applicable).
+			 *
+			 * @since 140422 First documented version.
+			 */
 			public function maybe_set_debug_info_postload()
 				{
 					if(!QUICK_CACHE_DEBUGGING_ENABLE)
@@ -742,7 +752,20 @@ namespace quick_cache
 						}, -(PHP_INT_MAX - 10));
 				}
 
-			public function wp_main_query_postload() // Fires on `wp` action hook.
+			/**
+			 * Grab details from WP and the Quick Cache plugin itself,
+			 *    after the main query is loaded (if at all possible).
+			 *
+			 * This is where we have a chance to grab any values we need from WordPress; or from the QC plugin.
+			 *    It is EXTREMEMLY important that we NOT attempt to grab any object references here.
+			 *    Anything acquired in this phase should be stored as a scalar value.
+			 *    See {@link output_buffer_callback_handler()} for further details.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @attaches-to `wp` hook.
+			 */
+			public function wp_main_query_postload()
 				{
 					if($this->is_wp_loaded_query || is_admin())
 						return; // Nothing to do.
