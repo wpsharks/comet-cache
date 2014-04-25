@@ -837,7 +837,7 @@ namespace quick_cache
 			public function output_buffer_callback_handler($buffer, $phase)
 				{
 					if(!($phase & PHP_OUTPUT_HANDLER_END)) // We do NOT chunk the buffer; so this should NOT occur.
-						throw new \exception(sprintf(__('Unexpected OB phase: `%1$s` on `%2$s`.', $this->text_domain), $phase));
+						throw new \exception(sprintf(__('Unexpected OB phase: `%1$s`.', $this->text_domain), $phase));
 
 					# Exclusion checks; there are MANY of these...
 
