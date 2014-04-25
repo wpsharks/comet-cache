@@ -219,7 +219,6 @@ namespace quick_cache
 							add_action('save_post', array($this, 'auto_purge_post_cache'));
 							add_action('delete_post', array($this, 'auto_purge_post_cache'));
 							add_action('clean_post_cache', array($this, 'auto_purge_post_cache'));
-
 							add_action('transition_post_status', array($this, 'auto_purge_post_cache_transition'), 10, 3);
 
 							add_action('added_term_relationship', array($this, 'auto_purge_post_terms_cache'), 10, 1);
@@ -814,7 +813,7 @@ namespace quick_cache
 					 * @since 140422 First documented version.
 					 *
 					 * @param integer $id A WordPress post ID.
-					 * @param bool $force_purge Defaults to a `FALSE` value.
+					 * @param bool $force Defaults to a `FALSE` value.
 					 *    Pass as TRUE if purge should be done for `draft`, `pending`,
 					 *    or `future` post statuses.
 					 *
@@ -828,7 +827,7 @@ namespace quick_cache
 					 * @see auto_purge_comment_post_cache()
 					 * @see auto_purge_post_cache_transition()
 					 */
-					public function auto_purge_post_cache($id, $force_purge=FALSE)
+					public function auto_purge_post_cache($id, $force = FALSE)
 						{
 							$counter = 0; // Initialize.
 
@@ -838,16 +837,18 @@ namespace quick_cache
 							if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
 								return $counter; // Nothing to do.
 
-							if(get_post_status($id) == 'auto-draft')
+							$post_status = get_post_status($id); // Cache this.
+
+							if($post_status === 'auto-draft')
 								return $counter; // Nothing to do.
 
-							if(get_post_status($id) == 'draft' && !$force_purge)
+							if($post_status === 'draft' && !$force)
 								return $counter; // Nothing to do.
 
-							if(get_post_status($id) == 'pending' && !$force_purge)
+							if($post_status === 'pending' && !$force)
 								return $counter; // Nothing to do.
 
-							if(get_post_status($id) == 'future' && !$force_purge)
+							if($post_status === 'future' && !$force)
 								return $counter; // Nothing to do.
 
 							$cache_dir = ABSPATH.$this->options['cache_dir'];
@@ -924,7 +925,7 @@ namespace quick_cache
 							return $counter; // Nothing to do.
 
 						if($new_status === 'draft' || $new_status === 'future' || $new_status === 'private')
-							$counter = $this->auto_purge_post_cache($post->ID, $force_purge=TRUE);
+							$counter = $this->auto_purge_post_cache($post->ID, TRUE);
 
 						return apply_filters(__METHOD__, $counter, get_defined_vars());
 					}
