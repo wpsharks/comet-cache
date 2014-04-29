@@ -197,6 +197,12 @@ namespace quick_cache // Root namespace.
 							echo '            <option value="1" selected="selected">'.__('Yes, if any single Post/Page is purged/reset; also purge the "Posts Page".', plugin()->text_domain).'</option>'."\n";
 							echo '            <option value="0">'.__('No, I don\'t use a separate Posts Page; e.g. my Home Page IS my Posts Page.', plugin()->text_domain).'</option>'."\n";
 							echo '         </select></p>'."\n";
+							echo '      <h3>'.__('Auto-Purge "Author Page" Too?', plugin()->text_domain).'</h3>'."\n";
+							echo '      <p>'.__('On many sites, each author has a related "Author Page" that offers an archive view of all posts associated with that author. Therefore, if a single Post/Page is changed in some way; and Quick Cache purges/resets the cache for a single Post/Page, would you like Quick Cache to also purge any existing cache files for the related "Author Page"?', plugin()->text_domain).'</p>'."\n";
+							echo '      <p><select name="'.esc_attr(__NAMESPACE__).'[save_options][cache_purge_author_page_enable]">'."\n";
+							echo '            <option value="1" selected="selected">'.__('Yes, if any single Post/Page is purged/reset; also purge the "Author Page".', plugin()->text_domain).'</option>'."\n";
+							echo '            <option value="0">'.__('No, my site doesn\'t use multiple authors and/or I don\'t have any "Author Page" archive views.', plugin()->text_domain).'</option>'."\n";
+							echo '         </select></p>'."\n";
 							echo '   </div>'."\n";
 
 							echo '</div>'."\n";
