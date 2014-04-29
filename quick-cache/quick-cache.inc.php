@@ -906,7 +906,7 @@ namespace quick_cache
 					 *
 					 * @param string $new_status New post status.
 					 * @param string $old_status Old post status.
-					 * @param object $post Post object.
+					 * @param \WP_Post $post Post object.
 					 *
 					 * @return integer Total files purged by this routine (if any).
 					 *
@@ -1066,8 +1066,8 @@ namespace quick_cache
 					 * @since 14xxxx First documented version.
 					 *
 					 * @param integer $post_ID A WordPress post ID.
-					 * @param object $post_after   WP_Post object following the update.
-					 * @param object $post_before  WP_Post object before the update.
+					 * @param \WP_Post $post_after   WP_Post object following the update.
+					 * @param \WP_Post $post_before  WP_Post object before the update.
 					 *
 					 * @return integer Total files purged by this routine (if any).
 					 *
@@ -1146,7 +1146,7 @@ namespace quick_cache
 
 										$_notices   = (is_array($_notices = get_option(__NAMESPACE__.'_notices'))) ? $_notices : array();
 										$_notices[] = '<img src="'.esc_attr($this->url('/client-s/images/clear.png')).'" style="float:left; margin:0 10px 0 0; border:0;" />'.
-										              sprintf(__('<strong>Quick Cache:</strong> detected changes. Found cache files for Author Page: <code>%1$s</code> (auto-purging).', $this->text_domain), $_author['display_name']);
+										              sprintf(__('<strong>Quick Cache:</strong> detected changes. Found cache files for Author Page: <code>%1$s</code> (auto-purging).', $this->text_domain), esc_html($_author['display_name']));
 
 										update_option(__NAMESPACE__.'_notices', $_notices);
 									}
