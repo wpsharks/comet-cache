@@ -1059,9 +1059,9 @@ namespace quick_cache
 						}
 
 					/**
-					 * Automatically purges cache files for the author page.
+					 * Automatically purges cache files for the author page(s).
 					 *
-					 * @attaches-to `edit_post` hook.
+					 * @attaches-to `post_updated` hook.
 					 *
 					 * @since 14xxxx First documented version.
 					 *
@@ -1073,10 +1073,9 @@ namespace quick_cache
 					 *
 					 * @throws \exception If a purge failure occurs.
 					 *
-					 * @note Unlike many of the other `auto_` methods, this one is NOT currently
-					 *    attached to any hooks. However, it is called upon by {@link auto_purge_post_cache()}.
+					 * @note If the author for the post is being changed, both the previous author
+					 *       and current author pages are purged, if the post status is applicable.
 					 *
-					 * @see auto_purge_post_cache()
 					 */
 					public function auto_purge_author_page_cache($post_ID, $post_after, $post_before)
 						{
