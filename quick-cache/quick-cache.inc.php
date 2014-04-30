@@ -145,7 +145,7 @@ namespace quick_cache
 							                                'cache_purge_term_other_enable'    => '0', // `0|1`.
 							                                'allow_browser_cache'              => '0', // `0|1`.
 
-							                                'cache_dir'                        => $wp_content_dir_relative.'/cache',
+							                                'cache_dir'                        => $wp_content_dir_relative.'/cache/quick-cache',
 							                                'cache_max_age'                    => '7 days', // `strtotime()` compatible.
 
 							                                'get_requests'                     => '0', // `0|1`.
