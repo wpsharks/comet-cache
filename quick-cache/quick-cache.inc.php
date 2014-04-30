@@ -139,6 +139,7 @@ namespace quick_cache
 							                                'debugging_enable'                 => '1', // `0|1`.
 							                                'cache_purge_home_page_enable'     => '1', // `0|1`.
 							                                'cache_purge_posts_page_enable'    => '1', // `0|1`.
+							                                'cache_purge_author_page_enable'   => '1', // `0|1`.
 							                                'cache_purge_term_category_enable' => '1', // `0|1`.
 							                                'cache_purge_term_post_tag_enable' => '1', // `0|1`.
 							                                'cache_purge_term_other_enable'    => '1', // `0|1`.
@@ -219,6 +220,7 @@ namespace quick_cache
 							add_action('save_post', array($this, 'auto_purge_post_cache'));
 							add_action('delete_post', array($this, 'auto_purge_post_cache'));
 							add_action('clean_post_cache', array($this, 'auto_purge_post_cache'));
+							add_action('post_updated', array($this, 'auto_purge_author_page_cache'), 10, 3);
 							add_action('transition_post_status', array($this, 'auto_purge_post_cache_transition'), 10, 3);
 
 							add_action('added_term_relationship', array($this, 'auto_purge_post_terms_cache'), 10, 1);
@@ -904,7 +906,7 @@ namespace quick_cache
 					 *
 					 * @param string $new_status New post status.
 					 * @param string $old_status Old post status.
-					 * @param object $post Post object.
+					 * @param \WP_Post $post Post object.
 					 *
 					 * @return integer Total files purged by this routine (if any).
 					 *
@@ -913,7 +915,7 @@ namespace quick_cache
 					 * @note This is also called upon by other routines which listen for
 					 *    events that are indirectly associated with a post ID.
 					 *
-					 * @see auto_purge_comment_post_cache()
+					 * @see auto_purge_post_cache()
 					 */
 					public function auto_purge_post_cache_transition($new_status, $old_status, $post)
 						{
@@ -1052,6 +1054,104 @@ namespace quick_cache
 									update_option(__NAMESPACE__.'_notices', $_notices);
 								}
 							unset($_file, $_notices); // Just a little housekeeping.
+
+							return apply_filters(__METHOD__, $counter, get_defined_vars());
+						}
+
+					/**
+					 * Automatically purges cache files for the author page(s).
+					 *
+					 * @attaches-to `post_updated` hook.
+					 *
+					 * @since 14xxxx First documented version.
+					 *
+					 * @param integer $post_ID A WordPress post ID.
+					 * @param \WP_Post $post_after   WP_Post object following the update.
+					 * @param \WP_Post $post_before  WP_Post object before the update.
+					 *
+					 * @return integer Total files purged by this routine (if any).
+					 *
+					 * @throws \exception If a purge failure occurs.
+					 *
+					 * @note If the author for the post is being changed, both the previous author
+					 *       and current author pages are purged, if the post status is applicable.
+					 *
+					 */
+					public function auto_purge_author_page_cache($post_ID, $post_after, $post_before)
+						{
+							$counter = 0; // Initialize.
+							$authors = array(); // Initialize.
+							$authors_to_purge = array(); // Initialize.
+
+							if(!$this->options['enable'])
+								return $counter; // Nothing to do.
+
+							if(!$this->options['cache_purge_author_page_enable'])
+								return $counter; // Nothing to do.
+
+							$cache_dir = ABSPATH.$this->options['cache_dir'];
+							if(!is_dir($cache_dir)) return $counter; // Nothing to do.
+
+							/*
+							 * If we're changing the post author AND
+							 *    the previous post status was either 'published' or 'private'
+							 * then clear the author page for both authors.
+							 *
+							 * Else if the old post status was 'published' or 'private' OR
+							 *    the new post status is 'published' or 'private'
+							 * then clear the author page for the current author.
+							 *
+							 * Else return the counter; post status does not warrant purging author page cache.
+							 */
+							if($post_after->post_author !== $post_before->post_author &&
+							   ($post_before->post_status === 'publish' || $post_before->post_status === 'private')
+							)
+								{
+									$authors[] = (integer)$post_before->post_author;
+									$authors[] = (integer)$post_after->post_author;
+								}
+							elseif(($post_before->post_status === 'publish' || $post_before->post_status === 'private') ||
+							       ($post_after->post_status === 'publish' || $post_after->post_status === 'private')
+							)
+								$authors[] = (integer)$post_after->post_author;
+							else
+								return $counter; // Nothing to do.
+
+							// Get author posts URL and display name
+							foreach ( $authors as $_author_id ) {
+								$authors_to_purge[$_author_id]['posts_url'] = get_author_posts_url( $_author_id );
+								$authors_to_purge[$_author_id]['display_name'] = get_the_author_meta( 'display_name', $_author_id );
+							}
+							unset($_author_id);
+
+							foreach ( $authors_to_purge as $_author ) {
+								$cache_path_no_scheme_quv_ext = $this->url_to_cache_path($_author['posts_url'], '', '', $this::CACHE_PATH_NO_SCHEME | $this::CACHE_PATH_NO_PATH_INDEX | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT);
+								$regex                        = '/^'.preg_quote($cache_dir, '/'). // Consider all schemes; all path paginations; and all possible variations.
+								                                '\/[^\/]+\/'.preg_quote($cache_path_no_scheme_quv_ext, '/').
+								                                '(?:\/index)?(?:\.|\/(?:page|comment\-page)\/[0-9]+[.\/])/';
+
+								/** @var $_file \RecursiveDirectoryIterator For IDEs. */
+								foreach($this->dir_regex_iteration($cache_dir, $regex) as $_file) if($_file->isFile() || $_file->isLink())
+									{
+										if(strpos($_file->getSubpathname(), '/') === FALSE) continue;
+										// Don't delete files in the immediate directory; e.g. `qc-advanced-cache` or `.htaccess`, etc.
+										// Actual `http|https/...` cache files are nested. Files in the immediate directory are for other purposes.
+
+										if(!unlink($_file->getPathname())) // Throw exception if unable to delete.
+											throw new \exception(sprintf(__('Unable to auto-purge file: `%1$s`.', $this->text_domain), $_file->getPathname()));
+										$counter++; // Increment counter for each file purge.
+
+										if(!is_admin())
+											continue; // Stop here; this notice is N/A.
+
+										$_notices   = (is_array($_notices = get_option(__NAMESPACE__.'_notices'))) ? $_notices : array();
+										$_notices[] = '<img src="'.esc_attr($this->url('/client-s/images/clear.png')).'" style="float:left; margin:0 10px 0 0; border:0;" />'.
+										              sprintf(__('<strong>Quick Cache:</strong> detected changes. Found cache files for Author Page: <code>%1$s</code> (auto-purging).', $this->text_domain), esc_html($_author['display_name']));
+
+										update_option(__NAMESPACE__.'_notices', $_notices);
+									}
+							}
+							unset($_file, $_notices, $_author); // Just a little housekeeping.
 
 							return apply_filters(__METHOD__, $counter, get_defined_vars());
 						}
