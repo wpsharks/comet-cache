@@ -142,7 +142,7 @@ namespace quick_cache
 							                                'cache_purge_author_page_enable'   => '1', // `0|1`.
 							                                'cache_purge_term_category_enable' => '1', // `0|1`.
 							                                'cache_purge_term_post_tag_enable' => '1', // `0|1`.
-							                                'cache_purge_term_other_enable'    => '1', // `0|1`.
+							                                'cache_purge_term_other_enable'    => '0', // `0|1`.
 							                                'allow_browser_cache'              => '0', // `0|1`.
 
 							                                'cache_dir'                        => $wp_content_dir_relative.'/cache',

@@ -203,6 +203,24 @@ namespace quick_cache // Root namespace.
 							echo '            <option value="1" selected="selected">'.__('Yes, if any single Post/Page is purged/reset; also purge the "Author Page".', plugin()->text_domain).'</option>'."\n";
 							echo '            <option value="0">'.__('No, my site doesn\'t use multiple authors and/or I don\'t have any "Author Page" archive views.', plugin()->text_domain).'</option>'."\n";
 							echo '         </select></p>'."\n";
+							echo '      <h3>'.__('Auto-Purge "Category Archives" Too?', plugin()->text_domain).'</h3>'."\n";
+							echo '      <p>'.__('On many sites, each post is associated with at least one Category. Each category then has an archive view that contains all the posts within that category. Therefore, if a single Post/Page is changed in some way; and Quick Cache purges/resets the cache for a single Post/Page, would you like Quick Cache to also purge any existing cache files for the associated Category archive views?', plugin()->text_domain).'</p>'."\n";
+							echo '      <p><select name="'.esc_attr(__NAMESPACE__).'[save_options][cache_purge_term_category_enable]">'."\n";
+							echo '            <option value="1" selected="selected">'.__('Yes, if any single Post/Page is purged/reset; also purge the associated Category archive views.', plugin()->text_domain).'</option>'."\n";
+							echo '            <option value="0">'.__('No, my site doesn\'t use Categories and/or I don\'t have any Category archive views.', plugin()->text_domain).'</option>'."\n";
+							echo '         </select></p>'."\n";
+							echo '      <h3>'.__('Auto-Purge "Tag Archives" Too?', plugin()->text_domain).'</h3>'."\n";
+							echo '      <p>'.__('On many sites, each post may be associated with at least one Tag. Each tag then has an archive view that contains all the posts assigned that tag. Therefore, if a single Post/Page is changed in some way; and Quick Cache purges/resets the cache for a single Post/Page, would you like Quick Cache to also purge any existing cache files for the associated Tag archive views?', plugin()->text_domain).'</p>'."\n";
+							echo '      <p><select name="'.esc_attr(__NAMESPACE__).'[save_options][cache_purge_term_tag_enable]">'."\n";
+							echo '            <option value="1" selected="selected">'.__('Yes, if any single Post/Page is purged/reset; also purge the associated Tag archive views.', plugin()->text_domain).'</option>'."\n";
+							echo '            <option value="0">'.__('No, my site doesn\'t use Tags and/or I don\'t have any Tag archive views.', plugin()->text_domain).'</option>'."\n";
+							echo '         </select></p>'."\n";
+							echo '      <h3>'.__('Auto-Purge "Custom Term Archives" Too?', plugin()->text_domain).'</h3>'."\n";
+							echo '      <p>'.__('Most sites do not use any custom Terms so it should be safe to leave this disabled. However, if your site uses custom Terms and they have their own Term archive views, you may want to clear those when the associated post is cleared. Therefore, if a single Post/Page is changed in some way; and Quick Cache purges/resets the cache for a single Post/Page, would you like Quick Cache to also purge any existing cache files for the associated Tag archive views?', plugin()->text_domain).'</p>'."\n";
+							echo '      <p><select name="'.esc_attr(__NAMESPACE__).'[save_options][cache_purge_term_other_enable]">'."\n";
+							echo '            <option value="1" selected="selected">'.__('Yes, if any single Post/Page is purged/reset; also purge any associated custom Term archive views.', plugin()->text_domain).'</option>'."\n";
+							echo '            <option value="0">'.__('No, my site doesn\'t use any custom Terms and/or I don\'t have any custom Term archive views.', plugin()->text_domain).'</option>'."\n";
+							echo '         </select></p>'."\n";
 							echo '   </div>'."\n";
 
 							echo '</div>'."\n";
