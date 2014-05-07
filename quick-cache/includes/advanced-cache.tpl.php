@@ -934,7 +934,7 @@ namespace quick_cache
 			 *
 			 * @since 140422 First documented version.
 			 *
-			 * @param string $doc Input string to append debug info to.
+			 * @param null|string $doc Input string to append debug info to.
 			 * @param string $reason_code One of the `NC_DEBUG_` constants.
 			 * @param string $reason Optional; to override the default description with a custom message.
 			 *
