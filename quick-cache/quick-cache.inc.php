@@ -628,16 +628,15 @@ namespace quick_cache
 							$counter = 0; // Initialize.
 
 							$cache_dir = ABSPATH.$this->options['cache_dir'];
-							if(!is_dir($cache_dir)) return $counter; // Nothing we can do.
 
 							// @TODO When set_time_limit() is disabled by PHP configuration, display a warning message to users upon plugin activation
 							@set_time_limit(1800); // In case of HUGE sites w/ a very large directory. Errors are ignored in case `set_time_limit()` is disabled.
 
 							/** @var $_dir_file \RecursiveDirectoryIterator For IDEs. */
-							foreach($this->dir_regex_iteration($cache_dir, '/.+/') as $_dir_file)
+							if(is_dir($cache_dir)) foreach($this->dir_regex_iteration($cache_dir, '/.+/') as $_dir_file)
 								{
-									if(($_dir_file->isFile() || $_dir_file->isLink()) && (strpos($_dir_file->getSubPathname(), '/') !== FALSE || strpos($_dir_file->getSubPathname(), 'qc-c-') === 0))
-										// Don't delete files in the immediate directory; e.g. `qc-advanced-cache` or `.htaccess`, etc. ~ With one exception for old `qc-c-` cache files.
+									if(($_dir_file->isFile() || $_dir_file->isLink()) && strpos($_dir_file->getSubPathname(), '/') !== FALSE)
+										// Don't delete files in the immediate directory; e.g. `qc-advanced-cache` or `.htaccess`, etc.
 										// Actual `http|https/...` cache files are nested. Files in the immediate directory are for other purposes.
 										if(!unlink($_dir_file->getPathname())) // Throw exception if unable to delete.
 											throw new \exception(sprintf(__('Unable to wipe file: `%1$s`.', $this->text_domain), $_dir_file->getPathname()));
@@ -646,6 +645,22 @@ namespace quick_cache
 									else if($_dir_file->isDir()) // Directories are last in the iteration.
 										if(!rmdir($_dir_file->getPathname())) // Throw exception if unable to delete.
 											throw new \exception(sprintf(__('Unable to wipe dir: `%1$s`.', $this->text_domain), $_dir_file->getPathname()));
+								}
+							unset($_dir_file); // Just a little housekeeping.
+
+							/** @var $_dir_file \RecursiveDirectoryIterator For IDEs. */
+							if(is_dir(WP_CONTENT_DIR.'/cache')) foreach($this->dir_regex_iteration(WP_CONTENT_DIR.'/cache', '/.+/') as $_dir_file)
+								{
+									if(($_dir_file->isFile() || $_dir_file->isLink()) && strpos($_dir_file->getSubPathname(), 'qc-') === 0)
+										// Only delete files that we KNOW belonged to Quick Cache; i.e. those starting w/ `qc-`.
+										if(!unlink($_dir_file->getPathname())) // Throw exception if unable to delete.
+											throw new \exception(sprintf(__('Unable to wipe old file: `%1$s`.', $this->text_domain), $_dir_file->getPathname()));
+										else $counter++; // Increment counter for each file we wipe.
+
+									else if($_dir_file->isDir() && strpos($_dir_file->getSubPathname(), 'qc-') === 0)
+										// Only delete directories that we KNOW belonged to Quick Cache; i.e. those starting w/ `qc-`.
+										if(!rmdir($_dir_file->getPathname())) // Throw exception if unable to delete.
+											throw new \exception(sprintf(__('Unable to wipe old dir: `%1$s`.', $this->text_domain), $_dir_file->getPathname()));
 								}
 							unset($_dir_file); // Just a little housekeeping.
 
@@ -904,8 +919,8 @@ namespace quick_cache
 					 *
 					 * @since 14xxxx First documented version.
 					 *
-					 * @param string $new_status New post status.
-					 * @param string $old_status Old post status.
+					 * @param string   $new_status New post status.
+					 * @param string   $old_status Old post status.
 					 * @param \WP_Post $post Post object.
 					 *
 					 * @return integer Total files purged by this routine (if any).
@@ -1065,9 +1080,9 @@ namespace quick_cache
 					 *
 					 * @since 14xxxx First documented version.
 					 *
-					 * @param integer $post_ID A WordPress post ID.
-					 * @param \WP_Post $post_after   WP_Post object following the update.
-					 * @param \WP_Post $post_before  WP_Post object before the update.
+					 * @param integer  $post_ID A WordPress post ID.
+					 * @param \WP_Post $post_after WP_Post object following the update.
+					 * @param \WP_Post $post_before WP_Post object before the update.
 					 *
 					 * @return integer Total files purged by this routine (if any).
 					 *
@@ -1079,8 +1094,8 @@ namespace quick_cache
 					 */
 					public function auto_purge_author_page_cache($post_ID, $post_after, $post_before)
 						{
-							$counter = 0; // Initialize.
-							$authors = array(); // Initialize.
+							$counter          = 0; // Initialize.
+							$authors          = array(); // Initialize.
 							$authors_to_purge = array(); // Initialize.
 
 							if(!$this->options['enable'])
@@ -1118,39 +1133,41 @@ namespace quick_cache
 								return $counter; // Nothing to do.
 
 							// Get author posts URL and display name
-							foreach ( $authors as $_author_id ) {
-								$authors_to_purge[$_author_id]['posts_url'] = get_author_posts_url( $_author_id );
-								$authors_to_purge[$_author_id]['display_name'] = get_the_author_meta( 'display_name', $_author_id );
-							}
+							foreach($authors as $_author_id)
+								{
+									$authors_to_purge[$_author_id]['posts_url']    = get_author_posts_url($_author_id);
+									$authors_to_purge[$_author_id]['display_name'] = get_the_author_meta('display_name', $_author_id);
+								}
 							unset($_author_id);
 
-							foreach ( $authors_to_purge as $_author ) {
-								$cache_path_no_scheme_quv_ext = $this->url_to_cache_path($_author['posts_url'], '', '', $this::CACHE_PATH_NO_SCHEME | $this::CACHE_PATH_NO_PATH_INDEX | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT);
-								$regex                        = '/^'.preg_quote($cache_dir, '/'). // Consider all schemes; all path paginations; and all possible variations.
-								                                '\/[^\/]+\/'.preg_quote($cache_path_no_scheme_quv_ext, '/').
-								                                '(?:\/index)?(?:\.|\/(?:page|comment\-page)\/[0-9]+[.\/])/';
+							foreach($authors_to_purge as $_author)
+								{
+									$cache_path_no_scheme_quv_ext = $this->url_to_cache_path($_author['posts_url'], '', '', $this::CACHE_PATH_NO_SCHEME | $this::CACHE_PATH_NO_PATH_INDEX | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT);
+									$regex                        = '/^'.preg_quote($cache_dir, '/'). // Consider all schemes; all path paginations; and all possible variations.
+									                                '\/[^\/]+\/'.preg_quote($cache_path_no_scheme_quv_ext, '/').
+									                                '(?:\/index)?(?:\.|\/(?:page|comment\-page)\/[0-9]+[.\/])/';
 
-								/** @var $_file \RecursiveDirectoryIterator For IDEs. */
-								foreach($this->dir_regex_iteration($cache_dir, $regex) as $_file) if($_file->isFile() || $_file->isLink())
-									{
-										if(strpos($_file->getSubpathname(), '/') === FALSE) continue;
-										// Don't delete files in the immediate directory; e.g. `qc-advanced-cache` or `.htaccess`, etc.
-										// Actual `http|https/...` cache files are nested. Files in the immediate directory are for other purposes.
+									/** @var $_file \RecursiveDirectoryIterator For IDEs. */
+									foreach($this->dir_regex_iteration($cache_dir, $regex) as $_file) if($_file->isFile() || $_file->isLink())
+										{
+											if(strpos($_file->getSubpathname(), '/') === FALSE) continue;
+											// Don't delete files in the immediate directory; e.g. `qc-advanced-cache` or `.htaccess`, etc.
+											// Actual `http|https/...` cache files are nested. Files in the immediate directory are for other purposes.
 
-										if(!unlink($_file->getPathname())) // Throw exception if unable to delete.
-											throw new \exception(sprintf(__('Unable to auto-purge file: `%1$s`.', $this->text_domain), $_file->getPathname()));
-										$counter++; // Increment counter for each file purge.
+											if(!unlink($_file->getPathname())) // Throw exception if unable to delete.
+												throw new \exception(sprintf(__('Unable to auto-purge file: `%1$s`.', $this->text_domain), $_file->getPathname()));
+											$counter++; // Increment counter for each file purge.
 
-										if(!is_admin())
-											continue; // Stop here; this notice is N/A.
+											if(!is_admin())
+												continue; // Stop here; this notice is N/A.
 
-										$_notices   = (is_array($_notices = get_option(__NAMESPACE__.'_notices'))) ? $_notices : array();
-										$_notices[] = '<img src="'.esc_attr($this->url('/client-s/images/clear.png')).'" style="float:left; margin:0 10px 0 0; border:0;" />'.
-										              sprintf(__('<strong>Quick Cache:</strong> detected changes. Found cache files for Author Page: <code>%1$s</code> (auto-purging).', $this->text_domain), esc_html($_author['display_name']));
+											$_notices   = (is_array($_notices = get_option(__NAMESPACE__.'_notices'))) ? $_notices : array();
+											$_notices[] = '<img src="'.esc_attr($this->url('/client-s/images/clear.png')).'" style="float:left; margin:0 10px 0 0; border:0;" />'.
+											              sprintf(__('<strong>Quick Cache:</strong> detected changes. Found cache files for Author Page: <code>%1$s</code> (auto-purging).', $this->text_domain), esc_html($_author['display_name']));
 
-										update_option(__NAMESPACE__.'_notices', $_notices);
-									}
-							}
+											update_option(__NAMESPACE__.'_notices', $_notices);
+										}
+								}
 							unset($_file, $_notices, $_author); // Just a little housekeeping.
 
 							return apply_filters(__METHOD__, $counter, get_defined_vars());
