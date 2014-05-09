@@ -1448,12 +1448,12 @@ namespace quick_cache
 							$rel_dir_file = trim((string)$rel_dir_file, '\\/'." \t\n\r\0\x0B");
 
 							if(empty($this->options['base_dir'])) // Security enhancement; NEVER allow this to be empty.
-								throw new \exception(__('Doing it wrong! Missing `base_dir` option value. MUST call this method after `setup()`.'));
+								throw new \exception(__('Doing it wrong! Missing `base_dir` option value. MUST call this method after `setup()`.', $this->text_domain));
 
 							$abspath = ABSPATH.$this->options['base_dir'];
 							if(isset($rel_dir_file[0])) $abspath .= '/'.$rel_dir_file;
 
-							return $abspath; // Intentionally excluding filter here.
+							return apply_filters(__METHOD__, $abspath, get_defined_vars());
 						}
 
 					/**
