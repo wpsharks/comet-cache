@@ -368,7 +368,8 @@ namespace quick_cache
 											if(!$this->options['base_dir'] || $this->options['base_dir'] === $wp_content_dir_relative.'/cache')
 												$this->options['base_dir'] = $wp_content_dir_relative.'/cache/quick-cache';
 
-											$this->wipe_cache(FALSE, ABSPATH.$this->options['cache_dir']);
+											if($this->options['cache_dir']) // Wipe old files?
+												$this->wipe_cache(FALSE, ABSPATH.$this->options['cache_dir']);
 
 											unset($this->options['cache_dir']);
 											update_option(__NAMESPACE__.'_options', $this->options);
