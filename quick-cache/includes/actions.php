@@ -61,8 +61,7 @@ namespace quick_cache // Root namespace.
 					plugin()->options = array_merge(plugin()->default_options, $args);
 
 					if(!trim(plugin()->options['base_dir'], '\\/'." \t\n\r\0\x0B") // Empty?
-					   || strpos(basename(plugin()->options['base_dir']), 'wp-admin') === 0 // Absolutely not!
-					   || strpos(basename(plugin()->options['base_dir']), 'wp-includes') === 0 // Absolutely not!
+					   || strpos(basename(plugin()->options['base_dir']), 'wp-') === 0 // Reserved?
 					) plugin()->options['base_dir'] = plugin()->default_options['base_dir'];
 
 					update_option(__NAMESPACE__.'_options', plugin()->options); // Blog-specific.
