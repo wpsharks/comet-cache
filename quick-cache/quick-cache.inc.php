@@ -1457,6 +1457,32 @@ namespace quick_cache
 						}
 
 					/**
+					 * This constructs a relative/base directory path (no leading/trailing slashes).
+					 *    Always relative to {@link \ABSPATH}. Depends on the configured `base_dir` option value.
+					 *
+					 * @since 14xxxx Moving to a base directory structure.
+					 *
+					 * @param string $rel_dir_file A sub-directory or file; relative location please.
+					 *
+					 * @return string The relative/base directory path to `$rel_dir_file`.
+					 *
+					 * @throws \exception If `base_dir` is empty when this method is called upon;
+					 *    i.e. if you attempt to call upon this method before {@link setup()} runs.
+					 */
+					public function basepath_to($rel_dir_file)
+						{
+							$rel_dir_file = trim((string)$rel_dir_file, '\\/'." \t\n\r\0\x0B");
+
+							if(empty($this->options['base_dir'])) // Security enhancement; NEVER allow this to be empty.
+								throw new \exception(__('Doing it wrong! Missing `base_dir` option value. MUST call this method after `setup()`.', $this->text_domain));
+
+							$basepath = $this->options['base_dir'];
+							if(isset($rel_dir_file[0])) $basepath .= '/'.$rel_dir_file;
+
+							return apply_filters(__METHOD__, $basepath, get_defined_vars());
+						}
+
+					/**
 					 * Finds absolute server path to `/wp-config.php` file.
 					 *
 					 * @since 140422 First documented version.
@@ -1630,7 +1656,11 @@ namespace quick_cache
 							if(!($advanced_cache_contents = file_get_contents($advanced_cache_template)))
 								return FALSE; // Template file is missing; or is not readable.
 
-							foreach($this->options as $_option => $_value) // Iterates options.
+							$possible_advanced_cache_content_key_values = array_merge(
+								$this->options, // The following additional keys are dynamic.
+								array('cache_dir' => $this->basepath_to($this->cache_sub_dir)
+								));
+							foreach($possible_advanced_cache_content_key_values as $_option => $_value)
 								{
 									$_value = (string)$_value; // Force string.
 
