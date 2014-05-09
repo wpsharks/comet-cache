@@ -137,7 +137,7 @@ namespace quick_cache
 							load_plugin_textdomain($this->text_domain);
 
 							$wp_content_dir_relative = // Considers custom `WP_CONTENT_DIR` locations.
-								trim(str_replace(ABSPATH, '', WP_CONTENT_DIR), '\\/'); // No leading/trailing slashes.
+								trim(str_replace(ABSPATH, '', WP_CONTENT_DIR), '\\/'." \t\n\r\0\x0B");
 
 							$this->default_options = array( // Default options.
 							                                'version'                          => $this->version,
@@ -362,13 +362,14 @@ namespace quick_cache
 									if(!empty($this->options['cache_dir'])) // From the previous release.
 										{
 											$wp_content_dir_relative = // Considers custom `WP_CONTENT_DIR` locations.
-												trim(str_replace(ABSPATH, '', WP_CONTENT_DIR), '\\/'); // No leading/trailing slashes.
+												trim(str_replace(ABSPATH, '', WP_CONTENT_DIR), '\\/'." \t\n\r\0\x0B");
 
-											$this->options['base_dir'] = $this->options['cache_dir'];
-											if($this->options['base_dir'] === $wp_content_dir_relative.'/cache')
+											$this->options['base_dir'] = $this->options['cache_dir'] = trim($this->options['cache_dir'], '\\/'." \t\n\r\0\x0B");
+											if(!$this->options['base_dir'] || $this->options['base_dir'] === $wp_content_dir_relative.'/cache')
 												$this->options['base_dir'] = $wp_content_dir_relative.'/cache/quick-cache';
 
-											$this->wipe_cache(FALSE, ABSPATH.$this->options['cache_dir']);
+											if($this->options['cache_dir']) // Wipe old files?
+												$this->wipe_cache(FALSE, ABSPATH.$this->options['cache_dir']);
 
 											unset($this->options['cache_dir']);
 											update_option(__NAMESPACE__.'_options', $this->options);
@@ -397,9 +398,10 @@ namespace quick_cache
 
 							/*
 							 * Common upgrade notice. This applies to all upgrades regardless of version.
+							 * NOTE: the use of `array_unshift()` puts this notice first; even though it comes last down here.
 							 */
-							$notices   = (is_array($notices = get_option(__NAMESPACE__.'_notices'))) ? $notices : array();
-							$notices[] = __('<strong>Quick Cache:</strong> detected a new version of itself. Recompiling w/ latest version... wiping the cache... all done :-)', $this->text_domain);
+							$notices = (is_array($notices = get_option(__NAMESPACE__.'_notices'))) ? $notices : array();
+							array_unshift($notices, __('<strong>Quick Cache:</strong> detected a new version of itself. Recompiling w/ latest version... wiping the cache... all done :-)', $this->text_domain));
 							update_option(__NAMESPACE__.'_notices', $notices);
 						}
 
@@ -771,7 +773,7 @@ namespace quick_cache
 							// @TODO When set_time_limit() is disabled by PHP configuration, display a warning message to users upon plugin activation
 							@set_time_limit(1800); // In case of HUGE sites w/ a very large directory. Errors are ignored in case `set_time_limit()` is disabled.
 
-							$url                          = 'http://'.$_SERVER['HTTP_HOST'].$this->host_dir_token();
+							$url                          = 'http://'.$_SERVER['HTTP_HOST'].$this->host_base_dir_tokens();
 							$cache_path_no_scheme_quv_ext = $this->url_to_cache_path($url, '', '', $this::CACHE_PATH_NO_SCHEME | $this::CACHE_PATH_NO_PATH_INDEX | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT);
 							$regex                        = '/^'.preg_quote($cache_dir, '/'). // Consider all schemes; all paths; and all possible variations.
 							                                '\/[^\/]+\/'.preg_quote($cache_path_no_scheme_quv_ext, '/').
@@ -1827,10 +1829,6 @@ namespace quick_cache
 
 							$cache_dir = $this->abspath_to($this->cache_sub_dir);
 
-							$base = '/'; // Initial default value.
-							if(defined('PATH_CURRENT_SITE')) $base = PATH_CURRENT_SITE;
-							else if(!empty($GLOBALS['base'])) $base = $GLOBALS['base'];
-
 							if(!is_dir($cache_dir) && mkdir($cache_dir, 0775, TRUE))
 								{
 									if(is_writable($cache_dir) && !is_file($cache_dir.'/.htaccess'))
@@ -1842,7 +1840,7 @@ namespace quick_cache
 										$this->wpdb()->get_col("SELECT `path` FROM `".esc_sql($this->wpdb()->blogs)."` WHERE `deleted` <= '0'");
 
 									foreach($paths as &$_path) // Strip base; these need to match `$host_dir_token`.
-										$_path = '/'.ltrim(preg_replace('/^'.preg_quote($base, '/').'/', '', $_path), '/');
+										$_path = '/'.ltrim(preg_replace('/^'.preg_quote($this->host_base_token(), '/').'/', '', $_path), '/');
 									unset($_path); // Housekeeping.
 
 									file_put_contents($cache_dir.'/qc-blog-paths', serialize($paths));
@@ -2051,8 +2049,45 @@ namespace quick_cache
 						}
 
 					/**
-					 * Produces a token based on the current blog sub-directory
+					 * Produces a token based on the current site's base directory.
+					 *
+					 * @since 14xxxx First documented version.
+					 *
+					 * @param boolean $dashify Optional, defaults to a `FALSE` value.
+					 *    If `TRUE`, the token is returned with dashes in place of `[^a-z0-9\/]`.
+					 *
+					 * @return string Produces a token based on the current site's base directory;
 					 *    (i.e. in the case of a sub-directory multisite network).
+					 *
+					 * @note The return value of this function is cached to reduce overhead on repeat calls.
+					 *
+					 * @see clear_cache()
+					 * @see update_blog_paths()
+					 */
+					public function host_base_token($dashify = FALSE)
+						{
+							$dashify = (integer)$dashify;
+							static $tokens = array(); // Static cache.
+							if(isset($tokens[$dashify])) return $tokens[$dashify];
+
+							$host_base_token = '/'; // Assume NOT multisite; or running it's own domain.
+
+							if(is_multisite() && (!defined('SUBDOMAIN_INSTALL') || !SUBDOMAIN_INSTALL))
+								{ // Multisite w/ sub-directories; need a valid sub-directory token.
+
+									if(defined('PATH_CURRENT_SITE')) $host_base_token = PATH_CURRENT_SITE;
+									else if(!empty($GLOBALS['base'])) $host_base_token = $GLOBALS['base'];
+
+									$host_base_token = trim($host_base_token, '\\/'." \t\n\r\0\x0B");
+									$host_base_token = (isset($host_base_token[0])) ? '/'.$host_base_token.'/' : '/';
+								}
+							$token_value = ($dashify) ? trim(preg_replace('/[^a-z0-9\/]/i', '-', $host_base_token), '-') : $host_base_token;
+
+							return ($tokens[$dashify] = $token_value);
+						}
+
+					/**
+					 * Produces a token based on the current blog's sub-directory.
 					 *
 					 * @since 140422 First documented version.
 					 *
@@ -2078,12 +2113,8 @@ namespace quick_cache
 							if(is_multisite() && (!defined('SUBDOMAIN_INSTALL') || !SUBDOMAIN_INSTALL))
 								{ // Multisite w/ sub-directories; need a valid sub-directory token.
 
-									$base = '/'; // Initial default value.
-									if(defined('PATH_CURRENT_SITE')) $base = PATH_CURRENT_SITE;
-									else if(!empty($GLOBALS['base'])) $base = $GLOBALS['base'];
-
 									$uri_minus_base = // Supports `/sub-dir/child-blog-sub-dir/` also.
-										preg_replace('/^'.preg_quote($base, '/').'/', '', $_SERVER['REQUEST_URI']);
+										preg_replace('/^'.preg_quote($this->host_base_token(), '/').'/', '', $_SERVER['REQUEST_URI']);
 
 									list($host_dir_token) = explode('/', trim($uri_minus_base, '/'));
 									$host_dir_token = (isset($host_dir_token[0])) ? '/'.$host_dir_token.'/' : '/';
@@ -2096,6 +2127,26 @@ namespace quick_cache
 							$token_value = ($dashify) ? trim(preg_replace('/[^a-z0-9\/]/i', '-', $host_dir_token), '-') : $host_dir_token;
 
 							return ($tokens[$dashify] = $token_value);
+						}
+
+					/**
+					 * Produces tokens for the current site's base directory & current blog's sub-directory.
+					 *
+					 * @since 140422 First documented version.
+					 *
+					 * @param boolean $dashify Optional, defaults to a `FALSE` value.
+					 *    If `TRUE`, the tokens are returned with dashes in place of `[^a-z0-9\/]`.
+					 *
+					 * @return string Tokens for the current site's base directory & current blog's sub-directory.
+					 *
+					 * @note The return value of this function is cached to reduce overhead on repeat calls.
+					 *
+					 * @see clear_cache()
+					 * @see update_blog_paths()
+					 */
+					public function host_base_dir_tokens($dashify = FALSE)
+						{
+							return preg_replace('/\/{2,}/', '/', $this->host_base_token($dashify).$this->host_dir_token($dashify));
 						}
 
 					/**
