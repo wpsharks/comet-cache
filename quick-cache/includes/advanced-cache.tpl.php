@@ -935,8 +935,8 @@ namespace quick_cache
 			 * @since 140422 First documented version.
 			 *
 			 * @param null|string $doc Input string to append debug info to.
-			 * @param string $reason_code One of the `NC_DEBUG_` constants.
-			 * @param string $reason Optional; to override the default description with a custom message.
+			 * @param string      $reason_code One of the `NC_DEBUG_` constants.
+			 * @param string      $reason Optional; to override the default description with a custom message.
 			 *
 			 * @return string The `$doc` with debug info appended (if applicable).
 			 */
@@ -1239,8 +1239,45 @@ namespace quick_cache
 				}
 
 			/**
-			 * Produces a token based on the current blog sub-directory
+			 * Produces a token based on the current site's base directory.
+			 *
+			 * @since 14xxxx First documented version.
+			 *
+			 * @param boolean $dashify Optional, defaults to a `FALSE` value.
+			 *    If `TRUE`, the token is returned with dashes in place of `[^a-z0-9\/]`.
+			 *
+			 * @return string Produces a token based on the current site's base directory;
 			 *    (i.e. in the case of a sub-directory multisite network).
+			 *
+			 * @note The return value of this function is cached to reduce overhead on repeat calls.
+			 *
+			 * @see plugin\clear_cache()
+			 * @see plugin\update_blog_paths()
+			 */
+			public function host_base_token($dashify = FALSE)
+				{
+					$dashify = (integer)$dashify;
+					static $tokens = array(); // Static cache.
+					if(isset($tokens[$dashify])) return $tokens[$dashify];
+
+					$host_base_token = '/'; // Assume NOT multisite; or running it's own domain.
+
+					if(is_multisite() && (!defined('SUBDOMAIN_INSTALL') || !SUBDOMAIN_INSTALL))
+						{ // Multisite w/ sub-directories; need a valid sub-directory token.
+
+							if(defined('PATH_CURRENT_SITE')) $host_base_token = PATH_CURRENT_SITE;
+							else if(!empty($GLOBALS['base'])) $host_base_token = $GLOBALS['base'];
+
+							$host_base_token = trim($host_base_token, '\\/'." \t\n\r\0\x0B");
+							$host_base_token = (isset($host_base_token[0])) ? '/'.$host_base_token.'/' : '/';
+						}
+					$token_value = ($dashify) ? trim(preg_replace('/[^a-z0-9\/]/i', '-', $host_base_token), '-') : $host_base_token;
+
+					return ($tokens[$dashify] = $token_value);
+				}
+
+			/**
+			 * Produces a token based on the current blog's sub-directory.
 			 *
 			 * @since 140422 First documented version.
 			 *
@@ -1252,6 +1289,7 @@ namespace quick_cache
 			 *
 			 * @note The return value of this function is cached to reduce overhead on repeat calls.
 			 *
+			 * @see plugin\clear_cache()
 			 * @see plugin\update_blog_paths()
 			 */
 			public function host_dir_token($dashify = FALSE)
@@ -1265,12 +1303,8 @@ namespace quick_cache
 					if(is_multisite() && (!defined('SUBDOMAIN_INSTALL') || !SUBDOMAIN_INSTALL))
 						{ // Multisite w/ sub-directories; need a valid sub-directory token.
 
-							$base = '/'; // Initial default value.
-							if(defined('PATH_CURRENT_SITE')) $base = PATH_CURRENT_SITE;
-							else if(!empty($GLOBALS['base'])) $base = $GLOBALS['base'];
-
 							$uri_minus_base = // Supports `/sub-dir/child-blog-sub-dir/` also.
-								preg_replace('/^'.preg_quote($base, '/').'/', '', $_SERVER['REQUEST_URI']);
+								preg_replace('/^'.preg_quote($this->host_base_token(), '/').'/', '', $_SERVER['REQUEST_URI']);
 
 							list($host_dir_token) = explode('/', trim($uri_minus_base, '/'));
 							$host_dir_token = (isset($host_dir_token[0])) ? '/'.$host_dir_token.'/' : '/';
@@ -1283,6 +1317,26 @@ namespace quick_cache
 					$token_value = ($dashify) ? trim(preg_replace('/[^a-z0-9\/]/i', '-', $host_dir_token), '-') : $host_dir_token;
 
 					return ($tokens[$dashify] = $token_value);
+				}
+
+			/**
+			 * Produces tokens for the current site's base directory & current blog's sub-directory.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @param boolean $dashify Optional, defaults to a `FALSE` value.
+			 *    If `TRUE`, the tokens are returned with dashes in place of `[^a-z0-9\/]`.
+			 *
+			 * @return string Tokens for the current site's base directory & current blog's sub-directory.
+			 *
+			 * @note The return value of this function is cached to reduce overhead on repeat calls.
+			 *
+			 * @see clear_cache()
+			 * @see update_blog_paths()
+			 */
+			public function host_base_dir_tokens($dashify = FALSE)
+				{
+					return preg_replace('/\/{2,}/', '/', $this->host_base_token($dashify).$this->host_dir_token($dashify));
 				}
 
 			/**
