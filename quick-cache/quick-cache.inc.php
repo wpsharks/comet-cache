@@ -397,9 +397,10 @@ namespace quick_cache
 
 							/*
 							 * Common upgrade notice. This applies to all upgrades regardless of version.
+							 * NOTE: the use of `array_unshift()` puts this notice first; even though it comes last down here.
 							 */
 							$notices   = (is_array($notices = get_option(__NAMESPACE__.'_notices'))) ? $notices : array();
-							$notices[] = __('<strong>Quick Cache:</strong> detected a new version of itself. Recompiling w/ latest version... wiping the cache... all done :-)', $this->text_domain);
+							array_unshift($notices, __('<strong>Quick Cache:</strong> detected a new version of itself. Recompiling w/ latest version... wiping the cache... all done :-)', $this->text_domain));
 							update_option(__NAMESPACE__.'_notices', $notices);
 						}
 
