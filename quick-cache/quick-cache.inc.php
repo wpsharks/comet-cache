@@ -101,7 +101,7 @@ namespace quick_cache
 					/**
 					 * Cache directory.
 					 *
-					 * @since 140509 Moving to a base directory.
+					 * @since 14xxxx Moving to a base directory.
 					 *
 					 * @var string Cache directory; relative to the configured base directory.
 					 */
@@ -137,7 +137,7 @@ namespace quick_cache
 							load_plugin_textdomain($this->text_domain);
 
 							$wp_content_dir_relative = // Considers custom `WP_CONTENT_DIR` locations.
-								rtrim(str_replace(ABSPATH, '', WP_CONTENT_DIR), '/'); // No trailing slash.
+								trim(str_replace(ABSPATH, '', WP_CONTENT_DIR), '\\/'); // No trailing slashes.
 
 							$this->default_options = array( // Default options.
 							                                'version'                          => $this->version,
@@ -317,24 +317,89 @@ namespace quick_cache
 					 */
 					public function check_version()
 						{
-							if(version_compare($this->options['version'], $this->version, '>='))
-								return; // Nothing to do in this case.
+							/*
+							 * The current version reflected by the configured option key: `version`.
+							 *    If they just upgraded, this represents the previous version.
+							 */
+							$current_version = $prev_version = $this->options['version'];
 
-							$this->options['version'] = $this->version;
+							/*
+							 * Check the current version; is it up-to-date?
+							 */
+							if(version_compare($current_version, $this->version, '>='))
+								return; // Nothing to do; we've already upgraded them.
+
+							/*
+							 * Update their current version to this version.
+							 */
+							$current_version = $this->options['version'] = $this->version;
 							update_option(__NAMESPACE__.'_options', $this->options);
 							if(is_multisite()) update_site_option(__NAMESPACE__.'_options', $this->options);
 
+							/* ------- START: VERSION-SPECIFIC UPGRADE HANDLERS --------------------------- */
+
+							// @TODO @raamdev I suggest that in the future we move these VERSION-SPECIFIC checks into their own class.
+							//    It's fine like it is, but I think we could reorganize and keep things cleaner in the future.
+							//    This list of checks is likely to build up over time.
+
+							/*
+							 * Upgrading from a version prior to v140104 where we introduced feed caching.
+							 */
+							if(version_compare($prev_version, '140104', '<')) // When this sort of update occurs, we issue a notice about this new feature.
+								{
+									$notices   = (is_array($notices = get_option(__NAMESPACE__.'_notices'))) ? $notices : array();
+									$notices[] = __('<strong>Quick Cache Feature Notice:</strong> This version of Quick Cache adds new options for Feed caching. Feed caching is now disabled by default. If you wish to enable feed caching, please visit the Quick Cache options panel.', $this->text_domain);
+									update_option(__NAMESPACE__.'_notices', $notices);
+								}
+							/*
+							 * Upgrading from a version prior to v14xxxx? (@TODO @raamdev See below, `140509` can change also).
+							 *    v14xxxx is where we introduced a branched cache structure, also also moved to a base directory layout.
+							 *
+							 * See <https://github.com/WebSharks/Quick-Cache/issues/147#issuecomment-42659131>
+							 */
+							if(version_compare($prev_version, '140509', '<')) // i.e. Upgrading from a version before the branched/base structures.
+								{
+									if(!empty($this->options['cache_dir'])) // From the previous release.
+										{
+											$wp_content_dir_relative = // Considers custom `WP_CONTENT_DIR` locations.
+												trim(str_replace(ABSPATH, '', WP_CONTENT_DIR), '\\/'); // No trailing slashes.
+
+											$this->options['base_dir'] = $this->options['cache_dir'];
+											if($this->options['base_dir'] === $wp_content_dir_relative.'/cache')
+												$this->options['base_dir'] = $wp_content_dir_relative.'/cache/quick-cache';
+
+											$this->wipe_cache(FALSE, ABSPATH.$this->options['cache_dir']);
+
+											unset($this->options['cache_dir']);
+											update_option(__NAMESPACE__.'_options', $this->options);
+											if(is_multisite()) update_site_option(__NAMESPACE__.'_options', $this->options);
+										}
+									// @TODO @raamdev You might like to customize this upgrade notice a bit further.
+									$notices   = (is_array($notices = get_option(__NAMESPACE__.'_notices'))) ? $notices : array();
+									$notices[] = __('<strong>Quick Cache Feature Notice:</strong> This version of Quick Cache introduces a new <a href="https://github.com/WebSharks/Quick-Cache/wiki/Branched-Cache-Structure" target="_blank">Branched Cache Structure</a>.', $this->text_domain);
+									update_option(__NAMESPACE__.'_notices', $notices);
+								}
+							/* ------- END: VERSION-SPECIFIC UPGRADE HANDLERS ----------------------------- */
+
+							/*
+							 * If enabled, lets recompile Quick Cache.
+							 */
 							if($this->options['enable']) // Only if enabled.
 								{
 									$this->add_wp_cache_to_wp_config();
 									$this->add_advanced_cache();
 									$this->update_blog_paths();
 								}
-							$this->wipe_cache(); // Always wipe the cache in this scenario.
+							/*
+							 * Wipe the cache on upgrade (always).
+							 */
+							$this->wipe_cache(); // Always wipe the cache; no exceptions.
 
+							/*
+							 * Common upgrade notice. This applies to all upgrades regardless of version.
+							 */
 							$notices   = (is_array($notices = get_option(__NAMESPACE__.'_notices'))) ? $notices : array();
 							$notices[] = __('<strong>Quick Cache:</strong> detected a new version of itself. Recompiling w/ latest version... wiping the cache... all done :-)', $this->text_domain);
-							$notices[] = __('<strong>Quick Cache Feature Notice:</strong> This version of Quick Cache adds new options for Feed caching. Feed caching is now disabled by default. If you wish to enable feed caching, please visit the Quick Cache options panel.', $this->text_domain);
 							update_option(__NAMESPACE__.'_notices', $notices);
 						}
 
@@ -630,17 +695,22 @@ namespace quick_cache
 					 * @param boolean $manually Defaults to a `FALSE` value.
 					 *    Pass as TRUE if the wipe is done manually by the site owner.
 					 *
+					 * @param string  $also_wipe_dir Defaults to an empty string.
+					 *    By default (i.e. when this is empty) we only wipe {@link $cache_sub_dir} files.
+					 *    WARNING: if this is passed, EVERYTHING inside this directory is deleted recursively;
+					 *       in addition to deleting all of the {@link $cache_sub_dir} files.
+					 *
 					 * @return integer Total files wiped by this routine (if any).
 					 *
 					 * @throws \exception If a wipe failure occurs.
 					 */
-					public function wipe_cache($manually = FALSE)
+					public function wipe_cache($manually = FALSE, $also_wipe_dir = '')
 						{
 							$counter = 0; // Initialize.
 
 							$cache_dir = $this->abspath_to($this->cache_sub_dir);
 
-							// @TODO When set_time_limit() is disabled by PHP configuration, display a warning message to users upon plugin activation
+							// @TODO When set_time_limit() is disabled by PHP configuration, display a warning message to users upon plugin activation.
 							@set_time_limit(1800); // In case of HUGE sites w/ a very large directory. Errors are ignored in case `set_time_limit()` is disabled.
 
 							/** @var $_dir_file \RecursiveDirectoryIterator For IDEs. */
@@ -660,18 +730,16 @@ namespace quick_cache
 							unset($_dir_file); // Just a little housekeeping.
 
 							/** @var $_dir_file \RecursiveDirectoryIterator For IDEs. */
-							if(is_dir(WP_CONTENT_DIR.'/cache')) foreach($this->dir_regex_iteration(WP_CONTENT_DIR.'/cache', '/.+/') as $_dir_file)
+							if($also_wipe_dir && is_dir($also_wipe_dir)) foreach($this->dir_regex_iteration($also_wipe_dir, '/.+/') as $_dir_file)
 								{
-									if(($_dir_file->isFile() || $_dir_file->isLink()) && strpos($_dir_file->getSubPathname(), 'qc-') === 0)
-										// Only delete files that we KNOW belonged to Quick Cache; i.e. those starting w/ `qc-`.
+									if(($_dir_file->isFile() || $_dir_file->isLink()))
 										if(!unlink($_dir_file->getPathname())) // Throw exception if unable to delete.
-											throw new \exception(sprintf(__('Unable to wipe old file: `%1$s`.', $this->text_domain), $_dir_file->getPathname()));
+											throw new \exception(sprintf(__('Unable to also wipe file: `%1$s`.', $this->text_domain), $_dir_file->getPathname()));
 										else $counter++; // Increment counter for each file we wipe.
 
-									else if($_dir_file->isDir() && strpos($_dir_file->getSubPathname(), 'qc-') === 0)
-										// Only delete directories that we KNOW belonged to Quick Cache; i.e. those starting w/ `qc-`.
+									else if($_dir_file->isDir())
 										if(!rmdir($_dir_file->getPathname())) // Throw exception if unable to delete.
-											throw new \exception(sprintf(__('Unable to wipe old dir: `%1$s`.', $this->text_domain), $_dir_file->getPathname()));
+											throw new \exception(sprintf(__('Unable to also wipe dir: `%1$s`.', $this->text_domain), $_dir_file->getPathname()));
 								}
 							unset($_dir_file); // Just a little housekeeping.
 
@@ -1366,7 +1434,7 @@ namespace quick_cache
 					 * This constructs an absolute server directory path (no trailing slashes);
 					 *    which is always nested into {@link \ABSPATH} and the configured `base_dir` option value.
 					 *
-					 * @since 140509 Moving to a base directory structure.
+					 * @since 14xxxx Moving to a base directory structure.
 					 *
 					 * @param string $rel_dir_file A sub-directory or file; relative location please.
 					 *
@@ -1546,7 +1614,7 @@ namespace quick_cache
 							if(!$this->remove_advanced_cache())
 								return FALSE; // Still exists.
 
-							$cache_dir = $this->abspath_to($this->cache_sub_dir);
+							$cache_dir               = $this->abspath_to($this->cache_sub_dir);
 							$advanced_cache_file     = WP_CONTENT_DIR.'/advanced-cache.php';
 							$advanced_cache_template = dirname(__FILE__).'/includes/advanced-cache.tpl.php';
 
@@ -1971,7 +2039,7 @@ namespace quick_cache
 							static $tokens = array(); // Static cache.
 							if(isset($tokens[$dashify])) return $tokens[$dashify];
 
-							$cache_dir = $this->abspath_to($this->cache_sub_dir);
+							$cache_dir      = $this->abspath_to($this->cache_sub_dir);
 							$host_dir_token = '/'; // Assume NOT multisite; or running it's own domain.
 
 							if(is_multisite() && (!defined('SUBDOMAIN_INSTALL') || !SUBDOMAIN_INSTALL))

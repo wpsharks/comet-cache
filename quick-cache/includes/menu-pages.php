@@ -233,7 +233,7 @@ namespace quick_cache // Root namespace.
 					echo '   </div>'."\n";
 
 					echo '   <div class="plugin-menu-page-panel-body clearfix">'."\n";
-					echo '      <h3>'.__('Cache Directory (Must be Writable; e.g. <a href="http://codex.wordpress.org/Changing_File_Permissions" target="_blank">Permissions</a> <code>755</code> or Higher)', plugin()->text_domain).'</h3>'."\n";
+					echo '      <h3>'.__('Base Cache Directory (Must be Writable; e.g. <a href="http://codex.wordpress.org/Changing_File_Permissions" target="_blank">Permissions</a> <code>755</code> or Higher)', plugin()->text_domain).'</h3>'."\n";
 					echo '      <p>'.__('This is where Quick Cache will store the cached version of your site. If you\'re not sure how to deal with directory permissions, don\'t worry too much about this. If there is a problem, Quick Cache will let you know about it. By default, this directory is created by Quick Cache and the permissions are setup automatically. In most cases there is nothing more you need to do.', plugin()->text_domain).'</p>'."\n";
 					echo '      <table style="width:100%;"><tr><td style="width:1px; font-weight:bold; white-space:nowrap;">'.esc_html(ABSPATH).'</td><td><input type="text" name="'.esc_attr(__NAMESPACE__).'[save_options][base_dir]" value="'.esc_attr(plugin()->options['base_dir']).'" /></td><td style="width:1px; font-weight:bold; white-space:nowrap;">/</td></tr></table>'."\n";
 					echo '      <hr />'."\n";
