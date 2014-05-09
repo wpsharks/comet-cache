@@ -137,7 +137,7 @@ namespace quick_cache
 							load_plugin_textdomain($this->text_domain);
 
 							$wp_content_dir_relative = // Considers custom `WP_CONTENT_DIR` locations.
-								trim(str_replace(ABSPATH, '', WP_CONTENT_DIR), '\\/'); // No trailing slashes.
+								trim(str_replace(ABSPATH, '', WP_CONTENT_DIR), '\\/'); // No leading/trailing slashes.
 
 							$this->default_options = array( // Default options.
 							                                'version'                          => $this->version,
@@ -362,7 +362,7 @@ namespace quick_cache
 									if(!empty($this->options['cache_dir'])) // From the previous release.
 										{
 											$wp_content_dir_relative = // Considers custom `WP_CONTENT_DIR` locations.
-												trim(str_replace(ABSPATH, '', WP_CONTENT_DIR), '\\/'); // No trailing slashes.
+												trim(str_replace(ABSPATH, '', WP_CONTENT_DIR), '\\/'); // No leading/trailing slashes.
 
 											$this->options['base_dir'] = $this->options['cache_dir'];
 											if($this->options['base_dir'] === $wp_content_dir_relative.'/cache')
@@ -441,6 +441,9 @@ namespace quick_cache
 							$this->delete_advanced_cache();
 
 							delete_option(__NAMESPACE__.'_options');
+							if(is_multisite()) // Delete network options too.
+								delete_site_option(__NAMESPACE__.'_options');
+
 							delete_option(__NAMESPACE__.'_notices');
 							delete_option(__NAMESPACE__.'_errors');
 
