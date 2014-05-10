@@ -83,7 +83,7 @@ namespace quick_cache // Root namespace.
 						{
 							echo '<div class="plugin-menu-page-notice error">'."\n";
 							if($_REQUEST[__NAMESPACE__.'__advanced_cache_add_failure'] === 'qc-advanced-cache')
-								echo '   <i class="fa fa-thumbs-down"></i> '.sprintf(__('Failed to update your <code>/wp-content/advanced-cache.php</code> file. Cannot write stat file: <code>%1$s/qc-advanced-cache</code>. Please be sure this directory exists (and that it\'s writable): <code>%1$s</code>. Please use directory permissions <code>755</code> or higher (perhaps <code>777</code>). Once you\'ve done this, please try again.', plugin()->text_domain), rtrim(plugin()->options['cache_dir'], '/'))."\n";
+								echo '   <i class="fa fa-thumbs-down"></i> '.sprintf(__('Failed to update your <code>/wp-content/advanced-cache.php</code> file. Cannot write stat file: <code>%1$s/qc-advanced-cache</code>. Please be sure this directory exists (and that it\'s writable): <code>%1$s</code>. Please use directory permissions <code>755</code> or higher (perhaps <code>777</code>). Once you\'ve done this, please try again.', plugin()->text_domain), esc_html(plugin()->abspath_to(plugin()->cache_sub_dir)))."\n";
 							else echo '   <i class="fa fa-thumbs-down"></i> '.__('Failed to update your <code>/wp-content/advanced-cache.php</code> file. Most likely a permissions error. Please create an empty file here: <code>/wp-content/advanced-cache.php</code> (just an empty PHP file, with nothing in it); give it permissions <code>644</code> or higher (perhaps <code>666</code>). Once you\'ve done this, please try again.', plugin()->text_domain)."\n";
 							echo '</div>'."\n";
 						}
@@ -233,9 +233,9 @@ namespace quick_cache // Root namespace.
 					echo '   </div>'."\n";
 
 					echo '   <div class="plugin-menu-page-panel-body clearfix">'."\n";
-					echo '      <h3>'.__('Cache Directory (Must be Writable; e.g. <a href="http://codex.wordpress.org/Changing_File_Permissions" target="_blank">Permissions</a> <code>755</code> or Higher)', plugin()->text_domain).'</h3>'."\n";
+					echo '      <h3>'.__('Base Cache Directory (Must be Writable; e.g. <a href="http://codex.wordpress.org/Changing_File_Permissions" target="_blank">Permissions</a> <code>755</code> or Higher)', plugin()->text_domain).'</h3>'."\n";
 					echo '      <p>'.__('This is where Quick Cache will store the cached version of your site. If you\'re not sure how to deal with directory permissions, don\'t worry too much about this. If there is a problem, Quick Cache will let you know about it. By default, this directory is created by Quick Cache and the permissions are setup automatically. In most cases there is nothing more you need to do.', plugin()->text_domain).'</p>'."\n";
-					echo '      <table style="width:100%;"><tr><td style="width:1px; font-weight:bold; white-space:nowrap;">'.esc_html(ABSPATH).'</td><td><input type="text" name="'.esc_attr(__NAMESPACE__).'[save_options][cache_dir]" value="'.esc_attr(plugin()->options['cache_dir']).'" /></td><td style="width:1px; font-weight:bold; white-space:nowrap;">/</td></tr></table>'."\n";
+					echo '      <table style="width:100%;"><tr><td style="width:1px; font-weight:bold; white-space:nowrap;">'.esc_html(ABSPATH).'</td><td><input type="text" name="'.esc_attr(__NAMESPACE__).'[save_options][base_dir]" value="'.esc_attr(plugin()->options['base_dir']).'" /></td><td style="width:1px; font-weight:bold; white-space:nowrap;">/</td></tr></table>'."\n";
 					echo '      <hr />'."\n";
 					echo '      <i class="fa fa-clock-o fa-4x" style="float:right; margin: 0 0 0 25px;"></i>'."\n";
 					echo '      <h3>'.__('Automatic Expiration Time (Max Age)', plugin()->text_domain).'</h3>'."\n";
@@ -465,35 +465,35 @@ namespace quick_cache // Root namespace.
 							echo '         <h3>'.__('HTML Compression Options', plugin()->text_domain).'</h3>'."\n";
 							echo '         <p>'.__('You can <a href="https://github.com/WebSharks/HTML-Compressor" target="_blank">learn more about all of these options here</a>.', plugin()->text_domain).'</p>'."\n";
 							echo '         <p><select name="'.esc_attr(__NAMESPACE__).'[save_options][htmlc_compress_combine_head_body_css]" autocomplete="off">'."\n";
-							echo '               <option value="1">'.__('Yes, combine CSS from &lt;head&gt; and &lt;body&gt; into fewer files.', plugin()->text_domain).'</option>'."\n";
+							echo '               <option value="1" selected="selected">'.__('Yes, combine CSS from &lt;head&gt; and &lt;body&gt; into fewer files.', plugin()->text_domain).'</option>'."\n";
 							echo '               <option value="0">'.__('No, do not combine CSS from &lt;head&gt; and &lt;body&gt; into fewer files.', plugin()->text_domain).'</option>'."\n";
 							echo '            </select></p>'."\n";
 							echo '         <p><select name="'.esc_attr(__NAMESPACE__).'[save_options][htmlc_compress_css_code]" autocomplete="off">'."\n";
-							echo '               <option value="1">'.__('Yes, compress the code in any unified CSS files.', plugin()->text_domain).'</option>'."\n";
+							echo '               <option value="1" selected="selected">'.__('Yes, compress the code in any unified CSS files.', plugin()->text_domain).'</option>'."\n";
 							echo '               <option value="0">'.__('No, do not compress the code in any unified CSS files.', plugin()->text_domain).'</option>'."\n";
 							echo '            </select></p>'."\n";
 							echo '         <p><select name="'.esc_attr(__NAMESPACE__).'[save_options][htmlc_compress_combine_head_js]" autocomplete="off">'."\n";
-							echo '               <option value="1">'.__('Yes, combine JS from &lt;head&gt; into fewer files.', plugin()->text_domain).'</option>'."\n";
+							echo '               <option value="1" selected="selected">'.__('Yes, combine JS from &lt;head&gt; into fewer files.', plugin()->text_domain).'</option>'."\n";
 							echo '               <option value="0">'.__('No, do not combine JS from &lt;head&gt; into fewer files.', plugin()->text_domain).'</option>'."\n";
 							echo '            </select></p>'."\n";
 							echo '         <p><select name="'.esc_attr(__NAMESPACE__).'[save_options][htmlc_compress_combine_footer_js]" autocomplete="off">'."\n";
-							echo '               <option value="1">'.__('Yes, combine JS footer scripts into fewer files.', plugin()->text_domain).'</option>'."\n";
+							echo '               <option value="1" selected="selected">'.__('Yes, combine JS footer scripts into fewer files.', plugin()->text_domain).'</option>'."\n";
 							echo '               <option value="0">'.__('No, do not combine JS footer scripts into fewer files.', plugin()->text_domain).'</option>'."\n";
 							echo '            </select></p>'."\n";
 							echo '         <p><select name="'.esc_attr(__NAMESPACE__).'[save_options][htmlc_compress_combine_remote_css_js]" autocomplete="off">'."\n";
-							echo '               <option value="1">'.__('Yes, combine CSS/JS from remote resources too.', plugin()->text_domain).'</option>'."\n";
+							echo '               <option value="1" selected="selected">'.__('Yes, combine CSS/JS from remote resources too.', plugin()->text_domain).'</option>'."\n";
 							echo '               <option value="0">'.__('No, do not combine CSS/JS from remote resources.', plugin()->text_domain).'</option>'."\n";
 							echo '            </select></p>'."\n";
 							echo '         <p><select name="'.esc_attr(__NAMESPACE__).'[save_options][htmlc_compress_js_code]" autocomplete="off">'."\n";
-							echo '               <option value="1">'.__('Yes, compress the code in any unified JS files.', plugin()->text_domain).'</option>'."\n";
+							echo '               <option value="1" selected="selected">'.__('Yes, compress the code in any unified JS files.', plugin()->text_domain).'</option>'."\n";
 							echo '               <option value="0">'.__('No, do not compress the code in any unified JS files.', plugin()->text_domain).'</option>'."\n";
 							echo '            </select></p>'."\n";
 							echo '         <p><select name="'.esc_attr(__NAMESPACE__).'[save_options][htmlc_compress_inline_js_code]" autocomplete="off">'."\n";
-							echo '               <option value="1">'.__('Yes, compress inline JavaScript snippets.', plugin()->text_domain).'</option>'."\n";
+							echo '               <option value="1" selected="selected">'.__('Yes, compress inline JavaScript snippets.', plugin()->text_domain).'</option>'."\n";
 							echo '               <option value="0">'.__('No, do not compress inline JavaScript snippets.', plugin()->text_domain).'</option>'."\n";
 							echo '            </select></p>'."\n";
 							echo '         <p><select name="'.esc_attr(__NAMESPACE__).'[save_options][htmlc_compress_html_code]" autocomplete="off">'."\n";
-							echo '               <option value="1">'.__('Yes, compress (remove extra whitespace) in the final HTML code too.', plugin()->text_domain).'</option>'."\n";
+							echo '               <option value="1" selected="selected">'.__('Yes, compress (remove extra whitespace) in the final HTML code too.', plugin()->text_domain).'</option>'."\n";
 							echo '               <option value="0">'.__('No, do not compress the final HTML code.', plugin()->text_domain).'</option>'."\n";
 							echo '            </select></p>'."\n";
 							echo '         <hr />'."\n";
@@ -506,13 +506,8 @@ namespace quick_cache // Root namespace.
 							echo '         <p><textarea name="'.esc_attr(__NAMESPACE__).'[save_options][htmlc_js_exclusions]" rows="5" spellcheck="false" class="monospace">.php?</textarea></p>'."\n";
 							echo '         <p class="info" style="display:block;">'.__('<strong>Note:</strong> please remember that your entries here should be formatted as a line-delimited list; e.g. one exclusion pattern per line.', plugin()->text_domain).'</p>'."\n";
 							echo '         <hr />'."\n";
-							echo '         <h3>'.__('Public HTML Compression Cache Directory', plugin()->text_domain).'</h3>'."\n";
-							echo '         <table style="width:100%;"><tr><td style="width:1px; font-weight:bold; white-space:nowrap;">'.esc_html(ABSPATH).'</td><td><input type="text" name="'.esc_attr(__NAMESPACE__).'[save_options][htmlc_cache_dir_public]" value="wp-content/htmlc/cache/public" /></td><td style="width:1px; font-weight:bold; white-space:nowrap;">/</td></tr></table>'."\n";
-							echo '         <p class="notice" style="display:block;">'.__('<strong>Important:</strong> this should <strong>NOT</strong> be the same as your primary Quick Cache directory. These cache files should be given their own <strong>separate</strong> directory on the server. This is where the HTML Compressor will store any unified CSS/JS files that are still fresh.', plugin()->text_domain).'</p>'."\n";
-							echo '         <h3>'.__('Private HTML Compression Cache Directory', plugin()->text_domain).'</h3>'."\n";
-							echo '         <table style="width:100%;"><tr><td style="width:1px; font-weight:bold; white-space:nowrap;">'.esc_html(ABSPATH).'</td><td><input type="text" name="'.esc_attr(__NAMESPACE__).'[save_options][htmlc_cache_dir_private]" value="wp-content/htmlc/cache/private" /></td><td style="width:1px; font-weight:bold; white-space:nowrap;">/</td></tr></table>'."\n";
-							echo '         <p class="notice" style="display:block;">'.__('<strong>Important:</strong> this should <strong>NOT</strong> be the same as your primary Quick Cache directory. These cache files should be given their own <strong>separate</strong> directory on the server. This is where the HTML Compressor will store any systematic cache files (for private internal use only) that are still fresh.', plugin()->text_domain).'</p>'."\n";
-							echo '         <p><input type="text" name="'.esc_attr(__NAMESPACE__).'[save_options][htmlc_cache_expiration_time]" value="14 days" /></p>'."\n";
+							echo '         <h3>'.__('HTML Compression Cache Expiration', plugin()->text_domain).'</h3>'."\n";
+							echo '         <p><input type="text" name="'.esc_attr(__NAMESPACE__).'[save_options][htmlc_cache_expiration_time]" value="" /></p>'."\n";
 							echo '         <p class="info" style="display:block;">'.__('<strong>Tip:</strong> the value that you specify here MUST be compatible with PHP\'s <a href="http://php.net/manual/en/function.strtotime.php" target="_blank" style="text-decoration:none;"><code>strtotime()</code></a> function. Examples: <code>2 hours</code>, <code>7 days</code>, <code>6 months</code>, <code>1 year</code>.', plugin()->text_domain).'</p>'."\n";
 							echo '         <p>'.__('<strong>Note:</strong> This does NOT impact the overall cache expiration time that you configure with Quick Cache. It only impacts the sub-routines provided by the HTML Compressor. In fact, this expiration time is mostly irrelevant. The HTML Compressor uses an internal checksum, and it also checks <code>filemtime()</code> before using an existing cache file. The HTML Compressor class also handles the automatic cleanup of your cache directories to keep it from growing too large over time. Therefore, unless you have VERY little disk space there is no reason to set this to a lower value (even if your site changes dynamically quite often). If anything, you might like to increase this value which could help to further reduce server load. You can <a href="https://github.com/WebSharks/HTML-Compressor" target="_blank">learn more here</a>. We recommend setting this value to at least double that of your overall Quick Cache expiration time.', plugin()->text_domain).'</p>'."\n";
 							echo '      </div>'."\n";
