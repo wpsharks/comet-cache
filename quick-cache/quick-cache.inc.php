@@ -1691,11 +1691,15 @@ namespace quick_cache
 							if(!file_put_contents($advanced_cache_file, $advanced_cache_contents))
 								return FALSE; // Failure; could not write file.
 
-							if(!is_dir($cache_dir) && mkdir($cache_dir, 0775, TRUE))
-								{
-									if(is_writable($cache_dir) && !is_file($cache_dir.'/.htaccess'))
-										file_put_contents($cache_dir.'/.htaccess', $this->htaccess_deny);
-								}
+							if(!is_dir($cache_dir))
+								mkdir($cache_dir, 0775, TRUE);
+
+							if(is_writable($cache_dir) && !is_file($cache_dir.'/.htaccess'))
+								file_put_contents($cache_dir.'/.htaccess', $this->htaccess_deny);
+
+							if(!is_file($cache_dir.'/.htaccess'))
+								return NULL; // Failure; could not write .htaccess file. Special return value (NULL) in this case.
+
 							if(!is_dir($cache_dir) || !is_writable($cache_dir) || !file_put_contents($cache_dir.'/qc-advanced-cache', time()))
 								return NULL; // Failure; could not write cache entry. Special return value (NULL) in this case.
 
@@ -1829,11 +1833,12 @@ namespace quick_cache
 
 							$cache_dir = $this->abspath_to($this->cache_sub_dir);
 
-							if(!is_dir($cache_dir) && mkdir($cache_dir, 0775, TRUE))
-								{
-									if(is_writable($cache_dir) && !is_file($cache_dir.'/.htaccess'))
-										file_put_contents($cache_dir.'/.htaccess', $this->htaccess_deny);
-								}
+							if(!is_dir($cache_dir))
+								mkdir($cache_dir, 0775, TRUE);
+
+							if(is_writable($cache_dir) && !is_file($cache_dir.'/.htaccess'))
+								file_put_contents($cache_dir.'/.htaccess', $this->htaccess_deny);
+
 							if(is_dir($cache_dir) && is_writable($cache_dir))
 								{
 									$paths = // Collect child blog paths from the WordPress database.
