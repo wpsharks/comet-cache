@@ -1541,6 +1541,9 @@ namespace quick_cache
 							if(is_writable($cache_dir) && !is_file($cache_dir.'/.htaccess'))
 								file_put_contents($cache_dir.'/.htaccess', $this->htaccess_deny);
 
+							if(!is_file($cache_dir.'/.htaccess'))
+								return NULL; // Failure; could not write .htaccess file. Special return value (NULL) in this case.
+
 							if(!is_dir($cache_dir) || !is_writable($cache_dir) || !file_put_contents($cache_dir.'/qc-advanced-cache', time()))
 								return NULL; // Failure; could not write cache entry. Special return value (NULL) in this case.
 
