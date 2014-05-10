@@ -455,6 +455,8 @@ namespace quick_cache // Root namespace.
 							echo '      <i class="fa fa-question-circle fa-4x" style="float:right; margin: 0 0 0 25px;"></i>'."\n";
 							echo '      <h3>'.__('Enable WebSharks™ HTML Compression?', plugin()->text_domain).'</h3>'."\n";
 							echo '      <p class="notice" style="display:block;">'.__('This is an experimental feature, however it offers a potentially HUGE speed boost. You can <a href="https://github.com/WebSharks/HTML-Compressor" target="_blank">learn more here</a>. Please use with caution.', plugin()->text_domain).'</p>'."\n";
+							if(!plugin()->is_extension_loaded('curl') || !is_array($_curl_version = curl_version()) || !($_curl_version['features'] & CURL_VERSION_SSL))
+								echo '   <p class="error" style="display:block;">'.__('<strong>WARNING:</strong> The HTML Compressor requires the <a href="http://www.php.net/manual/en/book.curl.php" target="_blank" rel="external">cURL extension for PHP</a>. cURL must also be compiled together with <a href="http://www.php.net/manual/en/book.openssl.php" target="_blank" rel="external">OpenSSL</a>. Quick Cache has detected that one or both of these are currently missing. Please check with your hosting company to resolve this message.', plugin()->text_domain).'</p>'."\n";
 							echo '      <p><select name="'.esc_attr(__NAMESPACE__).'[save_options][htmlc_enable]">'."\n";
 							echo '            <option value="0">'.__('No, do NOT compress HTML/CSS/JS code at runtime.', plugin()->text_domain).'</option>'."\n";
 							echo '            <option value="1" selected="selected">'.__('Yes, I want to compress HTML/CSS/JS for blazing fast speeds.', plugin()->text_domain).'</option>'."\n";
