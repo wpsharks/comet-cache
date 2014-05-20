@@ -145,7 +145,7 @@ namespace quick_cache
 				                                'crons_setup'                      => '0', // `0` or timestamp.
 
 				                                'enable'                           => '0', // `0|1`.
-				                                'debugging_enable'                 => '1', // `0|1`.
+				                                'debugging_enable'                 => '1', // `0|1|2` // 2 indicates greater debugging detail.
 				                                'cache_purge_home_page_enable'     => '1', // `0|1`.
 				                                'cache_purge_posts_page_enable'    => '1', // `0|1`.
 				                                'cache_purge_author_page_enable'   => '1', // `0|1`.
