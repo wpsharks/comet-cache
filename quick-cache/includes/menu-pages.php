@@ -127,6 +127,7 @@ namespace quick_cache // Root namespace.
 			echo '      <p>'.__('<strong>To verify that Quick Cache is working</strong>, navigate your site like a normal visitor would. Right-click on any page (choose View Source), then scroll to the very bottom of the document. At the bottom, you\'ll find comments that show Quick Cache stats and information. You should also notice that page-to-page navigation is <i class="fa fa-flash"></i> <strong>lightning fast</strong> now that Quick Cache is running; and it gets faster over time!', plugin()->text_domain).'</p>'."\n";
 			echo '      <p><select name="'.esc_attr(__NAMESPACE__).'[save_options][debugging_enable]">'."\n";
 			echo '            <option value="1"'.selected(plugin()->options['debugging_enable'], '1', FALSE).'>'.__('Yes, enable notes in the source code so I can see it\'s working (recommended).', plugin()->text_domain).'</option>'."\n";
+			echo '            <option value="2"'.selected(plugin()->options['debugging_enable'], '2', FALSE).'>'.__('Yes, enable notes in the source code AND show debugging details (not recommended for production).', plugin()->text_domain).'</option>'."\n";
 			echo '            <option value="0"'.selected(plugin()->options['debugging_enable'], '0', FALSE).'>'.__('No, I don\'t want my source code to contain any of these notes.', plugin()->text_domain).'</option>'."\n";
 			echo '         </select></p>'."\n";
 			echo '   </div>'."\n";
