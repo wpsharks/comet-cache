@@ -642,6 +642,44 @@ namespace quick_cache
 			}
 
 			/**
+			 * Enqueue an administrative notice.
+			 *
+			 * @since 14xxxx Adding enqueue notice/error methods.
+			 *
+			 * @param string  $notice HTML markup containing the notice itself.
+			 *
+			 * @param string  $persistent_key Optional. A unique key which identifies a particular type of persistent notice.
+			 *    This defaults to an empty string. If this is passed, the notice is persistent; i.e. it continues to be displayed until dismissed by the site owner.
+			 *
+			 * @param boolean $push_to_top Optional. Defaults to a `FALSE` value.
+			 *    If `TRUE`, the notice is pushed to the top of the stack; i.e. displayed above any others.
+			 */
+			public function enqueue_notice($notice, $persistent_key = '', $push_to_top = FALSE)
+			{
+				$notice         = (string)$notice;
+				$persistent_key = (string)$persistent_key;
+
+				$notices = get_option(__NAMESPACE__.'_notices');
+				if(!is_array($notices)) $notices = array();
+
+				if($persistent_key) // A persistent notice?
+				{
+					if(strpos($persistent_key, 'persistent-') !== 0)
+						$persistent_key = 'persistent-'.$persistent_key;
+
+					if($push_to_top) // Push this notice to the top?
+						$notices = array($persistent_key => $notice) + $notices;
+					else $notices[$persistent_key] = $notice;
+				}
+				else if($push_to_top) // Push to the top?
+					array_unshift($notices, $notice);
+
+				else $notices[] = $notice; // Default behavior.
+
+				update_option(__NAMESPACE__.'_notices', $notices);
+			}
+
+			/**
 			 * Render admin errors; across all admin dashboard views.
 			 *
 			 * @since 140422 First documented version.
@@ -672,6 +710,44 @@ namespace quick_cache
 					echo apply_filters(__METHOD__.'__error', '<div class="error"><p>'.$_error.$_dismiss.'</p></div>', get_defined_vars());
 				}
 				unset($_key, $_error, $_dismiss_css, $_dismiss); // Housekeeping.
+			}
+
+			/**
+			 * Enqueue an administrative error.
+			 *
+			 * @since 14xxxx Adding enqueue notice/error methods.
+			 *
+			 * @param string  $error HTML markup containing the error itself.
+			 *
+			 * @param string  $persistent_key Optional. A unique key which identifies a particular type of persistent error.
+			 *    This defaults to an empty string. If this is passed, the error is persistent; i.e. it continues to be displayed until dismissed by the site owner.
+			 *
+			 * @param boolean $push_to_top Optional. Defaults to a `FALSE` value.
+			 *    If `TRUE`, the error is pushed to the top of the stack; i.e. displayed above any others.
+			 */
+			public function enqueue_error($error, $persistent_key = '', $push_to_top = FALSE)
+			{
+				$error          = (string)$error;
+				$persistent_key = (string)$persistent_key;
+
+				$errors = get_option(__NAMESPACE__.'_errors');
+				if(!is_array($errors)) $errors = array();
+
+				if($persistent_key) // A persistent notice?
+				{
+					if(strpos($persistent_key, 'persistent-') !== 0)
+						$persistent_key = 'persistent-'.$persistent_key;
+
+					if($push_to_top) // Push this notice to the top?
+						$errors = array($persistent_key => $error) + $errors;
+					else $errors[$persistent_key] = $error;
+				}
+				else if($push_to_top) // Push to the top?
+					array_unshift($errors, $error);
+
+				else $errors[] = $error; // Default behavior.
+
+				update_option(__NAMESPACE__.'_errors', $errors);
 			}
 
 			/**
