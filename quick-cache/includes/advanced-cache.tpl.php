@@ -581,8 +581,11 @@ namespace quick_cache
 		 */
 		public function maybe_stop_browser_caching()
 		{
-			if(!empty($_GET['qcABC'])) return;
-			if(QUICK_CACHE_ALLOW_BROWSER_CACHE) return;
+			if(QUICK_CACHE_ALLOW_BROWSER_CACHE)
+				return; // Allow in this case.
+
+			if(!empty($_GET['qcABC']) && filter_var($_GET['qcABC'], FILTER_VALIDATE_BOOLEAN))
+				return; // The query var says it's OK here.
 
 			header_remove('Last-Modified');
 			header('Expires: Wed, 11 Jan 1984 05:00:00 GMT');
