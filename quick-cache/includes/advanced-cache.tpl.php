@@ -872,7 +872,7 @@ namespace quick_cache
 			if(strpos($cache, '<body id="error-page">') !== FALSE)
 				return $this->maybe_add_nc_debug_info($buffer, $this::NC_DEBUG_WP_ERROR_PAGE);
 
-			if(!function_exists('http_response_code') && stripos($buffer, '<title>database error</title>'))
+			if(!function_exists('http_response_code') && stripos($cache, '<title>database error</title>') !== FALSE)
 				return $this->maybe_add_nc_debug_info($buffer, $this::NC_DEBUG_WP_ERROR_PAGE);
 
 			if(!$this->has_a_cacheable_content_type()) // Exclude non-HTML/XML content types.
