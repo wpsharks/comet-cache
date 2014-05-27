@@ -872,6 +872,9 @@ namespace quick_cache
 			if(strpos($cache, '<body id="error-page">') !== FALSE)
 				return $this->maybe_add_nc_debug_info($buffer, $this::NC_DEBUG_WP_ERROR_PAGE);
 
+			if(!function_exists('http_response_code') && stripos($cache, '<title>database error</title>') !== FALSE)
+				return $this->maybe_add_nc_debug_info($buffer, $this::NC_DEBUG_WP_ERROR_PAGE);
+
 			if(!$this->has_a_cacheable_content_type()) // Exclude non-HTML/XML content types.
 				return $this->maybe_add_nc_debug_info($buffer, $this::NC_DEBUG_UNCACHEABLE_CONTENT_TYPE);
 
@@ -1553,6 +1556,9 @@ namespace quick_cache
 		{
 			static $has; // Cache.
 			if(isset($has)) return $has;
+
+			if(function_exists('http_response_code') && ($http_response_code = (integer)http_response_code()))
+				$this->http_status = $http_response_code;
 
 			if(isset($this->http_status[0]) && $this->http_status[0] !== '2' && $this->http_status !== '404')
 				return ($has = FALSE); // WP `status_header()` sent a non-2xx & non-404 status code.
