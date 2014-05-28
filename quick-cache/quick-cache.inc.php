@@ -957,7 +957,7 @@ namespace quick_cache
 
 				$counter += $this->auto_purge_home_page_cache(); // If enabled and necessary.
 				$counter += $this->auto_purge_posts_page_cache(); // If enabled & applicable.
-				$counter += $this->auto_purge_post_terms_cache($id); // If enabled and applicable.
+				$counter += $this->auto_purge_post_terms_cache($id, $force); // If enabled and applicable.
 
 				if(!($permalink = get_permalink($id))) return $counter; // Nothing we can do.
 
@@ -1265,6 +1265,9 @@ namespace quick_cache
 			 * @since 14XXXX First documented version.
 			 *
 			 * @param integer $id A WordPress post ID.
+			 * @param bool    $force Defaults to a `FALSE` value.
+			 *    Pass as TRUE if purge should be done for `draft`, `pending`,
+			 *    or `future` post statuses.
 			 *
 			 * @return integer Total files purged by this routine (if any).
 			 *
@@ -1275,18 +1278,12 @@ namespace quick_cache
 			 *
 			 * @see auto_purge_post_cache()
 			 */
-			public function auto_purge_post_terms_cache($id)
+			public function auto_purge_post_terms_cache($id, $force = FALSE)
 			{
 				$counter = 0; // Initialize
 
 				if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
 					return $counter; // Nothing to do.
-
-				// @TODO Add option to UI to disable clearing term cache when saving as Draft
-				// By default, clearing the tag cache when saving as Draft is enabled because
-				// the post might be going from Published -> Draft, in which case the Tag
-				// archive cache should be updated. Some site-owners might want to disable
-				// this behavior.
 
 				if(!$this->options['enable'])
 					return $counter; // Nothing to do.
@@ -1297,7 +1294,18 @@ namespace quick_cache
 				)
 					return $counter; // Nothing to do.
 
-				if(get_post_status($id) === 'auto-draft')
+				$post_status = get_post_status($id); // Cache this.
+
+				if($post_status === 'auto-draft')
+					return $counter; // Nothing to do.
+
+				if($post_status === 'draft' && !$force)
+					return $counter; // Nothing to do.
+
+				if($post_status === 'pending' && !$force)
+					return $counter; // Nothing to do.
+
+				if($post_status === 'future' && !$force)
 					return $counter; // Nothing to do.
 
 				$cache_dir = $this->abspath_to($this->cache_sub_dir);
