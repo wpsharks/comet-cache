@@ -916,7 +916,7 @@ namespace quick_cache
 			 * @param integer $id A WordPress post ID.
 			 * @param bool    $force Defaults to a `FALSE` value.
 			 *    Pass as TRUE if purge should be done for `draft`, `pending`,
-			 *    or `future` post statuses.
+			 *    `future`, or `trash` post statuses.
 			 *
 			 * @return integer Total files purged by this routine (if any).
 			 *
@@ -940,6 +940,9 @@ namespace quick_cache
 
 				$post_status = get_post_status($id); // Cache this.
 
+				if(!$post_status)
+					return $counter; // Nothing to do.
+
 				if($post_status === 'auto-draft')
 					return $counter; // Nothing to do.
 
@@ -950,6 +953,9 @@ namespace quick_cache
 					return $counter; // Nothing to do.
 
 				if($post_status === 'future' && !$force)
+					return $counter; // Nothing to do.
+
+				if($post_status === 'trash' && !$force)
 					return $counter; // Nothing to do.
 
 				$cache_dir = $this->abspath_to($this->cache_sub_dir);
@@ -996,7 +1002,7 @@ namespace quick_cache
 
 			/**
 			 * Automatically purge cache files for a particular post when transitioning
-			 *    from `publish` or `private` post status to `draft`, `future`, or `private`.
+			 *    from `publish` or `private` post status to `draft`, `future`, `private`, or `trash`.
 			 *
 			 * @attaches-to `transition_post_status` hook.
 			 *
@@ -1023,9 +1029,9 @@ namespace quick_cache
 					return $counter; // Nothing to do.
 
 				if($old_status !== 'publish' && $old_status !== 'private')
-					return $counter; // Nothing to do.
+					return $counter; // Nothing to do. We MUST be transitioning FROM one of these statuses.
 
-				if($new_status === 'draft' || $new_status === 'future' || $new_status === 'private')
+				if($new_status === 'draft' || $new_status === 'future' || $new_status === 'private' || $new_status === 'trash')
 					$counter = $this->auto_purge_post_cache($post->ID, TRUE);
 
 				return apply_filters(__METHOD__, $counter, get_defined_vars());
