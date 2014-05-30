@@ -49,7 +49,7 @@ namespace quick_cache
 			 *
 			 * @var string Current version of the software.
 			 */
-			public $version = '140520';
+			public $version = '140529';
 
 			/**
 			 * Plugin text domain for translations.
