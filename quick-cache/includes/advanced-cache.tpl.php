@@ -1566,11 +1566,12 @@ namespace quick_cache
 			static $has; // Cache.
 			if(isset($has)) return $has;
 
-			if(function_exists('http_response_code') && ($http_response_code = (integer)http_response_code()))
+			if(function_exists('http_response_code') && ($http_response_code = http_response_code()))
 				$this->http_status = $http_response_code;
 
-			if(isset($this->http_status[0]) && $this->http_status[0] !== '2' && $this->http_status !== '404')
-				return ($has = FALSE); // WP `status_header()` sent a non-2xx & non-404 status code.
+			$http_status = (string)$this->http_status; // So we can check indexes.
+			if(isset($http_status[0]) && $http_status[0] !== '2' && $http_status !== '404')
+				return ($has = FALSE); // A non-2xx & non-404 status code.
 			/*
 			 * PHP's `headers_list()` currently does NOT include `HTTP/` headers.
 			 *    This means the following routine will never catch a status sent by `status_header()`.
