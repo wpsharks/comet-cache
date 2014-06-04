@@ -349,12 +349,10 @@ namespace quick_cache
 					$this->enqueue_notice(__('<strong>Quick Cache Feature Notice:</strong> This version of Quick Cache adds new options for Feed caching. Feed caching is now disabled by default. If you wish to enable feed caching, please visit the Quick Cache options panel.', $this->text_domain));
 
 				/*
-				 * Upgrading from a version prior to v14xxxx? (@TODO @raamdev See below, `140509` can change also).
-				 *    v14xxxx is where we introduced a branched cache structure, also also moved to a base directory layout.
-				 *
+				 * Upgrading from a version prior to v140605, where we introduced a branched cache structure, also also moved to a base directory layout.
 				 * See <https://github.com/WebSharks/Quick-Cache/issues/147#issuecomment-42659131>
 				 */
-				if(version_compare($prev_version, '140509', '<')) // i.e. Upgrading from a version before the branched/base structures.
+				if(version_compare($prev_version, '140605', '<')) // i.e. Upgrading from a version before the branched/base structures.
 				{
 					if(!empty($this->options['cache_dir'])) // From the previous release.
 					{
@@ -372,8 +370,7 @@ namespace quick_cache
 						update_option(__NAMESPACE__.'_options', $this->options);
 						if(is_multisite()) update_site_option(__NAMESPACE__.'_options', $this->options);
 					}
-					// @TODO @raamdev You might like to customize this upgrade notice a bit further.
-					$this->enqueue_notice(__('<strong>Quick Cache Feature Notice:</strong> This version of Quick Cache introduces a new <a href="https://github.com/WebSharks/Quick-Cache/wiki/Branched-Cache-Structure" target="_blank">Branched Cache Structure</a>.', $this->text_domain));
+					$this->enqueue_notice(__('<strong>Quick Cache Feature Notice:</strong> This version of Quick Cache introduces a new <a href="http://www.websharks-inc.com/r/quick-cache-branched-cache-structure-wiki/" target="_blank">Branched Cache Structure</a> and several other <a href="http://www.websharks-inc.com/post/quick-cache-v140605-now-available/" target="_blank">new features</a>.', $this->text_domain));
 				}
 				/* ------- END: VERSION-SPECIFIC UPGRADE HANDLERS ----------------------------- */
 
