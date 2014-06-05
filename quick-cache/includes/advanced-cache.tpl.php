@@ -139,7 +139,7 @@ namespace quick_cache
 		/**
 		 * Flagged as `TRUE` if QC advanced cache is active & running.
 		 *
-		 * @since 14xxxx Improving output buffers
+		 * @since 140605 Improving output buffers
 		 *
 		 * @var boolean `TRUE` if QC advanced cache is active & running.
 		 */
@@ -239,7 +239,7 @@ namespace quick_cache
 		/**
 		 * An array of debug info.
 		 *
-		 * @since 14xxxx Improve output buffering.
+		 * @since 140605 Improve output buffering.
 		 *
 		 * @var array An array of debug info; i.e. `reason_code` and `reason` (optional).
 		 */
@@ -270,7 +270,7 @@ namespace quick_cache
 		/**
 		 * Is the current request a WordPress content type?
 		 *
-		 * @since 14xxxx Improving debug notes display.
+		 * @since 140605 Improving debug notes display.
 		 *
 		 * @var boolean `TRUE` if is a WP content type.
 		 *
@@ -570,7 +570,7 @@ namespace quick_cache
 		/**
 		 * No-cache because we detected an early buffer termination.
 		 *
-		 * @since 14xxxx Improving output buffer.
+		 * @since 140605 Improving output buffer.
 		 *
 		 * @var string A unique string identifier in the set of `NC_DEBUG_` constants.
 		 */
@@ -620,7 +620,7 @@ namespace quick_cache
 		/**
 		 * Registers a shutdown flag.
 		 *
-		 * @since 14xxxx Improving output buffer.
+		 * @since 140605 Improving output buffer.
 		 *
 		 * @note In `/wp-settings.php`, Quick Cache is loaded before WP registers its own shutdown function.
 		 * Therefore, this flag is set before {@link shutdown_action_hook()} fires, and thus before {@link wp_ob_end_flush_all()}.
@@ -963,7 +963,7 @@ namespace quick_cache
 		/**
 		 * Echoes `NC_DEBUG_` info in the WordPress `shutdown` phase (if applicable).
 		 *
-		 * @since 14xxxx Improving debug info output phase.
+		 * @since 140605 Improving debug info output phase.
 		 *
 		 * @attaches-to `shutdown` hook in WordPress w/ a late priority.
 		 */
@@ -1289,7 +1289,7 @@ namespace quick_cache
 		/**
 		 * Produces a token based on the current site's base directory.
 		 *
-		 * @since 14xxxx First documented version.
+		 * @since 140605 First documented version.
 		 *
 		 * @param boolean $dashify Optional, defaults to a `FALSE` value.
 		 *    If `TRUE`, the token is returned with dashes in place of `[^a-z0-9\/]`.
