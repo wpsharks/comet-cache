@@ -1,8 +1,8 @@
 === Quick Cache (Speed Without Compromise) ===
 
-Stable tag: 140104
+Stable tag: 140605
 Requires at least: 3.7
-Tested up to: 3.9
+Tested up to: 3.9.1
 Text Domain: quick-cache
 
 License: GPLv2 or later
@@ -29,6 +29,9 @@ The Quick Cache plugin uses configuration options that you select from the optio
 5. Quick Cache Screenshot #5
 6. Quick Cache Screenshot #6
 7. Quick Cache Screenshot #7
+8. Quick Cache Screenshot #8
+9. Quick Cache Screenshot #9
+10. Quick Cache Screenshot #10
 
 == Installation ==
 
@@ -85,9 +88,9 @@ In computer science, a cache (pronounced /kash/) is a collection of data duplica
 
 = Where & why are the cache files stored on my server? =
 
-The cache files are stored in a special directory: `/wp-content/cache/`. This directory needs to remain writable, just like the `/wp-content/uploads` directory on many WordPress® installations. The `/cache` directory is where MD5 hash files reside. These files are named (with an MD5 hash) based on `HTTPS/HTTP_HOST/REQUEST_URI`. See also: **Dashboard -› Quick Cache -› Cache Directory/Expiration Time** for further details.
+The cache files are stored in a special directory: `/wp-content/cache/quick-cache`. This directory needs to remain writable, just like the `/wp-content/uploads` directory on many WordPress® installations. The `/quick-cache/cache` directory is where cache files reside. These files are stored using an intutive directory structure that named based on the request URL (`HTTPS/HTTP_HOST/REQUEST_URI`). See also: **Dashboard -› Quick Cache -› Cache Directory/Expiration Time** for further details.
 
-Whenever a request comes in from someone on the web, Quick Cache checks to see if it can serve a cached file; e.g. it looks at the `HTTPS/HTTP_HOST/REQUEST_URI` environent variables, then it checks the `/cache` directory. If a cache file has been built already, and it matches an existing `HTTPS.HTTP_HOST.REQUEST_URI` combination; and it is not too old (see: **Dashboard -› Quick Cache -› Cache Directory/Expiration Time**), then it will serve that file instead of asking WordPress® to regenerate it. This adds tremendous speed to your site and reduces server load.
+Whenever a request comes in from someone on the web, Quick Cache checks to see if it can serve a cached file; e.g. it looks at the `HTTPS/HTTP_HOST/REQUEST_URI` environent variables, then it checks the `/quick-cache/cache` directory. If a cache file has been built already, and it matches an existing `HTTPS.HTTP_HOST.REQUEST_URI` combination; and it is not too old (see: **Dashboard -› Quick Cache -› Cache Directory/Expiration Time**), then it will serve that file instead of asking WordPress® to regenerate it. This adds tremendous speed to your site and reduces server load.
 
 If you have GZIP compression enabled, then the cache file is also sent to the browser with compression (recommended). Modern web browsers that support this technique will definitely take advantage of it. After all, if it is easier to email a zip file, it's also easier to download a web page that way. That is why on-the-fly GZIP compression for web pages is recommended. This is supported by all modern browsers.
 
@@ -231,7 +234,9 @@ Quick Cache is now completely uninstalled and you can start fresh :-)
 - URI exclusion patterns (now supporting wildcards too).
 - User-Agent exclusion patterns (now supporting wildcards too).
 - HTTP referrer exclusion patterns (now supporting wildcards too).
-- An MD5 Version Salt (customize the caching engine).
+- A Dynamic Version Salt (customize the caching engine).
+- HTML Compressor to automatically combine and compresses CSS/JS/HTML code.
+- Auto-Cache Engine to pre-cache your site at 15-minute intervals.
 - An Automatic Updater to update Quick Cache Pro from your WordPress Dashboard.
 - Rockstar support for all Quick Cache features.
 
@@ -272,6 +277,27 @@ Released under the terms of the [GNU General Public License](http://www.gnu.org/
 Requires PHP v5.3+. The latest version of Quick Cache is a complete rewrite (OOP design). Faster! and even more dependable. NOTE: the free version of Quick Cache (this new LITE version); while it remains fully functional and is more-than-adequate for most sites; is now limited in some ways. The following advanced features from the previous release are no longer available in the lite version: a custom MD5 Version Salt, custom Exclusion Patterns, a Clear Cache button in admin bar. These, and other features; are now available only in the pro version of the plugin. For further details, please see: <http://www.websharks-inc.com/product/quick-cache/>.
 
 == Changelog ==
+
+= v140605 =
+
+- **New Feature**: Branched Cache Structure. Cache files are now written to the cache directory using a more intuitive format of `PROTOCOL`/`HOSTNAME`/`PERMALINK` (e.g., `http/example-com/sample-page.html`). For more details, please see <https://github.com/WebSharks/Quick-Cache/wiki/Branched-Cache-Structure>
+- **New Feature**: 404 Page caching. It's now possible to enable/disable the caching of 404 requests. Enabling this feature generates a single cache file for your 404 Page and then symlinks future 404 requests to that cache file. See *Dashboard -> Quick Cache -> Plugin Options -> 404 Requests*.
+- **New Feature (Pro)**: HTML Compressor (experimental). This new experimental feature automatically combines and compresses CSS/JS/HTML code. See *Dashboard -> Quick Cache -> Plugin Options -> HTML Compressor*. For more details about how this feature works, please see <https://github.com/WebSharks/HTML-Compressor>
+- **New Feature (Pro)**: Auto-Cache Engine. When enabled, the Auto-Cache Engine will pre-cache your site at 15-minute intervals, rebuilding cache files when necessary (it will not rebuild cache files until they have expired). This helps eliminate the slowness a user may experience when visiting a page on your site that has not yet been cached. See *Dashboard -> Quick Cache -> Plugin Options -> Auto-Cache Engine*.
+- **New Feature**: Auto-Purge "Author Page". When a single Post/Page is changed in some way, Quick Cache can also purge any existing cache files for the associated Author Page. See *Dashboard -> Quick Cache -> Plugin Options -> Clearing the Cache*. (This option is enabled by default; disabling this requires Quick Cache Pro.)
+- **New Feature**: Auto-Purge "Category Archives". When a single Post/Page is changed in some way, Quick Cache can also purge any existing cache files for the associated Category archive views. See *Dashboard -> Quick Cache -> Plugin Options -> Clearing the Cache*. (This option is enabled by default; disabling this requires Quick Cache Pro.)
+- **New Feature**: Auto-Purge "Tag Archives". When a single Post/Page is changed in some way, Quick Cache can also purge any existing cache files for the associated Tag archive views. See *Dashboard -> Quick Cache -> Plugin Options -> Clearing the Cache*. (This option is enabled by default; disabling this requires Quick Cache Pro.)
+- **New Feature**: Auto-Purge "Custom Term Archives". When a single Post/Page is changed in some way, Quick Cache can also purge any custom Terms that may have their own Term archive views. See *Dashboard -> Quick Cache -> Plugin Options -> Clearing the Cache*. (This option is enabled by default; disabling this requires Quick Cache Pro.)
+- **Enhancement**: Improved conflict handling of other plugins using `ob_start()`. See <https://github.com/WebSharks/Quick-Cache/issues/97>
+- **Enhancement**: Added a postload filter for `status_header` so that Quick Cache can properly detect calls to the WP core function `status_header()`
+- **Enhancement**: The Quick Cache cache directory has been changed to `wp-content/cache/quick-cache/` to provide better organization of cache files and avoid interfering with another plugin that may also be writing to the `wp-content/cache/` directory. See <https://github.com/WebSharks/Quick-Cache/issues/123>
+- **Enhancement**: New detailed debugging notes (see *Dashboard -> Quick Cache -> Plugin Options -> Enable/Disable*). There is now an extra option to show detailed debugging information in addition to the Quick Cache notes in the HTML source. For now, this feature only applies when the HTML Compressor is enabled.
+- **Enhancement**: Better Debugging Notices. If Quick Cache is not caching a particular page (such as when a logged-in user visits the site and logged-in user caching is not enabled), Quick Cache will now report why that page is not being cached in the HTML notes.
+- **Enhancement**: Improved compatibility with the Nav Menu Roles plugin. See <https://github.com/WebSharks/quick-cache/issues/164>
+- **Bug Fix**: Obey custom content directories. If you have customized your `WP_CONTENT_DIR` and `WP_CONTENT_URL` constants to point somewhere other than the default, Quick Cache will now obey those and use your custom directory for storing cache files. See <https://github.com/WebSharks/Quick-Cache/issues/95>
+- **Bug Fix**: Scheduled posts now trigger the clearing of any associated archive views when those posts go live (assuming you have those archive views set to Auto-Purge in *Dashboard -> Quick Cache -> Plugin Options -> Clearing the Cache*). See <https://github.com/WebSharks/Quick-Cache/issues/26>
+- **Bug Fix**: Fixed a bug where saving a post as `draft` would trigger the Auto-Purge Post routine and clear the cache for that post. Now only purges post status `publish` and `private` and when transitioning from `publish` or `private` post status to `draft`, `future`, or `private`. See <https://github.com/WebSharks/Quick-Cache/issues/43>
+- **Bug Fix**: Split/paginated comments and multi-page Posts/Page cache files are now purged properly when the post cache is purged. See <https://github.com/WebSharks/Quick-Cache/issues/75>
 
 = v140104 =
 
