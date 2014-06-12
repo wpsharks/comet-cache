@@ -119,6 +119,21 @@ namespace quick_cache
 		 */
 		define('QUICK_CACHE_404_CACHE_FILENAME', '----404----');
 
+	if(!defined('QUICK_CACHE_PLUGIN_FILE'))
+		/**
+		 * Plugin file path.
+		 *
+		 * @since 14xxxx Reorganizing class members.
+		 *
+		 * @var string Absolute server path to QC plugin file.
+		 */
+		define('QUICK_CACHE_PLUGIN_FILE', '%%QUICK_CACHE_PLUGIN_FILE%%');
+
+	/*
+	 * Include shared methods between {@link advanced_cache} and {@link plugin}.
+	 */
+	require_once dirname(QUICK_CACHE_PLUGIN_FILE).'/includes/share.php';
+
 	/**
 	 * Quick Cache (Advanced Cache Handler)
 	 *
@@ -331,7 +346,7 @@ namespace quick_cache
 		 *
 		 * @see wp_main_query_postload()
 		 */
-		public $plugin_file = '';
+		public $plugin_file = QUICK_CACHE_PLUGIN_FILE;
 
 		/**
 		 * Text domain for translations; based on `__NAMESPACE__`.
@@ -350,6 +365,15 @@ namespace quick_cache
 		 * @var array An array of any hooks added by plugins.
 		 */
 		public $hooks = array();
+
+		/**
+		 * Easy reference to the {@link share} class instance.
+		 *
+		 * @since 14xxxx Reorganizing class members.
+		 *
+		 * @var share References {@link share} class.
+		 */
+		public $share; // Set by constructor.
 
 		/**
 		 * No-cache because of the current {@link \PHP_SAPI}.
@@ -592,6 +616,7 @@ namespace quick_cache
 			$this->is_running  = TRUE;
 			$this->timer       = microtime(TRUE);
 			$this->text_domain = str_replace('_', '-', __NAMESPACE__);
+			$this->share       = $GLOBALS[__NAMESPACE__.'__share'];
 
 			$this->load_ac_plugins();
 			$this->register_shutdown_flag();

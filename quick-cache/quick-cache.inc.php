@@ -112,7 +112,7 @@ namespace quick_cache
 			/**
 			 * Easy reference to the {@link share} class instance.
 			 *
-			 * @since 14xxxx Reorganize class members.
+			 * @since 14xxxx Reorganizing class members.
 			 *
 			 * @var share References {@link share} class.
 			 */
@@ -1763,6 +1763,10 @@ namespace quick_cache
 						             $_value, $advanced_cache_contents);
 				}
 				unset($_option, $_value, $_values, $_response); // Housekeeping.
+
+				// Make it possible for the `advanced-cache.php` handler to find the plugin directory reliably.
+				$advanced_cache_contents = str_replace("'%%".__NAMESPACE__."_PLUGIN_FILE%%'", // e.g. `QUICK_CACHE_PLUGIN_FILE`.
+				                                       "'".$this->esc_sq($this->file)."'", $advanced_cache_contents);
 
 				// Ignore; this is created by Quick Cache; and we don't need to obey in this case.
 				#if(defined('DISALLOW_FILE_MODS') && DISALLOW_FILE_MODS)
