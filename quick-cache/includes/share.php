@@ -7,7 +7,7 @@ namespace quick_cache // Root namespace.
 	/**
 	 * Quick Cache (Shared Methods)
 	 *
-	 * @package quick_cache\acp_shared
+	 * @package quick_cache\share
 	 * @since 14xxxx Reorganizing class members.
 	 */
 	class share // Shared between {@link advanced_cache} and {@link plugin}.
