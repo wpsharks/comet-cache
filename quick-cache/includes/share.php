@@ -14,6 +14,7 @@ namespace quick_cache // Root namespace.
 	{
 		public function __construct()
 		{
+			// @TODO Bring shareable methods into this class.
 		}
 	}
 
