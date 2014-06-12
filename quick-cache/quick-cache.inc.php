@@ -110,6 +110,8 @@ namespace quick_cache
 			/**
 			 * Used by methods in this class to help optimize performance.
 			 *
+			 * @since 14xxxx Reducing auto-purge overhead.
+			 *
 			 * @var array An instance-based cache used by methods in this class.
 			 */
 			public $cache = array();
