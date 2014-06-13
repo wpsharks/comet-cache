@@ -1081,26 +1081,6 @@ namespace quick_cache
 	}
 
 	/**
-	 * Polyfill for {@link \__()}.
-	 *
-	 * @since 140422 First documented version.
-	 *
-	 * @param string $string String to translate.
-	 * @param string $text_domain Plugin text domain.
-	 *
-	 * @return string Possibly translated string.
-	 */
-	function __($string, $text_domain) // Polyfill `\__()`.
-	{
-		static $__exists; // Static cache.
-
-		if(($__exists || function_exists('__')) && ($__exists = TRUE))
-			return \__($string, $text_domain);
-
-		return $string; // Not possible (yet).
-	}
-
-	/**
 	 * Global Quick Cache {@link advanced_cache} instance.
 	 *
 	 * @since 140422 First documented version.
