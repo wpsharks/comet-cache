@@ -1047,13 +1047,12 @@ namespace quick_cache
 				$cache_dir = $this->cache_dir(); // Current cache directory.
 				if(!is_dir($cache_dir)) return $counter; // Nothing to do.
 
-				$patterns                     = 'sitemap*xml'; // Not customizable in lite version.
 				$patterns                     = '(?:'.implode('|', array_map(function ($pattern)
 					{
 						$pattern = preg_quote($pattern, '/'); // Escape.
 						return preg_replace('/\\\\\*/', '.*?', $pattern); // Wildcards.
 
-					}, $this->options['cache_purge_xml_sitemap_patterns'])).')';
+					}, preg_split('/['."\r\n".']+/', 'sitemap*xml', NULL, PREG_SPLIT_NO_EMPTY))).')';
 				$cache_path_no_scheme_quv_ext = $this->url_to_cache_path(home_url('/'), '', '', $this::CACHE_PATH_NO_SCHEME | $this::CACHE_PATH_NO_PATH_INDEX | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT);
 				$regex                        = '/^'.preg_quote($cache_dir, '/'). // Consider all schemes; all path paginations; and all possible variations.
 				                                '\/[^\/]+\/'.preg_quote($cache_path_no_scheme_quv_ext, '/').
