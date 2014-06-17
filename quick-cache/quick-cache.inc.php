@@ -396,8 +396,8 @@ namespace quick_cache
 			 */
 			public function actions()
 			{
-				if(empty($_REQUEST[__NAMESPACE__])) return;
-				require_once dirname(__FILE__).'/includes/actions.php';
+				if(!empty($_REQUEST[__NAMESPACE__]))
+					require_once dirname(__FILE__).'/includes/actions.php';
 			}
 
 			/**
@@ -732,17 +732,17 @@ namespace quick_cache
 			{
 				$counter = 0; // Initialize.
 
-				$cache_dir = $this->cache_dir(); // Current cache directory.
-				if(!is_dir($cache_dir)) return $counter; // Nothing to do.
-
-				// @TODO When set_time_limit() is disabled by PHP configuration, display a warning message to users upon plugin activation
-				@set_time_limit(1800); // In case of HUGE sites w/ a very large directory. Errors are ignored in case `set_time_limit()` is disabled.
+				if(!is_dir($cache_dir = $this->cache_dir()))
+					return $counter; // Nothing to do.
 
 				$url                          = 'http://'.$_SERVER['HTTP_HOST'].$this->host_base_dir_tokens();
 				$cache_path_no_scheme_quv_ext = $this->build_cache_path($url, '', '', $this::CACHE_PATH_NO_SCHEME | $this::CACHE_PATH_NO_PATH_INDEX | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT);
 				$regex                        = '/^'.preg_quote($cache_dir, '/'). // Consider all schemes; all paths; and all possible variations.
 				                                '\/[^\/]+\/'.preg_quote($cache_path_no_scheme_quv_ext, '/').
 				                                '(?:\/index)?[.\/]/';
+
+				// @TODO When set_time_limit() is disabled by PHP configuration, display a warning message to users upon plugin activation
+				@set_time_limit(1800); // In case of HUGE sites w/ a very large directory. Errors are ignored in case `set_time_limit()` is disabled.
 
 				/** @var $_dir_file \RecursiveDirectoryIterator For IDEs. */
 				foreach($this->dir_regex_iteration($cache_dir, $regex) as $_dir_file)
@@ -776,9 +776,10 @@ namespace quick_cache
 			{
 				$counter = 0; // Initialize.
 
-				$cache_dir = $this->cache_dir(); // Current cache directory.
-				$max_age   = strtotime('-'.$this->options['cache_max_age']);
-				if(!is_dir($cache_dir)) return $counter; // Nothing to do.
+				if(!is_dir($cache_dir = $this->cache_dir()))
+					return $counter; // Nothing to do.
+
+				$max_age = strtotime('-'.$this->options['cache_max_age']);
 
 				// @TODO When set_time_limit() is disabled by PHP configuration, display a warning message to users upon plugin activation
 				@set_time_limit(1800); // In case of HUGE sites w/ a very large directory. Errors are ignored in case `set_time_limit()` is disabled.
@@ -912,9 +913,13 @@ namespace quick_cache
 				if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
 					return $counter; // Nothing to do.
 
-				$post_status = get_post_status($id); // Cache this.
+				if(!is_dir($cache_dir = $this->cache_dir()))
+					return $counter; // Nothing to do.
 
-				if(!$post_status)
+				if(!($permalink = get_permalink($id)))
+					return $counter; // Nothing we can do.
+
+				if(!($post_status = get_post_status($id)))
 					return $counter; // Nothing to do.
 
 				if($post_status === 'auto-draft')
@@ -931,15 +936,6 @@ namespace quick_cache
 
 				if($post_status === 'trash' && !$force)
 					return $counter; // Nothing to do.
-
-				$cache_dir = $this->cache_dir(); // Current cache directory.
-				if(!is_dir($cache_dir)) return $counter; // Nothing to do.
-
-				$counter += $this->auto_purge_home_page_cache(); // If enabled and necessary.
-				$counter += $this->auto_purge_posts_page_cache(); // If enabled & applicable.
-				$counter += $this->auto_purge_post_terms_cache($id, $force); // If enabled and applicable.
-
-				if(!($permalink = get_permalink($id))) return $counter; // Nothing we can do.
 
 				if(($type = get_post_type($id)) && ($type = get_post_type_object($type)) && !empty($type->labels->singular_name))
 					$type_singular_name = $type->labels->singular_name; // Singular name for the post type.
@@ -969,6 +965,11 @@ namespace quick_cache
 					$enqueued_notices++; // Notice counter.
 				}
 				unset($_file); // Just a little housekeeping.
+
+				$counter += $this->auto_purge_xml_sitemaps_cache(); // If enabled and necessary.
+				$counter += $this->auto_purge_home_page_cache(); // If enabled and necessary.
+				$counter += $this->auto_purge_posts_page_cache(); // If enabled and necessary.
+				$counter += $this->auto_purge_post_terms_cache($id, $force); // If enabled and necessary.
 
 				return apply_filters(__METHOD__, $counter, get_defined_vars());
 			}
@@ -1018,6 +1019,71 @@ namespace quick_cache
 			}
 
 			/**
+			 * Automatically purges cache files related to XML sitemaps.
+			 *
+			 * @since 14xxxx Working to improve compatibility with sitemaps.
+			 *
+			 * @return integer Total files purged by this routine (if any).
+			 *
+			 * @throws \exception If a purge failure occurs.
+			 *
+			 * @note Unlike many of the other `auto_` methods, this one is NOT currently
+			 *    attached to any hooks. However, it is called upon by {@link auto_purge_post_cache()}.
+			 *
+			 * @see auto_purge_post_cache()
+			 */
+			public function auto_purge_xml_sitemaps_cache()
+			{
+				$counter          = 0; // Initialize.
+				$enqueued_notices = 0; // Initialize.
+
+				if(isset($this->cache[__FUNCTION__]))
+					return $counter; // Already did this.
+				$this->cache[__FUNCTION__] = -1;
+
+				if(!$this->options['enable'])
+					return $counter; // Nothing to do.
+
+				if(!is_dir($cache_dir = $this->cache_dir()))
+					return $counter; // Nothing to do.
+
+				$patterns                     = '(?:'.implode('|', array_map(function ($pattern)
+					{
+						$pattern = trim($pattern, '/');
+						$pattern = str_replace('.', '-', $pattern);
+						$pattern = preg_quote($pattern, '/'); // Escape.
+						return preg_replace('/\\\\\*/', '.*?', $pattern); // Wildcards.
+
+					}, preg_split('/['."\r\n".']+/', 'sitemap*xml', NULL, PREG_SPLIT_NO_EMPTY))).')';
+				$cache_path_no_scheme_quv_ext = $this->url_to_cache_path(home_url('/'), '', '', $this::CACHE_PATH_NO_SCHEME | $this::CACHE_PATH_NO_PATH_INDEX | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT);
+				$regex                        = '/^'.preg_quote($cache_dir, '/'). // Consider all schemes; all path paginations; and all possible variations.
+				                                '\/[^\/]+\/'.preg_quote($cache_path_no_scheme_quv_ext, '/').
+				                                '\/'.$patterns.'\./';
+
+				/** @var $_file \RecursiveDirectoryIterator For IDEs. */
+				foreach($this->dir_regex_iteration($cache_dir, $regex) as $_file) if($_file->isFile() || $_file->isLink())
+				{
+					if(strpos($_file->getSubpathname(), '/') === FALSE) continue;
+					// Don't delete files in the immediate directory; e.g. `qc-advanced-cache` or `.htaccess`, etc.
+					// Actual `http|https/...` cache files are nested. Files in the immediate directory are for other purposes.
+
+					if(!unlink($_file->getPathname())) // Throw exception if unable to delete.
+						throw new \exception(sprintf(__('Unable to auto-purge XML sitemap file: `%1$s`.', $this->text_domain), $_file->getPathname()));
+					$counter++; // Increment counter for each file purge.
+
+					if($enqueued_notices || !$this->options['change_notifications_enable'] || !is_admin())
+						continue; // Stop here; we already issued a notice, or this notice is N/A.
+
+					$this->enqueue_notice('<img src="'.esc_attr($this->url('/client-s/images/clear.png')).'" style="float:left; margin:0 10px 0 0; border:0;" />'.
+					                      __('<strong>Quick Cache:</strong> detected changes. Found XML sitemaps (auto-purging).', $this->text_domain));
+					$enqueued_notices++; // Notice counter.
+				}
+				unset($_file); // Just a little housekeeping.
+
+				return apply_filters(__METHOD__, $counter, get_defined_vars());
+			}
+
+			/**
 			 * Automatically purges cache files for the home page.
 			 *
 			 * @since 140422 First documented version.
@@ -1046,8 +1112,8 @@ namespace quick_cache
 				if(!$this->options['cache_purge_home_page_enable'])
 					return $counter; // Nothing to do.
 
-				$cache_dir = $this->cache_dir(); // Current cache directory.
-				if(!is_dir($cache_dir)) return $counter; // Nothing to do.
+				if(!is_dir($cache_dir = $this->cache_dir()))
+					return $counter; // Nothing to do.
 
 				$cache_path_no_scheme_quv_ext = $this->build_cache_path(home_url('/'), '', '', $this::CACHE_PATH_NO_SCHEME | $this::CACHE_PATH_NO_PATH_INDEX | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT);
 				$regex                        = '/^'.preg_quote($cache_dir, '/'). // Consider all schemes; all path paginations; and all possible variations.
@@ -1106,8 +1172,8 @@ namespace quick_cache
 				if(!$this->options['cache_purge_posts_page_enable'])
 					return $counter; // Nothing to do.
 
-				$cache_dir = $this->cache_dir(); // Current cache directory.
-				if(!is_dir($cache_dir)) return $counter; // Nothing to do.
+				if(!is_dir($cache_dir = $this->cache_dir()))
+					return $counter; // Nothing to do.
 
 				$show_on_front  = get_option('show_on_front');
 				$page_for_posts = get_option('page_for_posts');
@@ -1189,8 +1255,8 @@ namespace quick_cache
 				if(!$this->options['cache_purge_author_page_enable'])
 					return $counter; // Nothing to do.
 
-				$cache_dir = $this->cache_dir(); // Current cache directory.
-				if(!is_dir($cache_dir)) return $counter; // Nothing to do.
+				if(!is_dir($cache_dir = $this->cache_dir()))
+					return $counter; // Nothing to do.
 
 				/*
 				 * If we're changing the post author AND
@@ -1210,20 +1276,19 @@ namespace quick_cache
 					$authors[] = (integer)$post_before->post_author;
 					$authors[] = (integer)$post_after->post_author;
 				}
-				elseif(($post_before->post_status === 'publish' || $post_before->post_status === 'private') ||
-				       ($post_after->post_status === 'publish' || $post_after->post_status === 'private')
+				else if(($post_before->post_status === 'publish' || $post_before->post_status === 'private') ||
+				        ($post_after->post_status === 'publish' || $post_after->post_status === 'private')
 				)
 					$authors[] = (integer)$post_after->post_author;
-				else
-					return $counter; // Nothing to do.
 
-				// Get author posts URL and display name
-				foreach($authors as $_author_id)
+				else return $counter; // Nothing to do in this scenario.
+
+				foreach($authors as $_author_id) // Get author posts URL and display name.
 				{
 					$authors_to_purge[$_author_id]['posts_url']    = get_author_posts_url($_author_id);
 					$authors_to_purge[$_author_id]['display_name'] = get_the_author_meta('display_name', $_author_id);
 				}
-				unset($_author_id);
+				unset($_author_id); // Housekeeping.
 
 				foreach($authors_to_purge as $_author)
 				{
@@ -1299,6 +1364,9 @@ namespace quick_cache
 				   !$this->options['cache_purge_term_other_enable']
 				) return $counter; // Nothing to do.
 
+				if(!is_dir($cache_dir = $this->cache_dir()))
+					return $counter; // Nothing to do.
+
 				$post_status = get_post_status($id); // Cache this.
 
 				if($post_status === 'auto-draft')
@@ -1312,9 +1380,6 @@ namespace quick_cache
 
 				if($post_status === 'future' && !$force)
 					return $counter; // Nothing to do.
-
-				$cache_dir = $this->cache_dir(); // Current cache directory.
-				if(!is_dir($cache_dir)) return $counter; // Nothing to do.
 
 				/*
 				 * Build an array of available taxonomies for this post (as taxonomy objects)
