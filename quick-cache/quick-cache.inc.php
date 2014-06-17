@@ -12,6 +12,8 @@ namespace quick_cache
 	if(!defined('WPINC')) // MUST have WordPress.
 		exit('Do NOT access this file directly: '.basename(__FILE__));
 
+	require_once dirname(__FILE__).'/includes/share.php';
+
 	if(!class_exists('\\'.__NAMESPACE__.'\\plugin'))
 	{
 		/**
@@ -20,17 +22,8 @@ namespace quick_cache
 		 * @package quick_cache\plugin
 		 * @since 140422 First documented version.
 		 */
-		class plugin
+		class plugin extends share
 		{
-			/**
-			 * Pro version flag.
-			 *
-			 * @since 140422 First documented version.
-			 *
-			 * @var boolean TRUE for pro version; FALSE for lite version.
-			 */
-			public $is_pro = FALSE;
-
 			/**
 			 * Stub `__FILE__` location.
 			 *
@@ -41,24 +34,6 @@ namespace quick_cache
 			 *    which is why we have this property. This is the stub `__FILE__`.
 			 */
 			public $file = '';
-
-			/**
-			 * Version string in YYMMDD[+build] format.
-			 *
-			 * @since 140422 First documented version.
-			 *
-			 * @var string Current version of the software.
-			 */
-			public $version = '140605';
-
-			/**
-			 * Plugin text domain for translations.
-			 *
-			 * @since 140422 First documented version.
-			 *
-			 * @var string Plugin text domain; set by constructor.
-			 */
-			public $text_domain = '';
 
 			/**
 			 * An array of all default option values.
@@ -79,16 +54,6 @@ namespace quick_cache
 			public $options = array();
 
 			/**
-			 * Network capability requirement.
-			 *
-			 * @since 140422 First documented version.
-			 *
-			 * @var string WordPress capability required to
-			 *    administer QC in a multisite network.
-			 */
-			public $network_cap = '';
-
-			/**
 			 * General capability requirement.
 			 *
 			 * @since 140422 First documented version.
@@ -97,6 +62,16 @@ namespace quick_cache
 			 *    administer QC in any environment; i.e. in multisite or otherwise.
 			 */
 			public $cap = '';
+
+			/**
+			 * Network capability requirement.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @var string WordPress capability required to
+			 *    administer QC in a multisite network.
+			 */
+			public $network_cap = '';
 
 			/**
 			 * Cache directory.
@@ -123,11 +98,9 @@ namespace quick_cache
 			 */
 			public function __construct()
 			{
-				if(strpos(__NAMESPACE__, '\\') !== FALSE) // Sanity check.
-					throw new \exception('Not a root namespace: `'.__NAMESPACE__.'`.');
+				parent::__construct(); // Shared constructor.
 
-				$this->file        = preg_replace('/\.inc\.php$/', '.php', __FILE__);
-				$this->text_domain = str_replace('_', '-', __NAMESPACE__);
+				$this->file = preg_replace('/\.inc\.php$/', '.php', __FILE__);
 
 				add_action('after_setup_theme', array($this, 'setup'));
 				register_activation_hook($this->file, array($this, 'activate'));
@@ -145,39 +118,40 @@ namespace quick_cache
 
 				load_plugin_textdomain($this->text_domain);
 
-				$wp_content_dir_relative = // Considers custom `WP_CONTENT_DIR` locations.
-					trim(str_replace(ABSPATH, '', WP_CONTENT_DIR), '\\/'." \t\n\r\0\x0B");
+				$this->default_options = array(
+					'version'                          => $this->version,
 
-				$this->default_options = array( // Default options.
-				                                'version'                          => $this->version,
+					'crons_setup'                      => '0', // `0` or timestamp.
 
-				                                'crons_setup'                      => '0', // `0` or timestamp.
+					'enable'                           => '0', // `0|1`.
+					'debugging_enable'                 => '1', // `0|1|2` // 2 indicates greater debugging detail.
+					'cache_purge_home_page_enable'     => '1', // `0|1`.
+					'cache_purge_posts_page_enable'    => '1', // `0|1`.
+					'cache_purge_author_page_enable'   => '1', // `0|1`.
+					'cache_purge_term_category_enable' => '1', // `0|1`.
+					'cache_purge_term_post_tag_enable' => '1', // `0|1`.
+					'cache_purge_term_other_enable'    => '0', // `0|1`.
+					'allow_browser_cache'              => '0', // `0|1`.
 
-				                                'enable'                           => '0', // `0|1`.
-				                                'debugging_enable'                 => '1', // `0|1|2` // 2 indicates greater debugging detail.
-				                                'cache_purge_home_page_enable'     => '1', // `0|1`.
-				                                'cache_purge_posts_page_enable'    => '1', // `0|1`.
-				                                'cache_purge_author_page_enable'   => '1', // `0|1`.
-				                                'cache_purge_term_category_enable' => '1', // `0|1`.
-				                                'cache_purge_term_post_tag_enable' => '1', // `0|1`.
-				                                'cache_purge_term_other_enable'    => '0', // `0|1`.
-				                                'allow_browser_cache'              => '0', // `0|1`.
+					'base_dir'                         => 'cache/quick-cache', // Relative to `WP_CONTENT_DIR`.
+					'cache_max_age'                    => '7 days', // `strtotime()` compatible.
 
-				                                'base_dir'                         => $wp_content_dir_relative.'/cache/quick-cache',
-				                                'cache_max_age'                    => '7 days', // `strtotime()` compatible.
+					'get_requests'                     => '0', // `0|1`.
+					'feeds_enable'                     => '0', // `0|1`.
+					'cache_404_requests'               => '0', // `0|1`.
 
-				                                'get_requests'                     => '0', // `0|1`.
-				                                'feeds_enable'                     => '0', // `0|1`.
-				                                'cache_404_requests'               => '0', // `0|1`.
-
-				                                'uninstall_on_deactivation'        => '0' // `0|1`.
+					'uninstall_on_deactivation'        => '0' // `0|1`.
 				); // Default options are merged with those defined by the site owner.
 				$options               = (is_array($options = get_option(__NAMESPACE__.'_options'))) ? $options : array();
 				if(is_multisite() && is_array($site_options = get_site_option(__NAMESPACE__.'_options')))
 					$options = array_merge($options, $site_options); // Multisite network options.
 
-				if(!$options && is_array($old_options = get_option('ws_plugin__qcache_options')) && $old_options)
+				if(!$options && get_option('ws_plugin__qcache_configured')
+				   && is_array($old_options = get_option('ws_plugin__qcache_options')) && $old_options
+				) // Before the rewrite. Only if QC was previously configured w/ options.
 				{
+					$this->options['version'] = '2.3.6'; // Old options.
+
 					if(!isset($options['enable']) && isset($old_options['enabled']))
 						$options['enable'] = (string)(integer)$old_options['enabled'];
 
@@ -213,15 +187,14 @@ namespace quick_cache
 				if(!$this->options['base_dir']) // Security enhancement; NEVER allow this to be empty.
 					$this->options['base_dir'] = $this->default_options['base_dir'];
 
-				$this->network_cap = apply_filters(__METHOD__.'__network_cap', 'manage_network_plugins');
 				$this->cap         = apply_filters(__METHOD__.'__cap', 'activate_plugins');
+				$this->network_cap = apply_filters(__METHOD__.'__network_cap', 'manage_network_plugins');
 
 				add_action('init', array($this, 'check_advanced_cache'));
 				add_action('init', array($this, 'check_blog_paths'));
 				add_action('wp_loaded', array($this, 'actions'));
 
 				add_action('admin_init', array($this, 'check_version'));
-				add_action('admin_init', array($this, 'rewrite_notice'));
 
 				add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_styles'));
 				add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_scripts'));
@@ -269,10 +242,6 @@ namespace quick_cache
 				if((integer)$this->options['crons_setup'] < 1382523750)
 				{
 					wp_clear_scheduled_hook('_cron_'.__NAMESPACE__.'_cleanup');
-
-					wp_clear_scheduled_hook('ws_plugin__qcache_garbage_collector__schedule');
-					wp_clear_scheduled_hook('ws_plugin__qcache_auto_cache_engine__schedule');
-
 					wp_schedule_event(time() + 60, 'daily', '_cron_'.__NAMESPACE__.'_cleanup');
 
 					$this->options['crons_setup'] = (string)time();
@@ -326,99 +295,26 @@ namespace quick_cache
 			 */
 			public function check_version()
 			{
-				/*
-				 * The current version reflected by the configured option key: `version`.
-				 *    If they just upgraded, this represents the previous version.
-				 */
 				$current_version = $prev_version = $this->options['version'];
-
-				/*
-				 * Check the current version; is it up-to-date?
-				 */
 				if(version_compare($current_version, $this->version, '>='))
 					return; // Nothing to do; we've already upgraded them.
 
-				/*
-				 * Update their current version to this version.
-				 */
 				$current_version = $this->options['version'] = $this->version;
-				update_option(__NAMESPACE__.'_options', $this->options);
+				update_option(__NAMESPACE__.'_options', $this->options); // Updates version.
 				if(is_multisite()) update_site_option(__NAMESPACE__.'_options', $this->options);
 
-				/* ------- START: VERSION-SPECIFIC UPGRADE HANDLERS --------------------------- */
+				require_once dirname(__FILE__).'/includes/version-specific-upgrade.php';
+				new version_specific_upgrade($prev_version);
 
-				// @TODO @raamdev I suggest that in the future we move these VERSION-SPECIFIC checks into their own class.
-				//    It's fine like it is, but I think we could reorganize and keep things cleaner in the future.
-				//    This list of checks is likely to build up over time.
-
-				/*
-				 * Upgrading from a version prior to v140104 where we introduced feed caching.
-				 */
-				if(version_compare($prev_version, '140104', '<')) // When this sort of update occurs, we issue a notice about this new feature.
-					$this->enqueue_notice(__('<strong>Quick Cache Feature Notice:</strong> This version of Quick Cache adds new options for Feed caching. Feed caching is now disabled by default. If you wish to enable feed caching, please visit the Quick Cache options panel.', $this->text_domain));
-
-				/*
-				 * Upgrading from a version prior to v140605, where we introduced a branched cache structure, also also moved to a base directory layout.
-				 * See <https://github.com/WebSharks/Quick-Cache/issues/147#issuecomment-42659131>
-				 */
-				if(version_compare($prev_version, '140605', '<')) // i.e. Upgrading from a version before the branched/base structures.
-				{
-					if(!empty($this->options['cache_dir'])) // From the previous release.
-					{
-						$wp_content_dir_relative = // Considers custom `WP_CONTENT_DIR` locations.
-							trim(str_replace(ABSPATH, '', WP_CONTENT_DIR), '\\/'." \t\n\r\0\x0B");
-
-						$this->options['base_dir'] = $this->options['cache_dir'] = trim($this->options['cache_dir'], '\\/'." \t\n\r\0\x0B");
-						if(!$this->options['base_dir'] || $this->options['base_dir'] === $wp_content_dir_relative.'/cache')
-							$this->options['base_dir'] = $wp_content_dir_relative.'/cache/quick-cache';
-
-						if($this->options['cache_dir']) // Wipe old files?
-							$this->wipe_cache(FALSE, ABSPATH.$this->options['cache_dir']);
-
-						unset($this->options['cache_dir']);
-						update_option(__NAMESPACE__.'_options', $this->options);
-						if(is_multisite()) update_site_option(__NAMESPACE__.'_options', $this->options);
-					}
-					$this->enqueue_notice(__('<strong>Quick Cache Feature Notice:</strong> This version of Quick Cache introduces a new <a href="http://www.websharks-inc.com/r/quick-cache-branched-cache-structure-wiki/" target="_blank">Branched Cache Structure</a> and several other <a href="http://www.websharks-inc.com/post/quick-cache-v140605-now-available/" target="_blank">new features</a>.', $this->text_domain));
-				}
-				/* ------- END: VERSION-SPECIFIC UPGRADE HANDLERS ----------------------------- */
-
-				/*
-				 * If enabled, lets recompile Quick Cache.
-				 */
-				if($this->options['enable']) // Only if enabled.
+				if($this->options['enable']) // Recompile.
 				{
 					$this->add_wp_cache_to_wp_config();
 					$this->add_advanced_cache();
 					$this->update_blog_paths();
 				}
-				/*
-				 * Wipe the cache on upgrade (always).
-				 */
 				$this->wipe_cache(); // Always wipe the cache; no exceptions.
 
-				/*
-				 * Common upgrade notice. This applies to all upgrades regardless of version.
-				 * NOTE: the use of `TRUE` in the 3rd argument puts this notice first; even though it comes last down here.
-				 */
 				$this->enqueue_notice(__('<strong>Quick Cache:</strong> detected a new version of itself. Recompiling w/ latest version... wiping the cache... all done :-)', $this->text_domain), '', TRUE);
-			}
-
-			/**
-			 * Display notice to site owners using a really old version of Quick Cache.
-			 *
-			 * @since 140422 First documented version.
-			 *
-			 * @attaches-to `admin_init` hook.
-			 */
-			public function rewrite_notice()
-			{
-				if(!get_option('ws_plugin__qcache_configured'))
-					return; // Nothing to do in this case.
-
-				delete_option('ws_plugin__qcache_configured'); // One-time only.
-
-				$this->enqueue_notice(__('<strong>Quick Cache:</strong> this version is a <strong>complete rewrite</strong> :-) Please review your Quick Cache options carefully!', $this->text_domain));
 			}
 
 			/**
@@ -445,10 +341,6 @@ namespace quick_cache
 
 				delete_option(__NAMESPACE__.'_notices');
 				delete_option(__NAMESPACE__.'_errors');
-
-				delete_option('ws_plugin__qcache_options');
-				delete_option('ws_plugin__qcache_notices');
-				delete_option('ws_plugin__qcache_configured');
 
 				wp_clear_scheduled_hook('_cron_'.__NAMESPACE__.'_cleanup');
 			}
@@ -483,33 +375,16 @@ namespace quick_cache
 			 */
 			public function url($file = '', $scheme = '')
 			{
-				static $plugin_directory; // Static cache.
+				if(!isset(static::$static[__FUNCTION__]['plugin_dir']))
+					static::$static[__FUNCTION__]['plugin_dir'] = rtrim(plugin_dir_url($this->file), '/');
+				$plugin_dir =& static::$static[__FUNCTION__]['plugin_dir'];
 
-				if(!isset($plugin_directory)) // Not cached yet?
-					$plugin_directory = rtrim(plugin_dir_url($this->file), '/');
-
-				$url = $plugin_directory.(string)$file;
+				$url = $plugin_dir.(string)$file;
 
 				if($scheme) // A specific URL scheme?
 					$url = set_url_scheme($url, (string)$scheme);
 
 				return apply_filters(__METHOD__, $url, get_defined_vars());
-			}
-
-			/**
-			 * Escape single quotes.
-			 *
-			 * @since 140422 First documented version.
-			 *
-			 * @param string  $string Input string to escape.
-			 * @param integer $times Optional. Defaults to one escape char; e.g. `\'`.
-			 *    If you need to escape more than once, set this to something > `1`.
-			 *
-			 * @return string Escaped string; e.g. `Raam\'s the lead developer`.
-			 */
-			public function esc_sq($string, $times = 1)
-			{
-				return str_replace("'", str_repeat('\\', abs($times))."'", (string)$string);
 			}
 
 			/**
@@ -522,7 +397,6 @@ namespace quick_cache
 			public function actions()
 			{
 				if(empty($_REQUEST[__NAMESPACE__])) return;
-
 				require_once dirname(__FILE__).'/includes/actions.php';
 			}
 
@@ -588,6 +462,26 @@ namespace quick_cache
 				add_menu_page(__('Quick Cache', $this->text_domain), __('Quick Cache', $this->text_domain),
 				              $this->cap, __NAMESPACE__, array($this, 'menu_page_options'),
 				              $this->url('/client-s/images/menu-icon.png'));
+			}
+
+			/**
+			 * Adds link(s) to Quick Cache row on the WP plugins page.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @attaches-to `plugin_action_links_'.plugin_basename($this->file)` filter.
+			 *
+			 * @param array $links An array of the existing links provided by WordPress.
+			 *
+			 * @return array Revised array of links.
+			 */
+			public function add_settings_link($links)
+			{
+				$links[] = '<a href="options-general.php?page='.urlencode(__NAMESPACE__).'">'.__('Settings', $this->text_domain).'</a>';
+				$links[] = '<br/><a href="'.esc_attr(add_query_arg(urlencode_deep(array('page' => __NAMESPACE__, __NAMESPACE__.'_pro_preview' => '1')), self_admin_url('/admin.php'))).'">'.__('Preview Pro Features', $this->text_domain).'</a>';
+				$links[] = '<a href="'.esc_attr('http://www.websharks-inc.com/product/'.str_replace('_', '-', __NAMESPACE__).'/').'" target="_blank">'.__('Upgrade', $this->text_domain).'</a>';
+
+				return apply_filters(__METHOD__, $links, get_defined_vars());
 			}
 
 			/**
@@ -786,13 +680,11 @@ namespace quick_cache
 			{
 				$counter = 0; // Initialize.
 
-				$cache_dir = $this->abspath_to($this->cache_sub_dir);
-
 				// @TODO When set_time_limit() is disabled by PHP configuration, display a warning message to users upon plugin activation.
 				@set_time_limit(1800); // In case of HUGE sites w/ a very large directory. Errors are ignored in case `set_time_limit()` is disabled.
 
 				/** @var $_dir_file \RecursiveDirectoryIterator For IDEs. */
-				if(is_dir($cache_dir)) foreach($this->dir_regex_iteration($cache_dir, '/.+/') as $_dir_file)
+				if(is_dir($cache_dir = $this->cache_dir())) foreach($this->dir_regex_iteration($cache_dir, '/.+/') as $_dir_file)
 				{
 					if(($_dir_file->isFile() || $_dir_file->isLink()) && strpos($_dir_file->getSubPathname(), '/') !== FALSE)
 						// Don't delete files in the immediate directory; e.g. `qc-advanced-cache` or `.htaccess`, etc.
@@ -840,7 +732,7 @@ namespace quick_cache
 			{
 				$counter = 0; // Initialize.
 
-				$cache_dir = $this->abspath_to($this->cache_sub_dir);
+				$cache_dir = $this->cache_dir(); // Current cache directory.
 				if(!is_dir($cache_dir)) return $counter; // Nothing to do.
 
 				// @TODO When set_time_limit() is disabled by PHP configuration, display a warning message to users upon plugin activation
@@ -884,7 +776,7 @@ namespace quick_cache
 			{
 				$counter = 0; // Initialize.
 
-				$cache_dir = $this->abspath_to($this->cache_sub_dir);
+				$cache_dir = $this->cache_dir(); // Current cache directory.
 				$max_age   = strtotime('-'.$this->options['cache_max_age']);
 				if(!is_dir($cache_dir)) return $counter; // Nothing to do.
 
@@ -1040,7 +932,7 @@ namespace quick_cache
 				if($post_status === 'trash' && !$force)
 					return $counter; // Nothing to do.
 
-				$cache_dir = $this->abspath_to($this->cache_sub_dir);
+				$cache_dir = $this->cache_dir(); // Current cache directory.
 				if(!is_dir($cache_dir)) return $counter; // Nothing to do.
 
 				$counter += $this->auto_purge_home_page_cache(); // If enabled and necessary.
@@ -1154,7 +1046,7 @@ namespace quick_cache
 				if(!$this->options['cache_purge_home_page_enable'])
 					return $counter; // Nothing to do.
 
-				$cache_dir = $this->abspath_to($this->cache_sub_dir);
+				$cache_dir = $this->cache_dir(); // Current cache directory.
 				if(!is_dir($cache_dir)) return $counter; // Nothing to do.
 
 				$cache_path_no_scheme_quv_ext = $this->url_to_cache_path(home_url('/'), '', '', $this::CACHE_PATH_NO_SCHEME | $this::CACHE_PATH_NO_PATH_INDEX | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT);
@@ -1214,7 +1106,7 @@ namespace quick_cache
 				if(!$this->options['cache_purge_posts_page_enable'])
 					return $counter; // Nothing to do.
 
-				$cache_dir = $this->abspath_to($this->cache_sub_dir);
+				$cache_dir = $this->cache_dir(); // Current cache directory.
 				if(!is_dir($cache_dir)) return $counter; // Nothing to do.
 
 				$show_on_front  = get_option('show_on_front');
@@ -1297,7 +1189,7 @@ namespace quick_cache
 				if(!$this->options['cache_purge_author_page_enable'])
 					return $counter; // Nothing to do.
 
-				$cache_dir = $this->abspath_to($this->cache_sub_dir);
+				$cache_dir = $this->cache_dir(); // Current cache directory.
 				if(!is_dir($cache_dir)) return $counter; // Nothing to do.
 
 				/*
@@ -1421,7 +1313,7 @@ namespace quick_cache
 				if($post_status === 'future' && !$force)
 					return $counter; // Nothing to do.
 
-				$cache_dir = $this->abspath_to($this->cache_sub_dir);
+				$cache_dir = $this->cache_dir(); // Current cache directory.
 				if(!is_dir($cache_dir)) return $counter; // Nothing to do.
 
 				/*
@@ -1561,7 +1453,7 @@ namespace quick_cache
 
 			/**
 			 * This constructs an absolute server directory path (no trailing slashes);
-			 *    which is always nested into {@link \ABSPATH} and the configured `base_dir` option value.
+			 *    which is always nested into {@link \WP_CONTENT_DIR} and the configured `base_dir` option value.
 			 *
 			 * @since 140605 Moving to a base directory structure.
 			 *
@@ -1572,22 +1464,22 @@ namespace quick_cache
 			 * @throws \exception If `base_dir` is empty when this method is called upon;
 			 *    i.e. if you attempt to call upon this method before {@link setup()} runs.
 			 */
-			public function abspath_to($rel_dir_file)
+			public function wp_content_dir_to($rel_dir_file)
 			{
 				$rel_dir_file = trim((string)$rel_dir_file, '\\/'." \t\n\r\0\x0B");
 
 				if(empty($this->options['base_dir'])) // Security enhancement; NEVER allow this to be empty.
 					throw new \exception(__('Doing it wrong! Missing `base_dir` option value. MUST call this method after `setup()`.', $this->text_domain));
 
-				$abspath = ABSPATH.$this->options['base_dir'];
-				if(isset($rel_dir_file[0])) $abspath .= '/'.$rel_dir_file;
+				$wp_content_dir_to = WP_CONTENT_DIR.'/'.$this->options['base_dir'];
+				if(isset($rel_dir_file[0])) $wp_content_dir_to .= '/'.$rel_dir_file;
 
-				return apply_filters(__METHOD__, $abspath, get_defined_vars());
+				return apply_filters(__METHOD__, $wp_content_dir_to, get_defined_vars());
 			}
 
 			/**
 			 * This constructs a relative/base directory path (no leading/trailing slashes).
-			 *    Always relative to {@link \ABSPATH}. Depends on the configured `base_dir` option value.
+			 *    Always relative to {@link \WP_CONTENT_DIR}. Depends on the configured `base_dir` option value.
 			 *
 			 * @since 140605 Moving to a base directory structure.
 			 *
@@ -1605,10 +1497,10 @@ namespace quick_cache
 				if(empty($this->options['base_dir'])) // Security enhancement; NEVER allow this to be empty.
 					throw new \exception(__('Doing it wrong! Missing `base_dir` option value. MUST call this method after `setup()`.', $this->text_domain));
 
-				$basepath = $this->options['base_dir'];
-				if(isset($rel_dir_file[0])) $basepath .= '/'.$rel_dir_file;
+				$basepath_to = $this->options['base_dir'];
+				if(isset($rel_dir_file[0])) $basepath_to .= '/'.$rel_dir_file;
 
-				return apply_filters(__METHOD__, $basepath, get_defined_vars());
+				return apply_filters(__METHOD__, $basepath_to, get_defined_vars());
 			}
 
 			/**
@@ -1738,7 +1630,7 @@ namespace quick_cache
 				if(!empty($_REQUEST[__NAMESPACE__]))
 					return; // Skip on plugin actions.
 
-				$cache_dir = $this->abspath_to($this->cache_sub_dir);
+				$cache_dir = $this->cache_dir(); // Current cache directory.
 
 				if(!is_file($cache_dir.'/qc-advanced-cache'))
 					$this->add_advanced_cache();
@@ -1769,7 +1661,7 @@ namespace quick_cache
 				if(!$this->remove_advanced_cache())
 					return FALSE; // Still exists.
 
-				$cache_dir               = $this->abspath_to($this->cache_sub_dir);
+				$cache_dir               = $this->cache_dir(); // Current cache directory.
 				$advanced_cache_file     = WP_CONTENT_DIR.'/advanced-cache.php';
 				$advanced_cache_template = dirname(__FILE__).'/includes/advanced-cache.tpl.php';
 
@@ -1807,6 +1699,10 @@ namespace quick_cache
 						             $_value, $advanced_cache_contents);
 				}
 				unset($_option, $_value, $_values, $_response); // Housekeeping.
+
+				// Make it possible for the `advanced-cache.php` handler to find the plugin directory reliably.
+				$advanced_cache_contents = str_ireplace("'%%".__NAMESPACE__."_PLUGIN_FILE%%'", // e.g. `QUICK_CACHE_PLUGIN_FILE`.
+				                                        "'".$this->esc_sq($this->file)."'", $advanced_cache_contents);
 
 				// Ignore; this is created by Quick Cache; and we don't need to obey in this case.
 				#if(defined('DISALLOW_FILE_MODS') && DISALLOW_FILE_MODS)
@@ -1926,7 +1822,7 @@ namespace quick_cache
 				if(!empty($_REQUEST[__NAMESPACE__]))
 					return; // Skip on plugin actions.
 
-				$cache_dir = $this->abspath_to($this->cache_sub_dir);
+				$cache_dir = $this->cache_dir(); // Current cache directory.
 
 				if(!is_file($cache_dir.'/qc-blog-paths'))
 					$this->update_blog_paths();
@@ -1955,7 +1851,7 @@ namespace quick_cache
 
 				if(!is_multisite()) return $value; // N/A.
 
-				$cache_dir = $this->abspath_to($this->cache_sub_dir);
+				$cache_dir = $this->cache_dir(); // cache dir.
 
 				if(!is_dir($cache_dir))
 					mkdir($cache_dir, 0775, TRUE);
@@ -1976,393 +1872,6 @@ namespace quick_cache
 				}
 				return $value; // Pass through untouched (always).
 			}
-
-			/**
-			 * Adds link(s) to Quick Cache row on the WP plugins page.
-			 *
-			 * @since 140422 First documented version.
-			 *
-			 * @attaches-to `plugin_action_links_'.plugin_basename($this->file)` filter.
-			 *
-			 * @param array $links An array of the existing links provided by WordPress.
-			 *
-			 * @return array Revised array of links.
-			 */
-			public function add_settings_link($links)
-			{
-				$links[] = '<a href="options-general.php?page='.urlencode(__NAMESPACE__).'">'.__('Settings', $this->text_domain).'</a>';
-				$links[] = '<br/><a href="'.esc_attr(add_query_arg(urlencode_deep(array('page' => __NAMESPACE__, __NAMESPACE__.'_pro_preview' => '1')), self_admin_url('/admin.php'))).'">'.__('Preview Pro Features', $this->text_domain).'</a>';
-				$links[] = '<a href="'.esc_attr('http://www.websharks-inc.com/product/'.str_replace('_', '-', __NAMESPACE__).'/').'" target="_blank">'.__('Upgrade', $this->text_domain).'</a>';
-
-				return apply_filters(__METHOD__, $links, get_defined_vars());
-			}
-
-			/*
-			 * See also: `advanced-cache.tpl.php` duplicates.
-			 *    @TODO Find a way to centralize this section so it can be shared between both classes easily.
-			 */
-
-			/**
-			 * Exclude scheme from cache path.
-			 *
-			 * @since 140422 First documented version.
-			 *
-			 * @var integer Part of a bitmask.
-			 */
-			const CACHE_PATH_NO_SCHEME = 1;
-
-			/**
-			 * Exclude host (i.e. domain name) from cache path.
-			 *
-			 * @since 140422 First documented version.
-			 *
-			 * @var integer Part of a bitmask.
-			 */
-			const CACHE_PATH_NO_HOST = 2;
-
-			/**
-			 * Exclude path from cache path.
-			 *
-			 * @since 140422 First documented version.
-			 *
-			 * @var integer Part of a bitmask.
-			 */
-			const CACHE_PATH_NO_PATH = 4;
-
-			/**
-			 * Exclude path index (i.e. no default `index`) from cache path.
-			 *
-			 * @since 140422 First documented version.
-			 *
-			 * @var integer Part of a bitmask.
-			 */
-			const CACHE_PATH_NO_PATH_INDEX = 8;
-
-			/**
-			 * Exclude query, user & version salt from cache path.
-			 *
-			 * @since 140422 First documented version.
-			 *
-			 * @var integer Part of a bitmask.
-			 */
-			const CACHE_PATH_NO_QUV = 16;
-
-			/**
-			 * Exclude query string from cache path.
-			 *
-			 * @since 140422 First documented version.
-			 *
-			 * @var integer Part of a bitmask.
-			 */
-			const CACHE_PATH_NO_QUERY = 32;
-
-			/**
-			 * Exclude user token from cache path.
-			 *
-			 * @since 140422 First documented version.
-			 *
-			 * @var integer Part of a bitmask.
-			 */
-			const CACHE_PATH_NO_USER = 64;
-
-			/**
-			 * Exclude version salt from cache path.
-			 *
-			 * @since 140422 First documented version.
-			 *
-			 * @var integer Part of a bitmask.
-			 */
-			const CACHE_PATH_NO_VSALT = 128;
-
-			/**
-			 * Exclude extension from cache path.
-			 *
-			 * @since 140422 First documented version.
-			 *
-			 * @var integer Part of a bitmask.
-			 */
-			const CACHE_PATH_NO_EXT = 256;
-
-			/**
-			 * Converts a URL into a `cache/path`.
-			 *
-			 * @since 140422 First documented version.
-			 *
-			 * @param string  $url The input URL to convert.
-			 * @param string  $with_user_token Optional user token (if applicable).
-			 * @param string  $with_version_salt Optional version salt (if applicable).
-			 * @param integer $flags Optional flags; a bitmask provided by `CACHE_PATH_*` constants.
-			 *
-			 * @return string The resulting `cache/path` based on the input `$url`.
-			 */
-			public function url_to_cache_path($url, $with_user_token = '', $with_version_salt = '', $flags = 0)
-			{
-				$cache_path        = ''; // Initialize.
-				$url               = trim((string)$url);
-				$with_user_token   = trim((string)$with_user_token);
-				$with_version_salt = trim((string)$with_version_salt);
-
-				if($url && strpos($url, '://') === FALSE)
-					$url = '//'.ltrim($url, '/');
-
-				if(!$url || !($url = parse_url($url)))
-					return ''; // Invalid URL.
-
-				if(!($flags & $this::CACHE_PATH_NO_SCHEME))
-				{
-					if(!empty($url['scheme']))
-						$cache_path .= $url['scheme'].'/';
-					else $cache_path .= is_ssl() ? 'https/' : 'http/';
-				}
-				if(!($flags & $this::CACHE_PATH_NO_HOST))
-				{
-					if(!empty($url['host']))
-						$cache_path .= $url['host'].'/';
-					else $cache_path .= $_SERVER['HTTP_HOST'].'/';
-				}
-				if(!($flags & $this::CACHE_PATH_NO_PATH))
-				{
-					if(!empty($url['path']) && strlen($url['path'] = trim($url['path'], '\\/'." \t\n\r\0\x0B")))
-						$cache_path .= $url['path'].'/';
-					else if(!($flags & $this::CACHE_PATH_NO_PATH_INDEX)) $cache_path .= 'index/';
-				}
-				if($this->is_extension_loaded('mbstring') && mb_check_encoding($cache_path, 'UTF-8'))
-					$cache_path = mb_strtolower($cache_path, 'UTF-8');
-				$cache_path = str_replace('.', '-', strtolower($cache_path));
-
-				if(!($flags & $this::CACHE_PATH_NO_QUV))
-				{
-					if(!($flags & $this::CACHE_PATH_NO_QUERY))
-						if(isset($url['query']) && $url['query'] !== '')
-							$cache_path = rtrim($cache_path, '/').'.q/'.md5($url['query']).'/';
-
-					if(!($flags & $this::CACHE_PATH_NO_USER))
-						if($with_user_token !== '') // Allow a `0` value if desirable.
-							$cache_path = rtrim($cache_path, '/').'.u/'.str_replace(array('/', '\\'), '-', $with_user_token).'/';
-
-					if(!($flags & $this::CACHE_PATH_NO_VSALT))
-						if($with_version_salt !== '') // Allow a `0` value if desirable.
-							$cache_path = rtrim($cache_path, '/').'.v/'.str_replace(array('/', '\\'), '-', $with_version_salt).'/';
-				}
-				$cache_path = trim(preg_replace('/\/+/', '/', $cache_path), '/');
-				$cache_path = preg_replace('/[^a-z0-9\/.]/i', '-', $cache_path);
-
-				if(!($flags & $this::CACHE_PATH_NO_EXT))
-					$cache_path .= '.html';
-
-				return $cache_path;
-			}
-
-			/**
-			 * Produces a token based on the current `$_SERVER['HTTP_HOST']`.
-			 *
-			 * @since 140422 First documented version.
-			 *
-			 * @param boolean $dashify Optional, defaults to a `FALSE` value.
-			 *    If `TRUE`, the token is returned with dashes in place of `[^a-z0-9\/]`.
-			 *
-			 * @return string Token based on the current `$_SERVER['HTTP_HOST']`.
-			 *
-			 * @note The return value of this function is cached to reduce overhead on repeat calls.
-			 */
-			public function host_token($dashify = FALSE)
-			{
-				$dashify = (integer)$dashify;
-				static $tokens = array(); // Static cache.
-				if(isset($tokens[$dashify])) return $tokens[$dashify];
-
-				$host        = strtolower($_SERVER['HTTP_HOST']);
-				$token_value = ($dashify) ? trim(preg_replace('/[^a-z0-9\/]/i', '-', $host), '-') : $host;
-
-				return ($tokens[$dashify] = $token_value);
-			}
-
-			/**
-			 * Produces a token based on the current site's base directory.
-			 *
-			 * @since 140605 First documented version.
-			 *
-			 * @param boolean $dashify Optional, defaults to a `FALSE` value.
-			 *    If `TRUE`, the token is returned with dashes in place of `[^a-z0-9\/]`.
-			 *
-			 * @return string Produces a token based on the current site's base directory;
-			 *    (i.e. in the case of a sub-directory multisite network).
-			 *
-			 * @note The return value of this function is cached to reduce overhead on repeat calls.
-			 *
-			 * @see clear_cache()
-			 * @see update_blog_paths()
-			 */
-			public function host_base_token($dashify = FALSE)
-			{
-				$dashify = (integer)$dashify;
-				static $tokens = array(); // Static cache.
-				if(isset($tokens[$dashify])) return $tokens[$dashify];
-
-				$host_base_token = '/'; // Assume NOT multisite; or running it's own domain.
-
-				if(is_multisite() && (!defined('SUBDOMAIN_INSTALL') || !SUBDOMAIN_INSTALL))
-				{ // Multisite w/ sub-directories; need a valid sub-directory token.
-
-					if(defined('PATH_CURRENT_SITE')) $host_base_token = PATH_CURRENT_SITE;
-					else if(!empty($GLOBALS['base'])) $host_base_token = $GLOBALS['base'];
-
-					$host_base_token = trim($host_base_token, '\\/'." \t\n\r\0\x0B");
-					$host_base_token = (isset($host_base_token[0])) ? '/'.$host_base_token.'/' : '/';
-				}
-				$token_value = ($dashify) ? trim(preg_replace('/[^a-z0-9\/]/i', '-', $host_base_token), '-') : $host_base_token;
-
-				return ($tokens[$dashify] = $token_value);
-			}
-
-			/**
-			 * Produces a token based on the current blog's sub-directory.
-			 *
-			 * @since 140422 First documented version.
-			 *
-			 * @param boolean $dashify Optional, defaults to a `FALSE` value.
-			 *    If `TRUE`, the token is returned with dashes in place of `[^a-z0-9\/]`.
-			 *
-			 * @return string Produces a token based on the current blog sub-directory
-			 *    (i.e. in the case of a sub-directory multisite network).
-			 *
-			 * @note The return value of this function is cached to reduce overhead on repeat calls.
-			 *
-			 * @see update_blog_paths()
-			 */
-			public function host_dir_token($dashify = FALSE)
-			{
-				$dashify = (integer)$dashify;
-				static $tokens = array(); // Static cache.
-				if(isset($tokens[$dashify])) return $tokens[$dashify];
-
-				$cache_dir      = $this->abspath_to($this->cache_sub_dir);
-				$host_dir_token = '/'; // Assume NOT multisite; or running it's own domain.
-
-				if(is_multisite() && (!defined('SUBDOMAIN_INSTALL') || !SUBDOMAIN_INSTALL))
-				{ // Multisite w/ sub-directories; need a valid sub-directory token.
-
-					$uri_minus_base = // Supports `/sub-dir/child-blog-sub-dir/` also.
-						preg_replace('/^'.preg_quote($this->host_base_token(), '/').'/', '', $_SERVER['REQUEST_URI']);
-
-					list($host_dir_token) = explode('/', trim($uri_minus_base, '/'));
-					$host_dir_token = (isset($host_dir_token[0])) ? '/'.$host_dir_token.'/' : '/';
-
-					if($host_dir_token !== '/' // Perhaps NOT the main site?
-					   && (!is_file($cache_dir.'/qc-blog-paths') // NOT a read/valid blog path?
-					       || !in_array($host_dir_token, unserialize(file_get_contents($cache_dir.'/qc-blog-paths')), TRUE))
-					) $host_dir_token = '/'; // Main site; e.g. this is NOT a real/valid child blog path.
-				}
-				$token_value = ($dashify) ? trim(preg_replace('/[^a-z0-9\/]/i', '-', $host_dir_token), '-') : $host_dir_token;
-
-				return ($tokens[$dashify] = $token_value);
-			}
-
-			/**
-			 * Produces tokens for the current site's base directory & current blog's sub-directory.
-			 *
-			 * @since 140422 First documented version.
-			 *
-			 * @param boolean $dashify Optional, defaults to a `FALSE` value.
-			 *    If `TRUE`, the tokens are returned with dashes in place of `[^a-z0-9\/]`.
-			 *
-			 * @return string Tokens for the current site's base directory & current blog's sub-directory.
-			 *
-			 * @note The return value of this function is cached to reduce overhead on repeat calls.
-			 *
-			 * @see clear_cache()
-			 * @see update_blog_paths()
-			 */
-			public function host_base_dir_tokens($dashify = FALSE)
-			{
-				return preg_replace('/\/{2,}/', '/', $this->host_base_token($dashify).$this->host_dir_token($dashify));
-			}
-
-			/**
-			 * Recursive directory iterator based on a regex pattern.
-			 *
-			 * @since 140422 First documented version.
-			 *
-			 * @param string $dir An absolute server directory path.
-			 * @param string $regex A regex pattern; compares to each full file path.
-			 *
-			 * @return \RegexIterator Navigable with {@link \foreach()}; where each item
-			 *    is a {@link \RecursiveDirectoryIterator}.
-			 */
-			public function dir_regex_iteration($dir, $regex)
-			{
-				$dir_iterator      = new \RecursiveDirectoryIterator($dir, \FilesystemIterator::KEY_AS_PATHNAME | \FilesystemIterator::CURRENT_AS_SELF | \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::UNIX_PATHS);
-				$iterator_iterator = new \RecursiveIteratorIterator($dir_iterator, \RecursiveIteratorIterator::CHILD_FIRST);
-				$regex_iterator    = new \RegexIterator($iterator_iterator, $regex, \RegexIterator::MATCH, \RegexIterator::USE_KEY);
-
-				return apply_filters(__METHOD__, $regex_iterator, get_defined_vars());
-			}
-
-			/**
-			 * Checks if a PHP extension is loaded up.
-			 *
-			 * @since 140422 First documented version.
-			 *
-			 * @param string $extension A PHP extension slug (i.e. extension name).
-			 *
-			 * @return boolean `TRUE` if the extension is loaded; else `FALSE`.
-			 *
-			 * @note The return value of this function is cached to reduce overhead on repeat calls.
-			 */
-			public function is_extension_loaded($extension)
-			{
-				static $is = array(); // Static cache.
-				if(isset($is[$extension])) return $is[$extension];
-				return ($is[$extension] = extension_loaded($extension));
-			}
-
-			/*
-			 * ------------ end section to centralize in a future release.
-			 */
-
-			/**
-			 * Is a particular function possible in every way?
-			 *
-			 * @since 140422 First documented version.
-			 *
-			 * @param string $function A PHP function (or user function) to check.
-			 *
-			 * @return string `TRUE` if the function is possible; else `FALSE`.
-			 *
-			 * @note This checks (among other things) if the function exists and that it's callable.
-			 *    It also checks the currently configured `disable_functions` and `suhosin.executor.func.blacklist`.
-			 */
-			public function function_is_possible($function)
-			{
-				static $disabled_functions; // Static cache.
-
-				if(!isset($disabled_functions) && function_exists('ini_get'))
-				{
-					$disabled_functions = array();
-
-					if(($disable_functions = trim(ini_get('disable_functions'))))
-						$disabled_functions = array_merge($disabled_functions, preg_split('/[\s;,]+/', strtolower($disable_functions), NULL, PREG_SPLIT_NO_EMPTY));
-
-					if(($blacklist_functions = trim(ini_get('suhosin.executor.func.blacklist'))))
-						$disabled_functions = array_merge($disabled_functions, preg_split('/[\s;,]+/', strtolower($blacklist_functions), NULL, PREG_SPLIT_NO_EMPTY));
-				}
-				$possible = TRUE; // Assume it is.. (intialize).
-
-				if(!function_exists($function) || !is_callable($function)
-				   || ($disabled_functions && in_array(strtolower($function), $disabled_functions, TRUE))
-				) $possible = FALSE; // Not possible.
-
-				return apply_filters(__METHOD__, $possible, get_defined_vars());
-			}
-
-			/**
-			 * Apache `.htaccess` rules that deny public access to the contents of a directory.
-			 *
-			 * @since 140422 First documented version.
-			 *
-			 * @var string `.htaccess` fules.
-			 */
-			public $htaccess_deny = "<IfModule authz_core_module>\n\tRequire all denied\n</IfModule>\n<IfModule !authz_core_module>\n\tdeny from all\n</IfModule>";
 		}
 
 		/**
