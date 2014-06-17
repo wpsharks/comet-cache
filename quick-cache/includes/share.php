@@ -1026,23 +1026,26 @@ namespace quick_cache // Root namespace.
 			public $htaccess_deny = "<IfModule authz_core_module>\n\tRequire all denied\n</IfModule>\n<IfModule !authz_core_module>\n\tdeny from all\n</IfModule>";
 		}
 
-		/**
-		 * Polyfill for {@link \__()}.
-		 *
-		 * @since 140422 First documented version.
-		 *
-		 * @param string $string String to translate.
-		 * @param string $text_domain Plugin text domain.
-		 *
-		 * @return string Possibly translated string.
-		 */
-		function __($string, $text_domain)
+		if(!function_exists('\\'.__NAMESPACE__.'\\__'))
 		{
-			static $exists; // Static cache.
-			if(($exists || function_exists('__')) && ($exists = TRUE))
-				return \__($string, $text_domain);
+			/**
+			 * Polyfill for {@link \__()}.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @param string $string String to translate.
+			 * @param string $text_domain Plugin text domain.
+			 *
+			 * @return string Possibly translated string.
+			 */
+			function __($string, $text_domain)
+			{
+				static $exists; // Static cache.
+				if(($exists || function_exists('__')) && ($exists = TRUE))
+					return \__($string, $text_domain);
 
-			return $string; // Not possible (yet).
+				return $string; // Not possible (yet).
+			}
 		}
 	}
 }
