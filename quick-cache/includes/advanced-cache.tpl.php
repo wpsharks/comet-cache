@@ -870,11 +870,12 @@ namespace quick_cache
 			if($this->is_404 && !QUICK_CACHE_CACHE_404_REQUESTS) // Not caching 404 errors.
 				return (boolean)$this->maybe_set_debug_info($this::NC_DEBUG_404_REQUEST);
 
-			if(strpos($cache, '<body id="error-page">') !== FALSE)
+			if(strpos($cache, '<body id="error-page">') !== FALSE) // A WordPress-generated {@link \wp_die()} error?
 				return (boolean)$this->maybe_set_debug_info($this::NC_DEBUG_WP_ERROR_PAGE);
 
-			if(!$this->function_is_possible('http_response_code') && stripos($cache, '<title>database error</title>') !== FALSE)
-				return (boolean)$this->maybe_set_debug_info($this::NC_DEBUG_WP_ERROR_PAGE);
+			if(!$this->function_is_possible('http_response_code')) // Unable to reliably detect HTTP status code?
+				if(stripos($cache, '<title>database error</title>') !== FALSE) // Fallback on this hackety hack.
+					return (boolean)$this->maybe_set_debug_info($this::NC_DEBUG_WP_ERROR_PAGE);
 
 			if(!$this->has_a_cacheable_content_type()) // Exclude non-HTML/XML content types.
 				return (boolean)$this->maybe_set_debug_info($this::NC_DEBUG_UNCACHEABLE_CONTENT_TYPE);
