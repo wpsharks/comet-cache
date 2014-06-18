@@ -167,6 +167,15 @@ namespace quick_cache // Root namespace.
 			 */
 			const CACHE_PATH_NO_EXT = 256;
 
+			/**
+			 * Allow wildcards in the cache path.
+			 *
+			 * @since 14xxxx Improving XML Sitemap support.
+			 *
+			 * @var integer Part of a bitmask.
+			 */
+			const CACHE_PATH_ALLOW_WILDCARDS = 512;
+
 			/* --------------------------------------------------------------------------------------
 			 * Shared constructor.
 			 -------------------------------------------------------------------------------------- */
@@ -224,7 +233,7 @@ namespace quick_cache // Root namespace.
 			 *
 			 * @return string The resulting `cache/path` based on the input `$url`.
 			 */
-			public function url_to_cache_path($url, $with_user_token = '', $with_version_salt = '', $flags = 0)
+			public function build_cache_path($url, $with_user_token = '', $with_version_salt = '', $flags = 0)
 			{
 				$cache_path        = ''; // Initialize.
 				$url               = trim((string)$url);
@@ -274,7 +283,10 @@ namespace quick_cache // Root namespace.
 							$cache_path = rtrim($cache_path, '/').'.v/'.str_replace(array('/', '\\'), '-', $with_version_salt).'/';
 				}
 				$cache_path = trim(preg_replace('/\/+/', '/', $cache_path), '/');
-				$cache_path = preg_replace('/[^a-z0-9\/.]/i', '-', $cache_path);
+
+				if($flags & $this::CACHE_PATH_ALLOW_WILDCARDS) // Allow `*`?
+					$cache_path = preg_replace('/[^a-z0-9\/.*]/i', '-', $cache_path);
+				else $cache_path = preg_replace('/[^a-z0-9\/.]/i', '-', $cache_path);
 
 				if(!($flags & $this::CACHE_PATH_NO_EXT))
 					$cache_path .= '.html';
@@ -1026,23 +1038,26 @@ namespace quick_cache // Root namespace.
 			public $htaccess_deny = "<IfModule authz_core_module>\n\tRequire all denied\n</IfModule>\n<IfModule !authz_core_module>\n\tdeny from all\n</IfModule>";
 		}
 
-		/**
-		 * Polyfill for {@link \__()}.
-		 *
-		 * @since 140422 First documented version.
-		 *
-		 * @param string $string String to translate.
-		 * @param string $text_domain Plugin text domain.
-		 *
-		 * @return string Possibly translated string.
-		 */
-		function __($string, $text_domain)
+		if(!function_exists('\\'.__NAMESPACE__.'\\__'))
 		{
-			static $exists; // Static cache.
-			if(($exists || function_exists('__')) && ($exists = TRUE))
-				return \__($string, $text_domain);
+			/**
+			 * Polyfill for {@link \__()}.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @param string $string String to translate.
+			 * @param string $text_domain Plugin text domain.
+			 *
+			 * @return string Possibly translated string.
+			 */
+			function __($string, $text_domain)
+			{
+				static $exists; // Static cache.
+				if(($exists || function_exists('__')) && ($exists = TRUE))
+					return \__($string, $text_domain);
 
-			return $string; // Not possible (yet).
+				return $string; // Not possible (yet).
+			}
 		}
 	}
 }
