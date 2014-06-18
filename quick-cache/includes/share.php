@@ -500,7 +500,7 @@ namespace quick_cache // Root namespace.
 			/**
 			 * Is the current request method is uncacheable?
 			 *
-			 * @since 14xxxx Adding HEAD/OPTIONS/TRACE to the list of uncacheables.
+			 * @since 14xxxx Adding HEAD/OPTIONS/TRACE/CONNECT to the list of uncacheables.
 			 *
 			 * @return boolean `TRUE` if current request method is uncacheable.
 			 *
@@ -513,7 +513,7 @@ namespace quick_cache // Root namespace.
 
 				if(!empty($_SERVER['REQUEST_METHOD']))
 					if(in_array(strtoupper($_SERVER['REQUEST_METHOD']),
-					            array('POST', 'PUT', 'DELETE', 'HEAD', 'OPTIONS', 'TRACE'), TRUE))
+					            array('POST', 'PUT', 'DELETE', 'HEAD', 'OPTIONS', 'TRACE', 'CONNECT'), TRUE))
 						return (static::$static[__FUNCTION__] = TRUE);
 
 				return (static::$static[__FUNCTION__] = FALSE);

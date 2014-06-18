@@ -1009,7 +1009,7 @@ namespace quick_cache
 					break; // Break switch handler.
 
 				case $this::NC_DEBUG_UNCACHEABLE_REQUEST:
-					$reason = __('because `$_SERVER[\'REQUEST_METHOD\']` is `POST`, `PUT`, `DELETE`, `HEAD`, `OPTIONS` or `TRACE`. These request methods should never (ever) be cached in any way.', $this->text_domain);
+					$reason = __('because `$_SERVER[\'REQUEST_METHOD\']` is `POST`, `PUT`, `DELETE`, `HEAD`, `OPTIONS`, `TRACE` or `CONNECT`. These request methods should never (ever) be cached in any way.', $this->text_domain);
 					break; // Break switch handler.
 
 				case $this::NC_DEBUG_SELF_SERVE_REQUEST:
