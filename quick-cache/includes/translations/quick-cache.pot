@@ -679,7 +679,7 @@ msgid "Don't Cache These Special URI Exclusion Patterns?"
 msgstr ""
 
 #: includes/menu-pages.php:370
-msgid "Sometimes there are certain cases where a particular file, or a particular group of files, should never be cached. This is where you will enter those if you need to (one per line). Searches are performed against the <a href=\"http://www.php.net/manual/en/reserved.variables.server.php\" target=\"_blank\" style=\"text-decoration:none;\"><code>REQUEST_URI</code></a>; i.e. <code>/path/?query</code> (case sensitive). So, don't put in full URLs here, just word fragments found in the file path (or query string) is all you need, excluding the http:// and domain name. A wildcard <code>*</code> character can also be used when necessary; e.g. <code>/category/abc-followed-by-*</code>; (where <code>*</code> = anything, 0 or more characters in length)."
+msgid "Sometimes there are certain cases where a particular file, or a particular group of files, should never be cached. This is where you will enter those if you need to (one per line). Searches are performed against the <a href=\"https://gist.github.com/jaswsinc/338b6eb03a36c048c26f\" target=\"_blank\" style=\"text-decoration:none;\"><code>REQUEST_URI</code></a>; i.e. <code>/path/?query</code> (case sensitive). So, don't put in full URLs here, just word fragments found in the file path (or query string) is all you need, excluding the http:// and domain name. A wildcard <code>*</code> character can also be used when necessary; e.g. <code>/category/abc-followed-by-*</code>; (where <code>*</code> = anything, 0 or more characters in length)."
 msgstr ""
 
 #: includes/menu-pages.php:372
@@ -701,7 +701,7 @@ msgid "Don't Cache These Special HTTP Referrer Exclusion Patterns?"
 msgstr ""
 
 #: includes/menu-pages.php:388
-msgid "Sometimes there are special cases where a particular referring URL (or referring domain) that sends you traffic; or even a particular group of referring URLs or domains that send you traffic; should result in a page being loaded on your site that is NOT from the cache (and that resulting page should never be cached). This is where you will enter those if you need to (one per line). Searches are performed against the <a href=\"http://www.php.net/manual/en/reserved.variables.server.php\" target=\"_blank\" style=\"text-decoration:none;\"><code>HTTP_REFERER</code></a> (case sensitive). A wildcard <code>*</code> character can also be used when necessary; e.g. <code>*.domain.com</code>; (where <code>*</code> = anything, 0 or more characters in length)."
+msgid "Sometimes there are special cases where a particular referring URL (or referring domain) that sends you traffic; or even a particular group of referring URLs or domains that send you traffic; should result in a page being loaded on your site that is NOT from the cache (and that resulting page should never be cached). This is where you will enter those if you need to (one per line). Searches are performed against the <a href=\"https://gist.github.com/jaswsinc/338b6eb03a36c048c26f\" target=\"_blank\" style=\"text-decoration:none;\"><code>HTTP_REFERER</code></a> (case sensitive). A wildcard <code>*</code> character can also be used when necessary; e.g. <code>*.domain.com</code>; (where <code>*</code> = anything, 0 or more characters in length)."
 msgstr ""
 
 #: includes/menu-pages.php:390
@@ -717,7 +717,7 @@ msgid "Don't Cache These Special User-Agent Exclusion Patterns?"
 msgstr ""
 
 #: includes/menu-pages.php:406
-msgid "Sometimes there are special cases when a particular user-agent (e.g. a specific browser or a specific type of device); should be shown a page on your site that is NOT from the cache (and that resulting page should never be cached). This is where you will enter those if you need to (one per line). Searches are performed against the <a href=\"http://www.php.net/manual/en/reserved.variables.server.php\" target=\"_blank\" style=\"text-decoration:none;\"><code>HTTP_USER_AGENT</code></a> (case insensitive). A wildcard <code>*</code> character can also be used when necessary; e.g. <code>Android *; Chrome/* Mobile</code>; (where <code>*</code> = anything, 0 or more characters in length)."
+msgid "Sometimes there are special cases when a particular user-agent (e.g. a specific browser or a specific type of device); should be shown a page on your site that is NOT from the cache (and that resulting page should never be cached). This is where you will enter those if you need to (one per line). Searches are performed against the <a href=\"https://gist.github.com/jaswsinc/338b6eb03a36c048c26f\" target=\"_blank\" style=\"text-decoration:none;\"><code>HTTP_USER_AGENT</code></a> (case insensitive). A wildcard <code>*</code> character can also be used when necessary; e.g. <code>Android *; Chrome/* Mobile</code>; (where <code>*</code> = anything, 0 or more characters in length)."
 msgstr ""
 
 #: includes/menu-pages.php:408

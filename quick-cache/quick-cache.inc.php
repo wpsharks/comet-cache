@@ -1047,14 +1047,15 @@ namespace quick_cache
 				if(!is_dir($cache_dir = $this->cache_dir()))
 					return $counter; // Nothing to do.
 
-				$patterns                     = '(?:'.implode('|', array_map(function ($pattern)
+				$_this                        = $this; // Needed in the closure below.
+				$patterns                     = '(?:'.implode('|', array_map(function ($pattern) use ($_this)
 					{
-						$pattern = trim($pattern, '/');
-						$pattern = str_replace('.', '-', $pattern);
-						$pattern = preg_quote($pattern, '/'); // Escape.
-						return preg_replace('/\\\\\*/', '.*?', $pattern); // Wildcards.
+						$pattern = $_this->build_cache_path(home_url('/'.trim($pattern, '/')), '', '', // Convert to a cache path w/ possible wildcards.
+						                                    $_this::CACHE_PATH_ALLOW_WILDCARDS | $_this::CACHE_PATH_NO_SCHEME | $_this::CACHE_PATH_NO_HOST
+						                                    | $_this::CACHE_PATH_NO_PATH_INDEX | $_this::CACHE_PATH_NO_QUV | $_this::CACHE_PATH_NO_EXT);
+						return preg_replace('/\\\\\*/', '.*?', preg_quote($pattern, '/')); // Wildcards.
 
-					}, preg_split('/['."\r\n".']+/', 'sitemap*xml', NULL, PREG_SPLIT_NO_EMPTY))).')';
+					}, preg_split('/['."\r\n".']+/', '/sitemap*.xml', NULL, PREG_SPLIT_NO_EMPTY))).')';
 				$cache_path_no_scheme_quv_ext = $this->build_cache_path(home_url('/'), '', '', $this::CACHE_PATH_NO_SCHEME | $this::CACHE_PATH_NO_PATH_INDEX | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT);
 				$regex                        = '/^'.preg_quote($cache_dir, '/'). // Consider all schemes; all path paginations; and all possible variations.
 				                                '\/[^\/]+\/'.preg_quote($cache_path_no_scheme_quv_ext, '/').
@@ -1071,8 +1072,7 @@ namespace quick_cache
 						throw new \exception(sprintf(__('Unable to auto-purge XML sitemap file: `%1$s`.', $this->text_domain), $_file->getPathname()));
 					$counter++; // Increment counter for each file purge.
 
-					if($enqueued_notices || !$this->options['change_notifications_enable'] || !is_admin())
-						continue; // Stop here; we already issued a notice, or this notice is N/A.
+					if($enqueued_notices || !is_admin()) continue; // Stop here; we already issued a notice, or this notice is N/A.
 
 					$this->enqueue_notice('<img src="'.esc_attr($this->url('/client-s/images/clear.png')).'" style="float:left; margin:0 10px 0 0; border:0;" />'.
 					                      __('<strong>Quick Cache:</strong> detected changes. Found XML sitemaps (auto-purging).', $this->text_domain));

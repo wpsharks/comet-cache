@@ -167,6 +167,15 @@ namespace quick_cache // Root namespace.
 			 */
 			const CACHE_PATH_NO_EXT = 256;
 
+			/**
+			 * Allow wildcards in the cache path.
+			 *
+			 * @since 14xxxx Improving XML Sitemap support.
+			 *
+			 * @var integer Part of a bitmask.
+			 */
+			const CACHE_PATH_ALLOW_WILDCARDS = 512;
+
 			/* --------------------------------------------------------------------------------------
 			 * Shared constructor.
 			 -------------------------------------------------------------------------------------- */
@@ -274,7 +283,10 @@ namespace quick_cache // Root namespace.
 							$cache_path = rtrim($cache_path, '/').'.v/'.str_replace(array('/', '\\'), '-', $with_version_salt).'/';
 				}
 				$cache_path = trim(preg_replace('/\/+/', '/', $cache_path), '/');
-				$cache_path = preg_replace('/[^a-z0-9\/.]/i', '-', $cache_path);
+
+				if($flags & $this::CACHE_PATH_ALLOW_WILDCARDS) // Allow `*`?
+					$cache_path = preg_replace('/[^a-z0-9\/.*]/i', '-', $cache_path);
+				else $cache_path = preg_replace('/[^a-z0-9\/.]/i', '-', $cache_path);
 
 				if(!($flags & $this::CACHE_PATH_NO_EXT))
 					$cache_path .= '.html';
