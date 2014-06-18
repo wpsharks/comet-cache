@@ -495,7 +495,7 @@
 </span></span><span id="398" class="l"><a class="l" href="#398"> 398: </a><span class="php-comment">             *
 </span></span><span id="399" class="l"><a class="l" href="#399"> 399: </a><span class="php-comment">             * @var string A unique string identifier in the set of `NC_DEBUG_` constants.
 </span></span><span id="400" class="l"><a class="l" href="#400"> 400: </a><span class="php-comment">             */</span>
-</span><span id="401" class="l"><a class="l" href="#401"> 401: </a>            <span class="php-keyword1">const</span> <a id="NC_DEBUG_POST_PUT_DEL_REQUEST" href="#NC_DEBUG_POST_PUT_DEL_REQUEST">NC_DEBUG_POST_PUT_DEL_REQUEST</a> = <span class="php-quote">'nc_debug_post_put_del_request'</span>;
+</span><span id="401" class="l"><a class="l" href="#401"> 401: </a>            <span class="php-keyword1">const</span> <a id="NC_DEBUG_UNCACHEABLE_REQUEST" href="#NC_DEBUG_UNCACHEABLE_REQUEST">NC_DEBUG_UNCACHEABLE_REQUEST</a> = <span class="php-quote">'nc_debug_post_put_del_request'</span>;
 </span><span id="402" class="l"><a class="l" href="#402"> 402: </a>
 </span><span id="403" class="l"><a class="l" href="#403"> 403: </a>            <span class="php-comment">/**
 </span></span><span id="404" class="l"><a class="l" href="#404"> 404: </a><span class="php-comment">             * No-cache because the current request originated from the server itself.
@@ -721,8 +721,8 @@
 </span><span id="624" class="l"><a class="l" href="#624"> 624: </a>                    <span class="php-keyword1">if</span>(<span class="php-keyword1">isset</span>(<span class="php-var">$_SERVER</span>[<span class="php-quote">'DONOTCACHEPAGE'</span>]))
 </span><span id="625" class="l"><a class="l" href="#625"> 625: </a>                        <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;maybe_set_debug_info(<span class="php-var">$this</span>::NC_DEBUG_DONOTCACHEPAGE_SERVER_VAR);
 </span><span id="626" class="l"><a class="l" href="#626"> 626: </a>
-</span><span id="627" class="l"><a class="l" href="#627"> 627: </a>                    <span class="php-keyword1">if</span>(<span class="php-var">$this</span>-&gt;is_post_put_del_request())
-</span><span id="628" class="l"><a class="l" href="#628"> 628: </a>                        <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;maybe_set_debug_info(<span class="php-var">$this</span>::NC_DEBUG_POST_PUT_DEL_REQUEST);
+</span><span id="627" class="l"><a class="l" href="#627"> 627: </a>                    <span class="php-keyword1">if</span>(<span class="php-var">$this</span>-&gt;is_uncacheable_request_method())
+</span><span id="628" class="l"><a class="l" href="#628"> 628: </a>                        <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;maybe_set_debug_info(<span class="php-var">$this</span>::NC_DEBUG_UNCACHEABLE_REQUEST);
 </span><span id="629" class="l"><a class="l" href="#629"> 629: </a>
 </span><span id="630" class="l"><a class="l" href="#630"> 630: </a>                    <span class="php-keyword1">if</span>(<span class="php-keyword1">isset</span>(<span class="php-var">$_SERVER</span>[<span class="php-quote">'REMOTE_ADDR'</span>], <span class="php-var">$_SERVER</span>[<span class="php-quote">'SERVER_ADDR'</span>]) &amp;&amp; <span class="php-var">$_SERVER</span>[<span class="php-quote">'REMOTE_ADDR'</span>] === <span class="php-var">$_SERVER</span>[<span class="php-quote">'SERVER_ADDR'</span>])
 </span><span id="631" class="l"><a class="l" href="#631"> 631: </a>                        <span class="php-keyword1">if</span>(!<span class="php-var">$this</span>-&gt;is_localhost()) <span class="php-keyword1">return</span> <span class="php-var">$this</span>-&gt;maybe_set_debug_info(<span class="php-var">$this</span>::NC_DEBUG_SELF_SERVE_REQUEST);
@@ -1088,7 +1088,7 @@
 </span><span id="991" class="l"><a class="l" href="#991"> 991: </a>                                <span class="php-var">$reason</span> = __(<span class="php-quote">'because the environment variable `$_SERVER[\'DONOTCACHEPAGE\']` has been set at runtime. Perhaps by WordPress itself, or by one of your themes/plugins. This usually means that you have a theme/plugin intentionally disabling the cache on this page; and it\'s usually for a very good reason.'</span>, <span class="php-var">$this</span>-&gt;text_domain);
 </span><span id="992" class="l"><a class="l" href="#992"> 992: </a>                                <span class="php-keyword1">break</span>; <span class="php-comment">// Break switch handler.</span>
 </span><span id="993" class="l"><a class="l" href="#993"> 993: </a>
-</span><span id="994" class="l"><a class="l" href="#994"> 994: </a>                        <span class="php-keyword1">case</span> <span class="php-var">$this</span>::NC_DEBUG_POST_PUT_DEL_REQUEST:
+</span><span id="994" class="l"><a class="l" href="#994"> 994: </a>                        <span class="php-keyword1">case</span> <span class="php-var">$this</span>::NC_DEBUG_UNCACHEABLE_REQUEST:
 </span><span id="995" class="l"><a class="l" href="#995"> 995: </a>                                <span class="php-var">$reason</span> = __(<span class="php-quote">'because `$_SERVER[\'REQUEST_METHOD\']` is `POST`, `PUT` or `DELETE`. These request types should never (ever) be cached in any way.'</span>, <span class="php-var">$this</span>-&gt;text_domain);
 </span><span id="996" class="l"><a class="l" href="#996"> 996: </a>                                <span class="php-keyword1">break</span>; <span class="php-comment">// Break switch handler.</span>
 </span><span id="997" class="l"><a class="l" href="#997"> 997: </a>
@@ -1392,7 +1392,7 @@
 </span></span><span id="1295" class="l"><a class="l" href="#1295">1295: </a><span class="php-comment">             *
 </span></span><span id="1296" class="l"><a class="l" href="#1296">1296: </a><span class="php-comment">             * @note The return value of this function is cached to reduce overhead on repeat calls.
 </span></span><span id="1297" class="l"><a class="l" href="#1297">1297: </a><span class="php-comment">             */</span>
-</span><span id="1298" class="l"><a class="l" href="#1298">1298: </a>            <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_is_post_put_del_request" href="#_is_post_put_del_request">is_post_put_del_request</a>()
+</span><span id="1298" class="l"><a class="l" href="#1298">1298: </a>            <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_is_uncacheable_request_method" href="#_is_uncacheable_request_method">is_uncacheable_request_method</a>()
 </span><span id="1299" class="l"><a class="l" href="#1299">1299: </a>                {
 </span><span id="1300" class="l"><a class="l" href="#1300">1300: </a>                    <span class="php-keyword1">static</span> <span class="php-var"><a id="$is" href="#$is">$is</a></span>; <span class="php-comment">// Cache.</span>
 </span><span id="1301" class="l"><a class="l" href="#1301">1301: </a>                    <span class="php-keyword1">if</span>(<span class="php-keyword1">isset</span>(<span class="php-var">$is</span>)) <span class="php-keyword1">return</span> <span class="php-var">$is</span>;

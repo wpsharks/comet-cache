@@ -477,27 +477,6 @@ namespace quick_cache // Root namespace.
 			 -------------------------------------------------------------------------------------- */
 
 			/**
-			 * Is the current request method `POST|PUT|DELETE`?
-			 *
-			 * @since 140422 First documented version.
-			 *
-			 * @return boolean `TRUE` if a `POST|PUT|DELETE` request.
-			 *
-			 * @note The return value of this function is cached to reduce overhead on repeat calls.
-			 */
-			public function is_post_put_del_request()
-			{
-				if(isset(static::$static[__FUNCTION__]))
-					return static::$static[__FUNCTION__];
-
-				if(!empty($_SERVER['REQUEST_METHOD']))
-					if(in_array(strtoupper($_SERVER['REQUEST_METHOD']), array('POST', 'PUT', 'DELETE'), TRUE))
-						return (static::$static[__FUNCTION__] = TRUE);
-
-				return (static::$static[__FUNCTION__] = FALSE);
-			}
-
-			/**
 			 * Does the current request include a query string?
 			 *
 			 * @since 140422 First documented version.
@@ -513,6 +492,28 @@ namespace quick_cache // Root namespace.
 
 				if(!empty($_GET) || isset($_SERVER['QUERY_STRING'][0]))
 					if(!(isset($_GET['qcABC']) && count($_GET) === 1)) // Ignore this special case.
+						return (static::$static[__FUNCTION__] = TRUE);
+
+				return (static::$static[__FUNCTION__] = FALSE);
+			}
+
+			/**
+			 * Is the current request method is uncacheable?
+			 *
+			 * @since 14xxxx Adding HEAD/OPTIONS/TRACE/CONNECT to the list of uncacheables.
+			 *
+			 * @return boolean `TRUE` if current request method is uncacheable.
+			 *
+			 * @note The return value of this function is cached to reduce overhead on repeat calls.
+			 */
+			public function is_uncacheable_request_method()
+			{
+				if(isset(static::$static[__FUNCTION__]))
+					return static::$static[__FUNCTION__];
+
+				if(!empty($_SERVER['REQUEST_METHOD']))
+					if(in_array(strtoupper($_SERVER['REQUEST_METHOD']),
+					            array('POST', 'PUT', 'DELETE', 'HEAD', 'OPTIONS', 'TRACE', 'CONNECT'), TRUE))
 						return (static::$static[__FUNCTION__] = TRUE);
 
 				return (static::$static[__FUNCTION__] = FALSE);
