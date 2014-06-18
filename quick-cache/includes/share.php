@@ -433,6 +433,8 @@ namespace quick_cache // Root namespace.
 			 * @note This routine may trigger a flag which indicates that the current user was logged-in at some point,
 			 *    but now the login cookie can no longer be validated by WordPress; i.e. they are NOT actually logged in any longer.
 			 *    See {@link $user_login_cookie_expired_or_invalid}
+			 *
+			 * @warning Do NOT call upon this method until WordPress reaches it's cache postload phase.
 			 */
 			public function user_token() // When/if possible.
 			{
@@ -664,13 +666,15 @@ namespace quick_cache // Root namespace.
 			 * @return boolean `TRUE` if the current request has a cacheable content type.
 			 *
 			 * @note The return value of this function is cached to reduce overhead on repeat calls.
+			 *
+			 * @warning Do NOT call upon this method until the end of a script execution.
 			 */
 			public function has_a_cacheable_content_type()
 			{
 				if(isset(static::$static[__FUNCTION__]))
 					return static::$static[__FUNCTION__];
 
-				foreach(headers_list() as $_header)
+				foreach($this->headers_list() as $_header)
 					if(stripos($_header, 'Content-Type:') === 0)
 						$content_type = $_header; // Last one.
 				unset($_header); // Just a little housekeeping.
@@ -689,34 +693,22 @@ namespace quick_cache // Root namespace.
 			 * @return boolean `TRUE` if the current request has a cacheable HTTP status code.
 			 *
 			 * @note The return value of this function is cached to reduce overhead on repeat calls.
+			 *
+			 * @warning Do NOT call upon this method until the end of a script execution.
 			 */
 			public function has_a_cacheable_status()
 			{
 				if(isset(static::$static[__FUNCTION__]))
 					return static::$static[__FUNCTION__];
 
-				$http_status = 0; // Initialize the HTTP status code; as a string here.
-				if($this->function_is_possible('http_response_code') && ($http_response_code = http_response_code()))
-				{
-					$http_status = (integer)$http_response_code;
-					if(property_exists($this, 'http_status')) // Update {@link advanced_cache} property?
-						$this->{'http_status'} = $http_status; // Prefer over {@link status_header()} filter value.
-				}
-				$http_status = (string)$http_status; // Need a string type here.
-				if(isset($http_status[0]) && $http_status[0] !== '2' && $http_status !== '404')
+				if(($http_status = (string)$this->http_status()) && $http_status[0] !== '2' && $http_status !== '404')
 					return (static::$static[__FUNCTION__] = FALSE); // A non-2xx & non-404 status code.
-				/*
-				 * PHP's `headers_list()` currently does NOT include `HTTP/` headers.
-				 *    This means the following routine will never catch a status sent by `status_header()`.
-				 *    However, I'm leaving this check in place in case a future version of PHP adds support for this.
-				 *
-				 *    For now, we monitor `status_header()` via {@link maybe_filter_status_header_postload()} so that will suffice.
-				 */
-				foreach(headers_list() as $_header)
+
+				foreach($this->headers_list() as $_header)
 					if(preg_match('/^(?:Retry\-After\:\s+(?P<retry>.+)|Status\:\s+(?P<status>[0-9]+)|HTTP\/[0-9]+\.[0-9]+\s+(?P<http_status>[0-9]+))/i', $_header, $_m))
 						if(!empty($_m['retry']) || (!empty($_m['status']) && $_m['status'][0] !== '2' && $_m['status'] !== '404')
 						   || (!empty($_m['http_status']) && $_m['http_status'][0] !== '2' && $_m['http_status'] !== '404')
-						) return (static::$static[__FUNCTION__] = FALSE); // NOT a 2xx or 404 status.
+						) return (static::$static[__FUNCTION__] = FALSE); // Not a cacheable status.
 				unset($_header); // Just a little housekeeping.
 
 				return (static::$static[__FUNCTION__] = TRUE); // Assume that it is by default.
@@ -785,6 +777,94 @@ namespace quick_cache // Root namespace.
 				) $possible = FALSE; // Not possible.
 
 				return (static::$static[__FUNCTION__][$function] = $possible);
+			}
+
+			/* --------------------------------------------------------------------------------------
+			 * HTTP protocol/status utility methods.
+			 -------------------------------------------------------------------------------------- */
+
+			/**
+			 * Current HTTP protocol; i.e. `HTTP/1.0` or `HTTP/1.1`.
+			 *
+			 * @since 14xxxx Correcting 404 cache response status code.
+			 *
+			 * @return string Current HTTP protocol; i.e. `HTTP/1.0` or `HTTP/1.1`.
+			 */
+			public function http_protocol()
+			{
+				if(isset(static::$static[__FUNCTION__]))
+					return static::$static[__FUNCTION__];
+
+				$protocol = !empty($_SERVER['SERVER_PROTOCOL'])
+					? strtoupper((string)$_SERVER['SERVER_PROTOCOL']) : 'HTTP/1.0';
+
+				if($protocol !== 'HTTP/1.1' && $protocol !== 'HTTP/1.0')
+					$protocol = 'HTTP/1.0'; // Default value.
+
+				return (static::$static[__FUNCTION__] = $protocol);
+			}
+
+			/**
+			 * An array of all headers sent via PHP; and the current HTTP status header too.
+			 *
+			 * @since 14xxxx Correcting 404 cache response status code.
+			 *
+			 * @return array PHP {@link headers_list()} supplemented with
+			 *    HTTP status code when possible.
+			 *
+			 * @warning Do NOT call upon this method until the end of a script execution.
+			 */
+			public function headers_list()
+			{
+				if(isset(static::$static[__FUNCTION__]))
+					return static::$static[__FUNCTION__];
+
+				$headers_list = headers_list(); // Lacks HTTP status header.
+
+				if(($http_status = (string)$this->http_status()))
+					$headers_list[] = $this->http_protocol().' '.$http_status;
+
+				return (static::$static[__FUNCTION__] = $headers_list);
+			}
+
+			/**
+			 * HTTP status code if at all possible.
+			 *
+			 * @since 14xxxx Correcting 404 cache response status code.
+			 *
+			 * @return integer HTTP status code if at all possible; else `0`.
+			 *
+			 * @warning Do NOT call upon this method until the end of a script execution.
+			 */
+			public function http_status()
+			{
+				if(isset(static::$static[__FUNCTION__]))
+					return static::$static[__FUNCTION__];
+
+				$http_status               = 0; // Initialize.
+				$has_property__is_404      = property_exists($this, 'is_404');
+				$has_property__http_status = property_exists($this, 'http_status');
+
+				// Determine current HTTP status code.
+
+				if($has_property__is_404 && $this->{'is_404'})
+					$http_status = 404; // WordPress said so.
+
+				else if($this->function_is_possible('http_response_code') && ($http_response_code = (integer)http_response_code()))
+					$http_status = $http_response_code; // {@link \http_response_code()} available since PHP v5.4.
+
+				else if($has_property__http_status && (integer)$this->{'http_status'})
+					$http_status = (integer)$this->{'http_status'}; // {@link \status_header()} filter.
+
+				// Dynamically update class property flags related to the HTTP status code.
+
+				if($http_status && $has_property__http_status) // Update {@link $http_status}?
+					$this->{'http_status'} = $http_status; // Prefer over {@link status_header()}.
+
+				if($http_status === 404 && $has_property__is_404) // Update {@link $is_404}?
+					$this->{'is_404'} = TRUE; // Prefer over {@link is_404()}.
+
+				return (static::$static[__FUNCTION__] = $http_status);
 			}
 
 			/* --------------------------------------------------------------------------------------
@@ -960,6 +1040,8 @@ namespace quick_cache // Root namespace.
 			 * Runs any callables attached to an action.
 			 *
 			 * @since 140422 First documented version.
+			 *
+			 * @param string $hook The name of an action hook.
 			 */
 			public function do_action($hook)
 			{

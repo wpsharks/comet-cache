@@ -701,9 +701,9 @@ namespace quick_cache
 			{
 				list($headers, $cache) = explode('<!--headers-->', file_get_contents($this->cache_file), 2);
 
-				$headers_list = headers_list(); // Headers already sent (or ready to be sent).
+				$headers_list = $this->headers_list(); // Headers already sent (or ready to be sent).
 				foreach(unserialize($headers) as $_header) // Preserves original headers sent with this file.
-					if(!in_array($_header, $headers_list) && stripos($_header, 'Last-Modified:') !== 0) header($_header);
+					if(!in_array($_header, $headers_list, TRUE) && stripos($_header, 'Last-Modified:') !== 0) header($_header);
 				unset($_header); // Just a little housekeeping.
 
 				if(QUICK_CACHE_DEBUGGING_ENABLE && $this->is_html_xml_doc($cache)) // Only if HTML comments are possible.
@@ -865,7 +865,7 @@ namespace quick_cache
 				return (boolean)$this->maybe_set_debug_info($this::NC_DEBUG_IS_LOGGED_IN_USER);
 
 			if($this->is_like_user_logged_in()) // Commenters, password-protected access, or actually logged-in.
-				return (boolean)$this->maybe_set_debug_info($this::NC_DEBUG_IS_LIKE_LOGGED_IN_USER); // This uses a separate debug notice.
+				return (boolean)$this->maybe_set_debug_info($this::NC_DEBUG_IS_LIKE_LOGGED_IN_USER); // Separate debug notice.
 
 			if($this->is_404 && !QUICK_CACHE_CACHE_404_REQUESTS) // Not caching 404 errors.
 				return (boolean)$this->maybe_set_debug_info($this::NC_DEBUG_404_REQUEST);
@@ -873,7 +873,7 @@ namespace quick_cache
 			if(strpos($cache, '<body id="error-page">') !== FALSE)
 				return (boolean)$this->maybe_set_debug_info($this::NC_DEBUG_WP_ERROR_PAGE);
 
-			if(!function_exists('http_response_code') && stripos($cache, '<title>database error</title>') !== FALSE)
+			if(!$this->function_is_possible('http_response_code') && stripos($cache, '<title>database error</title>') !== FALSE)
 				return (boolean)$this->maybe_set_debug_info($this::NC_DEBUG_WP_ERROR_PAGE);
 
 			if(!$this->has_a_cacheable_content_type()) // Exclude non-HTML/XML content types.
@@ -885,7 +885,7 @@ namespace quick_cache
 			if($this->is_maintenance) // <http://wordpress.org/extend/plugins/maintenance-mode>
 				return (boolean)$this->maybe_set_debug_info($this::NC_DEBUG_MAINTENANCE_PLUGIN);
 
-			if(function_exists('zlib_get_coding_type') && zlib_get_coding_type()
+			if($this->function_is_possible('zlib_get_coding_type') && zlib_get_coding_type()
 			   && (!($zlib_oc = ini_get('zlib.output_compression')) || !filter_var($zlib_oc, FILTER_VALIDATE_BOOLEAN))
 			) return (boolean)$this->maybe_set_debug_info($this::NC_DEBUG_OB_ZLIB_CODING_TYPE);
 
@@ -921,12 +921,12 @@ namespace quick_cache
 			 */
 			if($this->is_404) // This is a 404; let's create 404 cache file and symlink to it.
 			{
-				if(file_put_contents($cache_file_tmp, serialize(headers_list()).'<!--headers-->'.$cache) && rename($cache_file_tmp, $this->cache_file_404))
+				if(file_put_contents($cache_file_tmp, serialize($this->headers_list()).'<!--headers-->'.$cache) && rename($cache_file_tmp, $this->cache_file_404))
 					if(symlink($this->cache_file_404, $this->cache_file)) // If this fails an exception will be thrown down below.
 						return $cache; // Return the newly built cache; with possible debug information also.
 
 			} // NOT a 404; let's write a new cache file.
-			else if(file_put_contents($cache_file_tmp, serialize(headers_list()).'<!--headers-->'.$cache) && rename($cache_file_tmp, $this->cache_file))
+			else if(file_put_contents($cache_file_tmp, serialize($this->headers_list()).'<!--headers-->'.$cache) && rename($cache_file_tmp, $this->cache_file))
 				return $cache; // Return the newly built cache; with possible debug information also.
 
 			@unlink($cache_file_tmp); // Clean this up (if it exists); and throw an exception with information for the site owner.
