@@ -224,7 +224,7 @@ namespace quick_cache // Root namespace.
 			 *
 			 * @return string The resulting `cache/path` based on the input `$url`.
 			 */
-			public function url_to_cache_path($url, $with_user_token = '', $with_version_salt = '', $flags = 0)
+			public function build_cache_path($url, $with_user_token = '', $with_version_salt = '', $flags = 0)
 			{
 				$cache_path        = ''; // Initialize.
 				$url               = trim((string)$url);
