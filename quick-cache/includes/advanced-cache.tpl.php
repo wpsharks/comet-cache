@@ -401,13 +401,13 @@ namespace quick_cache
 		const NC_DEBUG_DONOTCACHEPAGE_SERVER_VAR = 'nc_debug_donotcachepage_server_var';
 
 		/**
-		 * No-cache because the current request method is `POST|PUT|DELETE`.
+		 * No-cache because the current request method is uncacheable.
 		 *
-		 * @since 140422 First documented version.
+		 * @since 14xxxx Adding HEAD/OPTIONS/TRACE to the list of uncacheables.
 		 *
 		 * @var string A unique string identifier in the set of `NC_DEBUG_` constants.
 		 */
-		const NC_DEBUG_POST_PUT_DEL_REQUEST = 'nc_debug_post_put_del_request';
+		const NC_DEBUG_UNCACHEABLE_REQUEST = 'nc_debug_uncacheable_request';
 
 		/**
 		 * No-cache because the current request originated from the server itself.
@@ -666,8 +666,8 @@ namespace quick_cache
 			if(isset($_SERVER['DONOTCACHEPAGE']))
 				return $this->maybe_set_debug_info($this::NC_DEBUG_DONOTCACHEPAGE_SERVER_VAR);
 
-			if($this->is_post_put_del_request())
-				return $this->maybe_set_debug_info($this::NC_DEBUG_POST_PUT_DEL_REQUEST);
+			if($this->is_uncacheable_request_method())
+				return $this->maybe_set_debug_info($this::NC_DEBUG_UNCACHEABLE_REQUEST);
 
 			if(isset($_SERVER['REMOTE_ADDR'], $_SERVER['SERVER_ADDR']) && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR'])
 				if(!$this->is_localhost()) return $this->maybe_set_debug_info($this::NC_DEBUG_SELF_SERVE_REQUEST);
@@ -1008,8 +1008,8 @@ namespace quick_cache
 					$reason = __('because the environment variable `$_SERVER[\'DONOTCACHEPAGE\']` has been set at runtime. Perhaps by WordPress itself, or by one of your themes/plugins. This usually means that you have a theme/plugin intentionally disabling the cache on this page; and it\'s usually for a very good reason.', $this->text_domain);
 					break; // Break switch handler.
 
-				case $this::NC_DEBUG_POST_PUT_DEL_REQUEST:
-					$reason = __('because `$_SERVER[\'REQUEST_METHOD\']` is `POST`, `PUT` or `DELETE`. These request types should never (ever) be cached in any way.', $this->text_domain);
+				case $this::NC_DEBUG_UNCACHEABLE_REQUEST:
+					$reason = __('because `$_SERVER[\'REQUEST_METHOD\']` is `POST`, `PUT`, `DELETE`, `HEAD`, `OPTIONS`, `TRACE` or `CONNECT`. These request methods should never (ever) be cached in any way.', $this->text_domain);
 					break; // Break switch handler.
 
 				case $this::NC_DEBUG_SELF_SERVE_REQUEST:
