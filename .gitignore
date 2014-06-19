@@ -1,0 +1,58 @@
+# NOTE: It is not absolutely required (but highly recommended) that you have: `ignorecase = true`
+# in your `.gitconfig` file to maximize compatibility with some of these exclusion patterns.
+
+# Local Dev
+.~*
+
+# Backups
+*~
+*.bak
+
+# IntelliJ
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Sublime
+*.sublime-workspace
+*.sublime-project
+
+# VC Systems
+CVS/
+.cvsignore
+.svn/
+_svn/
+.bzr/
+.bzrignore
+.hg/
+.hgignore
+SCCS/
+RCS/
+
+# PC Files
+$RECYCLE.BIN/
+Desktop.ini
+Thumbs.db
+ehthumbs.db
+
+# Mac Files
+.Spotlight-V100
+.AppleDouble
+.LSOverride
+.DS_Store
+.Trashes
+Icon?
+!Icons
+._*
+
+# Amazon Web Services
+.elasticbeanstalk/
+
+# For shell glob patterns. This includes GIT files too. We simply maintain this list together with `.gitignore`.
+# .~*;*~;*.bak;.idea;*.iml;*.ipr;*.iws;*.sublime-workspace;*.sublime-project;.git;.gitignore;.gitattributes;CVS;.cvsignore;.svn;_svn;.bzr;.bzrignore;.hg;.hgignore;SCCS;RCS;$RECYCLE.BIN;Desktop.ini;Thumbs.db;ehthumbs.db;.Spotlight-V100;.AppleDouble;.LSOverride;.DS_Store;.Trashes;.elasticbeanstalk
+
+# This list is for IntelliJ IDEA / PhpStorm `File Types` configuration. Some files we actually WANT to work with as part of a project.
+# .idea;*.iml;*.ipr;*.iws;*.sublime-workspace;*.sublime-project;.git;CVS;.svn;_svn;.bzr;.hg;SCCS;RCS;$RECYCLE.BIN;Desktop.ini;Thumbs.db;ehthumbs.db;.Spotlight-V100;.AppleDouble;.LSOverride;.DS_Store;.Trashes;._*
+
+# We also need to update the WebSharks™ Core `dirs_files::ignore()` method if this changes.
