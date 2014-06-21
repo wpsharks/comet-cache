@@ -439,7 +439,8 @@ namespace quick_cache // Root namespace.
 				echo '      <hr />'."\n";
 				echo '      <div class="plugin-menu-page-panel-if-enabled">'."\n";
 				echo '         <h3>'.__('XML Sitemap URL (or an XML Sitemap Index)', $this->plugin->text_domain).'</h3>'."\n";
-				echo '         <table style="width:100%;"><tr><td style="width:1px; font-weight:bold; white-space:nowrap;">'.esc_html(site_url('/')).'</td><td><input type="text" name="'.esc_attr(__NAMESPACE__).'[save_options][auto_cache_sitemap_url]" value="" /></td></tr></table>'."\n";
+				echo '         <table style="width:100%;"><tr><td style="width:1px; font-weight:bold; white-space:nowrap;">'.esc_html(home_url('/')).'</td><td><input type="text" name="'.esc_attr(__NAMESPACE__).'[save_options][auto_cache_sitemap_url]" value="" /></td></tr></table>'."\n";
+				if(is_multisite()) echo '<p class="info" style="display:block; margin-top:-15px;">'.__('In a Multisite Network, each child blog will be auto-cached too. Quick Cache will dynamically change the leading <code>'.esc_html(home_url('/')).'</code> as necessary; for each child blog in the network. Quick Cache supports both sub-directory &amp; sub-domain networks; including domain mapping plugins.', $this->plugin->text_domain).'</p>'."\n";
 				echo '         <h3>'.__('A List of URLs to Auto-Cache (One Per Line)', $this->plugin->text_domain).'</h3>'."\n";
 				echo '         <p><textarea name="'.esc_attr(__NAMESPACE__).'[save_options][auto_cache_other_urls]" rows="5" spellcheck="false" class="monospace"></textarea></p>'."\n";
 				echo '         <hr />'."\n";
