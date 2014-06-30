@@ -23,7 +23,7 @@ namespace quick_cache
 	 *
 	 * @var string|integer|boolean A boolean-ish value; e.g. `1` or `0`.
 	 */
-	define('QUICK_CACHE_PRO', TRUE); // Note that we do NOT check `if(defined())` here.
+	define('QUICK_CACHE_PRO', FALSE); // Note that we do NOT check `if(defined())` here.
 
 	if(!defined('QUICK_CACHE_ENABLE'))
 		/**
