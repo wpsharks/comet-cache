@@ -222,9 +222,7 @@ namespace quick_cache
 				add_action('trackback_post', array($this, 'auto_purge_comment_post_cache'));
 				add_action('pingback_post', array($this, 'auto_purge_comment_post_cache'));
 				add_action('comment_post', array($this, 'auto_purge_comment_post_cache'));
-				add_action('edit_comment', array($this, 'auto_purge_comment_post_cache'));
-				add_action('delete_comment', array($this, 'auto_purge_comment_post_cache'));
-				add_action('wp_set_comment_status', array($this, 'auto_purge_comment_post_cache'));
+				add_action('transition_comment_status', array($this, 'auto_purge_comment_transition'), 10, 3);
 
 				add_action('create_term', array($this, 'auto_clear_cache'));
 				add_action('edit_terms', array($this, 'auto_clear_cache'));
@@ -907,6 +905,12 @@ namespace quick_cache
 					return $counter; // Already did this.
 				$this->cache[__FUNCTION__][$id][(integer)$force] = -1;
 
+				if(isset(static::$static['allow_purging']) && static::$static['allow_purging'] === FALSE)
+				{
+					static::$static['allow_purging'] = TRUE; // Reset state.
+					return $counter; // Nothing to do.
+				}
+
 				if(!$this->options['enable'])
 					return $counter; // Nothing to do.
 
@@ -1479,10 +1483,6 @@ namespace quick_cache
 			 * @attaches-to `pingback_post` hook.
 			 * @attaches-to `comment_post` hook.
 			 *
-			 * @attaches-to `edit_comment` hook.
-			 * @attaches-to `delete_comment` hook.
-			 * @attaches-to `wp_set_comment_status` hook.
-			 *
 			 * @param integer $id A WordPress comment ID.
 			 *
 			 * @return integer Total files purged by this routine (if any).
@@ -1508,10 +1508,59 @@ namespace quick_cache
 				if(empty($comment->comment_post_ID))
 					return $counter; // Nothing we can do.
 
-				if($comment->comment_approved === 'spam')
+				if($comment->comment_approved === 'spam' || $comment->comment_approved === '0')
+				{
+					static::$static['allow_purging'] = FALSE; // Don't allow next `auto_purge_post_cache()` call to clear post cache.
 					return $counter; // Don't allow spam to clear cache.
+				}
 
 				$counter = $this->auto_purge_post_cache($comment->comment_post_ID);
+
+				return apply_filters(__METHOD__, $counter, get_defined_vars());
+			}
+
+			/**
+			 * Automatically purges cache files for a post associated with a particular comment.
+			 *
+			 * @since 140711 First documented version.
+			 *
+			 * @attaches-to `transition_comment_status` hook.
+			 *
+			 * @param string   $new_status New comment status.
+			 * @param string   $old_status Old comment status.
+			 * @param \WP_Post $comment Comment object.
+			 *
+			 * @return integer Total files purged by this routine (if any).
+			 *
+			 * @throws \exception If a purge failure occurs.
+			 *
+			 * @note This is also called upon by other routines which listen for
+			 *    events that are indirectly associated with a comment ID.
+			 *
+			 * @see auto_purge_comment_post_cache()
+			 */
+			public function auto_purge_comment_transition($new_status, $old_status, $comment)
+			{
+				$counter = 0; // Initialize.
+
+				if(!$this->options['enable'])
+					return $counter; // Nothing to do.
+
+				if(!is_object($comment))
+					return $counter; // Nothing we can do.
+
+				if(empty($comment->comment_post_ID))
+					return $counter; // Nothing we can do.
+
+				if($old_status === 'approved' || ($old_status === 'unapproved' && $new_status === 'approved'))
+				{
+					$counter = $this->auto_purge_post_cache($comment->comment_post_ID);
+				}
+				else
+				{
+					static::$static['allow_purging'] = FALSE; // Don't allow next `auto_purge_post_cache()` call to clear post cache.
+					return $counter; // Don't allow Unapproved comments not being Approved to clear cache.
+				}
 
 				return apply_filters(__METHOD__, $counter, get_defined_vars());
 			}
