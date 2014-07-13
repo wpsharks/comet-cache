@@ -905,9 +905,9 @@ namespace quick_cache
 					return $counter; // Already did this.
 				$this->cache[__FUNCTION__][$id][(integer)$force] = -1;
 
-				if(isset(static::$static['allow_purging']) && static::$static['allow_purging'] === FALSE)
+				if(isset(static::$static['___allow_auto_purge_post_cache']) && static::$static['___allow_auto_purge_post_cache'] === FALSE)
 				{
-					static::$static['allow_purging'] = TRUE; // Reset state.
+					static::$static['___allow_auto_purge_post_cache'] = TRUE; // Reset state.
 					return $counter; // Nothing to do.
 				}
 
@@ -1510,7 +1510,7 @@ namespace quick_cache
 
 				if($comment->comment_approved === 'spam' || $comment->comment_approved === '0')
 				{
-					static::$static['allow_purging'] = FALSE; // Don't allow next `auto_purge_post_cache()` call to clear post cache.
+					static::$static['___allow_auto_purge_post_cache'] = FALSE; // Don't allow next `auto_purge_post_cache()` call to clear post cache.
 					return $counter; // Don't allow spam to clear cache.
 				}
 
@@ -1558,7 +1558,7 @@ namespace quick_cache
 				}
 				else
 				{
-					static::$static['allow_purging'] = FALSE; // Don't allow next `auto_purge_post_cache()` call to clear post cache.
+					static::$static['___allow_auto_purge_post_cache'] = FALSE; // Don't allow next `auto_purge_post_cache()` call to clear post cache.
 					return $counter; // Don't allow Unapproved comments not being Approved to clear cache.
 				}
 
