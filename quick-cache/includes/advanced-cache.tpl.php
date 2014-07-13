@@ -807,12 +807,20 @@ namespace quick_cache
 
 			if(!is_main_query()) return; // Not main query.
 
-			$this->is_wp_loaded_query   = TRUE;
-			$this->is_404               = is_404();
-			$this->is_user_logged_in    = is_user_logged_in();
-			$this->content_url          = rtrim(content_url(), '/');
-			$this->is_maintenance       = function_exists('is_maintenance') && is_maintenance();
-			$this->is_a_wp_content_type = $this->is_404 || $this->is_maintenance || is_front_page() || is_home() || is_singular() || is_archive() || is_post_type_archive() || is_tax() || is_search() || is_feed();
+			$this->is_wp_loaded_query = TRUE;
+			$this->is_404             = is_404();
+			$this->is_user_logged_in  = is_user_logged_in();
+			$this->content_url        = rtrim(content_url(), '/');
+			$this->is_maintenance     = function_exists('is_maintenance') && is_maintenance();
+
+			$_this = $this; // Reference for the closure below.
+			add_action('template_redirect', function () use ($_this)
+			{ // Move this AFTER `redirect_canonical` to avoid buggy WP behavior.
+				// See <https://github.com/websharks/quick-cache/issues/209#issuecomment-46999230>
+				$_this->is_a_wp_content_type = $_this->is_404 || $_this->is_maintenance
+				                               || is_front_page() // See <https://core.trac.wordpress.org/ticket/21602#comment:7>
+				                               || is_home() || is_singular() || is_archive() || is_post_type_archive() || is_tax() || is_search() || is_feed();
+			}, 11);
 		}
 
 		/**
