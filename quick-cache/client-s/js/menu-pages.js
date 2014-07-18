@@ -35,8 +35,8 @@
 
 					if((thisName.indexOf('_enable]') !== -1 && (thisValue === '' || thisValue === '1'))
 						|| (thisName.indexOf('_flavor]') !== -1 && thisValue !== '0')) // Enabled?
-						$thisPanel.find('.plugin-menu-page-panel-if-enabled').css('opacity', 1).find(':input').removeAttr('disabled');
-					else $thisPanel.find('.plugin-menu-page-panel-if-enabled').css('opacity', 0.4).find(':input').attr('disabled', 'disabled');
+						$thisPanel.find('.plugin-menu-page-panel-if-enabled').css('opacity', 1).find(':input').removeAttr('readonly');
+					else $thisPanel.find('.plugin-menu-page-panel-if-enabled').css('opacity', 0.4).find(':input').attr('readonly', 'readonly');
 				})
 					.trigger('change'); // Initialize.
 			};
