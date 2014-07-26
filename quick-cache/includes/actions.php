@@ -6,8 +6,12 @@ namespace quick_cache // Root namespace.
 
 	class actions // Action handlers.
 	{
+		protected $plugin; // Set by constructor.
+
 		public function __construct()
 		{
+			$this->plugin = plugin();
+
 			if(empty($_REQUEST[__NAMESPACE__])) return;
 			foreach((array)$_REQUEST[__NAMESPACE__] as $action => $args)
 				if(method_exists($this, $action)) $this->{$action}($args);
@@ -15,13 +19,13 @@ namespace quick_cache // Root namespace.
 
 		public function wipe_cache($args)
 		{
-			if(!current_user_can(plugin()->network_cap))
+			if(!current_user_can($this->plugin->network_cap))
 				return; // Nothing to do.
 
 			if(empty($_REQUEST['_wpnonce']) || !wp_verify_nonce($_REQUEST['_wpnonce']))
 				return; // Unauthenticated POST data.
 
-			$counter = plugin()->wipe_cache(TRUE); // Counter.
+			$counter = $this->plugin->wipe_cache(TRUE); // Counter.
 
 			$redirect_to = self_admin_url('/admin.php'); // Redirect preparations.
 			$query_args  = array('page' => __NAMESPACE__, __NAMESPACE__.'__cache_wiped' => '1');
@@ -32,13 +36,13 @@ namespace quick_cache // Root namespace.
 
 		public function clear_cache($args)
 		{
-			if(!current_user_can(plugin()->cap))
+			if(!current_user_can($this->plugin->cap))
 				return; // Nothing to do.
 
 			if(empty($_REQUEST['_wpnonce']) || !wp_verify_nonce($_REQUEST['_wpnonce']))
 				return; // Unauthenticated POST data.
 
-			$counter = plugin()->clear_cache(TRUE); // Counter.
+			$counter = $this->plugin->clear_cache(TRUE); // Counter.
 
 			$redirect_to = self_admin_url('/admin.php'); // Redirect preparations.
 			$query_args  = array('page' => __NAMESPACE__, __NAMESPACE__.'__cache_cleared' => '1');
@@ -49,7 +53,7 @@ namespace quick_cache // Root namespace.
 
 		public function save_options($args)
 		{
-			if(!current_user_can(plugin()->cap))
+			if(!current_user_can($this->plugin->cap))
 				return; // Nothing to do.
 
 			if(empty($_REQUEST['_wpnonce']) || !wp_verify_nonce($_REQUEST['_wpnonce']))
@@ -58,38 +62,38 @@ namespace quick_cache // Root namespace.
 			$args = array_map('trim', stripslashes_deep((array)$args));
 			if(isset($args['base_dir'])) // No leading/trailing slashes please.
 				$args['base_dir'] = trim($args['base_dir'], '\\/'." \t\n\r\0\x0B");
-			plugin()->options = array_merge(plugin()->default_options, $args);
+			$this->plugin->options = array_merge($this->plugin->default_options, $args);
 
-			if(!trim(plugin()->options['base_dir'], '\\/'." \t\n\r\0\x0B") // Empty?
-			   || strpos(basename(plugin()->options['base_dir']), 'wp-') === 0 // Reserved?
-			) plugin()->options['base_dir'] = plugin()->default_options['base_dir'];
+			if(!trim($this->plugin->options['base_dir'], '\\/'." \t\n\r\0\x0B") // Empty?
+			   || strpos(basename($this->plugin->options['base_dir']), 'wp-') === 0 // Reserved?
+			) $this->plugin->options['base_dir'] = $this->plugin->default_options['base_dir'];
 
-			update_option(__NAMESPACE__.'_options', plugin()->options); // Blog-specific.
-			if(is_multisite()) update_site_option(__NAMESPACE__.'_options', plugin()->options);
+			update_option(__NAMESPACE__.'_options', $this->plugin->options); // Blog-specific.
+			if(is_multisite()) update_site_option(__NAMESPACE__.'_options', $this->plugin->options);
 
 			$redirect_to = self_admin_url('/admin.php'); // Redirect preparations.
 			$query_args  = array('page' => __NAMESPACE__, __NAMESPACE__.'__updated' => '1');
 
-			plugin()->auto_wipe_cache(); // May produce a notice.
+			$this->plugin->auto_wipe_cache(); // May produce a notice.
 
-			if(plugin()->options['enable']) // Enable.
+			if($this->plugin->options['enable']) // Enable.
 			{
-				if(!($add_wp_cache_to_wp_config = plugin()->add_wp_cache_to_wp_config()))
+				if(!($add_wp_cache_to_wp_config = $this->plugin->add_wp_cache_to_wp_config()))
 					$query_args[__NAMESPACE__.'__wp_config_wp_cache_add_failure'] = '1';
 
-				if(!($add_advanced_cache = plugin()->add_advanced_cache()))
+				if(!($add_advanced_cache = $this->plugin->add_advanced_cache()))
 					$query_args[__NAMESPACE__.'__advanced_cache_add_failure']
 						= ($add_advanced_cache === NULL)
 						? 'qc-advanced-cache' : '1';
 
-				plugin()->update_blog_paths();
+				$this->plugin->update_blog_paths();
 			}
 			else // We need to disable Quick Cache in this case.
 			{
-				if(!($remove_wp_cache_from_wp_config = plugin()->remove_wp_cache_from_wp_config()))
+				if(!($remove_wp_cache_from_wp_config = $this->plugin->remove_wp_cache_from_wp_config()))
 					$query_args[__NAMESPACE__.'__wp_config_wp_cache_remove_failure'] = '1';
 
-				if(!($remove_advanced_cache = plugin()->remove_advanced_cache()))
+				if(!($remove_advanced_cache = $this->plugin->remove_advanced_cache()))
 					$query_args[__NAMESPACE__.'__advanced_cache_remove_failure'] = '1';
 			}
 			$redirect_to = add_query_arg(urlencode_deep($query_args), $redirect_to);
@@ -99,40 +103,39 @@ namespace quick_cache // Root namespace.
 
 		public function restore_default_options($args)
 		{
-			if(!current_user_can(plugin()->cap))
+			if(!current_user_can($this->plugin->cap))
 				return; // Nothing to do.
 
 			if(empty($_REQUEST['_wpnonce']) || !wp_verify_nonce($_REQUEST['_wpnonce']))
 				return; // Unauthenticated POST data.
 
 			delete_option(__NAMESPACE__.'_options'); // Blog-specific.
-			delete_option('ws_plugin__qcache_options'); // Blog-specific.
 			if(is_multisite()) delete_site_option(__NAMESPACE__.'_options');
-			plugin()->options = plugin()->default_options;
+			$this->plugin->options = $this->plugin->default_options;
 
 			$redirect_to = self_admin_url('/admin.php'); // Redirect preparations.
 			$query_args  = array('page' => __NAMESPACE__, __NAMESPACE__.'__restored' => '1');
 
-			plugin()->auto_wipe_cache(); // May produce a notice.
+			$this->plugin->auto_wipe_cache(); // May produce a notice.
 
-			if(plugin()->options['enable']) // Enable.
+			if($this->plugin->options['enable']) // Enable.
 			{
-				if(!($add_wp_cache_to_wp_config = plugin()->add_wp_cache_to_wp_config()))
+				if(!($add_wp_cache_to_wp_config = $this->plugin->add_wp_cache_to_wp_config()))
 					$query_args[__NAMESPACE__.'__wp_config_wp_cache_add_failure'] = '1';
 
-				if(!($add_advanced_cache = plugin()->add_advanced_cache()))
+				if(!($add_advanced_cache = $this->plugin->add_advanced_cache()))
 					$query_args[__NAMESPACE__.'__advanced_cache_add_failure']
 						= ($add_advanced_cache === NULL)
 						? 'qc-advanced-cache' : '1';
 
-				plugin()->update_blog_paths();
+				$this->plugin->update_blog_paths();
 			}
 			else // We need to disable Quick Cache in this case.
 			{
-				if(!($remove_wp_cache_from_wp_config = plugin()->remove_wp_cache_from_wp_config()))
+				if(!($remove_wp_cache_from_wp_config = $this->plugin->remove_wp_cache_from_wp_config()))
 					$query_args[__NAMESPACE__.'__wp_config_wp_cache_remove_failure'] = '1';
 
-				if(!($remove_advanced_cache = plugin()->remove_advanced_cache()))
+				if(!($remove_advanced_cache = $this->plugin->remove_advanced_cache()))
 					$query_args[__NAMESPACE__.'__advanced_cache_remove_failure'] = '1';
 			}
 			$redirect_to = add_query_arg(urlencode_deep($query_args), $redirect_to);
@@ -142,7 +145,7 @@ namespace quick_cache // Root namespace.
 
 		public function dismiss_notice($args)
 		{
-			if(!current_user_can(plugin()->cap))
+			if(!current_user_can($this->plugin->cap))
 				return; // Nothing to do.
 
 			if(empty($_REQUEST['_wpnonce']) || !wp_verify_nonce($_REQUEST['_wpnonce']))
@@ -160,7 +163,7 @@ namespace quick_cache // Root namespace.
 
 		public function dismiss_error($args)
 		{
-			if(!current_user_can(plugin()->cap))
+			if(!current_user_can($this->plugin->cap))
 				return; // Nothing to do.
 
 			if(empty($_REQUEST['_wpnonce']) || !wp_verify_nonce($_REQUEST['_wpnonce']))

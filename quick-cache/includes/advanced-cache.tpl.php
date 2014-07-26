@@ -23,7 +23,7 @@ namespace quick_cache
 	 *
 	 * @var string|integer|boolean A boolean-ish value; e.g. `1` or `0`.
 	 */
-	define('QUICK_CACHE_PRO', TRUE); // Note that we do NOT check `if(defined())` here.
+	define('QUICK_CACHE_PRO', FALSE); // Note that we do NOT check `if(defined())` here.
 
 	if(!defined('QUICK_CACHE_ENABLE'))
 		/**
@@ -90,13 +90,13 @@ namespace quick_cache
 
 	if(!defined('QUICK_CACHE_DIR'))
 		/**
-		 * Directory used to store cache files; relative to `ABSPATH`.
+		 * Directory used to store cache files; relative to `WP_CONTENT_DIR`.
 		 *
 		 * @since 140422 First documented version.
 		 *
 		 * @var string Absolute server directory path.
 		 */
-		define('QUICK_CACHE_DIR', ABSPATH.'%%QUICK_CACHE_DIR%%');
+		define('QUICK_CACHE_DIR', WP_CONTENT_DIR.'/'.'%%QUICK_CACHE_DIR%%');
 
 	if(!defined('QUICK_CACHE_MAX_AGE'))
 		/**
@@ -119,22 +119,37 @@ namespace quick_cache
 		 */
 		define('QUICK_CACHE_404_CACHE_FILENAME', '----404----');
 
+	if(!defined('QUICK_CACHE_PLUGIN_FILE'))
+		/**
+		 * Plugin file path.
+		 *
+		 * @since 140725 Reorganizing class members.
+		 *
+		 * @var string Absolute server path to QC plugin file.
+		 */
+		define('QUICK_CACHE_PLUGIN_FILE', '%%QUICK_CACHE_PLUGIN_FILE%%');
+
+	/*
+	 * Include shared methods between {@link advanced_cache} and {@link plugin}.
+	 */
+	require_once dirname(QUICK_CACHE_PLUGIN_FILE).'/includes/share.php';
+
 	/**
 	 * Quick Cache (Advanced Cache Handler)
 	 *
 	 * @package quick_cache\advanced_cache
 	 * @since 140422 First documented version.
 	 */
-	class advanced_cache # `/wp-content/advanced-cache.php`
+	class advanced_cache extends share # `/wp-content/advanced-cache.php`
 	{
 		/**
-		 * Identifies the pro version of Quick Cache.
+		 * Microtime; defined by class constructor for debugging purposes.
 		 *
 		 * @since 140422 First documented version.
 		 *
-		 * @var boolean `TRUE` for Quick Cache Pro; else `FALSE`.
+		 * @var float Result of a call to {@link \microtime()}.
 		 */
-		public $is_pro = FALSE;
+		public $timer = 0;
 
 		/**
 		 * Flagged as `TRUE` if QC advanced cache is active & running.
@@ -144,15 +159,6 @@ namespace quick_cache
 		 * @var boolean `TRUE` if QC advanced cache is active & running.
 		 */
 		public $is_running = FALSE;
-
-		/**
-		 * Microtime; defined by class constructor for debugging purposes.
-		 *
-		 * @since 140422 First documented version.
-		 *
-		 * @var float Result of a call to {@link \microtime()}.
-		 */
-		public $timer = 0;
 
 		/**
 		 * Calculated protocol; one of `http://` or `https://`.
@@ -226,17 +232,6 @@ namespace quick_cache
 		);
 
 		/**
-		 * Last HTTP status code passed through {@link \status_header}.
-		 *
-		 * @since 140422 First documented version.
-		 *
-		 * @var null|integer Last HTTP status code (if applicable).
-		 *
-		 * @see maybe_filter_status_header_postload()
-		 */
-		public $http_status;
-
-		/**
 		 * An array of debug info.
 		 *
 		 * @since 140605 Improve output buffering.
@@ -268,6 +263,17 @@ namespace quick_cache
 		public $is_404 = FALSE;
 
 		/**
+		 * Last HTTP status code passed through {@link \status_header}.
+		 *
+		 * @since 140422 First documented version.
+		 *
+		 * @var integer Last HTTP status code (if applicable).
+		 *
+		 * @see maybe_filter_status_header_postload()
+		 */
+		public $http_status = 0;
+
+		/**
 		 * Is the current request a WordPress content type?
 		 *
 		 * @since 140605 Improving debug notes display.
@@ -279,26 +285,15 @@ namespace quick_cache
 		public $is_a_wp_content_type = FALSE;
 
 		/**
-		 * Current WordPress {@link \site_url()}.
+		 * Current WordPress {@link \content_url()}.
 		 *
-		 * @since 140422 First documented version.
+		 * @since 140725 Reorganizing class members.
 		 *
-		 * @var string Current WordPress {@link \site_url()}.
-		 *
-		 * @see wp_main_query_postload()
-		 */
-		public $site_url = '';
-
-		/**
-		 * Current WordPress {@link \home_url()}.
-		 *
-		 * @since 140422 First documented version.
-		 *
-		 * @var string Current WordPress {@link \home_url()}.
+		 * @var string Current WordPress {@link \content_url()}.
 		 *
 		 * @see wp_main_query_postload()
 		 */
-		public $home_url = '';
+		public $content_url = '';
 
 		/**
 		 * Flag for {@link \is_user_loged_in()}.
@@ -331,25 +326,7 @@ namespace quick_cache
 		 *
 		 * @see wp_main_query_postload()
 		 */
-		public $plugin_file = '';
-
-		/**
-		 * Text domain for translations; based on `__NAMESPACE__`.
-		 *
-		 * @since 140422 First documented version.
-		 *
-		 * @var string Defined by class constructor; for translations.
-		 */
-		public $text_domain = '';
-
-		/**
-		 * Array of hooks added by plugins.
-		 *
-		 * @since 140422 First documented version.
-		 *
-		 * @var array An array of any hooks added by plugins.
-		 */
-		public $hooks = array();
+		public $plugin_file = QUICK_CACHE_PLUGIN_FILE;
 
 		/**
 		 * No-cache because of the current {@link \PHP_SAPI}.
@@ -424,13 +401,13 @@ namespace quick_cache
 		const NC_DEBUG_DONOTCACHEPAGE_SERVER_VAR = 'nc_debug_donotcachepage_server_var';
 
 		/**
-		 * No-cache because the current request method is `POST|PUT|DELETE`.
+		 * No-cache because the current request method is uncacheable.
 		 *
-		 * @since 140422 First documented version.
+		 * @since 140725 Adding HEAD/OPTIONS/TRACE to the list of uncacheables.
 		 *
 		 * @var string A unique string identifier in the set of `NC_DEBUG_` constants.
 		 */
-		const NC_DEBUG_POST_PUT_DEL_REQUEST = 'nc_debug_post_put_del_request';
+		const NC_DEBUG_UNCACHEABLE_REQUEST = 'nc_debug_uncacheable_request';
 
 		/**
 		 * No-cache because the current request originated from the server itself.
@@ -583,15 +560,16 @@ namespace quick_cache
 		 */
 		public function __construct()
 		{
+			parent::__construct(); // Shared constructor.
+
 			if(!WP_CACHE || !QUICK_CACHE_ENABLE)
 				return; // Not enabled.
 
 			if(defined('WP_INSTALLING') || defined('RELOCATE'))
 				return; // N/A; installing|relocating.
 
-			$this->is_running  = TRUE;
-			$this->timer       = microtime(TRUE);
-			$this->text_domain = str_replace('_', '-', __NAMESPACE__);
+			$this->is_running = TRUE;
+			$this->timer      = microtime(TRUE);
 
 			$this->load_ac_plugins();
 			$this->register_shutdown_flag();
@@ -688,8 +666,8 @@ namespace quick_cache
 			if(isset($_SERVER['DONOTCACHEPAGE']))
 				return $this->maybe_set_debug_info($this::NC_DEBUG_DONOTCACHEPAGE_SERVER_VAR);
 
-			if($this->is_post_put_del_request())
-				return $this->maybe_set_debug_info($this::NC_DEBUG_POST_PUT_DEL_REQUEST);
+			if($this->is_uncacheable_request_method())
+				return $this->maybe_set_debug_info($this::NC_DEBUG_UNCACHEABLE_REQUEST);
 
 			if(isset($_SERVER['REMOTE_ADDR'], $_SERVER['SERVER_ADDR']) && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR'])
 				if(!$this->is_localhost()) return $this->maybe_set_debug_info($this::NC_DEBUG_SELF_SERVE_REQUEST);
@@ -714,18 +692,18 @@ namespace quick_cache
 
 			$this->protocol       = $this->is_ssl() ? 'https://' : 'http://';
 			$this->version_salt   = $this->apply_filters(__CLASS__.'__version_salt', '');
-			$this->cache_path     = $this->url_to_cache_path($this->protocol.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'], '', $this->version_salt);
+			$this->cache_path     = $this->build_cache_path($this->protocol.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'], '', $this->version_salt);
 			$this->cache_file     = QUICK_CACHE_DIR.'/'.$this->cache_path; // NOT considering a user cache at all in the lite version.
-			$this->cache_file_404 = QUICK_CACHE_DIR.'/'.$this->url_to_cache_path($this->protocol.$_SERVER['HTTP_HOST'].'/'.QUICK_CACHE_404_CACHE_FILENAME);
+			$this->cache_file_404 = QUICK_CACHE_DIR.'/'.$this->build_cache_path($this->protocol.$_SERVER['HTTP_HOST'].'/'.QUICK_CACHE_404_CACHE_FILENAME);
 			$this->salt_location  = ltrim($this->version_salt.' '.$this->protocol.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
 
 			if(is_file($this->cache_file) && filemtime($this->cache_file) >= strtotime('-'.QUICK_CACHE_MAX_AGE))
 			{
 				list($headers, $cache) = explode('<!--headers-->', file_get_contents($this->cache_file), 2);
 
-				$headers_list = headers_list(); // Headers already sent (or ready to be sent).
+				$headers_list = $this->headers_list(); // Headers already sent (or ready to be sent).
 				foreach(unserialize($headers) as $_header) // Preserves original headers sent with this file.
-					if(!in_array($_header, $headers_list) && stripos($_header, 'Last-Modified:') !== 0) header($_header);
+					if(!in_array($_header, $headers_list, TRUE) && stripos($_header, 'Last-Modified:') !== 0) header($_header);
 				unset($_header); // Just a little housekeeping.
 
 				if(QUICK_CACHE_DEBUGGING_ENABLE && $this->is_html_xml_doc($cache)) // Only if HTML comments are possible.
@@ -827,19 +805,22 @@ namespace quick_cache
 			if($this->is_wp_loaded_query || is_admin())
 				return; // Nothing to do.
 
-			if(!is_main_query())
-				return; // Not the main query.
+			if(!is_main_query()) return; // Not main query.
 
-			$this->is_wp_loaded_query   = TRUE;
-			$this->is_404               = is_404();
-			$this->site_url             = site_url();
-			$this->home_url             = home_url();
-			$this->is_user_logged_in    = is_user_logged_in();
-			$this->is_maintenance       = function_exists('is_maintenance') && is_maintenance();
-			$this->is_a_wp_content_type = $this->is_404 || $this->is_maintenance || is_front_page() || is_home() || is_singular() || is_archive() || is_post_type_archive() || is_tax() || is_search() || is_feed();
+			$this->is_wp_loaded_query = TRUE;
+			$this->is_404             = is_404();
+			$this->is_user_logged_in  = is_user_logged_in();
+			$this->content_url        = rtrim(content_url(), '/');
+			$this->is_maintenance     = function_exists('is_maintenance') && is_maintenance();
 
-			if(function_exists('\\'.__NAMESPACE__.'\\plugin'))
-				$this->plugin_file = plugin()->file;
+			$_this = $this; // Reference for the closure below.
+			add_action('template_redirect', function () use ($_this)
+			{ // Move this AFTER `redirect_canonical` to avoid buggy WP behavior.
+				// See <https://github.com/websharks/quick-cache/issues/209#issuecomment-46999230>
+				$_this->is_a_wp_content_type = $_this->is_404 || $_this->is_maintenance
+				                               || is_front_page() // See <https://core.trac.wordpress.org/ticket/21602#comment:7>
+				                               || is_home() || is_singular() || is_archive() || is_post_type_archive() || is_tax() || is_search() || is_feed();
+			}, 11);
 		}
 
 		/**
@@ -892,16 +873,17 @@ namespace quick_cache
 				return (boolean)$this->maybe_set_debug_info($this::NC_DEBUG_IS_LOGGED_IN_USER);
 
 			if($this->is_like_user_logged_in()) // Commenters, password-protected access, or actually logged-in.
-				return (boolean)$this->maybe_set_debug_info($this::NC_DEBUG_IS_LIKE_LOGGED_IN_USER); // This uses a separate debug notice.
+				return (boolean)$this->maybe_set_debug_info($this::NC_DEBUG_IS_LIKE_LOGGED_IN_USER); // Separate debug notice.
 
 			if($this->is_404 && !QUICK_CACHE_CACHE_404_REQUESTS) // Not caching 404 errors.
 				return (boolean)$this->maybe_set_debug_info($this::NC_DEBUG_404_REQUEST);
 
-			if(strpos($cache, '<body id="error-page">') !== FALSE)
+			if(strpos($cache, '<body id="error-page">') !== FALSE) // A WordPress-generated {@link \wp_die()} error?
 				return (boolean)$this->maybe_set_debug_info($this::NC_DEBUG_WP_ERROR_PAGE);
 
-			if(!function_exists('http_response_code') && stripos($cache, '<title>database error</title>') !== FALSE)
-				return (boolean)$this->maybe_set_debug_info($this::NC_DEBUG_WP_ERROR_PAGE);
+			if(!$this->function_is_possible('http_response_code')) // Unable to reliably detect HTTP status code?
+				if(stripos($cache, '<title>database error</title>') !== FALSE) // Fallback on this hackety hack.
+					return (boolean)$this->maybe_set_debug_info($this::NC_DEBUG_WP_ERROR_PAGE);
 
 			if(!$this->has_a_cacheable_content_type()) // Exclude non-HTML/XML content types.
 				return (boolean)$this->maybe_set_debug_info($this::NC_DEBUG_UNCACHEABLE_CONTENT_TYPE);
@@ -912,7 +894,7 @@ namespace quick_cache
 			if($this->is_maintenance) // <http://wordpress.org/extend/plugins/maintenance-mode>
 				return (boolean)$this->maybe_set_debug_info($this::NC_DEBUG_MAINTENANCE_PLUGIN);
 
-			if(function_exists('zlib_get_coding_type') && zlib_get_coding_type()
+			if($this->function_is_possible('zlib_get_coding_type') && zlib_get_coding_type()
 			   && (!($zlib_oc = ini_get('zlib.output_compression')) || !filter_var($zlib_oc, FILTER_VALIDATE_BOOLEAN))
 			) return (boolean)$this->maybe_set_debug_info($this::NC_DEBUG_OB_ZLIB_CODING_TYPE);
 
@@ -937,7 +919,7 @@ namespace quick_cache
 			if(QUICK_CACHE_DEBUGGING_ENABLE && $this->is_html_xml_doc($cache)) // Only if HTML comments are possible.
 			{
 				$total_time = number_format(microtime(TRUE) - $this->timer, 5, '.', '');
-				$cache .= "\n".'<!-- '.htmlspecialchars(sprintf(__('Quick Cache file path: %1$s', $this->text_domain), str_replace(ABSPATH, '', $this->is_404 ? $this->cache_file_404 : $this->cache_file))).' -->';
+				$cache .= "\n".'<!-- '.htmlspecialchars(sprintf(__('Quick Cache file path: %1$s', $this->text_domain), str_replace(WP_CONTENT_DIR, '', $this->is_404 ? $this->cache_file_404 : $this->cache_file))).' -->';
 				$cache .= "\n".'<!-- '.htmlspecialchars(sprintf(__('Quick Cache file built for (%1$s) in %2$s seconds, on: %3$s.', $this->text_domain),
 				                                                ($this->is_404) ? '404 [error document]' : $this->salt_location, $total_time, date('M jS, Y @ g:i a T'))).' -->';
 				$cache .= "\n".'<!-- '.htmlspecialchars(sprintf(__('This Quick Cache file will auto-expire (and be rebuilt) on: %1$s (based on your configured expiration time).', $this->text_domain), date('M jS, Y @ g:i a T', strtotime('+'.QUICK_CACHE_MAX_AGE)))).' -->';
@@ -948,12 +930,12 @@ namespace quick_cache
 			 */
 			if($this->is_404) // This is a 404; let's create 404 cache file and symlink to it.
 			{
-				if(file_put_contents($cache_file_tmp, serialize(headers_list()).'<!--headers-->'.$cache) && rename($cache_file_tmp, $this->cache_file_404))
+				if(file_put_contents($cache_file_tmp, serialize($this->headers_list()).'<!--headers-->'.$cache) && rename($cache_file_tmp, $this->cache_file_404))
 					if(symlink($this->cache_file_404, $this->cache_file)) // If this fails an exception will be thrown down below.
 						return $cache; // Return the newly built cache; with possible debug information also.
 
 			} // NOT a 404; let's write a new cache file.
-			else if(file_put_contents($cache_file_tmp, serialize(headers_list()).'<!--headers-->'.$cache) && rename($cache_file_tmp, $this->cache_file))
+			else if(file_put_contents($cache_file_tmp, serialize($this->headers_list()).'<!--headers-->'.$cache) && rename($cache_file_tmp, $this->cache_file))
 				return $cache; // Return the newly built cache; with possible debug information also.
 
 			@unlink($cache_file_tmp); // Clean this up (if it exists); and throw an exception with information for the site owner.
@@ -1034,8 +1016,8 @@ namespace quick_cache
 					$reason = __('because the environment variable `$_SERVER[\'DONOTCACHEPAGE\']` has been set at runtime. Perhaps by WordPress itself, or by one of your themes/plugins. This usually means that you have a theme/plugin intentionally disabling the cache on this page; and it\'s usually for a very good reason.', $this->text_domain);
 					break; // Break switch handler.
 
-				case $this::NC_DEBUG_POST_PUT_DEL_REQUEST:
-					$reason = __('because `$_SERVER[\'REQUEST_METHOD\']` is `POST`, `PUT` or `DELETE`. These request types should never (ever) be cached in any way.', $this->text_domain);
+				case $this::NC_DEBUG_UNCACHEABLE_REQUEST:
+					$reason = __('because `$_SERVER[\'REQUEST_METHOD\']` is `POST`, `PUT`, `DELETE`, `HEAD`, `OPTIONS`, `TRACE` or `CONNECT`. These request methods should never (ever) be cached in any way.', $this->text_domain);
 					break; // Break switch handler.
 
 				case $this::NC_DEBUG_SELF_SERVE_REQUEST:
@@ -1105,753 +1087,6 @@ namespace quick_cache
 			}
 			return "\n".'<!-- '.htmlspecialchars(sprintf(__('Quick Cache is NOT caching this page, %1$s', $this->text_domain), $reason)).' -->';
 		}
-
-		/*
-		 * See also: `quick-cache.inc.php` duplicates.
-		 *    @TODO Find a way to centralize this section so it can be shared between both classes easily.
-		 */
-
-		/**
-		 * Exclude scheme from cache path.
-		 *
-		 * @since 140422 First documented version.
-		 *
-		 * @var integer Part of a bitmask.
-		 */
-		const CACHE_PATH_NO_SCHEME = 1;
-
-		/**
-		 * Exclude host (i.e. domain name) from cache path.
-		 *
-		 * @since 140422 First documented version.
-		 *
-		 * @var integer Part of a bitmask.
-		 */
-		const CACHE_PATH_NO_HOST = 2;
-
-		/**
-		 * Exclude path from cache path.
-		 *
-		 * @since 140422 First documented version.
-		 *
-		 * @var integer Part of a bitmask.
-		 */
-		const CACHE_PATH_NO_PATH = 4;
-
-		/**
-		 * Exclude path index (i.e. no default `index`) from cache path.
-		 *
-		 * @since 140422 First documented version.
-		 *
-		 * @var integer Part of a bitmask.
-		 */
-		const CACHE_PATH_NO_PATH_INDEX = 8;
-
-		/**
-		 * Exclude query, user & version salt from cache path.
-		 *
-		 * @since 140422 First documented version.
-		 *
-		 * @var integer Part of a bitmask.
-		 */
-		const CACHE_PATH_NO_QUV = 16;
-
-		/**
-		 * Exclude query string from cache path.
-		 *
-		 * @since 140422 First documented version.
-		 *
-		 * @var integer Part of a bitmask.
-		 */
-		const CACHE_PATH_NO_QUERY = 32;
-
-		/**
-		 * Exclude user token from cache path.
-		 *
-		 * @since 140422 First documented version.
-		 *
-		 * @var integer Part of a bitmask.
-		 */
-		const CACHE_PATH_NO_USER = 64;
-
-		/**
-		 * Exclude version salt from cache path.
-		 *
-		 * @since 140422 First documented version.
-		 *
-		 * @var integer Part of a bitmask.
-		 */
-		const CACHE_PATH_NO_VSALT = 128;
-
-		/**
-		 * Exclude extension from cache path.
-		 *
-		 * @since 140422 First documented version.
-		 *
-		 * @var integer Part of a bitmask.
-		 */
-		const CACHE_PATH_NO_EXT = 256;
-
-		/**
-		 * Converts a URL into a `cache/path`.
-		 *
-		 * @since 140422 First documented version.
-		 *
-		 * @param string  $url The input URL to convert.
-		 * @param string  $with_user_token Optional user token (if applicable).
-		 * @param string  $with_version_salt Optional version salt (if applicable).
-		 * @param integer $flags Optional flags; a bitmask provided by `CACHE_PATH_*` constants.
-		 *
-		 * @return string The resulting `cache/path` based on the input `$url`.
-		 */
-		public function url_to_cache_path($url, $with_user_token = '', $with_version_salt = '', $flags = 0)
-		{
-			$cache_path        = ''; // Initialize.
-			$url               = trim((string)$url);
-			$with_user_token   = trim((string)$with_user_token);
-			$with_version_salt = trim((string)$with_version_salt);
-
-			if($url && strpos($url, '://') === FALSE)
-				$url = '//'.ltrim($url, '/');
-
-			if(!$url || !($url = parse_url($url)))
-				return ''; // Invalid URL.
-
-			if(!($flags & $this::CACHE_PATH_NO_SCHEME))
-			{
-				if(!empty($url['scheme']))
-					$cache_path .= $url['scheme'].'/';
-				else $cache_path .= $this->is_ssl() ? 'https/' : 'http/';
-			}
-			if(!($flags & $this::CACHE_PATH_NO_HOST))
-			{
-				if(!empty($url['host']))
-					$cache_path .= $url['host'].'/';
-				else $cache_path .= $_SERVER['HTTP_HOST'].'/';
-			}
-			if(!($flags & $this::CACHE_PATH_NO_PATH))
-			{
-				if(!empty($url['path']) && strlen($url['path'] = trim($url['path'], '\\/'." \t\n\r\0\x0B")))
-					$cache_path .= $url['path'].'/';
-				else if(!($flags & $this::CACHE_PATH_NO_PATH_INDEX)) $cache_path .= 'index/';
-			}
-			if($this->is_extension_loaded('mbstring') && mb_check_encoding($cache_path, 'UTF-8'))
-				$cache_path = mb_strtolower($cache_path, 'UTF-8');
-			$cache_path = str_replace('.', '-', strtolower($cache_path));
-
-			if(!($flags & $this::CACHE_PATH_NO_QUV))
-			{
-				if(!($flags & $this::CACHE_PATH_NO_QUERY))
-					if(isset($url['query']) && $url['query'] !== '')
-						$cache_path = rtrim($cache_path, '/').'.q/'.md5($url['query']).'/';
-
-				if(!($flags & $this::CACHE_PATH_NO_USER))
-					if($with_user_token !== '') // Allow a `0` value if desirable.
-						$cache_path = rtrim($cache_path, '/').'.u/'.str_replace(array('/', '\\'), '-', $with_user_token).'/';
-
-				if(!($flags & $this::CACHE_PATH_NO_VSALT))
-					if($with_version_salt !== '') // Allow a `0` value if desirable.
-						$cache_path = rtrim($cache_path, '/').'.v/'.str_replace(array('/', '\\'), '-', $with_version_salt).'/';
-			}
-			$cache_path = trim(preg_replace('/\/+/', '/', $cache_path), '/');
-			$cache_path = preg_replace('/[^a-z0-9\/.]/i', '-', $cache_path);
-
-			if(!($flags & $this::CACHE_PATH_NO_EXT))
-				$cache_path .= '.html';
-
-			return $cache_path;
-		}
-
-		/**
-		 * Produces a token based on the current `$_SERVER['HTTP_HOST']`.
-		 *
-		 * @since 140422 First documented version.
-		 *
-		 * @param boolean $dashify Optional, defaults to a `FALSE` value.
-		 *    If `TRUE`, the token is returned with dashes in place of `[^a-z0-9\/]`.
-		 *
-		 * @return string Token based on the current `$_SERVER['HTTP_HOST']`.
-		 *
-		 * @note The return value of this function is cached to reduce overhead on repeat calls.
-		 */
-		public function host_token($dashify = FALSE)
-		{
-			$dashify = (integer)$dashify;
-			static $tokens = array(); // Static cache.
-			if(isset($tokens[$dashify])) return $tokens[$dashify];
-
-			$host        = strtolower($_SERVER['HTTP_HOST']);
-			$token_value = ($dashify) ? trim(preg_replace('/[^a-z0-9\/]/i', '-', $host), '-') : $host;
-
-			return ($tokens[$dashify] = $token_value);
-		}
-
-		/**
-		 * Produces a token based on the current site's base directory.
-		 *
-		 * @since 140605 First documented version.
-		 *
-		 * @param boolean $dashify Optional, defaults to a `FALSE` value.
-		 *    If `TRUE`, the token is returned with dashes in place of `[^a-z0-9\/]`.
-		 *
-		 * @return string Produces a token based on the current site's base directory;
-		 *    (i.e. in the case of a sub-directory multisite network).
-		 *
-		 * @note The return value of this function is cached to reduce overhead on repeat calls.
-		 *
-		 * @see plugin\clear_cache()
-		 * @see plugin\update_blog_paths()
-		 */
-		public function host_base_token($dashify = FALSE)
-		{
-			$dashify = (integer)$dashify;
-			static $tokens = array(); // Static cache.
-			if(isset($tokens[$dashify])) return $tokens[$dashify];
-
-			$host_base_token = '/'; // Assume NOT multisite; or running it's own domain.
-
-			if(is_multisite() && (!defined('SUBDOMAIN_INSTALL') || !SUBDOMAIN_INSTALL))
-			{ // Multisite w/ sub-directories; need a valid sub-directory token.
-
-				if(defined('PATH_CURRENT_SITE')) $host_base_token = PATH_CURRENT_SITE;
-				else if(!empty($GLOBALS['base'])) $host_base_token = $GLOBALS['base'];
-
-				$host_base_token = trim($host_base_token, '\\/'." \t\n\r\0\x0B");
-				$host_base_token = (isset($host_base_token[0])) ? '/'.$host_base_token.'/' : '/';
-			}
-			$token_value = ($dashify) ? trim(preg_replace('/[^a-z0-9\/]/i', '-', $host_base_token), '-') : $host_base_token;
-
-			return ($tokens[$dashify] = $token_value);
-		}
-
-		/**
-		 * Produces a token based on the current blog's sub-directory.
-		 *
-		 * @since 140422 First documented version.
-		 *
-		 * @param boolean $dashify Optional, defaults to a `FALSE` value.
-		 *    If `TRUE`, the token is returned with dashes in place of `[^a-z0-9\/]`.
-		 *
-		 * @return string Produces a token based on the current blog sub-directory
-		 *    (i.e. in the case of a sub-directory multisite network).
-		 *
-		 * @note The return value of this function is cached to reduce overhead on repeat calls.
-		 *
-		 * @see plugin\clear_cache()
-		 * @see plugin\update_blog_paths()
-		 */
-		public function host_dir_token($dashify = FALSE)
-		{
-			$dashify = (integer)$dashify;
-			static $tokens = array(); // Static cache.
-			if(isset($tokens[$dashify])) return $tokens[$dashify];
-
-			$host_dir_token = '/'; // Assume NOT multisite; or running it's own domain.
-
-			if(is_multisite() && (!defined('SUBDOMAIN_INSTALL') || !SUBDOMAIN_INSTALL))
-			{ // Multisite w/ sub-directories; need a valid sub-directory token.
-
-				$uri_minus_base = // Supports `/sub-dir/child-blog-sub-dir/` also.
-					preg_replace('/^'.preg_quote($this->host_base_token(), '/').'/', '', $_SERVER['REQUEST_URI']);
-
-				list($host_dir_token) = explode('/', trim($uri_minus_base, '/'));
-				$host_dir_token = (isset($host_dir_token[0])) ? '/'.$host_dir_token.'/' : '/';
-
-				if($host_dir_token !== '/' // Perhaps NOT the main site?
-				   && (!is_file(QUICK_CACHE_DIR.'/qc-blog-paths') // NOT a read/valid blog path?
-				       || !in_array($host_dir_token, unserialize(file_get_contents(QUICK_CACHE_DIR.'/qc-blog-paths')), TRUE))
-				) $host_dir_token = '/'; // Main site; e.g. this is NOT a real/valid child blog path.
-			}
-			$token_value = ($dashify) ? trim(preg_replace('/[^a-z0-9\/]/i', '-', $host_dir_token), '-') : $host_dir_token;
-
-			return ($tokens[$dashify] = $token_value);
-		}
-
-		/**
-		 * Produces tokens for the current site's base directory & current blog's sub-directory.
-		 *
-		 * @since 140422 First documented version.
-		 *
-		 * @param boolean $dashify Optional, defaults to a `FALSE` value.
-		 *    If `TRUE`, the tokens are returned with dashes in place of `[^a-z0-9\/]`.
-		 *
-		 * @return string Tokens for the current site's base directory & current blog's sub-directory.
-		 *
-		 * @note The return value of this function is cached to reduce overhead on repeat calls.
-		 *
-		 * @see clear_cache()
-		 * @see update_blog_paths()
-		 */
-		public function host_base_dir_tokens($dashify = FALSE)
-		{
-			return preg_replace('/\/{2,}/', '/', $this->host_base_token($dashify).$this->host_dir_token($dashify));
-		}
-
-		/**
-		 * Is the current request method `POST|PUT|DELETE`?
-		 *
-		 * @since 140422 First documented version.
-		 *
-		 * @return boolean `TRUE` if yes; else `FALSE`.
-		 *
-		 * @note The return value of this function is cached to reduce overhead on repeat calls.
-		 */
-		public function is_post_put_del_request()
-		{
-			static $is; // Cache.
-			if(isset($is)) return $is;
-
-			if(!empty($_SERVER['REQUEST_METHOD']))
-				if(in_array(strtoupper($_SERVER['REQUEST_METHOD']), array('POST', 'PUT', 'DELETE'), TRUE))
-					return ($is = TRUE);
-
-			return ($is = FALSE);
-		}
-
-		/**
-		 * Does the current request include a query string?
-		 *
-		 * @since 140422 First documented version.
-		 *
-		 * @return boolean `TRUE` if yes; else `FALSE`.
-		 *
-		 * @note The return value of this function is cached to reduce overhead on repeat calls.
-		 */
-		public function is_get_request_w_query()
-		{
-			static $is; // Cache.
-			if(isset($is)) return $is;
-
-			if(!empty($_GET) || isset($_SERVER['QUERY_STRING'][0]))
-				if(!(isset($_GET['qcABC']) && count($_GET) === 1)) // Ignore this special case.
-					return ($is = TRUE);
-
-			return ($is = FALSE);
-		}
-
-		/**
-		 * Should the current user be considered a logged-in user?
-		 *
-		 * @since 140422 First documented version.
-		 *
-		 * @return boolean `TRUE` if yes; else `FALSE`.
-		 *
-		 * @note The return value of this function is cached to reduce overhead on repeat calls.
-		 */
-		public function is_like_user_logged_in()
-		{
-			static $is; // Cache.
-			if(isset($is)) return $is;
-
-			/* This checks for a PHP session; i.e. session_start() in PHP where you're dealing with a user session.
-			 * WordPress itself does not use sessions, but some plugins/themes do. If you have a theme/plugin using
-			 * sessions, and there is an active session open, we consider you logged in; and thus, no caching.
-			 * SID is a PHP internal constant to identify a PHP session. It's the same regardless of the app. If PHP
-			 * starts a session, SID is defined.
-			 */
-			if(defined('SID') && SID) return ($is = TRUE); // Session.
-
-			$logged_in_cookies[] = 'comment_author_'; // Comment (and/or reply) authors.
-			$logged_in_cookies[] = 'wp-postpass_'; // Password access to protected posts.
-
-			$logged_in_cookies[] = (defined('AUTH_COOKIE')) ? AUTH_COOKIE : 'wordpress_';
-			$logged_in_cookies[] = (defined('SECURE_AUTH_COOKIE')) ? SECURE_AUTH_COOKIE : 'wordpress_sec_';
-			$logged_in_cookies[] = (defined('LOGGED_IN_COOKIE')) ? LOGGED_IN_COOKIE : 'wordpress_logged_in_';
-			$logged_in_cookies   = '/^(?:'.implode('|', array_map(function ($logged_in_cookie)
-				{
-					return preg_quote($logged_in_cookie, '/'); // Escape.
-
-				}, $logged_in_cookies)).')/';
-			$test_cookie         = (defined('TEST_COOKIE')) ? TEST_COOKIE : 'wordpress_test_cookie';
-
-			foreach($_COOKIE as $_key => $_value) if($_key !== $test_cookie)
-				if(preg_match($logged_in_cookies, $_key) && $_value) return ($is = TRUE);
-			unset($_key, $_value); // Housekeeping.
-
-			return ($is = FALSE);
-		}
-
-		/**
-		 * Are we in a LOCALHOST environment?
-		 *
-		 * @since 140422 First documented version.
-		 *
-		 * @return boolean `TRUE` if yes; else `FALSE`.
-		 *
-		 * @note The return value of this function is cached to reduce overhead on repeat calls.
-		 */
-		public function is_localhost()
-		{
-			static $is; // Cache.
-			if(isset($is)) return $is;
-
-			if(defined('LOCALHOST') && LOCALHOST) return ($is = TRUE);
-
-			if(!defined('LOCALHOST') && !empty($_SERVER['HTTP_HOST']))
-				if(preg_match('/localhost|127\.0\.0\.1/i', $_SERVER['HTTP_HOST']))
-					return ($is = TRUE);
-
-			return ($is = FALSE);
-		}
-
-		/**
-		 * Is the current request for a feed?
-		 *
-		 * @since 140422 First documented version.
-		 *
-		 * @return boolean `TRUE` if yes; else `FALSE`.
-		 *
-		 * @note The return value of this function is cached to reduce overhead on repeat calls.
-		 */
-		public function is_feed()
-		{
-			static $is; // Cache.
-			if(isset($is)) return $is;
-
-			if(preg_match('/\/feed(?:[\/?]|$)/', $_SERVER['REQUEST_URI']))
-				return ($is = TRUE);
-
-			if(isset($_REQUEST['feed']))
-				return ($is = TRUE);
-
-			return ($is = FALSE);
-		}
-
-		/**
-		 * Is the current request over SSL?
-		 *
-		 * @since 140422 First documented version.
-		 *
-		 * @return boolean `TRUE` if yes; else `FALSE`.
-		 *
-		 * @note The return value of this function is cached to reduce overhead on repeat calls.
-		 */
-		public function is_ssl()
-		{
-			static $is; // Cache.
-			if(isset($is)) return $is;
-
-			if(!empty($_SERVER['SERVER_PORT']))
-				if($_SERVER['SERVER_PORT'] === '443')
-					return ($is = TRUE);
-
-			if(!empty($_SERVER['HTTPS']))
-				if($_SERVER['HTTPS'] === '1' || strcasecmp($_SERVER['HTTPS'], 'on') === 0)
-					return ($is = TRUE);
-
-			if(!empty($_SERVER['HTTP_X_FORWARDED_PROTO']))
-				if(strcasecmp($_SERVER['HTTP_X_FORWARDED_PROTO'], 'https') === 0)
-					return ($is = TRUE);
-
-			return ($is = FALSE);
-		}
-
-		/**
-		 * Is a document/string an HTML/XML doc; or no?
-		 *
-		 * @since 140422 First documented version.
-		 *
-		 * @param string $doc Input string/document to check.
-		 *
-		 * @return boolean `TRUE` if yes; else `FALSE`.
-		 */
-		public function is_html_xml_doc($doc)
-		{
-			if(($doc = (string)$doc))
-				if(stripos($doc, '</html>') !== FALSE || stripos($doc, '<?xml') === 0)
-					return TRUE;
-			return FALSE; // Not an HTML/XML document.
-		}
-
-		/**
-		 * Does the current request have a cacheable content type?
-		 *
-		 * @since 140422 First documented version.
-		 *
-		 * @return boolean `TRUE` if yes; else `FALSE`.
-		 *
-		 * @note The return value of this function is cached to reduce overhead on repeat calls.
-		 */
-		public function has_a_cacheable_content_type()
-		{
-			static $has; // Cache.
-			if(isset($has)) return $has;
-
-			foreach(headers_list() as $_header)
-				if(stripos($_header, 'Content-Type:') === 0)
-					$content_type = $_header; // Last one.
-			unset($_header); // Just a little housekeeping.
-
-			if(isset($content_type[0]) && stripos($content_type, 'html') === FALSE && stripos($content_type, 'xml') === FALSE && stripos($content_type, __NAMESPACE__) === FALSE)
-				return ($has = FALSE); // Do NOT cache data sent by scripts serving other MIME types.
-
-			return ($has = TRUE); // Assume that it is by default, we are within WP after all.
-		}
-
-		/**
-		 * Does the current request have a cacheable HTTP status code?
-		 *
-		 * @since 140422 First documented version.
-		 *
-		 * @return boolean `TRUE` if yes; else `FALSE`.
-		 *
-		 * @note The return value of this function is cached to reduce overhead on repeat calls.
-		 */
-		public function has_a_cacheable_status()
-		{
-			static $has; // Cache.
-			if(isset($has)) return $has;
-
-			if(function_exists('http_response_code') && ($http_response_code = http_response_code()))
-				$this->http_status = $http_response_code;
-
-			$http_status = (string)$this->http_status; // So we can check indexes.
-			if(isset($http_status[0]) && $http_status[0] !== '2' && $http_status !== '404')
-				return ($has = FALSE); // A non-2xx & non-404 status code.
-			/*
-			 * PHP's `headers_list()` currently does NOT include `HTTP/` headers.
-			 *    This means the following routine will never catch a status sent by `status_header()`.
-			 *    However, I'm leaving this check in place in case a future version of PHP adds support for this.
-			 *
-			 *    For now, we monitor `status_header()` via {@link maybe_filter_status_header_postload()} so that will suffice.
-			 */
-			foreach(headers_list() as $_header)
-				if(preg_match('/^(?:Retry\-After\:\s+(?P<retry>.+)|Status\:\s+(?P<status>[0-9]+)|HTTP\/[0-9]+\.[0-9]+\s+(?P<http_status>[0-9]+))/i', $_header, $_m))
-					if(!empty($_m['retry']) || (!empty($_m['status']) && $_m['status'][0] !== '2' && $_m['status'] !== '404')
-					   || (!empty($_m['http_status']) && $_m['http_status'][0] !== '2' && $_m['http_status'] !== '404')
-					) return ($has = FALSE); // Don't cache (anything that's NOT a 2xx or 404 status).
-			unset($_header); // Just a little housekeeping.
-
-			return ($has = TRUE); // Assume that it is by default, we are within WP after all.
-		}
-
-		/**
-		 * Checks if a PHP extension is loaded up.
-		 *
-		 * @since 140422 First documented version.
-		 *
-		 * @param string $extension A PHP extension slug (i.e. extension name).
-		 *
-		 * @return boolean `TRUE` if the extension is loaded; else `FALSE`.
-		 *
-		 * @note The return value of this function is cached to reduce overhead on repeat calls.
-		 */
-		public function is_extension_loaded($extension)
-		{
-			static $is = array(); // Static cache.
-			if(isset($is[$extension])) return $is[$extension];
-			return ($is[$extension] = extension_loaded($extension));
-		}
-
-		/**
-		 * Assigns an ID to each callable attached to a hook/filter.
-		 *
-		 * @since 140422 First documented version.
-		 *
-		 * @param string|callable|mixed $function A string or a callable.
-		 *
-		 * @return string Hook ID for the given `$function`.
-		 *
-		 * @throws \exception If the hook/function is invalid (i.e. it's not possible to generate an ID).
-		 */
-		public function hook_id($function)
-		{
-			if(is_string($function))
-				return $function;
-
-			if(is_object($function)) // Closure.
-				$function = array($function, '');
-			else $function = (array)$function;
-
-			if(is_object($function[0]))
-				return spl_object_hash($function[0]).$function[1];
-
-			else if(is_string($function[0]))
-				return $function[0].'::'.$function[1];
-
-			throw new \exception(__('Invalid hook.', $this->text_domain));
-		}
-
-		/**
-		 * Adds a new hook (works with both actions & filters).
-		 *
-		 * @since 140422 First documented version.
-		 *
-		 * @param string                $hook The name of a hook to attach to.
-		 * @param string|callable|mixed $function A string or a callable.
-		 * @param integer               $priority Hook priority; defaults to `10`.
-		 * @param integer               $accepted_args Max number of args that should be passed to the `$function`.
-		 *
-		 * @return boolean This always returns a `TRUE` value.
-		 */
-		public function add_hook($hook, $function, $priority = 10, $accepted_args = 1)
-		{
-			$this->hooks[$hook][$priority][$this->hook_id($function)]
-				= array('function' => $function, 'accepted_args' => (integer)$accepted_args);
-			return TRUE; // Always returns true.
-		}
-
-		/**
-		 * Adds a new action hook.
-		 *
-		 * @since 140422 First documented version.
-		 *
-		 * @return boolean This always returns a `TRUE` value.
-		 *
-		 * @see add_hook()
-		 */
-		public function add_action() // Simple `add_hook()` alias.
-		{
-			return call_user_func_array(array($this, 'add_hook'), func_get_args());
-		}
-
-		/**
-		 * Adds a new filter.
-		 *
-		 * @since 140422 First documented version.
-		 *
-		 * @return boolean This always returns a `TRUE` value.
-		 *
-		 * @see add_hook()
-		 */
-		public function add_filter() // Simple `add_hook()` alias.
-		{
-			return call_user_func_array(array($this, 'add_hook'), func_get_args());
-		}
-
-		/**
-		 * Removes a hook (works with both actions & filters).
-		 *
-		 * @since 140422 First documented version.
-		 *
-		 * @param string                $hook The name of a hook to remove.
-		 * @param string|callable|mixed $function A string or a callable.
-		 * @param integer               $priority Hook priority; defaults to `10`.
-		 *
-		 * @return boolean `TRUE` if removed; else `FALSE` if not removed for any reason.
-		 */
-		public function remove_hook($hook, $function, $priority = 10)
-		{
-			if(!isset($this->hooks[$hook][$priority][$this->hook_id($function)]))
-				return FALSE; // Nothing to remove in this case.
-
-			unset($this->hooks[$hook][$priority][$this->hook_id($function)]);
-			if(!$this->hooks[$hook][$priority]) unset($this->hooks[$hook][$priority]);
-			return TRUE; // Existed before it was removed in this case.
-		}
-
-		/**
-		 * Removes an action.
-		 *
-		 * @since 140422 First documented version.
-		 *
-		 * @return boolean `TRUE` if removed; else `FALSE` if not removed for any reason.
-		 *
-		 * @see remove_hook()
-		 */
-		public function remove_action() // Simple `remove_hook()` alias.
-		{
-			return call_user_func_array(array($this, 'remove_hook'), func_get_args());
-		}
-
-		/**
-		 * Removes a filter.
-		 *
-		 * @since 140422 First documented version.
-		 *
-		 * @return boolean `TRUE` if removed; else `FALSE` if not removed for any reason.
-		 *
-		 * @see remove_hook()
-		 */
-		public function remove_filter() // Simple `remove_hook()` alias.
-		{
-			return call_user_func_array(array($this, 'remove_hook'), func_get_args());
-		}
-
-		/**
-		 * Runs any callables attached to an action.
-		 *
-		 * @since 140422 First documented version.
-		 */
-		public function do_action($hook)
-		{
-			if(empty($this->hooks[$hook]))
-				return; // No hooks.
-
-			$hook_actions = $this->hooks[$hook];
-			ksort($hook_actions); // Sort by priority.
-
-			$args = func_get_args(); // We'll need these below.
-			foreach($hook_actions as $_hook_action) foreach($_hook_action as $_action)
-			{
-				if(!isset($_action['function'], $_action['accepted_args']))
-					continue; // Not a valid filter in this case.
-
-				call_user_func_array($_action['function'], array_slice($args, 1, $_action['accepted_args']));
-			}
-			unset($_hook_action, $_action); // Housekeeping.
-		}
-
-		/**
-		 * Runs any callables attached to a filter.
-		 *
-		 * @since 140422 First documented version.
-		 *
-		 * @param string $hook The name of a filter hook.
-		 * @param mixed  $value The value to filter.
-		 *
-		 * @return mixed The filtered `$value`.
-		 */
-		public function apply_filters($hook, $value)
-		{
-			if(empty($this->hooks[$hook]))
-				return $value; // No hooks.
-
-			$hook_filters = $this->hooks[$hook];
-			ksort($hook_filters); // Sort by priority.
-
-			$args = func_get_args(); // We'll need these below.
-			foreach($hook_filters as $_hook_filter) foreach($_hook_filter as $_filter)
-			{
-				if(!isset($_filter['function'], $_filter['accepted_args']))
-					continue; // Not a valid filter in this case.
-
-				$args[1] = $value; // Continously update the argument `$value`.
-				$value   = call_user_func_array($_filter['function'], array_slice($args, 1, $_filter['accepted_args']));
-			}
-			unset($_hook_filter, $_filter); // Housekeeping.
-
-			return $value; // With applied filters.
-		}
-
-		/**
-		 * Apache `.htaccess` rules that deny public access to the contents of a directory.
-		 *
-		 * @since 140422 First documented version.
-		 *
-		 * @var string `.htaccess` fules.
-		 */
-		public $htaccess_deny = "<IfModule authz_core_module>\n\tRequire all denied\n</IfModule>\n<IfModule !authz_core_module>\n\tdeny from all\n</IfModule>";
-	}
-
-	/**
-	 * Polyfill for {@link \__()}.
-	 *
-	 * @since 140422 First documented version.
-	 *
-	 * @param string $string String to translate.
-	 * @param string $text_domain Plugin text domain.
-	 *
-	 * @return string Possibly translated string.
-	 */
-	function __($string, $text_domain) // Polyfill `\__()`.
-	{
-		static $__exists; // Static cache.
-
-		if(($__exists || function_exists('__')) && ($__exists = TRUE))
-			return \__($string, $text_domain);
-
-		return $string; // Not possible (yet).
 	}
 
 	/**
