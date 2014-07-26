@@ -9,7 +9,7 @@ namespace quick_cache // Root namespace.
 		/**
 		 * Quick Cache (Upgrade Handlers)
 		 *
-		 * @since 14xxxx Reorganizing class members.
+		 * @since 140725 Reorganizing class members.
 		 * @package quick_cache\version_specific_upgrade
 		 */
 		class version_specific_upgrade // Version-specific upgrade handlers.
@@ -27,7 +27,7 @@ namespace quick_cache // Root namespace.
 			/**
 			 * Class constructor.
 			 *
-			 * @since 14xxxx Reorganizing class members.
+			 * @since 140725 Reorganizing class members.
 			 *
 			 * @param string $prev_version Version they are upgrading from.
 			 */

@@ -123,7 +123,7 @@ namespace quick_cache
 		/**
 		 * Plugin file path.
 		 *
-		 * @since 14xxxx Reorganizing class members.
+		 * @since 140725 Reorganizing class members.
 		 *
 		 * @var string Absolute server path to QC plugin file.
 		 */
@@ -287,7 +287,7 @@ namespace quick_cache
 		/**
 		 * Current WordPress {@link \content_url()}.
 		 *
-		 * @since 14xxxx Reorganizing class members.
+		 * @since 140725 Reorganizing class members.
 		 *
 		 * @var string Current WordPress {@link \content_url()}.
 		 *
@@ -403,7 +403,7 @@ namespace quick_cache
 		/**
 		 * No-cache because the current request method is uncacheable.
 		 *
-		 * @since 14xxxx Adding HEAD/OPTIONS/TRACE to the list of uncacheables.
+		 * @since 140725 Adding HEAD/OPTIONS/TRACE to the list of uncacheables.
 		 *
 		 * @var string A unique string identifier in the set of `NC_DEBUG_` constants.
 		 */

@@ -10,7 +10,7 @@ namespace quick_cache // Root namespace.
 		 * Quick Cache (Shared Methods)
 		 *
 		 * @package quick_cache\share
-		 * @since 14xxxx Reorganizing class members.
+		 * @since 140725 Reorganizing class members.
 		 */
 		abstract class share // Shared between {@link advanced_cache} and {@link plugin}.
 		{
@@ -34,7 +34,7 @@ namespace quick_cache // Root namespace.
 			 *
 			 * @var string Current version of the software.
 			 */
-			public $version = '140714';
+			public $version = '140725';
 
 			/**
 			 * Text domain for translations; based on `__NAMESPACE__`.
@@ -48,7 +48,7 @@ namespace quick_cache // Root namespace.
 			/**
 			 * An instance-based cache for class members.
 			 *
-			 * @since 14xxxx Reorganizing class members.
+			 * @since 140725 Reorganizing class members.
 			 *
 			 * @var array An instance-based cache for class members.
 			 */
@@ -57,7 +57,7 @@ namespace quick_cache // Root namespace.
 			/**
 			 * A global static cache for class members.
 			 *
-			 * @since 14xxxx Reorganizing class members.
+			 * @since 140725 Reorganizing class members.
 			 *
 			 * @var array Global static cache for class members.
 			 */
@@ -170,7 +170,7 @@ namespace quick_cache // Root namespace.
 			/**
 			 * Allow wildcards in the cache path.
 			 *
-			 * @since 14xxxx Improving XML Sitemap support.
+			 * @since 140725 Improving XML Sitemap support.
 			 *
 			 * @var integer Part of a bitmask.
 			 */
@@ -200,7 +200,7 @@ namespace quick_cache // Root namespace.
 			/**
 			 * Absolute server path to the cache directory.
 			 *
-			 * @since 14xxxx Reorganizing class members.
+			 * @since 140725 Reorganizing class members.
 			 *
 			 * @param string $rel_path Optional; a relative path within the cache directory.
 			 *
@@ -500,7 +500,7 @@ namespace quick_cache // Root namespace.
 			/**
 			 * Is the current request method is uncacheable?
 			 *
-			 * @since 14xxxx Adding HEAD/OPTIONS/TRACE/CONNECT to the list of uncacheables.
+			 * @since 140725 Adding HEAD/OPTIONS/TRACE/CONNECT to the list of uncacheables.
 			 *
 			 * @return boolean `TRUE` if current request method is uncacheable.
 			 *
@@ -799,7 +799,7 @@ namespace quick_cache // Root namespace.
 			/**
 			 * Current HTTP protocol; i.e. `HTTP/1.0` or `HTTP/1.1`.
 			 *
-			 * @since 14xxxx Correcting 404 cache response status code.
+			 * @since 140725 Correcting 404 cache response status code.
 			 *
 			 * @return string Current HTTP protocol; i.e. `HTTP/1.0` or `HTTP/1.1`.
 			 */
@@ -820,7 +820,7 @@ namespace quick_cache // Root namespace.
 			/**
 			 * An array of all headers sent via PHP; and the current HTTP status header too.
 			 *
-			 * @since 14xxxx Correcting 404 cache response status code.
+			 * @since 140725 Correcting 404 cache response status code.
 			 *
 			 * @return array PHP {@link headers_list()} supplemented with
 			 *    HTTP status code when possible.
@@ -843,7 +843,7 @@ namespace quick_cache // Root namespace.
 			/**
 			 * HTTP status code if at all possible.
 			 *
-			 * @since 14xxxx Correcting 404 cache response status code.
+			 * @since 140725 Correcting 404 cache response status code.
 			 *
 			 * @return integer HTTP status code if at all possible; else `0`.
 			 *
