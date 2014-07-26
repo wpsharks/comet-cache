@@ -1,6 +1,6 @@
 === Quick Cache (Speed Without Compromise) ===
 
-Stable tag: 140714
+Stable tag: 140725
 Requires at least: 3.7
 Tested up to: 3.9.1
 Text Domain: quick-cache
@@ -305,6 +305,24 @@ Released under the terms of the [GNU General Public License](http://www.gnu.org/
 Requires PHP v5.3+. The latest version of Quick Cache is a complete rewrite (OOP design). Faster! and even more dependable. NOTE: the free version of Quick Cache (this new LITE version); while it remains fully functional and is more-than-adequate for most sites; is now limited in some ways. The following advanced features from the previous release are no longer available in the lite version: a custom MD5 Version Salt, custom Exclusion Patterns, a Clear Cache button in admin bar. These, and other features; are now available only in the pro version of the plugin. For further details, please see: <http://www.websharks-inc.com/product/quick-cache/>.
 
 == Changelog ==
+
+= v140725 =
+
+- **Enhancement**: Improved overall performance by optimizing the auto-purge routines. See also: [#130](https://github.com/websharks/quick-cache/issues/130)
+- **Enhancement**: The "GET Requests" UI Panel now explains that you can use `?qcAC=0` to disable caching when you ARE caching GET Requests. See also: [#210](https://github.com/websharks/quick-cache/issues/210).
+- **New Pro Feature: Auto-Purge XML Sitemaps**. If you're generating XML Sitemaps with a plugin like Google XML Sitemaps, you can now tell Quick Cache to automatically purge any cached sitemap files whenever it purges a Post/Page cache. You may also specify a list of XML Sitemap patterns to clear, if you have multiple sitemap files. See also: [#169](https://github.com/websharks/quick-cache/issues/169)
+- **Enhancement (Pro)**: The Quick Cache Pro Updater now accepts a License Key in place of the WebSharks password.
+- **Enhancement (Pro)**: In a Multisite Network, the Auto-Cache Engine will now also auto-cache each child blog. See also: [#169](https://github.com/websharks/quick-cache/issues/169)
+- **Bug Fix**: Fixed a bug that was causing unapproved, spam, and trash comments to unnecessarily purge the cache. See also: [#159](https://github.com/websharks/quick-cache/issues/159)
+- **Bug Fix**: A custom `WP_CONTENT_DIR` is now obeyed in the scenario where it's set to a path outside of `ABSPATH`. See also: [#95](https://github.com/websharks/quick-cache/issues/95)
+- **Bug Fix**: The UI now correctly displays custom `WP_CONTENT_DIR` in the "Directory/Expiration Time" options panel. See also: [#206](https://github.com/websharks/quick-cache/issues/206)
+- **Bug Fix**: Quick Cache LITE now correctly sets the `QUICK_CACHE_PRO` constant to false. See also: [#229](https://github.com/websharks/quick-cache/issues/229)
+- **Bug Fix**: Workaround for broken page navigation on the front page of some sites. This is a WordPress `redirect_canonical()` bug workaround. See also: [#209](https://github.com/websharks/quick-cache/issues/209)
+- **Bug Fix (Pro)**: 404 Caching now properly returns a 404 HTTP Status code when serving a cached 404 page. See also: [#197](https://github.com/websharks/quick-cache/issues/197)
+- **Bug Fix (Pro)**: The HTML Compressor now properly preserves `[]` character whitespace during CSS compression. See also: [#25](https://github.com/websharks/html-compressor/issues/25)
+- **Bug Fix (Pro)**: The Pro Updater upgrade link now points to the correction location when displayed from a Child Blog in a Multisite Network. See also: [#205](https://github.com/websharks/quick-cache/issues/205)
+- **Bug Fix (Pro)**: The Auto-Cache Engine now correctly handles the sitemap when `home_url()` differs from `site_url()`.
+- **Bug Fix (Pro)**: The "Dynamic Version Salt" options panel now correctly displays the last saved value. See also: [#231](https://github.com/websharks/quick-cache/issues/231)
 
 = v140605 =
 

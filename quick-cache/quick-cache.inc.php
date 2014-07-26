@@ -85,7 +85,7 @@ namespace quick_cache
 			/**
 			 * Used by methods in this class to help optimize performance.
 			 *
-			 * @since 14xxxx Reducing auto-purge overhead.
+			 * @since 140725 Reducing auto-purge overhead.
 			 *
 			 * @var array An instance-based cache used by methods in this class.
 			 */
@@ -1025,7 +1025,7 @@ namespace quick_cache
 			/**
 			 * Automatically purges cache files related to XML sitemaps.
 			 *
-			 * @since 14xxxx Working to improve compatibility with sitemaps.
+			 * @since 140725 Working to improve compatibility with sitemaps.
 			 *
 			 * @return integer Total files purged by this routine (if any).
 			 *
