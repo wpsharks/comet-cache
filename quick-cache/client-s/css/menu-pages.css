@@ -228,6 +228,7 @@ Heading styles.
 */
 .plugin-menu-page-heading
 {
+	display        : block;
 	padding-bottom : 15px;
 	margin-bottom  : 25px;
 	border-bottom  : 1px solid #CCCCCC;
