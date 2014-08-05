@@ -1814,9 +1814,11 @@ namespace quick_cache
 				}
 				unset($_option, $_value, $_values, $_response); // Housekeeping.
 
+				if(strpos($this->file, WP_CONTENT_DIR) === 0)
+					$plugin_file = "WP_CONTENT_DIR.'".$this->esc_sq(str_replace(WP_CONTENT_DIR, '', $this->file))."'";
+				else $plugin_file = "'".$this->esc_sq($this->file)."'"; // Else use full absolute path.
 				// Make it possible for the `advanced-cache.php` handler to find the plugin directory reliably.
-				$advanced_cache_contents = str_ireplace("'%%".__NAMESPACE__."_PLUGIN_FILE%%'", // e.g. `QUICK_CACHE_PLUGIN_FILE`.
-				                                        "'".$this->esc_sq($this->file)."'", $advanced_cache_contents);
+				$advanced_cache_contents = str_ireplace("'%%".__NAMESPACE__."_PLUGIN_FILE%%'", $plugin_file, $advanced_cache_contents);
 
 				// Ignore; this is created by Quick Cache; and we don't need to obey in this case.
 				#if(defined('DISALLOW_FILE_MODS') && DISALLOW_FILE_MODS)
