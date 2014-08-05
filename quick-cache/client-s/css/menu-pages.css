@@ -303,6 +303,9 @@ Panel styles.
 }
 .plugin-menu-page-panel-heading
 {
+	display             : block;
+	text-decoration     : none;
+
 	z-index             : 1;
 	position            : relative;
 
