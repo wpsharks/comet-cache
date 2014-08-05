@@ -120,6 +120,30 @@ Menu page styles.
 {
 	background : #637041;
 }
+.plugin-menu-page input::-webkit-input-placeholder
+{
+	color       : rgba(255, 255, 255, 0.2);
+	font-style  : italic;
+	padding-top : 3px;
+}
+.plugin-menu-page input::-moz-placeholder
+{
+	color       : rgba(255, 255, 255, 0.2);
+	font-style  : italic;
+	padding-top : 3px;
+}
+.plugin-menu-page input:-moz-placeholder
+{
+	color       : rgba(255, 255, 255, 0.2);
+	font-style  : italic;
+	padding-top : 3px;
+}
+.plugin-menu-page input:-ms-input-placeholder
+{
+	color       : rgba(255, 255, 255, 0.2);
+	font-style  : italic;
+	padding-top : 3px;
+}
 .plugin-menu-page input[disabled],
 .plugin-menu-page select[disabled],
 .plugin-menu-page textarea[disabled]
