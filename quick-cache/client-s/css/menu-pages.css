@@ -228,7 +228,6 @@ Heading styles.
 */
 .plugin-menu-page-heading
 {
-	display        : block;
 	padding-bottom : 15px;
 	margin-bottom  : 25px;
 	border-bottom  : 1px solid #CCCCCC;
@@ -280,6 +279,9 @@ Panel styles.
 }
 .plugin-menu-page-panel-heading
 {
+	display             : block;
+	text-decoration     : none;
+
 	z-index             : 1;
 	position            : relative;
 
