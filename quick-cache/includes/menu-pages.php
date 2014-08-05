@@ -153,7 +153,7 @@ namespace quick_cache // Root namespace.
 			echo '      <p>'.__('<strong>Tip:</strong> By default, if you delete Quick Cache using the plugins menu in WordPress, nothing is lost. However, if you want to completely uninstall Quick Cache you should set this to <code>Yes</code> and <strong>THEN</strong> deactivate &amp; delete Quick Cache from the plugins menu in WordPress. This way Quick Cache will erase your options for the plugin, erase directories/files created by the plugin, remove the <code>advanced-cache.php</code> file, terminate CRON jobs, etc. It erases itself from existence completely.', $this->plugin->text_domain).'</p>'."\n";
 			echo '      <p><select name="'.esc_attr(__NAMESPACE__).'[save_options][uninstall_on_deletion]">'."\n";
 			echo '            <option value="0"'.selected($this->plugin->options['uninstall_on_deletion'], '0', FALSE).'>'.__('Safeguard my options and the cache (recommended).', $this->plugin->text_domain).'</option>'."\n";
-			echo '            <option value="1"'.selected($this->plugin->options['uninstall_on_deletion'], '1', FALSE).'>'.__('Uninstall (completely erase) Quick Cache on plugin deletion.', $this->plugin->text_domain).'</option>'."\n";
+			echo '            <option value="1"'.selected($this->plugin->options['uninstall_on_deletion'], '1', FALSE).'>'.__('Yes, uninstall (completely erase) Quick Cache on plugin deletion.', $this->plugin->text_domain).'</option>'."\n";
 			echo '         </select></p>'."\n";
 			echo '   </div>'."\n";
 
