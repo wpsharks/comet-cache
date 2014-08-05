@@ -6,8 +6,8 @@
 
 	<title>Class quick_cache\advanced_cache | Quick Cache Lite</title>
 
-	<script type="text/javascript" src="resources/combined.js?2507565882"></script>
-	<script type="text/javascript" src="elementlist.js?1733873414"></script>
+	<script type="text/javascript" src="resources/combined.js?822040270"></script>
+	<script type="text/javascript" src="elementlist.js?1312627654"></script>
 	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3403148767" />
 
 </head>
@@ -38,6 +38,8 @@
 				<li class="active"><a href="class-quick_cache.advanced_cache.html">advanced_cache</a></li>
 				<li><a href="class-quick_cache.menu_pages.html">menu_pages</a></li>
 				<li><a href="class-quick_cache.plugin.html">plugin</a></li>
+				<li><a href="class-quick_cache.share.html">share</a></li>
+				<li><a href="class-quick_cache.version_specific_upgrade.html">version_specific_upgrade</a></li>
 			</ul>
 
 
@@ -102,6 +104,20 @@
 
 	</div>
 
+	<dl class="tree">
+		<dd style="padding-left:0px">
+			<a href="class-quick_cache.share.html"><span>quick_cache\share</span></a>
+			
+			
+			
+		</dd>
+		<dd style="padding-left:30px">
+			<img src="resources/inherit.png" alt="Extended by" />
+<b><span>quick_cache\advanced_cache</span></b>			
+			
+			
+		</dd>
+	</dl>
 
 
 
@@ -119,7 +135,7 @@
 				<b>Since:</b>
 				<p>140422 First documented version.</p>
 <br />
-		<b>Located at</b> <a href="source-class-quick_cache.advanced_cache.html#122-1730" title="Go to source code">quick-cache/includes/advanced-cache.tpl.php</a><br />
+		<b>Located at</b> <a href="source-class-quick_cache.advanced_cache.html#137-1090" title="Go to source code">quick-cache/includes/advanced-cache.tpl.php</a><br />
 	</div>
 
 
@@ -137,7 +153,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#___construct">#</a>
-		<code><a href="source-class-quick_cache.advanced_cache.html#538-557" title="Go to source code">__construct</a>( )</code>
+		<code><a href="source-class-quick_cache.advanced_cache.html#556-578" title="Go to source code">__construct</a>( )</code>
 
 		<div class="description short">
 			<p>Class constructor/cache handler.</p>
@@ -158,6 +174,8 @@
 <br />
 				</div>
 
+				<h4>Overrides</h4>
+				<div class="list"><code><a href="class-quick_cache.share.html#___construct">quick_cache\share::__construct()</a></code></div>
 
 		</div>
 		</div></td>
@@ -173,7 +191,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_load_ac_plugins">#</a>
-		<code><a href="source-class-quick_cache.advanced_cache.html#559-575" title="Go to source code">load_ac_plugins</a>( )</code>
+		<code><a href="source-class-quick_cache.advanced_cache.html#580-596" title="Go to source code">load_ac_plugins</a>( )</code>
 
 		<div class="description short">
 			<p>Loads any advanced cache plugin files found inside <code>/wp-content/ac-plugins</code>.</p>
@@ -191,6 +209,53 @@
 				<h4>Since</h4>
 				<div class="list">
 						<p>140422 First documented version.</p>
+<br />
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="register_shutdown_flag" id="_register_shutdown_flag">
+
+		<td class="attributes"><code>
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_register_shutdown_flag">#</a>
+		<code><a href="source-class-quick_cache.advanced_cache.html#598-614" title="Go to source code">register_shutdown_flag</a>( )</code>
+
+		<div class="description short">
+			<p>Registers a shutdown flag.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Registers a shutdown flag.</p>
+
+
+
+
+
+
+				<h4>Since</h4>
+				<div class="list">
+						<p>140605 Improving output buffer.</p>
+<br />
+				</div>
+				<h4>See</h4>
+				<div class="list">
+						<p>http://www.php.net/manual/en/function.register-shutdown-function.php</p>
+<br />
+				</div>
+				<h4>Note</h4>
+				<div class="list">
+						<p>In <code>/wp-settings.php</code>, Quick Cache is loaded before WP registers its own shutdown function.
+Therefore, this flag is set before shutdown_action_hook() fires, and thus before wp_ob_end_flush_all().</p>
 <br />
 				</div>
 
@@ -209,7 +274,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_maybe_stop_browser_caching">#</a>
-		<code><a href="source-class-quick_cache.advanced_cache.html#577-591" title="Go to source code">maybe_stop_browser_caching</a>( )</code>
+		<code><a href="source-class-quick_cache.advanced_cache.html#616-633" title="Go to source code">maybe_stop_browser_caching</a>( )</code>
 
 		<div class="description short">
 			<p>Sends no-cache headers (if applicable).</p>
@@ -245,7 +310,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_maybe_start_output_buffering">#</a>
-		<code><a href="source-class-quick_cache.advanced_cache.html#593-683" title="Go to source code">maybe_start_output_buffering</a>( )</code>
+		<code><a href="source-class-quick_cache.advanced_cache.html#635-723" title="Go to source code">maybe_start_output_buffering</a>( )</code>
 
 		<div class="description short">
 			<p>Start output buffering (if applicable); or serve a cache file (if possible).</p>
@@ -287,7 +352,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_maybe_set_debug_info">#</a>
-		<code><a href="source-class-quick_cache.advanced_cache.html#685-703" title="Go to source code">maybe_set_debug_info</a>( <span>string <var>$reason_code</var></span>, <span>string <var>$reason</var> = <span class="php-quote">''</span></span> )</code>
+		<code><a href="source-class-quick_cache.advanced_cache.html#725-743" title="Go to source code">maybe_set_debug_info</a>( <span>string <var>$reason_code</var></span>, <span>string <var>$reason</var> = <span class="php-quote">''</span></span> )</code>
 
 		<div class="description short">
 			<p>Used to setup debug info (if enabled).</p>
@@ -332,7 +397,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_maybe_filter_status_header_postload">#</a>
-		<code><a href="source-class-quick_cache.advanced_cache.html#705-724" title="Go to source code">maybe_filter_status_header_postload</a>( )</code>
+		<code><a href="source-class-quick_cache.advanced_cache.html#745-764" title="Go to source code">maybe_filter_status_header_postload</a>( )</code>
 
 		<div class="description short">
 			<p>Filters WP \status_header() (if applicable).</p>
@@ -368,15 +433,15 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_maybe_set_debug_info_postload">#</a>
-		<code><a href="source-class-quick_cache.advanced_cache.html#726-753" title="Go to source code">maybe_set_debug_info_postload</a>( )</code>
+		<code><a href="source-class-quick_cache.advanced_cache.html#766-785" title="Go to source code">maybe_set_debug_info_postload</a>( )</code>
 
 		<div class="description short">
-			<p>Appends <code>NC_DEBUG_</code> info in the WordPress <code>shutdown</code> phase (if applicable).</p>
+			<p>Hooks <code>NC_DEBUG_</code> info into the WordPress <code>shutdown</code> phase (if applicable).</p>
 
 		</div>
 
 		<div class="description detailed hidden">
-			<p>Appends <code>NC_DEBUG_</code> info in the WordPress <code>shutdown</code> phase (if applicable).</p>
+			<p>Hooks <code>NC_DEBUG_</code> info into the WordPress <code>shutdown</code> phase (if applicable).</p>
 
 
 
@@ -404,7 +469,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_wp_main_query_postload">#</a>
-		<code><a href="source-class-quick_cache.advanced_cache.html#755-785" title="Go to source code">wp_main_query_postload</a>( )</code>
+		<code><a href="source-class-quick_cache.advanced_cache.html#787-824" title="Go to source code">wp_main_query_postload</a>( )</code>
 
 		<div class="description short">
 			<p>Grab details from WP and the Quick Cache plugin itself,
@@ -437,61 +502,6 @@
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="disable_wp_ob_end_flush_all_e_notice" id="_disable_wp_ob_end_flush_all_e_notice">
-
-		<td class="attributes"><code>
-			 public 
-			
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_disable_wp_ob_end_flush_all_e_notice">#</a>
-		<code><a href="source-class-quick_cache.advanced_cache.html#787-818" title="Go to source code">disable_wp_ob_end_flush_all_e_notice</a>( )</code>
-
-		<div class="description short">
-			<p>This turns off <code>E_NOTICE</code> level errors in the shutdown phase to prevent the WP core function
-   \wp_ob_end_flush_all() from triggering <code>WP_DEBUG</code> notices.</p>
-
-		</div>
-
-		<div class="description detailed hidden">
-			<p>This turns off <code>E_NOTICE</code> level errors in the shutdown phase to prevent the WP core function \wp_ob_end_flush_all() from triggering <code>WP_DEBUG</code> notices.</p>
-
-<p>Ideally we would NOT do this. However, there is little choice. This is what makes it possible for Quick Cache to use a locked output buffer. e.g. <code>ob_start(handler, 0, 0)</code>. Having a locked output buffer makes Quick Cache more dependable.
- In cases where there are theme/plugin conflicts, more of these should be reported to us now; i.e. site owners may report <code>WP_DEBUG</code> notices regarding failed attempts to close/clean/flush an out-of-order output handler. These can be caused by a rogue theme/plugin that is doing things w/ buffers that it should not be.
- The disabling of <code>E_NOTICE</code> here only impacts the PHP shutdown phase. i.e. Anything registered in PHP via \register_shutdown_function(). e.g. \wp_ob_end_flush_all() runs in the shutdown phase.
- This will NOT prevent <code>E_NOTICE</code> level errors from being triggered when a theme/plugin does something out-of-order with an output buffer. Want WANT to see those!</p>
-
-
-
-
-
-
-				<h4>Since</h4>
-				<div class="list">
-						<p>140422 First documented version.</p>
-<br />
-				</div>
-				<h4>See</h4>
-				<div class="list">
-						<p>https://github.com/WebSharks/Quick-Cache/issues/97</p>
-<br />
-				</div>
-				<h4>IMPORTANT</h4>
-				<div class="list">
-						<p>I suspect we will see some reports of this suddenly showing up on sites where a conflict currently exists.
-   Of course, that will be a GOOD thing in most cases, because QC will have not been working properly for sites with conflicts anyway.
-   Having said that, a sudden change like this could bring a site down completely, instead of just serving a corrupted cache every once in awhile.
-   I'm not overly concerned about it though, because they're just notices; a site running in <code>WP_DEBUG</code> mode is usually not a live site anyway.</p>
-<br />
-				</div>
-
-
-		</div>
-		</div></td>
-	</tr>
 	<tr data-order="output_buffer_callback_handler" id="_output_buffer_callback_handler">
 
 		<td class="attributes"><code>
@@ -503,7 +513,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_output_buffer_callback_handler">#</a>
-		<code><a href="source-class-quick_cache.advanced_cache.html#820-931" title="Go to source code">output_buffer_callback_handler</a>( <span>string <var>$buffer</var></span>, <span>integer <var>$phase</var></span> )</code>
+		<code><a href="source-class-quick_cache.advanced_cache.html#826-943" title="Go to source code">output_buffer_callback_handler</a>( <span>string <var>$buffer</var></span>, <span>integer <var>$phase</var></span> )</code>
 
 		<div class="description short">
 			<p>Output buffer handler; i.e. the cache file generator.</p>
@@ -558,7 +568,48 @@
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="maybe_add_nc_debug_info" id="_maybe_add_nc_debug_info">
+	<tr data-order="maybe_echo_nc_debug_info" id="_maybe_echo_nc_debug_info">
+
+		<td class="attributes"><code>
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_maybe_echo_nc_debug_info">#</a>
+		<code><a href="source-class-quick_cache.advanced_cache.html#945-964" title="Go to source code">maybe_echo_nc_debug_info</a>( )</code>
+
+		<div class="description short">
+			<p>Echoes <code>NC_DEBUG_</code> info in the WordPress <code>shutdown</code> phase (if applicable).</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Echoes <code>NC_DEBUG_</code> info in the WordPress <code>shutdown</code> phase (if applicable).</p>
+
+
+
+
+
+
+				<h4>Since</h4>
+				<div class="list">
+						<p>140605 Improving debug info output phase.</p>
+<br />
+				</div>
+				<h4>Attaches-to</h4>
+				<div class="list">
+						<p><code>shutdown</code> hook in WordPress w/ a late priority.</p>
+<br />
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="maybe_get_nc_debug_info" id="_maybe_get_nc_debug_info">
 
 		<td class="attributes"><code>
 			 public 
@@ -568,24 +619,21 @@
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_maybe_add_nc_debug_info">#</a>
-		<code><a href="source-class-quick_cache.advanced_cache.html#933-1060" title="Go to source code">maybe_add_nc_debug_info</a>( <span>string <var>$doc</var> = <span class="php-keyword1">NULL</span></span>, <span>string <var>$reason_code</var> = <span class="php-quote">''</span></span>, <span>string <var>$reason</var> = <span class="php-quote">''</span></span> )</code>
+		<a class="anchor" href="#_maybe_get_nc_debug_info">#</a>
+		<code><a href="source-class-quick_cache.advanced_cache.html#966-1089" title="Go to source code">maybe_get_nc_debug_info</a>( <span>string <var>$reason_code</var> = <span class="php-quote">''</span></span>, <span>string <var>$reason</var> = <span class="php-quote">''</span></span> )</code>
 
 		<div class="description short">
-			<p>Appends <code>NC_DEBUG_</code> info (if applicable).</p>
+			<p>Gets <code>NC_DEBUG_</code> info (if applicable).</p>
 
 		</div>
 
 		<div class="description detailed hidden">
-			<p>Appends <code>NC_DEBUG_</code> info (if applicable).</p>
+			<p>Gets <code>NC_DEBUG_</code> info (if applicable).</p>
 
 
 
 				<h4>Parameters</h4>
 				<div class="list"><dl>
-					<dt><var>$doc</var></dt>
-					<dd><code>string</code><br><p>$doc Input string to append debug info to.</p>
-</dd>
 					<dt><var>$reason_code</var></dt>
 					<dd><code>string</code><br><p>$reason_code One of the <code>NC_DEBUG_</code> constants.</p>
 </dd>
@@ -596,1070 +644,7 @@
 
 				<h4>Returns</h4>
 				<div class="list">
-					<code>string</code><br><p>The <code>$doc</code> with debug info appended (if applicable).</p>
-<br />
-				</div>
-
-
-				<h4>Since</h4>
-				<div class="list">
-						<p>140422 First documented version.</p>
-<br />
-				</div>
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="url_to_cache_path" id="_url_to_cache_path">
-
-		<td class="attributes"><code>
-			 public 
-			string
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_url_to_cache_path">#</a>
-		<code><a href="source-class-quick_cache.advanced_cache.html#1148-1216" title="Go to source code">url_to_cache_path</a>( <span>string <var>$url</var></span>, <span>string <var>$with_user_token</var> = <span class="php-quote">''</span></span>, <span>string <var>$with_version_salt</var> = <span class="php-quote">''</span></span>, <span>integer <var>$flags</var> = <span class="php-num">0</span></span> )</code>
-
-		<div class="description short">
-			<p>Converts a URL into a <code>cache/path</code>.</p>
-
-		</div>
-
-		<div class="description detailed hidden">
-			<p>Converts a URL into a <code>cache/path</code>.</p>
-
-
-
-				<h4>Parameters</h4>
-				<div class="list"><dl>
-					<dt><var>$url</var></dt>
-					<dd><code>string</code><br><p>$url The input URL to convert.</p>
-</dd>
-					<dt><var>$with_user_token</var></dt>
-					<dd><code>string</code><br><p>$with_user_token Optional user token (if applicable).</p>
-</dd>
-					<dt><var>$with_version_salt</var></dt>
-					<dd><code>string</code><br><p>$with_version_salt Optional version salt (if applicable).</p>
-</dd>
-					<dt><var>$flags</var></dt>
-					<dd><code>integer</code><br><p>$flags Optional flags; a bitmask provided by <code>CACHE_PATH_*</code> constants.</p>
-</dd>
-				</dl></div>
-
-				<h4>Returns</h4>
-				<div class="list">
-					<code>string</code><br><p>The resulting <code>cache/path</code> based on the input <code>$url</code>.</p>
-<br />
-				</div>
-
-
-				<h4>Since</h4>
-				<div class="list">
-						<p>140422 First documented version.</p>
-<br />
-				</div>
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="host_token" id="_host_token">
-
-		<td class="attributes"><code>
-			 public 
-			string
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_host_token">#</a>
-		<code><a href="source-class-quick_cache.advanced_cache.html#1218-1240" title="Go to source code">host_token</a>( <span>boolean <var>$dashify</var> = <span class="php-keyword1">FALSE</span></span> )</code>
-
-		<div class="description short">
-			<p>Produces a token based on the current <code>$_SERVER['HTTP_HOST']</code>.</p>
-
-		</div>
-
-		<div class="description detailed hidden">
-			<p>Produces a token based on the current <code>$_SERVER['HTTP_HOST']</code>.</p>
-
-
-
-				<h4>Parameters</h4>
-				<div class="list"><dl>
-					<dt><var>$dashify</var></dt>
-					<dd><code>boolean</code><br><p>$dashify Optional, defaults to a <code>FALSE</code> value.
-   If <code>TRUE</code>, the token is returned with dashes in place of <code>[^a-z0-9\/]</code>.</p>
-</dd>
-				</dl></div>
-
-				<h4>Returns</h4>
-				<div class="list">
-					<code>string</code><br><p>Token based on the current <code>$_SERVER['HTTP_HOST']</code>.</p>
-<br />
-				</div>
-
-
-				<h4>Since</h4>
-				<div class="list">
-						<p>140422 First documented version.</p>
-<br />
-				</div>
-				<h4>Note</h4>
-				<div class="list">
-						<p>The return value of this function is cached to reduce overhead on repeat calls.</p>
-<br />
-				</div>
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="host_dir_token" id="_host_dir_token">
-
-		<td class="attributes"><code>
-			 public 
-			string
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_host_dir_token">#</a>
-		<code><a href="source-class-quick_cache.advanced_cache.html#1242-1287" title="Go to source code">host_dir_token</a>( <span>boolean <var>$dashify</var> = <span class="php-keyword1">FALSE</span></span> )</code>
-
-		<div class="description short">
-			<p>Produces a token based on the current blog sub-directory
-   (i.e. in the case of a sub-directory multisite network).</p>
-
-		</div>
-
-		<div class="description detailed hidden">
-			<p>Produces a token based on the current blog sub-directory (i.e. in the case of a sub-directory multisite network).</p>
-
-
-
-				<h4>Parameters</h4>
-				<div class="list"><dl>
-					<dt><var>$dashify</var></dt>
-					<dd><code>boolean</code><br><p>$dashify Optional, defaults to a <code>FALSE</code> value.
-   If <code>TRUE</code>, the token is returned with dashes in place of <code>[^a-z0-9\/]</code>.</p>
-</dd>
-				</dl></div>
-
-				<h4>Returns</h4>
-				<div class="list">
-					<code>string</code><br><p>Produces a token based on the current blog sub-directory
-   (i.e. in the case of a sub-directory multisite network).</p>
-<br />
-				</div>
-
-
-				<h4>Since</h4>
-				<div class="list">
-						<p>140422 First documented version.</p>
-<br />
-				</div>
-				<h4>See</h4>
-				<div class="list">
-						<p>plugin\update_blog_paths()</p>
-<br />
-				</div>
-				<h4>Note</h4>
-				<div class="list">
-						<p>The return value of this function is cached to reduce overhead on repeat calls.</p>
-<br />
-				</div>
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="is_post_put_del_request" id="_is_post_put_del_request">
-
-		<td class="attributes"><code>
-			 public 
-			boolean
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_is_post_put_del_request">#</a>
-		<code><a href="source-class-quick_cache.advanced_cache.html#1289-1308" title="Go to source code">is_post_put_del_request</a>( )</code>
-
-		<div class="description short">
-			<p>Is the current request method <code>POST|PUT|DELETE</code>?</p>
-
-		</div>
-
-		<div class="description detailed hidden">
-			<p>Is the current request method <code>POST|PUT|DELETE</code>?</p>
-
-
-
-
-				<h4>Returns</h4>
-				<div class="list">
-					<code>boolean</code><br><p><code>TRUE</code> if yes; else <code>FALSE</code>.</p>
-<br />
-				</div>
-
-
-				<h4>Since</h4>
-				<div class="list">
-						<p>140422 First documented version.</p>
-<br />
-				</div>
-				<h4>Note</h4>
-				<div class="list">
-						<p>The return value of this function is cached to reduce overhead on repeat calls.</p>
-<br />
-				</div>
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="is_get_request_w_query" id="_is_get_request_w_query">
-
-		<td class="attributes"><code>
-			 public 
-			boolean
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_is_get_request_w_query">#</a>
-		<code><a href="source-class-quick_cache.advanced_cache.html#1310-1329" title="Go to source code">is_get_request_w_query</a>( )</code>
-
-		<div class="description short">
-			<p>Does the current request include a query string?</p>
-
-		</div>
-
-		<div class="description detailed hidden">
-			<p>Does the current request include a query string?</p>
-
-
-
-
-				<h4>Returns</h4>
-				<div class="list">
-					<code>boolean</code><br><p><code>TRUE</code> if yes; else <code>FALSE</code>.</p>
-<br />
-				</div>
-
-
-				<h4>Since</h4>
-				<div class="list">
-						<p>140422 First documented version.</p>
-<br />
-				</div>
-				<h4>Note</h4>
-				<div class="list">
-						<p>The return value of this function is cached to reduce overhead on repeat calls.</p>
-<br />
-				</div>
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="is_like_user_logged_in" id="_is_like_user_logged_in">
-
-		<td class="attributes"><code>
-			 public 
-			boolean
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_is_like_user_logged_in">#</a>
-		<code><a href="source-class-quick_cache.advanced_cache.html#1331-1371" title="Go to source code">is_like_user_logged_in</a>( )</code>
-
-		<div class="description short">
-			<p>Should the current user be considered a logged-in user?</p>
-
-		</div>
-
-		<div class="description detailed hidden">
-			<p>Should the current user be considered a logged-in user?</p>
-
-
-
-
-				<h4>Returns</h4>
-				<div class="list">
-					<code>boolean</code><br><p><code>TRUE</code> if yes; else <code>FALSE</code>.</p>
-<br />
-				</div>
-
-
-				<h4>Since</h4>
-				<div class="list">
-						<p>140422 First documented version.</p>
-<br />
-				</div>
-				<h4>Note</h4>
-				<div class="list">
-						<p>The return value of this function is cached to reduce overhead on repeat calls.</p>
-<br />
-				</div>
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="is_localhost" id="_is_localhost">
-
-		<td class="attributes"><code>
-			 public 
-			boolean
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_is_localhost">#</a>
-		<code><a href="source-class-quick_cache.advanced_cache.html#1373-1394" title="Go to source code">is_localhost</a>( )</code>
-
-		<div class="description short">
-			<p>Are we in a LOCALHOST environment?</p>
-
-		</div>
-
-		<div class="description detailed hidden">
-			<p>Are we in a LOCALHOST environment?</p>
-
-
-
-
-				<h4>Returns</h4>
-				<div class="list">
-					<code>boolean</code><br><p><code>TRUE</code> if yes; else <code>FALSE</code>.</p>
-<br />
-				</div>
-
-
-				<h4>Since</h4>
-				<div class="list">
-						<p>140422 First documented version.</p>
-<br />
-				</div>
-				<h4>Note</h4>
-				<div class="list">
-						<p>The return value of this function is cached to reduce overhead on repeat calls.</p>
-<br />
-				</div>
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="is_feed" id="_is_feed">
-
-		<td class="attributes"><code>
-			 public 
-			boolean
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_is_feed">#</a>
-		<code><a href="source-class-quick_cache.advanced_cache.html#1396-1417" title="Go to source code">is_feed</a>( )</code>
-
-		<div class="description short">
-			<p>Is the current request for a feed?</p>
-
-		</div>
-
-		<div class="description detailed hidden">
-			<p>Is the current request for a feed?</p>
-
-
-
-
-				<h4>Returns</h4>
-				<div class="list">
-					<code>boolean</code><br><p><code>TRUE</code> if yes; else <code>FALSE</code>.</p>
-<br />
-				</div>
-
-
-				<h4>Since</h4>
-				<div class="list">
-						<p>140422 First documented version.</p>
-<br />
-				</div>
-				<h4>Note</h4>
-				<div class="list">
-						<p>The return value of this function is cached to reduce overhead on repeat calls.</p>
-<br />
-				</div>
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="is_ssl" id="_is_ssl">
-
-		<td class="attributes"><code>
-			 public 
-			boolean
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_is_ssl">#</a>
-		<code><a href="source-class-quick_cache.advanced_cache.html#1419-1446" title="Go to source code">is_ssl</a>( )</code>
-
-		<div class="description short">
-			<p>Is the current request over SSL?</p>
-
-		</div>
-
-		<div class="description detailed hidden">
-			<p>Is the current request over SSL?</p>
-
-
-
-
-				<h4>Returns</h4>
-				<div class="list">
-					<code>boolean</code><br><p><code>TRUE</code> if yes; else <code>FALSE</code>.</p>
-<br />
-				</div>
-
-
-				<h4>Since</h4>
-				<div class="list">
-						<p>140422 First documented version.</p>
-<br />
-				</div>
-				<h4>Note</h4>
-				<div class="list">
-						<p>The return value of this function is cached to reduce overhead on repeat calls.</p>
-<br />
-				</div>
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="is_html_xml_doc" id="_is_html_xml_doc">
-
-		<td class="attributes"><code>
-			 public 
-			boolean
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_is_html_xml_doc">#</a>
-		<code><a href="source-class-quick_cache.advanced_cache.html#1448-1463" title="Go to source code">is_html_xml_doc</a>( <span>string <var>$doc</var></span> )</code>
-
-		<div class="description short">
-			<p>Is a document/string an HTML/XML doc; or no?</p>
-
-		</div>
-
-		<div class="description detailed hidden">
-			<p>Is a document/string an HTML/XML doc; or no?</p>
-
-
-
-				<h4>Parameters</h4>
-				<div class="list"><dl>
-					<dt><var>$doc</var></dt>
-					<dd><code>string</code><br><p>$doc Input string/document to check.</p>
-</dd>
-				</dl></div>
-
-				<h4>Returns</h4>
-				<div class="list">
-					<code>boolean</code><br><p><code>TRUE</code> if yes; else <code>FALSE</code>.</p>
-<br />
-				</div>
-
-
-				<h4>Since</h4>
-				<div class="list">
-						<p>140422 First documented version.</p>
-<br />
-				</div>
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="has_a_cacheable_content_type" id="_has_a_cacheable_content_type">
-
-		<td class="attributes"><code>
-			 public 
-			boolean
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_has_a_cacheable_content_type">#</a>
-		<code><a href="source-class-quick_cache.advanced_cache.html#1465-1488" title="Go to source code">has_a_cacheable_content_type</a>( )</code>
-
-		<div class="description short">
-			<p>Does the current request have a cacheable content type?</p>
-
-		</div>
-
-		<div class="description detailed hidden">
-			<p>Does the current request have a cacheable content type?</p>
-
-
-
-
-				<h4>Returns</h4>
-				<div class="list">
-					<code>boolean</code><br><p><code>TRUE</code> if yes; else <code>FALSE</code>.</p>
-<br />
-				</div>
-
-
-				<h4>Since</h4>
-				<div class="list">
-						<p>140422 First documented version.</p>
-<br />
-				</div>
-				<h4>Note</h4>
-				<div class="list">
-						<p>The return value of this function is cached to reduce overhead on repeat calls.</p>
-<br />
-				</div>
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="has_a_cacheable_status" id="_has_a_cacheable_status">
-
-		<td class="attributes"><code>
-			 public 
-			boolean
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_has_a_cacheable_status">#</a>
-		<code><a href="source-class-quick_cache.advanced_cache.html#1490-1521" title="Go to source code">has_a_cacheable_status</a>( )</code>
-
-		<div class="description short">
-			<p>Does the current request have a cacheable HTTP status code?</p>
-
-		</div>
-
-		<div class="description detailed hidden">
-			<p>Does the current request have a cacheable HTTP status code?</p>
-
-
-
-
-				<h4>Returns</h4>
-				<div class="list">
-					<code>boolean</code><br><p><code>TRUE</code> if yes; else <code>FALSE</code>.</p>
-<br />
-				</div>
-
-
-				<h4>Since</h4>
-				<div class="list">
-						<p>140422 First documented version.</p>
-<br />
-				</div>
-				<h4>Note</h4>
-				<div class="list">
-						<p>The return value of this function is cached to reduce overhead on repeat calls.</p>
-<br />
-				</div>
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="is_extension_loaded" id="_is_extension_loaded">
-
-		<td class="attributes"><code>
-			 public 
-			boolean
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_is_extension_loaded">#</a>
-		<code><a href="source-class-quick_cache.advanced_cache.html#1523-1539" title="Go to source code">is_extension_loaded</a>( <span>string <var>$extension</var></span> )</code>
-
-		<div class="description short">
-			<p>Checks if a PHP extension is loaded up.</p>
-
-		</div>
-
-		<div class="description detailed hidden">
-			<p>Checks if a PHP extension is loaded up.</p>
-
-
-
-				<h4>Parameters</h4>
-				<div class="list"><dl>
-					<dt><var>$extension</var></dt>
-					<dd><code>string</code><br><p>$extension A PHP extension slug (i.e. extension name).</p>
-</dd>
-				</dl></div>
-
-				<h4>Returns</h4>
-				<div class="list">
-					<code>boolean</code><br><p><code>TRUE</code> if the extension is loaded; else <code>FALSE</code>.</p>
-<br />
-				</div>
-
-
-				<h4>Since</h4>
-				<div class="list">
-						<p>140422 First documented version.</p>
-<br />
-				</div>
-				<h4>Note</h4>
-				<div class="list">
-						<p>The return value of this function is cached to reduce overhead on repeat calls.</p>
-<br />
-				</div>
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="hook_id" id="_hook_id">
-
-		<td class="attributes"><code>
-			 public 
-			string
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_hook_id">#</a>
-		<code><a href="source-class-quick_cache.advanced_cache.html#1541-1568" title="Go to source code">hook_id</a>( <span>string|callable|mixed <var>$function</var></span> )</code>
-
-		<div class="description short">
-			<p>Assigns an ID to each callable attached to a hook/filter.</p>
-
-		</div>
-
-		<div class="description detailed hidden">
-			<p>Assigns an ID to each callable attached to a hook/filter.</p>
-
-
-
-				<h4>Parameters</h4>
-				<div class="list"><dl>
-					<dt><var>$function</var></dt>
-					<dd><code>string|callable|mixed</code><br><p>$function A string or a callable.</p>
-</dd>
-				</dl></div>
-
-				<h4>Returns</h4>
-				<div class="list">
-					<code>string</code><br><p>Hook ID for the given <code>$function</code>.</p>
-<br />
-				</div>
-
-				<h4>Throws</h4>
-				<div class="list">
-					<code>exception</code><br><p>If the hook/function is invalid (i.e. it's not possible to generate an ID).</p>
-<br />
-				</div>
-
-				<h4>Since</h4>
-				<div class="list">
-						<p>140422 First documented version.</p>
-<br />
-				</div>
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="add_hook" id="_add_hook">
-
-		<td class="attributes"><code>
-			 public 
-			boolean
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_add_hook">#</a>
-		<code><a href="source-class-quick_cache.advanced_cache.html#1570-1587" title="Go to source code">add_hook</a>( <span>string <var>$hook</var></span>, <span>string|callable|mixed <var>$function</var></span>, <span>integer <var>$priority</var> = <span class="php-num">10</span></span>, <span>integer <var>$accepted_args</var> = <span class="php-num">1</span></span> )</code>
-
-		<div class="description short">
-			<p>Adds a new hook (works with both actions &amp; filters).</p>
-
-		</div>
-
-		<div class="description detailed hidden">
-			<p>Adds a new hook (works with both actions &amp; filters).</p>
-
-
-
-				<h4>Parameters</h4>
-				<div class="list"><dl>
-					<dt><var>$hook</var></dt>
-					<dd><code>string</code><br><p>$hook The name of a hook to attach to.</p>
-</dd>
-					<dt><var>$function</var></dt>
-					<dd><code>string|callable|mixed</code><br><p>$function A string or a callable.</p>
-</dd>
-					<dt><var>$priority</var></dt>
-					<dd><code>integer</code><br><p>$priority Hook priority; defaults to <code>10</code>.</p>
-</dd>
-					<dt><var>$accepted_args</var></dt>
-					<dd><code>integer</code><br><p>$accepted_args Max number of args that should be passed to the <code>$function</code>.</p>
-</dd>
-				</dl></div>
-
-				<h4>Returns</h4>
-				<div class="list">
-					<code>boolean</code><br><p>This always returns a <code>TRUE</code> value.</p>
-<br />
-				</div>
-
-
-				<h4>Since</h4>
-				<div class="list">
-						<p>140422 First documented version.</p>
-<br />
-				</div>
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="add_action" id="_add_action">
-
-		<td class="attributes"><code>
-			 public 
-			boolean
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_add_action">#</a>
-		<code><a href="source-class-quick_cache.advanced_cache.html#1589-1601" title="Go to source code">add_action</a>( )</code>
-
-		<div class="description short">
-			<p>Adds a new action hook.</p>
-
-		</div>
-
-		<div class="description detailed hidden">
-			<p>Adds a new action hook.</p>
-
-
-
-
-				<h4>Returns</h4>
-				<div class="list">
-					<code>boolean</code><br><p>This always returns a <code>TRUE</code> value.</p>
-<br />
-				</div>
-
-
-				<h4>Since</h4>
-				<div class="list">
-						<p>140422 First documented version.</p>
-<br />
-				</div>
-				<h4>See</h4>
-				<div class="list">
-						<code><code><a href="class-quick_cache.advanced_cache.html#_add_hook">quick_cache\advanced_cache::add_hook()</a></code></code><br />
-				</div>
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="add_filter" id="_add_filter">
-
-		<td class="attributes"><code>
-			 public 
-			boolean
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_add_filter">#</a>
-		<code><a href="source-class-quick_cache.advanced_cache.html#1603-1615" title="Go to source code">add_filter</a>( )</code>
-
-		<div class="description short">
-			<p>Adds a new filter.</p>
-
-		</div>
-
-		<div class="description detailed hidden">
-			<p>Adds a new filter.</p>
-
-
-
-
-				<h4>Returns</h4>
-				<div class="list">
-					<code>boolean</code><br><p>This always returns a <code>TRUE</code> value.</p>
-<br />
-				</div>
-
-
-				<h4>Since</h4>
-				<div class="list">
-						<p>140422 First documented version.</p>
-<br />
-				</div>
-				<h4>See</h4>
-				<div class="list">
-						<code><code><a href="class-quick_cache.advanced_cache.html#_add_hook">quick_cache\advanced_cache::add_hook()</a></code></code><br />
-				</div>
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="remove_hook" id="_remove_hook">
-
-		<td class="attributes"><code>
-			 public 
-			boolean
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_remove_hook">#</a>
-		<code><a href="source-class-quick_cache.advanced_cache.html#1617-1636" title="Go to source code">remove_hook</a>( <span>string <var>$hook</var></span>, <span>string|callable|mixed <var>$function</var></span>, <span>integer <var>$priority</var> = <span class="php-num">10</span></span> )</code>
-
-		<div class="description short">
-			<p>Removes a hook (works with both actions &amp; filters).</p>
-
-		</div>
-
-		<div class="description detailed hidden">
-			<p>Removes a hook (works with both actions &amp; filters).</p>
-
-
-
-				<h4>Parameters</h4>
-				<div class="list"><dl>
-					<dt><var>$hook</var></dt>
-					<dd><code>string</code><br><p>$hook The name of a hook to remove.</p>
-</dd>
-					<dt><var>$function</var></dt>
-					<dd><code>string|callable|mixed</code><br><p>$function A string or a callable.</p>
-</dd>
-					<dt><var>$priority</var></dt>
-					<dd><code>integer</code><br><p>$priority Hook priority; defaults to <code>10</code>.</p>
-</dd>
-				</dl></div>
-
-				<h4>Returns</h4>
-				<div class="list">
-					<code>boolean</code><br><p><code>TRUE</code> if removed; else <code>FALSE</code> if not removed for any reason.</p>
-<br />
-				</div>
-
-
-				<h4>Since</h4>
-				<div class="list">
-						<p>140422 First documented version.</p>
-<br />
-				</div>
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="remove_action" id="_remove_action">
-
-		<td class="attributes"><code>
-			 public 
-			boolean
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_remove_action">#</a>
-		<code><a href="source-class-quick_cache.advanced_cache.html#1638-1650" title="Go to source code">remove_action</a>( )</code>
-
-		<div class="description short">
-			<p>Removes an action.</p>
-
-		</div>
-
-		<div class="description detailed hidden">
-			<p>Removes an action.</p>
-
-
-
-
-				<h4>Returns</h4>
-				<div class="list">
-					<code>boolean</code><br><p><code>TRUE</code> if removed; else <code>FALSE</code> if not removed for any reason.</p>
-<br />
-				</div>
-
-
-				<h4>Since</h4>
-				<div class="list">
-						<p>140422 First documented version.</p>
-<br />
-				</div>
-				<h4>See</h4>
-				<div class="list">
-						<code><code><a href="class-quick_cache.advanced_cache.html#_remove_hook">quick_cache\advanced_cache::remove_hook()</a></code></code><br />
-				</div>
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="remove_filter" id="_remove_filter">
-
-		<td class="attributes"><code>
-			 public 
-			boolean
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_remove_filter">#</a>
-		<code><a href="source-class-quick_cache.advanced_cache.html#1652-1664" title="Go to source code">remove_filter</a>( )</code>
-
-		<div class="description short">
-			<p>Removes a filter.</p>
-
-		</div>
-
-		<div class="description detailed hidden">
-			<p>Removes a filter.</p>
-
-
-
-
-				<h4>Returns</h4>
-				<div class="list">
-					<code>boolean</code><br><p><code>TRUE</code> if removed; else <code>FALSE</code> if not removed for any reason.</p>
-<br />
-				</div>
-
-
-				<h4>Since</h4>
-				<div class="list">
-						<p>140422 First documented version.</p>
-<br />
-				</div>
-				<h4>See</h4>
-				<div class="list">
-						<code><code><a href="class-quick_cache.advanced_cache.html#_remove_hook">quick_cache\advanced_cache::remove_hook()</a></code></code><br />
-				</div>
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="do_action" id="_do_action">
-
-		<td class="attributes"><code>
-			 public 
-			
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_do_action">#</a>
-		<code><a href="source-class-quick_cache.advanced_cache.html#1666-1688" title="Go to source code">do_action</a>( <span>mixed <var>$hook</var></span> )</code>
-
-		<div class="description short">
-			<p>Runs any callables attached to an action.</p>
-
-		</div>
-
-		<div class="description detailed hidden">
-			<p>Runs any callables attached to an action.</p>
-
-
-
-
-
-
-				<h4>Since</h4>
-				<div class="list">
-						<p>140422 First documented version.</p>
-<br />
-				</div>
-
-
-		</div>
-		</div></td>
-	</tr>
-	<tr data-order="apply_filters" id="_apply_filters">
-
-		<td class="attributes"><code>
-			 public 
-			mixed
-			
-			</code>
-		</td>
-
-		<td class="name"><div>
-		<a class="anchor" href="#_apply_filters">#</a>
-		<code><a href="source-class-quick_cache.advanced_cache.html#1690-1720" title="Go to source code">apply_filters</a>( <span>string <var>$hook</var></span>, <span>mixed <var>$value</var></span> )</code>
-
-		<div class="description short">
-			<p>Runs any callables attached to a filter.</p>
-
-		</div>
-
-		<div class="description detailed hidden">
-			<p>Runs any callables attached to a filter.</p>
-
-
-
-				<h4>Parameters</h4>
-				<div class="list"><dl>
-					<dt><var>$hook</var></dt>
-					<dd><code>string</code><br><p>$hook The name of a filter hook.</p>
-</dd>
-					<dt><var>$value</var></dt>
-					<dd><code>mixed</code><br><p>$value The value to filter.</p>
-</dd>
-				</dl></div>
-
-				<h4>Returns</h4>
-				<div class="list">
-					<code>mixed</code><br><p>The filtered <code>$value</code>.</p>
+					<code>string</code><br><p>The debug info; i.e. full description (if applicable).</p>
 <br />
 				</div>
 
@@ -1676,6 +661,46 @@
 	</tr>
 	</table>
 
+	<table class="summary inherited">
+	<caption>Methods inherited from <a href="class-quick_cache.share.html#methods">quick_cache\share</a></caption>
+	<tr>
+		<td><code>
+			<a href="class-quick_cache.share.html#_add_action">add_action()</a>, 
+			<a href="class-quick_cache.share.html#_add_filter">add_filter()</a>, 
+			<a href="class-quick_cache.share.html#_add_hook">add_hook()</a>, 
+			<a href="class-quick_cache.share.html#_apply_filters">apply_filters()</a>, 
+			<a href="class-quick_cache.share.html#_build_cache_path">build_cache_path()</a>, 
+			<a href="class-quick_cache.share.html#_cache_dir">cache_dir()</a>, 
+			<a href="class-quick_cache.share.html#_dir_regex_iteration">dir_regex_iteration()</a>, 
+			<a href="class-quick_cache.share.html#_do_action">do_action()</a>, 
+			<a href="class-quick_cache.share.html#_esc_sq">esc_sq()</a>, 
+			<a href="class-quick_cache.share.html#_function_is_possible">function_is_possible()</a>, 
+			<a href="class-quick_cache.share.html#_has_a_cacheable_content_type">has_a_cacheable_content_type()</a>, 
+			<a href="class-quick_cache.share.html#_has_a_cacheable_status">has_a_cacheable_status()</a>, 
+			<a href="class-quick_cache.share.html#_headers_list">headers_list()</a>, 
+			<a href="class-quick_cache.share.html#_hook_id">hook_id()</a>, 
+			<a href="class-quick_cache.share.html#_host_base_dir_tokens">host_base_dir_tokens()</a>, 
+			<a href="class-quick_cache.share.html#_host_base_token">host_base_token()</a>, 
+			<a href="class-quick_cache.share.html#_host_dir_token">host_dir_token()</a>, 
+			<a href="class-quick_cache.share.html#_host_token">host_token()</a>, 
+			<a href="class-quick_cache.share.html#_http_protocol">http_protocol()</a>, 
+			<a href="class-quick_cache.share.html#_http_status">http_status()</a>, 
+			<a href="class-quick_cache.share.html#_is_auto_cache_engine">is_auto_cache_engine()</a>, 
+			<a href="class-quick_cache.share.html#_is_extension_loaded">is_extension_loaded()</a>, 
+			<a href="class-quick_cache.share.html#_is_feed">is_feed()</a>, 
+			<a href="class-quick_cache.share.html#_is_get_request_w_query">is_get_request_w_query()</a>, 
+			<a href="class-quick_cache.share.html#_is_html_xml_doc">is_html_xml_doc()</a>, 
+			<a href="class-quick_cache.share.html#_is_like_user_logged_in">is_like_user_logged_in()</a>, 
+			<a href="class-quick_cache.share.html#_is_localhost">is_localhost()</a>, 
+			<a href="class-quick_cache.share.html#_is_ssl">is_ssl()</a>, 
+			<a href="class-quick_cache.share.html#_is_uncacheable_request_method">is_uncacheable_request_method()</a>, 
+			<a href="class-quick_cache.share.html#_remove_action">remove_action()</a>, 
+			<a href="class-quick_cache.share.html#_remove_filter">remove_filter()</a>, 
+			<a href="class-quick_cache.share.html#_remove_hook">remove_hook()</a>, 
+			<a href="class-quick_cache.share.html#_user_token">user_token()</a>
+		</code></td>
+	</tr>
+	</table>
 
 
 
@@ -1689,7 +714,7 @@
 
 		<td class="attributes"><code>string</code></td>
 		<td class="name"><code>
-				<a href="source-class-quick_cache.advanced_cache.html#322-329" title="Go to source code"><b>NC_DEBUG_PHP_SAPI_CLI</b></a>
+				<a href="source-class-quick_cache.advanced_cache.html#331-338" title="Go to source code"><b>NC_DEBUG_PHP_SAPI_CLI</b></a>
 		</code></td>
 		<td class="value"><code><span class="php-quote">'nc_debug_php_sapi_cli'</span></code></td>
 		<td class="description"><div>
@@ -1716,7 +741,7 @@
 
 		<td class="attributes"><code>string</code></td>
 		<td class="name"><code>
-				<a href="source-class-quick_cache.advanced_cache.html#331-338" title="Go to source code"><b>NC_DEBUG_QCAC_GET_VAR</b></a>
+				<a href="source-class-quick_cache.advanced_cache.html#340-347" title="Go to source code"><b>NC_DEBUG_QCAC_GET_VAR</b></a>
 		</code></td>
 		<td class="value"><code><span class="php-quote">'nc_debug_qcac_get_var'</span></code></td>
 		<td class="description"><div>
@@ -1743,7 +768,7 @@
 
 		<td class="attributes"><code>string</code></td>
 		<td class="name"><code>
-				<a href="source-class-quick_cache.advanced_cache.html#340-347" title="Go to source code"><b>NC_DEBUG_NO_SERVER_HTTP_HOST</b></a>
+				<a href="source-class-quick_cache.advanced_cache.html#349-356" title="Go to source code"><b>NC_DEBUG_NO_SERVER_HTTP_HOST</b></a>
 		</code></td>
 		<td class="value"><code><span class="php-quote">'nc_debug_no_server_http_host'</span></code></td>
 		<td class="description"><div>
@@ -1770,7 +795,7 @@
 
 		<td class="attributes"><code>string</code></td>
 		<td class="name"><code>
-				<a href="source-class-quick_cache.advanced_cache.html#349-356" title="Go to source code"><b>NC_DEBUG_NO_SERVER_REQUEST_URI</b></a>
+				<a href="source-class-quick_cache.advanced_cache.html#358-365" title="Go to source code"><b>NC_DEBUG_NO_SERVER_REQUEST_URI</b></a>
 		</code></td>
 		<td class="value"><code><span class="php-quote">'nc_debug_no_server_request_uri'</span></code></td>
 		<td class="description"><div>
@@ -1797,7 +822,7 @@
 
 		<td class="attributes"><code>string</code></td>
 		<td class="name"><code>
-				<a href="source-class-quick_cache.advanced_cache.html#358-365" title="Go to source code"><b>NC_DEBUG_QUICK_CACHE_ALLOWED_CONSTANT</b></a>
+				<a href="source-class-quick_cache.advanced_cache.html#367-374" title="Go to source code"><b>NC_DEBUG_QUICK_CACHE_ALLOWED_CONSTANT</b></a>
 		</code></td>
 		<td class="value"><code><span class="php-quote">'nc_debug_quick_cache_allowed_constant'</span></code></td>
 		<td class="description"><div>
@@ -1824,7 +849,7 @@
 
 		<td class="attributes"><code>string</code></td>
 		<td class="name"><code>
-				<a href="source-class-quick_cache.advanced_cache.html#367-374" title="Go to source code"><b>NC_DEBUG_QUICK_CACHE_ALLOWED_SERVER_VAR</b></a>
+				<a href="source-class-quick_cache.advanced_cache.html#376-383" title="Go to source code"><b>NC_DEBUG_QUICK_CACHE_ALLOWED_SERVER_VAR</b></a>
 		</code></td>
 		<td class="value"><code><span class="php-quote">'nc_debug_quick_cache_allowed_server_var'</span></code></td>
 		<td class="description"><div>
@@ -1851,7 +876,7 @@
 
 		<td class="attributes"><code>string</code></td>
 		<td class="name"><code>
-				<a href="source-class-quick_cache.advanced_cache.html#376-383" title="Go to source code"><b>NC_DEBUG_DONOTCACHEPAGE_CONSTANT</b></a>
+				<a href="source-class-quick_cache.advanced_cache.html#385-392" title="Go to source code"><b>NC_DEBUG_DONOTCACHEPAGE_CONSTANT</b></a>
 		</code></td>
 		<td class="value"><code><span class="php-quote">'nc_debug_donotcachepage_constant'</span></code></td>
 		<td class="description"><div>
@@ -1878,7 +903,7 @@
 
 		<td class="attributes"><code>string</code></td>
 		<td class="name"><code>
-				<a href="source-class-quick_cache.advanced_cache.html#385-392" title="Go to source code"><b>NC_DEBUG_DONOTCACHEPAGE_SERVER_VAR</b></a>
+				<a href="source-class-quick_cache.advanced_cache.html#394-401" title="Go to source code"><b>NC_DEBUG_DONOTCACHEPAGE_SERVER_VAR</b></a>
 		</code></td>
 		<td class="value"><code><span class="php-quote">'nc_debug_donotcachepage_server_var'</span></code></td>
 		<td class="description"><div>
@@ -1901,28 +926,28 @@
 			</div>
 		</div></td>
 	</tr>
-	<tr data-order="NC_DEBUG_POST_PUT_DEL_REQUEST" id="NC_DEBUG_POST_PUT_DEL_REQUEST">
+	<tr data-order="NC_DEBUG_UNCACHEABLE_REQUEST" id="NC_DEBUG_UNCACHEABLE_REQUEST">
 
 		<td class="attributes"><code>string</code></td>
 		<td class="name"><code>
-				<a href="source-class-quick_cache.advanced_cache.html#394-401" title="Go to source code"><b>NC_DEBUG_POST_PUT_DEL_REQUEST</b></a>
+				<a href="source-class-quick_cache.advanced_cache.html#403-410" title="Go to source code"><b>NC_DEBUG_UNCACHEABLE_REQUEST</b></a>
 		</code></td>
-		<td class="value"><code><span class="php-quote">'nc_debug_post_put_del_request'</span></code></td>
+		<td class="value"><code><span class="php-quote">'nc_debug_uncacheable_request'</span></code></td>
 		<td class="description"><div>
-			<a href="#NC_DEBUG_POST_PUT_DEL_REQUEST" class="anchor">#</a>
+			<a href="#NC_DEBUG_UNCACHEABLE_REQUEST" class="anchor">#</a>
 
 			<div class="description short">
-				<p>No-cache because the current request method is <code>POST|PUT|DELETE</code>.</p>
+				<p>No-cache because the current request method is uncacheable.</p>
 
 			</div>
 
 			<div class="description detailed hidden">
-				<p>No-cache because the current request method is <code>POST|PUT|DELETE</code>.</p>
+				<p>No-cache because the current request method is uncacheable.</p>
 
 
 					<h4>Since</h4>
 					<div class="list">
-							<p>140422 First documented version.</p>
+							<p>140725 Adding HEAD/OPTIONS/TRACE to the list of uncacheables.</p>
 <br />
 					</div>
 			</div>
@@ -1932,7 +957,7 @@
 
 		<td class="attributes"><code>string</code></td>
 		<td class="name"><code>
-				<a href="source-class-quick_cache.advanced_cache.html#403-410" title="Go to source code"><b>NC_DEBUG_SELF_SERVE_REQUEST</b></a>
+				<a href="source-class-quick_cache.advanced_cache.html#412-419" title="Go to source code"><b>NC_DEBUG_SELF_SERVE_REQUEST</b></a>
 		</code></td>
 		<td class="value"><code><span class="php-quote">'nc_debug_self_serve_request'</span></code></td>
 		<td class="description"><div>
@@ -1959,7 +984,7 @@
 
 		<td class="attributes"><code>string</code></td>
 		<td class="name"><code>
-				<a href="source-class-quick_cache.advanced_cache.html#412-419" title="Go to source code"><b>NC_DEBUG_FEED_REQUEST</b></a>
+				<a href="source-class-quick_cache.advanced_cache.html#421-428" title="Go to source code"><b>NC_DEBUG_FEED_REQUEST</b></a>
 		</code></td>
 		<td class="value"><code><span class="php-quote">'nc_debug_feed_request'</span></code></td>
 		<td class="description"><div>
@@ -1986,7 +1011,7 @@
 
 		<td class="attributes"><code>string</code></td>
 		<td class="name"><code>
-				<a href="source-class-quick_cache.advanced_cache.html#421-428" title="Go to source code"><b>NC_DEBUG_WP_SYSTEMATICS</b></a>
+				<a href="source-class-quick_cache.advanced_cache.html#430-437" title="Go to source code"><b>NC_DEBUG_WP_SYSTEMATICS</b></a>
 		</code></td>
 		<td class="value"><code><span class="php-quote">'nc_debug_wp_systematics'</span></code></td>
 		<td class="description"><div>
@@ -2013,7 +1038,7 @@
 
 		<td class="attributes"><code>string</code></td>
 		<td class="name"><code>
-				<a href="source-class-quick_cache.advanced_cache.html#430-437" title="Go to source code"><b>NC_DEBUG_WP_ADMIN</b></a>
+				<a href="source-class-quick_cache.advanced_cache.html#439-446" title="Go to source code"><b>NC_DEBUG_WP_ADMIN</b></a>
 		</code></td>
 		<td class="value"><code><span class="php-quote">'nc_debug_wp_admin'</span></code></td>
 		<td class="description"><div>
@@ -2040,7 +1065,7 @@
 
 		<td class="attributes"><code>string</code></td>
 		<td class="name"><code>
-				<a href="source-class-quick_cache.advanced_cache.html#439-446" title="Go to source code"><b>NC_DEBUG_MS_FILES</b></a>
+				<a href="source-class-quick_cache.advanced_cache.html#448-455" title="Go to source code"><b>NC_DEBUG_MS_FILES</b></a>
 		</code></td>
 		<td class="value"><code><span class="php-quote">'nc_debug_ms_files'</span></code></td>
 		<td class="description"><div>
@@ -2067,7 +1092,7 @@
 
 		<td class="attributes"><code>string</code></td>
 		<td class="name"><code>
-				<a href="source-class-quick_cache.advanced_cache.html#448-455" title="Go to source code"><b>NC_DEBUG_IS_LIKE_LOGGED_IN_USER</b></a>
+				<a href="source-class-quick_cache.advanced_cache.html#457-464" title="Go to source code"><b>NC_DEBUG_IS_LIKE_LOGGED_IN_USER</b></a>
 		</code></td>
 		<td class="value"><code><span class="php-quote">'nc_debug_is_like_logged_in_user'</span></code></td>
 		<td class="description"><div>
@@ -2094,7 +1119,7 @@
 
 		<td class="attributes"><code>string</code></td>
 		<td class="name"><code>
-				<a href="source-class-quick_cache.advanced_cache.html#457-464" title="Go to source code"><b>NC_DEBUG_IS_LOGGED_IN_USER</b></a>
+				<a href="source-class-quick_cache.advanced_cache.html#466-473" title="Go to source code"><b>NC_DEBUG_IS_LOGGED_IN_USER</b></a>
 		</code></td>
 		<td class="value"><code><span class="php-quote">'nc_debug_is_logged_in_user'</span></code></td>
 		<td class="description"><div>
@@ -2121,7 +1146,7 @@
 
 		<td class="attributes"><code>string</code></td>
 		<td class="name"><code>
-				<a href="source-class-quick_cache.advanced_cache.html#466-473" title="Go to source code"><b>NC_DEBUG_GET_REQUEST_QUERIES</b></a>
+				<a href="source-class-quick_cache.advanced_cache.html#475-482" title="Go to source code"><b>NC_DEBUG_GET_REQUEST_QUERIES</b></a>
 		</code></td>
 		<td class="value"><code><span class="php-quote">'nc_debug_get_request_queries'</span></code></td>
 		<td class="description"><div>
@@ -2148,7 +1173,7 @@
 
 		<td class="attributes"><code>string</code></td>
 		<td class="name"><code>
-				<a href="source-class-quick_cache.advanced_cache.html#475-482" title="Go to source code"><b>NC_DEBUG_404_REQUEST</b></a>
+				<a href="source-class-quick_cache.advanced_cache.html#484-491" title="Go to source code"><b>NC_DEBUG_404_REQUEST</b></a>
 		</code></td>
 		<td class="value"><code><span class="php-quote">'nc_debug_404_request'</span></code></td>
 		<td class="description"><div>
@@ -2175,7 +1200,7 @@
 
 		<td class="attributes"><code>string</code></td>
 		<td class="name"><code>
-				<a href="source-class-quick_cache.advanced_cache.html#484-491" title="Go to source code"><b>NC_DEBUG_MAINTENANCE_PLUGIN</b></a>
+				<a href="source-class-quick_cache.advanced_cache.html#493-500" title="Go to source code"><b>NC_DEBUG_MAINTENANCE_PLUGIN</b></a>
 		</code></td>
 		<td class="value"><code><span class="php-quote">'nc_debug_maintenance_plugin'</span></code></td>
 		<td class="description"><div>
@@ -2202,7 +1227,7 @@
 
 		<td class="attributes"><code>string</code></td>
 		<td class="name"><code>
-				<a href="source-class-quick_cache.advanced_cache.html#493-500" title="Go to source code"><b>NC_DEBUG_OB_ZLIB_CODING_TYPE</b></a>
+				<a href="source-class-quick_cache.advanced_cache.html#502-509" title="Go to source code"><b>NC_DEBUG_OB_ZLIB_CODING_TYPE</b></a>
 		</code></td>
 		<td class="value"><code><span class="php-quote">'nc_debug_ob_zlib_coding_type'</span></code></td>
 		<td class="description"><div>
@@ -2229,7 +1254,7 @@
 
 		<td class="attributes"><code>string</code></td>
 		<td class="name"><code>
-				<a href="source-class-quick_cache.advanced_cache.html#502-509" title="Go to source code"><b>NC_DEBUG_WP_ERROR_PAGE</b></a>
+				<a href="source-class-quick_cache.advanced_cache.html#511-518" title="Go to source code"><b>NC_DEBUG_WP_ERROR_PAGE</b></a>
 		</code></td>
 		<td class="value"><code><span class="php-quote">'nc_debug_wp_error_page'</span></code></td>
 		<td class="description"><div>
@@ -2256,7 +1281,7 @@
 
 		<td class="attributes"><code>string</code></td>
 		<td class="name"><code>
-				<a href="source-class-quick_cache.advanced_cache.html#511-518" title="Go to source code"><b>NC_DEBUG_UNCACHEABLE_CONTENT_TYPE</b></a>
+				<a href="source-class-quick_cache.advanced_cache.html#520-527" title="Go to source code"><b>NC_DEBUG_UNCACHEABLE_CONTENT_TYPE</b></a>
 		</code></td>
 		<td class="value"><code><span class="php-quote">'nc_debug_uncacheable_content_type'</span></code></td>
 		<td class="description"><div>
@@ -2283,7 +1308,7 @@
 
 		<td class="attributes"><code>string</code></td>
 		<td class="name"><code>
-				<a href="source-class-quick_cache.advanced_cache.html#520-527" title="Go to source code"><b>NC_DEBUG_UNCACHEABLE_STATUS</b></a>
+				<a href="source-class-quick_cache.advanced_cache.html#529-536" title="Go to source code"><b>NC_DEBUG_UNCACHEABLE_STATUS</b></a>
 		</code></td>
 		<td class="value"><code><span class="php-quote">'nc_debug_uncacheable_status'</span></code></td>
 		<td class="description"><div>
@@ -2310,7 +1335,7 @@
 
 		<td class="attributes"><code>string</code></td>
 		<td class="name"><code>
-				<a href="source-class-quick_cache.advanced_cache.html#529-536" title="Go to source code"><b>NC_DEBUG_1ST_TIME_404_SYMLINK</b></a>
+				<a href="source-class-quick_cache.advanced_cache.html#538-545" title="Go to source code"><b>NC_DEBUG_1ST_TIME_404_SYMLINK</b></a>
 		</code></td>
 		<td class="value"><code><span class="php-quote">'nc_debug_1st_time_404_symlink'</span></code></td>
 		<td class="description"><div>
@@ -2333,244 +1358,28 @@
 			</div>
 		</div></td>
 	</tr>
-	<tr data-order="CACHE_PATH_NO_SCHEME" id="CACHE_PATH_NO_SCHEME">
+	<tr data-order="NC_DEBUG_EARLY_BUFFER_TERMINATION" id="NC_DEBUG_EARLY_BUFFER_TERMINATION">
 
-		<td class="attributes"><code>integer</code></td>
+		<td class="attributes"><code>string</code></td>
 		<td class="name"><code>
-				<a href="source-class-quick_cache.advanced_cache.html#1067-1074" title="Go to source code"><b>CACHE_PATH_NO_SCHEME</b></a>
+				<a href="source-class-quick_cache.advanced_cache.html#547-554" title="Go to source code"><b>NC_DEBUG_EARLY_BUFFER_TERMINATION</b></a>
 		</code></td>
-		<td class="value"><code><span class="php-num">1</span></code></td>
+		<td class="value"><code><span class="php-quote">'nc_debug_early_buffer_termination'</span></code></td>
 		<td class="description"><div>
-			<a href="#CACHE_PATH_NO_SCHEME" class="anchor">#</a>
+			<a href="#NC_DEBUG_EARLY_BUFFER_TERMINATION" class="anchor">#</a>
 
 			<div class="description short">
-				<p>Exclude scheme from cache path.</p>
+				<p>No-cache because we detected an early buffer termination.</p>
 
 			</div>
 
 			<div class="description detailed hidden">
-				<p>Exclude scheme from cache path.</p>
+				<p>No-cache because we detected an early buffer termination.</p>
 
 
 					<h4>Since</h4>
 					<div class="list">
-							<p>140422 First documented version.</p>
-<br />
-					</div>
-			</div>
-		</div></td>
-	</tr>
-	<tr data-order="CACHE_PATH_NO_HOST" id="CACHE_PATH_NO_HOST">
-
-		<td class="attributes"><code>integer</code></td>
-		<td class="name"><code>
-				<a href="source-class-quick_cache.advanced_cache.html#1076-1083" title="Go to source code"><b>CACHE_PATH_NO_HOST</b></a>
-		</code></td>
-		<td class="value"><code><span class="php-num">2</span></code></td>
-		<td class="description"><div>
-			<a href="#CACHE_PATH_NO_HOST" class="anchor">#</a>
-
-			<div class="description short">
-				<p>Exclude host (i.e. domain name) from cache path.</p>
-
-			</div>
-
-			<div class="description detailed hidden">
-				<p>Exclude host (i.e. domain name) from cache path.</p>
-
-
-					<h4>Since</h4>
-					<div class="list">
-							<p>140422 First documented version.</p>
-<br />
-					</div>
-			</div>
-		</div></td>
-	</tr>
-	<tr data-order="CACHE_PATH_NO_PATH" id="CACHE_PATH_NO_PATH">
-
-		<td class="attributes"><code>integer</code></td>
-		<td class="name"><code>
-				<a href="source-class-quick_cache.advanced_cache.html#1085-1092" title="Go to source code"><b>CACHE_PATH_NO_PATH</b></a>
-		</code></td>
-		<td class="value"><code><span class="php-num">4</span></code></td>
-		<td class="description"><div>
-			<a href="#CACHE_PATH_NO_PATH" class="anchor">#</a>
-
-			<div class="description short">
-				<p>Exclude path from cache path.</p>
-
-			</div>
-
-			<div class="description detailed hidden">
-				<p>Exclude path from cache path.</p>
-
-
-					<h4>Since</h4>
-					<div class="list">
-							<p>140422 First documented version.</p>
-<br />
-					</div>
-			</div>
-		</div></td>
-	</tr>
-	<tr data-order="CACHE_PATH_NO_PATH_INDEX" id="CACHE_PATH_NO_PATH_INDEX">
-
-		<td class="attributes"><code>integer</code></td>
-		<td class="name"><code>
-				<a href="source-class-quick_cache.advanced_cache.html#1094-1101" title="Go to source code"><b>CACHE_PATH_NO_PATH_INDEX</b></a>
-		</code></td>
-		<td class="value"><code><span class="php-num">8</span></code></td>
-		<td class="description"><div>
-			<a href="#CACHE_PATH_NO_PATH_INDEX" class="anchor">#</a>
-
-			<div class="description short">
-				<p>Exclude path index (i.e. no default <code>index</code>) from cache path.</p>
-
-			</div>
-
-			<div class="description detailed hidden">
-				<p>Exclude path index (i.e. no default <code>index</code>) from cache path.</p>
-
-
-					<h4>Since</h4>
-					<div class="list">
-							<p>140422 First documented version.</p>
-<br />
-					</div>
-			</div>
-		</div></td>
-	</tr>
-	<tr data-order="CACHE_PATH_NO_QUV" id="CACHE_PATH_NO_QUV">
-
-		<td class="attributes"><code>integer</code></td>
-		<td class="name"><code>
-				<a href="source-class-quick_cache.advanced_cache.html#1103-1110" title="Go to source code"><b>CACHE_PATH_NO_QUV</b></a>
-		</code></td>
-		<td class="value"><code><span class="php-num">16</span></code></td>
-		<td class="description"><div>
-			<a href="#CACHE_PATH_NO_QUV" class="anchor">#</a>
-
-			<div class="description short">
-				<p>Exclude query, user &amp; version salt from cache path.</p>
-
-			</div>
-
-			<div class="description detailed hidden">
-				<p>Exclude query, user &amp; version salt from cache path.</p>
-
-
-					<h4>Since</h4>
-					<div class="list">
-							<p>140422 First documented version.</p>
-<br />
-					</div>
-			</div>
-		</div></td>
-	</tr>
-	<tr data-order="CACHE_PATH_NO_QUERY" id="CACHE_PATH_NO_QUERY">
-
-		<td class="attributes"><code>integer</code></td>
-		<td class="name"><code>
-				<a href="source-class-quick_cache.advanced_cache.html#1112-1119" title="Go to source code"><b>CACHE_PATH_NO_QUERY</b></a>
-		</code></td>
-		<td class="value"><code><span class="php-num">32</span></code></td>
-		<td class="description"><div>
-			<a href="#CACHE_PATH_NO_QUERY" class="anchor">#</a>
-
-			<div class="description short">
-				<p>Exclude query string from cache path.</p>
-
-			</div>
-
-			<div class="description detailed hidden">
-				<p>Exclude query string from cache path.</p>
-
-
-					<h4>Since</h4>
-					<div class="list">
-							<p>140422 First documented version.</p>
-<br />
-					</div>
-			</div>
-		</div></td>
-	</tr>
-	<tr data-order="CACHE_PATH_NO_USER" id="CACHE_PATH_NO_USER">
-
-		<td class="attributes"><code>integer</code></td>
-		<td class="name"><code>
-				<a href="source-class-quick_cache.advanced_cache.html#1121-1128" title="Go to source code"><b>CACHE_PATH_NO_USER</b></a>
-		</code></td>
-		<td class="value"><code><span class="php-num">64</span></code></td>
-		<td class="description"><div>
-			<a href="#CACHE_PATH_NO_USER" class="anchor">#</a>
-
-			<div class="description short">
-				<p>Exclude user token from cache path.</p>
-
-			</div>
-
-			<div class="description detailed hidden">
-				<p>Exclude user token from cache path.</p>
-
-
-					<h4>Since</h4>
-					<div class="list">
-							<p>140422 First documented version.</p>
-<br />
-					</div>
-			</div>
-		</div></td>
-	</tr>
-	<tr data-order="CACHE_PATH_NO_VSALT" id="CACHE_PATH_NO_VSALT">
-
-		<td class="attributes"><code>integer</code></td>
-		<td class="name"><code>
-				<a href="source-class-quick_cache.advanced_cache.html#1130-1137" title="Go to source code"><b>CACHE_PATH_NO_VSALT</b></a>
-		</code></td>
-		<td class="value"><code><span class="php-num">128</span></code></td>
-		<td class="description"><div>
-			<a href="#CACHE_PATH_NO_VSALT" class="anchor">#</a>
-
-			<div class="description short">
-				<p>Exclude version salt from cache path.</p>
-
-			</div>
-
-			<div class="description detailed hidden">
-				<p>Exclude version salt from cache path.</p>
-
-
-					<h4>Since</h4>
-					<div class="list">
-							<p>140422 First documented version.</p>
-<br />
-					</div>
-			</div>
-		</div></td>
-	</tr>
-	<tr data-order="CACHE_PATH_NO_EXT" id="CACHE_PATH_NO_EXT">
-
-		<td class="attributes"><code>integer</code></td>
-		<td class="name"><code>
-				<a href="source-class-quick_cache.advanced_cache.html#1139-1146" title="Go to source code"><b>CACHE_PATH_NO_EXT</b></a>
-		</code></td>
-		<td class="value"><code><span class="php-num">256</span></code></td>
-		<td class="description"><div>
-			<a href="#CACHE_PATH_NO_EXT" class="anchor">#</a>
-
-			<div class="description short">
-				<p>Exclude extension from cache path.</p>
-
-			</div>
-
-			<div class="description detailed hidden">
-				<p>Exclude extension from cache path.</p>
-
-
-					<h4>Since</h4>
-					<div class="list">
-							<p>140422 First documented version.</p>
+							<p>140605 Improving output buffer.</p>
 <br />
 					</div>
 			</div>
@@ -2578,41 +1387,28 @@
 	</tr>
 	</table>
 
+	<table class="summary inherited">
+	<caption>Constants inherited from <a href="class-quick_cache.share.html#constants">quick_cache\share</a></caption>
+	<tr>
+		<td><code>
+			<a href="class-quick_cache.share.html#CACHE_PATH_ALLOW_WILDCARDS"><b>CACHE_PATH_ALLOW_WILDCARDS</b></a>, 
+			<a href="class-quick_cache.share.html#CACHE_PATH_NO_EXT"><b>CACHE_PATH_NO_EXT</b></a>, 
+			<a href="class-quick_cache.share.html#CACHE_PATH_NO_HOST"><b>CACHE_PATH_NO_HOST</b></a>, 
+			<a href="class-quick_cache.share.html#CACHE_PATH_NO_PATH"><b>CACHE_PATH_NO_PATH</b></a>, 
+			<a href="class-quick_cache.share.html#CACHE_PATH_NO_PATH_INDEX"><b>CACHE_PATH_NO_PATH_INDEX</b></a>, 
+			<a href="class-quick_cache.share.html#CACHE_PATH_NO_QUERY"><b>CACHE_PATH_NO_QUERY</b></a>, 
+			<a href="class-quick_cache.share.html#CACHE_PATH_NO_QUV"><b>CACHE_PATH_NO_QUV</b></a>, 
+			<a href="class-quick_cache.share.html#CACHE_PATH_NO_SCHEME"><b>CACHE_PATH_NO_SCHEME</b></a>, 
+			<a href="class-quick_cache.share.html#CACHE_PATH_NO_USER"><b>CACHE_PATH_NO_USER</b></a>, 
+			<a href="class-quick_cache.share.html#CACHE_PATH_NO_VSALT"><b>CACHE_PATH_NO_VSALT</b></a>
+		</code></td>
+	</tr>
+	</table>
 
 
 
 	<table class="summary" id="properties">
 	<caption>Properties summary</caption>
-	<tr data-order="is_pro" id="$is_pro">
-		<td class="attributes"><code>
-			public  
-			boolean
-		</code></td>
-
-		<td class="name">
-				<a href="source-class-quick_cache.advanced_cache.html#130-137" title="Go to source code"><var>$is_pro</var></a>
-		</td>
-		<td class="value"><code><span class="php-keyword1">FALSE</span></code></td>
-		<td class="description"><div>
-			<a href="#$is_pro" class="anchor">#</a>
-
-			<div class="description short">
-				<p>Identifies the pro version of Quick Cache.</p>
-
-			</div>
-
-			<div class="description detailed hidden">
-				<p>Identifies the pro version of Quick Cache.</p>
-
-
-					<h4>Since</h4>
-					<div class="list">
-							<p>140422 First documented version.</p>
-<br />
-					</div>
-			</div>
-		</div></td>
-	</tr>
 	<tr data-order="timer" id="$timer">
 		<td class="attributes"><code>
 			public  
@@ -2620,7 +1416,7 @@
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-quick_cache.advanced_cache.html#139-146" title="Go to source code"><var>$timer</var></a>
+				<a href="source-class-quick_cache.advanced_cache.html#145-152" title="Go to source code"><var>$timer</var></a>
 		</td>
 		<td class="value"><code><span class="php-num">0</span></code></td>
 		<td class="description"><div>
@@ -2643,6 +1439,36 @@
 			</div>
 		</div></td>
 	</tr>
+	<tr data-order="is_running" id="$is_running">
+		<td class="attributes"><code>
+			public  
+			boolean
+		</code></td>
+
+		<td class="name">
+				<a href="source-class-quick_cache.advanced_cache.html#154-161" title="Go to source code"><var>$is_running</var></a>
+		</td>
+		<td class="value"><code><span class="php-keyword1">FALSE</span></code></td>
+		<td class="description"><div>
+			<a href="#$is_running" class="anchor">#</a>
+
+			<div class="description short">
+				<p>Flagged as <code>TRUE</code> if QC advanced cache is active &amp; running.</p>
+
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Flagged as <code>TRUE</code> if QC advanced cache is active &amp; running.</p>
+
+
+					<h4>Since</h4>
+					<div class="list">
+							<p>140605 Improving output buffers</p>
+<br />
+					</div>
+			</div>
+		</div></td>
+	</tr>
 	<tr data-order="protocol" id="$protocol">
 		<td class="attributes"><code>
 			public  
@@ -2650,7 +1476,7 @@
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-quick_cache.advanced_cache.html#148-155" title="Go to source code"><var>$protocol</var></a>
+				<a href="source-class-quick_cache.advanced_cache.html#163-170" title="Go to source code"><var>$protocol</var></a>
 		</td>
 		<td class="value"><code><span class="php-quote">''</span></code></td>
 		<td class="description"><div>
@@ -2680,7 +1506,7 @@
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-quick_cache.advanced_cache.html#157-164" title="Go to source code"><var>$version_salt</var></a>
+				<a href="source-class-quick_cache.advanced_cache.html#172-179" title="Go to source code"><var>$version_salt</var></a>
 		</td>
 		<td class="value"><code><span class="php-quote">''</span></code></td>
 		<td class="description"><div>
@@ -2710,7 +1536,7 @@
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-quick_cache.advanced_cache.html#166-175" title="Go to source code"><var>$cache_path</var></a>
+				<a href="source-class-quick_cache.advanced_cache.html#181-190" title="Go to source code"><var>$cache_path</var></a>
 		</td>
 		<td class="value"><code><span class="php-quote">''</span></code></td>
 		<td class="description"><div>
@@ -2741,7 +1567,7 @@
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-quick_cache.advanced_cache.html#177-185" title="Go to source code"><var>$cache_file</var></a>
+				<a href="source-class-quick_cache.advanced_cache.html#192-200" title="Go to source code"><var>$cache_file</var></a>
 		</td>
 		<td class="value"><code><span class="php-quote">''</span></code></td>
 		<td class="description"><div>
@@ -2771,7 +1597,7 @@
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-quick_cache.advanced_cache.html#187-195" title="Go to source code"><var>$cache_file_404</var></a>
+				<a href="source-class-quick_cache.advanced_cache.html#202-210" title="Go to source code"><var>$cache_file_404</var></a>
 		</td>
 		<td class="value"><code><span class="php-quote">''</span></code></td>
 		<td class="description"><div>
@@ -2801,7 +1627,7 @@
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-quick_cache.advanced_cache.html#197-205" title="Go to source code"><var>$salt_location</var></a>
+				<a href="source-class-quick_cache.advanced_cache.html#212-220" title="Go to source code"><var>$salt_location</var></a>
 		</td>
 		<td class="value"><code><span class="php-quote">''</span></code></td>
 		<td class="description"><div>
@@ -2831,9 +1657,12 @@
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-quick_cache.advanced_cache.html#207-214" title="Go to source code"><var>$postload</var></a>
+				<a href="source-class-quick_cache.advanced_cache.html#222-232" title="Go to source code"><var>$postload</var></a>
 		</td>
-		<td class="value"><code><span class="php-keyword1">array</span>()</code></td>
+		<td class="value"><code><span class="php-keyword1">array</span>(
+		<span class="php-quote">'filter_status_header'</span> =&gt; <span class="php-keyword1">TRUE</span>, <span class="php-quote">'wp_main_query'</span> =&gt; <span class="php-keyword1">TRUE</span>,
+		<span class="php-quote">'set_debug_info'</span>       =&gt; QUICK_CACHE_DEBUGGING_ENABLE,
+	)</code></td>
 		<td class="description"><div>
 			<a href="#$postload" class="anchor">#</a>
 
@@ -2854,36 +1683,32 @@
 			</div>
 		</div></td>
 	</tr>
-	<tr data-order="http_status" id="$http_status">
+	<tr data-order="debug_info" id="$debug_info">
 		<td class="attributes"><code>
 			public  
-			null|integer
+			array
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-quick_cache.advanced_cache.html#216-225" title="Go to source code"><var>$http_status</var></a>
+				<a href="source-class-quick_cache.advanced_cache.html#234-241" title="Go to source code"><var>$debug_info</var></a>
 		</td>
-		<td class="value"><code></code></td>
+		<td class="value"><code><span class="php-keyword1">array</span>(<span class="php-quote">'reason_code'</span> =&gt; <span class="php-quote">''</span>, <span class="php-quote">'reason'</span> =&gt; <span class="php-quote">''</span>)</code></td>
 		<td class="description"><div>
-			<a href="#$http_status" class="anchor">#</a>
+			<a href="#$debug_info" class="anchor">#</a>
 
 			<div class="description short">
-				<p>Last HTTP status code passed through \status_header.</p>
+				<p>An array of debug info.</p>
 
 			</div>
 
 			<div class="description detailed hidden">
-				<p>Last HTTP status code passed through \status_header.</p>
+				<p>An array of debug info.</p>
 
 
 					<h4>Since</h4>
 					<div class="list">
-							<p>140422 First documented version.</p>
+							<p>140605 Improve output buffering.</p>
 <br />
-					</div>
-					<h4>See</h4>
-					<div class="list">
-							<code><code><a href="class-quick_cache.advanced_cache.html#_maybe_filter_status_header_postload">quick_cache\advanced_cache::maybe_filter_status_header_postload()</a></code></code><br />
 					</div>
 			</div>
 		</div></td>
@@ -2895,7 +1720,7 @@
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-quick_cache.advanced_cache.html#227-236" title="Go to source code"><var>$is_wp_loaded_query</var></a>
+				<a href="source-class-quick_cache.advanced_cache.html#243-252" title="Go to source code"><var>$is_wp_loaded_query</var></a>
 		</td>
 		<td class="value"><code><span class="php-keyword1">FALSE</span></code></td>
 		<td class="description"><div>
@@ -2929,7 +1754,7 @@
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-quick_cache.advanced_cache.html#238-247" title="Go to source code"><var>$is_404</var></a>
+				<a href="source-class-quick_cache.advanced_cache.html#254-263" title="Go to source code"><var>$is_404</var></a>
 		</td>
 		<td class="value"><code><span class="php-keyword1">FALSE</span></code></td>
 		<td class="description"><div>
@@ -2956,26 +1781,26 @@
 			</div>
 		</div></td>
 	</tr>
-	<tr data-order="site_url" id="$site_url">
+	<tr data-order="http_status" id="$http_status">
 		<td class="attributes"><code>
 			public  
-			string
+			integer
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-quick_cache.advanced_cache.html#249-258" title="Go to source code"><var>$site_url</var></a>
+				<a href="source-class-quick_cache.advanced_cache.html#265-274" title="Go to source code"><var>$http_status</var></a>
 		</td>
-		<td class="value"><code><span class="php-quote">''</span></code></td>
+		<td class="value"><code><span class="php-num">0</span></code></td>
 		<td class="description"><div>
-			<a href="#$site_url" class="anchor">#</a>
+			<a href="#$http_status" class="anchor">#</a>
 
 			<div class="description short">
-				<p>Current WordPress \site_url().</p>
+				<p>Last HTTP status code passed through \status_header.</p>
 
 			</div>
 
 			<div class="description detailed hidden">
-				<p>Current WordPress \site_url().</p>
+				<p>Last HTTP status code passed through \status_header.</p>
 
 
 					<h4>Since</h4>
@@ -2985,36 +1810,70 @@
 					</div>
 					<h4>See</h4>
 					<div class="list">
+							<code><code><a href="class-quick_cache.advanced_cache.html#_maybe_filter_status_header_postload">quick_cache\advanced_cache::maybe_filter_status_header_postload()</a></code></code><br />
+					</div>
+			</div>
+		</div></td>
+	</tr>
+	<tr data-order="is_a_wp_content_type" id="$is_a_wp_content_type">
+		<td class="attributes"><code>
+			public  
+			boolean
+		</code></td>
+
+		<td class="name">
+				<a href="source-class-quick_cache.advanced_cache.html#276-285" title="Go to source code"><var>$is_a_wp_content_type</var></a>
+		</td>
+		<td class="value"><code><span class="php-keyword1">FALSE</span></code></td>
+		<td class="description"><div>
+			<a href="#$is_a_wp_content_type" class="anchor">#</a>
+
+			<div class="description short">
+				<p>Is the current request a WordPress content type?</p>
+
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Is the current request a WordPress content type?</p>
+
+
+					<h4>Since</h4>
+					<div class="list">
+							<p>140605 Improving debug notes display.</p>
+<br />
+					</div>
+					<h4>See</h4>
+					<div class="list">
 							<code><code><a href="class-quick_cache.advanced_cache.html#_wp_main_query_postload">quick_cache\advanced_cache::wp_main_query_postload()</a></code></code><br />
 					</div>
 			</div>
 		</div></td>
 	</tr>
-	<tr data-order="home_url" id="$home_url">
+	<tr data-order="content_url" id="$content_url">
 		<td class="attributes"><code>
 			public  
 			string
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-quick_cache.advanced_cache.html#260-269" title="Go to source code"><var>$home_url</var></a>
+				<a href="source-class-quick_cache.advanced_cache.html#287-296" title="Go to source code"><var>$content_url</var></a>
 		</td>
 		<td class="value"><code><span class="php-quote">''</span></code></td>
 		<td class="description"><div>
-			<a href="#$home_url" class="anchor">#</a>
+			<a href="#$content_url" class="anchor">#</a>
 
 			<div class="description short">
-				<p>Current WordPress \home_url().</p>
+				<p>Current WordPress \content_url().</p>
 
 			</div>
 
 			<div class="description detailed hidden">
-				<p>Current WordPress \home_url().</p>
+				<p>Current WordPress \content_url().</p>
 
 
 					<h4>Since</h4>
 					<div class="list">
-							<p>140422 First documented version.</p>
+							<p>140725 Reorganizing class members.</p>
 <br />
 					</div>
 					<h4>See</h4>
@@ -3031,7 +1890,7 @@
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-quick_cache.advanced_cache.html#271-280" title="Go to source code"><var>$is_user_logged_in</var></a>
+				<a href="source-class-quick_cache.advanced_cache.html#298-307" title="Go to source code"><var>$is_user_logged_in</var></a>
 		</td>
 		<td class="value"><code><span class="php-keyword1">FALSE</span></code></td>
 		<td class="description"><div>
@@ -3065,7 +1924,7 @@
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-quick_cache.advanced_cache.html#282-291" title="Go to source code"><var>$is_maintenance</var></a>
+				<a href="source-class-quick_cache.advanced_cache.html#309-318" title="Go to source code"><var>$is_maintenance</var></a>
 		</td>
 		<td class="value"><code><span class="php-keyword1">FALSE</span></code></td>
 		<td class="description"><div>
@@ -3099,9 +1958,9 @@
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-quick_cache.advanced_cache.html#293-302" title="Go to source code"><var>$plugin_file</var></a>
+				<a href="source-class-quick_cache.advanced_cache.html#320-329" title="Go to source code"><var>$plugin_file</var></a>
 		</td>
-		<td class="value"><code><span class="php-quote">''</span></code></td>
+		<td class="value"><code>QUICK_CACHE_PLUGIN_FILE</code></td>
 		<td class="description"><div>
 			<a href="#$plugin_file" class="anchor">#</a>
 
@@ -3126,98 +1985,23 @@
 			</div>
 		</div></td>
 	</tr>
-	<tr data-order="text_domain" id="$text_domain">
-		<td class="attributes"><code>
-			public  
-			string
-		</code></td>
-
-		<td class="name">
-				<a href="source-class-quick_cache.advanced_cache.html#304-311" title="Go to source code"><var>$text_domain</var></a>
-		</td>
-		<td class="value"><code><span class="php-quote">''</span></code></td>
-		<td class="description"><div>
-			<a href="#$text_domain" class="anchor">#</a>
-
-			<div class="description short">
-				<p>Text domain for translations; based on <code>__NAMESPACE__</code>.</p>
-
-			</div>
-
-			<div class="description detailed hidden">
-				<p>Text domain for translations; based on <code>__NAMESPACE__</code>.</p>
-
-
-					<h4>Since</h4>
-					<div class="list">
-							<p>140422 First documented version.</p>
-<br />
-					</div>
-			</div>
-		</div></td>
-	</tr>
-	<tr data-order="hooks" id="$hooks">
-		<td class="attributes"><code>
-			public  
-			array
-		</code></td>
-
-		<td class="name">
-				<a href="source-class-quick_cache.advanced_cache.html#313-320" title="Go to source code"><var>$hooks</var></a>
-		</td>
-		<td class="value"><code><span class="php-keyword1">array</span>()</code></td>
-		<td class="description"><div>
-			<a href="#$hooks" class="anchor">#</a>
-
-			<div class="description short">
-				<p>Array of hooks added by plugins.</p>
-
-			</div>
-
-			<div class="description detailed hidden">
-				<p>Array of hooks added by plugins.</p>
-
-
-					<h4>Since</h4>
-					<div class="list">
-							<p>140422 First documented version.</p>
-<br />
-					</div>
-			</div>
-		</div></td>
-	</tr>
-	<tr data-order="htaccess_deny" id="$htaccess_deny">
-		<td class="attributes"><code>
-			public  
-			string
-		</code></td>
-
-		<td class="name">
-				<a href="source-class-quick_cache.advanced_cache.html#1722-1729" title="Go to source code"><var>$htaccess_deny</var></a>
-		</td>
-		<td class="value"><code><span class="php-quote">&quot;&lt;IfModule authz_core_module&gt;\n\tRequire all denied\n&lt;/IfModule&gt;\n&lt;IfModule !authz_core_module&gt;\n\tdeny from all\n&lt;/IfModule&gt;&quot;</span></code></td>
-		<td class="description"><div>
-			<a href="#$htaccess_deny" class="anchor">#</a>
-
-			<div class="description short">
-				<p>Apache <code>.htaccess</code> rules that deny public access to the contents of a directory.</p>
-
-			</div>
-
-			<div class="description detailed hidden">
-				<p>Apache <code>.htaccess</code> rules that deny public access to the contents of a directory.</p>
-
-
-					<h4>Since</h4>
-					<div class="list">
-							<p>140422 First documented version.</p>
-<br />
-					</div>
-			</div>
-		</div></td>
-	</tr>
 	</table>
 
+	<table class="summary inherited">
+	<caption>Properties inherited from <a href="class-quick_cache.share.html#properties">quick_cache\share</a></caption>
+	<tr>
+		<td><code>
+			<a href="class-quick_cache.share.html#$cache"><var>$cache</var></a>, 
+			<a href="class-quick_cache.share.html#$hooks"><var>$hooks</var></a>, 
+			<a href="class-quick_cache.share.html#$htaccess_deny"><var>$htaccess_deny</var></a>, 
+			<a href="class-quick_cache.share.html#$is_pro"><var>$is_pro</var></a>, 
+			<a href="class-quick_cache.share.html#$static"><var>$static</var></a>, 
+			<a href="class-quick_cache.share.html#$text_domain"><var>$text_domain</var></a>, 
+			<a href="class-quick_cache.share.html#$user_login_cookie_expired_or_invalid"><var>$user_login_cookie_expired_or_invalid</var></a>, 
+			<a href="class-quick_cache.share.html#$version"><var>$version</var></a>
+		</code></td>
+	</tr>
+	</table>
 
 
 

@@ -7,8 +7,8 @@
 
 	<title>File quick-cache/includes/api-class.php | Quick Cache Lite</title>
 
-	<script type="text/javascript" src="resources/combined.js?2507565882"></script>
-	<script type="text/javascript" src="elementlist.js?1733873414"></script>
+	<script type="text/javascript" src="resources/combined.js?822040270"></script>
+	<script type="text/javascript" src="elementlist.js?1312627654"></script>
 	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3403148767" />
 
 </head>
@@ -44,8 +44,10 @@
 
 			<h3>Functions</h3>
 			<ul>
-				<li><a href="function-quick_cache_php53_dashboard_notice.html">quick_cache_php53_dashboard_notice</a></li>
 				<li><a href="function-wp_cache_postload.html">wp_cache_postload</a></li>
+				<li><a href="function-wp_php53.html">wp_php53</a></li>
+				<li><a href="function-wp_php53_custom_notice.html">wp_php53_custom_notice</a></li>
+				<li><a href="function-wp_php53_notice.html">wp_php53_notice</a></li>
 			</ul>
 		</div>
 	</div>
@@ -122,64 +124,64 @@
 </span></span><span id="28" class="l"><a class="l" href="#28">28: </a><span class="php-comment"> *    This wipes out the entire cache. On a standard WP installation this is the same as quick_cache::clear(); but on a multisite installation it impacts the entire network (i.e. wipes the cache for all blogs in the network).
 </span></span><span id="29" class="l"><a class="l" href="#29">29: </a><span class="php-comment"> */</span>
 </span><span id="30" class="l"><a class="l" href="#30">30: </a><span class="php-keyword1">namespace</span> <span class="php-comment">// Global namespace.</span>
-</span><span id="31" class="l"><a class="l" href="#31">31: </a>    {
-</span><span id="32" class="l"><a class="l" href="#32">32: </a>        <span class="php-keyword1">if</span>(!<span class="php-keyword2">defined</span>(<span class="php-quote">'WPINC'</span>)) <span class="php-comment">// MUST have WordPress.</span>
-</span><span id="33" class="l"><a class="l" href="#33">33: </a>            <span class="php-keyword1">exit</span>(<span class="php-quote">'Do NOT access this file directly: '</span>.<span class="php-keyword2">basename</span>(__FILE__));
+</span><span id="31" class="l"><a class="l" href="#31">31: </a>{
+</span><span id="32" class="l"><a class="l" href="#32">32: </a>    <span class="php-keyword1">if</span>(!<span class="php-keyword2">defined</span>(<span class="php-quote">'WPINC'</span>)) <span class="php-comment">// MUST have WordPress.</span>
+</span><span id="33" class="l"><a class="l" href="#33">33: </a>        <span class="php-keyword1">exit</span>(<span class="php-quote">'Do NOT access this file directly: '</span>.<span class="php-keyword2">basename</span>(__FILE__));
 </span><span id="34" class="l"><a class="l" href="#34">34: </a>
-</span><span id="35" class="l"><a class="l" href="#35">35: </a>        <span class="php-comment">/**
-</span></span><span id="36" class="l"><a class="l" href="#36">36: </a><span class="php-comment">         * Quick Cache API Class.
-</span></span><span id="37" class="l"><a class="l" href="#37">37: </a><span class="php-comment">         */</span>
-</span><span id="38" class="l"><a class="l" href="#38">38: </a>        <span class="php-keyword1">class</span> <a id="quick_cache" href="#quick_cache">quick_cache</a>
-</span><span id="39" class="l"><a class="l" href="#39">39: </a>        {
-</span><span id="40" class="l"><a class="l" href="#40">40: </a>            <span class="php-comment">/**
-</span></span><span id="41" class="l"><a class="l" href="#41">41: </a><span class="php-comment">             * @return \quick_cache\plugin instance.
-</span></span><span id="42" class="l"><a class="l" href="#42">42: </a><span class="php-comment">             */</span>
-</span><span id="43" class="l"><a class="l" href="#43">43: </a>            <span class="php-keyword1">public</span> <span class="php-keyword1">static</span> <span class="php-keyword1">function</span> <a id="_plugin" href="#_plugin">plugin</a>()
-</span><span id="44" class="l"><a class="l" href="#44">44: </a>                {
-</span><span id="45" class="l"><a class="l" href="#45">45: </a>                    <span class="php-keyword1">return</span> <span class="php-var">$GLOBALS</span>[__CLASS__];
-</span><span id="46" class="l"><a class="l" href="#46">46: </a>                }
+</span><span id="35" class="l"><a class="l" href="#35">35: </a>    <span class="php-comment">/**
+</span></span><span id="36" class="l"><a class="l" href="#36">36: </a><span class="php-comment">     * Quick Cache API Class.
+</span></span><span id="37" class="l"><a class="l" href="#37">37: </a><span class="php-comment">     */</span>
+</span><span id="38" class="l"><a class="l" href="#38">38: </a>    <span class="php-keyword1">class</span> <a id="quick_cache" href="#quick_cache">quick_cache</a>
+</span><span id="39" class="l"><a class="l" href="#39">39: </a>    {
+</span><span id="40" class="l"><a class="l" href="#40">40: </a>        <span class="php-comment">/**
+</span></span><span id="41" class="l"><a class="l" href="#41">41: </a><span class="php-comment">         * @return \quick_cache\plugin instance.
+</span></span><span id="42" class="l"><a class="l" href="#42">42: </a><span class="php-comment">         */</span>
+</span><span id="43" class="l"><a class="l" href="#43">43: </a>        <span class="php-keyword1">public</span> <span class="php-keyword1">static</span> <span class="php-keyword1">function</span> <a id="_plugin" href="#_plugin">plugin</a>()
+</span><span id="44" class="l"><a class="l" href="#44">44: </a>        {
+</span><span id="45" class="l"><a class="l" href="#45">45: </a>            <span class="php-keyword1">return</span> <span class="php-var">$GLOBALS</span>[__CLASS__];
+</span><span id="46" class="l"><a class="l" href="#46">46: </a>        }
 </span><span id="47" class="l"><a class="l" href="#47">47: </a>
-</span><span id="48" class="l"><a class="l" href="#48">48: </a>            <span class="php-comment">/**
-</span></span><span id="49" class="l"><a class="l" href="#49">49: </a><span class="php-comment">             * @return string Current version string.
-</span></span><span id="50" class="l"><a class="l" href="#50">50: </a><span class="php-comment">             */</span>
-</span><span id="51" class="l"><a class="l" href="#51">51: </a>            <span class="php-keyword1">public</span> <span class="php-keyword1">static</span> <span class="php-keyword1">function</span> <a id="_version" href="#_version">version</a>()
-</span><span id="52" class="l"><a class="l" href="#52">52: </a>                {
-</span><span id="53" class="l"><a class="l" href="#53">53: </a>                    <span class="php-keyword1">return</span> <span class="php-keyword1">static</span>::plugin()-&gt;version;
-</span><span id="54" class="l"><a class="l" href="#54">54: </a>                }
+</span><span id="48" class="l"><a class="l" href="#48">48: </a>        <span class="php-comment">/**
+</span></span><span id="49" class="l"><a class="l" href="#49">49: </a><span class="php-comment">         * @return string Current version string.
+</span></span><span id="50" class="l"><a class="l" href="#50">50: </a><span class="php-comment">         */</span>
+</span><span id="51" class="l"><a class="l" href="#51">51: </a>        <span class="php-keyword1">public</span> <span class="php-keyword1">static</span> <span class="php-keyword1">function</span> <a id="_version" href="#_version">version</a>()
+</span><span id="52" class="l"><a class="l" href="#52">52: </a>        {
+</span><span id="53" class="l"><a class="l" href="#53">53: </a>            <span class="php-keyword1">return</span> <span class="php-keyword1">static</span>::plugin()-&gt;version;
+</span><span id="54" class="l"><a class="l" href="#54">54: </a>        }
 </span><span id="55" class="l"><a class="l" href="#55">55: </a>
-</span><span id="56" class="l"><a class="l" href="#56">56: </a>            <span class="php-comment">/**
-</span></span><span id="57" class="l"><a class="l" href="#57">57: </a><span class="php-comment">             * @return array Current array of options.
-</span></span><span id="58" class="l"><a class="l" href="#58">58: </a><span class="php-comment">             */</span>
-</span><span id="59" class="l"><a class="l" href="#59">59: </a>            <span class="php-keyword1">public</span> <span class="php-keyword1">static</span> <span class="php-keyword1">function</span> <a id="_options" href="#_options">options</a>()
-</span><span id="60" class="l"><a class="l" href="#60">60: </a>                {
-</span><span id="61" class="l"><a class="l" href="#61">61: </a>                    <span class="php-keyword1">return</span> <span class="php-keyword1">static</span>::plugin()-&gt;options;
-</span><span id="62" class="l"><a class="l" href="#62">62: </a>                }
+</span><span id="56" class="l"><a class="l" href="#56">56: </a>        <span class="php-comment">/**
+</span></span><span id="57" class="l"><a class="l" href="#57">57: </a><span class="php-comment">         * @return array Current array of options.
+</span></span><span id="58" class="l"><a class="l" href="#58">58: </a><span class="php-comment">         */</span>
+</span><span id="59" class="l"><a class="l" href="#59">59: </a>        <span class="php-keyword1">public</span> <span class="php-keyword1">static</span> <span class="php-keyword1">function</span> <a id="_options" href="#_options">options</a>()
+</span><span id="60" class="l"><a class="l" href="#60">60: </a>        {
+</span><span id="61" class="l"><a class="l" href="#61">61: </a>            <span class="php-keyword1">return</span> <span class="php-keyword1">static</span>::plugin()-&gt;options;
+</span><span id="62" class="l"><a class="l" href="#62">62: </a>        }
 </span><span id="63" class="l"><a class="l" href="#63">63: </a>
-</span><span id="64" class="l"><a class="l" href="#64">64: </a>            <span class="php-comment">/**
-</span></span><span id="65" class="l"><a class="l" href="#65">65: </a><span class="php-comment">             * @return integer Total files purged (if any).
-</span></span><span id="66" class="l"><a class="l" href="#66">66: </a><span class="php-comment">             */</span>
-</span><span id="67" class="l"><a class="l" href="#67">67: </a>            <span class="php-keyword1">public</span> <span class="php-keyword1">static</span> <span class="php-keyword1">function</span> <a id="_purge" href="#_purge">purge</a>()
-</span><span id="68" class="l"><a class="l" href="#68">68: </a>                {
-</span><span id="69" class="l"><a class="l" href="#69">69: </a>                    <span class="php-keyword1">return</span> <span class="php-keyword1">static</span>::plugin()-&gt;purge_cache();
-</span><span id="70" class="l"><a class="l" href="#70">70: </a>                }
+</span><span id="64" class="l"><a class="l" href="#64">64: </a>        <span class="php-comment">/**
+</span></span><span id="65" class="l"><a class="l" href="#65">65: </a><span class="php-comment">         * @return integer Total files purged (if any).
+</span></span><span id="66" class="l"><a class="l" href="#66">66: </a><span class="php-comment">         */</span>
+</span><span id="67" class="l"><a class="l" href="#67">67: </a>        <span class="php-keyword1">public</span> <span class="php-keyword1">static</span> <span class="php-keyword1">function</span> <a id="_purge" href="#_purge">purge</a>()
+</span><span id="68" class="l"><a class="l" href="#68">68: </a>        {
+</span><span id="69" class="l"><a class="l" href="#69">69: </a>            <span class="php-keyword1">return</span> <span class="php-keyword1">static</span>::plugin()-&gt;purge_cache();
+</span><span id="70" class="l"><a class="l" href="#70">70: </a>        }
 </span><span id="71" class="l"><a class="l" href="#71">71: </a>
-</span><span id="72" class="l"><a class="l" href="#72">72: </a>            <span class="php-comment">/**
-</span></span><span id="73" class="l"><a class="l" href="#73">73: </a><span class="php-comment">             * @return integer Total files cleared (if any).
-</span></span><span id="74" class="l"><a class="l" href="#74">74: </a><span class="php-comment">             */</span>
-</span><span id="75" class="l"><a class="l" href="#75">75: </a>            <span class="php-keyword1">public</span> <span class="php-keyword1">static</span> <span class="php-keyword1">function</span> <a id="_clear" href="#_clear">clear</a>()
-</span><span id="76" class="l"><a class="l" href="#76">76: </a>                {
-</span><span id="77" class="l"><a class="l" href="#77">77: </a>                    <span class="php-keyword1">return</span> <span class="php-keyword1">static</span>::plugin()-&gt;clear_cache();
-</span><span id="78" class="l"><a class="l" href="#78">78: </a>                }
+</span><span id="72" class="l"><a class="l" href="#72">72: </a>        <span class="php-comment">/**
+</span></span><span id="73" class="l"><a class="l" href="#73">73: </a><span class="php-comment">         * @return integer Total files cleared (if any).
+</span></span><span id="74" class="l"><a class="l" href="#74">74: </a><span class="php-comment">         */</span>
+</span><span id="75" class="l"><a class="l" href="#75">75: </a>        <span class="php-keyword1">public</span> <span class="php-keyword1">static</span> <span class="php-keyword1">function</span> <a id="_clear" href="#_clear">clear</a>()
+</span><span id="76" class="l"><a class="l" href="#76">76: </a>        {
+</span><span id="77" class="l"><a class="l" href="#77">77: </a>            <span class="php-keyword1">return</span> <span class="php-keyword1">static</span>::plugin()-&gt;clear_cache();
+</span><span id="78" class="l"><a class="l" href="#78">78: </a>        }
 </span><span id="79" class="l"><a class="l" href="#79">79: </a>
-</span><span id="80" class="l"><a class="l" href="#80">80: </a>            <span class="php-comment">/**
-</span></span><span id="81" class="l"><a class="l" href="#81">81: </a><span class="php-comment">             * @return integer Total files wiped (if any).
-</span></span><span id="82" class="l"><a class="l" href="#82">82: </a><span class="php-comment">             */</span>
-</span><span id="83" class="l"><a class="l" href="#83">83: </a>            <span class="php-keyword1">public</span> <span class="php-keyword1">static</span> <span class="php-keyword1">function</span> <a id="_wipe" href="#_wipe">wipe</a>()
-</span><span id="84" class="l"><a class="l" href="#84">84: </a>                {
-</span><span id="85" class="l"><a class="l" href="#85">85: </a>                    <span class="php-keyword1">return</span> <span class="php-keyword1">static</span>::plugin()-&gt;wipe_cache();
-</span><span id="86" class="l"><a class="l" href="#86">86: </a>                }
-</span><span id="87" class="l"><a class="l" href="#87">87: </a>        }
-</span><span id="88" class="l"><a class="l" href="#88">88: </a></span>    }</code></pre>
+</span><span id="80" class="l"><a class="l" href="#80">80: </a>        <span class="php-comment">/**
+</span></span><span id="81" class="l"><a class="l" href="#81">81: </a><span class="php-comment">         * @return integer Total files wiped (if any).
+</span></span><span id="82" class="l"><a class="l" href="#82">82: </a><span class="php-comment">         */</span>
+</span><span id="83" class="l"><a class="l" href="#83">83: </a>        <span class="php-keyword1">public</span> <span class="php-keyword1">static</span> <span class="php-keyword1">function</span> <a id="_wipe" href="#_wipe">wipe</a>()
+</span><span id="84" class="l"><a class="l" href="#84">84: </a>        {
+</span><span id="85" class="l"><a class="l" href="#85">85: </a>            <span class="php-keyword1">return</span> <span class="php-keyword1">static</span>::plugin()-&gt;wipe_cache();
+</span><span id="86" class="l"><a class="l" href="#86">86: </a>        }
+</span><span id="87" class="l"><a class="l" href="#87">87: </a>    }
+</span><span id="88" class="l"><a class="l" href="#88">88: </a></span>}</code></pre>
 
 	<div id="footer">
 		Quick Cache Lite API documentation generated by <a href="http://apigen.org">ApiGen 2.8.0</a>
