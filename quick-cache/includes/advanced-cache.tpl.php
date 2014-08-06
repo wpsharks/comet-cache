@@ -909,8 +909,10 @@ namespace quick_cache
 
 			# This is where a new 404 request might be detected for the first time; and where the 404 error file already exists in this case.
 
+			$cache_file_tmp = $this->cache_file.'.'.uniqid('', TRUE).'.tmp'; // Cache/symlink creation is atomic; e.g. tmp file w/ rename.
+
 			if($this->is_404 && is_file($this->cache_file_404))
-				if(!symlink($this->cache_file_404, $this->cache_file))
+				if(!(symlink($this->cache_file_404, $cache_file_tmp) && rename($cache_file_tmp, $this->cache_file)))
 					throw new \exception(sprintf(__('Unable to create symlink: `%1$s` » `%2$s`. Possible permissions issue (or race condition), please check your cache directory: `%3$s`.', $this->text_domain), $this->cache_file, $this->cache_file_404, QUICK_CACHE_DIR));
 				else return (boolean)$this->maybe_set_debug_info($this::NC_DEBUG_1ST_TIME_404_SYMLINK);
 
@@ -924,15 +926,19 @@ namespace quick_cache
 				                                                ($this->is_404) ? '404 [error document]' : $this->salt_location, $total_time, date('M jS, Y @ g:i a T'))).' -->';
 				$cache .= "\n".'<!-- '.htmlspecialchars(sprintf(__('This Quick Cache file will auto-expire (and be rebuilt) on: %1$s (based on your configured expiration time).', $this->text_domain), date('M jS, Y @ g:i a T', strtotime('+'.QUICK_CACHE_MAX_AGE)))).' -->';
 			}
-			$cache_file_tmp = $this->cache_file.'.'.uniqid('', TRUE).'.tmp'; // Cache creation is atomic; e.g. tmp file w/ rename.
+
 			/*
 			 * This is NOT a 404, or it is 404 and the 404 cache file doesn't yet exist (so we need to create it).
 			 */
 			if($this->is_404) // This is a 404; let's create 404 cache file and symlink to it.
 			{
 				if(file_put_contents($cache_file_tmp, serialize($this->headers_list()).'<!--headers-->'.$cache) && rename($cache_file_tmp, $this->cache_file_404))
-					if(symlink($this->cache_file_404, $this->cache_file)) // If this fails an exception will be thrown down below.
+				{
+					if(!(symlink($this->cache_file_404, $cache_file_tmp) && rename($cache_file_tmp, $this->cache_file)))
+						throw new \exception(sprintf(__('Unable to create symlink: `%1$s` » `%2$s`. Possible permissions issue (or race condition), please check your cache directory: `%3$s`.', $this->text_domain), $this->cache_file, $this->cache_file_404, QUICK_CACHE_DIR));
+					else
 						return $cache; // Return the newly built cache; with possible debug information also.
+				}
 
 			} // NOT a 404; let's write a new cache file.
 			else if(file_put_contents($cache_file_tmp, serialize($this->headers_list()).'<!--headers-->'.$cache) && rename($cache_file_tmp, $this->cache_file))
