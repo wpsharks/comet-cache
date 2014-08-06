@@ -74,6 +74,16 @@ namespace quick_cache
 			public $network_cap = '';
 
 			/**
+			 * Uninstall capability requirement.
+			 *
+			 * @since 14xxxx Adding uninstall handler.
+			 *
+			 * @var string WordPress capability required to
+			 *    completely uninstall/delete QC.
+			 */
+			public $uninstall_cap = '';
+
+			/**
 			 * Cache directory.
 			 *
 			 * @since 140605 Moving to a base directory.
@@ -92,15 +102,30 @@ namespace quick_cache
 			public $cache = array();
 
 			/**
+			 * Used by the plugin's uninstall handler.
+			 *
+			 * @since 14xxxx Adding uninstall handler.
+			 *
+			 * @var boolean If FALSE, run without any hooks.
+			 */
+			public $enable_hooks = TRUE;
+
+			/**
 			 * Quick Cache plugin constructor.
+			 *
+			 * @param boolean $enable_hooks Defaults to a TRUE value.
+			 *    If FALSE, setup runs but without adding any hooks.
 			 *
 			 * @since 140422 First documented version.
 			 */
-			public function __construct()
+			public function __construct($enable_hooks = TRUE)
 			{
 				parent::__construct(); // Shared constructor.
 
-				$this->file = preg_replace('/\.inc\.php$/', '.php', __FILE__);
+				$this->enable_hooks = (boolean)$enable_hooks;
+				$this->file         = preg_replace('/\.inc\.php$/', '.php', __FILE__);
+
+				if(!$this->enable_hooks) return; // All done in this case.
 
 				add_action('after_setup_theme', array($this, 'setup'));
 				register_activation_hook($this->file, array($this, 'activate'));
@@ -114,7 +139,8 @@ namespace quick_cache
 			 */
 			public function setup()
 			{
-				do_action('before__'.__METHOD__, get_defined_vars());
+				if($this->enable_hooks) // Hooks enabled?
+					do_action('before__'.__METHOD__, get_defined_vars());
 
 				load_plugin_textdomain($this->text_domain);
 
@@ -140,7 +166,7 @@ namespace quick_cache
 					'feeds_enable'                     => '0', // `0|1`.
 					'cache_404_requests'               => '0', // `0|1`.
 
-					'uninstall_on_deactivation'        => '0' // `0|1`.
+					'uninstall_on_deletion'            => '0' // `0|1`.
 				); // Default options are merged with those defined by the site owner.
 				$options               = (is_array($options = get_option(__NAMESPACE__.'_options'))) ? $options : array();
 				if(is_multisite() && is_array($site_options = get_site_option(__NAMESPACE__.'_options')))
@@ -187,8 +213,11 @@ namespace quick_cache
 				if(!$this->options['base_dir']) // Security enhancement; NEVER allow this to be empty.
 					$this->options['base_dir'] = $this->default_options['base_dir'];
 
-				$this->cap         = apply_filters(__METHOD__.'__cap', 'activate_plugins');
-				$this->network_cap = apply_filters(__METHOD__.'__network_cap', 'manage_network_plugins');
+				$this->cap           = apply_filters(__METHOD__.'__cap', 'activate_plugins');
+				$this->network_cap   = apply_filters(__METHOD__.'__network_cap', 'manage_network_plugins');
+				$this->uninstall_cap = apply_filters(__METHOD__.'__uninstall_cap', 'delete_plugins');
+
+				if(!$this->enable_hooks) return; // Stop here; setup without hooks.
 
 				add_action('init', array($this, 'check_advanced_cache'));
 				add_action('init', array($this, 'check_blog_paths'));
@@ -327,11 +356,35 @@ namespace quick_cache
 				$this->remove_wp_cache_from_wp_config();
 				$this->remove_advanced_cache();
 				$this->clear_cache();
+			}
 
-				if(!$this->options['uninstall_on_deactivation'])
+			/**
+			 * Plugin uninstall hook.
+			 *
+			 * @since 14xxxx Adding uninstall handler.
+			 *
+			 * @attaches-to {@link \register_uninstall_hook()} ~ via {@link uninstall()}
+			 */
+			public function uninstall()
+			{
+				if(!current_user_can($this->uninstall_cap))
+					return; // Extra layer of security.
+
+				if(!class_exists('\\'.__NAMESPACE__.'\\uninstall'))
+					return; // Expecting the uninstall class.
+
+				if(!defined('WP_UNINSTALL_PLUGIN'))
+					return; // Disallow.
+
+				$this->remove_wp_cache_from_wp_config();
+				$this->remove_advanced_cache();
+				$this->wipe_cache();
+
+				if(!$this->options['uninstall_on_deletion'])
 					return; // Nothing to do here.
 
 				$this->delete_advanced_cache();
+				$this->remove_base_dir();
 
 				delete_option(__NAMESPACE__.'_options');
 				if(is_multisite()) // Delete network options too.
@@ -1988,6 +2041,44 @@ namespace quick_cache
 				}
 				return $value; // Pass through untouched (always).
 			}
+
+			/**
+			 * Removes the entire base directory.
+			 *
+			 * @since 14xxx First documented version.
+			 *
+			 * @return integer Total files removed by this routine (if any).
+			 *
+			 * @throws \exception If a wipe failure occurs.
+			 */
+			public function remove_base_dir()
+			{
+				$counter = 0; // Initialize.
+
+				// @TODO When set_time_limit() is disabled by PHP configuration, display a warning message to users upon plugin activation.
+				@set_time_limit(1800); // In case of HUGE sites w/ a very large directory. Errors are ignored in case `set_time_limit()` is disabled.
+
+				$base_dir = $this->wp_content_dir_to(''); // Simply the base directory.
+
+				/** @var $_dir_file \RecursiveDirectoryIterator For IDEs. */
+				if($base_dir && is_dir($base_dir)) foreach($this->dir_regex_iteration($base_dir, '/.+/') as $_dir_file)
+				{
+					if(($_dir_file->isFile() || $_dir_file->isLink()))
+						if(!unlink($_dir_file->getPathname())) // Throw exception if unable to delete.
+							throw new \exception(sprintf(__('Unable to remove file: `%1$s`.', $this->text_domain), $_dir_file->getPathname()));
+						else $counter++; // Increment counter for each file we wipe.
+
+					else if($_dir_file->isDir())
+						if(!rmdir($_dir_file->getPathname())) // Throw exception if unable to delete.
+							throw new \exception(sprintf(__('Unable to remove dir: `%1$s`.', $this->text_domain), $_dir_file->getPathname()));
+				}
+				unset($_dir_file); // Just a little housekeeping.
+
+				if(is_dir($base_dir) && !rmdir($base_dir)) // Throw exception if unable to delete.
+					throw new \exception(sprintf(__('Unable to remove base dir: `%1$s`.', $this->text_domain), $base_dir));
+
+				return $counter; // Total removals.
+			}
 		}
 
 		/**
@@ -2008,15 +2099,15 @@ namespace quick_cache
 		 *
 		 * @since 140422 First documented version.
 		 *
-		 * @var plugin $GLOBALS [__NAMESPACE__]
+		 * @var plugin Main plugin class.
 		 */
-		$GLOBALS[__NAMESPACE__] = new plugin(); // New plugin instance.
+		$GLOBALS[__NAMESPACE__] = new plugin(!class_exists('\\'.__NAMESPACE__.'\\uninstall'));
 		/*
 		 * API class inclusion; depends on {@link $GLOBALS[__NAMESPACE__]}.
 		 */
 		require_once dirname(__FILE__).'/includes/api-class.php';
 	}
-	else add_action('all_admin_notices', function () // Do NOT load in this case.
+	else if(!class_exists('\\'.__NAMESPACE__.'\\uninstall')) add_action('all_admin_notices', function ()
 	{
 		echo '<div class="error"><p>'. // Running multiple versions of this plugin at same time.
 		     __('Please disable the LITE version of Quick Cache before you activate the PRO version.',
