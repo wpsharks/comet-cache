@@ -1023,11 +1023,14 @@ namespace quick_cache
 				}
 				unset($_file); // Just a little housekeeping.
 
-				$counter += $this->auto_purge_xml_feeds_cache(); // If enabled and necessary.
-				$counter += $this->auto_purge_xml_sitemaps_cache(); // If enabled and necessary.
-				$counter += $this->auto_purge_home_page_cache(); // If enabled and necessary.
-				$counter += $this->auto_purge_posts_page_cache(); // If enabled and necessary.
-				$counter += $this->auto_purge_post_terms_cache($id, $force); // If enabled and necessary.
+				$counter += $this->auto_purge_xml_feeds_cache('blog');
+				$counter += $this->auto_purge_xml_feeds_cache('post-terms', $id);
+				$counter += $this->auto_purge_xml_feeds_cache('post-authors', $id);
+
+				$counter += $this->auto_purge_xml_sitemaps_cache();
+				$counter += $this->auto_purge_home_page_cache();
+				$counter += $this->auto_purge_posts_page_cache();
+				$counter += $this->auto_purge_post_terms_cache($id, $force);
 
 				return apply_filters(__METHOD__, $counter, get_defined_vars());
 			}
@@ -1076,69 +1079,24 @@ namespace quick_cache
 				return apply_filters(__METHOD__, $counter, get_defined_vars());
 			}
 
-			/** @TODO
+			/**
 			 * Automatically purges cache files related to XML feeds.
 			 *
 			 * @since 14xxxx Working to improve compatibility with feeds.
+			 *
+			 * @param string  $type Type of feed(s) to auto-purge.
+			 * @param integer $post_id A Post ID (when applicable).
 			 *
 			 * @return integer Total files purged by this routine (if any).
 			 *
 			 * @throws \exception If a purge failure occurs.
 			 *
 			 * @note Unlike many of the other `auto_` methods, this one is NOT currently
-			 *    attached to any hooks. However, it is called upon by {@link auto_purge_post_cache()}.
-			 *
-			 * @see auto_purge_post_cache()
+			 *    attached to any hooks. However, it is called upon by other routines attached to hooks.
 			 */
-			public function auto_purge_xml_feeds_cache()
+			public function auto_purge_xml_feeds_cache($type, $post_id = 0)
 			{
-				$counter          = 0; // Initialize.
-				$enqueued_notices = 0; // Initialize.
-
-				if(isset($this->cache[__FUNCTION__]))
-					return $counter; // Already did this.
-				$this->cache[__FUNCTION__] = -1;
-
-				if(!$this->options['enable'])
-					return $counter; // Nothing to do.
-
-				if(!is_dir($cache_dir = $this->cache_dir()))
-					return $counter; // Nothing to do.
-
-				$_this                        = $this; // Needed in the closure below.
-				$patterns                     = '(?:'.implode('|', array_map(function ($pattern) use ($_this)
-					{
-						$pattern = $_this->build_cache_path(home_url('/'.trim($pattern, '/')), '', '', // Convert to a cache path w/ possible wildcards.
-						                                    $_this::CACHE_PATH_ALLOW_WILDCARDS | $_this::CACHE_PATH_NO_SCHEME | $_this::CACHE_PATH_NO_HOST
-						                                    | $_this::CACHE_PATH_NO_PATH_INDEX | $_this::CACHE_PATH_NO_QUV | $_this::CACHE_PATH_NO_EXT);
-						return preg_replace('/\\\\\*/', '.*?', preg_quote($pattern, '/')); // Wildcards.
-
-					}, preg_split('/['."\r\n".']+/', '/sitemap*.xml', NULL, PREG_SPLIT_NO_EMPTY))).')';
-				$cache_path_no_scheme_quv_ext = $this->build_cache_path(home_url('/'), '', '', $this::CACHE_PATH_NO_SCHEME | $this::CACHE_PATH_NO_PATH_INDEX | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT);
-				$regex                        = '/^'.preg_quote($cache_dir, '/'). // Consider all schemes; all path paginations; and all possible variations.
-				                                '\/[^\/]+\/'.preg_quote($cache_path_no_scheme_quv_ext, '/').
-				                                '\/'.$patterns.'\./';
-
-				/** @var $_file \RecursiveDirectoryIterator For IDEs. */
-				foreach($this->dir_regex_iteration($cache_dir, $regex) as $_file) if($_file->isFile() || $_file->isLink())
-				{
-					if(strpos($_file->getSubpathname(), '/') === FALSE) continue;
-					// Don't delete files in the immediate directory; e.g. `qc-advanced-cache` or `.htaccess`, etc.
-					// Actual `http|https/...` cache files are nested. Files in the immediate directory are for other purposes.
-
-					if(!unlink($_file->getPathname())) // Throw exception if unable to delete.
-						throw new \exception(sprintf(__('Unable to auto-purge XML sitemap file: `%1$s`.', $this->text_domain), $_file->getPathname()));
-					$counter++; // Increment counter for each file purge.
-
-					if($enqueued_notices || !is_admin()) continue; // Stop here; we already issued a notice, or this notice is N/A.
-
-					$this->enqueue_notice('<img src="'.esc_attr($this->url('/client-s/images/clear.png')).'" style="float:left; margin:0 10px 0 0; border:0;" />'.
-					                      __('<strong>Quick Cache:</strong> detected changes. Found XML sitemaps (auto-purging).', $this->text_domain));
-					$enqueued_notices++; // Notice counter.
-				}
-				unset($_file); // Just a little housekeeping.
-
-				return apply_filters(__METHOD__, $counter, get_defined_vars());
+				// @TODO
 			}
 
 			/**
@@ -1263,6 +1221,8 @@ namespace quick_cache
 				}
 				unset($_file); // Just a little housekeeping.
 
+				$counter += $this->auto_purge_xml_feeds_cache('blog');
+
 				return apply_filters(__METHOD__, $counter, get_defined_vars());
 			}
 
@@ -1335,6 +1295,8 @@ namespace quick_cache
 					$enqueued_notices++; // Notice counter.
 				}
 				unset($_file); // Just a little housekeeping.
+
+				$counter += $this->auto_purge_xml_feeds_cache('blog');
 
 				return apply_filters(__METHOD__, $counter, get_defined_vars());
 			}
@@ -1439,6 +1401,9 @@ namespace quick_cache
 					}
 				}
 				unset($_file, $_author); // Just a little housekeeping.
+
+				$counter += $this->auto_purge_xml_feeds_cache('blog');
+				$counter += $this->auto_purge_xml_feeds_cache('post-authors', $post_ID);
 
 				return apply_filters(__METHOD__, $counter, get_defined_vars());
 			}
@@ -1590,6 +1555,8 @@ namespace quick_cache
 				}
 				unset($_term, $_file); // Just a little housekeeping.
 
+				$counter += $this->auto_purge_xml_feeds_cache('post-terms', $id);
+
 				return apply_filters(__METHOD__, $counter, get_defined_vars());
 			}
 
@@ -1628,12 +1595,15 @@ namespace quick_cache
 					return $counter; // Nothing we can do.
 
 				if($comment->comment_approved === 'spam' || $comment->comment_approved === '0')
+					// Don't allow next `auto_purge_post_cache()` call to clear post cache.
+					// Also, don't allow spam to clear cache.
 				{
-					static::$static['___allow_auto_purge_post_cache'] = FALSE; // Don't allow next `auto_purge_post_cache()` call to clear post cache.
-					return $counter; // Don't allow spam to clear cache.
+					static::$static['___allow_auto_purge_post_cache'] = FALSE;
+					return $counter; // Nothing to do here.
 				}
-
-				$counter = $this->auto_purge_post_cache($comment->comment_post_ID);
+				$counter += $this->auto_purge_xml_feeds_cache('blog-comments');
+				$counter += $this->auto_purge_xml_feeds_cache('post-comments', $comment->comment_post_ID);
+				$counter += $this->auto_purge_post_cache($comment->comment_post_ID);
 
 				return apply_filters(__METHOD__, $counter, get_defined_vars());
 			}
@@ -1671,16 +1641,21 @@ namespace quick_cache
 				if(empty($comment->comment_post_ID))
 					return $counter; // Nothing we can do.
 
+				// @TODO @raamdev I think it would a good idea to reverse the logic here to match other routines.
+				//    Perhaps we could check for a negated condition and stop before proceeding; instead of the other way around.
+
 				if($old_status === 'approved' || ($old_status === 'unapproved' && $new_status === 'approved'))
 				{
-					$counter = $this->auto_purge_post_cache($comment->comment_post_ID);
+					$counter += $this->auto_purge_xml_feeds_cache('blog-comments');
+					$counter += $this->auto_purge_xml_feeds_cache('post-comments', $comment->comment_post_ID);
+					$counter += $this->auto_purge_post_cache($comment->comment_post_ID);
 				}
-				else
+				else // Don't allow next `auto_purge_post_cache()` call to clear post cache.
+					// Also, don't allow unapproved comments not being Approved to clear cache.
 				{
-					static::$static['___allow_auto_purge_post_cache'] = FALSE; // Don't allow next `auto_purge_post_cache()` call to clear post cache.
-					return $counter; // Don't allow Unapproved comments not being Approved to clear cache.
+					static::$static['___allow_auto_purge_post_cache'] = FALSE;
+					return $counter; // Nothing to do here.
 				}
-
 				return apply_filters(__METHOD__, $counter, get_defined_vars());
 			}
 
