@@ -1641,21 +1641,16 @@ namespace quick_cache
 				if(empty($comment->comment_post_ID))
 					return $counter; // Nothing we can do.
 
-				// @TODO @raamdev I think it would a good idea to reverse the logic here to match other routines.
-				//    Perhaps we could check for a negated condition and stop before proceeding; instead of the other way around.
-
-				if($old_status === 'approved' || ($old_status === 'unapproved' && $new_status === 'approved'))
-				{
-					$counter += $this->auto_purge_xml_feeds_cache('blog-comments');
-					$counter += $this->auto_purge_xml_feeds_cache('post-comments', $comment->comment_post_ID);
-					$counter += $this->auto_purge_post_cache($comment->comment_post_ID);
-				}
-				else // Don't allow next `auto_purge_post_cache()` call to clear post cache.
-					// Also, don't allow unapproved comments not being Approved to clear cache.
+				if(!($old_status === 'approved' || ($old_status === 'unapproved' && $new_status === 'approved')))
+					// If excluded here, don't allow next `auto_purge_post_cache()` call to clear post cache.
 				{
 					static::$static['___allow_auto_purge_post_cache'] = FALSE;
 					return $counter; // Nothing to do here.
 				}
+				$counter += $this->auto_purge_xml_feeds_cache('blog-comments');
+				$counter += $this->auto_purge_xml_feeds_cache('post-comments', $comment->comment_post_ID);
+				$counter += $this->auto_purge_post_cache($comment->comment_post_ID);
+
 				return apply_filters(__METHOD__, $counter, get_defined_vars());
 			}
 
