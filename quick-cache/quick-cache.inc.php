@@ -1096,7 +1096,29 @@ namespace quick_cache
 			 */
 			public function auto_purge_xml_feeds_cache($type, $post_id = 0)
 			{
-				// @TODO
+				switch($type) // Handle purging based on the `$type`.
+				{
+					case 'blog': // The blog feed; i.e. `/feed/` on most WP installs.
+						break; // Break switch handler.
+
+					case 'blog-comments': // The blog comments feed; i.e. `/comments/feed/` on most WP installs.
+						break; // Break switch handler.
+
+					case 'post-comments': // Feed related to comments that a post has.
+						if(!$post_id) break; // Nothing to do here.
+
+						break; // Break switch handler.
+
+					case 'post-authors': // Feed related to authors that a post has.
+						if(!$post_id) break; // Nothing to do here.
+
+						break; // Break switch handler.
+
+					case 'post-terms': // Feed related to terms that a post has.
+						if(!$post_id) break; // Nothing to do here.
+
+						break; // Break switch handler.
+				}
 			}
 
 			/**
