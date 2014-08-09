@@ -1266,7 +1266,7 @@ namespace quick_cache
 
 				$counter += $this->delete_files_from_host_cache_dir($regex);
 
-				if($counter && $this->options['change_notifications_enable'] && is_admin())
+				if($counter && is_admin()) // No ability to turn this off in the lite version.
 					$this->enqueue_notice('<img src="'.esc_attr($this->url('/client-s/images/clear.png')).'" style="float:left; margin:0 10px 0 0; border:0;" />'.
 					                      sprintf(__('<strong>Quick Cache:</strong> detected changes. Found XML feeds of type <code>%1$s</code> (auto-purging).', $this->text_domain), esc_html($type)));
 
