@@ -1222,10 +1222,10 @@ namespace quick_cache
 								$_wildcarded = preg_replace('/\/[^\/]+\/feed([\/?#]|$)/', '/*/feed'.'${1}', $post_term_feed_link);
 
 								// Quick example: `http://www.example.com/tax/*/feed`;
-								//   becomes: `www\.example\.com\/tax\/.*?[\/\-](?:123|slug)[\/\-].*?\/feed`
+								//   becomes: `www\.example\.com\/tax\/.*?(?=[\/\-]?(?:123|slug)[\/\-]).*?\/feed`
 								//    ... this covers variations that use: `/tax/term,term/feed/`
 								//    ... also covers variations that use: `/tax/term/tax/term/feed/`
-								$variations[] = $build_cache_path_regex($_wildcarded, '.*?[\/\-]'.$_term_id_or_slug.'[\/\-].*?');
+								$variations[] = $build_cache_path_regex($_wildcarded, '.*?(?=[\/\-]?'.$_term_id_or_slug.'[\/\-]).*?');
 								// NOTE: This may also pick up false-positives. Not much we can do about this.
 								//    For instance, if another feed has the same word/slug in what is actually a longer/different term.
 								//    Or, if another feed has the same word/slug in what is actually the name of a taxonomy.
