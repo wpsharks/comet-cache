@@ -963,7 +963,6 @@ namespace quick_cache
 					static::$static['___allow_auto_purge_post_cache'] = TRUE; // Reset state.
 					return $counter; // Nothing to do.
 				}
-
 				if(!$this->options['enable'])
 					return $counter; // Nothing to do.
 
