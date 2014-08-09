@@ -1115,7 +1115,7 @@ namespace quick_cache
 				if(!is_dir($cache_dir = $this->cache_dir()))
 					return $counter; // Nothing to do.
 
-				$_this                  = $this; // Reference need by the closure below.
+				$_this                  = $this; // Reference needed by the closure below.
 				$feed_cache_paths       = array(); // Initialize array of feed cache paths.
 				$build_cache_path_regex = function ($feed_link, $wildcard_regex = NULL) use ($_this)
 				{
@@ -1255,9 +1255,9 @@ namespace quick_cache
 
 						break; // Break switch handler.
 				}
-				foreach($feed_cache_paths as $_key => $_feed_url)
-					if(!is_string($_feed_url) || !$_feed_url) unset($feed_cache_paths[$_key]);
-				unset($_key, $_feed_url); // Housekeeping.
+				foreach($feed_cache_paths as $_key => $_feed_cache_path)
+					if(!is_string($_feed_cache_path) || !$_feed_cache_path) unset($feed_cache_paths[$_key]);
+				unset($_key, $_feed_cache_path); // Housekeeping.
 
 				if(!$feed_cache_paths || !($feed_cache_paths = array_unique($feed_cache_paths)))
 					return $counter; // Nothing to do here.
