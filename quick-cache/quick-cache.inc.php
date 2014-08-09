@@ -1262,9 +1262,17 @@ namespace quick_cache
 				if(!$feed_cache_paths || !($feed_cache_paths = array_unique($feed_cache_paths)))
 					return $counter; // Nothing to do here.
 
-				$regex = '/^'.preg_quote($cache_dir, '/').'\/[^\/]+\/(?:'.implode('|', $feed_cache_paths).')\./';
+				$in_sets_of = apply_filters(__METHOD__.'__in_sets_of', 10, get_defined_vars());
 
-				$counter += $this->delete_files_from_host_cache_dir($regex);
+				for($_i = 0; $_i < count($feed_cache_paths); $_i = $_i + $in_sets_of)
+					// Run these in sets of 10 in case of a post having MANY terms.
+					// This prevents the regex from hitting a backtrack limit in some environments.
+				{
+					$_feed_cache_paths = array_slice($feed_cache_paths, $_i, $in_sets_of);
+					$_regex            = '/^'.preg_quote($cache_dir, '/').'\/[^\/]+\/(?:'.implode('|', $_feed_cache_paths).')\./';
+					$counter += $this->delete_files_from_host_cache_dir($_regex);
+				}
+				unset($_i, $_feed_cache_paths, $_regex); // Housekeeping.
 
 				if($counter && is_admin()) // No ability to turn this off in the lite version.
 					$this->enqueue_notice('<img src="'.esc_attr($this->url('/client-s/images/clear.png')).'" style="float:left; margin:0 10px 0 0; border:0;" />'.
