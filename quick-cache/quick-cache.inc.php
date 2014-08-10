@@ -1095,8 +1095,7 @@ namespace quick_cache
 			 */
 			public function auto_purge_xml_feeds_cache($type, $post_id = 0)
 			{
-				$counter          = 0; // Initialize.
-				$enqueued_notices = 0; // Initialize.
+				$counter = 0; // Initialize.
 
 				if(!($type = (string)$type))
 					return $counter; // Nothing we can do.
@@ -1115,9 +1114,12 @@ namespace quick_cache
 				if(!is_dir($cache_dir = $this->cache_dir()))
 					return $counter; // Nothing to do.
 
-				$_this                  = $this; // Reference needed by the closure below.
-				$feed_cache_paths       = array(); // Initialize array of feed cache paths.
-				$build_cache_path_regex = function ($feed_link, $wildcard_regex = NULL) use ($_this)
+				$home_url                = home_url('/'); // Need this below.
+				$default_feed            = get_default_feed(); // Need this below.
+				$seo_friendly_permalinks = (boolean)get_option('permalink_structure');
+				$_this                   = $this; // Reference needed by the closure below.
+				$feed_cache_path_regexs  = array(); // Initialize array of feed cache paths.
+				$build_cache_path_regex  = function ($feed_link, $wildcard_regex = NULL) use ($_this)
 				{
 					if(!is_string($feed_link) || !$feed_link)
 						return ''; // Nothing to do here.
@@ -1137,22 +1139,38 @@ namespace quick_cache
 				{
 					case 'blog': // The blog feed; i.e. `/feed/` on most WP installs.
 
-						$feed_cache_paths[] = $build_cache_path_regex(get_feed_link(get_default_feed()));
-						$feed_cache_paths[] = $build_cache_path_regex(get_feed_link('rdf'));
-						$feed_cache_paths[] = $build_cache_path_regex(get_feed_link('rss'));
-						$feed_cache_paths[] = $build_cache_path_regex(get_feed_link('rss2'));
-						$feed_cache_paths[] = $build_cache_path_regex(get_feed_link('atom'));
+						$feed_cache_path_regexs[] = $build_cache_path_regex(get_feed_link($default_feed));
+						$feed_cache_path_regexs[] = $build_cache_path_regex(get_feed_link('rdf'));
+						$feed_cache_path_regexs[] = $build_cache_path_regex(get_feed_link('rss'));
+						$feed_cache_path_regexs[] = $build_cache_path_regex(get_feed_link('rss2'));
+						$feed_cache_path_regexs[] = $build_cache_path_regex(get_feed_link('atom'));
 
+						if($seo_friendly_permalinks) // The above uses SEO-friendly permalinks?
+						{
+							$feed_cache_path_regexs[] = $build_cache_path_regex(add_query_arg(urlencode_deep(array('feed' => $default_feed), $home_url)));
+							$feed_cache_path_regexs[] = $build_cache_path_regex(add_query_arg(urlencode_deep(array('feed' => 'rdf'), $home_url)));
+							$feed_cache_path_regexs[] = $build_cache_path_regex(add_query_arg(urlencode_deep(array('feed' => 'rss'), $home_url)));
+							$feed_cache_path_regexs[] = $build_cache_path_regex(add_query_arg(urlencode_deep(array('feed' => 'rss2'), $home_url)));
+							$feed_cache_path_regexs[] = $build_cache_path_regex(add_query_arg(urlencode_deep(array('feed' => 'atom'), $home_url)));
+						}
 						break; // Break switch handler.
 
 					case 'blog-comments': // The blog comments feed; i.e. `/comments/feed/` on most WP installs.
 
-						$feed_cache_paths[] = $build_cache_path_regex(get_feed_link('comments_'.get_default_feed()));
-						$feed_cache_paths[] = $build_cache_path_regex(get_feed_link('comments_rdf'));
-						$feed_cache_paths[] = $build_cache_path_regex(get_feed_link('comments_rss'));
-						$feed_cache_paths[] = $build_cache_path_regex(get_feed_link('comments_rss2'));
-						$feed_cache_paths[] = $build_cache_path_regex(get_feed_link('comments_atom'));
+						$feed_cache_path_regexs[] = $build_cache_path_regex(get_feed_link('comments_'.$default_feed));
+						$feed_cache_path_regexs[] = $build_cache_path_regex(get_feed_link('comments_rdf'));
+						$feed_cache_path_regexs[] = $build_cache_path_regex(get_feed_link('comments_rss'));
+						$feed_cache_path_regexs[] = $build_cache_path_regex(get_feed_link('comments_rss2'));
+						$feed_cache_path_regexs[] = $build_cache_path_regex(get_feed_link('comments_atom'));
 
+						if($seo_friendly_permalinks) // The above uses SEO-friendly permalinks?
+						{
+							$feed_cache_path_regexs[] = $build_cache_path_regex(add_query_arg(urlencode_deep(array('feed' => 'comments-'.$default_feed), $home_url)));
+							$feed_cache_path_regexs[] = $build_cache_path_regex(add_query_arg(urlencode_deep(array('feed' => 'comments-rdf'), $home_url)));
+							$feed_cache_path_regexs[] = $build_cache_path_regex(add_query_arg(urlencode_deep(array('feed' => 'comments-rss'), $home_url)));
+							$feed_cache_path_regexs[] = $build_cache_path_regex(add_query_arg(urlencode_deep(array('feed' => 'comments-rss2'), $home_url)));
+							$feed_cache_path_regexs[] = $build_cache_path_regex(add_query_arg(urlencode_deep(array('feed' => 'comments-atom'), $home_url)));
+						}
 						break; // Break switch handler.
 
 					// @TODO Possibly consider search-related feeds in the future.
@@ -1164,12 +1182,29 @@ namespace quick_cache
 						if(!$post_id) break; // Nothing to do here.
 						if(!($post = get_post($post_id))) break;
 
-						$feed_cache_paths[] = $build_cache_path_regex(get_post_comments_feed_link($post->ID, get_default_feed()));
-						$feed_cache_paths[] = $build_cache_path_regex(get_post_comments_feed_link($post->ID, 'rdf'));
-						$feed_cache_paths[] = $build_cache_path_regex(get_post_comments_feed_link($post->ID, 'rss'));
-						$feed_cache_paths[] = $build_cache_path_regex(get_post_comments_feed_link($post->ID, 'rss2'));
-						$feed_cache_paths[] = $build_cache_path_regex(get_post_comments_feed_link($post->ID, 'atom'));
+						$feed_cache_path_regexs[] = $build_cache_path_regex(get_post_comments_feed_link($post->ID, $default_feed));
+						$feed_cache_path_regexs[] = $build_cache_path_regex(get_post_comments_feed_link($post->ID, 'rdf'));
+						$feed_cache_path_regexs[] = $build_cache_path_regex(get_post_comments_feed_link($post->ID, 'rss'));
+						$feed_cache_path_regexs[] = $build_cache_path_regex(get_post_comments_feed_link($post->ID, 'rss2'));
+						$feed_cache_path_regexs[] = $build_cache_path_regex(get_post_comments_feed_link($post->ID, 'atom'));
 
+						if($seo_friendly_permalinks) // The above uses SEO-friendly permalinks?
+						{
+							$feed_cache_path_regexs[] = $build_cache_path_regex(add_query_arg(urlencode_deep(array('feed' => $default_feed, 'p' => $post->ID), $home_url)));
+							$feed_cache_path_regexs[] = $build_cache_path_regex(add_query_arg(urlencode_deep(array('feed' => 'rdf', 'p' => $post->ID), $home_url)));
+							$feed_cache_path_regexs[] = $build_cache_path_regex(add_query_arg(urlencode_deep(array('feed' => 'rss', 'p' => $post->ID), $home_url)));
+							$feed_cache_path_regexs[] = $build_cache_path_regex(add_query_arg(urlencode_deep(array('feed' => 'rss2', 'p' => $post->ID), $home_url)));
+							$feed_cache_path_regexs[] = $build_cache_path_regex(add_query_arg(urlencode_deep(array('feed' => 'atom', 'p' => $post->ID), $home_url)));
+
+							if($post->post_type === 'page') // Cover this additional variation for `post_type=page`.
+							{
+								$feed_cache_path_regexs[] = $build_cache_path_regex(add_query_arg(urlencode_deep(array('feed' => $default_feed, 'page_id' => $post->ID), $home_url)));
+								$feed_cache_path_regexs[] = $build_cache_path_regex(add_query_arg(urlencode_deep(array('feed' => 'rdf', 'page_id' => $post->ID), $home_url)));
+								$feed_cache_path_regexs[] = $build_cache_path_regex(add_query_arg(urlencode_deep(array('feed' => 'rss', 'page_id' => $post->ID), $home_url)));
+								$feed_cache_path_regexs[] = $build_cache_path_regex(add_query_arg(urlencode_deep(array('feed' => 'rss2', 'page_id' => $post->ID), $home_url)));
+								$feed_cache_path_regexs[] = $build_cache_path_regex(add_query_arg(urlencode_deep(array('feed' => 'atom', 'page_id' => $post->ID), $home_url)));
+							}
+						}
 						break; // Break switch handler.
 
 					case 'post-authors': // Feeds related to authors that a post has.
@@ -1177,12 +1212,20 @@ namespace quick_cache
 						if(!$post_id) break; // nothing to do here.
 						if(!($post = get_post($post_id))) break;
 
-						$feed_cache_paths[] = $build_cache_path_regex(get_author_feed_link($post->post_author, get_default_feed()));
-						$feed_cache_paths[] = $build_cache_path_regex(get_author_feed_link($post->post_author, 'rdf'));
-						$feed_cache_paths[] = $build_cache_path_regex(get_author_feed_link($post->post_author, 'rss'));
-						$feed_cache_paths[] = $build_cache_path_regex(get_author_feed_link($post->post_author, 'rss2'));
-						$feed_cache_paths[] = $build_cache_path_regex(get_author_feed_link($post->post_author, 'atom'));
+						$feed_cache_path_regexs[] = $build_cache_path_regex(get_author_feed_link($post->post_author, $default_feed));
+						$feed_cache_path_regexs[] = $build_cache_path_regex(get_author_feed_link($post->post_author, 'rdf'));
+						$feed_cache_path_regexs[] = $build_cache_path_regex(get_author_feed_link($post->post_author, 'rss'));
+						$feed_cache_path_regexs[] = $build_cache_path_regex(get_author_feed_link($post->post_author, 'rss2'));
+						$feed_cache_path_regexs[] = $build_cache_path_regex(get_author_feed_link($post->post_author, 'atom'));
 
+						if($seo_friendly_permalinks) // The above uses SEO-friendly permalinks?
+						{
+							$feed_cache_path_regexs[] = $build_cache_path_regex(add_query_arg(urlencode_deep(array('feed' => $default_feed, 'author' => $post->post_author), $home_url)));
+							$feed_cache_path_regexs[] = $build_cache_path_regex(add_query_arg(urlencode_deep(array('feed' => 'rdf', 'author' => $post->post_author), $home_url)));
+							$feed_cache_path_regexs[] = $build_cache_path_regex(add_query_arg(urlencode_deep(array('feed' => 'rss', 'author' => $post->post_author), $home_url)));
+							$feed_cache_path_regexs[] = $build_cache_path_regex(add_query_arg(urlencode_deep(array('feed' => 'rss2', 'author' => $post->post_author), $home_url)));
+							$feed_cache_path_regexs[] = $build_cache_path_regex(add_query_arg(urlencode_deep(array('feed' => 'atom', 'author' => $post->post_author), $home_url)));
+						}
 						break; // Break switch handler.
 
 					case 'post-terms': // Feeds related to terms that a post has.
@@ -1236,43 +1279,62 @@ namespace quick_cache
 						};
 						foreach($post_terms as $_post_term) // See: <http://codex.wordpress.org/WordPress_Feeds#Categories_and_Tags>
 						{
-							$_post_term_feed_link = get_term_feed_link($_post_term->term_id, $_post_term->taxonomy, get_default_feed());
-							$feed_cache_paths     = array_merge($feed_cache_paths, $post_term_cache_path_variations($_post_term_feed_link, $_post_term));
+							$_post_term_feed_link   = get_term_feed_link($_post_term->term_id, $_post_term->taxonomy, $default_feed);
+							$feed_cache_path_regexs = array_merge($feed_cache_path_regexs, $post_term_cache_path_variations($_post_term_feed_link, $_post_term));
 
-							$_post_term_feed_link = get_term_feed_link($_post_term->term_id, $_post_term->taxonomy, 'rdf');
-							$feed_cache_paths     = array_merge($feed_cache_paths, $post_term_cache_path_variations($_post_term_feed_link, $_post_term));
+							$_post_term_feed_link   = get_term_feed_link($_post_term->term_id, $_post_term->taxonomy, 'rdf');
+							$feed_cache_path_regexs = array_merge($feed_cache_path_regexs, $post_term_cache_path_variations($_post_term_feed_link, $_post_term));
 
-							$_post_term_feed_link = get_term_feed_link($_post_term->term_id, $_post_term->taxonomy, 'rss');
-							$feed_cache_paths     = array_merge($feed_cache_paths, $post_term_cache_path_variations($_post_term_feed_link, $_post_term));
+							$_post_term_feed_link   = get_term_feed_link($_post_term->term_id, $_post_term->taxonomy, 'rss');
+							$feed_cache_path_regexs = array_merge($feed_cache_path_regexs, $post_term_cache_path_variations($_post_term_feed_link, $_post_term));
 
-							$_post_term_feed_link = get_term_feed_link($_post_term->term_id, $_post_term->taxonomy, 'rss2');
-							$feed_cache_paths     = array_merge($feed_cache_paths, $post_term_cache_path_variations($_post_term_feed_link, $_post_term));
+							$_post_term_feed_link   = get_term_feed_link($_post_term->term_id, $_post_term->taxonomy, 'rss2');
+							$feed_cache_path_regexs = array_merge($feed_cache_path_regexs, $post_term_cache_path_variations($_post_term_feed_link, $_post_term));
 
-							$_post_term_feed_link = get_term_feed_link($_post_term->term_id, $_post_term->taxonomy, 'atom');
-							$feed_cache_paths     = array_merge($feed_cache_paths, $post_term_cache_path_variations($_post_term_feed_link, $_post_term));
+							$_post_term_feed_link   = get_term_feed_link($_post_term->term_id, $_post_term->taxonomy, 'atom');
+							$feed_cache_path_regexs = array_merge($feed_cache_path_regexs, $post_term_cache_path_variations($_post_term_feed_link, $_post_term));
+
+							if($seo_friendly_permalinks && ($_post_term_taxonomy = get_taxonomy($_post_term->taxonomy))/* The above uses SEO-friendly permalinks? */)
+							{
+								if($_post_term_taxonomy->name === 'category')
+									$_post_term_taxonomy_query_var = 'cat'; // Special query var.
+								else $_post_term_taxonomy_query_var = $_post_term_taxonomy->query_var;
+
+								$feed_cache_path_regexs[] = $build_cache_path_regex(add_query_arg(urlencode_deep(array('feed' => $default_feed, $_post_term_taxonomy_query_var => $_post_term->term_id), $home_url)));
+								$feed_cache_path_regexs[] = $build_cache_path_regex(add_query_arg(urlencode_deep(array('feed' => 'rdf', $_post_term_taxonomy_query_var => $_post_term->term_id), $home_url)));
+								$feed_cache_path_regexs[] = $build_cache_path_regex(add_query_arg(urlencode_deep(array('feed' => 'rss', $_post_term_taxonomy_query_var => $_post_term->term_id), $home_url)));
+								$feed_cache_path_regexs[] = $build_cache_path_regex(add_query_arg(urlencode_deep(array('feed' => 'rss2', $_post_term_taxonomy_query_var => $_post_term->term_id), $home_url)));
+								$feed_cache_path_regexs[] = $build_cache_path_regex(add_query_arg(urlencode_deep(array('feed' => 'atom', $_post_term_taxonomy_query_var => $_post_term->term_id), $home_url)));
+
+								$feed_cache_path_regexs[] = $build_cache_path_regex(add_query_arg(urlencode_deep(array('feed' => $default_feed, $_post_term_taxonomy_query_var => $_post_term->slug), $home_url)));
+								$feed_cache_path_regexs[] = $build_cache_path_regex(add_query_arg(urlencode_deep(array('feed' => 'rdf', $_post_term_taxonomy_query_var => $_post_term->slug), $home_url)));
+								$feed_cache_path_regexs[] = $build_cache_path_regex(add_query_arg(urlencode_deep(array('feed' => 'rss', $_post_term_taxonomy_query_var => $_post_term->slug), $home_url)));
+								$feed_cache_path_regexs[] = $build_cache_path_regex(add_query_arg(urlencode_deep(array('feed' => 'rss2', $_post_term_taxonomy_query_var => $_post_term->slug), $home_url)));
+								$feed_cache_path_regexs[] = $build_cache_path_regex(add_query_arg(urlencode_deep(array('feed' => 'atom', $_post_term_taxonomy_query_var => $_post_term->slug), $home_url)));
+							}
+							unset($_post_term_taxonomy, $_post_term_taxonomy_query_var); // Housekeeping.
 						}
 						unset($_post_taxonomies, $_post_taxonomy, $_post_taxonomy_terms, $_post_term, $_post_term_feed_link);
 
 						break; // Break switch handler.
 				}
-				foreach($feed_cache_paths as $_key => $_feed_cache_path)
-					if(!is_string($_feed_cache_path) || !$_feed_cache_path) unset($feed_cache_paths[$_key]);
-				unset($_key, $_feed_cache_path); // Housekeeping.
+				foreach($feed_cache_path_regexs as $_key => $_feed_cache_path_regex)
+					if(!is_string($_feed_cache_path_regex) || !$_feed_cache_path_regex) unset($feed_cache_path_regexs[$_key]);
+				unset($_key, $_feed_cache_path_regex); // Housekeeping.
 
-				if(!$feed_cache_paths || !($feed_cache_paths = array_unique($feed_cache_paths)))
+				if(!$feed_cache_path_regexs || !($feed_cache_path_regexs = array_unique($feed_cache_path_regexs)))
 					return $counter; // Nothing to do here.
 
 				$in_sets_of = apply_filters(__METHOD__.'__in_sets_of', 10, get_defined_vars());
 
-				for($_i = 0; $_i < count($feed_cache_paths); $_i = $_i + $in_sets_of)
-					// Run these in sets of 10 in case of a post having MANY terms.
+				for($_i = 0; $_i < count($feed_cache_path_regexs); $_i = $_i + $in_sets_of)
 					// This prevents the regex from hitting a backtrack limit in some environments.
 				{
-					$_feed_cache_paths = array_slice($feed_cache_paths, $_i, $in_sets_of);
-					$_regex            = '/^'.preg_quote($cache_dir, '/').'\/[^\/]+\/(?:'.implode('|', $_feed_cache_paths).')\./';
+					$_feed_cache_path_regexs = array_slice($feed_cache_path_regexs, $_i, $in_sets_of);
+					$_regex                  = '/^'.preg_quote($cache_dir, '/').'\/[^\/]+\/(?:'.implode('|', $_feed_cache_path_regexs).')\./';
 					$counter += $this->delete_files_from_host_cache_dir($_regex);
 				}
-				unset($_i, $_feed_cache_paths, $_regex); // Housekeeping.
+				unset($_i, $_feed_cache_path_regexs, $_regex); // Housekeeping.
 
 				if($counter && is_admin()) // No ability to turn this off in the lite version.
 					$this->enqueue_notice('<img src="'.esc_attr($this->url('/client-s/images/clear.png')).'" style="float:left; margin:0 10px 0 0; border:0;" />'.

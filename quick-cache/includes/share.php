@@ -243,6 +243,9 @@ namespace quick_cache // Root namespace.
 				if($url && strpos($url, '://') === FALSE)
 					$url = '//'.ltrim($url, '/');
 
+				if($url && strpos($url, '&amp;') !== FALSE)
+					$url = str_replace('&amp;', '&', $url);
+
 				if(!$url || !($url = parse_url($url)))
 					return ''; // Invalid URL.
 
