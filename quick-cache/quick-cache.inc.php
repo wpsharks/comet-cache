@@ -1286,7 +1286,7 @@ namespace quick_cache
 							if($seo_friendly_permalinks && ($_post_term_taxonomy = get_taxonomy($_post_term->taxonomy))/* The above uses SEO-friendly permalinks? */)
 								// Here we cover query string variations that can be left behind after `redirect_canonical()` does its thing.
 								// In the case of term-related feeds, most of the URL is converted to SEO-friendly format.
-								// Everything except `?[tax query var]=` which what we deal with below.
+								// Everything except `?[tax query var]=` which is what we deal with below.
 							{
 								if($_post_term_taxonomy->name === 'category')
 									$_post_term_taxonomy_query_var = 'cat'; // Special query var.
