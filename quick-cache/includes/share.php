@@ -243,6 +243,9 @@ namespace quick_cache // Root namespace.
 				if($url && strpos($url, '://') === FALSE)
 					$url = '//'.ltrim($url, '/');
 
+				if($url && strpos($url, '&amp;') !== FALSE)
+					$url = str_replace('&amp;', '&', $url);
+
 				if(!$url || !($url = parse_url($url)))
 					return ''; // Invalid URL.
 
@@ -901,6 +904,42 @@ namespace quick_cache // Root namespace.
 			}
 
 			/**
+			 * Normalizes directory/file separators.
+			 *
+			 * @since 14xxxx Implementing XML/RSS feed purging.
+			 *
+			 * @param string  $dir_file Directory/file path.
+			 *
+			 * @param boolean $allow_trailing_slash Defaults to FALSE.
+			 *    If TRUE; and `$dir_file` contains a trailing slash; we'll leave it there.
+			 *
+			 * @return string Normalized directory/file path.
+			 */
+			public function n_dir_seps($dir_file, $allow_trailing_slash = FALSE)
+			{
+				$dir_file = (string)$dir_file; // Force string value.
+				if(!isset($dir_file[0])) return ''; // Catch empty string.
+
+				if(strpos($dir_file, '://' !== FALSE))  // A possible stream wrapper?
+				{
+					if(preg_match('/^(?P<stream_wrapper>[a-zA-Z0-9]+)\:\/\//', $dir_file, $stream_wrapper))
+						$dir_file = preg_replace('/^(?P<stream_wrapper>[a-zA-Z0-9]+)\:\/\//', '', $dir_file);
+				}
+				if(strpos($dir_file, ':' !== FALSE))  // Might have a Windows® drive letter?
+				{
+					if(preg_match('/^(?P<drive_letter>[a-zA-Z])\:[\/\\\\]/', $dir_file)) // It has a Windows® drive letter?
+						$dir_file = preg_replace_callback('/^(?P<drive_letter>[a-zA-Z])\:[\/\\\\]/', create_function('$m', 'return strtoupper($m[0]);'), $dir_file);
+				}
+				$dir_file = preg_replace('/\/+/', '/', str_replace(array(DIRECTORY_SEPARATOR, '\\', '/'), '/', $dir_file));
+				$dir_file = ($allow_trailing_slash) ? $dir_file : rtrim($dir_file, '/'); // Strip trailing slashes.
+
+				if(!empty($stream_wrapper[0])) // Stream wrapper (force lowercase).
+					$dir_file = strtolower($stream_wrapper[0]).$dir_file;
+
+				return $dir_file; // Normalized now.
+			}
+
+			/**
 			 * Recursive directory iterator based on a regex pattern.
 			 *
 			 * @since 140422 First documented version.
@@ -918,6 +957,66 @@ namespace quick_cache // Root namespace.
 				$regex_iterator    = new \RegexIterator($iterator_iterator, $regex, \RegexIterator::MATCH, \RegexIterator::USE_KEY);
 
 				return $regex_iterator;
+			}
+
+			/**
+			 * Deletes files from the cache directory (for the current host) that match a regex pattern.
+			 *
+			 * @since 14xxxx Implementing XML/RSS feed purging.
+			 *
+			 * @param string $regex A regex pattern; compares to each full file path.
+			 *
+			 * @return integer Total files deleted by this routine (if any).
+			 *
+			 * @throws \exception If unable to delete a file for any reason.
+			 *
+			 * @TODO @raamdev I think we could take the same concept introduced by this routine and use it to build others
+			 *    that deal with purging/clearing/wiping; thereby centralizing this sort of job, making QC DRYer.
+			 *    Also, this type of routine works to improve speed when running on a large MS network.
+			 *
+			 *    Suggested class members to come in a future release of QC.
+			 *       - `purge_files_from_host_cache_dir()`
+			 *       - `clear_files_from_host_cache_dir()`
+			 *
+			 *    Also, this class member (i.e. `delete_files_from_host_cache_dir()`) could be
+			 *       used by many of the existing auto-purge routines. Thereby requiring less code
+			 *       and speeding QC up overall; i.e. making it faster on large MS networks.
+			 */
+			public function delete_files_from_host_cache_dir($regex)
+			{
+				$counter = 0; // Initialize.
+
+				if(!($regex = (string)$regex))
+					return $counter; // Nothing to do.
+
+				if(!is_dir($cache_dir = $this->cache_dir()))
+					return $counter; // Nothing to do.
+
+				$host                 = $_SERVER['HTTP_HOST'];
+				$host_base_dir_tokens = $this->host_base_dir_tokens();
+				$cache_dir            = $this->n_dir_seps($cache_dir);
+
+				foreach(array('http', 'https') as $_host_scheme) // Consider all possible schemes.
+				{
+					$_host_url        = $_host_scheme.'://'.$host.$host_base_dir_tokens; // Base URL for this host (w/ MS support).
+					$_host_cache_path = $this->build_cache_path($_host_url, '', '', $this::CACHE_PATH_NO_PATH_INDEX | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT);
+					$_host_cache_dir  = $this->n_dir_seps($cache_dir.'/'.$_host_cache_path);
+
+					/** @var $_dir_file \RecursiveDirectoryIterator For IDEs. */
+					if($_host_cache_dir && is_dir($_host_cache_dir)) foreach($this->dir_regex_iteration($_host_cache_dir, $regex) as $_dir_file)
+					{
+						if(($_dir_file->isFile() || $_dir_file->isLink()) && ($_host_cache_dir !== $cache_dir || strpos($_dir_file->getSubpathname(), '/') !== FALSE))
+							// Don't delete files in the immediate directory; e.g. `qc-advanced-cache` or `.htaccess`, etc.
+							// Actual `http|https/...` cache files are nested. Files in the immediate directory are for other purposes.
+							if(!unlink($_dir_file->getPathname())) // Throw exception if unable to delete.
+								throw new \exception(sprintf(__('Unable to delete file: `%1$s`.', $this->text_domain), $_dir_file->getPathname()));
+							else $counter++; // Increment counter for each file we purge.
+					}
+					unset($_dir_file); // Housekeeping.
+				}
+				unset($_host_scheme, $_host_url, $_host_cache_path, $_host_cache_dir); // Housekeeping.
+
+				return $counter; // Total files deleted by this routine.
 			}
 
 			/* --------------------------------------------------------------------------------------
