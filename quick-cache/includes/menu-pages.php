@@ -143,9 +143,9 @@ namespace quick_cache // Root namespace.
 
 			echo '<div class="plugin-menu-page-panel">'."\n";
 
-			echo '   <div class="plugin-menu-page-panel-heading">'."\n";
+			echo '   <a href="#" class="plugin-menu-page-panel-heading">'."\n";
 			echo '      <i class="fa fa-shield"></i> '.__('Plugin Deletion Safeguards', $this->plugin->text_domain)."\n";
-			echo '   </div>'."\n";
+			echo '   </a>'."\n";
 
 			echo '   <div class="plugin-menu-page-panel-body clearfix">'."\n";
 			echo '      <i class="fa fa-shield fa-4x" style="float:right; margin: 0 0 0 25px;"></i>'."\n";
