@@ -703,7 +703,8 @@ namespace quick_cache
 
 				$headers_list = $this->headers_list(); // Headers already sent (or ready to be sent).
 				foreach(unserialize($headers) as $_header) // Preserves original headers sent with this file.
-					if(!in_array($_header, $headers_list, TRUE) && stripos($_header, 'Last-Modified:') !== 0) header($_header);
+					if(!in_array($_header, $headers_list, TRUE) && stripos($_header, 'Last-Modified:') !== 0)
+						header($_header); // Only cacheable/safe headers are stored in the cache.
 				unset($_header); // Just a little housekeeping.
 
 				if(QUICK_CACHE_DEBUGGING_ENABLE && $this->is_html_xml_doc($cache)) // Only if HTML comments are possible.
@@ -932,7 +933,7 @@ namespace quick_cache
 			 */
 			if($this->is_404) // This is a 404; let's create 404 cache file and symlink to it.
 			{
-				if(file_put_contents($cache_file_tmp, serialize($this->headers_list()).'<!--headers-->'.$cache) && rename($cache_file_tmp, $this->cache_file_404))
+				if(file_put_contents($cache_file_tmp, serialize($this->cacheable_headers_list()).'<!--headers-->'.$cache) && rename($cache_file_tmp, $this->cache_file_404))
 				{
 					if(!(symlink($this->cache_file_404, $cache_file_tmp) && rename($cache_file_tmp, $this->cache_file)))
 						throw new \exception(sprintf(__('Unable to create symlink: `%1$s` » `%2$s`. Possible permissions issue (or race condition), please check your cache directory: `%3$s`.', $this->text_domain), $this->cache_file, $this->cache_file_404, QUICK_CACHE_DIR));
@@ -941,7 +942,7 @@ namespace quick_cache
 				}
 
 			} // NOT a 404; let's write a new cache file.
-			else if(file_put_contents($cache_file_tmp, serialize($this->headers_list()).'<!--headers-->'.$cache) && rename($cache_file_tmp, $this->cache_file))
+			else if(file_put_contents($cache_file_tmp, serialize($this->cacheable_headers_list()).'<!--headers-->'.$cache) && rename($cache_file_tmp, $this->cache_file))
 				return $cache; // Return the newly built cache; with possible debug information also.
 
 			@unlink($cache_file_tmp); // Clean this up (if it exists); and throw an exception with information for the site owner.
