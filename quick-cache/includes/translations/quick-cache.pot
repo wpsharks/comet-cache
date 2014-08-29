@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the Quick Cache package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Quick Cache 140725\n"
+"Project-Id-Version: Quick Cache 140829\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/quick-cache\n"
-"POT-Creation-Date: 2014-07-26 00:23:05+00:00\n"
+"POT-Creation-Date: 2014-08-29 03:17:51+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -14,139 +14,139 @@ msgstr ""
 
 #. translators: This string is actually NOT translatable because the `__()`
 #. function is not available at this point in the processing.
-#: includes/advanced-cache.tpl.php:714
+#: includes/advanced-cache.tpl.php:715
 msgid "Quick Cache fully functional :-) Cache file served for (%1$s) in %2$s seconds, on: %3$s."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:846
+#: includes/advanced-cache.tpl.php:847
 msgid "Unexpected OB phase: `%1$s`."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:908
+#: includes/advanced-cache.tpl.php:909
 msgid "Cache directory not writable. Quick Cache needs this directory please: `%1$s`. Set permissions to `755` or higher; `777` might be needed in some cases."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:914
+#: includes/advanced-cache.tpl.php:917 includes/advanced-cache.tpl.php:939
 msgid "Unable to create symlink: `%1$s` » `%2$s`. Possible permissions issue (or race condition), please check your cache directory: `%3$s`."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:922
+#: includes/advanced-cache.tpl.php:925
 msgid "Quick Cache file path: %1$s"
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:923
+#: includes/advanced-cache.tpl.php:926
 msgid "Quick Cache file built for (%1$s) in %2$s seconds, on: %3$s."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:925
+#: includes/advanced-cache.tpl.php:928
 msgid "This Quick Cache file will auto-expire (and be rebuilt) on: %1$s (based on your configured expiration time)."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:942
+#: includes/advanced-cache.tpl.php:949
 msgid "Quick Cache: failed to write cache file for: `%1$s`; possible permissions issue (or race condition), please check your cache directory: `%2$s`."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:988
+#: includes/advanced-cache.tpl.php:995
 msgid "because `PHP_SAPI` reports that you are currently running from the command line."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:992
+#: includes/advanced-cache.tpl.php:999
 msgid "because `$_GET['qcAC']` is set to a boolean-ish FALSE value."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:996
+#: includes/advanced-cache.tpl.php:1003
 msgid "because `$_SERVER['HTTP_HOST']` is missing from your server configuration."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1000
+#: includes/advanced-cache.tpl.php:1007
 msgid "because `$_SERVER['REQUEST_URI']` is missing from your server configuration."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1004
+#: includes/advanced-cache.tpl.php:1011
 msgid "because the PHP constant `QUICK_CACHE_ALLOWED` has been set to a boolean-ish `FALSE` value at runtime. Perhaps by WordPress itself, or by one of your themes/plugins. This usually means that you have a theme/plugin intentionally disabling the cache on this page; and it's usually for a very good reason."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1008
+#: includes/advanced-cache.tpl.php:1015
 msgid "because the environment variable `$_SERVER['QUICK_CACHE_ALLOWED']` has been set to a boolean-ish `FALSE` value at runtime. Perhaps by WordPress itself, or by one of your themes/plugins. This usually means that you have a theme/plugin intentionally disabling the cache on this page; and it's usually for a very good reason."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1012
+#: includes/advanced-cache.tpl.php:1019
 msgid "because the PHP constant `DONOTCACHEPAGE` has been set at runtime. Perhaps by WordPress itself, or by one of your themes/plugins. This usually means that you have a theme/plugin intentionally disabling the cache on this page; and it's usually for a very good reason."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1016
+#: includes/advanced-cache.tpl.php:1023
 msgid "because the environment variable `$_SERVER['DONOTCACHEPAGE']` has been set at runtime. Perhaps by WordPress itself, or by one of your themes/plugins. This usually means that you have a theme/plugin intentionally disabling the cache on this page; and it's usually for a very good reason."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1020
+#: includes/advanced-cache.tpl.php:1027
 msgid "because `$_SERVER['REQUEST_METHOD']` is `POST`, `PUT`, `DELETE`, `HEAD`, `OPTIONS`, `TRACE` or `CONNECT`. These request methods should never (ever) be cached in any way."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1024
+#: includes/advanced-cache.tpl.php:1031
 msgid "because `$_SERVER['REMOTE_ADDR']` === `$_SERVER['SERVER_ADDR']`; i.e. a self-serve request. DEVELOPER TIP: if you are testing on a localhost installation, please add `define('LOCALHOST', TRUE);` to your `/wp-config.php` file while you run tests :-) Remove it (or set it to a `FALSE` value) once you go live on the web."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1028
+#: includes/advanced-cache.tpl.php:1035
 msgid "because `$_SERVER['REQUEST_URI']` indicates this is a `/feed`; and the configuration of this site says not to cache XML-based feeds."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1032
+#: includes/advanced-cache.tpl.php:1039
 msgid "because `$_SERVER['REQUEST_URI']` indicates this is a `wp-` or `xmlrpc` file; i.e. a WordPress systematic file. WordPress systematics are never (ever) cached in any way."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1036
+#: includes/advanced-cache.tpl.php:1043
 msgid "because `$_SERVER['REQUEST_URI']` or the `is_admin()` function indicates this is an administrative area of the site."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1040
+#: includes/advanced-cache.tpl.php:1047
 msgid "because `$_SERVER['REQUEST_URI']` indicates this is a Multisite Network; and this was a request for `/files/*`, not a page."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1045
+#: includes/advanced-cache.tpl.php:1052
 msgid "because the current user visiting this page (usually YOU), appears to be logged-in. The current configuration says NOT to cache pages for logged-in visitors. This message may also appear if you have an active PHP session on this site, or if you've left (or replied to) a comment recently. If this message continues, please clear your cookies and try again."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1049
+#: includes/advanced-cache.tpl.php:1056
 msgid "because `$_GET` contains query string data. The current configuration says NOT to cache GET requests with a query string."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1053
+#: includes/advanced-cache.tpl.php:1060
 msgid "because the WordPress `is_404()` Conditional Tag says the current page is a 404 error. The current configuration says NOT to cache 404 errors."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1057
+#: includes/advanced-cache.tpl.php:1064
 msgid "because a plugin running on this installation says this page is in Maintenance Mode; i.e. is not available publicly at this time."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1061
+#: includes/advanced-cache.tpl.php:1068
 msgid "because Quick Cache is unable to cache already-compressed output. Please use `mod_deflate` w/ Apache; or use `zlib.output_compression` in your `php.ini` file. Quick Cache is NOT compatible with `ob_gzhandler()` and others like this."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1065
+#: includes/advanced-cache.tpl.php:1072
 msgid "because the contents of this document contain `<body id=\"error-page\">`, which indicates this is an auto-generated WordPress error message."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1069
+#: includes/advanced-cache.tpl.php:1076
 msgid "because a `Content-Type:` header was set via PHP at runtime. The header contains a MIME type which is NOT a variation of HTML or XML. This header might have been set by your hosting company, by WordPress itself; or by one of your themes/plugins."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1073
+#: includes/advanced-cache.tpl.php:1080
 msgid "because a `Status:` header (or an `HTTP/` header) was set via PHP at runtime. The header contains a non-`2xx` status code. This indicates the current page was not loaded successfully. This header might have been set by your hosting company, by WordPress itself; or by one of your themes/plugins."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1077
+#: includes/advanced-cache.tpl.php:1084
 msgid "because the WordPress `is_404()` Conditional Tag says the current page is a 404 error; and this is the first time it's happened on this page. Your current configuration says that 404 errors SHOULD be cached, so Quick Cache built a cached symlink which points future requests for this location to your already-cached 404 error document. If you reload this page (assuming you don't clear the cache before you do so); you should get a cached version of your 404 error document. This message occurs ONCE for each new/unique 404 error request."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1081
+#: includes/advanced-cache.tpl.php:1088
 msgid "because Quick Cache detected an early output buffer termination. This may happen when a theme/plugin ends, cleans, or flushes all output buffers before reaching the PHP shutdown phase. It's not always a bad thing. Sometimes it is necessary for a theme/plugin to do this. However, in this scenario it is NOT possible to cache the output; since Quick Cache is effectively disabled at runtime when this occurs."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1085
+#: includes/advanced-cache.tpl.php:1092
 msgid "due to an unexpected behavior in the application. Please report this as a bug!"
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1088
+#: includes/advanced-cache.tpl.php:1095
 msgid "Quick Cache is NOT caching this page, %1$s"
 msgstr ""
 
@@ -291,23 +291,23 @@ msgid "No, I don't want my source code to contain any of these notes."
 msgstr ""
 
 #: includes/menu-pages.php:147
-msgid "Deactivation Safeguards"
+msgid "Plugin Deletion Safeguards"
 msgstr ""
 
 #: includes/menu-pages.php:152
-msgid "Uninstall on Deactivation; or Safeguard Options?"
+msgid "Uninstall on Plugin Deletion; or Safeguard Options?"
 msgstr ""
 
 #: includes/menu-pages.php:153
-msgid "<strong>Tip:</strong> By default, if you deactivate Quick Cache from the plugins menu in WordPress; nothing is lost. However, if you want to uninstall Quick Cache you should set this to <code>Yes</code> and <strong>THEN</strong> deactivate it from the plugins menu in WordPress. This way Quick Cache will erase your options for the plugin, clear the cache, remove the <code>advanced-cache.php</code> file, terminate CRON jobs, etc. It erases itself from existence completely."
+msgid "<strong>Tip:</strong> By default, if you delete Quick Cache using the plugins menu in WordPress, nothing is lost. However, if you want to completely uninstall Quick Cache you should set this to <code>Yes</code> and <strong>THEN</strong> deactivate &amp; delete Quick Cache from the plugins menu in WordPress. This way Quick Cache will erase your options for the plugin, erase directories/files created by the plugin, remove the <code>advanced-cache.php</code> file, terminate CRON jobs, etc. It erases itself from existence completely."
 msgstr ""
 
 #: includes/menu-pages.php:155
-msgid "If I deactivate Quick Cache please safeguard my options and the cache (recommended)."
+msgid "Safeguard my options and the cache (recommended)."
 msgstr ""
 
 #: includes/menu-pages.php:156
-msgid "Yes, uninstall (completely erase) Quick Cache on deactivation."
+msgid "Yes, uninstall (completely erase) Quick Cache on plugin deletion."
 msgstr ""
 
 #: includes/menu-pages.php:167
@@ -651,7 +651,7 @@ msgid "Caching Enabled for RSS, RDF, Atom Feeds?"
 msgstr ""
 
 #: includes/menu-pages.php:357
-msgid "This should almost ALWAYS be set to <code>No</code>. UNLESS, you're sure that you want to cache your feeds. If you use a web feed management provider like Google® Feedburner and you set this option to <code>Yes</code>, you may experience delays in the detection of new posts."
+msgid "This should almost ALWAYS be set to <code>No</code>. UNLESS, you're sure that you want to cache your feeds. If you use a web feed management provider like Google® Feedburner and you set this option to <code>Yes</code>, you may experience delays in the detection of new posts. <strong>NOTE:</strong> If you do enable this, it is highly recommended that you also enable automatic Feed Purging too. Please see the section above: \"Clearing the Cache\". Find the sub-section titled: \"Auto-Purge RSS/RDF/ATOM Feeds\" (available only in the pro version)."
 msgstr ""
 
 #: includes/menu-pages.php:359
@@ -1012,7 +1012,11 @@ msgstr ""
 msgid "Unable to determine cache directory location."
 msgstr ""
 
-#: includes/share.php:953
+#: includes/share.php:1093
+msgid "Unable to delete file: `%1$s`."
+msgstr ""
+
+#: includes/share.php:1133
 msgid "Invalid hook."
 msgstr ""
 
@@ -1052,114 +1056,130 @@ msgstr ""
 msgid "To remove this message, please deactivate %1$s."
 msgstr ""
 
-#: quick-cache.inc.php:315
+#: quick-cache.inc.php:344
 msgid "<strong>Quick Cache:</strong> detected a new version of itself. Recompiling w/ latest version... wiping the cache... all done :-)"
 msgstr ""
 
-#. #-#-#-#-#  quick-cache.pot (Quick Cache 140725)  #-#-#-#-#
+#. #-#-#-#-#  quick-cache.pot (Quick Cache 140829)  #-#-#-#-#
 #. Plugin Name of the plugin/theme
-#: quick-cache.inc.php:444 quick-cache.inc.php:460
+#: quick-cache.inc.php:497 quick-cache.inc.php:513
 msgid "Quick Cache"
 msgstr ""
 
-#: quick-cache.inc.php:478
+#: quick-cache.inc.php:531
 msgid "Settings"
 msgstr ""
 
-#: quick-cache.inc.php:479
+#: quick-cache.inc.php:532
 msgid "Preview Pro Features"
 msgstr ""
 
-#: quick-cache.inc.php:480
+#: quick-cache.inc.php:533
 msgid "Upgrade"
 msgstr ""
 
-#: quick-cache.inc.php:526 quick-cache.inc.php:597
+#: quick-cache.inc.php:579 quick-cache.inc.php:650
 msgid "dismiss &times;"
 msgstr ""
 
-#: quick-cache.inc.php:655
+#: quick-cache.inc.php:708
 msgid "Every 15 Minutes"
 msgstr ""
 
-#: quick-cache.inc.php:691
+#: quick-cache.inc.php:744
 msgid "Unable to wipe file: `%1$s`."
 msgstr ""
 
-#: quick-cache.inc.php:696
+#: quick-cache.inc.php:749
 msgid "Unable to wipe dir: `%1$s`."
 msgstr ""
 
-#: quick-cache.inc.php:705
+#: quick-cache.inc.php:758
 msgid "Unable to also wipe file: `%1$s`."
 msgstr ""
 
-#: quick-cache.inc.php:710
+#: quick-cache.inc.php:763
 msgid "Unable to also wipe dir: `%1$s`."
 msgstr ""
 
-#: quick-cache.inc.php:752
+#: quick-cache.inc.php:805
 msgid "Unable to clear file: `%1$s`."
 msgstr ""
 
-#: quick-cache.inc.php:757
+#: quick-cache.inc.php:810
 msgid "Unable to clear dir: `%1$s`."
 msgstr ""
 
-#: quick-cache.inc.php:792
+#: quick-cache.inc.php:845
 msgid "Unable to purge file: `%1$s`."
 msgstr ""
 
-#: quick-cache.inc.php:825
+#: quick-cache.inc.php:878
 msgid "<strong>Quick Cache:</strong> detected significant changes. Found cache files (auto-wiping)."
 msgstr ""
 
-#: quick-cache.inc.php:868
+#: quick-cache.inc.php:921
 msgid "<strong>Quick Cache:</strong> detected changes. Found cache files for this site (auto-clearing)."
 msgstr ""
 
-#: quick-cache.inc.php:946
+#: quick-cache.inc.php:998
 msgid "Post"
 msgstr ""
 
-#: quick-cache.inc.php:961 quick-cache.inc.php:1135 quick-cache.inc.php:1208
-#: quick-cache.inc.php:1312 quick-cache.inc.php:1461
+#: quick-cache.inc.php:1013 quick-cache.inc.php:1448 quick-cache.inc.php:1523
+#: quick-cache.inc.php:1629 quick-cache.inc.php:1781
 msgid "Unable to auto-purge file: `%1$s`."
 msgstr ""
 
-#: quick-cache.inc.php:968
+#: quick-cache.inc.php:1020
 msgid "<strong>Quick Cache:</strong> detected changes. Found cache file(s) for %1$s ID: <code>%2$s</code> (auto-purging)."
 msgstr ""
 
-#: quick-cache.inc.php:1076
+#: quick-cache.inc.php:1333
+msgid "<strong>Quick Cache:</strong> detected changes. Found XML feeds of type <code>%1$s</code> (auto-purging)."
+msgstr ""
+
+#: quick-cache.inc.php:1389
 msgid "Unable to auto-purge XML sitemap file: `%1$s`."
 msgstr ""
 
-#: quick-cache.inc.php:1082
+#: quick-cache.inc.php:1395
 msgid "<strong>Quick Cache:</strong> detected changes. Found XML sitemaps (auto-purging)."
 msgstr ""
 
-#: quick-cache.inc.php:1142
+#: quick-cache.inc.php:1455
 msgid "<strong>Quick Cache:</strong> detected changes. Found cache file(s) for the designated \"Home Page\" (auto-purging)."
 msgstr ""
 
-#: quick-cache.inc.php:1215
+#: quick-cache.inc.php:1530
 msgid "<strong>Quick Cache:</strong> detected changes. Found cache file(s) for the designated \"Posts Page\" (auto-purging)."
 msgstr ""
 
-#: quick-cache.inc.php:1318
+#: quick-cache.inc.php:1635
 msgid "<strong>Quick Cache:</strong> detected changes. Found cache files for Author Page: <code>%1$s</code> (auto-purging)."
 msgstr ""
 
-#: quick-cache.inc.php:1468
+#: quick-cache.inc.php:1788
 msgid "<strong>Quick Cache:</strong> detected changes. Found cache files for %1$s: <code>%2$s</code> (auto-purging)."
 msgstr ""
 
-#: quick-cache.inc.php:1586 quick-cache.inc.php:1612
+#: quick-cache.inc.php:1911 quick-cache.inc.php:1937
 msgid "Doing it wrong! Missing `base_dir` option value. MUST call this method after `setup()`."
 msgstr ""
 
-#: quick-cache.inc.php:2020
+#: quick-cache.inc.php:2340
+msgid "Unable to remove file: `%1$s`."
+msgstr ""
+
+#: quick-cache.inc.php:2345
+msgid "Unable to remove dir: `%1$s`."
+msgstr ""
+
+#: quick-cache.inc.php:2350
+msgid "Unable to remove base dir: `%1$s`."
+msgstr ""
+
+#: quick-cache.inc.php:2385
 msgid "Please disable the LITE version of Quick Cache before you activate the PRO version."
 msgstr ""
 

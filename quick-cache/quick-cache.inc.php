@@ -76,7 +76,7 @@ namespace quick_cache
 			/**
 			 * Uninstall capability requirement.
 			 *
-			 * @since 14xxxx Adding uninstall handler.
+			 * @since 140829 Adding uninstall handler.
 			 *
 			 * @var string WordPress capability required to
 			 *    completely uninstall/delete QC.
@@ -104,7 +104,7 @@ namespace quick_cache
 			/**
 			 * Used by the plugin's uninstall handler.
 			 *
-			 * @since 14xxxx Adding uninstall handler.
+			 * @since 140829 Adding uninstall handler.
 			 *
 			 * @var boolean If FALSE, run without any hooks.
 			 */
@@ -361,7 +361,7 @@ namespace quick_cache
 			/**
 			 * Plugin uninstall hook.
 			 *
-			 * @since 14xxxx Adding uninstall handler.
+			 * @since 140829 Adding uninstall handler.
 			 *
 			 * @attaches-to {@link \register_uninstall_hook()} ~ via {@link uninstall()}
 			 */
@@ -1081,7 +1081,7 @@ namespace quick_cache
 			/**
 			 * Automatically purges cache files related to XML feeds.
 			 *
-			 * @since 14xxxx Working to improve compatibility with feeds.
+			 * @since 140829 Working to improve compatibility with feeds.
 			 *
 			 * @param string  $type Type of feed(s) to auto-purge.
 			 * @param integer $post_id A Post ID (when applicable).

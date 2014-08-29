@@ -34,7 +34,7 @@ namespace quick_cache // Root namespace.
 			 *
 			 * @var string Current version of the software.
 			 */
-			public $version = '140820';
+			public $version = '140829';
 
 			/**
 			 * Text domain for translations; based on `__NAMESPACE__`.
@@ -844,6 +844,87 @@ namespace quick_cache // Root namespace.
 			}
 
 			/**
+			 * An array of all cacheable/safe headers sent via PHP; and the current HTTP status header too.
+			 *
+			 * @since 140829 Correcting security issue related to headers with cookies.
+			 *
+			 * @return array PHP {@link headers_list()} supplemented with
+			 *    HTTP status code when possible.
+			 *
+			 * @warning Do NOT call upon this method until the end of a script execution.
+			 *
+			 * @see http://bit.ly/1zwwIrM
+			 */
+			public function cacheable_headers_list()
+			{
+				if(isset(static::$static[__FUNCTION__]))
+					return static::$static[__FUNCTION__];
+
+				$headers_list = headers_list(); // Lacks HTTP status header.
+
+				$cacheable_headers = array(
+					'Access-Control-Allow-Origin',
+					'Accept-Ranges',
+					'Age',
+					'Allow',
+					'Cache-Control',
+					'Connection',
+					'Content-Encoding',
+					'Content-Language',
+					'Content-Length',
+					'Content-Location',
+					'Content-MD5',
+					'Content-Disposition',
+					'Content-Range',
+					'Content-Type',
+					'Date',
+					'ETag',
+					'Expires',
+					'Last-Modified',
+					'Link',
+					'Location',
+					'P3P',
+					'Pragma',
+					'Proxy-Authenticate',
+					'Refresh',
+					'Retry-After',
+					'Server',
+					'Status',
+					'Strict-Transport-Security',
+					'Trailer',
+					'Transfer-Encoding',
+					'Upgrade',
+					'Vary',
+					'Via',
+					'Warning',
+					'WWW-Authenticate',
+					'X-Frame-Options',
+					'Public-Key-Pins',
+					'X-XSS-Protection',
+					'Content-Security-Policy',
+					'X-Content-Security-Policy',
+					'X-WebKit-CSP',
+					'X-Content-Type-Options',
+					'X-Powered-By',
+					'X-UA-Compatible',
+				);
+				$cacheable_headers = array_map('strtolower', $cacheable_headers);
+
+				foreach($headers_list as $_key => $_header)
+				{
+					$_header = strtolower((string)strstr($_header, ':', TRUE));
+					if(!$_header || !in_array($_header, $cacheable_headers, TRUE))
+						unset($headers_list[$_key]);
+				}
+				unset($_key, $_header); // Housekeeping.
+
+				if(($http_status = (string)$this->http_status()))
+					array_unshift($headers_list, $this->http_protocol().' '.$http_status);
+
+				return (static::$static[__FUNCTION__] = $headers_list);
+			}
+
+			/**
 			 * HTTP status code if at all possible.
 			 *
 			 * @since 140725 Correcting 404 cache response status code.
@@ -906,7 +987,7 @@ namespace quick_cache // Root namespace.
 			/**
 			 * Normalizes directory/file separators.
 			 *
-			 * @since 14xxxx Implementing XML/RSS feed purging.
+			 * @since 140829 Implementing XML/RSS feed purging.
 			 *
 			 * @param string  $dir_file Directory/file path.
 			 *
@@ -962,7 +1043,7 @@ namespace quick_cache // Root namespace.
 			/**
 			 * Deletes files from the cache directory (for the current host) that match a regex pattern.
 			 *
-			 * @since 14xxxx Implementing XML/RSS feed purging.
+			 * @since 140829 Implementing XML/RSS feed purging.
 			 *
 			 * @param string $regex A regex pattern; compares to each full file path.
 			 *

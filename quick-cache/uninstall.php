@@ -3,7 +3,7 @@
  * Quick Cache Uninstaller
  *
  * @package quick_cache\uninstall
- * @since 14xxxx Adding plugin uninstaller.
+ * @since 140829 Adding plugin uninstaller.
  * @copyright WebSharks, Inc. <http://www.websharks-inc.com>
  * @license GNU General Public License, version 2
  */
@@ -12,7 +12,7 @@ namespace quick_cache
 	if(!defined('WPINC')) // MUST have WordPress.
 		exit('Do NOT access this file directly: '.basename(__FILE__));
 
-	require_once dirname(__FILE__).'/quick-cache-pro.inc.php';
+	require_once dirname(__FILE__).'/quick-cache.inc.php';
 
 	if(!class_exists('\\'.__NAMESPACE__.'\\uninstall'))
 	{
