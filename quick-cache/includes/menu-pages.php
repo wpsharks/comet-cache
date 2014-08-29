@@ -117,9 +117,9 @@ namespace quick_cache // Root namespace.
 
 			echo '<div class="plugin-menu-page-panel">'."\n";
 
-			echo '   <div class="plugin-menu-page-panel-heading'.((!$this->plugin->options['enable']) ? ' open' : '').'">'."\n";
+			echo '   <a href="#" class="plugin-menu-page-panel-heading'.((!$this->plugin->options['enable']) ? ' open' : '').'">'."\n";
 			echo '      <i class="fa fa-flag"></i> '.__('Enable/Disable', $this->plugin->text_domain)."\n";
-			echo '   </div>'."\n";
+			echo '   </a>'."\n";
 
 			echo '   <div class="plugin-menu-page-panel-body'.((!$this->plugin->options['enable']) ? ' open' : '').' clearfix">'."\n";
 			echo '      <p style="float:right; margin:-5px 0 0 0; font-weight:bold;">Quick Cache = <i class="fa fa-tachometer fa-4x"></i> SPEED<em>!!</em></p>'."\n";
@@ -143,17 +143,17 @@ namespace quick_cache // Root namespace.
 
 			echo '<div class="plugin-menu-page-panel">'."\n";
 
-			echo '   <div class="plugin-menu-page-panel-heading">'."\n";
-			echo '      <i class="fa fa-shield"></i> '.__('Deactivation Safeguards', $this->plugin->text_domain)."\n";
-			echo '   </div>'."\n";
+			echo '   <a href="#" class="plugin-menu-page-panel-heading">'."\n";
+			echo '      <i class="fa fa-shield"></i> '.__('Plugin Deletion Safeguards', $this->plugin->text_domain)."\n";
+			echo '   </a>'."\n";
 
 			echo '   <div class="plugin-menu-page-panel-body clearfix">'."\n";
 			echo '      <i class="fa fa-shield fa-4x" style="float:right; margin: 0 0 0 25px;"></i>'."\n";
-			echo '      <h3>'.__('Uninstall on Deactivation; or Safeguard Options?', $this->plugin->text_domain).'</h3>'."\n";
-			echo '      <p>'.__('<strong>Tip:</strong> By default, if you deactivate Quick Cache from the plugins menu in WordPress; nothing is lost. However, if you want to uninstall Quick Cache you should set this to <code>Yes</code> and <strong>THEN</strong> deactivate it from the plugins menu in WordPress. This way Quick Cache will erase your options for the plugin, clear the cache, remove the <code>advanced-cache.php</code> file, terminate CRON jobs, etc. It erases itself from existence completely.', $this->plugin->text_domain).'</p>'."\n";
-			echo '      <p><select name="'.esc_attr(__NAMESPACE__).'[save_options][uninstall_on_deactivation]">'."\n";
-			echo '            <option value="0"'.selected($this->plugin->options['uninstall_on_deactivation'], '0', FALSE).'>'.__('If I deactivate Quick Cache please safeguard my options and the cache (recommended).', $this->plugin->text_domain).'</option>'."\n";
-			echo '            <option value="1"'.selected($this->plugin->options['uninstall_on_deactivation'], '1', FALSE).'>'.__('Yes, uninstall (completely erase) Quick Cache on deactivation.', $this->plugin->text_domain).'</option>'."\n";
+			echo '      <h3>'.__('Uninstall on Plugin Deletion; or Safeguard Options?', $this->plugin->text_domain).'</h3>'."\n";
+			echo '      <p>'.__('<strong>Tip:</strong> By default, if you delete Quick Cache using the plugins menu in WordPress, nothing is lost. However, if you want to completely uninstall Quick Cache you should set this to <code>Yes</code> and <strong>THEN</strong> deactivate &amp; delete Quick Cache from the plugins menu in WordPress. This way Quick Cache will erase your options for the plugin, erase directories/files created by the plugin, remove the <code>advanced-cache.php</code> file, terminate CRON jobs, etc. It erases itself from existence completely.', $this->plugin->text_domain).'</p>'."\n";
+			echo '      <p><select name="'.esc_attr(__NAMESPACE__).'[save_options][uninstall_on_deletion]">'."\n";
+			echo '            <option value="0"'.selected($this->plugin->options['uninstall_on_deletion'], '0', FALSE).'>'.__('Safeguard my options and the cache (recommended).', $this->plugin->text_domain).'</option>'."\n";
+			echo '            <option value="1"'.selected($this->plugin->options['uninstall_on_deletion'], '1', FALSE).'>'.__('Yes, uninstall (completely erase) Quick Cache on plugin deletion.', $this->plugin->text_domain).'</option>'."\n";
 			echo '         </select></p>'."\n";
 			echo '   </div>'."\n";
 
@@ -163,9 +163,9 @@ namespace quick_cache // Root namespace.
 			{
 				echo '<div class="plugin-menu-page-panel pro-preview">'."\n";
 
-				echo '   <div class="plugin-menu-page-panel-heading">'."\n";
+				echo '   <a href="#" class="plugin-menu-page-panel-heading">'."\n";
 				echo '      <i class="fa fa-info-circle"></i> '.__('Clearing the Cache', $this->plugin->text_domain)."\n";
-				echo '   </div>'."\n";
+				echo '   </a>'."\n";
 
 				echo '   <div class="plugin-menu-page-panel-body clearfix">'."\n";
 				echo '      <h3>'.__('Clearing the Cache (Manually)', $this->plugin->text_domain).'</h3>'."\n";
@@ -236,9 +236,9 @@ namespace quick_cache // Root namespace.
 			}
 			echo '<div class="plugin-menu-page-panel">'."\n";
 
-			echo '   <div class="plugin-menu-page-panel-heading">'."\n";
+			echo '   <a href="#" class="plugin-menu-page-panel-heading">'."\n";
 			echo '      <i class="fa fa-gears"></i> '.__('Directory / Expiration Time', $this->plugin->text_domain)."\n";
-			echo '   </div>'."\n";
+			echo '   </a>'."\n";
 
 			echo '   <div class="plugin-menu-page-panel-body clearfix">'."\n";
 			echo '      <h3>'.__('Base Cache Directory (Must be Writable; e.g. <a href="http://codex.wordpress.org/Changing_File_Permissions" target="_blank">Permissions</a> <code>755</code> or Higher)', $this->plugin->text_domain).'</h3>'."\n";
@@ -259,9 +259,9 @@ namespace quick_cache // Root namespace.
 
 			echo '<div class="plugin-menu-page-panel">'."\n";
 
-			echo '   <div class="plugin-menu-page-panel-heading">'."\n";
+			echo '   <a href="#" class="plugin-menu-page-panel-heading">'."\n";
 			echo '      <i class="fa fa-gears"></i> '.__('Client-Side Cache', $this->plugin->text_domain)."\n";
-			echo '   </div>'."\n";
+			echo '   </a>'."\n";
 
 			echo '   <div class="plugin-menu-page-panel-body clearfix">'."\n";
 			echo '      <i class="fa fa-desktop fa-4x" style="float:right; margin: 0 0 0 25px;"></i>'."\n";
@@ -284,9 +284,9 @@ namespace quick_cache // Root namespace.
 			{
 				echo '<div class="plugin-menu-page-panel pro-preview">'."\n";
 
-				echo '   <div class="plugin-menu-page-panel-heading">'."\n";
+				echo '   <a href="#" class="plugin-menu-page-panel-heading">'."\n";
 				echo '      <i class="fa fa-gears"></i> '.__('Logged-In Users', $this->plugin->text_domain)."\n";
-				echo '   </div>'."\n";
+				echo '   </a>'."\n";
 
 				echo '   <div class="plugin-menu-page-panel-body clearfix">'."\n";
 				echo '      <i class="fa fa-group fa-4x" style="float:right; margin: 0 0 0 25px;"></i>'."\n";
@@ -307,9 +307,9 @@ namespace quick_cache // Root namespace.
 			}
 			echo '<div class="plugin-menu-page-panel">'."\n";
 
-			echo '   <div class="plugin-menu-page-panel-heading">'."\n";
+			echo '   <a href="#" class="plugin-menu-page-panel-heading">'."\n";
 			echo '      <i class="fa fa-gears"></i> '.__('GET Requests', $this->plugin->text_domain)."\n";
-			echo '   </div>'."\n";
+			echo '   </a>'."\n";
 
 			echo '   <div class="plugin-menu-page-panel-body clearfix">'."\n";
 			echo '      <i class="fa fa-question-circle fa-4x" style="float:right; margin: 0 0 0 25px;"></i>'."\n";
@@ -327,9 +327,9 @@ namespace quick_cache // Root namespace.
 
 			echo '<div class="plugin-menu-page-panel">'."\n";
 
-			echo '   <div class="plugin-menu-page-panel-heading">'."\n";
+			echo '   <a href="#" class="plugin-menu-page-panel-heading">'."\n";
 			echo '      <i class="fa fa-gears"></i> '.__('404 Requests', $this->plugin->text_domain)."\n";
-			echo '   </div>'."\n";
+			echo '   </a>'."\n";
 
 			echo '   <div class="plugin-menu-page-panel-body clearfix">'."\n";
 			echo '      <i class="fa fa-question-circle fa-4x" style="float:right; margin: 0 0 0 25px;"></i>'."\n";
@@ -347,14 +347,14 @@ namespace quick_cache // Root namespace.
 
 			echo '<div class="plugin-menu-page-panel">'."\n";
 
-			echo '   <div class="plugin-menu-page-panel-heading">'."\n";
+			echo '   <a href="#" class="plugin-menu-page-panel-heading">'."\n";
 			echo '      <i class="fa fa-gears"></i> '.__('RSS, RDF, and Atom Feeds', $this->plugin->text_domain)."\n";
-			echo '   </div>'."\n";
+			echo '   </a>'."\n";
 
 			echo '   <div class="plugin-menu-page-panel-body clearfix">'."\n";
 			echo '      <i class="fa fa-question-circle fa-4x" style="float:right; margin: 0 0 0 25px;"></i>'."\n";
 			echo '      <h3>'.__('Caching Enabled for RSS, RDF, Atom Feeds?', $this->plugin->text_domain).'</h3>'."\n";
-			echo '      <p>'.__('This should almost ALWAYS be set to <code>No</code>. UNLESS, you\'re sure that you want to cache your feeds. If you use a web feed management provider like Google® Feedburner and you set this option to <code>Yes</code>, you may experience delays in the detection of new posts.', $this->plugin->text_domain).'</p>'."\n";
+			echo '      <p>'.__('This should almost ALWAYS be set to <code>No</code>. UNLESS, you\'re sure that you want to cache your feeds. If you use a web feed management provider like Google® Feedburner and you set this option to <code>Yes</code>, you may experience delays in the detection of new posts. <strong>NOTE:</strong> If you do enable this, it is highly recommended that you also enable automatic Feed Purging too. Please see the section above: "Clearing the Cache". Find the sub-section titled: "Auto-Purge RSS/RDF/ATOM Feeds" (available only in the pro version).', $this->plugin->text_domain).'</p>'."\n";
 			echo '      <p><select name="'.esc_attr(__NAMESPACE__).'[save_options][feeds_enable]">'."\n";
 			echo '            <option value="0"'.selected($this->plugin->options['feeds_enable'], '0', FALSE).'>'.__('No, do NOT cache (or serve a cache file) when displaying a feed.', $this->plugin->text_domain).'</option>'."\n";
 			echo '            <option value="1"'.selected($this->plugin->options['feeds_enable'], '1', FALSE).'>'.__('Yes, I would like to cache feed URLs.', $this->plugin->text_domain).'</option>'."\n";
@@ -368,9 +368,9 @@ namespace quick_cache // Root namespace.
 			{
 				echo '<div class="plugin-menu-page-panel pro-preview">'."\n";
 
-				echo '   <div class="plugin-menu-page-panel-heading">'."\n";
+				echo '   <a href="#" class="plugin-menu-page-panel-heading">'."\n";
 				echo '      <i class="fa fa-gears"></i> '.__('URI Exclusion Patterns', $this->plugin->text_domain)."\n";
-				echo '   </div>'."\n";
+				echo '   </a>'."\n";
 
 				echo '   <div class="plugin-menu-page-panel-body clearfix">'."\n";
 				echo '      <h3>'.__('Don\'t Cache These Special URI Exclusion Patterns?', $this->plugin->text_domain).'</h3>'."\n";
@@ -386,9 +386,9 @@ namespace quick_cache // Root namespace.
 			{
 				echo '<div class="plugin-menu-page-panel pro-preview">'."\n";
 
-				echo '   <div class="plugin-menu-page-panel-heading">'."\n";
+				echo '   <a href="#" class="plugin-menu-page-panel-heading">'."\n";
 				echo '      <i class="fa fa-gears"></i> '.__('HTTP Referrer Exclusion Patterns', $this->plugin->text_domain)."\n";
-				echo '   </div>'."\n";
+				echo '   </a>'."\n";
 
 				echo '   <div class="plugin-menu-page-panel-body clearfix">'."\n";
 				echo '      <h3>'.__('Don\'t Cache These Special HTTP Referrer Exclusion Patterns?', $this->plugin->text_domain).'</h3>'."\n";
@@ -404,9 +404,9 @@ namespace quick_cache // Root namespace.
 			{
 				echo '<div class="plugin-menu-page-panel pro-preview">'."\n";
 
-				echo '   <div class="plugin-menu-page-panel-heading">'."\n";
+				echo '   <a href="#" class="plugin-menu-page-panel-heading">'."\n";
 				echo '      <i class="fa fa-gears"></i> '.__('User-Agent Exclusion Patterns', $this->plugin->text_domain)."\n";
-				echo '   </div>'."\n";
+				echo '   </a>'."\n";
 
 				echo '   <div class="plugin-menu-page-panel-body clearfix">'."\n";
 				echo '      <h3>'.__('Don\'t Cache These Special User-Agent Exclusion Patterns?', $this->plugin->text_domain).'</h3>'."\n";
@@ -422,15 +422,15 @@ namespace quick_cache // Root namespace.
 			{
 				echo '<div class="plugin-menu-page-panel pro-preview">'."\n";
 
-				echo '   <div class="plugin-menu-page-panel-heading">'."\n";
+				echo '   <a href="#" class="plugin-menu-page-panel-heading">'."\n";
 				echo '      <i class="fa fa-gears"></i> '.__('Auto-Cache Engine', $this->plugin->text_domain)."\n";
-				echo '   </div>'."\n";
+				echo '   </a>'."\n";
 
 				echo '   <div class="plugin-menu-page-panel-body clearfix">'."\n";
 				echo '      <i class="fa fa-question-circle fa-4x" style="float:right; margin: 0 0 0 25px;"></i>'."\n";
 				echo '      <h3>'.__('Enable the Auto-Cache Engine?', $this->plugin->text_domain).'</h3>'."\n";
 				echo '      <p>'.__('After using Quick Cache for awhile (or any other page caching plugin, for that matter); it becomes obvious that at some point (based on your configured Expiration Time) Quick Cache has to refresh itself. It does this by ditching its cached version of a page, reloading the database-driven content, and then recreating the cache with the latest data. This is a never ending regeneration cycle that is based entirely on your configured Expiration Time.', $this->plugin->text_domain).'</p>'."\n";
-				echo '      <p>'.__('Understanding this, you can see that 99% of your visitors are going to receive a lightning fast response from your server. However, there will always be around 1% of your visitors that land on a page for the very first time (before it\'s been cached), or land on a page that needs to have its cache regenerated, because the existing cache has become outdated. We refer to this as a <em>First-Come Slow-Load Issue</em>. Not a huge problem, but if you\'re optimizing your site for every once of speed possible, the Auto-Cache Engine can help with this. The Auto-Cache Engine has been designed to combat this issue by taking on the responsibility of being that first visitor to a page that has not yet been cached, or has an expired cache. The Auto-Cache Engine is powered, in part, by <a href="http://codex.wordpress.org/Category:WP-Cron_Functions" target="_blank">WP-Cron</a> (already built into WordPress). The Auto-Cache Engine runs at 15-minute intervals via WP-Cron. It also uses the <a href="http://core.trac.wordpress.org/browser/trunk/wp-includes/http.php" target="_blank">WP_Http</a> class, which is also built into WordPress already.', $this->plugin->text_domain).'</p>'."\n";
+				echo '      <p>'.__('Understanding this, you can see that 99% of your visitors are going to receive a lightning fast response from your server. However, there will always be around 1% of your visitors that land on a page for the very first time (before it\'s been cached), or land on a page that needs to have its cache regenerated, because the existing cache has become outdated. We refer to this as a <em>First-Come Slow-Load Issue</em>. Not a huge problem, but if you\'re optimizing your site for every ounce of speed possible, the Auto-Cache Engine can help with this. The Auto-Cache Engine has been designed to combat this issue by taking on the responsibility of being that first visitor to a page that has not yet been cached, or has an expired cache. The Auto-Cache Engine is powered, in part, by <a href="http://codex.wordpress.org/Category:WP-Cron_Functions" target="_blank">WP-Cron</a> (already built into WordPress). The Auto-Cache Engine runs at 15-minute intervals via WP-Cron. It also uses the <a href="http://core.trac.wordpress.org/browser/trunk/wp-includes/http.php" target="_blank">WP_Http</a> class, which is also built into WordPress already.', $this->plugin->text_domain).'</p>'."\n";
 				echo '      <p>'.__('The Auto-Cache Engine obtains its list of URLs to auto-cache, from two different sources. It can read an <a href="http://wordpress.org/extend/plugins/google-sitemap-generator/" target="_blank">XML Sitemap</a> and/or a list of specific URLs that you supply. If you supply both sources, it will use both sources collectively. The Auto-Cache Engine takes ALL of your other configuration options into consideration too, including your Expiration Time, as well as any cache exclusion rules.', $this->plugin->text_domain).'</p>'."\n";
 				echo '      <p><select name="'.esc_attr(__NAMESPACE__).'[save_options][auto_cache_enable]">'."\n";
 				echo '            <option value="0" selected="selected">'.__('No, leave the Auto-Cache Engine disabled please.', $this->plugin->text_domain).'</option>'."\n";
@@ -456,9 +456,9 @@ namespace quick_cache // Root namespace.
 			{
 				echo '<div class="plugin-menu-page-panel pro-preview">'."\n";
 
-				echo '   <div class="plugin-menu-page-panel-heading">'."\n";
+				echo '   <a href="#" class="plugin-menu-page-panel-heading">'."\n";
 				echo '      <i class="fa fa-gears"></i> '.__('HTML Compression (Experimental)', $this->plugin->text_domain)."\n";
-				echo '   </div>'."\n";
+				echo '   </a>'."\n";
 
 				echo '   <div class="plugin-menu-page-panel-body clearfix">'."\n";
 				echo '      <i class="fa fa-question-circle fa-4x" style="float:right; margin: 0 0 0 25px;"></i>'."\n";
@@ -528,9 +528,9 @@ namespace quick_cache // Root namespace.
 			}
 			echo '<div class="plugin-menu-page-panel">'."\n";
 
-			echo '   <div class="plugin-menu-page-panel-heading">'."\n";
+			echo '   <a href="#" class="plugin-menu-page-panel-heading">'."\n";
 			echo '      <i class="fa fa-gears"></i> '.__('GZIP Compression', $this->plugin->text_domain)."\n";
-			echo '   </div>'."\n";
+			echo '   </a>'."\n";
 
 			echo '   <div class="plugin-menu-page-panel-body clearfix">'."\n";
 			echo '      <img src="'.esc_attr($this->plugin->url('/client-s/images/gzip.png')).'" class="screenshot" />'."\n";
@@ -549,9 +549,9 @@ namespace quick_cache // Root namespace.
 			{
 				echo '<div class="plugin-menu-page-panel pro-preview">'."\n";
 
-				echo '   <div class="plugin-menu-page-panel-heading">'."\n";
+				echo '   <a href="#" class="plugin-menu-page-panel-heading">'."\n";
 				echo '      <i class="fa fa-gears"></i> '.__('Dynamic Version Salt', $this->plugin->text_domain)."\n";
-				echo '   </div>'."\n";
+				echo '   </a>'."\n";
 
 				echo '   <div class="plugin-menu-page-panel-body clearfix">'."\n";
 				echo '      <img src="'.esc_attr($this->plugin->url('/client-s/images/salt.png')).'" class="screenshot" />'."\n";
@@ -573,9 +573,9 @@ namespace quick_cache // Root namespace.
 			}
 			echo '<div class="plugin-menu-page-panel">'."\n";
 
-			echo '   <div class="plugin-menu-page-panel-heading">'."\n";
+			echo '   <a href="#" class="plugin-menu-page-panel-heading">'."\n";
 			echo '      <i class="fa fa-gears"></i> '.__('Theme/Plugin Developers', $this->plugin->text_domain)."\n";
-			echo '   </div>'."\n";
+			echo '   </a>'."\n";
 
 			echo '   <div class="plugin-menu-page-panel-body clearfix">'."\n";
 			echo '      <i class="fa fa-puzzle-piece fa-4x" style="float:right; margin: 0 0 0 25px;"></i>'."\n";
@@ -593,9 +593,9 @@ namespace quick_cache // Root namespace.
 			{
 				echo '<div class="plugin-menu-page-panel pro-preview">'."\n";
 
-				echo '   <div class="plugin-menu-page-panel-heading">'."\n";
+				echo '   <a href="#" class="plugin-menu-page-panel-heading">'."\n";
 				echo '      <i class="fa fa-gears"></i> '.__('Import/Export Options', $this->plugin->text_domain)."\n";
-				echo '   </div>'."\n";
+				echo '   </a>'."\n";
 
 				echo '   <div class="plugin-menu-page-panel-body clearfix">'."\n";
 				echo '      <i class="fa fa-arrow-circle-o-up fa-4x" style="float:right; margin: 0 0 0 25px;"></i>'."\n";

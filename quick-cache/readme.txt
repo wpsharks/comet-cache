@@ -1,8 +1,8 @@
 === Quick Cache (Speed Without Compromise) ===
 
-Stable tag: 140725
+Stable tag: 140829
 Requires at least: 3.7
-Tested up to: 3.9.1
+Tested up to: 3.9.2
 Text Domain: quick-cache
 
 License: GPLv2 or later
@@ -305,6 +305,24 @@ Released under the terms of the [GNU General Public License](http://www.gnu.org/
 Requires PHP v5.3+. The latest version of Quick Cache is a complete rewrite (OOP design). Faster! and even more dependable. NOTE: the free version of Quick Cache (this new LITE version); while it remains fully functional and is more-than-adequate for most sites; is now limited in some ways. The following advanced features from the previous release are no longer available in the lite version: a custom MD5 Version Salt, custom Exclusion Patterns, a Clear Cache button in admin bar. These, and other features; are now available only in the pro version of the plugin. For further details, please see: <http://www.websharks-inc.com/product/quick-cache/>.
 
 == Changelog ==
+
+= v140829 =
+
+- **SECURITY FIX - Please upgrade immediately**: Fixes a security related to cached cookies sent in the header of a request. This only affects sites running plugins that might send cookie data via the header. See [#253](https://github.com/websharks/quick-cache/issues/253)
+- **Enhancement**: Auto-Purge RSS Feeds. Quick Cache will now automatically purge the cache for RSS/RDF/Atom Feeds when Feed Caching is enabled. This new option will purge the cache for the master feed, the master comments feed, feeds associated with comments on a Post/Page, term-related feeds (including mixed term-related feeds), and author-related feeds when you update a Post/Page, approve a Comment, or make other changes where Quick Cache can detect that certain types of Feeds should be purged. See [#182](https://github.com/websharks/quick-cache/issues/182)
+- **Enhancement**: Improve handling of symlink creation for 404 cache files by using atomic symlink creation to decrease the possibility of encountering a race condition. See [#242](https://github.com/websharks/quick-cache/issues/242).
+- **Enhancement**: Improved portability of `advanced-cache.php`. This will help reduce configuration overhead for site owners when migrating a WordPress installation from one server to another. See [#258](https://github.com/websharks/quick-cache/issues/258).
+- **Enhancement**: Option Panels now have proper HTML anchor tags so that they work better with browser extensions that rely on anchor tags being available. See [#260.](https://github.com/websharks/quick-cache/issues/260)
+- **Enhancement**: The Plugin Deactivation Safeguards option has been renamed to Plugin Deletion Safeguards. When Plugin Deletion Safeguards are disabled, deactivating and deleting the plugin will now erase your options for the plugin, erase directories/files created by the plugin, remove the advanced-cache.php file, terminate CRON jobs, etc. It completely erases itself, but only when you disable Plugin Deletion Safeguards (enabled by default to prevent accidental loss of data). See [#261](https://github.com/websharks/quick-cache/issues/261).
+- **Enhancement (Pro)**: HTML Compressor now includes FOPEN as transport layer fallback in case cURL is not available. See [#15](https://github.com/websharks/html-compressor/issues/15)
+- **Enhancement (Pro)**: HTML Compressor now writes files atomically; this will help avoid race conditions when writing cache files. See [#273](https://github.com/websharks/quick-cache/issues/273)
+- **Enhancement (Pro)**: Improved error handling for the Auto-Cache Engine. There were some scenarios where `XMLReader()` would fail with a PHP Warning notice when it was unable to properly parse the sitemap. See [#250](https://github.com/websharks/quick-cache/issues/250).
+- **Bug Fix**: The cache directory is now properly removed when deleting the plugin from the WordPress Dashboard plugins list. See [#261](https://github.com/websharks/quick-cache/issues/261).
+- **Bug Fix**: WooCommerce compatibility fix for a bug where cart session data appeared to get cached across sessions. See [#253](https://github.com/websharks/quick-cache/issues/253)
+- **Bug Fix (Pro)**: The plugin upgrade notice no longer appears on Child Blogs in a Multisite Network. There was no security risk here; while the upgrade notice was shown, Child Blog admins who did not have permission to upgrade Network-activated plugins were unable to do anything with the message. See [#259](https://github.com/websharks/quick-cache/issues/259).
+- **Bug Fix (Pro)**: Fixed a bug where, in certain scenarios, a WordPress Plugin may break the JavaScript that controls the Clear Cache button on the Dashboard. See [#272](https://github.com/websharks/quick-cache/issues/259).
+- **Bug Fix (Pro)**: CSS files are now excluded from compression by the HTML Compressor when included inside conditional comments. See [#35](https://github.com/websharks/html-compressor/issues/35)
+- **Bug Fix (Pro)**: HTML Compressor now preserves whitespace inside CSS `calc()` statements. See [#286](https://github.com/websharks/quick-cache/issues/286).
 
 = v140725 =
 

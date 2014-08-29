@@ -74,6 +74,16 @@ namespace quick_cache
 			public $network_cap = '';
 
 			/**
+			 * Uninstall capability requirement.
+			 *
+			 * @since 140829 Adding uninstall handler.
+			 *
+			 * @var string WordPress capability required to
+			 *    completely uninstall/delete QC.
+			 */
+			public $uninstall_cap = '';
+
+			/**
 			 * Cache directory.
 			 *
 			 * @since 140605 Moving to a base directory.
@@ -92,15 +102,30 @@ namespace quick_cache
 			public $cache = array();
 
 			/**
+			 * Used by the plugin's uninstall handler.
+			 *
+			 * @since 140829 Adding uninstall handler.
+			 *
+			 * @var boolean If FALSE, run without any hooks.
+			 */
+			public $enable_hooks = TRUE;
+
+			/**
 			 * Quick Cache plugin constructor.
+			 *
+			 * @param boolean $enable_hooks Defaults to a TRUE value.
+			 *    If FALSE, setup runs but without adding any hooks.
 			 *
 			 * @since 140422 First documented version.
 			 */
-			public function __construct()
+			public function __construct($enable_hooks = TRUE)
 			{
 				parent::__construct(); // Shared constructor.
 
-				$this->file = preg_replace('/\.inc\.php$/', '.php', __FILE__);
+				$this->enable_hooks = (boolean)$enable_hooks;
+				$this->file         = preg_replace('/\.inc\.php$/', '.php', __FILE__);
+
+				if(!$this->enable_hooks) return; // All done in this case.
 
 				add_action('after_setup_theme', array($this, 'setup'));
 				register_activation_hook($this->file, array($this, 'activate'));
@@ -114,7 +139,8 @@ namespace quick_cache
 			 */
 			public function setup()
 			{
-				do_action('before__'.__METHOD__, get_defined_vars());
+				if($this->enable_hooks) // Hooks enabled?
+					do_action('before__'.__METHOD__, get_defined_vars());
 
 				load_plugin_textdomain($this->text_domain);
 
@@ -140,7 +166,7 @@ namespace quick_cache
 					'feeds_enable'                     => '0', // `0|1`.
 					'cache_404_requests'               => '0', // `0|1`.
 
-					'uninstall_on_deactivation'        => '0' // `0|1`.
+					'uninstall_on_deletion'            => '0' // `0|1`.
 				); // Default options are merged with those defined by the site owner.
 				$options               = (is_array($options = get_option(__NAMESPACE__.'_options'))) ? $options : array();
 				if(is_multisite() && is_array($site_options = get_site_option(__NAMESPACE__.'_options')))
@@ -187,8 +213,11 @@ namespace quick_cache
 				if(!$this->options['base_dir']) // Security enhancement; NEVER allow this to be empty.
 					$this->options['base_dir'] = $this->default_options['base_dir'];
 
-				$this->cap         = apply_filters(__METHOD__.'__cap', 'activate_plugins');
-				$this->network_cap = apply_filters(__METHOD__.'__network_cap', 'manage_network_plugins');
+				$this->cap           = apply_filters(__METHOD__.'__cap', 'activate_plugins');
+				$this->network_cap   = apply_filters(__METHOD__.'__network_cap', 'manage_network_plugins');
+				$this->uninstall_cap = apply_filters(__METHOD__.'__uninstall_cap', 'delete_plugins');
+
+				if(!$this->enable_hooks) return; // Stop here; setup without hooks.
 
 				add_action('init', array($this, 'check_advanced_cache'));
 				add_action('init', array($this, 'check_blog_paths'));
@@ -327,11 +356,35 @@ namespace quick_cache
 				$this->remove_wp_cache_from_wp_config();
 				$this->remove_advanced_cache();
 				$this->clear_cache();
+			}
 
-				if(!$this->options['uninstall_on_deactivation'])
+			/**
+			 * Plugin uninstall hook.
+			 *
+			 * @since 140829 Adding uninstall handler.
+			 *
+			 * @attaches-to {@link \register_uninstall_hook()} ~ via {@link uninstall()}
+			 */
+			public function uninstall()
+			{
+				if(!current_user_can($this->uninstall_cap))
+					return; // Extra layer of security.
+
+				if(!class_exists('\\'.__NAMESPACE__.'\\uninstall'))
+					return; // Expecting the uninstall class.
+
+				if(!defined('WP_UNINSTALL_PLUGIN'))
+					return; // Disallow.
+
+				$this->remove_wp_cache_from_wp_config();
+				$this->remove_advanced_cache();
+				$this->wipe_cache();
+
+				if(!$this->options['uninstall_on_deletion'])
 					return; // Nothing to do here.
 
 				$this->delete_advanced_cache();
+				$this->remove_base_dir();
 
 				delete_option(__NAMESPACE__.'_options');
 				if(is_multisite()) // Delete network options too.
@@ -910,7 +963,6 @@ namespace quick_cache
 					static::$static['___allow_auto_purge_post_cache'] = TRUE; // Reset state.
 					return $counter; // Nothing to do.
 				}
-
 				if(!$this->options['enable'])
 					return $counter; // Nothing to do.
 
@@ -970,10 +1022,14 @@ namespace quick_cache
 				}
 				unset($_file); // Just a little housekeeping.
 
-				$counter += $this->auto_purge_xml_sitemaps_cache(); // If enabled and necessary.
-				$counter += $this->auto_purge_home_page_cache(); // If enabled and necessary.
-				$counter += $this->auto_purge_posts_page_cache(); // If enabled and necessary.
-				$counter += $this->auto_purge_post_terms_cache($id, $force); // If enabled and necessary.
+				$counter += $this->auto_purge_xml_feeds_cache('blog');
+				$counter += $this->auto_purge_xml_feeds_cache('post-terms', $id);
+				$counter += $this->auto_purge_xml_feeds_cache('post-authors', $id);
+
+				$counter += $this->auto_purge_xml_sitemaps_cache();
+				$counter += $this->auto_purge_home_page_cache();
+				$counter += $this->auto_purge_posts_page_cache();
+				$counter += $this->auto_purge_post_terms_cache($id, $force);
 
 				return apply_filters(__METHOD__, $counter, get_defined_vars());
 			}
@@ -1018,6 +1074,263 @@ namespace quick_cache
 
 				if($new_status === 'draft' || $new_status === 'future' || $new_status === 'private' || $new_status === 'trash')
 					$counter = $this->auto_purge_post_cache($post->ID, TRUE);
+
+				return apply_filters(__METHOD__, $counter, get_defined_vars());
+			}
+
+			/**
+			 * Automatically purges cache files related to XML feeds.
+			 *
+			 * @since 140829 Working to improve compatibility with feeds.
+			 *
+			 * @param string  $type Type of feed(s) to auto-purge.
+			 * @param integer $post_id A Post ID (when applicable).
+			 *
+			 * @return integer Total files purged by this routine (if any).
+			 *
+			 * @throws \exception If a purge failure occurs.
+			 *
+			 * @note Unlike many of the other `auto_` methods, this one is NOT currently
+			 *    attached to any hooks. However, it is called upon by other routines attached to hooks.
+			 */
+			public function auto_purge_xml_feeds_cache($type, $post_id = 0)
+			{
+				$counter = 0; // Initialize.
+
+				if(!($type = (string)$type))
+					return $counter; // Nothing we can do.
+				$post_id = (integer)$post_id; // Force integer.
+
+				if(isset($this->cache[__FUNCTION__][$type][$post_id]))
+					return $counter; // Already did this.
+				$this->cache[__FUNCTION__][$type][$post_id] = -1;
+
+				if(!$this->options['enable'])
+					return $counter; // Nothing to do.
+
+				if(!$this->options['feeds_enable'])
+					return $counter; // Nothing to do.
+
+				if(!is_dir($cache_dir = $this->cache_dir()))
+					return $counter; // Nothing to do.
+
+				$home_url                = home_url('/'); // Need this below.
+				$default_feed            = get_default_feed(); // Need this below.
+				$seo_friendly_permalinks = (boolean)get_option('permalink_structure');
+				$_this                   = $this; // Reference needed by the closure below.
+				$feed_cache_path_regexs  = array(); // Initialize array of feed cache paths.
+				$build_cache_path_regex  = function ($feed_link, $wildcard_regex = NULL) use ($_this)
+				{
+					if(!is_string($feed_link) || !$feed_link)
+						return ''; // Nothing to do here.
+
+					$cache_path_flags = $_this::CACHE_PATH_NO_SCHEME | $_this::CACHE_PATH_NO_EXT
+					                    | $_this::CACHE_PATH_NO_USER | $_this::CACHE_PATH_NO_VSALT;
+					if($wildcard_regex) $cache_path_flags |= $_this::CACHE_PATH_ALLOW_WILDCARDS;
+
+					$cache_path_regex = preg_quote($_this->build_cache_path($feed_link, '', '', $cache_path_flags), '/');
+
+					if($wildcard_regex) // Replace wildcards with regex.
+						$cache_path_regex = preg_replace('/\\\\\*/', $wildcard_regex, $cache_path_regex);
+
+					return $cache_path_regex;
+				};
+				switch($type) // Handle purging based on the `$type`.
+				{
+					case 'blog': // The blog feed; i.e. `/feed/` on most WP installs.
+
+						$feed_cache_path_regexs[] = $build_cache_path_regex(get_feed_link($default_feed));
+						$feed_cache_path_regexs[] = $build_cache_path_regex(get_feed_link('rdf'));
+						$feed_cache_path_regexs[] = $build_cache_path_regex(get_feed_link('rss'));
+						$feed_cache_path_regexs[] = $build_cache_path_regex(get_feed_link('rss2'));
+						$feed_cache_path_regexs[] = $build_cache_path_regex(get_feed_link('atom'));
+
+						// It is not necessary to cover query string variations for these when `$seo_friendly_permalinks = TRUE`,
+						//    because `redirect_canonical()` will force SEO-friendly links in the end anyway.
+
+						break; // Break switch handler.
+
+					case 'blog-comments': // The blog comments feed; i.e. `/comments/feed/` on most WP installs.
+
+						$feed_cache_path_regexs[] = $build_cache_path_regex(get_feed_link('comments_'.$default_feed));
+						$feed_cache_path_regexs[] = $build_cache_path_regex(get_feed_link('comments_rdf'));
+						$feed_cache_path_regexs[] = $build_cache_path_regex(get_feed_link('comments_rss'));
+						$feed_cache_path_regexs[] = $build_cache_path_regex(get_feed_link('comments_rss2'));
+						$feed_cache_path_regexs[] = $build_cache_path_regex(get_feed_link('comments_atom'));
+
+						// It is not necessary to cover query string variations for these when `$seo_friendly_permalinks = TRUE`,
+						//    because `redirect_canonical()` will force SEO-friendly links in the end anyway.
+
+						break; // Break switch handler.
+
+					// @TODO Possibly consider search-related feeds in the future.
+					//    See: <http://codex.wordpress.org/WordPress_Feeds#Categories_and_Tags>
+					// e.g. case 'blog-searches':
+
+					case 'post-comments': // Feeds related to comments that a post has.
+
+						if(!$post_id) break; // Nothing to do here.
+						if(!($post = get_post($post_id))) break;
+
+						$feed_cache_path_regexs[] = $build_cache_path_regex(get_post_comments_feed_link($post->ID, $default_feed));
+						$feed_cache_path_regexs[] = $build_cache_path_regex(get_post_comments_feed_link($post->ID, 'rdf'));
+						$feed_cache_path_regexs[] = $build_cache_path_regex(get_post_comments_feed_link($post->ID, 'rss'));
+						$feed_cache_path_regexs[] = $build_cache_path_regex(get_post_comments_feed_link($post->ID, 'rss2'));
+						$feed_cache_path_regexs[] = $build_cache_path_regex(get_post_comments_feed_link($post->ID, 'atom'));
+
+						// It is not necessary to cover query string variations for these when `$seo_friendly_permalinks = TRUE`,
+						//    because `redirect_canonical()` will force SEO-friendly links in the end anyway.
+
+						break; // Break switch handler.
+
+					case 'post-authors': // Feeds related to authors that a post has.
+
+						if(!$post_id) break; // nothing to do here.
+						if(!($post = get_post($post_id))) break;
+
+						$feed_cache_path_regexs[] = $build_cache_path_regex(get_author_feed_link($post->post_author, $default_feed));
+						$feed_cache_path_regexs[] = $build_cache_path_regex(get_author_feed_link($post->post_author, 'rdf'));
+						$feed_cache_path_regexs[] = $build_cache_path_regex(get_author_feed_link($post->post_author, 'rss'));
+						$feed_cache_path_regexs[] = $build_cache_path_regex(get_author_feed_link($post->post_author, 'rss2'));
+						$feed_cache_path_regexs[] = $build_cache_path_regex(get_author_feed_link($post->post_author, 'atom'));
+
+						if($seo_friendly_permalinks) // The above uses SEO-friendly permalinks?
+							// Here we cover query string variations that can be left behind after `redirect_canonical()` does its thing.
+							// In the case of author-related feeds, most of the URL is converted to SEO-friendly format.
+							// Everything except `?author=` which is what we deal with below.
+						{
+							$feed_cache_path_regexs[] = $build_cache_path_regex(add_query_arg(urlencode_deep(array('author' => $post->post_author)), $home_url.'feed/'.urlencode($default_feed).'/'));
+							$feed_cache_path_regexs[] = $build_cache_path_regex(add_query_arg(urlencode_deep(array('author' => $post->post_author)), $home_url.'feed/rdf/'));
+							$feed_cache_path_regexs[] = $build_cache_path_regex(add_query_arg(urlencode_deep(array('author' => $post->post_author)), $home_url.'feed/rss/'));
+							$feed_cache_path_regexs[] = $build_cache_path_regex(add_query_arg(urlencode_deep(array('author' => $post->post_author)), $home_url.'feed/rss2/'));
+							$feed_cache_path_regexs[] = $build_cache_path_regex(add_query_arg(urlencode_deep(array('author' => $post->post_author)), $home_url.'feed/atom/'));
+
+							if(($_post_author = get_userdata($post->post_author)) && !empty($_post_author->user_nicename)) // By author nicename.
+							{
+								$feed_cache_path_regexs[] = $build_cache_path_regex(add_query_arg(urlencode_deep(array('author' => $_post_author->user_nicename)), $home_url.'feed/'.urlencode($default_feed).'/'));
+								$feed_cache_path_regexs[] = $build_cache_path_regex(add_query_arg(urlencode_deep(array('author' => $_post_author->user_nicename)), $home_url.'feed/rdf/'));
+								$feed_cache_path_regexs[] = $build_cache_path_regex(add_query_arg(urlencode_deep(array('author' => $_post_author->user_nicename)), $home_url.'feed/rss/'));
+								$feed_cache_path_regexs[] = $build_cache_path_regex(add_query_arg(urlencode_deep(array('author' => $_post_author->user_nicename)), $home_url.'feed/rss2/'));
+								$feed_cache_path_regexs[] = $build_cache_path_regex(add_query_arg(urlencode_deep(array('author' => $_post_author->user_nicename)), $home_url.'feed/atom/'));
+							}
+							unset($_post_author); // Housekeeping.
+						}
+						break; // Break switch handler.
+
+					case 'post-terms': // Feeds related to terms that a post has.
+
+						if(!$post_id) break; // Nothing to do here.
+						if(!($post = get_post($post_id))) break;
+
+						$post_terms = array(); // Initialize array of all post terms.
+
+						if(!is_array($_post_taxonomies = get_object_taxonomies($post, 'objects')) || !$_post_taxonomies)
+							break; // Nothing to do here; post has no terms.
+
+						foreach($_post_taxonomies as $_post_taxonomy) // Collect terms for each taxonomy.
+							if(is_array($_post_taxonomy_terms = wp_get_post_terms($post->ID, $_post_taxonomy->name)) && $_post_taxonomy_terms)
+								$post_terms = array_merge($post_terms, $_post_taxonomy_terms);
+
+						$post_term_cache_path_variations = function ($post_term_feed_link, $post_term) use ($build_cache_path_regex)
+						{
+							$post_term_feed_link = (string)$post_term_feed_link; // Force string.
+							$variations          = array(); // Initialize the array of variations.
+							if($post_term_feed_link) $variations[] = $build_cache_path_regex($post_term_feed_link);
+
+							/* NOTE: We CANNOT reliably include permalink variations here that use query string vars.
+								This is because Quick Cache hashes query string variables via MD5 checksums.
+								For this reason, we deal with SEO-friendly permalink variations only here. */
+
+							if($post_term_feed_link && strpos($post_term_feed_link, '?') === FALSE
+							   && is_object($post_term) && !empty($post_term->term_id) && !empty($post_term->slug)
+							)// Create variations that deal with SEO-friendly permalink variations.
+							{
+								// Quick example: `(?:123|slug)`; to consider both.
+								$_term_id_or_slug = '(?:'.preg_quote($post_term->term_id, '/').
+								                    '|'.preg_quote(preg_replace('/[^a-z0-9\/.]/i', '-', $post_term->slug), '/').')';
+
+								// Quick example: `http://www.example.com/tax/term/feed`;
+								//    with a wildcard this becomes: `http://www.example.com/tax/*/feed`
+								$_wildcarded = preg_replace('/\/[^\/]+\/feed([\/?#]|$)/', '/*/feed'.'${1}', $post_term_feed_link);
+
+								// Quick example: `http://www.example.com/tax/*/feed`;
+								//   becomes: `www\.example\.com\/tax\/.*?(?=[\/\-]?(?:123|slug)[\/\-]).*?\/feed`
+								//    ... this covers variations that use: `/tax/term,term/feed/`
+								//    ... also covers variations that use: `/tax/term/tax/term/feed/`
+								$variations[] = $build_cache_path_regex($_wildcarded, '.*?(?=[\/\-]?'.$_term_id_or_slug.'[\/\-]).*?');
+								// NOTE: This may also pick up false-positives. Not much we can do about this.
+								//    For instance, if another feed has the same word/slug in what is actually a longer/different term.
+								//    Or, if another feed has the same word/slug in what is actually the name of a taxonomy.
+
+								unset($_term_id_or_slug, $_wildcarded); // Housekeeping.
+							}
+							return $variations; // Zero or more variations.
+						};
+						foreach($post_terms as $_post_term) // See: <http://codex.wordpress.org/WordPress_Feeds#Categories_and_Tags>
+						{
+							$_post_term_feed_link   = get_term_feed_link($_post_term->term_id, $_post_term->taxonomy, $default_feed);
+							$feed_cache_path_regexs = array_merge($feed_cache_path_regexs, $post_term_cache_path_variations($_post_term_feed_link, $_post_term));
+
+							$_post_term_feed_link   = get_term_feed_link($_post_term->term_id, $_post_term->taxonomy, 'rdf');
+							$feed_cache_path_regexs = array_merge($feed_cache_path_regexs, $post_term_cache_path_variations($_post_term_feed_link, $_post_term));
+
+							$_post_term_feed_link   = get_term_feed_link($_post_term->term_id, $_post_term->taxonomy, 'rss');
+							$feed_cache_path_regexs = array_merge($feed_cache_path_regexs, $post_term_cache_path_variations($_post_term_feed_link, $_post_term));
+
+							$_post_term_feed_link   = get_term_feed_link($_post_term->term_id, $_post_term->taxonomy, 'rss2');
+							$feed_cache_path_regexs = array_merge($feed_cache_path_regexs, $post_term_cache_path_variations($_post_term_feed_link, $_post_term));
+
+							$_post_term_feed_link   = get_term_feed_link($_post_term->term_id, $_post_term->taxonomy, 'atom');
+							$feed_cache_path_regexs = array_merge($feed_cache_path_regexs, $post_term_cache_path_variations($_post_term_feed_link, $_post_term));
+
+							if($seo_friendly_permalinks && ($_post_term_taxonomy = get_taxonomy($_post_term->taxonomy))/* The above uses SEO-friendly permalinks? */)
+								// Here we cover query string variations that can be left behind after `redirect_canonical()` does its thing.
+								// In the case of term-related feeds, most of the URL is converted to SEO-friendly format.
+								// Everything except `?[tax query var]=` which is what we deal with below.
+							{
+								if($_post_term_taxonomy->name === 'category')
+									$_post_term_taxonomy_query_var = 'cat'; // Special query var.
+								else $_post_term_taxonomy_query_var = $_post_term_taxonomy->query_var;
+
+								$feed_cache_path_regexs[] = $build_cache_path_regex(add_query_arg(urlencode_deep(array($_post_term_taxonomy_query_var => $_post_term->term_id)), $home_url.'feed/'.urlencode($default_feed).'/'));
+								$feed_cache_path_regexs[] = $build_cache_path_regex(add_query_arg(urlencode_deep(array($_post_term_taxonomy_query_var => $_post_term->term_id)), $home_url.'feed/rdf/'));
+								$feed_cache_path_regexs[] = $build_cache_path_regex(add_query_arg(urlencode_deep(array($_post_term_taxonomy_query_var => $_post_term->term_id)), $home_url.'feed/rss/'));
+								$feed_cache_path_regexs[] = $build_cache_path_regex(add_query_arg(urlencode_deep(array($_post_term_taxonomy_query_var => $_post_term->term_id)), $home_url.'feed/rss2/'));
+								$feed_cache_path_regexs[] = $build_cache_path_regex(add_query_arg(urlencode_deep(array($_post_term_taxonomy_query_var => $_post_term->term_id)), $home_url.'feed/atom/'));
+
+								$feed_cache_path_regexs[] = $build_cache_path_regex(add_query_arg(urlencode_deep(array($_post_term_taxonomy_query_var => $_post_term->slug)), $home_url.'feed/'.urlencode($default_feed).'/'));
+								$feed_cache_path_regexs[] = $build_cache_path_regex(add_query_arg(urlencode_deep(array($_post_term_taxonomy_query_var => $_post_term->slug)), $home_url.'feed/rdf/'));
+								$feed_cache_path_regexs[] = $build_cache_path_regex(add_query_arg(urlencode_deep(array($_post_term_taxonomy_query_var => $_post_term->slug)), $home_url.'feed/rss/'));
+								$feed_cache_path_regexs[] = $build_cache_path_regex(add_query_arg(urlencode_deep(array($_post_term_taxonomy_query_var => $_post_term->slug)), $home_url.'feed/rss2/'));
+								$feed_cache_path_regexs[] = $build_cache_path_regex(add_query_arg(urlencode_deep(array($_post_term_taxonomy_query_var => $_post_term->slug)), $home_url.'feed/atom/'));
+							}
+							unset($_post_term_taxonomy, $_post_term_taxonomy_query_var); // Housekeeping.
+						}
+						unset($_post_taxonomies, $_post_taxonomy, $_post_taxonomy_terms, $_post_term, $_post_term_feed_link);
+
+						break; // Break switch handler.
+				}
+				foreach($feed_cache_path_regexs as $_key => $_feed_cache_path_regex)
+					if(!is_string($_feed_cache_path_regex) || !$_feed_cache_path_regex) unset($feed_cache_path_regexs[$_key]);
+				unset($_key, $_feed_cache_path_regex); // Housekeeping.
+
+				if(!$feed_cache_path_regexs || !($feed_cache_path_regexs = array_unique($feed_cache_path_regexs)))
+					return $counter; // Nothing to do here.
+
+				$in_sets_of = apply_filters(__METHOD__.'__in_sets_of', 10, get_defined_vars());
+
+				for($_i = 0; $_i < count($feed_cache_path_regexs); $_i = $_i + $in_sets_of)
+					// This prevents the regex from hitting a backtrack limit in some environments.
+				{
+					$_feed_cache_path_regexs = array_slice($feed_cache_path_regexs, $_i, $in_sets_of);
+					$_regex                  = '/^'.preg_quote($cache_dir, '/').'\/[^\/]+\/(?:'.implode('|', $_feed_cache_path_regexs).')\./';
+					$counter += $this->delete_files_from_host_cache_dir($_regex);
+				}
+				unset($_i, $_feed_cache_path_regexs, $_regex); // Housekeeping.
+
+				if($counter && is_admin()) // These cannot be disabled in the list version.
+					$this->enqueue_notice('<img src="'.esc_attr($this->url('/client-s/images/clear.png')).'" style="float:left; margin:0 10px 0 0; border:0;" />'.
+					                      sprintf(__('<strong>Quick Cache:</strong> detected changes. Found XML feeds of type <code>%1$s</code> (auto-purging).', $this->text_domain), esc_html($type)));
 
 				return apply_filters(__METHOD__, $counter, get_defined_vars());
 			}
@@ -1144,6 +1457,8 @@ namespace quick_cache
 				}
 				unset($_file); // Just a little housekeeping.
 
+				$counter += $this->auto_purge_xml_feeds_cache('blog');
+
 				return apply_filters(__METHOD__, $counter, get_defined_vars());
 			}
 
@@ -1216,6 +1531,8 @@ namespace quick_cache
 					$enqueued_notices++; // Notice counter.
 				}
 				unset($_file); // Just a little housekeeping.
+
+				$counter += $this->auto_purge_xml_feeds_cache('blog');
 
 				return apply_filters(__METHOD__, $counter, get_defined_vars());
 			}
@@ -1320,6 +1637,9 @@ namespace quick_cache
 					}
 				}
 				unset($_file, $_author); // Just a little housekeeping.
+
+				$counter += $this->auto_purge_xml_feeds_cache('blog');
+				$counter += $this->auto_purge_xml_feeds_cache('post-authors', $post_ID);
 
 				return apply_filters(__METHOD__, $counter, get_defined_vars());
 			}
@@ -1471,6 +1791,8 @@ namespace quick_cache
 				}
 				unset($_term, $_file); // Just a little housekeeping.
 
+				$counter += $this->auto_purge_xml_feeds_cache('post-terms', $id);
+
 				return apply_filters(__METHOD__, $counter, get_defined_vars());
 			}
 
@@ -1509,12 +1831,15 @@ namespace quick_cache
 					return $counter; // Nothing we can do.
 
 				if($comment->comment_approved === 'spam' || $comment->comment_approved === '0')
+					// Don't allow next `auto_purge_post_cache()` call to clear post cache.
+					// Also, don't allow spam to clear cache.
 				{
-					static::$static['___allow_auto_purge_post_cache'] = FALSE; // Don't allow next `auto_purge_post_cache()` call to clear post cache.
-					return $counter; // Don't allow spam to clear cache.
+					static::$static['___allow_auto_purge_post_cache'] = FALSE;
+					return $counter; // Nothing to do here.
 				}
-
-				$counter = $this->auto_purge_post_cache($comment->comment_post_ID);
+				$counter += $this->auto_purge_xml_feeds_cache('blog-comments');
+				$counter += $this->auto_purge_xml_feeds_cache('post-comments', $comment->comment_post_ID);
+				$counter += $this->auto_purge_post_cache($comment->comment_post_ID);
 
 				return apply_filters(__METHOD__, $counter, get_defined_vars());
 			}
@@ -1552,15 +1877,15 @@ namespace quick_cache
 				if(empty($comment->comment_post_ID))
 					return $counter; // Nothing we can do.
 
-				if($old_status === 'approved' || ($old_status === 'unapproved' && $new_status === 'approved'))
+				if(!($old_status === 'approved' || ($old_status === 'unapproved' && $new_status === 'approved')))
+					// If excluded here, don't allow next `auto_purge_post_cache()` call to clear post cache.
 				{
-					$counter = $this->auto_purge_post_cache($comment->comment_post_ID);
+					static::$static['___allow_auto_purge_post_cache'] = FALSE;
+					return $counter; // Nothing to do here.
 				}
-				else
-				{
-					static::$static['___allow_auto_purge_post_cache'] = FALSE; // Don't allow next `auto_purge_post_cache()` call to clear post cache.
-					return $counter; // Don't allow Unapproved comments not being Approved to clear cache.
-				}
+				$counter += $this->auto_purge_xml_feeds_cache('blog-comments');
+				$counter += $this->auto_purge_xml_feeds_cache('post-comments', $comment->comment_post_ID);
+				$counter += $this->auto_purge_post_cache($comment->comment_post_ID);
 
 				return apply_filters(__METHOD__, $counter, get_defined_vars());
 			}
@@ -1814,9 +2139,11 @@ namespace quick_cache
 				}
 				unset($_option, $_value, $_values, $_response); // Housekeeping.
 
+				if(strpos($this->file, WP_CONTENT_DIR) === 0)
+					$plugin_file = "WP_CONTENT_DIR.'".$this->esc_sq(str_replace(WP_CONTENT_DIR, '', $this->file))."'";
+				else $plugin_file = "'".$this->esc_sq($this->file)."'"; // Else use full absolute path.
 				// Make it possible for the `advanced-cache.php` handler to find the plugin directory reliably.
-				$advanced_cache_contents = str_ireplace("'%%".__NAMESPACE__."_PLUGIN_FILE%%'", // e.g. `QUICK_CACHE_PLUGIN_FILE`.
-				                                        "'".$this->esc_sq($this->file)."'", $advanced_cache_contents);
+				$advanced_cache_contents = str_ireplace("'%%".__NAMESPACE__."_PLUGIN_FILE%%'", $plugin_file, $advanced_cache_contents);
 
 				// Ignore; this is created by Quick Cache; and we don't need to obey in this case.
 				#if(defined('DISALLOW_FILE_MODS') && DISALLOW_FILE_MODS)
@@ -1986,6 +2313,44 @@ namespace quick_cache
 				}
 				return $value; // Pass through untouched (always).
 			}
+
+			/**
+			 * Removes the entire base directory.
+			 *
+			 * @since 14xxx First documented version.
+			 *
+			 * @return integer Total files removed by this routine (if any).
+			 *
+			 * @throws \exception If a wipe failure occurs.
+			 */
+			public function remove_base_dir()
+			{
+				$counter = 0; // Initialize.
+
+				// @TODO When set_time_limit() is disabled by PHP configuration, display a warning message to users upon plugin activation.
+				@set_time_limit(1800); // In case of HUGE sites w/ a very large directory. Errors are ignored in case `set_time_limit()` is disabled.
+
+				$base_dir = $this->wp_content_dir_to(''); // Simply the base directory.
+
+				/** @var $_dir_file \RecursiveDirectoryIterator For IDEs. */
+				if($base_dir && is_dir($base_dir)) foreach($this->dir_regex_iteration($base_dir, '/.+/') as $_dir_file)
+				{
+					if(($_dir_file->isFile() || $_dir_file->isLink()))
+						if(!unlink($_dir_file->getPathname())) // Throw exception if unable to delete.
+							throw new \exception(sprintf(__('Unable to remove file: `%1$s`.', $this->text_domain), $_dir_file->getPathname()));
+						else $counter++; // Increment counter for each file we wipe.
+
+					else if($_dir_file->isDir())
+						if(!rmdir($_dir_file->getPathname())) // Throw exception if unable to delete.
+							throw new \exception(sprintf(__('Unable to remove dir: `%1$s`.', $this->text_domain), $_dir_file->getPathname()));
+				}
+				unset($_dir_file); // Just a little housekeeping.
+
+				if(is_dir($base_dir) && !rmdir($base_dir)) // Throw exception if unable to delete.
+					throw new \exception(sprintf(__('Unable to remove base dir: `%1$s`.', $this->text_domain), $base_dir));
+
+				return $counter; // Total removals.
+			}
 		}
 
 		/**
@@ -2006,15 +2371,15 @@ namespace quick_cache
 		 *
 		 * @since 140422 First documented version.
 		 *
-		 * @var plugin $GLOBALS [__NAMESPACE__]
+		 * @var plugin Main plugin class.
 		 */
-		$GLOBALS[__NAMESPACE__] = new plugin(); // New plugin instance.
+		$GLOBALS[__NAMESPACE__] = new plugin(!class_exists('\\'.__NAMESPACE__.'\\uninstall'));
 		/*
 		 * API class inclusion; depends on {@link $GLOBALS[__NAMESPACE__]}.
 		 */
 		require_once dirname(__FILE__).'/includes/api-class.php';
 	}
-	else add_action('all_admin_notices', function () // Do NOT load in this case.
+	else if(!class_exists('\\'.__NAMESPACE__.'\\uninstall')) add_action('all_admin_notices', function ()
 	{
 		echo '<div class="error"><p>'. // Running multiple versions of this plugin at same time.
 		     __('Please disable the LITE version of Quick Cache before you activate the PRO version.',
