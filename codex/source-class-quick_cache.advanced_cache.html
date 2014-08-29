@@ -8,7 +8,7 @@
 	<title>File quick-cache/includes/advanced-cache.tpl.php | Quick Cache Lite</title>
 
 	<script type="text/javascript" src="resources/combined.js?822040270"></script>
-	<script type="text/javascript" src="elementlist.js?1312627654"></script>
+	<script type="text/javascript" src="elementlist.js?1748627827"></script>
 	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3403148767" />
 
 </head>
@@ -40,6 +40,7 @@
 				<li><a href="class-quick_cache.menu_pages.html">menu_pages</a></li>
 				<li><a href="class-quick_cache.plugin.html">plugin</a></li>
 				<li><a href="class-quick_cache.share.html">share</a></li>
+				<li><a href="class-quick_cache.uninstall.html">uninstall</a></li>
 				<li><a href="class-quick_cache.version_specific_upgrade.html">version_specific_upgrade</a></li>
 			</ul>
 
@@ -802,426 +803,433 @@
 </span><span id="703" class="l"><a class="l" href="#703"> 703: </a>
 </span><span id="704" class="l"><a class="l" href="#704"> 704: </a>                <span class="php-var">$headers_list</span> = <span class="php-var">$this</span>-&gt;<span class="php-keyword2">headers_list</span>(); <span class="php-comment">// Headers already sent (or ready to be sent).</span>
 </span><span id="705" class="l"><a class="l" href="#705"> 705: </a>                <span class="php-keyword1">foreach</span>(<span class="php-keyword2">unserialize</span>(<span class="php-var">$headers</span>) <span class="php-keyword1">as</span> <span class="php-var">$_header</span>) <span class="php-comment">// Preserves original headers sent with this file.</span>
-</span><span id="706" class="l"><a class="l" href="#706"> 706: </a>                    <span class="php-keyword1">if</span>(!<span class="php-keyword2">in_array</span>(<span class="php-var">$_header</span>, <span class="php-var">$headers_list</span>, <span class="php-keyword1">TRUE</span>) &amp;&amp; <span class="php-keyword2">stripos</span>(<span class="php-var">$_header</span>, <span class="php-quote">'Last-Modified:'</span>) !== <span class="php-num">0</span>) <span class="php-keyword2">header</span>(<span class="php-var">$_header</span>);
-</span><span id="707" class="l"><a class="l" href="#707"> 707: </a>                <span class="php-keyword1">unset</span>(<span class="php-var">$_header</span>); <span class="php-comment">// Just a little housekeeping.</span>
-</span><span id="708" class="l"><a class="l" href="#708"> 708: </a>
-</span><span id="709" class="l"><a class="l" href="#709"> 709: </a>                <span class="php-keyword1">if</span>(QUICK_CACHE_DEBUGGING_ENABLE &amp;&amp; <span class="php-var">$this</span>-&gt;is_html_xml_doc(<span class="php-var">$cache</span>)) <span class="php-comment">// Only if HTML comments are possible.</span>
-</span><span id="710" class="l"><a class="l" href="#710"> 710: </a>                {
-</span><span id="711" class="l"><a class="l" href="#711"> 711: </a>                    <span class="php-var">$total_time</span> = <span class="php-keyword2">number_format</span>(<span class="php-keyword2">microtime</span>(<span class="php-keyword1">TRUE</span>) - <span class="php-var">$this</span>-&gt;timer, <span class="php-num">5</span>, <span class="php-quote">'.'</span>, <span class="php-quote">''</span>);
-</span><span id="712" class="l"><a class="l" href="#712"> 712: </a>                    <span class="php-var">$cache</span> .= <span class="php-quote">&quot;\n&quot;</span>.<span class="php-quote">'&lt;!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ --&gt;'</span>;
-</span><span id="713" class="l"><a class="l" href="#713"> 713: </a>                    <span class="php-comment">// translators: This string is actually NOT translatable because the `__()` function is not available at this point in the processing.</span>
-</span><span id="714" class="l"><a class="l" href="#714"> 714: </a>                    <span class="php-var">$cache</span> .= <span class="php-quote">&quot;\n&quot;</span>.<span class="php-quote">'&lt;!-- '</span>.<span class="php-keyword2">htmlspecialchars</span>(<span class="php-keyword2">sprintf</span>(__(<span class="php-quote">'Quick Cache fully functional :-) Cache file served for (%1$s) in %2$s seconds, on: %3$s.'</span>, <span class="php-var">$this</span>-&gt;text_domain), <span class="php-var">$this</span>-&gt;salt_location, <span class="php-var">$total_time</span>, <span class="php-keyword2">date</span>(<span class="php-quote">'M jS, Y @ g:i a T'</span>))).<span class="php-quote">' --&gt;'</span>;
-</span><span id="715" class="l"><a class="l" href="#715"> 715: </a>                }
-</span><span id="716" class="l"><a class="l" href="#716"> 716: </a>                <span class="php-keyword1">exit</span>(<span class="php-var">$cache</span>); <span class="php-comment">// Exit with cache contents.</span>
-</span><span id="717" class="l"><a class="l" href="#717"> 717: </a>            }
-</span><span id="718" class="l"><a class="l" href="#718"> 718: </a>            <span class="php-keyword1">else</span> <span class="php-comment">// Start buffering output; we may need to cache the HTML generated by this request.</span>
-</span><span id="719" class="l"><a class="l" href="#719"> 719: </a>            {
-</span><span id="720" class="l"><a class="l" href="#720"> 720: </a>                <span class="php-keyword2">ob_start</span>(<span class="php-keyword1">array</span>(<span class="php-var">$this</span>, <span class="php-quote">'output_buffer_callback_handler'</span>)); <span class="php-comment">// Start output buffering.</span>
-</span><span id="721" class="l"><a class="l" href="#721"> 721: </a>            }
-</span><span id="722" class="l"><a class="l" href="#722"> 722: </a>            <span class="php-keyword1">return</span> <span class="php-keyword1">NULL</span>; <span class="php-comment">// Return value not applicable.</span>
-</span><span id="723" class="l"><a class="l" href="#723"> 723: </a>        }
-</span><span id="724" class="l"><a class="l" href="#724"> 724: </a>
-</span><span id="725" class="l"><a class="l" href="#725"> 725: </a>        <span class="php-comment">/**
-</span></span><span id="726" class="l"><a class="l" href="#726"> 726: </a><span class="php-comment">         * Used to setup debug info (if enabled).
-</span></span><span id="727" class="l"><a class="l" href="#727"> 727: </a><span class="php-comment">         *
-</span></span><span id="728" class="l"><a class="l" href="#728"> 728: </a><span class="php-comment">         * @since 140422 First documented version.
-</span></span><span id="729" class="l"><a class="l" href="#729"> 729: </a><span class="php-comment">         *
-</span></span><span id="730" class="l"><a class="l" href="#730"> 730: </a><span class="php-comment">         * @param string $reason_code One of the `NC_DEBUG_` constants.
-</span></span><span id="731" class="l"><a class="l" href="#731"> 731: </a><span class="php-comment">         * @param string $reason Optionally override the built-in description with a custom message.
-</span></span><span id="732" class="l"><a class="l" href="#732"> 732: </a><span class="php-comment">         */</span>
-</span><span id="733" class="l"><a class="l" href="#733"> 733: </a>        <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_maybe_set_debug_info" href="#_maybe_set_debug_info">maybe_set_debug_info</a>(<span class="php-var">$reason_code</span>, <span class="php-var">$reason</span> = <span class="php-quote">''</span>)
-</span><span id="734" class="l"><a class="l" href="#734"> 734: </a>        {
-</span><span id="735" class="l"><a class="l" href="#735"> 735: </a>            <span class="php-keyword1">if</span>(!QUICK_CACHE_DEBUGGING_ENABLE)
-</span><span id="736" class="l"><a class="l" href="#736"> 736: </a>                <span class="php-keyword1">return</span>; <span class="php-comment">// Nothing to do.</span>
-</span><span id="737" class="l"><a class="l" href="#737"> 737: </a>
-</span><span id="738" class="l"><a class="l" href="#738"> 738: </a>            <span class="php-var">$reason</span> = (string)<span class="php-var">$reason</span>;
-</span><span id="739" class="l"><a class="l" href="#739"> 739: </a>            <span class="php-keyword1">if</span>(!(<span class="php-var">$reason_code</span> = (string)<span class="php-var">$reason_code</span>))
-</span><span id="740" class="l"><a class="l" href="#740"> 740: </a>                <span class="php-keyword1">return</span>; <span class="php-comment">// Not applicable.</span>
-</span><span id="741" class="l"><a class="l" href="#741"> 741: </a>
-</span><span id="742" class="l"><a class="l" href="#742"> 742: </a>            <span class="php-var">$this</span>-&gt;debug_info = <span class="php-keyword1">array</span>(<span class="php-quote">'reason_code'</span> =&gt; <span class="php-var">$reason_code</span>, <span class="php-quote">'reason'</span> =&gt; <span class="php-var">$reason</span>);
-</span><span id="743" class="l"><a class="l" href="#743"> 743: </a>        }
-</span><span id="744" class="l"><a class="l" href="#744"> 744: </a>
-</span><span id="745" class="l"><a class="l" href="#745"> 745: </a>        <span class="php-comment">/**
-</span></span><span id="746" class="l"><a class="l" href="#746"> 746: </a><span class="php-comment">         * Filters WP {@link \status_header()} (if applicable).
-</span></span><span id="747" class="l"><a class="l" href="#747"> 747: </a><span class="php-comment">         *
-</span></span><span id="748" class="l"><a class="l" href="#748"> 748: </a><span class="php-comment">         * @since 140422 First documented version.
-</span></span><span id="749" class="l"><a class="l" href="#749"> 749: </a><span class="php-comment">         */</span>
-</span><span id="750" class="l"><a class="l" href="#750"> 750: </a>        <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_maybe_filter_status_header_postload" href="#_maybe_filter_status_header_postload">maybe_filter_status_header_postload</a>()
-</span><span id="751" class="l"><a class="l" href="#751"> 751: </a>        {
-</span><span id="752" class="l"><a class="l" href="#752"> 752: </a>            <span class="php-keyword1">if</span>(<span class="php-keyword1">empty</span>(<span class="php-var">$this</span>-&gt;postload[<span class="php-quote">'filter_status_header'</span>]))
-</span><span id="753" class="l"><a class="l" href="#753"> 753: </a>                <span class="php-keyword1">return</span>; <span class="php-comment">// Nothing to do in this case.</span>
-</span><span id="754" class="l"><a class="l" href="#754"> 754: </a>
-</span><span id="755" class="l"><a class="l" href="#755"> 755: </a>            <span class="php-var">$_this</span> = <span class="php-var">$this</span>; <span class="php-comment">// Reference needed by the closure below.</span>
-</span><span id="756" class="l"><a class="l" href="#756"> 756: </a>            add_filter(<span class="php-quote">'status_header'</span>, <span class="php-keyword1">function</span> (<span class="php-var">$status_header</span>, <span class="php-var">$status_code</span>) <span class="php-keyword1">use</span> (<span class="php-var">$_this</span>)
-</span><span id="757" class="l"><a class="l" href="#757"> 757: </a>            {
-</span><span id="758" class="l"><a class="l" href="#758"> 758: </a>                <span class="php-keyword1">if</span>(<span class="php-var">$status_code</span> &gt; <span class="php-num">0</span>) <span class="php-comment">// Sending a status?</span>
-</span><span id="759" class="l"><a class="l" href="#759"> 759: </a>                    <span class="php-var">$_this</span>-&gt;http_status = (integer)<span class="php-var">$status_code</span>;
-</span><span id="760" class="l"><a class="l" href="#760"> 760: </a>
-</span><span id="761" class="l"><a class="l" href="#761"> 761: </a>                <span class="php-keyword1">return</span> <span class="php-var">$status_header</span>; <span class="php-comment">// Pass through this filter.</span>
-</span><span id="762" class="l"><a class="l" href="#762"> 762: </a>
-</span><span id="763" class="l"><a class="l" href="#763"> 763: </a>            }, PHP_INT_MAX, <span class="php-num">2</span>);
-</span><span id="764" class="l"><a class="l" href="#764"> 764: </a>        }
-</span><span id="765" class="l"><a class="l" href="#765"> 765: </a>
-</span><span id="766" class="l"><a class="l" href="#766"> 766: </a>        <span class="php-comment">/**
-</span></span><span id="767" class="l"><a class="l" href="#767"> 767: </a><span class="php-comment">         * Hooks `NC_DEBUG_` info into the WordPress `shutdown` phase (if applicable).
-</span></span><span id="768" class="l"><a class="l" href="#768"> 768: </a><span class="php-comment">         *
-</span></span><span id="769" class="l"><a class="l" href="#769"> 769: </a><span class="php-comment">         * @since 140422 First documented version.
-</span></span><span id="770" class="l"><a class="l" href="#770"> 770: </a><span class="php-comment">         */</span>
-</span><span id="771" class="l"><a class="l" href="#771"> 771: </a>        <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_maybe_set_debug_info_postload" href="#_maybe_set_debug_info_postload">maybe_set_debug_info_postload</a>()
-</span><span id="772" class="l"><a class="l" href="#772"> 772: </a>        {
-</span><span id="773" class="l"><a class="l" href="#773"> 773: </a>            <span class="php-keyword1">if</span>(!QUICK_CACHE_DEBUGGING_ENABLE)
-</span><span id="774" class="l"><a class="l" href="#774"> 774: </a>                <span class="php-keyword1">return</span>; <span class="php-comment">// Nothing to do.</span>
-</span><span id="775" class="l"><a class="l" href="#775"> 775: </a>
-</span><span id="776" class="l"><a class="l" href="#776"> 776: </a>            <span class="php-keyword1">if</span>(<span class="php-keyword1">empty</span>(<span class="php-var">$this</span>-&gt;postload[<span class="php-quote">'set_debug_info'</span>]))
-</span><span id="777" class="l"><a class="l" href="#777"> 777: </a>                <span class="php-keyword1">return</span>; <span class="php-comment">// Nothing to do in this case.</span>
-</span><span id="778" class="l"><a class="l" href="#778"> 778: </a>
-</span><span id="779" class="l"><a class="l" href="#779"> 779: </a>            <span class="php-keyword1">if</span>(is_admin()) <span class="php-keyword1">return</span>; <span class="php-comment">// Not applicable.</span>
-</span><span id="780" class="l"><a class="l" href="#780"> 780: </a>
-</span><span id="781" class="l"><a class="l" href="#781"> 781: </a>            <span class="php-keyword1">if</span>(<span class="php-keyword2">strcasecmp</span>(PHP_SAPI, <span class="php-quote">'cli'</span>) === <span class="php-num">0</span>)
-</span><span id="782" class="l"><a class="l" href="#782"> 782: </a>                <span class="php-keyword1">return</span>; <span class="php-comment">// Let's not run the risk here.</span>
-</span><span id="783" class="l"><a class="l" href="#783"> 783: </a>
-</span><span id="784" class="l"><a class="l" href="#784"> 784: </a>            add_action(<span class="php-quote">'shutdown'</span>, <span class="php-keyword1">array</span>(<span class="php-var">$this</span>, <span class="php-quote">'maybe_echo_nc_debug_info'</span>), PHP_INT_MAX - <span class="php-num">10</span>);
-</span><span id="785" class="l"><a class="l" href="#785"> 785: </a>        }
-</span><span id="786" class="l"><a class="l" href="#786"> 786: </a>
-</span><span id="787" class="l"><a class="l" href="#787"> 787: </a>        <span class="php-comment">/**
-</span></span><span id="788" class="l"><a class="l" href="#788"> 788: </a><span class="php-comment">         * Grab details from WP and the Quick Cache plugin itself,
-</span></span><span id="789" class="l"><a class="l" href="#789"> 789: </a><span class="php-comment">         *    after the main query is loaded (if at all possible).
-</span></span><span id="790" class="l"><a class="l" href="#790"> 790: </a><span class="php-comment">         *
-</span></span><span id="791" class="l"><a class="l" href="#791"> 791: </a><span class="php-comment">         * This is where we have a chance to grab any values we need from WordPress; or from the QC plugin.
-</span></span><span id="792" class="l"><a class="l" href="#792"> 792: </a><span class="php-comment">         *    It is EXTREMEMLY important that we NOT attempt to grab any object references here.
-</span></span><span id="793" class="l"><a class="l" href="#793"> 793: </a><span class="php-comment">         *    Anything acquired in this phase should be stored as a scalar value.
-</span></span><span id="794" class="l"><a class="l" href="#794"> 794: </a><span class="php-comment">         *    See {@link output_buffer_callback_handler()} for further details.
-</span></span><span id="795" class="l"><a class="l" href="#795"> 795: </a><span class="php-comment">         *
-</span></span><span id="796" class="l"><a class="l" href="#796"> 796: </a><span class="php-comment">         * @since 140422 First documented version.
-</span></span><span id="797" class="l"><a class="l" href="#797"> 797: </a><span class="php-comment">         *
-</span></span><span id="798" class="l"><a class="l" href="#798"> 798: </a><span class="php-comment">         * @attaches-to `wp` hook.
-</span></span><span id="799" class="l"><a class="l" href="#799"> 799: </a><span class="php-comment">         */</span>
-</span><span id="800" class="l"><a class="l" href="#800"> 800: </a>        <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_wp_main_query_postload" href="#_wp_main_query_postload">wp_main_query_postload</a>()
-</span><span id="801" class="l"><a class="l" href="#801"> 801: </a>        {
-</span><span id="802" class="l"><a class="l" href="#802"> 802: </a>            <span class="php-keyword1">if</span>(<span class="php-keyword1">empty</span>(<span class="php-var">$this</span>-&gt;postload[<span class="php-quote">'wp_main_query'</span>]))
-</span><span id="803" class="l"><a class="l" href="#803"> 803: </a>                <span class="php-keyword1">return</span>; <span class="php-comment">// Nothing to do in this case.</span>
-</span><span id="804" class="l"><a class="l" href="#804"> 804: </a>
-</span><span id="805" class="l"><a class="l" href="#805"> 805: </a>            <span class="php-keyword1">if</span>(<span class="php-var">$this</span>-&gt;is_wp_loaded_query || is_admin())
-</span><span id="806" class="l"><a class="l" href="#806"> 806: </a>                <span class="php-keyword1">return</span>; <span class="php-comment">// Nothing to do.</span>
-</span><span id="807" class="l"><a class="l" href="#807"> 807: </a>
-</span><span id="808" class="l"><a class="l" href="#808"> 808: </a>            <span class="php-keyword1">if</span>(!is_main_query()) <span class="php-keyword1">return</span>; <span class="php-comment">// Not main query.</span>
-</span><span id="809" class="l"><a class="l" href="#809"> 809: </a>
-</span><span id="810" class="l"><a class="l" href="#810"> 810: </a>            <span class="php-var">$this</span>-&gt;is_wp_loaded_query = <span class="php-keyword1">TRUE</span>;
-</span><span id="811" class="l"><a class="l" href="#811"> 811: </a>            <span class="php-var">$this</span>-&gt;is_404             = is_404();
-</span><span id="812" class="l"><a class="l" href="#812"> 812: </a>            <span class="php-var">$this</span>-&gt;is_user_logged_in  = is_user_logged_in();
-</span><span id="813" class="l"><a class="l" href="#813"> 813: </a>            <span class="php-var">$this</span>-&gt;content_url        = <span class="php-keyword2">rtrim</span>(content_url(), <span class="php-quote">'/'</span>);
-</span><span id="814" class="l"><a class="l" href="#814"> 814: </a>            <span class="php-var">$this</span>-&gt;is_maintenance     = <span class="php-keyword2">function_exists</span>(<span class="php-quote">'is_maintenance'</span>) &amp;&amp; is_maintenance();
-</span><span id="815" class="l"><a class="l" href="#815"> 815: </a>
-</span><span id="816" class="l"><a class="l" href="#816"> 816: </a>            <span class="php-var">$_this</span> = <span class="php-var">$this</span>; <span class="php-comment">// Reference for the closure below.</span>
-</span><span id="817" class="l"><a class="l" href="#817"> 817: </a>            add_action(<span class="php-quote">'template_redirect'</span>, <span class="php-keyword1">function</span> () <span class="php-keyword1">use</span> (<span class="php-var">$_this</span>)
-</span><span id="818" class="l"><a class="l" href="#818"> 818: </a>            { <span class="php-comment">// Move this AFTER `redirect_canonical` to avoid buggy WP behavior.</span>
-</span><span id="819" class="l"><a class="l" href="#819"> 819: </a>                <span class="php-comment">// See &lt;https://github.com/websharks/quick-cache/issues/209#issuecomment-46999230&gt;</span>
-</span><span id="820" class="l"><a class="l" href="#820"> 820: </a>                <span class="php-var">$_this</span>-&gt;is_a_wp_content_type = <span class="php-var">$_this</span>-&gt;is_404 || <span class="php-var">$_this</span>-&gt;is_maintenance
-</span><span id="821" class="l"><a class="l" href="#821"> 821: </a>                                               || is_front_page() <span class="php-comment">// See &lt;https://core.trac.wordpress.org/ticket/21602#comment:7&gt;</span>
-</span><span id="822" class="l"><a class="l" href="#822"> 822: </a>                                               || is_home() || is_singular() || is_archive() || is_post_type_archive() || is_tax() || is_search() || is_feed();
-</span><span id="823" class="l"><a class="l" href="#823"> 823: </a>            }, <span class="php-num">11</span>);
-</span><span id="824" class="l"><a class="l" href="#824"> 824: </a>        }
-</span><span id="825" class="l"><a class="l" href="#825"> 825: </a>
-</span><span id="826" class="l"><a class="l" href="#826"> 826: </a>        <span class="php-comment">/**
-</span></span><span id="827" class="l"><a class="l" href="#827"> 827: </a><span class="php-comment">         * Output buffer handler; i.e. the cache file generator.
-</span></span><span id="828" class="l"><a class="l" href="#828"> 828: </a><span class="php-comment">         *
-</span></span><span id="829" class="l"><a class="l" href="#829"> 829: </a><span class="php-comment">         * @note We CANNOT depend on any WP functionality here; it will cause problems.
-</span></span><span id="830" class="l"><a class="l" href="#830"> 830: </a><span class="php-comment">         *    Anything we need from WP should be saved in the postload phase as a scalar value.
-</span></span><span id="831" class="l"><a class="l" href="#831"> 831: </a><span class="php-comment">         *
-</span></span><span id="832" class="l"><a class="l" href="#832"> 832: </a><span class="php-comment">         * @since 140422 First documented version.
-</span></span><span id="833" class="l"><a class="l" href="#833"> 833: </a><span class="php-comment">         *
-</span></span><span id="834" class="l"><a class="l" href="#834"> 834: </a><span class="php-comment">         * @param string  $buffer The buffer from {@link \ob_start()}.
-</span></span><span id="835" class="l"><a class="l" href="#835"> 835: </a><span class="php-comment">         * @param integer $phase A set of bitmask flags.
-</span></span><span id="836" class="l"><a class="l" href="#836"> 836: </a><span class="php-comment">         *
-</span></span><span id="837" class="l"><a class="l" href="#837"> 837: </a><span class="php-comment">         * @return string|boolean The output buffer, or `FALSE` to indicate no change.
-</span></span><span id="838" class="l"><a class="l" href="#838"> 838: </a><span class="php-comment">         *
-</span></span><span id="839" class="l"><a class="l" href="#839"> 839: </a><span class="php-comment">         * @throws \exception If unable to handle output buffering for any reason.
-</span></span><span id="840" class="l"><a class="l" href="#840"> 840: </a><span class="php-comment">         *
-</span></span><span id="841" class="l"><a class="l" href="#841"> 841: </a><span class="php-comment">         * @attaches-to {@link \ob_start()}
-</span></span><span id="842" class="l"><a class="l" href="#842"> 842: </a><span class="php-comment">         */</span>
-</span><span id="843" class="l"><a class="l" href="#843"> 843: </a>        <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_output_buffer_callback_handler" href="#_output_buffer_callback_handler">output_buffer_callback_handler</a>(<span class="php-var">$buffer</span>, <span class="php-var">$phase</span>)
-</span><span id="844" class="l"><a class="l" href="#844"> 844: </a>        {
-</span><span id="845" class="l"><a class="l" href="#845"> 845: </a>            <span class="php-keyword1">if</span>(!(<span class="php-var">$phase</span> &amp; PHP_OUTPUT_HANDLER_END)) <span class="php-comment">// We do NOT chunk the buffer; so this should NOT occur.</span>
-</span><span id="846" class="l"><a class="l" href="#846"> 846: </a>                <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> \exception(<span class="php-keyword2">sprintf</span>(__(<span class="php-quote">'Unexpected OB phase: `%1$s`.'</span>, <span class="php-var">$this</span>-&gt;text_domain), <span class="php-var">$phase</span>));
-</span><span id="847" class="l"><a class="l" href="#847"> 847: </a>
-</span><span id="848" class="l"><a class="l" href="#848"> 848: </a>            <span class="php-comment"># Exclusion checks; there are MANY of these...</span>
-</span><span id="849" class="l"><a class="l" href="#849"> 849: </a>
-</span><span id="850" class="l"><a class="l" href="#850"> 850: </a>            <span class="php-var">$cache</span> = <span class="php-keyword2">trim</span>((string)<span class="php-var">$buffer</span>);
-</span><span id="851" class="l"><a class="l" href="#851"> 851: </a>            <span class="php-keyword1">if</span>(!<span class="php-keyword1">isset</span>(<span class="php-var">$cache</span>[<span class="php-num">0</span>])) <span class="php-comment">// Allows a `0`.</span>
-</span><span id="852" class="l"><a class="l" href="#852"> 852: </a>                <span class="php-keyword1">return</span> <span class="php-keyword1">FALSE</span>; <span class="php-comment">// Don't cache an empty buffer.</span>
-</span><span id="853" class="l"><a class="l" href="#853"> 853: </a>
-</span><span id="854" class="l"><a class="l" href="#854"> 854: </a>            <span class="php-keyword1">if</span>(!<span class="php-keyword1">isset</span>(<span class="php-var">$GLOBALS</span>[__NAMESPACE__.<span class="php-quote">'__shutdown_flag'</span>]))
-</span><span id="855" class="l"><a class="l" href="#855"> 855: </a>                <span class="php-keyword1">return</span> (boolean)<span class="php-var">$this</span>-&gt;maybe_set_debug_info(<span class="php-var">$this</span>::NC_DEBUG_EARLY_BUFFER_TERMINATION);
-</span><span id="856" class="l"><a class="l" href="#856"> 856: </a>
-</span><span id="857" class="l"><a class="l" href="#857"> 857: </a>            <span class="php-keyword1">if</span>(<span class="php-keyword1">isset</span>(<span class="php-var">$_GET</span>[<span class="php-quote">'qcAC'</span>]) &amp;&amp; !<span class="php-keyword2">filter_var</span>(<span class="php-var">$_GET</span>[<span class="php-quote">'qcAC'</span>], FILTER_VALIDATE_BOOLEAN))
-</span><span id="858" class="l"><a class="l" href="#858"> 858: </a>                <span class="php-keyword1">return</span> (boolean)<span class="php-var">$this</span>-&gt;maybe_set_debug_info(<span class="php-var">$this</span>::NC_DEBUG_QCAC_GET_VAR);
-</span><span id="859" class="l"><a class="l" href="#859"> 859: </a>
-</span><span id="860" class="l"><a class="l" href="#860"> 860: </a>            <span class="php-keyword1">if</span>(<span class="php-keyword2">defined</span>(<span class="php-quote">'QUICK_CACHE_ALLOWED'</span>) &amp;&amp; !QUICK_CACHE_ALLOWED)
-</span><span id="861" class="l"><a class="l" href="#861"> 861: </a>                <span class="php-keyword1">return</span> (boolean)<span class="php-var">$this</span>-&gt;maybe_set_debug_info(<span class="php-var">$this</span>::NC_DEBUG_QUICK_CACHE_ALLOWED_CONSTANT);
-</span><span id="862" class="l"><a class="l" href="#862"> 862: </a>
-</span><span id="863" class="l"><a class="l" href="#863"> 863: </a>            <span class="php-keyword1">if</span>(<span class="php-keyword1">isset</span>(<span class="php-var">$_SERVER</span>[<span class="php-quote">'QUICK_CACHE_ALLOWED'</span>]) &amp;&amp; !<span class="php-var">$_SERVER</span>[<span class="php-quote">'QUICK_CACHE_ALLOWED'</span>])
-</span><span id="864" class="l"><a class="l" href="#864"> 864: </a>                <span class="php-keyword1">return</span> (boolean)<span class="php-var">$this</span>-&gt;maybe_set_debug_info(<span class="php-var">$this</span>::NC_DEBUG_QUICK_CACHE_ALLOWED_SERVER_VAR);
-</span><span id="865" class="l"><a class="l" href="#865"> 865: </a>
-</span><span id="866" class="l"><a class="l" href="#866"> 866: </a>            <span class="php-keyword1">if</span>(<span class="php-keyword2">defined</span>(<span class="php-quote">'DONOTCACHEPAGE'</span>)) <span class="php-comment">// WP Super Cache compatible.</span>
-</span><span id="867" class="l"><a class="l" href="#867"> 867: </a>                <span class="php-keyword1">return</span> (boolean)<span class="php-var">$this</span>-&gt;maybe_set_debug_info(<span class="php-var">$this</span>::NC_DEBUG_DONOTCACHEPAGE_CONSTANT);
-</span><span id="868" class="l"><a class="l" href="#868"> 868: </a>
-</span><span id="869" class="l"><a class="l" href="#869"> 869: </a>            <span class="php-keyword1">if</span>(<span class="php-keyword1">isset</span>(<span class="php-var">$_SERVER</span>[<span class="php-quote">'DONOTCACHEPAGE'</span>])) <span class="php-comment">// WP Super Cache compatible.</span>
-</span><span id="870" class="l"><a class="l" href="#870"> 870: </a>                <span class="php-keyword1">return</span> (boolean)<span class="php-var">$this</span>-&gt;maybe_set_debug_info(<span class="php-var">$this</span>::NC_DEBUG_DONOTCACHEPAGE_SERVER_VAR);
-</span><span id="871" class="l"><a class="l" href="#871"> 871: </a>
-</span><span id="872" class="l"><a class="l" href="#872"> 872: </a>            <span class="php-keyword1">if</span>(<span class="php-var">$this</span>-&gt;is_user_logged_in) <span class="php-comment">// Actually logged into the site.</span>
-</span><span id="873" class="l"><a class="l" href="#873"> 873: </a>                <span class="php-keyword1">return</span> (boolean)<span class="php-var">$this</span>-&gt;maybe_set_debug_info(<span class="php-var">$this</span>::NC_DEBUG_IS_LOGGED_IN_USER);
-</span><span id="874" class="l"><a class="l" href="#874"> 874: </a>
-</span><span id="875" class="l"><a class="l" href="#875"> 875: </a>            <span class="php-keyword1">if</span>(<span class="php-var">$this</span>-&gt;is_like_user_logged_in()) <span class="php-comment">// Commenters, password-protected access, or actually logged-in.</span>
-</span><span id="876" class="l"><a class="l" href="#876"> 876: </a>                <span class="php-keyword1">return</span> (boolean)<span class="php-var">$this</span>-&gt;maybe_set_debug_info(<span class="php-var">$this</span>::NC_DEBUG_IS_LIKE_LOGGED_IN_USER); <span class="php-comment">// Separate debug notice.</span>
-</span><span id="877" class="l"><a class="l" href="#877"> 877: </a>
-</span><span id="878" class="l"><a class="l" href="#878"> 878: </a>            <span class="php-keyword1">if</span>(<span class="php-var">$this</span>-&gt;is_404 &amp;&amp; !QUICK_CACHE_CACHE_404_REQUESTS) <span class="php-comment">// Not caching 404 errors.</span>
-</span><span id="879" class="l"><a class="l" href="#879"> 879: </a>                <span class="php-keyword1">return</span> (boolean)<span class="php-var">$this</span>-&gt;maybe_set_debug_info(<span class="php-var">$this</span>::NC_DEBUG_404_REQUEST);
-</span><span id="880" class="l"><a class="l" href="#880"> 880: </a>
-</span><span id="881" class="l"><a class="l" href="#881"> 881: </a>            <span class="php-keyword1">if</span>(<span class="php-keyword2">strpos</span>(<span class="php-var">$cache</span>, <span class="php-quote">'&lt;body id=&quot;error-page&quot;&gt;'</span>) !== <span class="php-keyword1">FALSE</span>) <span class="php-comment">// A WordPress-generated {@link \wp_die()} error?</span>
-</span><span id="882" class="l"><a class="l" href="#882"> 882: </a>                <span class="php-keyword1">return</span> (boolean)<span class="php-var">$this</span>-&gt;maybe_set_debug_info(<span class="php-var">$this</span>::NC_DEBUG_WP_ERROR_PAGE);
-</span><span id="883" class="l"><a class="l" href="#883"> 883: </a>
-</span><span id="884" class="l"><a class="l" href="#884"> 884: </a>            <span class="php-keyword1">if</span>(!<span class="php-var">$this</span>-&gt;function_is_possible(<span class="php-quote">'http_response_code'</span>)) <span class="php-comment">// Unable to reliably detect HTTP status code?</span>
-</span><span id="885" class="l"><a class="l" href="#885"> 885: </a>                <span class="php-keyword1">if</span>(<span class="php-keyword2">stripos</span>(<span class="php-var">$cache</span>, <span class="php-quote">'&lt;title&gt;database error&lt;/title&gt;'</span>) !== <span class="php-keyword1">FALSE</span>) <span class="php-comment">// Fallback on this hackety hack.</span>
-</span><span id="886" class="l"><a class="l" href="#886"> 886: </a>                    <span class="php-keyword1">return</span> (boolean)<span class="php-var">$this</span>-&gt;maybe_set_debug_info(<span class="php-var">$this</span>::NC_DEBUG_WP_ERROR_PAGE);
-</span><span id="887" class="l"><a class="l" href="#887"> 887: </a>
-</span><span id="888" class="l"><a class="l" href="#888"> 888: </a>            <span class="php-keyword1">if</span>(!<span class="php-var">$this</span>-&gt;has_a_cacheable_content_type()) <span class="php-comment">// Exclude non-HTML/XML content types.</span>
-</span><span id="889" class="l"><a class="l" href="#889"> 889: </a>                <span class="php-keyword1">return</span> (boolean)<span class="php-var">$this</span>-&gt;maybe_set_debug_info(<span class="php-var">$this</span>::NC_DEBUG_UNCACHEABLE_CONTENT_TYPE);
-</span><span id="890" class="l"><a class="l" href="#890"> 890: </a>
-</span><span id="891" class="l"><a class="l" href="#891"> 891: </a>            <span class="php-keyword1">if</span>(!<span class="php-var">$this</span>-&gt;has_a_cacheable_status()) <span class="php-comment">// This will catch WP Maintenance Mode too.</span>
-</span><span id="892" class="l"><a class="l" href="#892"> 892: </a>                <span class="php-keyword1">return</span> (boolean)<span class="php-var">$this</span>-&gt;maybe_set_debug_info(<span class="php-var">$this</span>::NC_DEBUG_UNCACHEABLE_STATUS);
-</span><span id="893" class="l"><a class="l" href="#893"> 893: </a>
-</span><span id="894" class="l"><a class="l" href="#894"> 894: </a>            <span class="php-keyword1">if</span>(<span class="php-var">$this</span>-&gt;is_maintenance) <span class="php-comment">// &lt;http://wordpress.org/extend/plugins/maintenance-mode&gt;</span>
-</span><span id="895" class="l"><a class="l" href="#895"> 895: </a>                <span class="php-keyword1">return</span> (boolean)<span class="php-var">$this</span>-&gt;maybe_set_debug_info(<span class="php-var">$this</span>::NC_DEBUG_MAINTENANCE_PLUGIN);
-</span><span id="896" class="l"><a class="l" href="#896"> 896: </a>
-</span><span id="897" class="l"><a class="l" href="#897"> 897: </a>            <span class="php-keyword1">if</span>(<span class="php-var">$this</span>-&gt;function_is_possible(<span class="php-quote">'zlib_get_coding_type'</span>) &amp;&amp; <span class="php-keyword2">zlib_get_coding_type</span>()
-</span><span id="898" class="l"><a class="l" href="#898"> 898: </a>               &amp;&amp; (!(<span class="php-var">$zlib_oc</span> = <span class="php-keyword2">ini_get</span>(<span class="php-quote">'zlib.output_compression'</span>)) || !<span class="php-keyword2">filter_var</span>(<span class="php-var">$zlib_oc</span>, FILTER_VALIDATE_BOOLEAN))
-</span><span id="899" class="l"><a class="l" href="#899"> 899: </a>            ) <span class="php-keyword1">return</span> (boolean)<span class="php-var">$this</span>-&gt;maybe_set_debug_info(<span class="php-var">$this</span>::NC_DEBUG_OB_ZLIB_CODING_TYPE);
-</span><span id="900" class="l"><a class="l" href="#900"> 900: </a>
-</span><span id="901" class="l"><a class="l" href="#901"> 901: </a>            <span class="php-comment"># Cache directory checks. The cache file directory is created here if necessary.</span>
-</span><span id="902" class="l"><a class="l" href="#902"> 902: </a>
-</span><span id="903" class="l"><a class="l" href="#903"> 903: </a>            <span class="php-keyword1">if</span>(!<span class="php-keyword2">is_dir</span>(QUICK_CACHE_DIR) &amp;&amp; <span class="php-keyword2">mkdir</span>(QUICK_CACHE_DIR, <span class="php-num">0775</span>, <span class="php-keyword1">TRUE</span>) &amp;&amp; !<span class="php-keyword2">is_file</span>(QUICK_CACHE_DIR.<span class="php-quote">'/.htaccess'</span>))
-</span><span id="904" class="l"><a class="l" href="#904"> 904: </a>                <span class="php-keyword2">file_put_contents</span>(QUICK_CACHE_DIR.<span class="php-quote">'/.htaccess'</span>, <span class="php-var">$this</span>-&gt;htaccess_deny); <span class="php-comment">// We know it's writable here.</span>
-</span><span id="905" class="l"><a class="l" href="#905"> 905: </a>
-</span><span id="906" class="l"><a class="l" href="#906"> 906: </a>            <span class="php-keyword1">if</span>(!<span class="php-keyword2">is_dir</span>(<span class="php-var">$cache_file_dir</span> = <span class="php-keyword2">dirname</span>(<span class="php-var">$this</span>-&gt;cache_file))) <span class="php-var">$cache_file_dir_writable</span> = <span class="php-keyword2">mkdir</span>(<span class="php-var">$cache_file_dir</span>, <span class="php-num">0775</span>, <span class="php-keyword1">TRUE</span>);
-</span><span id="907" class="l"><a class="l" href="#907"> 907: </a>            <span class="php-keyword1">if</span>(<span class="php-keyword1">empty</span>(<span class="php-var">$cache_file_dir_writable</span>) &amp;&amp; !<span class="php-keyword2">is_writable</span>(<span class="php-var">$cache_file_dir</span>)) <span class="php-comment">// Only check if it's writable, if we didn't just successfully create it.</span>
-</span><span id="908" class="l"><a class="l" href="#908"> 908: </a>                <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> \exception(<span class="php-keyword2">sprintf</span>(__(<span class="php-quote">'Cache directory not writable. Quick Cache needs this directory please: `%1$s`. Set permissions to `755` or higher; `777` might be needed in some cases.'</span>, <span class="php-var">$this</span>-&gt;text_domain), <span class="php-var">$cache_file_dir</span>));
-</span><span id="909" class="l"><a class="l" href="#909"> 909: </a>
-</span><span id="910" class="l"><a class="l" href="#910"> 910: </a>            <span class="php-comment"># This is where a new 404 request might be detected for the first time; and where the 404 error file already exists in this case.</span>
-</span><span id="911" class="l"><a class="l" href="#911"> 911: </a>
-</span><span id="912" class="l"><a class="l" href="#912"> 912: </a>            <span class="php-keyword1">if</span>(<span class="php-var">$this</span>-&gt;is_404 &amp;&amp; <span class="php-keyword2">is_file</span>(<span class="php-var">$this</span>-&gt;cache_file_404))
-</span><span id="913" class="l"><a class="l" href="#913"> 913: </a>                <span class="php-keyword1">if</span>(!<span class="php-keyword2">symlink</span>(<span class="php-var">$this</span>-&gt;cache_file_404, <span class="php-var">$this</span>-&gt;cache_file))
-</span><span id="914" class="l"><a class="l" href="#914"> 914: </a>                    <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> \exception(<span class="php-keyword2">sprintf</span>(__(<span class="php-quote">'Unable to create symlink: `%1$s` » `%2$s`. Possible permissions issue (or race condition), please check your cache directory: `%3$s`.'</span>, <span class="php-var">$this</span>-&gt;text_domain), <span class="php-var">$this</span>-&gt;cache_file, <span class="php-var">$this</span>-&gt;cache_file_404, QUICK_CACHE_DIR));
-</span><span id="915" class="l"><a class="l" href="#915"> 915: </a>                <span class="php-keyword1">else</span> <span class="php-keyword1">return</span> (boolean)<span class="php-var">$this</span>-&gt;maybe_set_debug_info(<span class="php-var">$this</span>::NC_DEBUG_1ST_TIME_404_SYMLINK);
-</span><span id="916" class="l"><a class="l" href="#916"> 916: </a>
-</span><span id="917" class="l"><a class="l" href="#917"> 917: </a>            <span class="php-comment">/* ------- Otherwise, we need to construct &amp; store a new cache file. -------- */</span>
-</span><span id="918" class="l"><a class="l" href="#918"> 918: </a>
-</span><span id="919" class="l"><a class="l" href="#919"> 919: </a>            <span class="php-keyword1">if</span>(QUICK_CACHE_DEBUGGING_ENABLE &amp;&amp; <span class="php-var">$this</span>-&gt;is_html_xml_doc(<span class="php-var">$cache</span>)) <span class="php-comment">// Only if HTML comments are possible.</span>
-</span><span id="920" class="l"><a class="l" href="#920"> 920: </a>            {
-</span><span id="921" class="l"><a class="l" href="#921"> 921: </a>                <span class="php-var">$total_time</span> = <span class="php-keyword2">number_format</span>(<span class="php-keyword2">microtime</span>(<span class="php-keyword1">TRUE</span>) - <span class="php-var">$this</span>-&gt;timer, <span class="php-num">5</span>, <span class="php-quote">'.'</span>, <span class="php-quote">''</span>);
-</span><span id="922" class="l"><a class="l" href="#922"> 922: </a>                <span class="php-var">$cache</span> .= <span class="php-quote">&quot;\n&quot;</span>.<span class="php-quote">'&lt;!-- '</span>.<span class="php-keyword2">htmlspecialchars</span>(<span class="php-keyword2">sprintf</span>(__(<span class="php-quote">'Quick Cache file path: %1$s'</span>, <span class="php-var">$this</span>-&gt;text_domain), <span class="php-keyword2">str_replace</span>(WP_CONTENT_DIR, <span class="php-quote">''</span>, <span class="php-var">$this</span>-&gt;is_404 ? <span class="php-var">$this</span>-&gt;cache_file_404 : <span class="php-var">$this</span>-&gt;cache_file))).<span class="php-quote">' --&gt;'</span>;
-</span><span id="923" class="l"><a class="l" href="#923"> 923: </a>                <span class="php-var">$cache</span> .= <span class="php-quote">&quot;\n&quot;</span>.<span class="php-quote">'&lt;!-- '</span>.<span class="php-keyword2">htmlspecialchars</span>(<span class="php-keyword2">sprintf</span>(__(<span class="php-quote">'Quick Cache file built for (%1$s) in %2$s seconds, on: %3$s.'</span>, <span class="php-var">$this</span>-&gt;text_domain),
-</span><span id="924" class="l"><a class="l" href="#924"> 924: </a>                                                                (<span class="php-var">$this</span>-&gt;is_404) ? <span class="php-quote">'404 [error document]'</span> : <span class="php-var">$this</span>-&gt;salt_location, <span class="php-var">$total_time</span>, <span class="php-keyword2">date</span>(<span class="php-quote">'M jS, Y @ g:i a T'</span>))).<span class="php-quote">' --&gt;'</span>;
-</span><span id="925" class="l"><a class="l" href="#925"> 925: </a>                <span class="php-var">$cache</span> .= <span class="php-quote">&quot;\n&quot;</span>.<span class="php-quote">'&lt;!-- '</span>.<span class="php-keyword2">htmlspecialchars</span>(<span class="php-keyword2">sprintf</span>(__(<span class="php-quote">'This Quick Cache file will auto-expire (and be rebuilt) on: %1$s (based on your configured expiration time).'</span>, <span class="php-var">$this</span>-&gt;text_domain), <span class="php-keyword2">date</span>(<span class="php-quote">'M jS, Y @ g:i a T'</span>, <span class="php-keyword2">strtotime</span>(<span class="php-quote">'+'</span>.QUICK_CACHE_MAX_AGE)))).<span class="php-quote">' --&gt;'</span>;
-</span><span id="926" class="l"><a class="l" href="#926"> 926: </a>            }
-</span><span id="927" class="l"><a class="l" href="#927"> 927: </a>            <span class="php-var">$cache_file_tmp</span> = <span class="php-var">$this</span>-&gt;cache_file.<span class="php-quote">'.'</span>.<span class="php-keyword2">uniqid</span>(<span class="php-quote">''</span>, <span class="php-keyword1">TRUE</span>).<span class="php-quote">'.tmp'</span>; <span class="php-comment">// Cache creation is atomic; e.g. tmp file w/ rename.</span>
-</span><span id="928" class="l"><a class="l" href="#928"> 928: </a>            <span class="php-comment">/*
-</span></span><span id="929" class="l"><a class="l" href="#929"> 929: </a><span class="php-comment">             * This is NOT a 404, or it is 404 and the 404 cache file doesn't yet exist (so we need to create it).
-</span></span><span id="930" class="l"><a class="l" href="#930"> 930: </a><span class="php-comment">             */</span>
-</span><span id="931" class="l"><a class="l" href="#931"> 931: </a>            <span class="php-keyword1">if</span>(<span class="php-var">$this</span>-&gt;is_404) <span class="php-comment">// This is a 404; let's create 404 cache file and symlink to it.</span>
-</span><span id="932" class="l"><a class="l" href="#932"> 932: </a>            {
-</span><span id="933" class="l"><a class="l" href="#933"> 933: </a>                <span class="php-keyword1">if</span>(<span class="php-keyword2">file_put_contents</span>(<span class="php-var">$cache_file_tmp</span>, <span class="php-keyword2">serialize</span>(<span class="php-var">$this</span>-&gt;<span class="php-keyword2">headers_list</span>()).<span class="php-quote">'&lt;!--headers--&gt;'</span>.<span class="php-var">$cache</span>) &amp;&amp; <span class="php-keyword2">rename</span>(<span class="php-var">$cache_file_tmp</span>, <span class="php-var">$this</span>-&gt;cache_file_404))
-</span><span id="934" class="l"><a class="l" href="#934"> 934: </a>                    <span class="php-keyword1">if</span>(<span class="php-keyword2">symlink</span>(<span class="php-var">$this</span>-&gt;cache_file_404, <span class="php-var">$this</span>-&gt;cache_file)) <span class="php-comment">// If this fails an exception will be thrown down below.</span>
-</span><span id="935" class="l"><a class="l" href="#935"> 935: </a>                        <span class="php-keyword1">return</span> <span class="php-var">$cache</span>; <span class="php-comment">// Return the newly built cache; with possible debug information also.</span>
-</span><span id="936" class="l"><a class="l" href="#936"> 936: </a>
-</span><span id="937" class="l"><a class="l" href="#937"> 937: </a>            } <span class="php-comment">// NOT a 404; let's write a new cache file.</span>
-</span><span id="938" class="l"><a class="l" href="#938"> 938: </a>            <span class="php-keyword1">else</span> <span class="php-keyword1">if</span>(<span class="php-keyword2">file_put_contents</span>(<span class="php-var">$cache_file_tmp</span>, <span class="php-keyword2">serialize</span>(<span class="php-var">$this</span>-&gt;<span class="php-keyword2">headers_list</span>()).<span class="php-quote">'&lt;!--headers--&gt;'</span>.<span class="php-var">$cache</span>) &amp;&amp; <span class="php-keyword2">rename</span>(<span class="php-var">$cache_file_tmp</span>, <span class="php-var">$this</span>-&gt;cache_file))
-</span><span id="939" class="l"><a class="l" href="#939"> 939: </a>                <span class="php-keyword1">return</span> <span class="php-var">$cache</span>; <span class="php-comment">// Return the newly built cache; with possible debug information also.</span>
-</span><span id="940" class="l"><a class="l" href="#940"> 940: </a>
-</span><span id="941" class="l"><a class="l" href="#941"> 941: </a>            @<span class="php-keyword2">unlink</span>(<span class="php-var">$cache_file_tmp</span>); <span class="php-comment">// Clean this up (if it exists); and throw an exception with information for the site owner.</span>
-</span><span id="942" class="l"><a class="l" href="#942"> 942: </a>            <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> \exception(<span class="php-keyword2">sprintf</span>(__(<span class="php-quote">'Quick Cache: failed to write cache file for: `%1$s`; possible permissions issue (or race condition), please check your cache directory: `%2$s`.'</span>, <span class="php-var">$this</span>-&gt;text_domain), <span class="php-var">$_SERVER</span>[<span class="php-quote">'REQUEST_URI'</span>], QUICK_CACHE_DIR));
-</span><span id="943" class="l"><a class="l" href="#943"> 943: </a>        }
-</span><span id="944" class="l"><a class="l" href="#944"> 944: </a>
-</span><span id="945" class="l"><a class="l" href="#945"> 945: </a>        <span class="php-comment">/**
-</span></span><span id="946" class="l"><a class="l" href="#946"> 946: </a><span class="php-comment">         * Echoes `NC_DEBUG_` info in the WordPress `shutdown` phase (if applicable).
-</span></span><span id="947" class="l"><a class="l" href="#947"> 947: </a><span class="php-comment">         *
-</span></span><span id="948" class="l"><a class="l" href="#948"> 948: </a><span class="php-comment">         * @since 140605 Improving debug info output phase.
-</span></span><span id="949" class="l"><a class="l" href="#949"> 949: </a><span class="php-comment">         *
-</span></span><span id="950" class="l"><a class="l" href="#950"> 950: </a><span class="php-comment">         * @attaches-to `shutdown` hook in WordPress w/ a late priority.
-</span></span><span id="951" class="l"><a class="l" href="#951"> 951: </a><span class="php-comment">         */</span>
-</span><span id="952" class="l"><a class="l" href="#952"> 952: </a>        <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_maybe_echo_nc_debug_info" href="#_maybe_echo_nc_debug_info">maybe_echo_nc_debug_info</a>() <span class="php-comment">// Debug info in the shutdown phase.</span>
-</span><span id="953" class="l"><a class="l" href="#953"> 953: </a>        {
-</span><span id="954" class="l"><a class="l" href="#954"> 954: </a>            <span class="php-keyword1">if</span>(!QUICK_CACHE_DEBUGGING_ENABLE)
-</span><span id="955" class="l"><a class="l" href="#955"> 955: </a>                <span class="php-keyword1">return</span>; <span class="php-comment">// Nothing to do.</span>
-</span><span id="956" class="l"><a class="l" href="#956"> 956: </a>
-</span><span id="957" class="l"><a class="l" href="#957"> 957: </a>            <span class="php-keyword1">if</span>(is_admin()) <span class="php-keyword1">return</span>; <span class="php-comment">// Not applicable.</span>
-</span><span id="958" class="l"><a class="l" href="#958"> 958: </a>
-</span><span id="959" class="l"><a class="l" href="#959"> 959: </a>            <span class="php-keyword1">if</span>(<span class="php-keyword2">strcasecmp</span>(PHP_SAPI, <span class="php-quote">'cli'</span>) === <span class="php-num">0</span>)
-</span><span id="960" class="l"><a class="l" href="#960"> 960: </a>                <span class="php-keyword1">return</span>; <span class="php-comment">// Let's not run the risk here.</span>
-</span><span id="961" class="l"><a class="l" href="#961"> 961: </a>
-</span><span id="962" class="l"><a class="l" href="#962"> 962: </a>            <span class="php-keyword1">if</span>(<span class="php-var">$this</span>-&gt;debug_info &amp;&amp; <span class="php-var">$this</span>-&gt;has_a_cacheable_content_type() &amp;&amp; <span class="php-var">$this</span>-&gt;is_a_wp_content_type)
-</span><span id="963" class="l"><a class="l" href="#963"> 963: </a>                <span class="php-keyword1">echo</span> (string)<span class="php-var">$this</span>-&gt;maybe_get_nc_debug_info(<span class="php-var">$this</span>-&gt;debug_info[<span class="php-quote">'reason_code'</span>], <span class="php-var">$this</span>-&gt;debug_info[<span class="php-quote">'reason'</span>]);
-</span><span id="964" class="l"><a class="l" href="#964"> 964: </a>        }
+</span><span id="706" class="l"><a class="l" href="#706"> 706: </a>                    <span class="php-keyword1">if</span>(!<span class="php-keyword2">in_array</span>(<span class="php-var">$_header</span>, <span class="php-var">$headers_list</span>, <span class="php-keyword1">TRUE</span>) &amp;&amp; <span class="php-keyword2">stripos</span>(<span class="php-var">$_header</span>, <span class="php-quote">'Last-Modified:'</span>) !== <span class="php-num">0</span>)
+</span><span id="707" class="l"><a class="l" href="#707"> 707: </a>                        <span class="php-keyword2">header</span>(<span class="php-var">$_header</span>); <span class="php-comment">// Only cacheable/safe headers are stored in the cache.</span>
+</span><span id="708" class="l"><a class="l" href="#708"> 708: </a>                <span class="php-keyword1">unset</span>(<span class="php-var">$_header</span>); <span class="php-comment">// Just a little housekeeping.</span>
+</span><span id="709" class="l"><a class="l" href="#709"> 709: </a>
+</span><span id="710" class="l"><a class="l" href="#710"> 710: </a>                <span class="php-keyword1">if</span>(QUICK_CACHE_DEBUGGING_ENABLE &amp;&amp; <span class="php-var">$this</span>-&gt;is_html_xml_doc(<span class="php-var">$cache</span>)) <span class="php-comment">// Only if HTML comments are possible.</span>
+</span><span id="711" class="l"><a class="l" href="#711"> 711: </a>                {
+</span><span id="712" class="l"><a class="l" href="#712"> 712: </a>                    <span class="php-var">$total_time</span> = <span class="php-keyword2">number_format</span>(<span class="php-keyword2">microtime</span>(<span class="php-keyword1">TRUE</span>) - <span class="php-var">$this</span>-&gt;timer, <span class="php-num">5</span>, <span class="php-quote">'.'</span>, <span class="php-quote">''</span>);
+</span><span id="713" class="l"><a class="l" href="#713"> 713: </a>                    <span class="php-var">$cache</span> .= <span class="php-quote">&quot;\n&quot;</span>.<span class="php-quote">'&lt;!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ --&gt;'</span>;
+</span><span id="714" class="l"><a class="l" href="#714"> 714: </a>                    <span class="php-comment">// translators: This string is actually NOT translatable because the `__()` function is not available at this point in the processing.</span>
+</span><span id="715" class="l"><a class="l" href="#715"> 715: </a>                    <span class="php-var">$cache</span> .= <span class="php-quote">&quot;\n&quot;</span>.<span class="php-quote">'&lt;!-- '</span>.<span class="php-keyword2">htmlspecialchars</span>(<span class="php-keyword2">sprintf</span>(__(<span class="php-quote">'Quick Cache fully functional :-) Cache file served for (%1$s) in %2$s seconds, on: %3$s.'</span>, <span class="php-var">$this</span>-&gt;text_domain), <span class="php-var">$this</span>-&gt;salt_location, <span class="php-var">$total_time</span>, <span class="php-keyword2">date</span>(<span class="php-quote">'M jS, Y @ g:i a T'</span>))).<span class="php-quote">' --&gt;'</span>;
+</span><span id="716" class="l"><a class="l" href="#716"> 716: </a>                }
+</span><span id="717" class="l"><a class="l" href="#717"> 717: </a>                <span class="php-keyword1">exit</span>(<span class="php-var">$cache</span>); <span class="php-comment">// Exit with cache contents.</span>
+</span><span id="718" class="l"><a class="l" href="#718"> 718: </a>            }
+</span><span id="719" class="l"><a class="l" href="#719"> 719: </a>            <span class="php-keyword1">else</span> <span class="php-comment">// Start buffering output; we may need to cache the HTML generated by this request.</span>
+</span><span id="720" class="l"><a class="l" href="#720"> 720: </a>            {
+</span><span id="721" class="l"><a class="l" href="#721"> 721: </a>                <span class="php-keyword2">ob_start</span>(<span class="php-keyword1">array</span>(<span class="php-var">$this</span>, <span class="php-quote">'output_buffer_callback_handler'</span>)); <span class="php-comment">// Start output buffering.</span>
+</span><span id="722" class="l"><a class="l" href="#722"> 722: </a>            }
+</span><span id="723" class="l"><a class="l" href="#723"> 723: </a>            <span class="php-keyword1">return</span> <span class="php-keyword1">NULL</span>; <span class="php-comment">// Return value not applicable.</span>
+</span><span id="724" class="l"><a class="l" href="#724"> 724: </a>        }
+</span><span id="725" class="l"><a class="l" href="#725"> 725: </a>
+</span><span id="726" class="l"><a class="l" href="#726"> 726: </a>        <span class="php-comment">/**
+</span></span><span id="727" class="l"><a class="l" href="#727"> 727: </a><span class="php-comment">         * Used to setup debug info (if enabled).
+</span></span><span id="728" class="l"><a class="l" href="#728"> 728: </a><span class="php-comment">         *
+</span></span><span id="729" class="l"><a class="l" href="#729"> 729: </a><span class="php-comment">         * @since 140422 First documented version.
+</span></span><span id="730" class="l"><a class="l" href="#730"> 730: </a><span class="php-comment">         *
+</span></span><span id="731" class="l"><a class="l" href="#731"> 731: </a><span class="php-comment">         * @param string $reason_code One of the `NC_DEBUG_` constants.
+</span></span><span id="732" class="l"><a class="l" href="#732"> 732: </a><span class="php-comment">         * @param string $reason Optionally override the built-in description with a custom message.
+</span></span><span id="733" class="l"><a class="l" href="#733"> 733: </a><span class="php-comment">         */</span>
+</span><span id="734" class="l"><a class="l" href="#734"> 734: </a>        <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_maybe_set_debug_info" href="#_maybe_set_debug_info">maybe_set_debug_info</a>(<span class="php-var">$reason_code</span>, <span class="php-var">$reason</span> = <span class="php-quote">''</span>)
+</span><span id="735" class="l"><a class="l" href="#735"> 735: </a>        {
+</span><span id="736" class="l"><a class="l" href="#736"> 736: </a>            <span class="php-keyword1">if</span>(!QUICK_CACHE_DEBUGGING_ENABLE)
+</span><span id="737" class="l"><a class="l" href="#737"> 737: </a>                <span class="php-keyword1">return</span>; <span class="php-comment">// Nothing to do.</span>
+</span><span id="738" class="l"><a class="l" href="#738"> 738: </a>
+</span><span id="739" class="l"><a class="l" href="#739"> 739: </a>            <span class="php-var">$reason</span> = (string)<span class="php-var">$reason</span>;
+</span><span id="740" class="l"><a class="l" href="#740"> 740: </a>            <span class="php-keyword1">if</span>(!(<span class="php-var">$reason_code</span> = (string)<span class="php-var">$reason_code</span>))
+</span><span id="741" class="l"><a class="l" href="#741"> 741: </a>                <span class="php-keyword1">return</span>; <span class="php-comment">// Not applicable.</span>
+</span><span id="742" class="l"><a class="l" href="#742"> 742: </a>
+</span><span id="743" class="l"><a class="l" href="#743"> 743: </a>            <span class="php-var">$this</span>-&gt;debug_info = <span class="php-keyword1">array</span>(<span class="php-quote">'reason_code'</span> =&gt; <span class="php-var">$reason_code</span>, <span class="php-quote">'reason'</span> =&gt; <span class="php-var">$reason</span>);
+</span><span id="744" class="l"><a class="l" href="#744"> 744: </a>        }
+</span><span id="745" class="l"><a class="l" href="#745"> 745: </a>
+</span><span id="746" class="l"><a class="l" href="#746"> 746: </a>        <span class="php-comment">/**
+</span></span><span id="747" class="l"><a class="l" href="#747"> 747: </a><span class="php-comment">         * Filters WP {@link \status_header()} (if applicable).
+</span></span><span id="748" class="l"><a class="l" href="#748"> 748: </a><span class="php-comment">         *
+</span></span><span id="749" class="l"><a class="l" href="#749"> 749: </a><span class="php-comment">         * @since 140422 First documented version.
+</span></span><span id="750" class="l"><a class="l" href="#750"> 750: </a><span class="php-comment">         */</span>
+</span><span id="751" class="l"><a class="l" href="#751"> 751: </a>        <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_maybe_filter_status_header_postload" href="#_maybe_filter_status_header_postload">maybe_filter_status_header_postload</a>()
+</span><span id="752" class="l"><a class="l" href="#752"> 752: </a>        {
+</span><span id="753" class="l"><a class="l" href="#753"> 753: </a>            <span class="php-keyword1">if</span>(<span class="php-keyword1">empty</span>(<span class="php-var">$this</span>-&gt;postload[<span class="php-quote">'filter_status_header'</span>]))
+</span><span id="754" class="l"><a class="l" href="#754"> 754: </a>                <span class="php-keyword1">return</span>; <span class="php-comment">// Nothing to do in this case.</span>
+</span><span id="755" class="l"><a class="l" href="#755"> 755: </a>
+</span><span id="756" class="l"><a class="l" href="#756"> 756: </a>            <span class="php-var">$_this</span> = <span class="php-var">$this</span>; <span class="php-comment">// Reference needed by the closure below.</span>
+</span><span id="757" class="l"><a class="l" href="#757"> 757: </a>            add_filter(<span class="php-quote">'status_header'</span>, <span class="php-keyword1">function</span> (<span class="php-var">$status_header</span>, <span class="php-var">$status_code</span>) <span class="php-keyword1">use</span> (<span class="php-var">$_this</span>)
+</span><span id="758" class="l"><a class="l" href="#758"> 758: </a>            {
+</span><span id="759" class="l"><a class="l" href="#759"> 759: </a>                <span class="php-keyword1">if</span>(<span class="php-var">$status_code</span> &gt; <span class="php-num">0</span>) <span class="php-comment">// Sending a status?</span>
+</span><span id="760" class="l"><a class="l" href="#760"> 760: </a>                    <span class="php-var">$_this</span>-&gt;http_status = (integer)<span class="php-var">$status_code</span>;
+</span><span id="761" class="l"><a class="l" href="#761"> 761: </a>
+</span><span id="762" class="l"><a class="l" href="#762"> 762: </a>                <span class="php-keyword1">return</span> <span class="php-var">$status_header</span>; <span class="php-comment">// Pass through this filter.</span>
+</span><span id="763" class="l"><a class="l" href="#763"> 763: </a>
+</span><span id="764" class="l"><a class="l" href="#764"> 764: </a>            }, PHP_INT_MAX, <span class="php-num">2</span>);
+</span><span id="765" class="l"><a class="l" href="#765"> 765: </a>        }
+</span><span id="766" class="l"><a class="l" href="#766"> 766: </a>
+</span><span id="767" class="l"><a class="l" href="#767"> 767: </a>        <span class="php-comment">/**
+</span></span><span id="768" class="l"><a class="l" href="#768"> 768: </a><span class="php-comment">         * Hooks `NC_DEBUG_` info into the WordPress `shutdown` phase (if applicable).
+</span></span><span id="769" class="l"><a class="l" href="#769"> 769: </a><span class="php-comment">         *
+</span></span><span id="770" class="l"><a class="l" href="#770"> 770: </a><span class="php-comment">         * @since 140422 First documented version.
+</span></span><span id="771" class="l"><a class="l" href="#771"> 771: </a><span class="php-comment">         */</span>
+</span><span id="772" class="l"><a class="l" href="#772"> 772: </a>        <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_maybe_set_debug_info_postload" href="#_maybe_set_debug_info_postload">maybe_set_debug_info_postload</a>()
+</span><span id="773" class="l"><a class="l" href="#773"> 773: </a>        {
+</span><span id="774" class="l"><a class="l" href="#774"> 774: </a>            <span class="php-keyword1">if</span>(!QUICK_CACHE_DEBUGGING_ENABLE)
+</span><span id="775" class="l"><a class="l" href="#775"> 775: </a>                <span class="php-keyword1">return</span>; <span class="php-comment">// Nothing to do.</span>
+</span><span id="776" class="l"><a class="l" href="#776"> 776: </a>
+</span><span id="777" class="l"><a class="l" href="#777"> 777: </a>            <span class="php-keyword1">if</span>(<span class="php-keyword1">empty</span>(<span class="php-var">$this</span>-&gt;postload[<span class="php-quote">'set_debug_info'</span>]))
+</span><span id="778" class="l"><a class="l" href="#778"> 778: </a>                <span class="php-keyword1">return</span>; <span class="php-comment">// Nothing to do in this case.</span>
+</span><span id="779" class="l"><a class="l" href="#779"> 779: </a>
+</span><span id="780" class="l"><a class="l" href="#780"> 780: </a>            <span class="php-keyword1">if</span>(is_admin()) <span class="php-keyword1">return</span>; <span class="php-comment">// Not applicable.</span>
+</span><span id="781" class="l"><a class="l" href="#781"> 781: </a>
+</span><span id="782" class="l"><a class="l" href="#782"> 782: </a>            <span class="php-keyword1">if</span>(<span class="php-keyword2">strcasecmp</span>(PHP_SAPI, <span class="php-quote">'cli'</span>) === <span class="php-num">0</span>)
+</span><span id="783" class="l"><a class="l" href="#783"> 783: </a>                <span class="php-keyword1">return</span>; <span class="php-comment">// Let's not run the risk here.</span>
+</span><span id="784" class="l"><a class="l" href="#784"> 784: </a>
+</span><span id="785" class="l"><a class="l" href="#785"> 785: </a>            add_action(<span class="php-quote">'shutdown'</span>, <span class="php-keyword1">array</span>(<span class="php-var">$this</span>, <span class="php-quote">'maybe_echo_nc_debug_info'</span>), PHP_INT_MAX - <span class="php-num">10</span>);
+</span><span id="786" class="l"><a class="l" href="#786"> 786: </a>        }
+</span><span id="787" class="l"><a class="l" href="#787"> 787: </a>
+</span><span id="788" class="l"><a class="l" href="#788"> 788: </a>        <span class="php-comment">/**
+</span></span><span id="789" class="l"><a class="l" href="#789"> 789: </a><span class="php-comment">         * Grab details from WP and the Quick Cache plugin itself,
+</span></span><span id="790" class="l"><a class="l" href="#790"> 790: </a><span class="php-comment">         *    after the main query is loaded (if at all possible).
+</span></span><span id="791" class="l"><a class="l" href="#791"> 791: </a><span class="php-comment">         *
+</span></span><span id="792" class="l"><a class="l" href="#792"> 792: </a><span class="php-comment">         * This is where we have a chance to grab any values we need from WordPress; or from the QC plugin.
+</span></span><span id="793" class="l"><a class="l" href="#793"> 793: </a><span class="php-comment">         *    It is EXTREMEMLY important that we NOT attempt to grab any object references here.
+</span></span><span id="794" class="l"><a class="l" href="#794"> 794: </a><span class="php-comment">         *    Anything acquired in this phase should be stored as a scalar value.
+</span></span><span id="795" class="l"><a class="l" href="#795"> 795: </a><span class="php-comment">         *    See {@link output_buffer_callback_handler()} for further details.
+</span></span><span id="796" class="l"><a class="l" href="#796"> 796: </a><span class="php-comment">         *
+</span></span><span id="797" class="l"><a class="l" href="#797"> 797: </a><span class="php-comment">         * @since 140422 First documented version.
+</span></span><span id="798" class="l"><a class="l" href="#798"> 798: </a><span class="php-comment">         *
+</span></span><span id="799" class="l"><a class="l" href="#799"> 799: </a><span class="php-comment">         * @attaches-to `wp` hook.
+</span></span><span id="800" class="l"><a class="l" href="#800"> 800: </a><span class="php-comment">         */</span>
+</span><span id="801" class="l"><a class="l" href="#801"> 801: </a>        <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_wp_main_query_postload" href="#_wp_main_query_postload">wp_main_query_postload</a>()
+</span><span id="802" class="l"><a class="l" href="#802"> 802: </a>        {
+</span><span id="803" class="l"><a class="l" href="#803"> 803: </a>            <span class="php-keyword1">if</span>(<span class="php-keyword1">empty</span>(<span class="php-var">$this</span>-&gt;postload[<span class="php-quote">'wp_main_query'</span>]))
+</span><span id="804" class="l"><a class="l" href="#804"> 804: </a>                <span class="php-keyword1">return</span>; <span class="php-comment">// Nothing to do in this case.</span>
+</span><span id="805" class="l"><a class="l" href="#805"> 805: </a>
+</span><span id="806" class="l"><a class="l" href="#806"> 806: </a>            <span class="php-keyword1">if</span>(<span class="php-var">$this</span>-&gt;is_wp_loaded_query || is_admin())
+</span><span id="807" class="l"><a class="l" href="#807"> 807: </a>                <span class="php-keyword1">return</span>; <span class="php-comment">// Nothing to do.</span>
+</span><span id="808" class="l"><a class="l" href="#808"> 808: </a>
+</span><span id="809" class="l"><a class="l" href="#809"> 809: </a>            <span class="php-keyword1">if</span>(!is_main_query()) <span class="php-keyword1">return</span>; <span class="php-comment">// Not main query.</span>
+</span><span id="810" class="l"><a class="l" href="#810"> 810: </a>
+</span><span id="811" class="l"><a class="l" href="#811"> 811: </a>            <span class="php-var">$this</span>-&gt;is_wp_loaded_query = <span class="php-keyword1">TRUE</span>;
+</span><span id="812" class="l"><a class="l" href="#812"> 812: </a>            <span class="php-var">$this</span>-&gt;is_404             = is_404();
+</span><span id="813" class="l"><a class="l" href="#813"> 813: </a>            <span class="php-var">$this</span>-&gt;is_user_logged_in  = is_user_logged_in();
+</span><span id="814" class="l"><a class="l" href="#814"> 814: </a>            <span class="php-var">$this</span>-&gt;content_url        = <span class="php-keyword2">rtrim</span>(content_url(), <span class="php-quote">'/'</span>);
+</span><span id="815" class="l"><a class="l" href="#815"> 815: </a>            <span class="php-var">$this</span>-&gt;is_maintenance     = <span class="php-keyword2">function_exists</span>(<span class="php-quote">'is_maintenance'</span>) &amp;&amp; is_maintenance();
+</span><span id="816" class="l"><a class="l" href="#816"> 816: </a>
+</span><span id="817" class="l"><a class="l" href="#817"> 817: </a>            <span class="php-var">$_this</span> = <span class="php-var">$this</span>; <span class="php-comment">// Reference for the closure below.</span>
+</span><span id="818" class="l"><a class="l" href="#818"> 818: </a>            add_action(<span class="php-quote">'template_redirect'</span>, <span class="php-keyword1">function</span> () <span class="php-keyword1">use</span> (<span class="php-var">$_this</span>)
+</span><span id="819" class="l"><a class="l" href="#819"> 819: </a>            { <span class="php-comment">// Move this AFTER `redirect_canonical` to avoid buggy WP behavior.</span>
+</span><span id="820" class="l"><a class="l" href="#820"> 820: </a>                <span class="php-comment">// See &lt;https://github.com/websharks/quick-cache/issues/209#issuecomment-46999230&gt;</span>
+</span><span id="821" class="l"><a class="l" href="#821"> 821: </a>                <span class="php-var">$_this</span>-&gt;is_a_wp_content_type = <span class="php-var">$_this</span>-&gt;is_404 || <span class="php-var">$_this</span>-&gt;is_maintenance
+</span><span id="822" class="l"><a class="l" href="#822"> 822: </a>                                               || is_front_page() <span class="php-comment">// See &lt;https://core.trac.wordpress.org/ticket/21602#comment:7&gt;</span>
+</span><span id="823" class="l"><a class="l" href="#823"> 823: </a>                                               || is_home() || is_singular() || is_archive() || is_post_type_archive() || is_tax() || is_search() || is_feed();
+</span><span id="824" class="l"><a class="l" href="#824"> 824: </a>            }, <span class="php-num">11</span>);
+</span><span id="825" class="l"><a class="l" href="#825"> 825: </a>        }
+</span><span id="826" class="l"><a class="l" href="#826"> 826: </a>
+</span><span id="827" class="l"><a class="l" href="#827"> 827: </a>        <span class="php-comment">/**
+</span></span><span id="828" class="l"><a class="l" href="#828"> 828: </a><span class="php-comment">         * Output buffer handler; i.e. the cache file generator.
+</span></span><span id="829" class="l"><a class="l" href="#829"> 829: </a><span class="php-comment">         *
+</span></span><span id="830" class="l"><a class="l" href="#830"> 830: </a><span class="php-comment">         * @note We CANNOT depend on any WP functionality here; it will cause problems.
+</span></span><span id="831" class="l"><a class="l" href="#831"> 831: </a><span class="php-comment">         *    Anything we need from WP should be saved in the postload phase as a scalar value.
+</span></span><span id="832" class="l"><a class="l" href="#832"> 832: </a><span class="php-comment">         *
+</span></span><span id="833" class="l"><a class="l" href="#833"> 833: </a><span class="php-comment">         * @since 140422 First documented version.
+</span></span><span id="834" class="l"><a class="l" href="#834"> 834: </a><span class="php-comment">         *
+</span></span><span id="835" class="l"><a class="l" href="#835"> 835: </a><span class="php-comment">         * @param string  $buffer The buffer from {@link \ob_start()}.
+</span></span><span id="836" class="l"><a class="l" href="#836"> 836: </a><span class="php-comment">         * @param integer $phase A set of bitmask flags.
+</span></span><span id="837" class="l"><a class="l" href="#837"> 837: </a><span class="php-comment">         *
+</span></span><span id="838" class="l"><a class="l" href="#838"> 838: </a><span class="php-comment">         * @return string|boolean The output buffer, or `FALSE` to indicate no change.
+</span></span><span id="839" class="l"><a class="l" href="#839"> 839: </a><span class="php-comment">         *
+</span></span><span id="840" class="l"><a class="l" href="#840"> 840: </a><span class="php-comment">         * @throws \exception If unable to handle output buffering for any reason.
+</span></span><span id="841" class="l"><a class="l" href="#841"> 841: </a><span class="php-comment">         *
+</span></span><span id="842" class="l"><a class="l" href="#842"> 842: </a><span class="php-comment">         * @attaches-to {@link \ob_start()}
+</span></span><span id="843" class="l"><a class="l" href="#843"> 843: </a><span class="php-comment">         */</span>
+</span><span id="844" class="l"><a class="l" href="#844"> 844: </a>        <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_output_buffer_callback_handler" href="#_output_buffer_callback_handler">output_buffer_callback_handler</a>(<span class="php-var">$buffer</span>, <span class="php-var">$phase</span>)
+</span><span id="845" class="l"><a class="l" href="#845"> 845: </a>        {
+</span><span id="846" class="l"><a class="l" href="#846"> 846: </a>            <span class="php-keyword1">if</span>(!(<span class="php-var">$phase</span> &amp; PHP_OUTPUT_HANDLER_END)) <span class="php-comment">// We do NOT chunk the buffer; so this should NOT occur.</span>
+</span><span id="847" class="l"><a class="l" href="#847"> 847: </a>                <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> \exception(<span class="php-keyword2">sprintf</span>(__(<span class="php-quote">'Unexpected OB phase: `%1$s`.'</span>, <span class="php-var">$this</span>-&gt;text_domain), <span class="php-var">$phase</span>));
+</span><span id="848" class="l"><a class="l" href="#848"> 848: </a>
+</span><span id="849" class="l"><a class="l" href="#849"> 849: </a>            <span class="php-comment"># Exclusion checks; there are MANY of these...</span>
+</span><span id="850" class="l"><a class="l" href="#850"> 850: </a>
+</span><span id="851" class="l"><a class="l" href="#851"> 851: </a>            <span class="php-var">$cache</span> = <span class="php-keyword2">trim</span>((string)<span class="php-var">$buffer</span>);
+</span><span id="852" class="l"><a class="l" href="#852"> 852: </a>            <span class="php-keyword1">if</span>(!<span class="php-keyword1">isset</span>(<span class="php-var">$cache</span>[<span class="php-num">0</span>])) <span class="php-comment">// Allows a `0`.</span>
+</span><span id="853" class="l"><a class="l" href="#853"> 853: </a>                <span class="php-keyword1">return</span> <span class="php-keyword1">FALSE</span>; <span class="php-comment">// Don't cache an empty buffer.</span>
+</span><span id="854" class="l"><a class="l" href="#854"> 854: </a>
+</span><span id="855" class="l"><a class="l" href="#855"> 855: </a>            <span class="php-keyword1">if</span>(!<span class="php-keyword1">isset</span>(<span class="php-var">$GLOBALS</span>[__NAMESPACE__.<span class="php-quote">'__shutdown_flag'</span>]))
+</span><span id="856" class="l"><a class="l" href="#856"> 856: </a>                <span class="php-keyword1">return</span> (boolean)<span class="php-var">$this</span>-&gt;maybe_set_debug_info(<span class="php-var">$this</span>::NC_DEBUG_EARLY_BUFFER_TERMINATION);
+</span><span id="857" class="l"><a class="l" href="#857"> 857: </a>
+</span><span id="858" class="l"><a class="l" href="#858"> 858: </a>            <span class="php-keyword1">if</span>(<span class="php-keyword1">isset</span>(<span class="php-var">$_GET</span>[<span class="php-quote">'qcAC'</span>]) &amp;&amp; !<span class="php-keyword2">filter_var</span>(<span class="php-var">$_GET</span>[<span class="php-quote">'qcAC'</span>], FILTER_VALIDATE_BOOLEAN))
+</span><span id="859" class="l"><a class="l" href="#859"> 859: </a>                <span class="php-keyword1">return</span> (boolean)<span class="php-var">$this</span>-&gt;maybe_set_debug_info(<span class="php-var">$this</span>::NC_DEBUG_QCAC_GET_VAR);
+</span><span id="860" class="l"><a class="l" href="#860"> 860: </a>
+</span><span id="861" class="l"><a class="l" href="#861"> 861: </a>            <span class="php-keyword1">if</span>(<span class="php-keyword2">defined</span>(<span class="php-quote">'QUICK_CACHE_ALLOWED'</span>) &amp;&amp; !QUICK_CACHE_ALLOWED)
+</span><span id="862" class="l"><a class="l" href="#862"> 862: </a>                <span class="php-keyword1">return</span> (boolean)<span class="php-var">$this</span>-&gt;maybe_set_debug_info(<span class="php-var">$this</span>::NC_DEBUG_QUICK_CACHE_ALLOWED_CONSTANT);
+</span><span id="863" class="l"><a class="l" href="#863"> 863: </a>
+</span><span id="864" class="l"><a class="l" href="#864"> 864: </a>            <span class="php-keyword1">if</span>(<span class="php-keyword1">isset</span>(<span class="php-var">$_SERVER</span>[<span class="php-quote">'QUICK_CACHE_ALLOWED'</span>]) &amp;&amp; !<span class="php-var">$_SERVER</span>[<span class="php-quote">'QUICK_CACHE_ALLOWED'</span>])
+</span><span id="865" class="l"><a class="l" href="#865"> 865: </a>                <span class="php-keyword1">return</span> (boolean)<span class="php-var">$this</span>-&gt;maybe_set_debug_info(<span class="php-var">$this</span>::NC_DEBUG_QUICK_CACHE_ALLOWED_SERVER_VAR);
+</span><span id="866" class="l"><a class="l" href="#866"> 866: </a>
+</span><span id="867" class="l"><a class="l" href="#867"> 867: </a>            <span class="php-keyword1">if</span>(<span class="php-keyword2">defined</span>(<span class="php-quote">'DONOTCACHEPAGE'</span>)) <span class="php-comment">// WP Super Cache compatible.</span>
+</span><span id="868" class="l"><a class="l" href="#868"> 868: </a>                <span class="php-keyword1">return</span> (boolean)<span class="php-var">$this</span>-&gt;maybe_set_debug_info(<span class="php-var">$this</span>::NC_DEBUG_DONOTCACHEPAGE_CONSTANT);
+</span><span id="869" class="l"><a class="l" href="#869"> 869: </a>
+</span><span id="870" class="l"><a class="l" href="#870"> 870: </a>            <span class="php-keyword1">if</span>(<span class="php-keyword1">isset</span>(<span class="php-var">$_SERVER</span>[<span class="php-quote">'DONOTCACHEPAGE'</span>])) <span class="php-comment">// WP Super Cache compatible.</span>
+</span><span id="871" class="l"><a class="l" href="#871"> 871: </a>                <span class="php-keyword1">return</span> (boolean)<span class="php-var">$this</span>-&gt;maybe_set_debug_info(<span class="php-var">$this</span>::NC_DEBUG_DONOTCACHEPAGE_SERVER_VAR);
+</span><span id="872" class="l"><a class="l" href="#872"> 872: </a>
+</span><span id="873" class="l"><a class="l" href="#873"> 873: </a>            <span class="php-keyword1">if</span>(<span class="php-var">$this</span>-&gt;is_user_logged_in) <span class="php-comment">// Actually logged into the site.</span>
+</span><span id="874" class="l"><a class="l" href="#874"> 874: </a>                <span class="php-keyword1">return</span> (boolean)<span class="php-var">$this</span>-&gt;maybe_set_debug_info(<span class="php-var">$this</span>::NC_DEBUG_IS_LOGGED_IN_USER);
+</span><span id="875" class="l"><a class="l" href="#875"> 875: </a>
+</span><span id="876" class="l"><a class="l" href="#876"> 876: </a>            <span class="php-keyword1">if</span>(<span class="php-var">$this</span>-&gt;is_like_user_logged_in()) <span class="php-comment">// Commenters, password-protected access, or actually logged-in.</span>
+</span><span id="877" class="l"><a class="l" href="#877"> 877: </a>                <span class="php-keyword1">return</span> (boolean)<span class="php-var">$this</span>-&gt;maybe_set_debug_info(<span class="php-var">$this</span>::NC_DEBUG_IS_LIKE_LOGGED_IN_USER); <span class="php-comment">// Separate debug notice.</span>
+</span><span id="878" class="l"><a class="l" href="#878"> 878: </a>
+</span><span id="879" class="l"><a class="l" href="#879"> 879: </a>            <span class="php-keyword1">if</span>(<span class="php-var">$this</span>-&gt;is_404 &amp;&amp; !QUICK_CACHE_CACHE_404_REQUESTS) <span class="php-comment">// Not caching 404 errors.</span>
+</span><span id="880" class="l"><a class="l" href="#880"> 880: </a>                <span class="php-keyword1">return</span> (boolean)<span class="php-var">$this</span>-&gt;maybe_set_debug_info(<span class="php-var">$this</span>::NC_DEBUG_404_REQUEST);
+</span><span id="881" class="l"><a class="l" href="#881"> 881: </a>
+</span><span id="882" class="l"><a class="l" href="#882"> 882: </a>            <span class="php-keyword1">if</span>(<span class="php-keyword2">strpos</span>(<span class="php-var">$cache</span>, <span class="php-quote">'&lt;body id=&quot;error-page&quot;&gt;'</span>) !== <span class="php-keyword1">FALSE</span>) <span class="php-comment">// A WordPress-generated {@link \wp_die()} error?</span>
+</span><span id="883" class="l"><a class="l" href="#883"> 883: </a>                <span class="php-keyword1">return</span> (boolean)<span class="php-var">$this</span>-&gt;maybe_set_debug_info(<span class="php-var">$this</span>::NC_DEBUG_WP_ERROR_PAGE);
+</span><span id="884" class="l"><a class="l" href="#884"> 884: </a>
+</span><span id="885" class="l"><a class="l" href="#885"> 885: </a>            <span class="php-keyword1">if</span>(!<span class="php-var">$this</span>-&gt;function_is_possible(<span class="php-quote">'http_response_code'</span>)) <span class="php-comment">// Unable to reliably detect HTTP status code?</span>
+</span><span id="886" class="l"><a class="l" href="#886"> 886: </a>                <span class="php-keyword1">if</span>(<span class="php-keyword2">stripos</span>(<span class="php-var">$cache</span>, <span class="php-quote">'&lt;title&gt;database error&lt;/title&gt;'</span>) !== <span class="php-keyword1">FALSE</span>) <span class="php-comment">// Fallback on this hackety hack.</span>
+</span><span id="887" class="l"><a class="l" href="#887"> 887: </a>                    <span class="php-keyword1">return</span> (boolean)<span class="php-var">$this</span>-&gt;maybe_set_debug_info(<span class="php-var">$this</span>::NC_DEBUG_WP_ERROR_PAGE);
+</span><span id="888" class="l"><a class="l" href="#888"> 888: </a>
+</span><span id="889" class="l"><a class="l" href="#889"> 889: </a>            <span class="php-keyword1">if</span>(!<span class="php-var">$this</span>-&gt;has_a_cacheable_content_type()) <span class="php-comment">// Exclude non-HTML/XML content types.</span>
+</span><span id="890" class="l"><a class="l" href="#890"> 890: </a>                <span class="php-keyword1">return</span> (boolean)<span class="php-var">$this</span>-&gt;maybe_set_debug_info(<span class="php-var">$this</span>::NC_DEBUG_UNCACHEABLE_CONTENT_TYPE);
+</span><span id="891" class="l"><a class="l" href="#891"> 891: </a>
+</span><span id="892" class="l"><a class="l" href="#892"> 892: </a>            <span class="php-keyword1">if</span>(!<span class="php-var">$this</span>-&gt;has_a_cacheable_status()) <span class="php-comment">// This will catch WP Maintenance Mode too.</span>
+</span><span id="893" class="l"><a class="l" href="#893"> 893: </a>                <span class="php-keyword1">return</span> (boolean)<span class="php-var">$this</span>-&gt;maybe_set_debug_info(<span class="php-var">$this</span>::NC_DEBUG_UNCACHEABLE_STATUS);
+</span><span id="894" class="l"><a class="l" href="#894"> 894: </a>
+</span><span id="895" class="l"><a class="l" href="#895"> 895: </a>            <span class="php-keyword1">if</span>(<span class="php-var">$this</span>-&gt;is_maintenance) <span class="php-comment">// &lt;http://wordpress.org/extend/plugins/maintenance-mode&gt;</span>
+</span><span id="896" class="l"><a class="l" href="#896"> 896: </a>                <span class="php-keyword1">return</span> (boolean)<span class="php-var">$this</span>-&gt;maybe_set_debug_info(<span class="php-var">$this</span>::NC_DEBUG_MAINTENANCE_PLUGIN);
+</span><span id="897" class="l"><a class="l" href="#897"> 897: </a>
+</span><span id="898" class="l"><a class="l" href="#898"> 898: </a>            <span class="php-keyword1">if</span>(<span class="php-var">$this</span>-&gt;function_is_possible(<span class="php-quote">'zlib_get_coding_type'</span>) &amp;&amp; <span class="php-keyword2">zlib_get_coding_type</span>()
+</span><span id="899" class="l"><a class="l" href="#899"> 899: </a>               &amp;&amp; (!(<span class="php-var">$zlib_oc</span> = <span class="php-keyword2">ini_get</span>(<span class="php-quote">'zlib.output_compression'</span>)) || !<span class="php-keyword2">filter_var</span>(<span class="php-var">$zlib_oc</span>, FILTER_VALIDATE_BOOLEAN))
+</span><span id="900" class="l"><a class="l" href="#900"> 900: </a>            ) <span class="php-keyword1">return</span> (boolean)<span class="php-var">$this</span>-&gt;maybe_set_debug_info(<span class="php-var">$this</span>::NC_DEBUG_OB_ZLIB_CODING_TYPE);
+</span><span id="901" class="l"><a class="l" href="#901"> 901: </a>
+</span><span id="902" class="l"><a class="l" href="#902"> 902: </a>            <span class="php-comment"># Cache directory checks. The cache file directory is created here if necessary.</span>
+</span><span id="903" class="l"><a class="l" href="#903"> 903: </a>
+</span><span id="904" class="l"><a class="l" href="#904"> 904: </a>            <span class="php-keyword1">if</span>(!<span class="php-keyword2">is_dir</span>(QUICK_CACHE_DIR) &amp;&amp; <span class="php-keyword2">mkdir</span>(QUICK_CACHE_DIR, <span class="php-num">0775</span>, <span class="php-keyword1">TRUE</span>) &amp;&amp; !<span class="php-keyword2">is_file</span>(QUICK_CACHE_DIR.<span class="php-quote">'/.htaccess'</span>))
+</span><span id="905" class="l"><a class="l" href="#905"> 905: </a>                <span class="php-keyword2">file_put_contents</span>(QUICK_CACHE_DIR.<span class="php-quote">'/.htaccess'</span>, <span class="php-var">$this</span>-&gt;htaccess_deny); <span class="php-comment">// We know it's writable here.</span>
+</span><span id="906" class="l"><a class="l" href="#906"> 906: </a>
+</span><span id="907" class="l"><a class="l" href="#907"> 907: </a>            <span class="php-keyword1">if</span>(!<span class="php-keyword2">is_dir</span>(<span class="php-var">$cache_file_dir</span> = <span class="php-keyword2">dirname</span>(<span class="php-var">$this</span>-&gt;cache_file))) <span class="php-var">$cache_file_dir_writable</span> = <span class="php-keyword2">mkdir</span>(<span class="php-var">$cache_file_dir</span>, <span class="php-num">0775</span>, <span class="php-keyword1">TRUE</span>);
+</span><span id="908" class="l"><a class="l" href="#908"> 908: </a>            <span class="php-keyword1">if</span>(<span class="php-keyword1">empty</span>(<span class="php-var">$cache_file_dir_writable</span>) &amp;&amp; !<span class="php-keyword2">is_writable</span>(<span class="php-var">$cache_file_dir</span>)) <span class="php-comment">// Only check if it's writable, if we didn't just successfully create it.</span>
+</span><span id="909" class="l"><a class="l" href="#909"> 909: </a>                <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> \exception(<span class="php-keyword2">sprintf</span>(__(<span class="php-quote">'Cache directory not writable. Quick Cache needs this directory please: `%1$s`. Set permissions to `755` or higher; `777` might be needed in some cases.'</span>, <span class="php-var">$this</span>-&gt;text_domain), <span class="php-var">$cache_file_dir</span>));
+</span><span id="910" class="l"><a class="l" href="#910"> 910: </a>
+</span><span id="911" class="l"><a class="l" href="#911"> 911: </a>            <span class="php-comment"># This is where a new 404 request might be detected for the first time; and where the 404 error file already exists in this case.</span>
+</span><span id="912" class="l"><a class="l" href="#912"> 912: </a>
+</span><span id="913" class="l"><a class="l" href="#913"> 913: </a>            <span class="php-var">$cache_file_tmp</span> = <span class="php-var">$this</span>-&gt;cache_file.<span class="php-quote">'.'</span>.<span class="php-keyword2">uniqid</span>(<span class="php-quote">''</span>, <span class="php-keyword1">TRUE</span>).<span class="php-quote">'.tmp'</span>; <span class="php-comment">// Cache/symlink creation is atomic; e.g. tmp file w/ rename.</span>
+</span><span id="914" class="l"><a class="l" href="#914"> 914: </a>
+</span><span id="915" class="l"><a class="l" href="#915"> 915: </a>            <span class="php-keyword1">if</span>(<span class="php-var">$this</span>-&gt;is_404 &amp;&amp; <span class="php-keyword2">is_file</span>(<span class="php-var">$this</span>-&gt;cache_file_404))
+</span><span id="916" class="l"><a class="l" href="#916"> 916: </a>                <span class="php-keyword1">if</span>(!(<span class="php-keyword2">symlink</span>(<span class="php-var">$this</span>-&gt;cache_file_404, <span class="php-var">$cache_file_tmp</span>) &amp;&amp; <span class="php-keyword2">rename</span>(<span class="php-var">$cache_file_tmp</span>, <span class="php-var">$this</span>-&gt;cache_file)))
+</span><span id="917" class="l"><a class="l" href="#917"> 917: </a>                    <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> \exception(<span class="php-keyword2">sprintf</span>(__(<span class="php-quote">'Unable to create symlink: `%1$s` » `%2$s`. Possible permissions issue (or race condition), please check your cache directory: `%3$s`.'</span>, <span class="php-var">$this</span>-&gt;text_domain), <span class="php-var">$this</span>-&gt;cache_file, <span class="php-var">$this</span>-&gt;cache_file_404, QUICK_CACHE_DIR));
+</span><span id="918" class="l"><a class="l" href="#918"> 918: </a>                <span class="php-keyword1">else</span> <span class="php-keyword1">return</span> (boolean)<span class="php-var">$this</span>-&gt;maybe_set_debug_info(<span class="php-var">$this</span>::NC_DEBUG_1ST_TIME_404_SYMLINK);
+</span><span id="919" class="l"><a class="l" href="#919"> 919: </a>
+</span><span id="920" class="l"><a class="l" href="#920"> 920: </a>            <span class="php-comment">/* ------- Otherwise, we need to construct &amp; store a new cache file. -------- */</span>
+</span><span id="921" class="l"><a class="l" href="#921"> 921: </a>
+</span><span id="922" class="l"><a class="l" href="#922"> 922: </a>            <span class="php-keyword1">if</span>(QUICK_CACHE_DEBUGGING_ENABLE &amp;&amp; <span class="php-var">$this</span>-&gt;is_html_xml_doc(<span class="php-var">$cache</span>)) <span class="php-comment">// Only if HTML comments are possible.</span>
+</span><span id="923" class="l"><a class="l" href="#923"> 923: </a>            {
+</span><span id="924" class="l"><a class="l" href="#924"> 924: </a>                <span class="php-var">$total_time</span> = <span class="php-keyword2">number_format</span>(<span class="php-keyword2">microtime</span>(<span class="php-keyword1">TRUE</span>) - <span class="php-var">$this</span>-&gt;timer, <span class="php-num">5</span>, <span class="php-quote">'.'</span>, <span class="php-quote">''</span>);
+</span><span id="925" class="l"><a class="l" href="#925"> 925: </a>                <span class="php-var">$cache</span> .= <span class="php-quote">&quot;\n&quot;</span>.<span class="php-quote">'&lt;!-- '</span>.<span class="php-keyword2">htmlspecialchars</span>(<span class="php-keyword2">sprintf</span>(__(<span class="php-quote">'Quick Cache file path: %1$s'</span>, <span class="php-var">$this</span>-&gt;text_domain), <span class="php-keyword2">str_replace</span>(WP_CONTENT_DIR, <span class="php-quote">''</span>, <span class="php-var">$this</span>-&gt;is_404 ? <span class="php-var">$this</span>-&gt;cache_file_404 : <span class="php-var">$this</span>-&gt;cache_file))).<span class="php-quote">' --&gt;'</span>;
+</span><span id="926" class="l"><a class="l" href="#926"> 926: </a>                <span class="php-var">$cache</span> .= <span class="php-quote">&quot;\n&quot;</span>.<span class="php-quote">'&lt;!-- '</span>.<span class="php-keyword2">htmlspecialchars</span>(<span class="php-keyword2">sprintf</span>(__(<span class="php-quote">'Quick Cache file built for (%1$s) in %2$s seconds, on: %3$s.'</span>, <span class="php-var">$this</span>-&gt;text_domain),
+</span><span id="927" class="l"><a class="l" href="#927"> 927: </a>                                                                (<span class="php-var">$this</span>-&gt;is_404) ? <span class="php-quote">'404 [error document]'</span> : <span class="php-var">$this</span>-&gt;salt_location, <span class="php-var">$total_time</span>, <span class="php-keyword2">date</span>(<span class="php-quote">'M jS, Y @ g:i a T'</span>))).<span class="php-quote">' --&gt;'</span>;
+</span><span id="928" class="l"><a class="l" href="#928"> 928: </a>                <span class="php-var">$cache</span> .= <span class="php-quote">&quot;\n&quot;</span>.<span class="php-quote">'&lt;!-- '</span>.<span class="php-keyword2">htmlspecialchars</span>(<span class="php-keyword2">sprintf</span>(__(<span class="php-quote">'This Quick Cache file will auto-expire (and be rebuilt) on: %1$s (based on your configured expiration time).'</span>, <span class="php-var">$this</span>-&gt;text_domain), <span class="php-keyword2">date</span>(<span class="php-quote">'M jS, Y @ g:i a T'</span>, <span class="php-keyword2">strtotime</span>(<span class="php-quote">'+'</span>.QUICK_CACHE_MAX_AGE)))).<span class="php-quote">' --&gt;'</span>;
+</span><span id="929" class="l"><a class="l" href="#929"> 929: </a>            }
+</span><span id="930" class="l"><a class="l" href="#930"> 930: </a>
+</span><span id="931" class="l"><a class="l" href="#931"> 931: </a>            <span class="php-comment">/*
+</span></span><span id="932" class="l"><a class="l" href="#932"> 932: </a><span class="php-comment">             * This is NOT a 404, or it is 404 and the 404 cache file doesn't yet exist (so we need to create it).
+</span></span><span id="933" class="l"><a class="l" href="#933"> 933: </a><span class="php-comment">             */</span>
+</span><span id="934" class="l"><a class="l" href="#934"> 934: </a>            <span class="php-keyword1">if</span>(<span class="php-var">$this</span>-&gt;is_404) <span class="php-comment">// This is a 404; let's create 404 cache file and symlink to it.</span>
+</span><span id="935" class="l"><a class="l" href="#935"> 935: </a>            {
+</span><span id="936" class="l"><a class="l" href="#936"> 936: </a>                <span class="php-keyword1">if</span>(<span class="php-keyword2">file_put_contents</span>(<span class="php-var">$cache_file_tmp</span>, <span class="php-keyword2">serialize</span>(<span class="php-var">$this</span>-&gt;cacheable_headers_list()).<span class="php-quote">'&lt;!--headers--&gt;'</span>.<span class="php-var">$cache</span>) &amp;&amp; <span class="php-keyword2">rename</span>(<span class="php-var">$cache_file_tmp</span>, <span class="php-var">$this</span>-&gt;cache_file_404))
+</span><span id="937" class="l"><a class="l" href="#937"> 937: </a>                {
+</span><span id="938" class="l"><a class="l" href="#938"> 938: </a>                    <span class="php-keyword1">if</span>(!(<span class="php-keyword2">symlink</span>(<span class="php-var">$this</span>-&gt;cache_file_404, <span class="php-var">$cache_file_tmp</span>) &amp;&amp; <span class="php-keyword2">rename</span>(<span class="php-var">$cache_file_tmp</span>, <span class="php-var">$this</span>-&gt;cache_file)))
+</span><span id="939" class="l"><a class="l" href="#939"> 939: </a>                        <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> \exception(<span class="php-keyword2">sprintf</span>(__(<span class="php-quote">'Unable to create symlink: `%1$s` » `%2$s`. Possible permissions issue (or race condition), please check your cache directory: `%3$s`.'</span>, <span class="php-var">$this</span>-&gt;text_domain), <span class="php-var">$this</span>-&gt;cache_file, <span class="php-var">$this</span>-&gt;cache_file_404, QUICK_CACHE_DIR));
+</span><span id="940" class="l"><a class="l" href="#940"> 940: </a>                    <span class="php-keyword1">else</span>
+</span><span id="941" class="l"><a class="l" href="#941"> 941: </a>                        <span class="php-keyword1">return</span> <span class="php-var">$cache</span>; <span class="php-comment">// Return the newly built cache; with possible debug information also.</span>
+</span><span id="942" class="l"><a class="l" href="#942"> 942: </a>                }
+</span><span id="943" class="l"><a class="l" href="#943"> 943: </a>
+</span><span id="944" class="l"><a class="l" href="#944"> 944: </a>            } <span class="php-comment">// NOT a 404; let's write a new cache file.</span>
+</span><span id="945" class="l"><a class="l" href="#945"> 945: </a>            <span class="php-keyword1">else</span> <span class="php-keyword1">if</span>(<span class="php-keyword2">file_put_contents</span>(<span class="php-var">$cache_file_tmp</span>, <span class="php-keyword2">serialize</span>(<span class="php-var">$this</span>-&gt;cacheable_headers_list()).<span class="php-quote">'&lt;!--headers--&gt;'</span>.<span class="php-var">$cache</span>) &amp;&amp; <span class="php-keyword2">rename</span>(<span class="php-var">$cache_file_tmp</span>, <span class="php-var">$this</span>-&gt;cache_file))
+</span><span id="946" class="l"><a class="l" href="#946"> 946: </a>                <span class="php-keyword1">return</span> <span class="php-var">$cache</span>; <span class="php-comment">// Return the newly built cache; with possible debug information also.</span>
+</span><span id="947" class="l"><a class="l" href="#947"> 947: </a>
+</span><span id="948" class="l"><a class="l" href="#948"> 948: </a>            @<span class="php-keyword2">unlink</span>(<span class="php-var">$cache_file_tmp</span>); <span class="php-comment">// Clean this up (if it exists); and throw an exception with information for the site owner.</span>
+</span><span id="949" class="l"><a class="l" href="#949"> 949: </a>            <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> \exception(<span class="php-keyword2">sprintf</span>(__(<span class="php-quote">'Quick Cache: failed to write cache file for: `%1$s`; possible permissions issue (or race condition), please check your cache directory: `%2$s`.'</span>, <span class="php-var">$this</span>-&gt;text_domain), <span class="php-var">$_SERVER</span>[<span class="php-quote">'REQUEST_URI'</span>], QUICK_CACHE_DIR));
+</span><span id="950" class="l"><a class="l" href="#950"> 950: </a>        }
+</span><span id="951" class="l"><a class="l" href="#951"> 951: </a>
+</span><span id="952" class="l"><a class="l" href="#952"> 952: </a>        <span class="php-comment">/**
+</span></span><span id="953" class="l"><a class="l" href="#953"> 953: </a><span class="php-comment">         * Echoes `NC_DEBUG_` info in the WordPress `shutdown` phase (if applicable).
+</span></span><span id="954" class="l"><a class="l" href="#954"> 954: </a><span class="php-comment">         *
+</span></span><span id="955" class="l"><a class="l" href="#955"> 955: </a><span class="php-comment">         * @since 140605 Improving debug info output phase.
+</span></span><span id="956" class="l"><a class="l" href="#956"> 956: </a><span class="php-comment">         *
+</span></span><span id="957" class="l"><a class="l" href="#957"> 957: </a><span class="php-comment">         * @attaches-to `shutdown` hook in WordPress w/ a late priority.
+</span></span><span id="958" class="l"><a class="l" href="#958"> 958: </a><span class="php-comment">         */</span>
+</span><span id="959" class="l"><a class="l" href="#959"> 959: </a>        <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_maybe_echo_nc_debug_info" href="#_maybe_echo_nc_debug_info">maybe_echo_nc_debug_info</a>() <span class="php-comment">// Debug info in the shutdown phase.</span>
+</span><span id="960" class="l"><a class="l" href="#960"> 960: </a>        {
+</span><span id="961" class="l"><a class="l" href="#961"> 961: </a>            <span class="php-keyword1">if</span>(!QUICK_CACHE_DEBUGGING_ENABLE)
+</span><span id="962" class="l"><a class="l" href="#962"> 962: </a>                <span class="php-keyword1">return</span>; <span class="php-comment">// Nothing to do.</span>
+</span><span id="963" class="l"><a class="l" href="#963"> 963: </a>
+</span><span id="964" class="l"><a class="l" href="#964"> 964: </a>            <span class="php-keyword1">if</span>(is_admin()) <span class="php-keyword1">return</span>; <span class="php-comment">// Not applicable.</span>
 </span><span id="965" class="l"><a class="l" href="#965"> 965: </a>
-</span><span id="966" class="l"><a class="l" href="#966"> 966: </a>        <span class="php-comment">/**
-</span></span><span id="967" class="l"><a class="l" href="#967"> 967: </a><span class="php-comment">         * Gets `NC_DEBUG_` info (if applicable).
-</span></span><span id="968" class="l"><a class="l" href="#968"> 968: </a><span class="php-comment">         *
-</span></span><span id="969" class="l"><a class="l" href="#969"> 969: </a><span class="php-comment">         * @since 140422 First documented version.
-</span></span><span id="970" class="l"><a class="l" href="#970"> 970: </a><span class="php-comment">         *
-</span></span><span id="971" class="l"><a class="l" href="#971"> 971: </a><span class="php-comment">         * @param string $reason_code One of the `NC_DEBUG_` constants.
-</span></span><span id="972" class="l"><a class="l" href="#972"> 972: </a><span class="php-comment">         * @param string $reason Optional; to override the default description with a custom message.
-</span></span><span id="973" class="l"><a class="l" href="#973"> 973: </a><span class="php-comment">         *
-</span></span><span id="974" class="l"><a class="l" href="#974"> 974: </a><span class="php-comment">         * @return string The debug info; i.e. full description (if applicable).
-</span></span><span id="975" class="l"><a class="l" href="#975"> 975: </a><span class="php-comment">         */</span>
-</span><span id="976" class="l"><a class="l" href="#976"> 976: </a>        <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_maybe_get_nc_debug_info" href="#_maybe_get_nc_debug_info">maybe_get_nc_debug_info</a>(<span class="php-var">$reason_code</span> = <span class="php-quote">''</span>, <span class="php-var">$reason</span> = <span class="php-quote">''</span>)
-</span><span id="977" class="l"><a class="l" href="#977"> 977: </a>        {
-</span><span id="978" class="l"><a class="l" href="#978"> 978: </a>            <span class="php-keyword1">if</span>(!QUICK_CACHE_DEBUGGING_ENABLE)
-</span><span id="979" class="l"><a class="l" href="#979"> 979: </a>                <span class="php-keyword1">return</span> <span class="php-quote">''</span>; <span class="php-comment">// Not applicable.</span>
-</span><span id="980" class="l"><a class="l" href="#980"> 980: </a>
-</span><span id="981" class="l"><a class="l" href="#981"> 981: </a>            <span class="php-var">$reason</span> = (string)<span class="php-var">$reason</span>;
-</span><span id="982" class="l"><a class="l" href="#982"> 982: </a>            <span class="php-keyword1">if</span>(!(<span class="php-var">$reason_code</span> = (string)<span class="php-var">$reason_code</span>))
-</span><span id="983" class="l"><a class="l" href="#983"> 983: </a>                <span class="php-keyword1">return</span> <span class="php-quote">''</span>; <span class="php-comment">// Not applicable.</span>
-</span><span id="984" class="l"><a class="l" href="#984"> 984: </a>
-</span><span id="985" class="l"><a class="l" href="#985"> 985: </a>            <span class="php-keyword1">if</span>(!<span class="php-var">$reason</span>) <span class="php-keyword1">switch</span>(<span class="php-var">$reason_code</span>)
-</span><span id="986" class="l"><a class="l" href="#986"> 986: </a>            {
-</span><span id="987" class="l"><a class="l" href="#987"> 987: </a>                <span class="php-keyword1">case</span> <span class="php-var">$this</span>::NC_DEBUG_PHP_SAPI_CLI:
-</span><span id="988" class="l"><a class="l" href="#988"> 988: </a>                    <span class="php-var">$reason</span> = __(<span class="php-quote">'because `PHP_SAPI` reports that you are currently running from the command line.'</span>, <span class="php-var">$this</span>-&gt;text_domain);
-</span><span id="989" class="l"><a class="l" href="#989"> 989: </a>                    <span class="php-keyword1">break</span>; <span class="php-comment">// Break switch handler.</span>
-</span><span id="990" class="l"><a class="l" href="#990"> 990: </a>
-</span><span id="991" class="l"><a class="l" href="#991"> 991: </a>                <span class="php-keyword1">case</span> <span class="php-var">$this</span>::NC_DEBUG_QCAC_GET_VAR:
-</span><span id="992" class="l"><a class="l" href="#992"> 992: </a>                    <span class="php-var">$reason</span> = __(<span class="php-quote">'because `$_GET[\'qcAC\']` is set to a boolean-ish FALSE value.'</span>, <span class="php-var">$this</span>-&gt;text_domain);
-</span><span id="993" class="l"><a class="l" href="#993"> 993: </a>                    <span class="php-keyword1">break</span>; <span class="php-comment">// Break switch handler.</span>
-</span><span id="994" class="l"><a class="l" href="#994"> 994: </a>
-</span><span id="995" class="l"><a class="l" href="#995"> 995: </a>                <span class="php-keyword1">case</span> <span class="php-var">$this</span>::NC_DEBUG_NO_SERVER_HTTP_HOST:
-</span><span id="996" class="l"><a class="l" href="#996"> 996: </a>                    <span class="php-var">$reason</span> = __(<span class="php-quote">'because `$_SERVER[\'HTTP_HOST\']` is missing from your server configuration.'</span>, <span class="php-var">$this</span>-&gt;text_domain);
-</span><span id="997" class="l"><a class="l" href="#997"> 997: </a>                    <span class="php-keyword1">break</span>; <span class="php-comment">// Break switch handler.</span>
-</span><span id="998" class="l"><a class="l" href="#998"> 998: </a>
-</span><span id="999" class="l"><a class="l" href="#999"> 999: </a>                <span class="php-keyword1">case</span> <span class="php-var">$this</span>::NC_DEBUG_NO_SERVER_REQUEST_URI:
-</span><span id="1000" class="l"><a class="l" href="#1000">1000: </a>                    <span class="php-var">$reason</span> = __(<span class="php-quote">'because `$_SERVER[\'REQUEST_URI\']` is missing from your server configuration.'</span>, <span class="php-var">$this</span>-&gt;text_domain);
-</span><span id="1001" class="l"><a class="l" href="#1001">1001: </a>                    <span class="php-keyword1">break</span>; <span class="php-comment">// Break switch handler.</span>
-</span><span id="1002" class="l"><a class="l" href="#1002">1002: </a>
-</span><span id="1003" class="l"><a class="l" href="#1003">1003: </a>                <span class="php-keyword1">case</span> <span class="php-var">$this</span>::NC_DEBUG_QUICK_CACHE_ALLOWED_CONSTANT:
-</span><span id="1004" class="l"><a class="l" href="#1004">1004: </a>                    <span class="php-var">$reason</span> = __(<span class="php-quote">'because the PHP constant `QUICK_CACHE_ALLOWED` has been set to a boolean-ish `FALSE` value at runtime. Perhaps by WordPress itself, or by one of your themes/plugins. This usually means that you have a theme/plugin intentionally disabling the cache on this page; and it\'s usually for a very good reason.'</span>, <span class="php-var">$this</span>-&gt;text_domain);
-</span><span id="1005" class="l"><a class="l" href="#1005">1005: </a>                    <span class="php-keyword1">break</span>; <span class="php-comment">// Break switch handler.</span>
-</span><span id="1006" class="l"><a class="l" href="#1006">1006: </a>
-</span><span id="1007" class="l"><a class="l" href="#1007">1007: </a>                <span class="php-keyword1">case</span> <span class="php-var">$this</span>::NC_DEBUG_QUICK_CACHE_ALLOWED_SERVER_VAR:
-</span><span id="1008" class="l"><a class="l" href="#1008">1008: </a>                    <span class="php-var">$reason</span> = __(<span class="php-quote">'because the environment variable `$_SERVER[\'QUICK_CACHE_ALLOWED\']` has been set to a boolean-ish `FALSE` value at runtime. Perhaps by WordPress itself, or by one of your themes/plugins. This usually means that you have a theme/plugin intentionally disabling the cache on this page; and it\'s usually for a very good reason.'</span>, <span class="php-var">$this</span>-&gt;text_domain);
-</span><span id="1009" class="l"><a class="l" href="#1009">1009: </a>                    <span class="php-keyword1">break</span>; <span class="php-comment">// Break switch handler.</span>
-</span><span id="1010" class="l"><a class="l" href="#1010">1010: </a>
-</span><span id="1011" class="l"><a class="l" href="#1011">1011: </a>                <span class="php-keyword1">case</span> <span class="php-var">$this</span>::NC_DEBUG_DONOTCACHEPAGE_CONSTANT:
-</span><span id="1012" class="l"><a class="l" href="#1012">1012: </a>                    <span class="php-var">$reason</span> = __(<span class="php-quote">'because the PHP constant `DONOTCACHEPAGE` has been set at runtime. Perhaps by WordPress itself, or by one of your themes/plugins. This usually means that you have a theme/plugin intentionally disabling the cache on this page; and it\'s usually for a very good reason.'</span>, <span class="php-var">$this</span>-&gt;text_domain);
-</span><span id="1013" class="l"><a class="l" href="#1013">1013: </a>                    <span class="php-keyword1">break</span>; <span class="php-comment">// Break switch handler.</span>
-</span><span id="1014" class="l"><a class="l" href="#1014">1014: </a>
-</span><span id="1015" class="l"><a class="l" href="#1015">1015: </a>                <span class="php-keyword1">case</span> <span class="php-var">$this</span>::NC_DEBUG_DONOTCACHEPAGE_SERVER_VAR:
-</span><span id="1016" class="l"><a class="l" href="#1016">1016: </a>                    <span class="php-var">$reason</span> = __(<span class="php-quote">'because the environment variable `$_SERVER[\'DONOTCACHEPAGE\']` has been set at runtime. Perhaps by WordPress itself, or by one of your themes/plugins. This usually means that you have a theme/plugin intentionally disabling the cache on this page; and it\'s usually for a very good reason.'</span>, <span class="php-var">$this</span>-&gt;text_domain);
-</span><span id="1017" class="l"><a class="l" href="#1017">1017: </a>                    <span class="php-keyword1">break</span>; <span class="php-comment">// Break switch handler.</span>
-</span><span id="1018" class="l"><a class="l" href="#1018">1018: </a>
-</span><span id="1019" class="l"><a class="l" href="#1019">1019: </a>                <span class="php-keyword1">case</span> <span class="php-var">$this</span>::NC_DEBUG_UNCACHEABLE_REQUEST:
-</span><span id="1020" class="l"><a class="l" href="#1020">1020: </a>                    <span class="php-var">$reason</span> = __(<span class="php-quote">'because `$_SERVER[\'REQUEST_METHOD\']` is `POST`, `PUT`, `DELETE`, `HEAD`, `OPTIONS`, `TRACE` or `CONNECT`. These request methods should never (ever) be cached in any way.'</span>, <span class="php-var">$this</span>-&gt;text_domain);
-</span><span id="1021" class="l"><a class="l" href="#1021">1021: </a>                    <span class="php-keyword1">break</span>; <span class="php-comment">// Break switch handler.</span>
-</span><span id="1022" class="l"><a class="l" href="#1022">1022: </a>
-</span><span id="1023" class="l"><a class="l" href="#1023">1023: </a>                <span class="php-keyword1">case</span> <span class="php-var">$this</span>::NC_DEBUG_SELF_SERVE_REQUEST:
-</span><span id="1024" class="l"><a class="l" href="#1024">1024: </a>                    <span class="php-var">$reason</span> = __(<span class="php-quote">'because `$_SERVER[\'REMOTE_ADDR\']` === `$_SERVER[\'SERVER_ADDR\']`; i.e. a self-serve request. DEVELOPER TIP: if you are testing on a localhost installation, please add `define(\'LOCALHOST\', TRUE);` to your `/wp-config.php` file while you run tests :-) Remove it (or set it to a `FALSE` value) once you go live on the web.'</span>, <span class="php-var">$this</span>-&gt;text_domain);
-</span><span id="1025" class="l"><a class="l" href="#1025">1025: </a>                    <span class="php-keyword1">break</span>; <span class="php-comment">// Break switch handler.</span>
-</span><span id="1026" class="l"><a class="l" href="#1026">1026: </a>
-</span><span id="1027" class="l"><a class="l" href="#1027">1027: </a>                <span class="php-keyword1">case</span> <span class="php-var">$this</span>::NC_DEBUG_FEED_REQUEST:
-</span><span id="1028" class="l"><a class="l" href="#1028">1028: </a>                    <span class="php-var">$reason</span> = __(<span class="php-quote">'because `$_SERVER[\'REQUEST_URI\']` indicates this is a `/feed`; and the configuration of this site says not to cache XML-based feeds.'</span>, <span class="php-var">$this</span>-&gt;text_domain);
-</span><span id="1029" class="l"><a class="l" href="#1029">1029: </a>                    <span class="php-keyword1">break</span>; <span class="php-comment">// Break switch handler.</span>
-</span><span id="1030" class="l"><a class="l" href="#1030">1030: </a>
-</span><span id="1031" class="l"><a class="l" href="#1031">1031: </a>                <span class="php-keyword1">case</span> <span class="php-var">$this</span>::NC_DEBUG_WP_SYSTEMATICS:
-</span><span id="1032" class="l"><a class="l" href="#1032">1032: </a>                    <span class="php-var">$reason</span> = __(<span class="php-quote">'because `$_SERVER[\'REQUEST_URI\']` indicates this is a `wp-` or `xmlrpc` file; i.e. a WordPress systematic file. WordPress systematics are never (ever) cached in any way.'</span>, <span class="php-var">$this</span>-&gt;text_domain);
-</span><span id="1033" class="l"><a class="l" href="#1033">1033: </a>                    <span class="php-keyword1">break</span>; <span class="php-comment">// Break switch handler.</span>
-</span><span id="1034" class="l"><a class="l" href="#1034">1034: </a>
-</span><span id="1035" class="l"><a class="l" href="#1035">1035: </a>                <span class="php-keyword1">case</span> <span class="php-var">$this</span>::NC_DEBUG_WP_ADMIN:
-</span><span id="1036" class="l"><a class="l" href="#1036">1036: </a>                    <span class="php-var">$reason</span> = __(<span class="php-quote">'because `$_SERVER[\'REQUEST_URI\']` or the `is_admin()` function indicates this is an administrative area of the site.'</span>, <span class="php-var">$this</span>-&gt;text_domain);
-</span><span id="1037" class="l"><a class="l" href="#1037">1037: </a>                    <span class="php-keyword1">break</span>; <span class="php-comment">// Break switch handler.</span>
-</span><span id="1038" class="l"><a class="l" href="#1038">1038: </a>
-</span><span id="1039" class="l"><a class="l" href="#1039">1039: </a>                <span class="php-keyword1">case</span> <span class="php-var">$this</span>::NC_DEBUG_MS_FILES:
-</span><span id="1040" class="l"><a class="l" href="#1040">1040: </a>                    <span class="php-var">$reason</span> = __(<span class="php-quote">'because `$_SERVER[\'REQUEST_URI\']` indicates this is a Multisite Network; and this was a request for `/files/*`, not a page.'</span>, <span class="php-var">$this</span>-&gt;text_domain);
-</span><span id="1041" class="l"><a class="l" href="#1041">1041: </a>                    <span class="php-keyword1">break</span>; <span class="php-comment">// Break switch handler.</span>
-</span><span id="1042" class="l"><a class="l" href="#1042">1042: </a>
-</span><span id="1043" class="l"><a class="l" href="#1043">1043: </a>                <span class="php-keyword1">case</span> <span class="php-var">$this</span>::NC_DEBUG_IS_LOGGED_IN_USER:
-</span><span id="1044" class="l"><a class="l" href="#1044">1044: </a>                <span class="php-keyword1">case</span> <span class="php-var">$this</span>::NC_DEBUG_IS_LIKE_LOGGED_IN_USER:
-</span><span id="1045" class="l"><a class="l" href="#1045">1045: </a>                    <span class="php-var">$reason</span> = __(<span class="php-quote">'because the current user visiting this page (usually YOU), appears to be logged-in. The current configuration says NOT to cache pages for logged-in visitors. This message may also appear if you have an active PHP session on this site, or if you\'ve left (or replied to) a comment recently. If this message continues, please clear your cookies and try again.'</span>, <span class="php-var">$this</span>-&gt;text_domain);
-</span><span id="1046" class="l"><a class="l" href="#1046">1046: </a>                    <span class="php-keyword1">break</span>; <span class="php-comment">// Break switch handler.</span>
-</span><span id="1047" class="l"><a class="l" href="#1047">1047: </a>
-</span><span id="1048" class="l"><a class="l" href="#1048">1048: </a>                <span class="php-keyword1">case</span> <span class="php-var">$this</span>::NC_DEBUG_GET_REQUEST_QUERIES:
-</span><span id="1049" class="l"><a class="l" href="#1049">1049: </a>                    <span class="php-var">$reason</span> = __(<span class="php-quote">'because `$_GET` contains query string data. The current configuration says NOT to cache GET requests with a query string.'</span>, <span class="php-var">$this</span>-&gt;text_domain);
-</span><span id="1050" class="l"><a class="l" href="#1050">1050: </a>                    <span class="php-keyword1">break</span>; <span class="php-comment">// Break switch handler.</span>
-</span><span id="1051" class="l"><a class="l" href="#1051">1051: </a>
-</span><span id="1052" class="l"><a class="l" href="#1052">1052: </a>                <span class="php-keyword1">case</span> <span class="php-var">$this</span>::NC_DEBUG_404_REQUEST:
-</span><span id="1053" class="l"><a class="l" href="#1053">1053: </a>                    <span class="php-var">$reason</span> = __(<span class="php-quote">'because the WordPress `is_404()` Conditional Tag says the current page is a 404 error. The current configuration says NOT to cache 404 errors.'</span>, <span class="php-var">$this</span>-&gt;text_domain);
-</span><span id="1054" class="l"><a class="l" href="#1054">1054: </a>                    <span class="php-keyword1">break</span>; <span class="php-comment">// Break switch handler.</span>
-</span><span id="1055" class="l"><a class="l" href="#1055">1055: </a>
-</span><span id="1056" class="l"><a class="l" href="#1056">1056: </a>                <span class="php-keyword1">case</span> <span class="php-var">$this</span>::NC_DEBUG_MAINTENANCE_PLUGIN:
-</span><span id="1057" class="l"><a class="l" href="#1057">1057: </a>                    <span class="php-var">$reason</span> = __(<span class="php-quote">'because a plugin running on this installation says this page is in Maintenance Mode; i.e. is not available publicly at this time.'</span>, <span class="php-var">$this</span>-&gt;text_domain);
-</span><span id="1058" class="l"><a class="l" href="#1058">1058: </a>                    <span class="php-keyword1">break</span>; <span class="php-comment">// Break switch handler.</span>
-</span><span id="1059" class="l"><a class="l" href="#1059">1059: </a>
-</span><span id="1060" class="l"><a class="l" href="#1060">1060: </a>                <span class="php-keyword1">case</span> <span class="php-var">$this</span>::NC_DEBUG_OB_ZLIB_CODING_TYPE:
-</span><span id="1061" class="l"><a class="l" href="#1061">1061: </a>                    <span class="php-var">$reason</span> = __(<span class="php-quote">'because Quick Cache is unable to cache already-compressed output. Please use `mod_deflate` w/ Apache; or use `zlib.output_compression` in your `php.ini` file. Quick Cache is NOT compatible with `ob_gzhandler()` and others like this.'</span>, <span class="php-var">$this</span>-&gt;text_domain);
-</span><span id="1062" class="l"><a class="l" href="#1062">1062: </a>                    <span class="php-keyword1">break</span>; <span class="php-comment">// Break switch handler.</span>
-</span><span id="1063" class="l"><a class="l" href="#1063">1063: </a>
-</span><span id="1064" class="l"><a class="l" href="#1064">1064: </a>                <span class="php-keyword1">case</span> <span class="php-var">$this</span>::NC_DEBUG_WP_ERROR_PAGE:
-</span><span id="1065" class="l"><a class="l" href="#1065">1065: </a>                    <span class="php-var">$reason</span> = __(<span class="php-quote">'because the contents of this document contain `&lt;body id=&quot;error-page&quot;&gt;`, which indicates this is an auto-generated WordPress error message.'</span>, <span class="php-var">$this</span>-&gt;text_domain);
-</span><span id="1066" class="l"><a class="l" href="#1066">1066: </a>                    <span class="php-keyword1">break</span>; <span class="php-comment">// Break switch handler.</span>
-</span><span id="1067" class="l"><a class="l" href="#1067">1067: </a>
-</span><span id="1068" class="l"><a class="l" href="#1068">1068: </a>                <span class="php-keyword1">case</span> <span class="php-var">$this</span>::NC_DEBUG_UNCACHEABLE_CONTENT_TYPE:
-</span><span id="1069" class="l"><a class="l" href="#1069">1069: </a>                    <span class="php-var">$reason</span> = __(<span class="php-quote">'because a `Content-Type:` header was set via PHP at runtime. The header contains a MIME type which is NOT a variation of HTML or XML. This header might have been set by your hosting company, by WordPress itself; or by one of your themes/plugins.'</span>, <span class="php-var">$this</span>-&gt;text_domain);
-</span><span id="1070" class="l"><a class="l" href="#1070">1070: </a>                    <span class="php-keyword1">break</span>; <span class="php-comment">// Break switch handler.</span>
-</span><span id="1071" class="l"><a class="l" href="#1071">1071: </a>
-</span><span id="1072" class="l"><a class="l" href="#1072">1072: </a>                <span class="php-keyword1">case</span> <span class="php-var">$this</span>::NC_DEBUG_UNCACHEABLE_STATUS:
-</span><span id="1073" class="l"><a class="l" href="#1073">1073: </a>                    <span class="php-var">$reason</span> = __(<span class="php-quote">'because a `Status:` header (or an `HTTP/` header) was set via PHP at runtime. The header contains a non-`2xx` status code. This indicates the current page was not loaded successfully. This header might have been set by your hosting company, by WordPress itself; or by one of your themes/plugins.'</span>, <span class="php-var">$this</span>-&gt;text_domain);
-</span><span id="1074" class="l"><a class="l" href="#1074">1074: </a>                    <span class="php-keyword1">break</span>; <span class="php-comment">// Break switch handler.</span>
-</span><span id="1075" class="l"><a class="l" href="#1075">1075: </a>
-</span><span id="1076" class="l"><a class="l" href="#1076">1076: </a>                <span class="php-keyword1">case</span> <span class="php-var">$this</span>::NC_DEBUG_1ST_TIME_404_SYMLINK:
-</span><span id="1077" class="l"><a class="l" href="#1077">1077: </a>                    <span class="php-var">$reason</span> = __(<span class="php-quote">'because the WordPress `is_404()` Conditional Tag says the current page is a 404 error; and this is the first time it\'s happened on this page. Your current configuration says that 404 errors SHOULD be cached, so Quick Cache built a cached symlink which points future requests for this location to your already-cached 404 error document. If you reload this page (assuming you don\'t clear the cache before you do so); you should get a cached version of your 404 error document. This message occurs ONCE for each new/unique 404 error request.'</span>, <span class="php-var">$this</span>-&gt;text_domain);
-</span><span id="1078" class="l"><a class="l" href="#1078">1078: </a>                    <span class="php-keyword1">break</span>; <span class="php-comment">// Break switch handler.</span>
-</span><span id="1079" class="l"><a class="l" href="#1079">1079: </a>
-</span><span id="1080" class="l"><a class="l" href="#1080">1080: </a>                <span class="php-keyword1">case</span> <span class="php-var">$this</span>::NC_DEBUG_EARLY_BUFFER_TERMINATION:
-</span><span id="1081" class="l"><a class="l" href="#1081">1081: </a>                    <span class="php-var">$reason</span> = __(<span class="php-quote">'because Quick Cache detected an early output buffer termination. This may happen when a theme/plugin ends, cleans, or flushes all output buffers before reaching the PHP shutdown phase. It\'s not always a bad thing. Sometimes it is necessary for a theme/plugin to do this. However, in this scenario it is NOT possible to cache the output; since Quick Cache is effectively disabled at runtime when this occurs.'</span>, <span class="php-var">$this</span>-&gt;text_domain);
-</span><span id="1082" class="l"><a class="l" href="#1082">1082: </a>                    <span class="php-keyword1">break</span>; <span class="php-comment">// Break switch handler.</span>
-</span><span id="1083" class="l"><a class="l" href="#1083">1083: </a>
-</span><span id="1084" class="l"><a class="l" href="#1084">1084: </a>                <span class="php-keyword1">default</span>: <span class="php-comment">// Default case handler.</span>
-</span><span id="1085" class="l"><a class="l" href="#1085">1085: </a>                    <span class="php-var">$reason</span> = __(<span class="php-quote">'due to an unexpected behavior in the application. Please report this as a bug!'</span>, <span class="php-var">$this</span>-&gt;text_domain);
-</span><span id="1086" class="l"><a class="l" href="#1086">1086: </a>                    <span class="php-keyword1">break</span>; <span class="php-comment">// Break switch handler.</span>
-</span><span id="1087" class="l"><a class="l" href="#1087">1087: </a>            }
-</span><span id="1088" class="l"><a class="l" href="#1088">1088: </a>            <span class="php-keyword1">return</span> <span class="php-quote">&quot;\n&quot;</span>.<span class="php-quote">'&lt;!-- '</span>.<span class="php-keyword2">htmlspecialchars</span>(<span class="php-keyword2">sprintf</span>(__(<span class="php-quote">'Quick Cache is NOT caching this page, %1$s'</span>, <span class="php-var">$this</span>-&gt;text_domain), <span class="php-var">$reason</span>)).<span class="php-quote">' --&gt;'</span>;
-</span><span id="1089" class="l"><a class="l" href="#1089">1089: </a>        }
-</span><span id="1090" class="l"><a class="l" href="#1090">1090: </a>    }
-</span><span id="1091" class="l"><a class="l" href="#1091">1091: </a>
-</span><span id="1092" class="l"><a class="l" href="#1092">1092: </a>    <span class="php-comment">/**
-</span></span><span id="1093" class="l"><a class="l" href="#1093">1093: </a><span class="php-comment">     * Global Quick Cache {@link advanced_cache} instance.
-</span></span><span id="1094" class="l"><a class="l" href="#1094">1094: </a><span class="php-comment">     *
-</span></span><span id="1095" class="l"><a class="l" href="#1095">1095: </a><span class="php-comment">     * @since 140422 First documented version.
-</span></span><span id="1096" class="l"><a class="l" href="#1096">1096: </a><span class="php-comment">     *
-</span></span><span id="1097" class="l"><a class="l" href="#1097">1097: </a><span class="php-comment">     * @var advanced_cache Global instance reference.
-</span></span><span id="1098" class="l"><a class="l" href="#1098">1098: </a><span class="php-comment">     */</span>
-</span><span id="1099" class="l"><a class="l" href="#1099">1099: </a>    <span class="php-var">$GLOBALS</span>[__NAMESPACE__.<span class="php-quote">'__advanced_cache'</span>] = <span class="php-keyword1">new</span> advanced_cache();
-</span><span id="1100" class="l"><a class="l" href="#1100">1100: </a>}
-</span><span id="1101" class="l"><a class="l" href="#1101">1101: </a><span class="php-keyword1">namespace</span> <span class="php-comment">// Global namespace.</span>
-</span><span id="1102" class="l"><a class="l" href="#1102">1102: </a>{
-</span><span id="1103" class="l"><a class="l" href="#1103">1103: </a>    <span class="php-comment">/**
-</span></span><span id="1104" class="l"><a class="l" href="#1104">1104: </a><span class="php-comment">     * Postload event handler; overrides core WP function.
-</span></span><span id="1105" class="l"><a class="l" href="#1105">1105: </a><span class="php-comment">     *
-</span></span><span id="1106" class="l"><a class="l" href="#1106">1106: </a><span class="php-comment">     * @since 140422 First documented version.
-</span></span><span id="1107" class="l"><a class="l" href="#1107">1107: </a><span class="php-comment">     *
-</span></span><span id="1108" class="l"><a class="l" href="#1108">1108: </a><span class="php-comment">     * @note See `/wp-settings.php` around line #226.
-</span></span><span id="1109" class="l"><a class="l" href="#1109">1109: </a><span class="php-comment">     */</span>
-</span><span id="1110" class="l"><a class="l" href="#1110">1110: </a>    <span class="php-keyword1">function</span> <a id="_wp_cache_postload" href="#_wp_cache_postload">wp_cache_postload</a>() <span class="php-comment">// See: `wp-settings.php`.</span>
-</span><span id="1111" class="l"><a class="l" href="#1111">1111: </a>    {
-</span><span id="1112" class="l"><a class="l" href="#1112">1112: </a>        <span class="php-var">$advanced_cache</span> = <span class="php-var">$GLOBALS</span>[<span class="php-quote">'quick_cache__advanced_cache'</span>];
-</span><span id="1113" class="l"><a class="l" href="#1113">1113: </a>        <span class="php-comment">/** @var $advanced_cache \quick_cache\advanced_cache */</span>
-</span><span id="1114" class="l"><a class="l" href="#1114">1114: </a>        <span class="php-keyword1">if</span>(!<span class="php-var">$advanced_cache</span>-&gt;is_running) <span class="php-keyword1">return</span>;
-</span><span id="1115" class="l"><a class="l" href="#1115">1115: </a>
-</span><span id="1116" class="l"><a class="l" href="#1116">1116: </a>        <span class="php-keyword1">if</span>(!<span class="php-keyword1">empty</span>(<span class="php-var">$advanced_cache</span>-&gt;postload[<span class="php-quote">'filter_status_header'</span>]))
-</span><span id="1117" class="l"><a class="l" href="#1117">1117: </a>            <span class="php-var">$advanced_cache</span>-&gt;maybe_filter_status_header_postload();
-</span><span id="1118" class="l"><a class="l" href="#1118">1118: </a>
-</span><span id="1119" class="l"><a class="l" href="#1119">1119: </a>        <span class="php-keyword1">if</span>(!<span class="php-keyword1">empty</span>(<span class="php-var">$advanced_cache</span>-&gt;postload[<span class="php-quote">'set_debug_info'</span>]))
-</span><span id="1120" class="l"><a class="l" href="#1120">1120: </a>            <span class="php-var">$advanced_cache</span>-&gt;maybe_set_debug_info_postload();
-</span><span id="1121" class="l"><a class="l" href="#1121">1121: </a>
-</span><span id="1122" class="l"><a class="l" href="#1122">1122: </a>        <span class="php-keyword1">if</span>(!<span class="php-keyword1">empty</span>(<span class="php-var">$advanced_cache</span>-&gt;postload[<span class="php-quote">'wp_main_query'</span>]))
-</span><span id="1123" class="l"><a class="l" href="#1123">1123: </a>            add_action(<span class="php-quote">'wp'</span>, <span class="php-keyword1">array</span>(<span class="php-var">$advanced_cache</span>, <span class="php-quote">'wp_main_query_postload'</span>), PHP_INT_MAX);
-</span><span id="1124" class="l"><a class="l" href="#1124">1124: </a>    }
-</span><span id="1125" class="l"><a class="l" href="#1125">1125: </a></span>}</code></pre>
+</span><span id="966" class="l"><a class="l" href="#966"> 966: </a>            <span class="php-keyword1">if</span>(<span class="php-keyword2">strcasecmp</span>(PHP_SAPI, <span class="php-quote">'cli'</span>) === <span class="php-num">0</span>)
+</span><span id="967" class="l"><a class="l" href="#967"> 967: </a>                <span class="php-keyword1">return</span>; <span class="php-comment">// Let's not run the risk here.</span>
+</span><span id="968" class="l"><a class="l" href="#968"> 968: </a>
+</span><span id="969" class="l"><a class="l" href="#969"> 969: </a>            <span class="php-keyword1">if</span>(<span class="php-var">$this</span>-&gt;debug_info &amp;&amp; <span class="php-var">$this</span>-&gt;has_a_cacheable_content_type() &amp;&amp; <span class="php-var">$this</span>-&gt;is_a_wp_content_type)
+</span><span id="970" class="l"><a class="l" href="#970"> 970: </a>                <span class="php-keyword1">echo</span> (string)<span class="php-var">$this</span>-&gt;maybe_get_nc_debug_info(<span class="php-var">$this</span>-&gt;debug_info[<span class="php-quote">'reason_code'</span>], <span class="php-var">$this</span>-&gt;debug_info[<span class="php-quote">'reason'</span>]);
+</span><span id="971" class="l"><a class="l" href="#971"> 971: </a>        }
+</span><span id="972" class="l"><a class="l" href="#972"> 972: </a>
+</span><span id="973" class="l"><a class="l" href="#973"> 973: </a>        <span class="php-comment">/**
+</span></span><span id="974" class="l"><a class="l" href="#974"> 974: </a><span class="php-comment">         * Gets `NC_DEBUG_` info (if applicable).
+</span></span><span id="975" class="l"><a class="l" href="#975"> 975: </a><span class="php-comment">         *
+</span></span><span id="976" class="l"><a class="l" href="#976"> 976: </a><span class="php-comment">         * @since 140422 First documented version.
+</span></span><span id="977" class="l"><a class="l" href="#977"> 977: </a><span class="php-comment">         *
+</span></span><span id="978" class="l"><a class="l" href="#978"> 978: </a><span class="php-comment">         * @param string $reason_code One of the `NC_DEBUG_` constants.
+</span></span><span id="979" class="l"><a class="l" href="#979"> 979: </a><span class="php-comment">         * @param string $reason Optional; to override the default description with a custom message.
+</span></span><span id="980" class="l"><a class="l" href="#980"> 980: </a><span class="php-comment">         *
+</span></span><span id="981" class="l"><a class="l" href="#981"> 981: </a><span class="php-comment">         * @return string The debug info; i.e. full description (if applicable).
+</span></span><span id="982" class="l"><a class="l" href="#982"> 982: </a><span class="php-comment">         */</span>
+</span><span id="983" class="l"><a class="l" href="#983"> 983: </a>        <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_maybe_get_nc_debug_info" href="#_maybe_get_nc_debug_info">maybe_get_nc_debug_info</a>(<span class="php-var">$reason_code</span> = <span class="php-quote">''</span>, <span class="php-var">$reason</span> = <span class="php-quote">''</span>)
+</span><span id="984" class="l"><a class="l" href="#984"> 984: </a>        {
+</span><span id="985" class="l"><a class="l" href="#985"> 985: </a>            <span class="php-keyword1">if</span>(!QUICK_CACHE_DEBUGGING_ENABLE)
+</span><span id="986" class="l"><a class="l" href="#986"> 986: </a>                <span class="php-keyword1">return</span> <span class="php-quote">''</span>; <span class="php-comment">// Not applicable.</span>
+</span><span id="987" class="l"><a class="l" href="#987"> 987: </a>
+</span><span id="988" class="l"><a class="l" href="#988"> 988: </a>            <span class="php-var">$reason</span> = (string)<span class="php-var">$reason</span>;
+</span><span id="989" class="l"><a class="l" href="#989"> 989: </a>            <span class="php-keyword1">if</span>(!(<span class="php-var">$reason_code</span> = (string)<span class="php-var">$reason_code</span>))
+</span><span id="990" class="l"><a class="l" href="#990"> 990: </a>                <span class="php-keyword1">return</span> <span class="php-quote">''</span>; <span class="php-comment">// Not applicable.</span>
+</span><span id="991" class="l"><a class="l" href="#991"> 991: </a>
+</span><span id="992" class="l"><a class="l" href="#992"> 992: </a>            <span class="php-keyword1">if</span>(!<span class="php-var">$reason</span>) <span class="php-keyword1">switch</span>(<span class="php-var">$reason_code</span>)
+</span><span id="993" class="l"><a class="l" href="#993"> 993: </a>            {
+</span><span id="994" class="l"><a class="l" href="#994"> 994: </a>                <span class="php-keyword1">case</span> <span class="php-var">$this</span>::NC_DEBUG_PHP_SAPI_CLI:
+</span><span id="995" class="l"><a class="l" href="#995"> 995: </a>                    <span class="php-var">$reason</span> = __(<span class="php-quote">'because `PHP_SAPI` reports that you are currently running from the command line.'</span>, <span class="php-var">$this</span>-&gt;text_domain);
+</span><span id="996" class="l"><a class="l" href="#996"> 996: </a>                    <span class="php-keyword1">break</span>; <span class="php-comment">// Break switch handler.</span>
+</span><span id="997" class="l"><a class="l" href="#997"> 997: </a>
+</span><span id="998" class="l"><a class="l" href="#998"> 998: </a>                <span class="php-keyword1">case</span> <span class="php-var">$this</span>::NC_DEBUG_QCAC_GET_VAR:
+</span><span id="999" class="l"><a class="l" href="#999"> 999: </a>                    <span class="php-var">$reason</span> = __(<span class="php-quote">'because `$_GET[\'qcAC\']` is set to a boolean-ish FALSE value.'</span>, <span class="php-var">$this</span>-&gt;text_domain);
+</span><span id="1000" class="l"><a class="l" href="#1000">1000: </a>                    <span class="php-keyword1">break</span>; <span class="php-comment">// Break switch handler.</span>
+</span><span id="1001" class="l"><a class="l" href="#1001">1001: </a>
+</span><span id="1002" class="l"><a class="l" href="#1002">1002: </a>                <span class="php-keyword1">case</span> <span class="php-var">$this</span>::NC_DEBUG_NO_SERVER_HTTP_HOST:
+</span><span id="1003" class="l"><a class="l" href="#1003">1003: </a>                    <span class="php-var">$reason</span> = __(<span class="php-quote">'because `$_SERVER[\'HTTP_HOST\']` is missing from your server configuration.'</span>, <span class="php-var">$this</span>-&gt;text_domain);
+</span><span id="1004" class="l"><a class="l" href="#1004">1004: </a>                    <span class="php-keyword1">break</span>; <span class="php-comment">// Break switch handler.</span>
+</span><span id="1005" class="l"><a class="l" href="#1005">1005: </a>
+</span><span id="1006" class="l"><a class="l" href="#1006">1006: </a>                <span class="php-keyword1">case</span> <span class="php-var">$this</span>::NC_DEBUG_NO_SERVER_REQUEST_URI:
+</span><span id="1007" class="l"><a class="l" href="#1007">1007: </a>                    <span class="php-var">$reason</span> = __(<span class="php-quote">'because `$_SERVER[\'REQUEST_URI\']` is missing from your server configuration.'</span>, <span class="php-var">$this</span>-&gt;text_domain);
+</span><span id="1008" class="l"><a class="l" href="#1008">1008: </a>                    <span class="php-keyword1">break</span>; <span class="php-comment">// Break switch handler.</span>
+</span><span id="1009" class="l"><a class="l" href="#1009">1009: </a>
+</span><span id="1010" class="l"><a class="l" href="#1010">1010: </a>                <span class="php-keyword1">case</span> <span class="php-var">$this</span>::NC_DEBUG_QUICK_CACHE_ALLOWED_CONSTANT:
+</span><span id="1011" class="l"><a class="l" href="#1011">1011: </a>                    <span class="php-var">$reason</span> = __(<span class="php-quote">'because the PHP constant `QUICK_CACHE_ALLOWED` has been set to a boolean-ish `FALSE` value at runtime. Perhaps by WordPress itself, or by one of your themes/plugins. This usually means that you have a theme/plugin intentionally disabling the cache on this page; and it\'s usually for a very good reason.'</span>, <span class="php-var">$this</span>-&gt;text_domain);
+</span><span id="1012" class="l"><a class="l" href="#1012">1012: </a>                    <span class="php-keyword1">break</span>; <span class="php-comment">// Break switch handler.</span>
+</span><span id="1013" class="l"><a class="l" href="#1013">1013: </a>
+</span><span id="1014" class="l"><a class="l" href="#1014">1014: </a>                <span class="php-keyword1">case</span> <span class="php-var">$this</span>::NC_DEBUG_QUICK_CACHE_ALLOWED_SERVER_VAR:
+</span><span id="1015" class="l"><a class="l" href="#1015">1015: </a>                    <span class="php-var">$reason</span> = __(<span class="php-quote">'because the environment variable `$_SERVER[\'QUICK_CACHE_ALLOWED\']` has been set to a boolean-ish `FALSE` value at runtime. Perhaps by WordPress itself, or by one of your themes/plugins. This usually means that you have a theme/plugin intentionally disabling the cache on this page; and it\'s usually for a very good reason.'</span>, <span class="php-var">$this</span>-&gt;text_domain);
+</span><span id="1016" class="l"><a class="l" href="#1016">1016: </a>                    <span class="php-keyword1">break</span>; <span class="php-comment">// Break switch handler.</span>
+</span><span id="1017" class="l"><a class="l" href="#1017">1017: </a>
+</span><span id="1018" class="l"><a class="l" href="#1018">1018: </a>                <span class="php-keyword1">case</span> <span class="php-var">$this</span>::NC_DEBUG_DONOTCACHEPAGE_CONSTANT:
+</span><span id="1019" class="l"><a class="l" href="#1019">1019: </a>                    <span class="php-var">$reason</span> = __(<span class="php-quote">'because the PHP constant `DONOTCACHEPAGE` has been set at runtime. Perhaps by WordPress itself, or by one of your themes/plugins. This usually means that you have a theme/plugin intentionally disabling the cache on this page; and it\'s usually for a very good reason.'</span>, <span class="php-var">$this</span>-&gt;text_domain);
+</span><span id="1020" class="l"><a class="l" href="#1020">1020: </a>                    <span class="php-keyword1">break</span>; <span class="php-comment">// Break switch handler.</span>
+</span><span id="1021" class="l"><a class="l" href="#1021">1021: </a>
+</span><span id="1022" class="l"><a class="l" href="#1022">1022: </a>                <span class="php-keyword1">case</span> <span class="php-var">$this</span>::NC_DEBUG_DONOTCACHEPAGE_SERVER_VAR:
+</span><span id="1023" class="l"><a class="l" href="#1023">1023: </a>                    <span class="php-var">$reason</span> = __(<span class="php-quote">'because the environment variable `$_SERVER[\'DONOTCACHEPAGE\']` has been set at runtime. Perhaps by WordPress itself, or by one of your themes/plugins. This usually means that you have a theme/plugin intentionally disabling the cache on this page; and it\'s usually for a very good reason.'</span>, <span class="php-var">$this</span>-&gt;text_domain);
+</span><span id="1024" class="l"><a class="l" href="#1024">1024: </a>                    <span class="php-keyword1">break</span>; <span class="php-comment">// Break switch handler.</span>
+</span><span id="1025" class="l"><a class="l" href="#1025">1025: </a>
+</span><span id="1026" class="l"><a class="l" href="#1026">1026: </a>                <span class="php-keyword1">case</span> <span class="php-var">$this</span>::NC_DEBUG_UNCACHEABLE_REQUEST:
+</span><span id="1027" class="l"><a class="l" href="#1027">1027: </a>                    <span class="php-var">$reason</span> = __(<span class="php-quote">'because `$_SERVER[\'REQUEST_METHOD\']` is `POST`, `PUT`, `DELETE`, `HEAD`, `OPTIONS`, `TRACE` or `CONNECT`. These request methods should never (ever) be cached in any way.'</span>, <span class="php-var">$this</span>-&gt;text_domain);
+</span><span id="1028" class="l"><a class="l" href="#1028">1028: </a>                    <span class="php-keyword1">break</span>; <span class="php-comment">// Break switch handler.</span>
+</span><span id="1029" class="l"><a class="l" href="#1029">1029: </a>
+</span><span id="1030" class="l"><a class="l" href="#1030">1030: </a>                <span class="php-keyword1">case</span> <span class="php-var">$this</span>::NC_DEBUG_SELF_SERVE_REQUEST:
+</span><span id="1031" class="l"><a class="l" href="#1031">1031: </a>                    <span class="php-var">$reason</span> = __(<span class="php-quote">'because `$_SERVER[\'REMOTE_ADDR\']` === `$_SERVER[\'SERVER_ADDR\']`; i.e. a self-serve request. DEVELOPER TIP: if you are testing on a localhost installation, please add `define(\'LOCALHOST\', TRUE);` to your `/wp-config.php` file while you run tests :-) Remove it (or set it to a `FALSE` value) once you go live on the web.'</span>, <span class="php-var">$this</span>-&gt;text_domain);
+</span><span id="1032" class="l"><a class="l" href="#1032">1032: </a>                    <span class="php-keyword1">break</span>; <span class="php-comment">// Break switch handler.</span>
+</span><span id="1033" class="l"><a class="l" href="#1033">1033: </a>
+</span><span id="1034" class="l"><a class="l" href="#1034">1034: </a>                <span class="php-keyword1">case</span> <span class="php-var">$this</span>::NC_DEBUG_FEED_REQUEST:
+</span><span id="1035" class="l"><a class="l" href="#1035">1035: </a>                    <span class="php-var">$reason</span> = __(<span class="php-quote">'because `$_SERVER[\'REQUEST_URI\']` indicates this is a `/feed`; and the configuration of this site says not to cache XML-based feeds.'</span>, <span class="php-var">$this</span>-&gt;text_domain);
+</span><span id="1036" class="l"><a class="l" href="#1036">1036: </a>                    <span class="php-keyword1">break</span>; <span class="php-comment">// Break switch handler.</span>
+</span><span id="1037" class="l"><a class="l" href="#1037">1037: </a>
+</span><span id="1038" class="l"><a class="l" href="#1038">1038: </a>                <span class="php-keyword1">case</span> <span class="php-var">$this</span>::NC_DEBUG_WP_SYSTEMATICS:
+</span><span id="1039" class="l"><a class="l" href="#1039">1039: </a>                    <span class="php-var">$reason</span> = __(<span class="php-quote">'because `$_SERVER[\'REQUEST_URI\']` indicates this is a `wp-` or `xmlrpc` file; i.e. a WordPress systematic file. WordPress systematics are never (ever) cached in any way.'</span>, <span class="php-var">$this</span>-&gt;text_domain);
+</span><span id="1040" class="l"><a class="l" href="#1040">1040: </a>                    <span class="php-keyword1">break</span>; <span class="php-comment">// Break switch handler.</span>
+</span><span id="1041" class="l"><a class="l" href="#1041">1041: </a>
+</span><span id="1042" class="l"><a class="l" href="#1042">1042: </a>                <span class="php-keyword1">case</span> <span class="php-var">$this</span>::NC_DEBUG_WP_ADMIN:
+</span><span id="1043" class="l"><a class="l" href="#1043">1043: </a>                    <span class="php-var">$reason</span> = __(<span class="php-quote">'because `$_SERVER[\'REQUEST_URI\']` or the `is_admin()` function indicates this is an administrative area of the site.'</span>, <span class="php-var">$this</span>-&gt;text_domain);
+</span><span id="1044" class="l"><a class="l" href="#1044">1044: </a>                    <span class="php-keyword1">break</span>; <span class="php-comment">// Break switch handler.</span>
+</span><span id="1045" class="l"><a class="l" href="#1045">1045: </a>
+</span><span id="1046" class="l"><a class="l" href="#1046">1046: </a>                <span class="php-keyword1">case</span> <span class="php-var">$this</span>::NC_DEBUG_MS_FILES:
+</span><span id="1047" class="l"><a class="l" href="#1047">1047: </a>                    <span class="php-var">$reason</span> = __(<span class="php-quote">'because `$_SERVER[\'REQUEST_URI\']` indicates this is a Multisite Network; and this was a request for `/files/*`, not a page.'</span>, <span class="php-var">$this</span>-&gt;text_domain);
+</span><span id="1048" class="l"><a class="l" href="#1048">1048: </a>                    <span class="php-keyword1">break</span>; <span class="php-comment">// Break switch handler.</span>
+</span><span id="1049" class="l"><a class="l" href="#1049">1049: </a>
+</span><span id="1050" class="l"><a class="l" href="#1050">1050: </a>                <span class="php-keyword1">case</span> <span class="php-var">$this</span>::NC_DEBUG_IS_LOGGED_IN_USER:
+</span><span id="1051" class="l"><a class="l" href="#1051">1051: </a>                <span class="php-keyword1">case</span> <span class="php-var">$this</span>::NC_DEBUG_IS_LIKE_LOGGED_IN_USER:
+</span><span id="1052" class="l"><a class="l" href="#1052">1052: </a>                    <span class="php-var">$reason</span> = __(<span class="php-quote">'because the current user visiting this page (usually YOU), appears to be logged-in. The current configuration says NOT to cache pages for logged-in visitors. This message may also appear if you have an active PHP session on this site, or if you\'ve left (or replied to) a comment recently. If this message continues, please clear your cookies and try again.'</span>, <span class="php-var">$this</span>-&gt;text_domain);
+</span><span id="1053" class="l"><a class="l" href="#1053">1053: </a>                    <span class="php-keyword1">break</span>; <span class="php-comment">// Break switch handler.</span>
+</span><span id="1054" class="l"><a class="l" href="#1054">1054: </a>
+</span><span id="1055" class="l"><a class="l" href="#1055">1055: </a>                <span class="php-keyword1">case</span> <span class="php-var">$this</span>::NC_DEBUG_GET_REQUEST_QUERIES:
+</span><span id="1056" class="l"><a class="l" href="#1056">1056: </a>                    <span class="php-var">$reason</span> = __(<span class="php-quote">'because `$_GET` contains query string data. The current configuration says NOT to cache GET requests with a query string.'</span>, <span class="php-var">$this</span>-&gt;text_domain);
+</span><span id="1057" class="l"><a class="l" href="#1057">1057: </a>                    <span class="php-keyword1">break</span>; <span class="php-comment">// Break switch handler.</span>
+</span><span id="1058" class="l"><a class="l" href="#1058">1058: </a>
+</span><span id="1059" class="l"><a class="l" href="#1059">1059: </a>                <span class="php-keyword1">case</span> <span class="php-var">$this</span>::NC_DEBUG_404_REQUEST:
+</span><span id="1060" class="l"><a class="l" href="#1060">1060: </a>                    <span class="php-var">$reason</span> = __(<span class="php-quote">'because the WordPress `is_404()` Conditional Tag says the current page is a 404 error. The current configuration says NOT to cache 404 errors.'</span>, <span class="php-var">$this</span>-&gt;text_domain);
+</span><span id="1061" class="l"><a class="l" href="#1061">1061: </a>                    <span class="php-keyword1">break</span>; <span class="php-comment">// Break switch handler.</span>
+</span><span id="1062" class="l"><a class="l" href="#1062">1062: </a>
+</span><span id="1063" class="l"><a class="l" href="#1063">1063: </a>                <span class="php-keyword1">case</span> <span class="php-var">$this</span>::NC_DEBUG_MAINTENANCE_PLUGIN:
+</span><span id="1064" class="l"><a class="l" href="#1064">1064: </a>                    <span class="php-var">$reason</span> = __(<span class="php-quote">'because a plugin running on this installation says this page is in Maintenance Mode; i.e. is not available publicly at this time.'</span>, <span class="php-var">$this</span>-&gt;text_domain);
+</span><span id="1065" class="l"><a class="l" href="#1065">1065: </a>                    <span class="php-keyword1">break</span>; <span class="php-comment">// Break switch handler.</span>
+</span><span id="1066" class="l"><a class="l" href="#1066">1066: </a>
+</span><span id="1067" class="l"><a class="l" href="#1067">1067: </a>                <span class="php-keyword1">case</span> <span class="php-var">$this</span>::NC_DEBUG_OB_ZLIB_CODING_TYPE:
+</span><span id="1068" class="l"><a class="l" href="#1068">1068: </a>                    <span class="php-var">$reason</span> = __(<span class="php-quote">'because Quick Cache is unable to cache already-compressed output. Please use `mod_deflate` w/ Apache; or use `zlib.output_compression` in your `php.ini` file. Quick Cache is NOT compatible with `ob_gzhandler()` and others like this.'</span>, <span class="php-var">$this</span>-&gt;text_domain);
+</span><span id="1069" class="l"><a class="l" href="#1069">1069: </a>                    <span class="php-keyword1">break</span>; <span class="php-comment">// Break switch handler.</span>
+</span><span id="1070" class="l"><a class="l" href="#1070">1070: </a>
+</span><span id="1071" class="l"><a class="l" href="#1071">1071: </a>                <span class="php-keyword1">case</span> <span class="php-var">$this</span>::NC_DEBUG_WP_ERROR_PAGE:
+</span><span id="1072" class="l"><a class="l" href="#1072">1072: </a>                    <span class="php-var">$reason</span> = __(<span class="php-quote">'because the contents of this document contain `&lt;body id=&quot;error-page&quot;&gt;`, which indicates this is an auto-generated WordPress error message.'</span>, <span class="php-var">$this</span>-&gt;text_domain);
+</span><span id="1073" class="l"><a class="l" href="#1073">1073: </a>                    <span class="php-keyword1">break</span>; <span class="php-comment">// Break switch handler.</span>
+</span><span id="1074" class="l"><a class="l" href="#1074">1074: </a>
+</span><span id="1075" class="l"><a class="l" href="#1075">1075: </a>                <span class="php-keyword1">case</span> <span class="php-var">$this</span>::NC_DEBUG_UNCACHEABLE_CONTENT_TYPE:
+</span><span id="1076" class="l"><a class="l" href="#1076">1076: </a>                    <span class="php-var">$reason</span> = __(<span class="php-quote">'because a `Content-Type:` header was set via PHP at runtime. The header contains a MIME type which is NOT a variation of HTML or XML. This header might have been set by your hosting company, by WordPress itself; or by one of your themes/plugins.'</span>, <span class="php-var">$this</span>-&gt;text_domain);
+</span><span id="1077" class="l"><a class="l" href="#1077">1077: </a>                    <span class="php-keyword1">break</span>; <span class="php-comment">// Break switch handler.</span>
+</span><span id="1078" class="l"><a class="l" href="#1078">1078: </a>
+</span><span id="1079" class="l"><a class="l" href="#1079">1079: </a>                <span class="php-keyword1">case</span> <span class="php-var">$this</span>::NC_DEBUG_UNCACHEABLE_STATUS:
+</span><span id="1080" class="l"><a class="l" href="#1080">1080: </a>                    <span class="php-var">$reason</span> = __(<span class="php-quote">'because a `Status:` header (or an `HTTP/` header) was set via PHP at runtime. The header contains a non-`2xx` status code. This indicates the current page was not loaded successfully. This header might have been set by your hosting company, by WordPress itself; or by one of your themes/plugins.'</span>, <span class="php-var">$this</span>-&gt;text_domain);
+</span><span id="1081" class="l"><a class="l" href="#1081">1081: </a>                    <span class="php-keyword1">break</span>; <span class="php-comment">// Break switch handler.</span>
+</span><span id="1082" class="l"><a class="l" href="#1082">1082: </a>
+</span><span id="1083" class="l"><a class="l" href="#1083">1083: </a>                <span class="php-keyword1">case</span> <span class="php-var">$this</span>::NC_DEBUG_1ST_TIME_404_SYMLINK:
+</span><span id="1084" class="l"><a class="l" href="#1084">1084: </a>                    <span class="php-var">$reason</span> = __(<span class="php-quote">'because the WordPress `is_404()` Conditional Tag says the current page is a 404 error; and this is the first time it\'s happened on this page. Your current configuration says that 404 errors SHOULD be cached, so Quick Cache built a cached symlink which points future requests for this location to your already-cached 404 error document. If you reload this page (assuming you don\'t clear the cache before you do so); you should get a cached version of your 404 error document. This message occurs ONCE for each new/unique 404 error request.'</span>, <span class="php-var">$this</span>-&gt;text_domain);
+</span><span id="1085" class="l"><a class="l" href="#1085">1085: </a>                    <span class="php-keyword1">break</span>; <span class="php-comment">// Break switch handler.</span>
+</span><span id="1086" class="l"><a class="l" href="#1086">1086: </a>
+</span><span id="1087" class="l"><a class="l" href="#1087">1087: </a>                <span class="php-keyword1">case</span> <span class="php-var">$this</span>::NC_DEBUG_EARLY_BUFFER_TERMINATION:
+</span><span id="1088" class="l"><a class="l" href="#1088">1088: </a>                    <span class="php-var">$reason</span> = __(<span class="php-quote">'because Quick Cache detected an early output buffer termination. This may happen when a theme/plugin ends, cleans, or flushes all output buffers before reaching the PHP shutdown phase. It\'s not always a bad thing. Sometimes it is necessary for a theme/plugin to do this. However, in this scenario it is NOT possible to cache the output; since Quick Cache is effectively disabled at runtime when this occurs.'</span>, <span class="php-var">$this</span>-&gt;text_domain);
+</span><span id="1089" class="l"><a class="l" href="#1089">1089: </a>                    <span class="php-keyword1">break</span>; <span class="php-comment">// Break switch handler.</span>
+</span><span id="1090" class="l"><a class="l" href="#1090">1090: </a>
+</span><span id="1091" class="l"><a class="l" href="#1091">1091: </a>                <span class="php-keyword1">default</span>: <span class="php-comment">// Default case handler.</span>
+</span><span id="1092" class="l"><a class="l" href="#1092">1092: </a>                    <span class="php-var">$reason</span> = __(<span class="php-quote">'due to an unexpected behavior in the application. Please report this as a bug!'</span>, <span class="php-var">$this</span>-&gt;text_domain);
+</span><span id="1093" class="l"><a class="l" href="#1093">1093: </a>                    <span class="php-keyword1">break</span>; <span class="php-comment">// Break switch handler.</span>
+</span><span id="1094" class="l"><a class="l" href="#1094">1094: </a>            }
+</span><span id="1095" class="l"><a class="l" href="#1095">1095: </a>            <span class="php-keyword1">return</span> <span class="php-quote">&quot;\n&quot;</span>.<span class="php-quote">'&lt;!-- '</span>.<span class="php-keyword2">htmlspecialchars</span>(<span class="php-keyword2">sprintf</span>(__(<span class="php-quote">'Quick Cache is NOT caching this page, %1$s'</span>, <span class="php-var">$this</span>-&gt;text_domain), <span class="php-var">$reason</span>)).<span class="php-quote">' --&gt;'</span>;
+</span><span id="1096" class="l"><a class="l" href="#1096">1096: </a>        }
+</span><span id="1097" class="l"><a class="l" href="#1097">1097: </a>    }
+</span><span id="1098" class="l"><a class="l" href="#1098">1098: </a>
+</span><span id="1099" class="l"><a class="l" href="#1099">1099: </a>    <span class="php-comment">/**
+</span></span><span id="1100" class="l"><a class="l" href="#1100">1100: </a><span class="php-comment">     * Global Quick Cache {@link advanced_cache} instance.
+</span></span><span id="1101" class="l"><a class="l" href="#1101">1101: </a><span class="php-comment">     *
+</span></span><span id="1102" class="l"><a class="l" href="#1102">1102: </a><span class="php-comment">     * @since 140422 First documented version.
+</span></span><span id="1103" class="l"><a class="l" href="#1103">1103: </a><span class="php-comment">     *
+</span></span><span id="1104" class="l"><a class="l" href="#1104">1104: </a><span class="php-comment">     * @var advanced_cache Global instance reference.
+</span></span><span id="1105" class="l"><a class="l" href="#1105">1105: </a><span class="php-comment">     */</span>
+</span><span id="1106" class="l"><a class="l" href="#1106">1106: </a>    <span class="php-var">$GLOBALS</span>[__NAMESPACE__.<span class="php-quote">'__advanced_cache'</span>] = <span class="php-keyword1">new</span> advanced_cache();
+</span><span id="1107" class="l"><a class="l" href="#1107">1107: </a>}
+</span><span id="1108" class="l"><a class="l" href="#1108">1108: </a><span class="php-keyword1">namespace</span> <span class="php-comment">// Global namespace.</span>
+</span><span id="1109" class="l"><a class="l" href="#1109">1109: </a>{
+</span><span id="1110" class="l"><a class="l" href="#1110">1110: </a>    <span class="php-comment">/**
+</span></span><span id="1111" class="l"><a class="l" href="#1111">1111: </a><span class="php-comment">     * Postload event handler; overrides core WP function.
+</span></span><span id="1112" class="l"><a class="l" href="#1112">1112: </a><span class="php-comment">     *
+</span></span><span id="1113" class="l"><a class="l" href="#1113">1113: </a><span class="php-comment">     * @since 140422 First documented version.
+</span></span><span id="1114" class="l"><a class="l" href="#1114">1114: </a><span class="php-comment">     *
+</span></span><span id="1115" class="l"><a class="l" href="#1115">1115: </a><span class="php-comment">     * @note See `/wp-settings.php` around line #226.
+</span></span><span id="1116" class="l"><a class="l" href="#1116">1116: </a><span class="php-comment">     */</span>
+</span><span id="1117" class="l"><a class="l" href="#1117">1117: </a>    <span class="php-keyword1">function</span> <a id="_wp_cache_postload" href="#_wp_cache_postload">wp_cache_postload</a>() <span class="php-comment">// See: `wp-settings.php`.</span>
+</span><span id="1118" class="l"><a class="l" href="#1118">1118: </a>    {
+</span><span id="1119" class="l"><a class="l" href="#1119">1119: </a>        <span class="php-var">$advanced_cache</span> = <span class="php-var">$GLOBALS</span>[<span class="php-quote">'quick_cache__advanced_cache'</span>];
+</span><span id="1120" class="l"><a class="l" href="#1120">1120: </a>        <span class="php-comment">/** @var $advanced_cache \quick_cache\advanced_cache */</span>
+</span><span id="1121" class="l"><a class="l" href="#1121">1121: </a>        <span class="php-keyword1">if</span>(!<span class="php-var">$advanced_cache</span>-&gt;is_running) <span class="php-keyword1">return</span>;
+</span><span id="1122" class="l"><a class="l" href="#1122">1122: </a>
+</span><span id="1123" class="l"><a class="l" href="#1123">1123: </a>        <span class="php-keyword1">if</span>(!<span class="php-keyword1">empty</span>(<span class="php-var">$advanced_cache</span>-&gt;postload[<span class="php-quote">'filter_status_header'</span>]))
+</span><span id="1124" class="l"><a class="l" href="#1124">1124: </a>            <span class="php-var">$advanced_cache</span>-&gt;maybe_filter_status_header_postload();
+</span><span id="1125" class="l"><a class="l" href="#1125">1125: </a>
+</span><span id="1126" class="l"><a class="l" href="#1126">1126: </a>        <span class="php-keyword1">if</span>(!<span class="php-keyword1">empty</span>(<span class="php-var">$advanced_cache</span>-&gt;postload[<span class="php-quote">'set_debug_info'</span>]))
+</span><span id="1127" class="l"><a class="l" href="#1127">1127: </a>            <span class="php-var">$advanced_cache</span>-&gt;maybe_set_debug_info_postload();
+</span><span id="1128" class="l"><a class="l" href="#1128">1128: </a>
+</span><span id="1129" class="l"><a class="l" href="#1129">1129: </a>        <span class="php-keyword1">if</span>(!<span class="php-keyword1">empty</span>(<span class="php-var">$advanced_cache</span>-&gt;postload[<span class="php-quote">'wp_main_query'</span>]))
+</span><span id="1130" class="l"><a class="l" href="#1130">1130: </a>            add_action(<span class="php-quote">'wp'</span>, <span class="php-keyword1">array</span>(<span class="php-var">$advanced_cache</span>, <span class="php-quote">'wp_main_query_postload'</span>), PHP_INT_MAX);
+</span><span id="1131" class="l"><a class="l" href="#1131">1131: </a>    }
+</span><span id="1132" class="l"><a class="l" href="#1132">1132: </a></span>}</code></pre>
 
 	<div id="footer">
 		Quick Cache Lite API documentation generated by <a href="http://apigen.org">ApiGen 2.8.0</a>

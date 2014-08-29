@@ -7,7 +7,7 @@
 	<title>Class quick_cache\advanced_cache | Quick Cache Lite</title>
 
 	<script type="text/javascript" src="resources/combined.js?822040270"></script>
-	<script type="text/javascript" src="elementlist.js?1312627654"></script>
+	<script type="text/javascript" src="elementlist.js?1748627827"></script>
 	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3403148767" />
 
 </head>
@@ -39,6 +39,7 @@
 				<li><a href="class-quick_cache.menu_pages.html">menu_pages</a></li>
 				<li><a href="class-quick_cache.plugin.html">plugin</a></li>
 				<li><a href="class-quick_cache.share.html">share</a></li>
+				<li><a href="class-quick_cache.uninstall.html">uninstall</a></li>
 				<li><a href="class-quick_cache.version_specific_upgrade.html">version_specific_upgrade</a></li>
 			</ul>
 
@@ -135,7 +136,7 @@
 				<b>Since:</b>
 				<p>140422 First documented version.</p>
 <br />
-		<b>Located at</b> <a href="source-class-quick_cache.advanced_cache.html#137-1090" title="Go to source code">quick-cache/includes/advanced-cache.tpl.php</a><br />
+		<b>Located at</b> <a href="source-class-quick_cache.advanced_cache.html#137-1097" title="Go to source code">quick-cache/includes/advanced-cache.tpl.php</a><br />
 	</div>
 
 
@@ -310,7 +311,7 @@ Therefore, this flag is set before shutdown_action_hook() fires, and thus before
 
 		<td class="name"><div>
 		<a class="anchor" href="#_maybe_start_output_buffering">#</a>
-		<code><a href="source-class-quick_cache.advanced_cache.html#635-723" title="Go to source code">maybe_start_output_buffering</a>( )</code>
+		<code><a href="source-class-quick_cache.advanced_cache.html#635-724" title="Go to source code">maybe_start_output_buffering</a>( )</code>
 
 		<div class="description short">
 			<p>Start output buffering (if applicable); or serve a cache file (if possible).</p>
@@ -352,7 +353,7 @@ Therefore, this flag is set before shutdown_action_hook() fires, and thus before
 
 		<td class="name"><div>
 		<a class="anchor" href="#_maybe_set_debug_info">#</a>
-		<code><a href="source-class-quick_cache.advanced_cache.html#725-743" title="Go to source code">maybe_set_debug_info</a>( <span>string <var>$reason_code</var></span>, <span>string <var>$reason</var> = <span class="php-quote">''</span></span> )</code>
+		<code><a href="source-class-quick_cache.advanced_cache.html#726-744" title="Go to source code">maybe_set_debug_info</a>( <span>string <var>$reason_code</var></span>, <span>string <var>$reason</var> = <span class="php-quote">''</span></span> )</code>
 
 		<div class="description short">
 			<p>Used to setup debug info (if enabled).</p>
@@ -397,7 +398,7 @@ Therefore, this flag is set before shutdown_action_hook() fires, and thus before
 
 		<td class="name"><div>
 		<a class="anchor" href="#_maybe_filter_status_header_postload">#</a>
-		<code><a href="source-class-quick_cache.advanced_cache.html#745-764" title="Go to source code">maybe_filter_status_header_postload</a>( )</code>
+		<code><a href="source-class-quick_cache.advanced_cache.html#746-765" title="Go to source code">maybe_filter_status_header_postload</a>( )</code>
 
 		<div class="description short">
 			<p>Filters WP \status_header() (if applicable).</p>
@@ -433,7 +434,7 @@ Therefore, this flag is set before shutdown_action_hook() fires, and thus before
 
 		<td class="name"><div>
 		<a class="anchor" href="#_maybe_set_debug_info_postload">#</a>
-		<code><a href="source-class-quick_cache.advanced_cache.html#766-785" title="Go to source code">maybe_set_debug_info_postload</a>( )</code>
+		<code><a href="source-class-quick_cache.advanced_cache.html#767-786" title="Go to source code">maybe_set_debug_info_postload</a>( )</code>
 
 		<div class="description short">
 			<p>Hooks <code>NC_DEBUG_</code> info into the WordPress <code>shutdown</code> phase (if applicable).</p>
@@ -469,7 +470,7 @@ Therefore, this flag is set before shutdown_action_hook() fires, and thus before
 
 		<td class="name"><div>
 		<a class="anchor" href="#_wp_main_query_postload">#</a>
-		<code><a href="source-class-quick_cache.advanced_cache.html#787-824" title="Go to source code">wp_main_query_postload</a>( )</code>
+		<code><a href="source-class-quick_cache.advanced_cache.html#788-825" title="Go to source code">wp_main_query_postload</a>( )</code>
 
 		<div class="description short">
 			<p>Grab details from WP and the Quick Cache plugin itself,
@@ -513,7 +514,7 @@ Therefore, this flag is set before shutdown_action_hook() fires, and thus before
 
 		<td class="name"><div>
 		<a class="anchor" href="#_output_buffer_callback_handler">#</a>
-		<code><a href="source-class-quick_cache.advanced_cache.html#826-943" title="Go to source code">output_buffer_callback_handler</a>( <span>string <var>$buffer</var></span>, <span>integer <var>$phase</var></span> )</code>
+		<code><a href="source-class-quick_cache.advanced_cache.html#827-950" title="Go to source code">output_buffer_callback_handler</a>( <span>string <var>$buffer</var></span>, <span>integer <var>$phase</var></span> )</code>
 
 		<div class="description short">
 			<p>Output buffer handler; i.e. the cache file generator.</p>
@@ -579,7 +580,7 @@ Therefore, this flag is set before shutdown_action_hook() fires, and thus before
 
 		<td class="name"><div>
 		<a class="anchor" href="#_maybe_echo_nc_debug_info">#</a>
-		<code><a href="source-class-quick_cache.advanced_cache.html#945-964" title="Go to source code">maybe_echo_nc_debug_info</a>( )</code>
+		<code><a href="source-class-quick_cache.advanced_cache.html#952-971" title="Go to source code">maybe_echo_nc_debug_info</a>( )</code>
 
 		<div class="description short">
 			<p>Echoes <code>NC_DEBUG_</code> info in the WordPress <code>shutdown</code> phase (if applicable).</p>
@@ -620,7 +621,7 @@ Therefore, this flag is set before shutdown_action_hook() fires, and thus before
 
 		<td class="name"><div>
 		<a class="anchor" href="#_maybe_get_nc_debug_info">#</a>
-		<code><a href="source-class-quick_cache.advanced_cache.html#966-1089" title="Go to source code">maybe_get_nc_debug_info</a>( <span>string <var>$reason_code</var> = <span class="php-quote">''</span></span>, <span>string <var>$reason</var> = <span class="php-quote">''</span></span> )</code>
+		<code><a href="source-class-quick_cache.advanced_cache.html#973-1096" title="Go to source code">maybe_get_nc_debug_info</a>( <span>string <var>$reason_code</var> = <span class="php-quote">''</span></span>, <span>string <var>$reason</var> = <span class="php-quote">''</span></span> )</code>
 
 		<div class="description short">
 			<p>Gets <code>NC_DEBUG_</code> info (if applicable).</p>
@@ -671,6 +672,8 @@ Therefore, this flag is set before shutdown_action_hook() fires, and thus before
 			<a href="class-quick_cache.share.html#_apply_filters">apply_filters()</a>, 
 			<a href="class-quick_cache.share.html#_build_cache_path">build_cache_path()</a>, 
 			<a href="class-quick_cache.share.html#_cache_dir">cache_dir()</a>, 
+			<a href="class-quick_cache.share.html#_cacheable_headers_list">cacheable_headers_list()</a>, 
+			<a href="class-quick_cache.share.html#_delete_files_from_host_cache_dir">delete_files_from_host_cache_dir()</a>, 
 			<a href="class-quick_cache.share.html#_dir_regex_iteration">dir_regex_iteration()</a>, 
 			<a href="class-quick_cache.share.html#_do_action">do_action()</a>, 
 			<a href="class-quick_cache.share.html#_esc_sq">esc_sq()</a>, 
@@ -694,6 +697,7 @@ Therefore, this flag is set before shutdown_action_hook() fires, and thus before
 			<a href="class-quick_cache.share.html#_is_localhost">is_localhost()</a>, 
 			<a href="class-quick_cache.share.html#_is_ssl">is_ssl()</a>, 
 			<a href="class-quick_cache.share.html#_is_uncacheable_request_method">is_uncacheable_request_method()</a>, 
+			<a href="class-quick_cache.share.html#_n_dir_seps">n_dir_seps()</a>, 
 			<a href="class-quick_cache.share.html#_remove_action">remove_action()</a>, 
 			<a href="class-quick_cache.share.html#_remove_filter">remove_filter()</a>, 
 			<a href="class-quick_cache.share.html#_remove_hook">remove_hook()</a>, 
