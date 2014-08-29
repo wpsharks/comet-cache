@@ -34,7 +34,7 @@ namespace quick_cache // Root namespace.
 			 *
 			 * @var string Current version of the software.
 			 */
-			public $version = '140820';
+			public $version = '140829';
 
 			/**
 			 * Text domain for translations; based on `__NAMESPACE__`.
@@ -846,7 +846,7 @@ namespace quick_cache // Root namespace.
 			/**
 			 * An array of all cacheable/safe headers sent via PHP; and the current HTTP status header too.
 			 *
-			 * @since 14xxxx Correcting security issue related to headers with cookies.
+			 * @since 140829 Correcting security issue related to headers with cookies.
 			 *
 			 * @return array PHP {@link headers_list()} supplemented with
 			 *    HTTP status code when possible.
@@ -987,7 +987,7 @@ namespace quick_cache // Root namespace.
 			/**
 			 * Normalizes directory/file separators.
 			 *
-			 * @since 14xxxx Implementing XML/RSS feed purging.
+			 * @since 140829 Implementing XML/RSS feed purging.
 			 *
 			 * @param string  $dir_file Directory/file path.
 			 *
@@ -1043,7 +1043,7 @@ namespace quick_cache // Root namespace.
 			/**
 			 * Deletes files from the cache directory (for the current host) that match a regex pattern.
 			 *
-			 * @since 14xxxx Implementing XML/RSS feed purging.
+			 * @since 140829 Implementing XML/RSS feed purging.
 			 *
 			 * @param string $regex A regex pattern; compares to each full file path.
 			 *

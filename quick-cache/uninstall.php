@@ -3,7 +3,7 @@
  * Quick Cache Uninstaller
  *
  * @package quick_cache\uninstall
- * @since 14xxxx Adding plugin uninstaller.
+ * @since 140829 Adding plugin uninstaller.
  * @copyright WebSharks, Inc. <http://www.websharks-inc.com>
  * @license GNU General Public License, version 2
  */
