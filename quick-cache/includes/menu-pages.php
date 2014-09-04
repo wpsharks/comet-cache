@@ -444,8 +444,12 @@ namespace quick_cache // Root namespace.
 				echo '         <h3>'.__('A List of URLs to Auto-Cache (One Per Line)', $this->plugin->text_domain).'</h3>'."\n";
 				echo '         <p><textarea name="'.esc_attr(__NAMESPACE__).'[save_options][auto_cache_other_urls]" rows="5" spellcheck="false" class="monospace"></textarea></p>'."\n";
 				echo '         <hr />'."\n";
+				echo '         <h3>'.__('Auto-Cache Delay Timer (in Milliseconds)', $this->plugin->text_domain).'</h3>'."\n";
+				echo '         <p>'.__('As the Auto-Cache Engine runs through each URL, you can tell it to wait X number of milliseconds between each connection that it makes. It is strongly suggested that you DO have some small delay here. Otherwise, you run the risk of hammering your own web server with multiple repeated connections whenever the Auto-Cache Engine is running. This is especially true on very large sites; where there is the potential for hundreds of repeated connections as the Auto-Cache Engine goes through a long list of URLs. Adding a delay between each connection will prevent the Auto-Cache Engine from placing a heavy load on the processor that powers your web server. A value of <code>500</code> milliseconds is suggested here (half a second). If you experience problems, you can bump this up a little at a time, in increments of <code>500</code> milliseconds; until you find a happy place for your server. <em>Please note that <code>1000</code> milliseconds = <code>1</code> full second.</em>', $this->plugin->text_domain).'</p>'."\n";
+				echo '         <p><input type="text" name="'.esc_attr(__NAMESPACE__).'[save_options][auto_cache_delay]" value="500" /></p>'."\n";
+				echo '         <hr />'."\n";
 				echo '         <h3>'.__('Auto-Cache User-Agent String', $this->plugin->text_domain).'</h3>'."\n";
-				echo '         <table style="width:100%;"><tr><td><input type="text" name="'.esc_attr(__NAMESPACE__).'[save_options][auto_cache_user_agent]" value="" /></td><td style="width:1px; font-weight:bold; white-space:nowrap;">; '.esc_html(__NAMESPACE__.' '.$this->plugin->version).'</td></tr></table>'."\n";
+				echo '         <table style="width:100%;"><tr><td><input type="text" name="'.esc_attr(__NAMESPACE__).'[save_options][auto_cache_user_agent]" value="WordPress" /></td><td style="width:1px; font-weight:bold; white-space:nowrap;">; '.esc_html(__NAMESPACE__.' '.$this->plugin->version).'</td></tr></table>'."\n";
 				echo '         <p class="info" style="display:block;">'.__('This is how the Auto-Cache Engine identifies itself when connecting to URLs. See <a href="http://en.wikipedia.org/wiki/User_agent" target="_blank">User Agent</a> in the Wikipedia.', $this->plugin->text_domain).'</p>'."\n";
 				echo '      </div>'."\n";
 				echo '   </div>'."\n";
