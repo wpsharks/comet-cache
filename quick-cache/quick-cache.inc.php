@@ -241,6 +241,7 @@ namespace quick_cache
 
 				add_action('save_post', array($this, 'auto_purge_post_cache'));
 				add_action('trash_post', array($this, 'auto_purge_post_cache'));
+				add_action('untrash_post', array($this, 'auto_purge_post_cache'));
 				add_action('delete_post', array($this, 'auto_purge_post_cache'));
 				add_action('clean_post_cache', array($this, 'auto_purge_post_cache'));
 				add_action('post_updated', array($this, 'auto_purge_author_page_cache'), 10, 3);
