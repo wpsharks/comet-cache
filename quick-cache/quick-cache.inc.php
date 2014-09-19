@@ -1031,6 +1031,8 @@ namespace quick_cache
 				$counter += $this->auto_purge_posts_page_cache();
 				$counter += $this->auto_purge_post_terms_cache($id, $force);
 
+				$counter += $this->auto_purge_custom_post_type_archive_cache($id); // If this is a Custom Post Type, also purge the Custom Post Type Archive view
+
 				return apply_filters(__METHOD__, $counter, get_defined_vars());
 			}
 
@@ -1309,6 +1311,24 @@ namespace quick_cache
 						unset($_post_taxonomies, $_post_taxonomy, $_post_taxonomy_terms, $_post_term, $_post_term_feed_link);
 
 						break; // Break switch handler.
+
+					case 'custom-post-type': // Feeds related to a custom post type archive view.
+
+						if(!$post_id) break; // Nothing to do here.
+						if(!($post = get_post($post_id))) break;
+
+						$custom_post_type_archive_link = get_post_type_archive_link($post->post_type);
+
+						$feed_cache_path_regexs[] = $build_cache_path_regex(get_post_type_archive_feed_link($post->post_type, $default_feed));
+						$feed_cache_path_regexs[] = $build_cache_path_regex(get_post_type_archive_feed_link($post->post_type, 'rdf'));
+						$feed_cache_path_regexs[] = $build_cache_path_regex(get_post_type_archive_feed_link($post->post_type, 'rss'));
+						$feed_cache_path_regexs[] = $build_cache_path_regex(get_post_type_archive_feed_link($post->post_type, 'rss2'));
+						$feed_cache_path_regexs[] = $build_cache_path_regex(get_post_type_archive_feed_link($post->post_type, 'atom'));
+
+						// It is not necessary to cover query string variations for these when `$seo_friendly_permalinks = TRUE`,
+						//    because `redirect_canonical()` will force SEO-friendly links in the end anyway.
+
+						break; // Break switch handler.
 				}
 				foreach($feed_cache_path_regexs as $_key => $_feed_cache_path_regex)
 					if(!is_string($_feed_cache_path_regex) || !$_feed_cache_path_regex) unset($feed_cache_path_regexs[$_key]);
@@ -1533,6 +1553,78 @@ namespace quick_cache
 				unset($_file); // Just a little housekeeping.
 
 				$counter += $this->auto_purge_xml_feeds_cache('blog');
+
+				return apply_filters(__METHOD__, $counter, get_defined_vars());
+			}
+
+			/**
+			 * Automatically purges cache files for a custom post type archive view.
+			 *
+			 * @since 140918 First documented version.
+			 *
+			 * @return integer Total files purged by this routine (if any).
+			 *
+			 * @throws \exception If a purge failure occurs.
+			 *
+			 * @note Unlike many of the other `auto_` methods, this one is NOT currently
+			 *    attached to any hooks. However, it is called upon by {@link auto_purge_post_cache()}.
+			 *
+			 * @see auto_purge_post_cache()
+			 */
+			public function auto_purge_custom_post_type_archive_cache($id)
+			{
+				$counter          = 0; // Initialize.
+				$enqueued_notices = 0; // Initialize.
+
+				if(isset($this->cache[__FUNCTION__]))
+					return $counter; // Already did this.
+				$this->cache[__FUNCTION__] = -1;
+
+				if(!$this->options['enable'])
+					return $counter; // Nothing to do.
+
+				if(!is_dir($cache_dir = $this->cache_dir()))
+					return $counter; // Nothing to do.
+
+				$post_type             = get_post_type($id);
+				$all_custom_post_types = get_post_types(array('_builtin' => FALSE));
+
+				if($post_type && !empty ($all_custom_post_types))
+					if(!in_array($post_type, array_keys($all_custom_post_types)))
+						return $counter; // Not a Custom Post Type. Nothing to do.
+
+				$custom_post_type              = get_post_type_object($post_type);
+				$custom_post_type_name         = $custom_post_type->labels->name;
+				$custom_post_type_archive_link = get_post_type_archive_link($post_type);
+
+				if(empty($custom_post_type_archive_link)) return $counter; // Nothing we can do.
+
+				$cache_path_no_scheme_quv_ext = $this->build_cache_path($custom_post_type_archive_link, '', '', $this::CACHE_PATH_NO_SCHEME | $this::CACHE_PATH_NO_PATH_INDEX | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT);
+				$regex                        = '/^'.preg_quote($cache_dir, '/'). // Consider all schemes; all path paginations; and all possible variations.
+				                                '\/[^\/]+\/'.preg_quote($cache_path_no_scheme_quv_ext, '/').
+				                                '(?:\/index)?(?:\.|\/(?:page|comment\-page)\/[0-9]+[.\/])/';
+
+				/** @var $_file \RecursiveDirectoryIterator For IDEs. */
+				foreach($this->dir_regex_iteration($cache_dir, $regex) as $_file) if($_file->isFile() || $_file->isLink())
+				{
+					if(strpos($_file->getSubpathname(), '/') === FALSE) continue;
+					// Don't delete files in the immediate directory; e.g. `qc-advanced-cache` or `.htaccess`, etc.
+					// Actual `http|https/...` cache files are nested. Files in the immediate directory are for other purposes.
+
+					if(!unlink($_file->getPathname())) // Throw exception if unable to delete.
+						throw new \exception(sprintf(__('Unable to auto-purge file: `%1$s`.', $this->text_domain), $_file->getPathname()));
+					$counter++; // Increment counter for each file purge.
+
+					if($enqueued_notices || !is_admin())
+						continue; // Stop here; we already issued a notice, or this notice is N/A.
+
+					$this->enqueue_notice('<img src="'.esc_attr($this->url('/client-s/images/clear.png')).'" style="float:left; margin:0 10px 0 0; border:0;" />'.
+					                      sprintf(__('<strong>Quick Cache:</strong> detected changes. Found cache file(s) for Custom Post Type <code>%1$s</code> (auto-purging).', $this->text_domain), $custom_post_type_name));
+					$enqueued_notices++; // Notice counter.
+				}
+				unset($_file); // Just a little housekeeping.
+
+				$counter += $this->auto_purge_xml_feeds_cache('custom-post-type', $id);
 
 				return apply_filters(__METHOD__, $counter, get_defined_vars());
 			}
