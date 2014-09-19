@@ -1317,23 +1317,13 @@ namespace quick_cache
 						if(!$post_id) break; // Nothing to do here.
 						if(!($post = get_post($post_id))) break;
 
-						$post_type                     = get_post_type($post_id);
-						$custom_post_type_archive_link = get_post_type_archive_link($post_type);
+						$custom_post_type_archive_link = get_post_type_archive_link($post->post_type);
 
-						/*
-						 * @TODO @jaswsinc We don't have a 'get_post_type_feed_link()` function available
-						 * so we'll need to write our own here to build the proper Custom Post Type Archive
-						 * feed links, which should be something like get_post_type_archive_link() . '/rdf/' etc.
-						 * however, looking at get_feed_link, I see that that routine also takes into account
-						 * unfriendly permalink structures, so it's probably not as simple as appending '/rdf/'
-						 * to the Custom Post Type Archive link.
-						 *
-						$feed_cache_path_regexs[] = $build_cache_path_regex(get_feed_link($default_feed));
-						$feed_cache_path_regexs[] = $build_cache_path_regex(get_feed_link('rdf'));
-						$feed_cache_path_regexs[] = $build_cache_path_regex(get_feed_link('rss'));
-						$feed_cache_path_regexs[] = $build_cache_path_regex(get_feed_link('rss2'));
-						$feed_cache_path_regexs[] = $build_cache_path_regex(get_feed_link('atom'));
-						*/
+						$feed_cache_path_regexs[] = $build_cache_path_regex(get_post_type_archive_feed_link($post->post_type, $default_feed));
+						$feed_cache_path_regexs[] = $build_cache_path_regex(get_post_type_archive_feed_link($post->post_type, 'rdf'));
+						$feed_cache_path_regexs[] = $build_cache_path_regex(get_post_type_archive_feed_link($post->post_type, 'rss'));
+						$feed_cache_path_regexs[] = $build_cache_path_regex(get_post_type_archive_feed_link($post->post_type, 'rss2'));
+						$feed_cache_path_regexs[] = $build_cache_path_regex(get_post_type_archive_feed_link($post->post_type, 'atom'));
 
 						// It is not necessary to cover query string variations for these when `$seo_friendly_permalinks = TRUE`,
 						//    because `redirect_canonical()` will force SEO-friendly links in the end anyway.
