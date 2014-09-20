@@ -235,6 +235,7 @@ namespace quick_cache
 				add_action('admin_menu', array($this, 'add_menu_pages'));
 
 				add_action('switch_theme', array($this, 'auto_clear_cache'));
+				add_action('safecss_save_pre', array($this, 'jetpack_custom_css'), 10, 1);
 				add_action('wp_create_nav_menu', array($this, 'auto_clear_cache'));
 				add_action('wp_update_nav_menu', array($this, 'auto_clear_cache'));
 				add_action('wp_delete_nav_menu', array($this, 'auto_clear_cache'));
@@ -1985,6 +1986,21 @@ namespace quick_cache
 				$counter += $this->auto_purge_post_cache($comment->comment_post_ID);
 
 				return apply_filters(__METHOD__, $counter, get_defined_vars());
+			}
+
+			/**
+			 * Automatically clears all cache files for current blog when JetPack Custom CSS is saved.
+			 *
+			 * @since 140919 First documented version.
+			 *
+			 * @attaches-to `safecss_save_pre` hook.
+			 *
+			 * @see auto_clear_cache()
+			 */
+			public function jetpack_custom_css($args)
+			{
+				if(class_exists('Jetpack') && !$args['is_preview'])
+					$this->auto_clear_cache();
 			}
 
 			/**
