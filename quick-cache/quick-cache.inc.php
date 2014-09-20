@@ -234,8 +234,10 @@ namespace quick_cache
 				add_action('network_admin_menu', array($this, 'add_network_menu_pages'));
 				add_action('admin_menu', array($this, 'add_menu_pages'));
 
+				add_action('upgrader_process_complete', array($this, 'auto_clear_cache'));
 				add_action('switch_theme', array($this, 'auto_clear_cache'));
 				add_action('safecss_save_pre', array($this, 'jetpack_custom_css'), 10, 1);
+
 				add_action('wp_create_nav_menu', array($this, 'auto_clear_cache'));
 				add_action('wp_update_nav_menu', array($this, 'auto_clear_cache'));
 				add_action('wp_delete_nav_menu', array($this, 'auto_clear_cache'));
