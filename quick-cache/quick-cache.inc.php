@@ -2008,106 +2008,111 @@ namespace quick_cache
 			/**
 			 * Automatically clears all cache files for current blog when WordPress core, or an active component, is upgraded.
 			 *
-			 * @since 140920 First documented version.
+			 * @since 14xxxx Clearing the cache on WP upgrades.
 			 *
 			 * @attaches-to `upgrader_process_complete` hook.
 			 *
-			 * @param \Plugin_Upgrader $this Plugin_Upgrader instance. In other contexts, $this, might
-			 *                              be a Theme_Upgrader or Core_Upgrade instance.
-			 * @param array            $data {
-			 *     Array of bulk item update data.
+			 * @param \WP_Upgrader $upgrader_instance An instance of \WP_Upgrader.
+			 *    Or, any class that extends \WP_Upgrader.
 			 *
-			 * @type string            $action Type of action. Default 'update'.
-			 * @type string            $type Type of update process. Accepts 'plugin', 'theme', or 'core'.
-			 * @type bool              $bulk Whether the update process is a bulk update. Default true.
-			 * @type array             $packages Array of plugin, theme, or core packages to update.
+			 * @param array        $data Array of bulk item update data.
+			 *
+			 *    This array may include one or more of the following keys:
+			 *
+			 *       - `string` `$action` Type of action. Default 'update'.
+			 *       - `string` `$type` Type of update process; e.g. 'plugin', 'theme', 'core'.
+			 *       - `boolean` `$bulk` Whether the update process is a bulk update. Default true.
+			 *       - `array` `$packages` Array of plugin, theme, or core packages to update.
 			 *
 			 * @see auto_clear_cache()
 			 */
-			public function upgrader_process_complete($upgrader_instance, $data)
+			public function upgrader_process_complete(\WP_Upgrader $upgrader_instance, array $data)
 			{
-				if(!is_array($data) || trim($data['type']) === '')
-					return; // Nothing to do.
-
-				switch($data['type'])
+				switch(!empty($data['type']) ? $data['type'] : '')
 				{
-					case 'core':
-						$this->auto_clear_cache();
-						break;
+					case 'plugin': // Plugin upgrade.
 
-					case 'plugin':
-						$_multi_plugin_update     = FALSE;
-						$_upgrading_active_plugin = FALSE;
-						$_single_plugin_update    = FALSE;
+						$multi_plugin_update     = $single_plugin_update = FALSE;
+						$upgrading_active_plugin = FALSE; // Initialize.
 
-						if(array_key_exists('bulk', $data) && $data['bulk'] === TRUE && is_array($data['plugins']))
-							$_multi_plugin_update = TRUE;
-						elseif(array_key_exists('plugin', $data))
-							$_single_plugin_update = TRUE;
-						else
-							break; // Nothing to do.
+						if(!empty($data['bulk']) && !empty($data['plugins']) && is_array($data['plugins']))
+							$multi_plugin_update = TRUE;
 
-						if($_multi_plugin_update)
+						else if(!empty($data['plugin']) && is_string($data['plugin']))
+							$single_plugin_update = TRUE;
+
+						if($multi_plugin_update)
+						{
 							foreach($data['plugins'] as $_plugin)
-							{
-								if(is_plugin_active($_plugin))
-									$_upgrading_active_plugin = TRUE;
-							}
-						elseif($_single_plugin_update)
-							if(is_plugin_active($data['plugin']))
-								$_upgrading_active_plugin = TRUE;
+								if($_plugin && is_string($_plugin) && is_plugin_active($_plugin))
+								{
+									$upgrading_active_plugin = TRUE;
+									break; // Got what we need here.
+								}
+							unset($_plugin); // Housekeeping.
+						}
+						else if($single_plugin_update && is_plugin_active($data['plugin']))
+							$upgrading_active_plugin = TRUE;
 
-						if($_upgrading_active_plugin)
-							$this->auto_clear_cache();
+						if($upgrading_active_plugin)
+							$this->auto_clear_cache(); // Yes, clear the cache.
 
-						unset($_multi_plugin_update, $_upgrading_active_plugin, $_plugin);
-						break;
+						break; // Break switch.
 
-					case 'theme':
-						$_multi_theme_update  = FALSE;
-						$_single_theme_update = FALSE;
+					case 'theme': // Theme upgrade.
 
-						if(array_key_exists('bulk', $data) && $data['bulk'] === TRUE && is_array($data['themes']))
-							$_multi_theme_update = TRUE;
-						elseif(array_key_exists('theme', $data))
-							$_single_theme_update = TRUE;
-						else
-							break; // Nothing to do.
+						$current_active_theme          = wp_get_theme();
+						$current_active_theme_parent   = $current_active_theme->parent();
+						$multi_theme_update            = $single_theme_update = FALSE;
+						$upgrading_active_parent_theme = $upgrading_active_theme = FALSE;
 
-						$_upgrading_active_parent_theme = FALSE;
-						$_upgrading_active_theme        = FALSE;
-						$_current_active_theme          = wp_get_theme();
-						$_current_active_theme_parent   = $_current_active_theme->parent();
+						if(!empty($data['bulk']) && !empty($data['themes']) && is_array($data['themes']))
+							$multi_theme_update = TRUE;
 
-						if($_multi_theme_update)
+						else if(!empty($data['theme']) && is_string($data['theme']))
+							$single_theme_update = TRUE;
+
+						if($multi_theme_update)
 						{
 							foreach($data['themes'] as $_theme)
 							{
-								$_theme_obj = wp_get_theme($_theme);
+								if(!$_theme || !is_string($_theme) || !($_theme_obj = wp_get_theme($_theme)))
+									continue; // Unable to acquire theme object instance.
 
-								if($_current_active_theme_parent && $_current_active_theme_parent->get_stylesheet() === $_theme_obj->get_stylesheet())
-									$_upgrading_active_parent_theme = TRUE;
-
-								if($_current_active_theme->get_stylesheet() === $_theme_obj->get_stylesheet())
-									$_upgrading_active_theme = TRUE;
+								if($current_active_theme_parent && $current_active_theme_parent->get_stylesheet() === $_theme_obj->get_stylesheet())
+								{
+									$upgrading_active_parent_theme = TRUE;
+									break; // Got what we needed here.
+								}
+								else if($current_active_theme->get_stylesheet() === $_theme_obj->get_stylesheet())
+								{
+									$upgrading_active_theme = TRUE;
+									break; // Got what we needed here.
+								}
 							}
+							unset($_theme, $_theme_obj); // Housekeeping.
 						}
-						elseif($_single_theme_update)
+						else if($single_theme_update && ($_theme_obj = wp_get_theme($data['theme'])))
 						{
-							$_theme_obj = wp_get_theme($data['theme']);
+							if($current_active_theme_parent && $current_active_theme_parent->get_stylesheet() === $_theme_obj->get_stylesheet())
+								$upgrading_active_parent_theme = TRUE;
 
-							if($_current_active_theme_parent && $_current_active_theme_parent->get_stylesheet() === $_theme_obj->get_stylesheet())
-								$_upgrading_active_parent_theme = TRUE;
-
-							if($_current_active_theme->get_stylesheet() === $_theme_obj->get_stylesheet())
-								$_upgrading_active_theme = TRUE;
+							else if($current_active_theme->get_stylesheet() === $_theme_obj->get_stylesheet())
+								$upgrading_active_theme = TRUE;
 						}
+						unset($_theme_obj); // Housekeeping.
 
-						if($_upgrading_active_theme || $_upgrading_active_parent_theme)
-							$this->auto_clear_cache();
+						if($upgrading_active_theme || $upgrading_active_parent_theme)
+							$this->auto_clear_cache(); // Yes, clear the cache.
 
-						unset($_multi_theme_update, $_single_theme_update, $_theme, $_theme_obj, $_upgrading_active_theme, $_upgrading_active_parent_theme, $_current_active_theme, $_current_active_theme_parent);
-						break;
+						break; // Break switch.
+
+					case 'core': // Core upgrade.
+					default: // Or any other sort of upgrade.
+
+						$this->auto_clear_cache(); // Yes, clear the cache.
+
+						break; // Break switch.
 				}
 			}
 
