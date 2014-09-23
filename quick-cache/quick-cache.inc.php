@@ -2051,7 +2051,7 @@ namespace quick_cache
 								}
 							unset($_plugin); // Housekeeping.
 						}
-						else if($single_plugin_update && is_plugin_active($data['plugin']))
+						else if($single_plugin_update && $upgrader_instance->skin->plugin_active == TRUE)
 							$upgrading_active_plugin = TRUE;
 
 						if($upgrading_active_plugin)
