@@ -234,10 +234,10 @@ namespace quick_cache
 				add_action('network_admin_menu', array($this, 'add_network_menu_pages'));
 				add_action('admin_menu', array($this, 'add_menu_pages'));
 
-				add_action('upgrader_process_complete', array($this, 'auto_clear_cache'));
-				add_action('switch_theme', array($this, 'auto_clear_cache'));
+				add_action('upgrader_process_complete', array($this, 'upgrader_process_complete'), 10, 2);
 				add_action('safecss_save_pre', array($this, 'jetpack_custom_css'), 10, 1);
 
+				add_action('switch_theme', array($this, 'auto_clear_cache'));
 				add_action('wp_create_nav_menu', array($this, 'auto_clear_cache'));
 				add_action('wp_update_nav_menu', array($this, 'auto_clear_cache'));
 				add_action('wp_delete_nav_menu', array($this, 'auto_clear_cache'));
@@ -2003,6 +2003,112 @@ namespace quick_cache
 			{
 				if(class_exists('Jetpack') && !$args['is_preview'])
 					$this->auto_clear_cache();
+			}
+
+			/**
+			 * Automatically clears all cache files for current blog when WordPress core, or an active component, is upgraded.
+			 *
+			 * @since 140920 First documented version.
+			 *
+			 * @attaches-to `upgrader_process_complete` hook.
+			 *
+			 * @param \Plugin_Upgrader $this Plugin_Upgrader instance. In other contexts, $this, might
+			 *                              be a Theme_Upgrader or Core_Upgrade instance.
+			 * @param array            $data {
+			 *     Array of bulk item update data.
+			 *
+			 * @type string            $action Type of action. Default 'update'.
+			 * @type string            $type Type of update process. Accepts 'plugin', 'theme', or 'core'.
+			 * @type bool              $bulk Whether the update process is a bulk update. Default true.
+			 * @type array             $packages Array of plugin, theme, or core packages to update.
+			 *
+			 * @see auto_clear_cache()
+			 */
+			public function upgrader_process_complete($upgrader_instance, $data)
+			{
+				if(!is_array($data) || trim($data['type']) === '')
+					return; // Nothing to do.
+
+				switch($data['type'])
+				{
+					case 'core':
+						$this->auto_clear_cache();
+						break;
+
+					case 'plugin':
+						$_multi_plugin_update     = FALSE;
+						$_upgrading_active_plugin = FALSE;
+						$_single_plugin_update    = FALSE;
+
+						if(array_key_exists('bulk', $data) && $data['bulk'] === TRUE && is_array($data['plugins']))
+							$_multi_plugin_update = TRUE;
+						elseif(array_key_exists('plugin', $data))
+							$_single_plugin_update = TRUE;
+						else
+							break; // Nothing to do.
+
+						if($_multi_plugin_update)
+							foreach($data['plugins'] as $_plugin)
+							{
+								if(is_plugin_active($_plugin))
+									$_upgrading_active_plugin = TRUE;
+							}
+						elseif($_single_plugin_update)
+							if(is_plugin_active($data['plugin']))
+								$_upgrading_active_plugin = TRUE;
+
+						if($_upgrading_active_plugin)
+							$this->auto_clear_cache();
+
+						unset($_multi_plugin_update, $_upgrading_active_plugin, $_plugin);
+						break;
+
+					case 'theme':
+						$_multi_theme_update  = FALSE;
+						$_single_theme_update = FALSE;
+
+						if(array_key_exists('bulk', $data) && $data['bulk'] === TRUE && is_array($data['themes']))
+							$_multi_theme_update = TRUE;
+						elseif(array_key_exists('theme', $data))
+							$_single_theme_update = TRUE;
+						else
+							break; // Nothing to do.
+
+						$_upgrading_active_parent_theme = FALSE;
+						$_upgrading_active_theme        = FALSE;
+						$_current_active_theme          = wp_get_theme();
+						$_current_active_theme_parent   = $_current_active_theme->parent();
+
+						if($_multi_theme_update)
+						{
+							foreach($data['themes'] as $_theme)
+							{
+								$_theme_obj = wp_get_theme($_theme);
+
+								if($_current_active_theme_parent && $_current_active_theme_parent->get_stylesheet() === $_theme_obj->get_stylesheet())
+									$_upgrading_active_parent_theme = TRUE;
+
+								if($_current_active_theme->get_stylesheet() === $_theme_obj->get_stylesheet())
+									$_upgrading_active_theme = TRUE;
+							}
+						}
+						elseif($_single_theme_update)
+						{
+							$_theme_obj = wp_get_theme($data['theme']);
+
+							if($_current_active_theme_parent && $_current_active_theme_parent->get_stylesheet() === $_theme_obj->get_stylesheet())
+								$_upgrading_active_parent_theme = TRUE;
+
+							if($_current_active_theme->get_stylesheet() === $_theme_obj->get_stylesheet())
+								$_upgrading_active_theme = TRUE;
+						}
+
+						if($_upgrading_active_theme || $_upgrading_active_parent_theme)
+							$this->auto_clear_cache();
+
+						unset($_multi_theme_update, $_single_theme_update, $_theme, $_theme_obj, $_upgrading_active_theme, $_upgrading_active_parent_theme, $_current_active_theme, $_current_active_theme_parent);
+						break;
+				}
 			}
 
 			/**
