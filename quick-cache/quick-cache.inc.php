@@ -922,7 +922,7 @@ namespace quick_cache
 
 				if($counter && is_admin()) // Change notifications cannot be turned off in the lite version.
 					$this->enqueue_notice('<img src="'.esc_attr($this->url('/client-s/images/clear.png')).'" style="float:left; margin:0 10px 0 0; border:0;" />'.
-					                      __('<strong>Quick Cache:</strong> detected changes. Found cache files for this site (auto-clearing).', $this->text_domain));
+					                      __('<strong>Quick Cache:</strong> detected important site changes. Found cache files for this site (auto-clearing).', $this->text_domain));
 
 				return apply_filters(__METHOD__, $counter, get_defined_vars());
 			}
