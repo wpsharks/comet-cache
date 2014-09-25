@@ -2008,8 +2008,20 @@ namespace quick_cache
 					return; // Already did this.
 				$this->cache[__FUNCTION__][$_pagenow] = -1;
 
+				// If Dashboard → Settings → General options are updated
+				if($GLOBALS['pagenow'] === 'options-general.php' && !empty($_REQUEST['settings-updated']))
+					$this->auto_clear_cache();
+
 				// If Dashboard → Settings → Reading options are updated
 				if($GLOBALS['pagenow'] === 'options-reading.php' && !empty($_REQUEST['settings-updated']))
+					$this->auto_clear_cache();
+
+				// If Dashboard → Settings → Discussion options are updated
+				if($GLOBALS['pagenow'] === 'options-discussion.php' && !empty($_REQUEST['settings-updated']))
+					$this->auto_clear_cache();
+
+				// If Dashboard → Settings → Permalink options are updated
+				if($GLOBALS['pagenow'] === 'options-permalink.php' && !empty($_REQUEST['settings-updated']))
 					$this->auto_clear_cache();
 			}
 
