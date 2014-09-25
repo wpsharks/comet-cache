@@ -2032,6 +2032,8 @@ namespace quick_cache
 				{
 					case 'plugin': // Plugin upgrade.
 
+						/** @var $skin \Plugin_Upgrader_Skin * */
+						$skin                    = $upgrader_instance->skin;
 						$multi_plugin_update     = $single_plugin_update = FALSE;
 						$upgrading_active_plugin = FALSE; // Initialize.
 
@@ -2051,7 +2053,7 @@ namespace quick_cache
 								}
 							unset($_plugin); // Housekeeping.
 						}
-						else if($single_plugin_update && $upgrader_instance->skin->plugin_active == TRUE)
+						else if($single_plugin_update && $skin->plugin_active == TRUE)
 							$upgrading_active_plugin = TRUE;
 
 						if($upgrading_active_plugin)
