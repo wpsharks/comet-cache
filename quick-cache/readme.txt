@@ -1,8 +1,8 @@
 === Quick Cache (Speed Without Compromise) ===
 
-Stable tag: 140829
+Stable tag: 140926
 Requires at least: 3.7
-Tested up to: 3.9.2
+Tested up to: 4.0
 Text Domain: quick-cache
 
 License: GPLv2 or later

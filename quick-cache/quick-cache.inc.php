@@ -1004,7 +1004,7 @@ namespace quick_cache
 				$cache_path_no_scheme_quv_ext = $this->build_cache_path($permalink, '', '', $this::CACHE_PATH_NO_SCHEME | $this::CACHE_PATH_NO_PATH_INDEX | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT);
 				$regex                        = '/^'.preg_quote($cache_dir, '/'). // Consider all schemes; all path paginations; and all possible variations.
 				                                '\/[^\/]+\/'.preg_quote($cache_path_no_scheme_quv_ext, '/').
-				                                '(?:\/index)?(?:\.|\/(?:page|comment\-page)\/[0-9]+[.\/])/';
+				                                '(?:\/index)?(?:\.|\/(?:page\/[0-9]+|comment\-page\-[0-9]+)[.\/])/';
 
 				/** @var $_file \RecursiveDirectoryIterator For IDEs. */
 				foreach($this->dir_regex_iteration($cache_dir, $regex) as $_file) if($_file->isFile() || $_file->isLink())
@@ -1459,7 +1459,7 @@ namespace quick_cache
 				$cache_path_no_scheme_quv_ext = $this->build_cache_path(home_url('/'), '', '', $this::CACHE_PATH_NO_SCHEME | $this::CACHE_PATH_NO_PATH_INDEX | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT);
 				$regex                        = '/^'.preg_quote($cache_dir, '/'). // Consider all schemes; all path paginations; and all possible variations.
 				                                '\/[^\/]+\/'.preg_quote($cache_path_no_scheme_quv_ext, '/').
-				                                '(?:\/index)?(?:\.|\/(?:page|comment\-page)\/[0-9]+[.\/])/';
+				                                '(?:\/index)?(?:\.|\/(?:page\/[0-9]+|comment\-page\-[0-9]+)[.\/])/';
 
 				/** @var $_file \RecursiveDirectoryIterator For IDEs. */
 				foreach($this->dir_regex_iteration($cache_dir, $regex) as $_file) if($_file->isFile() || $_file->isLink())
@@ -1534,7 +1534,7 @@ namespace quick_cache
 				$cache_path_no_scheme_quv_ext = $this->build_cache_path($posts_page, '', '', $this::CACHE_PATH_NO_SCHEME | $this::CACHE_PATH_NO_PATH_INDEX | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT);
 				$regex                        = '/^'.preg_quote($cache_dir, '/'). // Consider all schemes; all path paginations; and all possible variations.
 				                                '\/[^\/]+\/'.preg_quote($cache_path_no_scheme_quv_ext, '/').
-				                                '(?:\/index)?(?:\.|\/(?:page|comment\-page)\/[0-9]+[.\/])/';
+				                                '(?:\/index)?(?:\.|\/(?:page\/[0-9]+|comment\-page\-[0-9]+)[.\/])/';
 
 				/** @var $_file \RecursiveDirectoryIterator For IDEs. */
 				foreach($this->dir_regex_iteration($cache_dir, $regex) as $_file) if($_file->isFile() || $_file->isLink())
@@ -1606,7 +1606,7 @@ namespace quick_cache
 				$cache_path_no_scheme_quv_ext = $this->build_cache_path($custom_post_type_archive_link, '', '', $this::CACHE_PATH_NO_SCHEME | $this::CACHE_PATH_NO_PATH_INDEX | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT);
 				$regex                        = '/^'.preg_quote($cache_dir, '/'). // Consider all schemes; all path paginations; and all possible variations.
 				                                '\/[^\/]+\/'.preg_quote($cache_path_no_scheme_quv_ext, '/').
-				                                '(?:\/index)?(?:\.|\/(?:page|comment\-page)\/[0-9]+[.\/])/';
+				                                '(?:\/index)?(?:\.|\/(?:page\/[0-9]+|comment\-page\-[0-9]+)[.\/])/';
 
 				/** @var $_file \RecursiveDirectoryIterator For IDEs. */
 				foreach($this->dir_regex_iteration($cache_dir, $regex) as $_file) if($_file->isFile() || $_file->isLink())
@@ -1712,7 +1712,7 @@ namespace quick_cache
 					$cache_path_no_scheme_quv_ext = $this->build_cache_path($_author['posts_url'], '', '', $this::CACHE_PATH_NO_SCHEME | $this::CACHE_PATH_NO_PATH_INDEX | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT);
 					$regex                        = '/^'.preg_quote($cache_dir, '/'). // Consider all schemes; all path paginations; and all possible variations.
 					                                '\/[^\/]+\/'.preg_quote($cache_path_no_scheme_quv_ext, '/').
-					                                '(?:\/index)?(?:\.|\/(?:page|comment\-page)\/[0-9]+[.\/])/';
+					                                '(?:\/index)?(?:\.|\/(?:page\/[0-9]+|comment\-page\-[0-9]+)[.\/])/';
 
 					/** @var $_file \RecursiveDirectoryIterator For IDEs. */
 					foreach($this->dir_regex_iteration($cache_dir, $regex) as $_file) if($_file->isFile() || $_file->isLink())
@@ -1869,7 +1869,7 @@ namespace quick_cache
 					$cache_path_no_scheme_quv_ext = $this->build_cache_path($_term['permalink'], '', '', $this::CACHE_PATH_NO_SCHEME | $this::CACHE_PATH_NO_PATH_INDEX | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT);
 					$regex                        = '/^'.preg_quote($cache_dir, '/'). // Consider all schemes; all path paginations; and all possible variations.
 					                                '\/[^\/]+\/'.preg_quote($cache_path_no_scheme_quv_ext, '/').
-					                                '(?:\/index)?(?:\.|\/(?:page|comment\-page)\/[0-9]+[.\/])/';
+					                                '(?:\/index)?(?:\.|\/(?:page\/[0-9]+|comment\-page\-[0-9]+)[.\/])/';
 
 					/** @var $_file \RecursiveDirectoryIterator For IDEs. */
 					foreach($this->dir_regex_iteration($cache_dir, $regex) as $_file) if($_file->isFile() || $_file->isLink())
@@ -2008,8 +2008,20 @@ namespace quick_cache
 					return; // Already did this.
 				$this->cache[__FUNCTION__][$_pagenow] = -1;
 
+				// If Dashboard → Settings → General options are updated
+				if($GLOBALS['pagenow'] === 'options-general.php' && !empty($_REQUEST['settings-updated']))
+					$this->auto_clear_cache();
+
 				// If Dashboard → Settings → Reading options are updated
 				if($GLOBALS['pagenow'] === 'options-reading.php' && !empty($_REQUEST['settings-updated']))
+					$this->auto_clear_cache();
+
+				// If Dashboard → Settings → Discussion options are updated
+				if($GLOBALS['pagenow'] === 'options-discussion.php' && !empty($_REQUEST['settings-updated']))
+					$this->auto_clear_cache();
+
+				// If Dashboard → Settings → Permalink options are updated
+				if($GLOBALS['pagenow'] === 'options-permalink.php' && !empty($_REQUEST['settings-updated']))
 					$this->auto_clear_cache();
 			}
 
