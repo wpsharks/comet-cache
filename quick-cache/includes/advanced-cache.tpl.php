@@ -660,8 +660,17 @@ namespace quick_cache
 			if(isset($_SERVER['QUICK_CACHE_ALLOWED']) && !$_SERVER['QUICK_CACHE_ALLOWED'])
 				return $this->maybe_set_debug_info($this::NC_DEBUG_QUICK_CACHE_ALLOWED_SERVER_VAR);
 
-			if(defined('DONOTCACHEPAGE'))
-				return $this->maybe_set_debug_info($this::NC_DEBUG_DONOTCACHEPAGE_CONSTANT);
+			if(defined('DONOTCACHEPAGE')) {
+        if (DONOTCACHEPAGE) {
+          return $this->maybe_set_debug_info($this::NC_DEBUG_DONOTCACHEPAGE_CONSTANT);
+        }
+      } else {
+        // If someone defines DONOTCACHEPAGE to *true* between now and the moment
+        // output_buffer_callback_handler is called, we'll get a white screen.
+        // So, we define it here.
+        define('DONOTCACHEPAGE', false);
+      }
+
 
 			if(isset($_SERVER['DONOTCACHEPAGE']))
 				return $this->maybe_set_debug_info($this::NC_DEBUG_DONOTCACHEPAGE_SERVER_VAR);
@@ -864,7 +873,7 @@ namespace quick_cache
 			if(isset($_SERVER['QUICK_CACHE_ALLOWED']) && !$_SERVER['QUICK_CACHE_ALLOWED'])
 				return (boolean)$this->maybe_set_debug_info($this::NC_DEBUG_QUICK_CACHE_ALLOWED_SERVER_VAR);
 
-			if(defined('DONOTCACHEPAGE')) // WP Super Cache compatible.
+			if(defined('DONOTCACHEPAGE') && DONOTCACHEPAGE) // WP Super Cache compatible.
 				return (boolean)$this->maybe_set_debug_info($this::NC_DEBUG_DONOTCACHEPAGE_CONSTANT);
 
 			if(isset($_SERVER['DONOTCACHEPAGE'])) // WP Super Cache compatible.
