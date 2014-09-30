@@ -25,6 +25,13 @@ namespace quick_cache
 		class plugin extends share
 		{
 			/**
+			 * Plugin slug; based on `__NAMESPACE__`.
+			 *
+			 * @since 14xxxx Adding plugin slug property.
+			 */
+			public $slug = '';
+
+			/**
 			 * Stub `__FILE__` location.
 			 *
 			 * @since 140422 First documented version.
@@ -122,10 +129,18 @@ namespace quick_cache
 			{
 				parent::__construct(); // Shared constructor.
 
+				/* -------------------------------------------------------------- */
+
 				$this->enable_hooks = (boolean)$enable_hooks;
+				$this->slug         = str_replace('_', '-', __NAMESPACE__);
 				$this->file         = preg_replace('/\.inc\.php$/', '.php', __FILE__);
 
-				if(!$this->enable_hooks) return; // All done in this case.
+				/* -------------------------------------------------------------- */
+
+				if(!$this->enable_hooks) // Without hooks?
+					return; // Stop here; construct without hooks.
+
+				/* -------------------------------------------------------------- */
 
 				add_action('after_setup_theme', array($this, 'setup'));
 				register_activation_hook($this->file, array($this, 'activate'));
@@ -139,8 +154,14 @@ namespace quick_cache
 			 */
 			public function setup()
 			{
+				if(isset($this->cache[__FUNCTION__]))
+					return; // Already setup. Once only!
+				$this->cache[__FUNCTION__] = -1;
+
 				if($this->enable_hooks) // Hooks enabled?
 					do_action('before__'.__METHOD__, get_defined_vars());
+
+				/* -------------------------------------------------------------- */
 
 				load_plugin_textdomain($this->text_domain);
 
@@ -217,7 +238,12 @@ namespace quick_cache
 				$this->network_cap   = apply_filters(__METHOD__.'__network_cap', 'manage_network_plugins');
 				$this->uninstall_cap = apply_filters(__METHOD__.'__uninstall_cap', 'delete_plugins');
 
-				if(!$this->enable_hooks) return; // Stop here; setup without hooks.
+				/* -------------------------------------------------------------- */
+
+				if(!$this->enable_hooks) // Without hooks?
+					return; // Stop here; setup without hooks.
+
+				/* -------------------------------------------------------------- */
 
 				add_action('init', array($this, 'check_advanced_cache'));
 				add_action('init', array($this, 'check_blog_paths'));
@@ -269,7 +295,10 @@ namespace quick_cache
 
 				add_filter('plugin_action_links_'.plugin_basename($this->file), array($this, 'add_settings_link'));
 
+				/* -------------------------------------------------------------- */
+
 				add_filter('cron_schedules', array($this, 'extend_cron_schedules'));
+
 				if((integer)$this->options['crons_setup'] < 1382523750)
 				{
 					wp_clear_scheduled_hook('_cron_'.__NAMESPACE__.'_cleanup');
@@ -280,6 +309,8 @@ namespace quick_cache
 					if(is_multisite()) update_site_option(__NAMESPACE__.'_options', $this->options);
 				}
 				add_action('_cron_'.__NAMESPACE__.'_cleanup', array($this, 'purge_cache'));
+
+				/* -------------------------------------------------------------- */
 
 				do_action('after__'.__METHOD__, get_defined_vars());
 				do_action(__METHOD__.'_complete', get_defined_vars());
@@ -357,6 +388,8 @@ namespace quick_cache
 			 */
 			public function deactivate()
 			{
+				$this->setup(); // Setup routines.
+
 				$this->remove_wp_cache_from_wp_config();
 				$this->remove_advanced_cache();
 				$this->clear_cache();
@@ -371,14 +404,19 @@ namespace quick_cache
 			 */
 			public function uninstall()
 			{
-				if(!current_user_can($this->uninstall_cap))
-					return; // Extra layer of security.
+				$this->setup(); // Setup routines.
+
+				if(!defined('WP_UNINSTALL_PLUGIN'))
+					return; // Disallow.
+
+				if(empty($GLOBALS[__NAMESPACE__.'_uninstalling']))
+					return; // Not uninstalling.
 
 				if(!class_exists('\\'.__NAMESPACE__.'\\uninstall'))
 					return; // Expecting the uninstall class.
 
-				if(!defined('WP_UNINSTALL_PLUGIN'))
-					return; // Disallow.
+				if(!current_user_can($this->uninstall_cap))
+					return; // Extra layer of security.
 
 				$this->remove_wp_cache_from_wp_config();
 				$this->remove_advanced_cache();
@@ -2032,11 +2070,13 @@ namespace quick_cache
 			 *
 			 * @attaches-to `safecss_save_pre` hook.
 			 *
+			 * @param array $args Args passed in by hook.
+			 *
 			 * @see auto_clear_cache()
 			 */
 			public function jetpack_custom_css($args)
 			{
-				if(class_exists('Jetpack') && !$args['is_preview'])
+				if(class_exists('\\Jetpack') && empty($args['is_preview']))
 					$this->auto_clear_cache();
 			}
 
@@ -2636,16 +2676,16 @@ namespace quick_cache
 		 *
 		 * @var plugin Main plugin class.
 		 */
-		$GLOBALS[__NAMESPACE__] = new plugin(!class_exists('\\'.__NAMESPACE__.'\\uninstall'));
-		/*
-		 * API class inclusion; depends on {@link $GLOBALS[__NAMESPACE__]}.
-		 */
-		require_once dirname(__FILE__).'/includes/api-class.php';
+		if(!isset($GLOBALS[__NAMESPACE__.'_autoload_plugin']) || $GLOBALS[__NAMESPACE__.'_autoload_plugin'])
+			$GLOBALS[__NAMESPACE__] = new plugin(); // Load the Quick Cache plugin automatically.
+		require_once dirname(__FILE__).'/includes/api-class.php'; // API class.
 	}
-	else if(!class_exists('\\'.__NAMESPACE__.'\\uninstall')) add_action('all_admin_notices', function ()
+	else if(empty($GLOBALS[__NAMESPACE__.'_uninstalling'])) add_action('all_admin_notices', function ()
 	{
-		echo '<div class="error"><p>'. // Running multiple versions of this plugin at same time.
-		     __('Please disable the LITE version of Quick Cache before you activate the PRO version.',
-		        str_replace('_', '-', __NAMESPACE__)).'</p></div>';
+		echo '<div class="error">'.
+		     '   <p>'. // Running multiple versions of this plugin at same time.
+		     '      '.__('Please disable the LITE version of Quick Cache before you activate the PRO version.', str_replace('_', '-', __NAMESPACE__)).
+		     '   </p>'.
+		     '</div>';
 	});
 }
