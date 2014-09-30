@@ -1386,7 +1386,7 @@ namespace quick_cache
 				{
 					$_feed_cache_path_regexs = array_slice($feed_cache_path_regexs, $_i, $in_sets_of);
 					$_regex                  = '/^'.preg_quote($cache_dir, '/').'\/[^\/]+\/(?:'.implode('|', $_feed_cache_path_regexs).')\./';
-					$counter += $this->delete_files_from_host_cache_dir($_regex);
+					$counter += $this->clear_files_from_host_cache_dir($_regex);
 				}
 				unset($_i, $_feed_cache_path_regexs, $_regex); // Housekeeping.
 

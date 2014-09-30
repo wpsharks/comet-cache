@@ -1068,29 +1068,17 @@ namespace quick_cache // Root namespace.
 			}
 
 			/**
-			 * Deletes files from the cache directory (for the current host) that match a regex pattern.
+			 * Clear files from the cache directory (for the current host) that match a regex pattern.
 			 *
-			 * @since 140829 Implementing XML/RSS feed purging.
+			 * @since 14xxxx Refactoring cache clear/purge routines.
 			 *
 			 * @param string $regex A regex pattern; compares to each full file path.
 			 *
-			 * @return integer Total files deleted by this routine (if any).
+			 * @return integer Total files cleared by this routine (if any).
 			 *
-			 * @throws \exception If unable to delete a file for any reason.
-			 *
-			 * @TODO @raamdev I think we could take the same concept introduced by this routine and use it to build others
-			 *    that deal with purging/clearing/wiping; thereby centralizing this sort of job, making QC DRYer.
-			 *    Also, this type of routine works to improve speed when running on a large MS network.
-			 *
-			 *    Suggested class members to come in a future release of QC.
-			 *       - `purge_files_from_host_cache_dir()`
-			 *       - `clear_files_from_host_cache_dir()`
-			 *
-			 *    Also, this class member (i.e. `delete_files_from_host_cache_dir()`) could be
-			 *       used by many of the existing auto-purge routines. Thereby requiring less code
-			 *       and speeding QC up overall; i.e. making it faster on large MS networks.
+			 * @throws \exception If unable to clear a file for any reason.
 			 */
-			public function delete_files_from_host_cache_dir($regex)
+			public function clear_files_from_host_cache_dir($regex)
 			{
 				$counter = 0; // Initialize.
 
@@ -1114,17 +1102,71 @@ namespace quick_cache // Root namespace.
 					if($_host_cache_dir && is_dir($_host_cache_dir)) foreach($this->dir_regex_iteration($_host_cache_dir, $regex) as $_dir_file)
 					{
 						if(($_dir_file->isFile() || $_dir_file->isLink()) && ($_host_cache_dir !== $cache_dir || strpos($_dir_file->getSubpathname(), '/') !== FALSE))
-							// Don't delete files in the immediate directory; e.g. `qc-advanced-cache` or `.htaccess`, etc.
+							// Don't clear files in the immediate directory; e.g. `qc-advanced-cache` or `.htaccess`, etc.
 							// Actual `http|https/...` cache files are nested. Files in the immediate directory are for other purposes.
-							if(!unlink($_dir_file->getPathname())) // Throw exception if unable to delete.
-								throw new \exception(sprintf(__('Unable to delete file: `%1$s`.', $this->text_domain), $_dir_file->getPathname()));
+							if(!unlink($_dir_file->getPathname())) // Throw exception if unable to clear.
+								throw new \exception(sprintf(__('Unable to clear file: `%1$s`.', $this->text_domain), $_dir_file->getPathname()));
+							else $counter++; // Increment counter for each file we clear.
+					}
+					unset($_dir_file); // Housekeeping.
+				}
+				unset($_host_scheme, $_host_url, $_host_cache_path, $_host_cache_dir); // Housekeeping.
+
+				return $counter; // Total files cleared by this routine.
+			}
+
+			/**
+			 * Purge files from the cache directory (for the current host) that match a regex pattern.
+			 *
+			 * @since 14xxxx Refactoring cache clear/purge routines.
+			 *
+			 * @param string $regex A regex pattern; compares to each full file path.
+			 *
+			 * @return integer Total files deleted by this routine (if any).
+			 *
+			 * @throws \exception If unable to delete a file for any reason.
+			 */
+			public function purge_files_from_host_cache_dir($regex)
+			{
+				$counter = 0; // Initialize.
+
+				if(!($regex = (string)$regex))
+					return $counter; // Nothing to do.
+
+				if(!is_dir($cache_dir = $this->cache_dir()))
+					return $counter; // Nothing to do.
+
+				$host                 = $_SERVER['HTTP_HOST'];
+				$host_base_dir_tokens = $this->host_base_dir_tokens();
+				$cache_dir            = $this->n_dir_seps($cache_dir);
+
+				if(empty($this->options)) // Relies upon plugin options. Not called from the plugin class?
+					throw new \exception(__('The `options` property is not defined in this class.', $this->text_domain));
+
+				if(!($max_age = strtotime('-'.$this->options['cache_max_age'])))
+					return $counter; // Invalid cache expiration time.
+
+				foreach(array('http', 'https') as $_host_scheme) // Consider all possible schemes.
+				{
+					$_host_url        = $_host_scheme.'://'.$host.$host_base_dir_tokens; // Base URL for this host (w/ MS support).
+					$_host_cache_path = $this->build_cache_path($_host_url, '', '', $this::CACHE_PATH_NO_PATH_INDEX | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT);
+					$_host_cache_dir  = $this->n_dir_seps($cache_dir.'/'.$_host_cache_path);
+
+					/** @var $_dir_file \RecursiveDirectoryIterator For IDEs. */
+					if($_host_cache_dir && is_dir($_host_cache_dir)) foreach($this->dir_regex_iteration($_host_cache_dir, $regex) as $_dir_file)
+					{
+						if(($_dir_file->isFile() || $_dir_file->isLink()) && ($_host_cache_dir !== $cache_dir || strpos($_dir_file->getSubpathname(), '/') !== FALSE) && $_dir_file->getMTime() < $max_age)
+							// Don't purge files in the immediate directory; e.g. `qc-advanced-cache` or `.htaccess`, etc.
+							// Actual `http|https/...` cache files are nested. Files in the immediate directory are for other purposes.
+							if(!unlink($_dir_file->getPathname())) // Throw exception if unable to purge.
+								throw new \exception(sprintf(__('Unable to purge file: `%1$s`.', $this->text_domain), $_dir_file->getPathname()));
 							else $counter++; // Increment counter for each file we purge.
 					}
 					unset($_dir_file); // Housekeeping.
 				}
 				unset($_host_scheme, $_host_url, $_host_cache_path, $_host_cache_dir); // Housekeeping.
 
-				return $counter; // Total files deleted by this routine.
+				return $counter; // Total files purged by this routine.
 			}
 
 			/* --------------------------------------------------------------------------------------
