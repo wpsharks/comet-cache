@@ -94,20 +94,6 @@ Ordinarily you can just deactivate Quick Cache from the plugins menu in WordPres
 
 Quick Cache is now completely uninstalled and you can start fresh :-)
 
-== Pro Installation ==
-
-Quick Cache Pro is a wholly contained plugin that _does not_ require Quick Cache Lite to be installed. To install Quick Cache Pro,
-
-1. Deactivate and delete Quick Cache Lite, if it is currently installed
-1. Download Quick Cache Pro from your account at WebSharks-Inc.com
-1. From your WordPress Dashboard, go to **Dashboard -> Plugins -> Add New** and then click on the **Upload Plugin** button at the top
-1. Select the Quick Cache Pro zip file you downloaded in step 2 and click "Install Now"
-1. After the plugin finishes installing, click the "Activate Plugin" link
-
-Once the plugin is active, you can go to **Dashboard -> Quick Cache -> Plugin Options -> Enable/Disable** and Enable Quick Cache.
-
-Also, to stay updated with the latest version of Quick Cache Pro, be sure to also configure **Dashboard -> Quick Cache -> Plugin Updater**.
-
 == Frequently Asked Questions ==
 
 = How do I know that Quick Cache is working the way it should be? =
@@ -283,6 +269,20 @@ Quick Cache is now completely uninstalled and you can start fresh :-)
 - Rockstar support for all Quick Cache features.
 
 **TIP:** you can preview Pro features in the free version by clicking the "**Preview Pro Features**" link at the top of your Quick Cache options.
+
+== Pro Installation ==
+
+Quick Cache Pro is a wholly contained plugin that _does not_ require Quick Cache Lite to be installed. To install Quick Cache Pro,
+
+1. Deactivate and delete Quick Cache Lite, if it is currently installed
+1. Download Quick Cache Pro from your account at WebSharks-Inc.com
+1. From your WordPress Dashboard, go to **Dashboard -> Plugins -> Add New** and then click on the **Upload Plugin** button at the top
+1. Select the Quick Cache Pro zip file you downloaded in step 2 and click "Install Now"
+1. After the plugin finishes installing, click the "Activate Plugin" link
+
+Once the plugin is active, you can go to **Dashboard -> Quick Cache -> Plugin Options -> Enable/Disable** and Enable Quick Cache.
+
+Also, to stay updated with the latest version of Quick Cache Pro, be sure to also configure **Dashboard -> Quick Cache -> Plugin Updater**.
 
 == Software Requirements ==
 
