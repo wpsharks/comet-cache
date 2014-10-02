@@ -34,7 +34,7 @@ namespace quick_cache // Root namespace.
 			 *
 			 * @var string Current version of the software.
 			 */
-			public $version = '140925';
+			public $version = '141001';
 
 			/**
 			 * Text domain for translations; based on `__NAMESPACE__`.

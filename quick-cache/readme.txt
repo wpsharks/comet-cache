@@ -1,6 +1,6 @@
 === Quick Cache (Speed Without Compromise) ===
 
-Stable tag: 140925
+Stable tag: 141001
 Requires at least: 3.7
 Tested up to: 4.0
 Text Domain: quick-cache
@@ -319,6 +319,26 @@ Released under the terms of the [GNU General Public License](http://www.gnu.org/
 Requires PHP v5.3+. The latest version of Quick Cache is a complete rewrite (OOP design). Faster! and even more dependable. NOTE: the free version of Quick Cache (this new LITE version); while it remains fully functional and is more-than-adequate for most sites; is now limited in some ways. The following advanced features from the previous release are no longer available in the lite version: a custom MD5 Version Salt, custom Exclusion Patterns, a Clear Cache button in admin bar. These, and other features; are now available only in the pro version of the plugin. For further details, please see: <http://www.websharks-inc.com/product/quick-cache/>.
 
 == Changelog ==
+
+= v141001 =
+
+- **Enhancement**: Improved Dashboard messaging for the `auto_clear_cache()` routine. See [#328](https://github.com/websharks/quick-cache/issues/328).
+- **Enhancement (Pro)**: Improved consistency of Auto-Cache Engine User-Agent string by removing WordPress-version-specific identifier. See [#315](https://github.com/websharks/quick-cache/issues/315).
+- **Enhancement (Pro)**: It is now possible to disable the automatic clear and wipe cache routines. If you have a very large site with many cache files, this feature allows you manual control over when the cache gets cleared or wiped. For complete documentation on this feature, see [Quick Cache Wiki - Clear and Wipe Cache Routines](https://github.com/websharks/quick-cache/wiki/Clear-Cache-and-Wipe-Cache-Routines). See also [#23](https://github.com/websharks/quick-cache/issues/23).
+- **Bug Fix**: Fixes an issue with the Pro Preview mode where saving the plugin options may inadvertently save Pro-only options that could later cause issues if the plugin is upgraded to the Pro version. See [#311](https://github.com/websharks/quick-cache/pull/311#issuecomment-54491922).
+- **Bug Fix**: Fixes an edge-case where the proper cache files do not get purged when a user with the Editor role publishes a new post with both a category and a tag associated with the post. See [#313](https://github.com/websharks/quick-cache/issues/313).
+- **Bug Fix**: When Quick Cache purges/resets the cache for a post with a Custom Post Type, any cache files for the associated Custom Post Type archive view are now auto-purged, along with any associated XML feed cache files. See [#280](https://github.com/websharks/quick-cache/issues/280).
+- **Bug Fix**: Fixed missing trailing slash in Directory / Expiration Time configuration panel. This was purely a visual inconsistency and had no effect on Quick Cache's functionality. See [#267](https://github.com/websharks/quick-cache/issues/267).
+- **Bug Fix**: When saving custom CSS using JetPack's Custom CSS module, Quick Cache now properly purges the site cache to ensure that outdated cache files are not served to visitors. See [#246](https://github.com/websharks/quick-cache/issues/246).
+- **Bug Fix**: When changes are made to WordPress General, Reading, Discussion, or Permalink settings (Dashboard -> Settings), Quick Cache now clears the cache to prevent an outdated cache file from being served to visitors. See [#223](https://github.com/websharks/quick-cache/issues/223).
+- **Bug Fix**: When an active plugin is updated, or when an active theme or the parent theme for an active child theme is updated, or when WordPress Core is updated, Quick Cache now properly clears the cache to ensure that an outdated cache file does not get served to a visitor. See [#145](https://github.com/websharks/quick-cache/issues/145) and [#327](https://github.com/websharks/quick-cache/issues/327).
+- **Bug Fix**: When a new comment is posted, Quick Cache now properly purges the cache files for any paginated comment pages. See [#336](https://github.com/websharks/quick-cache/issues/336).
+- **Bug Fix (Pro)**: Fixed a bug where the HTML Compressor, when enabled with the "remove extra whitespace in the final HTML" option, would incorrectly remove `<!DOCTYPE html>`. See [#299](https://github.com/websharks/quick-cache/issues/299).
+- **Bug Fix (Pro)**: Fixed a bug in the HTML Compressor that would, in certain scenarios, leave behind fragments of HTML comments. See [#295](https://github.com/websharks/quick-cache/issues/295).
+- **Bug Fix (Pro)**: The Auto-Cache Engine now has an option to configure a delay between each request when pre-caching the site. There were some reports of the Auto-Cache Engine causing load issues with large sites on servers that sometimes had trouble handling many requests. See [#294](https://github.com/websharks/quick-cache/issues/294).
+- **Bug Fix (Pro)**: Fixes an Auto-Cache Engine scheduling issue that may, in some scenarios, prevent it from running as expected. See [#291](https://github.com/websharks/quick-cache/issues/291).
+- **Bug Fix (Pro)**: Fixed a bug with the HTML Compressor where `style`, `link` and/or `script` tags could end up out of order in certain scenarios. See [#45](https://github.com/websharks/html-compressor/issues/45).
+- **Bug Fix (Pro)**: Fixed a bug in the HTML Compressor related to JavaScript compression routines. See [#38](https://github.com/websharks/html-compressor/issues/38).
 
 = v140829 =
 
