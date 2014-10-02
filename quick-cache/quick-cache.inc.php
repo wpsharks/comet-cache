@@ -224,6 +224,7 @@ namespace quick_cache
 				add_action('wp_loaded', array($this, 'actions'));
 
 				add_action('admin_init', array($this, 'check_version'));
+				add_action('admin_init', array($this, 'maybe_auto_clear_cache'));
 
 				add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_styles'));
 				add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_scripts'));
@@ -233,6 +234,9 @@ namespace quick_cache
 
 				add_action('network_admin_menu', array($this, 'add_network_menu_pages'));
 				add_action('admin_menu', array($this, 'add_menu_pages'));
+
+				add_action('upgrader_process_complete', array($this, 'upgrader_process_complete'), 10, 2);
+				add_action('safecss_save_pre', array($this, 'jetpack_custom_css'), 10, 1);
 
 				add_action('switch_theme', array($this, 'auto_clear_cache'));
 				add_action('wp_create_nav_menu', array($this, 'auto_clear_cache'));
@@ -918,7 +922,7 @@ namespace quick_cache
 
 				if($counter && is_admin()) // Change notifications cannot be turned off in the lite version.
 					$this->enqueue_notice('<img src="'.esc_attr($this->url('/client-s/images/clear.png')).'" style="float:left; margin:0 10px 0 0; border:0;" />'.
-					                      __('<strong>Quick Cache:</strong> detected changes. Found cache files for this site (auto-clearing).', $this->text_domain));
+					                      __('<strong>Quick Cache:</strong> detected important site changes. Found cache files for this site (auto-clearing).', $this->text_domain));
 
 				return apply_filters(__METHOD__, $counter, get_defined_vars());
 			}
@@ -1000,7 +1004,7 @@ namespace quick_cache
 				$cache_path_no_scheme_quv_ext = $this->build_cache_path($permalink, '', '', $this::CACHE_PATH_NO_SCHEME | $this::CACHE_PATH_NO_PATH_INDEX | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT);
 				$regex                        = '/^'.preg_quote($cache_dir, '/'). // Consider all schemes; all path paginations; and all possible variations.
 				                                '\/[^\/]+\/'.preg_quote($cache_path_no_scheme_quv_ext, '/').
-				                                '(?:\/index)?(?:\.|\/(?:page|comment\-page)\/[0-9]+[.\/])/';
+				                                '(?:\/index)?(?:\.|\/(?:page\/[0-9]+|comment\-page\-[0-9]+)[.\/])/';
 
 				/** @var $_file \RecursiveDirectoryIterator For IDEs. */
 				foreach($this->dir_regex_iteration($cache_dir, $regex) as $_file) if($_file->isFile() || $_file->isLink())
@@ -1030,6 +1034,8 @@ namespace quick_cache
 				$counter += $this->auto_purge_home_page_cache();
 				$counter += $this->auto_purge_posts_page_cache();
 				$counter += $this->auto_purge_post_terms_cache($id, $force);
+
+				$counter += $this->auto_purge_custom_post_type_archive_cache($id); // If this is a Custom Post Type, also purge the Custom Post Type Archive view
 
 				return apply_filters(__METHOD__, $counter, get_defined_vars());
 			}
@@ -1309,6 +1315,24 @@ namespace quick_cache
 						unset($_post_taxonomies, $_post_taxonomy, $_post_taxonomy_terms, $_post_term, $_post_term_feed_link);
 
 						break; // Break switch handler.
+
+					case 'custom-post-type': // Feeds related to a custom post type archive view.
+
+						if(!$post_id) break; // Nothing to do here.
+						if(!($post = get_post($post_id))) break;
+
+						$custom_post_type_archive_link = get_post_type_archive_link($post->post_type);
+
+						$feed_cache_path_regexs[] = $build_cache_path_regex(get_post_type_archive_feed_link($post->post_type, $default_feed));
+						$feed_cache_path_regexs[] = $build_cache_path_regex(get_post_type_archive_feed_link($post->post_type, 'rdf'));
+						$feed_cache_path_regexs[] = $build_cache_path_regex(get_post_type_archive_feed_link($post->post_type, 'rss'));
+						$feed_cache_path_regexs[] = $build_cache_path_regex(get_post_type_archive_feed_link($post->post_type, 'rss2'));
+						$feed_cache_path_regexs[] = $build_cache_path_regex(get_post_type_archive_feed_link($post->post_type, 'atom'));
+
+						// It is not necessary to cover query string variations for these when `$seo_friendly_permalinks = TRUE`,
+						//    because `redirect_canonical()` will force SEO-friendly links in the end anyway.
+
+						break; // Break switch handler.
 				}
 				foreach($feed_cache_path_regexs as $_key => $_feed_cache_path_regex)
 					if(!is_string($_feed_cache_path_regex) || !$_feed_cache_path_regex) unset($feed_cache_path_regexs[$_key]);
@@ -1435,7 +1459,7 @@ namespace quick_cache
 				$cache_path_no_scheme_quv_ext = $this->build_cache_path(home_url('/'), '', '', $this::CACHE_PATH_NO_SCHEME | $this::CACHE_PATH_NO_PATH_INDEX | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT);
 				$regex                        = '/^'.preg_quote($cache_dir, '/'). // Consider all schemes; all path paginations; and all possible variations.
 				                                '\/[^\/]+\/'.preg_quote($cache_path_no_scheme_quv_ext, '/').
-				                                '(?:\/index)?(?:\.|\/(?:page|comment\-page)\/[0-9]+[.\/])/';
+				                                '(?:\/index)?(?:\.|\/(?:page\/[0-9]+|comment\-page\-[0-9]+)[.\/])/';
 
 				/** @var $_file \RecursiveDirectoryIterator For IDEs. */
 				foreach($this->dir_regex_iteration($cache_dir, $regex) as $_file) if($_file->isFile() || $_file->isLink())
@@ -1510,7 +1534,7 @@ namespace quick_cache
 				$cache_path_no_scheme_quv_ext = $this->build_cache_path($posts_page, '', '', $this::CACHE_PATH_NO_SCHEME | $this::CACHE_PATH_NO_PATH_INDEX | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT);
 				$regex                        = '/^'.preg_quote($cache_dir, '/'). // Consider all schemes; all path paginations; and all possible variations.
 				                                '\/[^\/]+\/'.preg_quote($cache_path_no_scheme_quv_ext, '/').
-				                                '(?:\/index)?(?:\.|\/(?:page|comment\-page)\/[0-9]+[.\/])/';
+				                                '(?:\/index)?(?:\.|\/(?:page\/[0-9]+|comment\-page\-[0-9]+)[.\/])/';
 
 				/** @var $_file \RecursiveDirectoryIterator For IDEs. */
 				foreach($this->dir_regex_iteration($cache_dir, $regex) as $_file) if($_file->isFile() || $_file->isLink())
@@ -1533,6 +1557,78 @@ namespace quick_cache
 				unset($_file); // Just a little housekeeping.
 
 				$counter += $this->auto_purge_xml_feeds_cache('blog');
+
+				return apply_filters(__METHOD__, $counter, get_defined_vars());
+			}
+
+			/**
+			 * Automatically purges cache files for a custom post type archive view.
+			 *
+			 * @since 140918 First documented version.
+			 *
+			 * @return integer Total files purged by this routine (if any).
+			 *
+			 * @throws \exception If a purge failure occurs.
+			 *
+			 * @note Unlike many of the other `auto_` methods, this one is NOT currently
+			 *    attached to any hooks. However, it is called upon by {@link auto_purge_post_cache()}.
+			 *
+			 * @see auto_purge_post_cache()
+			 */
+			public function auto_purge_custom_post_type_archive_cache($id)
+			{
+				$counter          = 0; // Initialize.
+				$enqueued_notices = 0; // Initialize.
+
+				if(isset($this->cache[__FUNCTION__]))
+					return $counter; // Already did this.
+				$this->cache[__FUNCTION__] = -1;
+
+				if(!$this->options['enable'])
+					return $counter; // Nothing to do.
+
+				if(!is_dir($cache_dir = $this->cache_dir()))
+					return $counter; // Nothing to do.
+
+				$post_type             = get_post_type($id);
+				$all_custom_post_types = get_post_types(array('_builtin' => FALSE));
+
+				if($post_type && !empty ($all_custom_post_types))
+					if(!in_array($post_type, array_keys($all_custom_post_types)))
+						return $counter; // Not a Custom Post Type. Nothing to do.
+
+				$custom_post_type              = get_post_type_object($post_type);
+				$custom_post_type_name         = $custom_post_type->labels->name;
+				$custom_post_type_archive_link = get_post_type_archive_link($post_type);
+
+				if(empty($custom_post_type_archive_link)) return $counter; // Nothing we can do.
+
+				$cache_path_no_scheme_quv_ext = $this->build_cache_path($custom_post_type_archive_link, '', '', $this::CACHE_PATH_NO_SCHEME | $this::CACHE_PATH_NO_PATH_INDEX | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT);
+				$regex                        = '/^'.preg_quote($cache_dir, '/'). // Consider all schemes; all path paginations; and all possible variations.
+				                                '\/[^\/]+\/'.preg_quote($cache_path_no_scheme_quv_ext, '/').
+				                                '(?:\/index)?(?:\.|\/(?:page\/[0-9]+|comment\-page\-[0-9]+)[.\/])/';
+
+				/** @var $_file \RecursiveDirectoryIterator For IDEs. */
+				foreach($this->dir_regex_iteration($cache_dir, $regex) as $_file) if($_file->isFile() || $_file->isLink())
+				{
+					if(strpos($_file->getSubpathname(), '/') === FALSE) continue;
+					// Don't delete files in the immediate directory; e.g. `qc-advanced-cache` or `.htaccess`, etc.
+					// Actual `http|https/...` cache files are nested. Files in the immediate directory are for other purposes.
+
+					if(!unlink($_file->getPathname())) // Throw exception if unable to delete.
+						throw new \exception(sprintf(__('Unable to auto-purge file: `%1$s`.', $this->text_domain), $_file->getPathname()));
+					$counter++; // Increment counter for each file purge.
+
+					if($enqueued_notices || !is_admin())
+						continue; // Stop here; we already issued a notice, or this notice is N/A.
+
+					$this->enqueue_notice('<img src="'.esc_attr($this->url('/client-s/images/clear.png')).'" style="float:left; margin:0 10px 0 0; border:0;" />'.
+					                      sprintf(__('<strong>Quick Cache:</strong> detected changes. Found cache file(s) for Custom Post Type <code>%1$s</code> (auto-purging).', $this->text_domain), $custom_post_type_name));
+					$enqueued_notices++; // Notice counter.
+				}
+				unset($_file); // Just a little housekeeping.
+
+				$counter += $this->auto_purge_xml_feeds_cache('custom-post-type', $id);
 
 				return apply_filters(__METHOD__, $counter, get_defined_vars());
 			}
@@ -1616,7 +1712,7 @@ namespace quick_cache
 					$cache_path_no_scheme_quv_ext = $this->build_cache_path($_author['posts_url'], '', '', $this::CACHE_PATH_NO_SCHEME | $this::CACHE_PATH_NO_PATH_INDEX | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT);
 					$regex                        = '/^'.preg_quote($cache_dir, '/'). // Consider all schemes; all path paginations; and all possible variations.
 					                                '\/[^\/]+\/'.preg_quote($cache_path_no_scheme_quv_ext, '/').
-					                                '(?:\/index)?(?:\.|\/(?:page|comment\-page)\/[0-9]+[.\/])/';
+					                                '(?:\/index)?(?:\.|\/(?:page\/[0-9]+|comment\-page\-[0-9]+)[.\/])/';
 
 					/** @var $_file \RecursiveDirectoryIterator For IDEs. */
 					foreach($this->dir_regex_iteration($cache_dir, $regex) as $_file) if($_file->isFile() || $_file->isLink())
@@ -1693,6 +1789,11 @@ namespace quick_cache
 
 				$post_status = get_post_status($id); // Cache this.
 
+				if($post_status === 'draft' && isset($GLOBALS['pagenow'], $_POST['publish'])
+				   && is_admin() && $GLOBALS['pagenow'] === 'post.php' && current_user_can('publish_posts')
+				   && strpos(wp_get_referer(), '/post-new.php') !== FALSE
+				) $post_status = 'publish'; // A new post being published now.
+
 				if($post_status === 'auto-draft')
 					return $counter; // Nothing to do.
 
@@ -1768,7 +1869,7 @@ namespace quick_cache
 					$cache_path_no_scheme_quv_ext = $this->build_cache_path($_term['permalink'], '', '', $this::CACHE_PATH_NO_SCHEME | $this::CACHE_PATH_NO_PATH_INDEX | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT);
 					$regex                        = '/^'.preg_quote($cache_dir, '/'). // Consider all schemes; all path paginations; and all possible variations.
 					                                '\/[^\/]+\/'.preg_quote($cache_path_no_scheme_quv_ext, '/').
-					                                '(?:\/index)?(?:\.|\/(?:page|comment\-page)\/[0-9]+[.\/])/';
+					                                '(?:\/index)?(?:\.|\/(?:page\/[0-9]+|comment\-page\-[0-9]+)[.\/])/';
 
 					/** @var $_file \RecursiveDirectoryIterator For IDEs. */
 					foreach($this->dir_regex_iteration($cache_dir, $regex) as $_file) if($_file->isFile() || $_file->isLink())
@@ -1888,6 +1989,168 @@ namespace quick_cache
 				$counter += $this->auto_purge_post_cache($comment->comment_post_ID);
 
 				return apply_filters(__METHOD__, $counter, get_defined_vars());
+			}
+
+			/**
+			 * Automatically clears all cache files for current blog under various conditions;
+			 *    used to check for conditions that don't have a hook that we can attach to.
+			 *
+			 * @since 140922 First documented version.
+			 *
+			 * @attaches-to `admin_init` hook.
+			 *
+			 * @see auto_clear_cache()
+			 */
+			public function maybe_auto_clear_cache()
+			{
+				$_pagenow = $GLOBALS['pagenow'];
+				if(isset($this->cache[__FUNCTION__][$_pagenow]))
+					return; // Already did this.
+				$this->cache[__FUNCTION__][$_pagenow] = -1;
+
+				// If Dashboard → Settings → General options are updated
+				if($GLOBALS['pagenow'] === 'options-general.php' && !empty($_REQUEST['settings-updated']))
+					$this->auto_clear_cache();
+
+				// If Dashboard → Settings → Reading options are updated
+				if($GLOBALS['pagenow'] === 'options-reading.php' && !empty($_REQUEST['settings-updated']))
+					$this->auto_clear_cache();
+
+				// If Dashboard → Settings → Discussion options are updated
+				if($GLOBALS['pagenow'] === 'options-discussion.php' && !empty($_REQUEST['settings-updated']))
+					$this->auto_clear_cache();
+
+				// If Dashboard → Settings → Permalink options are updated
+				if($GLOBALS['pagenow'] === 'options-permalink.php' && !empty($_REQUEST['settings-updated']))
+					$this->auto_clear_cache();
+			}
+
+			/**
+			 * Automatically clears all cache files for current blog when JetPack Custom CSS is saved.
+			 *
+			 * @since 140919 First documented version.
+			 *
+			 * @attaches-to `safecss_save_pre` hook.
+			 *
+			 * @see auto_clear_cache()
+			 */
+			public function jetpack_custom_css($args)
+			{
+				if(class_exists('Jetpack') && !$args['is_preview'])
+					$this->auto_clear_cache();
+			}
+
+			/**
+			 * Automatically clears all cache files for current blog when WordPress core, or an active component, is upgraded.
+			 *
+			 * @since 141001 Clearing the cache on WP upgrades.
+			 *
+			 * @attaches-to `upgrader_process_complete` hook.
+			 *
+			 * @param \WP_Upgrader $upgrader_instance An instance of \WP_Upgrader.
+			 *    Or, any class that extends \WP_Upgrader.
+			 *
+			 * @param array        $data Array of bulk item update data.
+			 *
+			 *    This array may include one or more of the following keys:
+			 *
+			 *       - `string` `$action` Type of action. Default 'update'.
+			 *       - `string` `$type` Type of update process; e.g. 'plugin', 'theme', 'core'.
+			 *       - `boolean` `$bulk` Whether the update process is a bulk update. Default true.
+			 *       - `array` `$packages` Array of plugin, theme, or core packages to update.
+			 *
+			 * @see auto_clear_cache()
+			 */
+			public function upgrader_process_complete(\WP_Upgrader $upgrader_instance, array $data)
+			{
+				switch(!empty($data['type']) ? $data['type'] : '')
+				{
+					case 'plugin': // Plugin upgrade.
+
+						/** @var $skin \Plugin_Upgrader_Skin * */
+						$skin                    = $upgrader_instance->skin;
+						$multi_plugin_update     = $single_plugin_update = FALSE;
+						$upgrading_active_plugin = FALSE; // Initialize.
+
+						if(!empty($data['bulk']) && !empty($data['plugins']) && is_array($data['plugins']))
+							$multi_plugin_update = TRUE;
+
+						else if(!empty($data['plugin']) && is_string($data['plugin']))
+							$single_plugin_update = TRUE;
+
+						if($multi_plugin_update)
+						{
+							foreach($data['plugins'] as $_plugin)
+								if($_plugin && is_string($_plugin) && is_plugin_active($_plugin))
+								{
+									$upgrading_active_plugin = TRUE;
+									break; // Got what we need here.
+								}
+							unset($_plugin); // Housekeeping.
+						}
+						else if($single_plugin_update && $skin->plugin_active == TRUE)
+							$upgrading_active_plugin = TRUE;
+
+						if($upgrading_active_plugin)
+							$this->auto_clear_cache(); // Yes, clear the cache.
+
+						break; // Break switch.
+
+					case 'theme': // Theme upgrade.
+
+						$current_active_theme          = wp_get_theme();
+						$current_active_theme_parent   = $current_active_theme->parent();
+						$multi_theme_update            = $single_theme_update = FALSE;
+						$upgrading_active_parent_theme = $upgrading_active_theme = FALSE;
+
+						if(!empty($data['bulk']) && !empty($data['themes']) && is_array($data['themes']))
+							$multi_theme_update = TRUE;
+
+						else if(!empty($data['theme']) && is_string($data['theme']))
+							$single_theme_update = TRUE;
+
+						if($multi_theme_update)
+						{
+							foreach($data['themes'] as $_theme)
+							{
+								if(!$_theme || !is_string($_theme) || !($_theme_obj = wp_get_theme($_theme)))
+									continue; // Unable to acquire theme object instance.
+
+								if($current_active_theme_parent && $current_active_theme_parent->get_stylesheet() === $_theme_obj->get_stylesheet())
+								{
+									$upgrading_active_parent_theme = TRUE;
+									break; // Got what we needed here.
+								}
+								else if($current_active_theme->get_stylesheet() === $_theme_obj->get_stylesheet())
+								{
+									$upgrading_active_theme = TRUE;
+									break; // Got what we needed here.
+								}
+							}
+							unset($_theme, $_theme_obj); // Housekeeping.
+						}
+						else if($single_theme_update && ($_theme_obj = wp_get_theme($data['theme'])))
+						{
+							if($current_active_theme_parent && $current_active_theme_parent->get_stylesheet() === $_theme_obj->get_stylesheet())
+								$upgrading_active_parent_theme = TRUE;
+
+							else if($current_active_theme->get_stylesheet() === $_theme_obj->get_stylesheet())
+								$upgrading_active_theme = TRUE;
+						}
+						unset($_theme_obj); // Housekeeping.
+
+						if($upgrading_active_theme || $upgrading_active_parent_theme)
+							$this->auto_clear_cache(); // Yes, clear the cache.
+
+						break; // Break switch.
+
+					case 'core': // Core upgrade.
+					default: // Or any other sort of upgrade.
+
+						$this->auto_clear_cache(); // Yes, clear the cache.
+
+						break; // Break switch.
+				}
 			}
 
 			/**

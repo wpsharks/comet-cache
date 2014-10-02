@@ -230,6 +230,12 @@ namespace quick_cache // Root namespace.
 				echo '            <option value="1">'.__('Yes, if any single Post/Page is purged/reset; also purge any associated custom Term archive views.', $this->plugin->text_domain).'</option>'."\n";
 				echo '            <option value="0" selected="selected">'.__('No, my site doesn\'t use any custom Terms and/or I don\'t have any custom Term archive views.', $this->plugin->text_domain).'</option>'."\n";
 				echo '         </select></p>'."\n";
+				echo '      <h3>'.__('Auto-Purge "Custom Post Type Archives" Too?', $this->plugin->text_domain).'</h3>'."\n";
+				echo '      <p>'.__('Most sites do not use any Custom Post Types so it should be safe to disable this option. However, if your site uses Custom Post Types and they have their own Custom Post Type archive views, you may want to clear those when any associated post is cleared. Therefore, if a single Post with a Custom Post Type is changed in some way; and Quick Cache purges/resets the cache for that post, would you like Quick Cache to also purge any existing cache files for the associated Custom Post Type archive views?', $this->plugin->text_domain).'</p>'."\n";
+				echo '      <p><select name="'.esc_attr(__NAMESPACE__).'[save_options][cache_purge_custom_post_type_enable]">'."\n";
+				echo '            <option value="1" selected="selected">'.__('Yes, if any single Post with a Custom Post Type is purged/reset; also purge any associated Custom Post Type archive views.', $this->plugin->text_domain).'</option>'."\n";
+				echo '            <option value="0">'.__('No, my site doesn\'t use any Custom Post Types and/or I don\'t have any Custom Post Type archive views.', $this->plugin->text_domain).'</option>'."\n";
+				echo '         </select></p>'."\n";
 				echo '   </div>'."\n";
 
 				echo '</div>'."\n";
@@ -243,7 +249,7 @@ namespace quick_cache // Root namespace.
 			echo '   <div class="plugin-menu-page-panel-body clearfix">'."\n";
 			echo '      <h3>'.__('Base Cache Directory (Must be Writable; e.g. <a href="http://codex.wordpress.org/Changing_File_Permissions" target="_blank">Permissions</a> <code>755</code> or Higher)', $this->plugin->text_domain).'</h3>'."\n";
 			echo '      <p>'.__('This is where Quick Cache will store the cached version of your site. If you\'re not sure how to deal with directory permissions, don\'t worry too much about this. If there is a problem, Quick Cache will let you know about it. By default, this directory is created by Quick Cache and the permissions are setup automatically. In most cases there is nothing more you need to do.', $this->plugin->text_domain).'</p>'."\n";
-			echo '      <table style="width:100%;"><tr><td style="width:1px; font-weight:bold; white-space:nowrap;">'.esc_html(WP_CONTENT_DIR).'</td><td><input type="text" name="'.esc_attr(__NAMESPACE__).'[save_options][base_dir]" value="'.esc_attr($this->plugin->options['base_dir']).'" /></td><td style="width:1px; font-weight:bold; white-space:nowrap;">/</td></tr></table>'."\n";
+			echo '      <table style="width:100%;"><tr><td style="width:1px; font-weight:bold; white-space:nowrap;">'.esc_html(WP_CONTENT_DIR).'/</td><td><input type="text" name="'.esc_attr(__NAMESPACE__).'[save_options][base_dir]" value="'.esc_attr($this->plugin->options['base_dir']).'" /></td><td style="width:1px; font-weight:bold; white-space:nowrap;">/</td></tr></table>'."\n";
 			echo '      <hr />'."\n";
 			echo '      <i class="fa fa-clock-o fa-4x" style="float:right; margin: 0 0 0 25px;"></i>'."\n";
 			echo '      <h3>'.__('Automatic Expiration Time (Max Age)', $this->plugin->text_domain).'</h3>'."\n";
@@ -444,8 +450,12 @@ namespace quick_cache // Root namespace.
 				echo '         <h3>'.__('A List of URLs to Auto-Cache (One Per Line)', $this->plugin->text_domain).'</h3>'."\n";
 				echo '         <p><textarea name="'.esc_attr(__NAMESPACE__).'[save_options][auto_cache_other_urls]" rows="5" spellcheck="false" class="monospace"></textarea></p>'."\n";
 				echo '         <hr />'."\n";
+				echo '         <h3>'.__('Auto-Cache Delay Timer (in Milliseconds)', $this->plugin->text_domain).'</h3>'."\n";
+				echo '         <p>'.__('As the Auto-Cache Engine runs through each URL, you can tell it to wait X number of milliseconds between each connection that it makes. It is strongly suggested that you DO have some small delay here. Otherwise, you run the risk of hammering your own web server with multiple repeated connections whenever the Auto-Cache Engine is running. This is especially true on very large sites; where there is the potential for hundreds of repeated connections as the Auto-Cache Engine goes through a long list of URLs. Adding a delay between each connection will prevent the Auto-Cache Engine from placing a heavy load on the processor that powers your web server. A value of <code>500</code> milliseconds is suggested here (half a second). If you experience problems, you can bump this up a little at a time, in increments of <code>500</code> milliseconds; until you find a happy place for your server. <em>Please note that <code>1000</code> milliseconds = <code>1</code> full second.</em>', $this->plugin->text_domain).'</p>'."\n";
+				echo '         <p><input type="text" name="'.esc_attr(__NAMESPACE__).'[save_options][auto_cache_delay]" value="500" /></p>'."\n";
+				echo '         <hr />'."\n";
 				echo '         <h3>'.__('Auto-Cache User-Agent String', $this->plugin->text_domain).'</h3>'."\n";
-				echo '         <table style="width:100%;"><tr><td><input type="text" name="'.esc_attr(__NAMESPACE__).'[save_options][auto_cache_user_agent]" value="" /></td><td style="width:1px; font-weight:bold; white-space:nowrap;">; '.esc_html(__NAMESPACE__.' '.$this->plugin->version).'</td></tr></table>'."\n";
+				echo '         <table style="width:100%;"><tr><td><input type="text" name="'.esc_attr(__NAMESPACE__).'[save_options][auto_cache_user_agent]" value="WordPress" /></td><td style="width:1px; font-weight:bold; white-space:nowrap;">; '.esc_html(__NAMESPACE__.' '.$this->plugin->version).'</td></tr></table>'."\n";
 				echo '         <p class="info" style="display:block;">'.__('This is how the Auto-Cache Engine identifies itself when connecting to URLs. See <a href="http://en.wikipedia.org/wiki/User_agent" target="_blank">User Agent</a> in the Wikipedia.', $this->plugin->text_domain).'</p>'."\n";
 				echo '      </div>'."\n";
 				echo '   </div>'."\n";

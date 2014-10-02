@@ -62,7 +62,9 @@ namespace quick_cache // Root namespace.
 			$args = array_map('trim', stripslashes_deep((array)$args));
 			if(isset($args['base_dir'])) // No leading/trailing slashes please.
 				$args['base_dir'] = trim($args['base_dir'], '\\/'." \t\n\r\0\x0B");
+
 			$this->plugin->options = array_merge($this->plugin->default_options, $args);
+			$this->plugin->options = array_intersect_key($this->plugin->options, $this->plugin->default_options);
 
 			if(!trim($this->plugin->options['base_dir'], '\\/'." \t\n\r\0\x0B") // Empty?
 			   || strpos(basename($this->plugin->options['base_dir']), 'wp-') === 0 // Reserved?
