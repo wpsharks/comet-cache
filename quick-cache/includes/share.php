@@ -34,7 +34,7 @@ namespace quick_cache // Root namespace.
 			 *
 			 * @var string Current version of the software.
 			 */
-			public $version = '140925';
+			public $version = '141001';
 
 			/**
 			 * Text domain for translations; based on `__NAMESPACE__`.
@@ -494,7 +494,31 @@ namespace quick_cache // Root namespace.
 					return static::$static[__FUNCTION__];
 
 				if(!empty($_GET) || isset($_SERVER['QUERY_STRING'][0]))
-					if(!(isset($_GET['qcABC']) && count($_GET) === 1)) // Ignore this special case.
+					if(!(isset($_GET['qcABC']) && count($_GET) === 1)) // Special case.
+						return (static::$static[__FUNCTION__] = TRUE);
+
+				return (static::$static[__FUNCTION__] = FALSE);
+			}
+
+			/**
+			 * Is the current request method `POST`, `PUT` or `DELETE`?
+			 *
+			 * @since 14xxxx Updating `is_uncacheable_request_method()` and restoring this one.
+			 *
+			 * @return boolean `TRUE` if current request method is `POST`, `PUT` or `DELETE`.
+			 *
+			 * @note The return value of this function is cached to reduce overhead on repeat calls.
+			 */
+			public function is_post_put_delete_request()
+			{
+				if(isset(static::$static[__FUNCTION__]))
+					return static::$static[__FUNCTION__];
+
+				if(!empty($_POST)) // Being thorough.
+					return (static::$static[__FUNCTION__] = TRUE);
+
+				if(!empty($_SERVER['REQUEST_METHOD']))
+					if(in_array(strtoupper($_SERVER['REQUEST_METHOD']), array('POST', 'PUT', 'DELETE'), TRUE))
 						return (static::$static[__FUNCTION__] = TRUE);
 
 				return (static::$static[__FUNCTION__] = FALSE);
@@ -503,6 +527,7 @@ namespace quick_cache // Root namespace.
 			/**
 			 * Is the current request method is uncacheable?
 			 *
+			 * @since 14xxxx Reversing logic; only allow `GET` requests to be cached.
 			 * @since 140725 Adding HEAD/OPTIONS/TRACE/CONNECT to the list of uncacheables.
 			 *
 			 * @return boolean `TRUE` if current request method is uncacheable.
@@ -514,9 +539,11 @@ namespace quick_cache // Root namespace.
 				if(isset(static::$static[__FUNCTION__]))
 					return static::$static[__FUNCTION__];
 
+				if(!empty($_POST)) // Being thorough.
+					return (static::$static[__FUNCTION__] = TRUE);
+
 				if(!empty($_SERVER['REQUEST_METHOD']))
-					if(in_array(strtoupper($_SERVER['REQUEST_METHOD']),
-					            array('POST', 'PUT', 'DELETE', 'HEAD', 'OPTIONS', 'TRACE', 'CONNECT'), TRUE))
+					if(!in_array(strtoupper($_SERVER['REQUEST_METHOD']), array('GET'), TRUE))
 						return (static::$static[__FUNCTION__] = TRUE);
 
 				return (static::$static[__FUNCTION__] = FALSE);
