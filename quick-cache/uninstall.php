@@ -19,7 +19,7 @@ namespace quick_cache
 		class uninstall // Uninstall handler.
 		{
 			/**
-			 * @since 14xxxx Adding uninstaller.
+			 * @since 141001 Adding uninstaller.
 			 *
 			 * @var plugin Primary plugin class instance.
 			 */
@@ -28,7 +28,7 @@ namespace quick_cache
 			/**
 			 * Uninstall constructor.
 			 *
-			 * @since 14xxxx Adding uninstall handler.
+			 * @since 141001 Adding uninstall handler.
 			 */
 			public function __construct()
 			{
