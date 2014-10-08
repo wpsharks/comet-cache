@@ -1316,6 +1316,8 @@ namespace quick_cache // Root namespace.
 			 */
 			public function files_i18n($counter)
 			{
+				$counter = (integer)$counter;
+
 				return $counter.' '._n('file', 'files', $counter, $this->text_domain);
 			}
 
@@ -1330,6 +1332,8 @@ namespace quick_cache // Root namespace.
 			 */
 			public function dirs_i18n($counter)
 			{
+				$counter = (integer)$counter;
+
 				return $counter.' '._n('directory', 'directories', $counter, $this->text_domain);
 			}
 
@@ -1344,6 +1348,8 @@ namespace quick_cache // Root namespace.
 			 */
 			public function files_dirs_i18n($counter)
 			{
+				$counter = (integer)$counter;
+
 				return $counter.' '._n('file/directory', 'files/directories', $counter, $this->text_domain);
 			}
 
