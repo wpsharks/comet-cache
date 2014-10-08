@@ -2620,11 +2620,9 @@ namespace quick_cache
 			/**
 			 * Removes the entire base directory.
 			 *
-			 * @since 14xxx First documented version.
+			 * @since 140422 First documented version.
 			 *
 			 * @return integer Total files removed by this routine (if any).
-			 *
-			 * @throws \exception If a wipe failure occurs.
 			 */
 			public function remove_base_dir()
 			{
@@ -2633,26 +2631,7 @@ namespace quick_cache
 				// @TODO When set_time_limit() is disabled by PHP configuration, display a warning message to users upon plugin activation.
 				@set_time_limit(1800); // In case of HUGE sites w/ a very large directory. Errors are ignored in case `set_time_limit()` is disabled.
 
-				$base_dir = $this->wp_content_dir_to(''); // Simply the base directory.
-
-				/** @var $_dir_file \RecursiveDirectoryIterator For IDEs. */
-				if($base_dir && is_dir($base_dir)) foreach($this->dir_regex_iteration($base_dir, '/.+/') as $_dir_file)
-				{
-					if(($_dir_file->isFile() || $_dir_file->isLink()))
-						if(!unlink($_dir_file->getPathname())) // Throw exception if unable to delete.
-							throw new \exception(sprintf(__('Unable to remove file: `%1$s`.', $this->text_domain), $_dir_file->getPathname()));
-						else $counter++; // Increment counter for each file we wipe.
-
-					else if($_dir_file->isDir())
-						if(!rmdir($_dir_file->getPathname())) // Throw exception if unable to delete.
-							throw new \exception(sprintf(__('Unable to remove dir: `%1$s`.', $this->text_domain), $_dir_file->getPathname()));
-				}
-				unset($_dir_file); // Just a little housekeeping.
-
-				if(is_dir($base_dir) && !rmdir($base_dir)) // Throw exception if unable to delete.
-					throw new \exception(sprintf(__('Unable to remove base dir: `%1$s`.', $this->text_domain), $base_dir));
-
-				return $counter; // Total removals.
+				return ($counter += $this->delete_all_files_dirs_in($this->wp_content_dir_to(''), TRUE));
 			}
 		}
 

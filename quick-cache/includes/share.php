@@ -1090,6 +1090,10 @@ namespace quick_cache // Root namespace.
 				return $dir_file; // Normalized now.
 			}
 
+			/* --------------------------------------------------------------------------------------
+			 * File/directory iteration utilities for Quick Cache.
+			 -------------------------------------------------------------------------------------- */
+
 			/**
 			 * Recursive directory iterator based on a regex pattern.
 			 *
@@ -1295,6 +1299,52 @@ namespace quick_cache // Root namespace.
 					$counter++; // Increment counter for each directory we delete.
 				}
 				return $counter; // Total files deleted by this routine.
+			}
+
+			/* --------------------------------------------------------------------------------------
+			 * Translation utilities for Quick Cache.
+			 -------------------------------------------------------------------------------------- */
+
+			/**
+			 * `X file` or `X files`, translated w/ singlular/plural context.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @param integer $counter Total files; i.e. the counter.
+			 *
+			 * @return string The phrase `X file` or `X files`.
+			 */
+			public function files_i18n($counter)
+			{
+				return $counter.' '._n('file', 'files', $counter, $this->text_domain);
+			}
+
+			/**
+			 * `X directory` or `X directories`, translated w/ singlular/plural context.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @param integer $counter Total directories; i.e. the counter.
+			 *
+			 * @return string The phrase `X directory` or `X directories`.
+			 */
+			public function dirs_i18n($counter)
+			{
+				return $counter.' '._n('directory', 'directories', $counter, $this->text_domain);
+			}
+
+			/**
+			 * `X file/directory` or `X files/directories`, translated w/ singlular/plural context.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @param integer $counter Total files/directories; i.e. the counter.
+			 *
+			 * @return string The phrase `X file/directory` or `X files/directories`.
+			 */
+			public function files_dirs_i18n($counter)
+			{
+				return $counter.' '._n('file/directory', 'files/directories', $counter, $this->text_domain);
 			}
 
 			/* --------------------------------------------------------------------------------------
