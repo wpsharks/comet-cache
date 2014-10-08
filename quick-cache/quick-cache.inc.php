@@ -2083,7 +2083,7 @@ namespace quick_cache
 			/**
 			 * Automatically clears all cache files for current blog when WordPress core, or an active component, is upgraded.
 			 *
-			 * @since 14xxxx Clearing the cache on WP upgrades.
+			 * @since 141001 Clearing the cache on WP upgrades.
 			 *
 			 * @attaches-to `upgrader_process_complete` hook.
 			 *
