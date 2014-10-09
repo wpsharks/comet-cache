@@ -460,7 +460,7 @@ namespace quick_cache // Root namespace.
 					return static::$static[__FUNCTION__][$dashify];
 
 				$host        = strtolower($_SERVER['HTTP_HOST']);
-				$token_value = ($dashify) ? trim(preg_replace('/[^a-z0-9\/]/i', '-', $host), '-') : $host;
+				$token_value = $dashify ? trim(preg_replace('/[^a-z0-9\/]/i', '-', $host), '-') : $host;
 
 				return (static::$static[__FUNCTION__][$dashify] = $token_value);
 			}
@@ -488,18 +488,21 @@ namespace quick_cache // Root namespace.
 				if(isset(static::$static[__FUNCTION__][$dashify]))
 					return static::$static[__FUNCTION__][$dashify];
 
-				$host_base_token = '/'; // Assume NOT multisite; or running it's own domain.
+				$host_base_token = '/'; // Assume NOT multisite; or own domain.
 
 				if(is_multisite() && (!defined('SUBDOMAIN_INSTALL') || !SUBDOMAIN_INSTALL))
 				{ // Multisite w/ sub-directories; need a valid sub-directory token.
 
-					if(defined('PATH_CURRENT_SITE')) $host_base_token = PATH_CURRENT_SITE;
-					else if(!empty($GLOBALS['base'])) $host_base_token = $GLOBALS['base'];
+					if(defined('PATH_CURRENT_SITE'))
+						$host_base_token = PATH_CURRENT_SITE;
+
+					else if(!empty($GLOBALS['base']))
+						$host_base_token = $GLOBALS['base'];
 
 					$host_base_token = trim($host_base_token, '\\/'." \t\n\r\0\x0B");
-					$host_base_token = (isset($host_base_token[0])) ? '/'.$host_base_token.'/' : '/';
+					$host_base_token = isset($host_base_token[0]) ? '/'.$host_base_token.'/' : '/';
 				}
-				$token_value = ($dashify) ? trim(preg_replace('/[^a-z0-9\/]/i', '-', $host_base_token), '-') : $host_base_token;
+				$token_value = $dashify ? trim(preg_replace('/[^a-z0-9\/]/i', '-', $host_base_token), '-') : $host_base_token;
 
 				return (static::$static[__FUNCTION__][$dashify] = $token_value);
 			}
@@ -527,7 +530,8 @@ namespace quick_cache // Root namespace.
 				if(isset(static::$static[__FUNCTION__][$dashify]))
 					return static::$static[__FUNCTION__][$dashify];
 
-				$host_dir_token = '/'; // Assume NOT multisite; or on it's own domain.
+				$host_dir_token = '/'; // Assume NOT multisite; or own domain.
+
 				if(is_multisite() && (!defined('SUBDOMAIN_INSTALL') || !SUBDOMAIN_INSTALL))
 				{ // Multisite w/ sub-directories; need a valid sub-directory token.
 
@@ -535,14 +539,14 @@ namespace quick_cache // Root namespace.
 						preg_replace('/^'.preg_quote($this->host_base_token(), '/').'/', '', $_SERVER['REQUEST_URI']);
 
 					list($host_dir_token) = explode('/', trim($uri_minus_base, '/'));
-					$host_dir_token = (isset($host_dir_token[0])) ? '/'.$host_dir_token.'/' : '/';
+					$host_dir_token = isset($host_dir_token[0]) ? '/'.$host_dir_token.'/' : '/';
 
 					if($host_dir_token !== '/' // Perhaps NOT the main site?
 					   && (!is_file(($cache_dir = $this->cache_dir()).'/qc-blog-paths') // NOT a read/valid blog path?
 					       || !in_array($host_dir_token, unserialize(file_get_contents($cache_dir.'/qc-blog-paths')), TRUE))
 					) $host_dir_token = '/'; // Main site; e.g. this is NOT a real/valid child blog path.
 				}
-				$token_value = ($dashify) ? trim(preg_replace('/[^a-z0-9\/]/i', '-', $host_dir_token), '-') : $host_dir_token;
+				$token_value = $dashify ? trim(preg_replace('/[^a-z0-9\/]/i', '-', $host_dir_token), '-') : $host_dir_token;
 
 				return (static::$static[__FUNCTION__][$dashify] = $token_value);
 			}
