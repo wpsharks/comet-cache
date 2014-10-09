@@ -762,8 +762,13 @@ namespace quick_cache
 			 *
 			 * @param string  $also_wipe_dir Defaults to an empty string.
 			 *    By default (i.e. when this is empty) we only wipe {@link $cache_sub_dir} files.
-			 *    WARNING: if this is passed, EVERYTHING inside this directory is deleted recursively;
+			 *
+			 *    WARNING: If this is passed, EVERYTHING inside this directory is deleted recursively;
 			 *       in addition to deleting all of the {@link $cache_sub_dir} files.
+			 *
+			 *    SECURITY: This directory MUST be located inside the `/wp-content/` directory.
+			 *    Also, it MUST be a sub-directory of `/wp-content/`, NOT the directory itself.
+			 *    Also, it cannot be: `mu-plugins`, `themes`, or `plugins`.
 			 *
 			 * @return integer Total files wiped by this routine (if any).
 			 *
@@ -773,38 +778,23 @@ namespace quick_cache
 			{
 				$counter = 0; // Initialize.
 
+				$also_wipe_dir = trim((string)$also_wipe_dir);
+
 				@set_time_limit(1800); // @TODO When disabled, display a warning.
 
-				/** @var $_dir_file \RecursiveDirectoryIterator For IDEs. */
-				if(is_dir($cache_dir = $this->cache_dir())) foreach($this->dir_regex_iteration($cache_dir, '/.+/') as $_dir_file)
+				if(is_dir($cache_dir = $this->cache_dir()))
+					$counter += $this->delete_all_files_dirs_in($cache_dir);
+
+				if($also_wipe_dir && is_dir($also_wipe_dir)) // Also wipe another directory?
+					// This is called w/ version-specific upgrades. That's the only use at this time.
 				{
-					if(($_dir_file->isFile() || $_dir_file->isLink()) && strpos($_dir_file->getSubPathname(), '/') !== FALSE)
-						// Don't delete files in the immediate directory; e.g. `qc-advanced-cache` or `.htaccess`, etc.
-						// Actual `http|https/...` cache files are nested. Files in the immediate directory are for other purposes.
-						if(!unlink($_dir_file->getPathname())) // Throw exception if unable to delete.
-							throw new \exception(sprintf(__('Unable to wipe file: `%1$s`.', $this->text_domain), $_dir_file->getPathname()));
-						else $counter++; // Increment counter for each file we wipe.
+					$also_wipe_dir        = $this->n_dir_seps($also_wipe_dir);
+					$wp_content_dir_regex = preg_quote($this->n_dir_seps(WP_CONTENT_DIR), '/');
 
-					else if($_dir_file->isDir()) // Directories are last in the iteration.
-						if(!rmdir($_dir_file->getPathname())) // Throw exception if unable to delete.
-							throw new \exception(sprintf(__('Unable to wipe dir: `%1$s`.', $this->text_domain), $_dir_file->getPathname()));
+					if(preg_match('/^'.$wp_content_dir_regex.'\/[^\/]+/i', $also_wipe_dir)) // A sub-directory?
+						if(!preg_match('/^'.$wp_content_dir_regex.'\/(?:mu\-plugins|themes|plugins)(?:\/|$)/i', $also_wipe_dir))
+							$counter += $this->delete_all_files_dirs_in($also_wipe_dir);
 				}
-				unset($_dir_file); // Just a little housekeeping.
-
-				/** @var $_dir_file \RecursiveDirectoryIterator For IDEs. */
-				if($also_wipe_dir && is_dir($also_wipe_dir)) foreach($this->dir_regex_iteration($also_wipe_dir, '/.+/') as $_dir_file)
-				{
-					if(($_dir_file->isFile() || $_dir_file->isLink()))
-						if(!unlink($_dir_file->getPathname())) // Throw exception if unable to delete.
-							throw new \exception(sprintf(__('Unable to also wipe file: `%1$s`.', $this->text_domain), $_dir_file->getPathname()));
-						else $counter++; // Increment counter for each file we wipe.
-
-					else if($_dir_file->isDir())
-						if(!rmdir($_dir_file->getPathname())) // Throw exception if unable to delete.
-							throw new \exception(sprintf(__('Unable to also wipe dir: `%1$s`.', $this->text_domain), $_dir_file->getPathname()));
-				}
-				unset($_dir_file); // Just a little housekeeping.
-
 				return apply_filters(__METHOD__, $counter, get_defined_vars());
 			}
 
@@ -885,9 +875,6 @@ namespace quick_cache
 				if(!$this->options['enable'])
 					return $counter; // Nothing to do.
 
-				// if($this->disable_auto_wipe_cache_routines())
-				// 	return $counter; // Nothing to do.
-
 				$counter += $this->wipe_cache();
 
 				if($counter && is_admin() /* && $this->options['change_notifications_enable'] */)
@@ -932,9 +919,6 @@ namespace quick_cache
 
 				if(!$this->options['enable'])
 					return $counter; // Nothing to do.
-
-				// if($this->disable_clear_cache_routines())
-				// 	return $counter; // Nothing to do.
 
 				$counter += $this->clear_cache();
 
@@ -1388,16 +1372,10 @@ namespace quick_cache
 				if(!$this->options['enable'])
 					return $counter; // Nothing to do.
 
-				// if(!$this->options['cache_purge_xml_sitemaps_enable'])
-				// 	return $counter; // Nothing to do.
-
-				// if(!$this->options['cache_purge_xml_sitemap_patterns'])
-				// 	return $counter; // Nothing to do.
-
 				if(!is_dir($cache_dir = $this->cache_dir()))
 					return $counter; // Nothing to do.
 
-				if(!($patterns = $this->build_host_cache_path_regex_patterns_from_wc_uris($this->options['cache_purge_xml_sitemap_patterns'])))
+				if(!($patterns = $this->build_host_cache_path_regex_patterns_from_wc_uris('/sitemap*.xml')))
 					return $counter; // There are no patterns to look for.
 
 				$regex = $this->build_host_cache_path_regex(home_url('/'), '\/'.$patterns.'\.');
@@ -1544,9 +1522,6 @@ namespace quick_cache
 
 				if(!$this->options['enable'])
 					return $counter; // Nothing to do.
-
-				// if(!$this->options['cache_purge_custom_post_type_enable'])
-				// 	return $counter; // Nothing to do.
 
 				if(!is_dir($cache_dir = $this->cache_dir()))
 					return $counter; // Nothing to do.
