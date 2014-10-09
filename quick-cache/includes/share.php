@@ -338,18 +338,22 @@ namespace quick_cache // Root namespace.
 			 */
 			public function build_cache_path_regex($url, $regex_suffix_frag = self::CACHE_PATH_REGEX_DEFAULT_SUFFIX_FRAG)
 			{
-				$url               = trim((string)$url);
-				$regex_suffix_frag = (string)$regex_suffix_frag;
+				$url                           = trim((string)$url);
+				$regex_suffix_frag             = (string)$regex_suffix_frag;
+				$abs_relative_cache_path_regex = ''; // Initialize.
 
-				$flags = $this::CACHE_PATH_NO_PATH_INDEX | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT;
+				if($url) // Only necessary if there is a URL to deal with here.
+				{
+					$flags = $this::CACHE_PATH_NO_PATH_INDEX
+					         | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT;
 
-				$relative_cache_path           = $url ? $this->build_cache_path($url, '', '', $flags) : '';
-				$abs_relative_cache_path       = $url && isset($relative_cache_path[0]) ? '/'.$relative_cache_path : '';
-				$abs_relative_cache_path_regex = $url && isset($abs_relative_cache_path[0]) ? preg_quote($abs_relative_cache_path, '/') : '';
+					$relative_cache_path           = $this->build_cache_path($url, '', '', $flags);
+					$abs_relative_cache_path       = isset($relative_cache_path[0]) ? '/'.$relative_cache_path : '';
+					$abs_relative_cache_path_regex = preg_quote($abs_relative_cache_path, '/');
 
-				if($url && $abs_relative_cache_path_regex) $abs_relative_cache_path_regex // `http` and `https` schemes.
-					= preg_replace('/^\\\\\/https?\\\\\//i', '\/https?\/', $abs_relative_cache_path_regex);
-
+					if($abs_relative_cache_path_regex) $abs_relative_cache_path_regex = // `http` and `https` schemes.
+						preg_replace('/^\\\\\/https?\\\\\//i', '\/https?\/', $abs_relative_cache_path_regex);
+				}
 				return '/^'.$abs_relative_cache_path_regex.$regex_suffix_frag.'/i';
 			}
 
@@ -384,30 +388,44 @@ namespace quick_cache // Root namespace.
 			 */
 			public function build_host_cache_path_regex($url, $regex_suffix_frag = self::CACHE_PATH_REGEX_DEFAULT_SUFFIX_FRAG)
 			{
-				$url               = trim((string)$url);
-				$regex_suffix_frag = (string)$regex_suffix_frag;
+				$url                           = trim((string)$url);
+				$regex_suffix_frag             = (string)$regex_suffix_frag;
+				$abs_relative_cache_path_regex = ''; // Initialize.
 
-				$flags = $this::CACHE_PATH_NO_SCHEME | $this::CACHE_PATH_NO_HOST
-				         | $this::CACHE_PATH_NO_PATH_INDEX | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT;
+				if($url) // Only necessary if there is a URL to deal with here.
+				{
+					$flags = $this::CACHE_PATH_NO_SCHEME | $this::CACHE_PATH_NO_HOST | $this::CACHE_PATH_NO_PATH_INDEX
+					         | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT;
 
-				$relative_cache_path           = $url ? $this->build_cache_path($url, '', '', $flags) : '';
-				$abs_relative_cache_path       = $url && isset($relative_cache_path[0]) ? '/'.$relative_cache_path : '';
-				$abs_relative_cache_path_regex = $url && isset($abs_relative_cache_path[0]) ? preg_quote($abs_relative_cache_path, '/') : '';
+					$host                 = $_SERVER['HTTP_HOST'];
+					$host_base_dir_tokens = $this->host_base_dir_tokens();
+					$host_url             = rtrim('http://'.$host.$host_base_dir_tokens, '/');
+					$host_cache_path      = $this->build_cache_path($host_url, '', '', $flags);
 
+					$cache_path                    = $this->build_cache_path($url, '', '', $flags);
+					$relative_cache_path           = preg_replace('/^'.preg_quote($host_cache_path, '/').'(?:\/|$)/i', '', $cache_path);
+					$abs_relative_cache_path       = isset($relative_cache_path[0]) ? '/'.$relative_cache_path : '';
+					$abs_relative_cache_path_regex = preg_quote($abs_relative_cache_path, '/');
+				}
 				return '/^'.$abs_relative_cache_path_regex.$regex_suffix_frag.'/i';
 			}
 
 			/**
-			 * Variation of {@link build_cache_path()} for relative regex.
+			 * Variation of {@link build_cache_path()} for relative regex fragments.
 			 *
 			 * This converts URIs into relative `cache/paths`; i.e. relative to the current host|blog directory,
-			 *    and then converts those into `(?:regex|patterns)` with piped `|` alternatives.
+			 *    and then converts those into `(?:regex|fragments)` with piped `|` alternatives.
 			 *
 			 * @since 14xxxx Refactoring cache clear/purge routines.
 			 *
 			 * @param string $uris A line-delimited list of URIs. These may contain `*` wildcards also.
 			 *
-			 * @return string The resulting `cache/paths` based on the input `$uris`; converted to `(?:regex|patterns)`.
+			 * @param string $regex_suffix_frag Regex fragment to come after each relative cache/path.
+			 *    Defaults to: `(?:\/index)?(?:\.|\/(?:page\/[0-9]+|comment\-page\-[0-9]+)[.\/])`.
+			 *    Note: this should NOT have delimiters; i.e. do NOT start or end with `/`.
+			 *    See also: {@link CACHE_PATH_REGEX_DEFAULT_SUFFIX_FRAG}.
+			 *
+			 * @return string The resulting `cache/paths` based on the input `$uris`; converted to `(?:regex|fragments)`.
 			 *
 			 * @note This variation of {@link build_cache_path()} automatically forces the following flags.
 			 *
@@ -418,20 +436,27 @@ namespace quick_cache // Root namespace.
 			 *       - {@link CACHE_PATH_NO_QUV}
 			 *       - {@link CACHE_PATH_NO_EXT}
 			 */
-			public function build_host_cache_path_regex_patterns_from_wc_uris($uris)
+			public function build_host_cache_path_regex_frags_from_wc_uris($uris, $regex_suffix_frag = self::CACHE_PATH_REGEX_DEFAULT_SUFFIX_FRAG)
 			{
 				if(!($uris = trim((string)$uris)))
 					return ''; // Nothing to do.
 
-				$_this = $this; // Reference for the closure below.
-				$flags = $this::CACHE_PATH_ALLOW_WILDCARDS | $this::CACHE_PATH_NO_SCHEME | $this::CACHE_PATH_NO_HOST
-				         | $this::CACHE_PATH_NO_PATH_INDEX | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT;
+				$_this             = $this; // Reference for the closure below.
+				$regex_suffix_frag = (string)$regex_suffix_frag; // Force a string value.
+				$flags             = $this::CACHE_PATH_ALLOW_WILDCARDS | $this::CACHE_PATH_NO_SCHEME | $this::CACHE_PATH_NO_HOST
+				                     | $this::CACHE_PATH_NO_PATH_INDEX | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT;
 
-				return '(?:'.implode('|', array_map(function ($pattern) use ($_this, $flags)
+				$host                 = $_SERVER['HTTP_HOST'];
+				$host_base_dir_tokens = $this->host_base_dir_tokens();
+				$host_url             = rtrim('http://'.$host.$host_base_dir_tokens, '/');
+				$host_cache_path      = $this->build_cache_path($host_url, '', '', $flags);
+
+				return '(?:'.implode('|', array_map(function ($pattern) use ($_this, $regex_suffix_frag, $flags, $host_url, $host_cache_path)
 				{
-					$pattern = $_this->build_cache_path(home_url('/'.trim($pattern, '/')), '', '', $flags);
+					$cache_path          = $_this->build_cache_path($host_url.'/'.trim($pattern, '/'), '', '', $flags);
+					$relative_cache_path = preg_replace('/^'.preg_quote($host_cache_path, '/').'(?:\/|$)/i', '', $cache_path);
 
-					return preg_replace('/\\\\\*/', '.*?', preg_quote($pattern, '/')); #
+					return preg_replace('/\\\\\*/', '.*?', preg_quote($relative_cache_path, '/')).$regex_suffix_frag; #
 
 				}, preg_split('/['."\r\n".']+/', $uris, NULL, PREG_SPLIT_NO_EMPTY))).')';
 			}

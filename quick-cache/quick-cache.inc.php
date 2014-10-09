@@ -1159,7 +1159,7 @@ namespace quick_cache
 				for($_i = 0; $_i < count($variation_regex_frags); $_i = $_i + $in_sets_of)
 				{
 					$_variation_regex_frags = array_slice($variation_regex_frags, $_i, $in_sets_of);
-					$_regex            = '/^\/(?:'.implode('|', $_variation_regex_frags).')\./';
+					$_regex                 = '/^\/(?:'.implode('|', $_variation_regex_frags).')\./';
 					$counter += $this->clear_files_from_host_cache_dir($_regex);
 				}
 				unset($_i, $_variation_regex_frags, $_regex); // Housekeeping.
@@ -1201,10 +1201,10 @@ namespace quick_cache
 				if(!is_dir($cache_dir = $this->cache_dir()))
 					return $counter; // Nothing to do.
 
-				if(!($patterns = $this->build_host_cache_path_regex_patterns_from_wc_uris('/sitemap*.xml')))
+				if(!($regex_frags = $this->build_host_cache_path_regex_frags_from_wc_uris('/sitemap*.xml', '')))
 					return $counter; // There are no patterns to look for.
 
-				$regex = $this->build_host_cache_path_regex(home_url('/'), '\/'.$patterns.'\.');
+				$regex = $this->build_host_cache_path_regex('', '\/'.$regex_frags.'\.');
 				$counter += $this->clear_files_from_host_cache_dir($regex);
 
 				if($counter && is_admin() /* && $this->options['change_notifications_enable'] */)

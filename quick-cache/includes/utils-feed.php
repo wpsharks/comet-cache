@@ -2,7 +2,7 @@
 /**
  * Feed Utilities
  *
- * @package quick_cache\auto_cache_engine
+ * @package quick_cache\utils_feed
  * @since 14xxxx Refactoring cache clear/purge routines.
  * @copyright WebSharks, Inc. <http://www.websharks-inc.com>
  * @license GNU General Public License, version 2
