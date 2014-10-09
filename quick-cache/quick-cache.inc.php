@@ -956,11 +956,15 @@ namespace quick_cache
 				if(!$this->options['enable'])
 					return $counter; // Nothing to do.
 
+				// if($this->disable_clear_cache_routines())
+				// 	return $counter; // Nothing to do.
+
 				$counter = $this->clear_cache();
 
-				if($counter && is_admin()) // Change notifications cannot be turned off in the lite version.
+				if($counter && is_admin() /* && $this->options['change_notifications_enable'] */)
 					$this->enqueue_notice('<img src="'.esc_attr($this->url('/client-s/images/clear.png')).'" style="float:left; margin:0 10px 0 0; border:0;" />'.
-					                      __('<strong>Quick Cache:</strong> detected important site changes. Found cache files for this site (auto-clearing).', $this->text_domain));
+					                      sprintf(__('<strong>Quick Cache:</strong> detected important site changes. Found %1$s in the cache for this site; auto-clearing.', $this->text_domain),
+					                              esc_html($this->i18n_files($counter))));
 
 				return apply_filters(__METHOD__, $counter, get_defined_vars());
 			}
