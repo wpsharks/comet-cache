@@ -974,7 +974,7 @@ namespace quick_cache
 			 *
 			 * @since 140422 First documented version.
 			 *
-			 * @param integer $id A WordPress post ID.
+			 * @param integer $post_id A WordPress post ID.
 			 * @param bool    $force Defaults to a `FALSE` value.
 			 *    Pass as TRUE if purge should be done for `draft`, `pending`,
 			 *    `future`, or `trash` post statuses.
@@ -989,16 +989,16 @@ namespace quick_cache
 			 * @see auto_purge_comment_post_cache()
 			 * @see auto_purge_post_cache_transition()
 			 */
-			public function auto_purge_post_cache($id, $force = FALSE)
+			public function auto_purge_post_cache($post_id, $force = FALSE)
 			{
-				$id = (integer)$id;
+				$counter = 0; // Initialize.
 
-				$counter          = 0; // Initialize.
-				$enqueued_notices = 0; // Initialize.
+				if(!($post_id = (integer)$post_id))
+					return $counter; // Nothing to do.
 
-				if(isset($this->cache[__FUNCTION__][$id][(integer)$force]))
+				if(isset($this->cache[__FUNCTION__][$post_id][(integer)$force]))
 					return $counter; // Already did this.
-				$this->cache[__FUNCTION__][$id][(integer)$force] = -1;
+				$this->cache[__FUNCTION__][$post_id][(integer)$force] = -1;
 
 				if(isset(static::$static['___allow_auto_purge_post_cache']) && static::$static['___allow_auto_purge_post_cache'] === FALSE)
 				{
@@ -1014,10 +1014,10 @@ namespace quick_cache
 				if(!is_dir($cache_dir = $this->cache_dir()))
 					return $counter; // Nothing to do.
 
-				if(!($permalink = get_permalink($id)))
+				if(!($permalink = get_permalink($post_id)))
 					return $counter; // Nothing we can do.
 
-				if(!($post_status = get_post_status($id)))
+				if(!($post_status = get_post_status($post_id)))
 					return $counter; // Nothing to do.
 
 				if($post_status === 'auto-draft')
@@ -1035,45 +1035,30 @@ namespace quick_cache
 				if($post_status === 'trash' && !$force)
 					return $counter; // Nothing to do.
 
-				if(($type = get_post_type($id)) && ($type = get_post_type_object($type)) && !empty($type->labels->singular_name))
+				if(($type = get_post_type($post_id)) && ($type = get_post_type_object($type)) && !empty($type->labels->singular_name))
 					$type_singular_name = $type->labels->singular_name; // Singular name for the post type.
 				else $type_singular_name = __('Post', $this->text_domain); // Default value.
 
-				$cache_path_no_scheme_quv_ext = $this->build_cache_path($permalink, '', '', $this::CACHE_PATH_NO_SCHEME | $this::CACHE_PATH_NO_PATH_INDEX | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT);
-				$regex                        = '/^'.preg_quote($cache_dir, '/'). // Consider all schemes; all path paginations; and all possible variations.
-				                                '\/[^\/]+\/'.preg_quote($cache_path_no_scheme_quv_ext, '/').
-				                                '(?:\/index)?(?:\.|\/(?:page\/[0-9]+|comment\-page\-[0-9]+)[.\/])/';
+				$regex = $this->build_host_cache_path_regex($permalink);
+				$counter += $this->clear_files_from_host_cache_dir($regex);
 
-				/** @var $_file \RecursiveDirectoryIterator For IDEs. */
-				foreach($this->dir_regex_iteration($cache_dir, $regex) as $_file) if($_file->isFile() || $_file->isLink())
+				if($counter && is_admin() /* && $this->options['change_notifications_enable'] */)
 				{
-					if(strpos($_file->getSubpathname(), '/') === FALSE) continue;
-					// Don't delete files in the immediate directory; e.g. `qc-advanced-cache` or `.htaccess`, etc.
-					// Actual `http|https/...` cache files are nested. Files in the immediate directory are for other purposes.
-
-					if(!unlink($_file->getPathname())) // Throw exception if unable to delete.
-						throw new \exception(sprintf(__('Unable to auto-purge file: `%1$s`.', $this->text_domain), $_file->getPathname()));
-					$counter++; // Increment counter for each file purge.
-
-					if($enqueued_notices || !is_admin())
-						continue; // Stop here; we already issued a notice, or this notice is N/A.
-
 					$this->enqueue_notice('<img src="'.esc_attr($this->url('/client-s/images/clear.png')).'" style="float:left; margin:0 10px 0 0; border:0;" />'.
-					                      sprintf(__('<strong>Quick Cache:</strong> detected changes. Found cache file(s) for %1$s ID: <code>%2$s</code> (auto-purging).', $this->text_domain), $type_singular_name, $id));
-					$enqueued_notices++; // Notice counter.
+					                      sprintf(__('<strong>Quick Cache:</strong> detected changes. Found %1$s in the cache for %2$s ID: <code>%3$s</code>; auto-clearing.', $this->text_domain),
+					                              esc_html($this->i18n_files($counter)), esc_html($type_singular_name), esc_html($post_id)));
 				}
-				unset($_file); // Just a little housekeeping.
-
 				$counter += $this->auto_purge_xml_feeds_cache('blog');
-				$counter += $this->auto_purge_xml_feeds_cache('post-terms', $id);
-				$counter += $this->auto_purge_xml_feeds_cache('post-authors', $id);
+				$counter += $this->auto_purge_xml_feeds_cache('post-terms', $post_id);
+				$counter += $this->auto_purge_xml_feeds_cache('post-authors', $post_id);
 
 				$counter += $this->auto_purge_xml_sitemaps_cache();
 				$counter += $this->auto_purge_home_page_cache();
 				$counter += $this->auto_purge_posts_page_cache();
-				$counter += $this->auto_purge_post_terms_cache($id, $force);
+				$counter += $this->auto_purge_post_terms_cache($post_id, $force);
 
-				$counter += $this->auto_purge_custom_post_type_archive_cache($id); // If this is a Custom Post Type, also purge the Custom Post Type Archive view
+				// Also purge a possible custom post type archive view.
+				$counter += $this->auto_purge_custom_post_type_archive_cache($post_id);
 
 				return apply_filters(__METHOD__, $counter, get_defined_vars());
 			}
