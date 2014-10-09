@@ -1441,7 +1441,7 @@ namespace quick_cache
 				{
 					$this->enqueue_notice('<img src="'.esc_attr($this->url('/client-s/images/clear.png')).'" style="float:left; margin:0 10px 0 0; border:0;" />'.
 					                      sprintf(__('<strong>Quick Cache:</strong> detected changes. Found %1$s in the cache for XML sitemaps; auto-clearing.', $this->text_domain),
-					                              esc_html($this->files_i18n($counter))));
+					                              esc_html($this->i18n_files($counter))));
 				}
 				return apply_filters(__METHOD__, $counter, get_defined_vars());
 			}
@@ -1484,7 +1484,7 @@ namespace quick_cache
 				{
 					$this->enqueue_notice('<img src="'.esc_attr($this->url('/client-s/images/clear.png')).'" style="float:left; margin:0 10px 0 0; border:0;" />'.
 					                      sprintf(__('<strong>Quick Cache:</strong> detected changes. Found %1$s in the cache for the designated "Home Page"; auto-clearing.', $this->text_domain),
-					                              esc_html($this->files_i18n($counter))));
+					                              esc_html($this->i18n_files($counter))));
 				}
 				$counter += $this->auto_purge_xml_feeds_cache('blog');
 
@@ -1542,7 +1542,7 @@ namespace quick_cache
 				{
 					$this->enqueue_notice('<img src="'.esc_attr($this->url('/client-s/images/clear.png')).'" style="float:left; margin:0 10px 0 0; border:0;" />'.
 					                      sprintf(__('<strong>Quick Cache:</strong> detected changes. Found %1$s in the cache for the designated "Posts Page"; auto-clearing.', $this->text_domain),
-					                              esc_html($this->files_i18n($counter))));
+					                              esc_html($this->i18n_files($counter))));
 				}
 				$counter += $this->auto_purge_xml_feeds_cache('blog');
 
@@ -1611,7 +1611,7 @@ namespace quick_cache
 				{
 					$this->enqueue_notice('<img src="'.esc_attr($this->url('/client-s/images/clear.png')).'" style="float:left; margin:0 10px 0 0; border:0;" />'.
 					                      sprintf(__('<strong>Quick Cache:</strong> detected changes. Found %1$s in the cache for Custom Post Type: <code>%2$s</code>; auto-clearing.', $this->text_domain),
-					                              esc_html($this->files_i18n($counter)), esc_html($custom_post_type_name)));
+					                              esc_html($this->i18n_files($counter)), esc_html($custom_post_type_name)));
 				}
 				$counter += $this->auto_purge_xml_feeds_cache('custom-post-type', $post_id);
 
@@ -1701,7 +1701,7 @@ namespace quick_cache
 					{
 						$this->enqueue_notice('<img src="'.esc_attr($this->url('/client-s/images/clear.png')).'" style="float:left; margin:0 10px 0 0; border:0;" />'.
 						                      sprintf(__('<strong>Quick Cache:</strong> detected changes. Found %1$s in the cache for Author Page: <code>%2$s</code>; auto-clearing.', $this->text_domain),
-						                              esc_html($this->files_i18n($_author_counter)), esc_html($_author['display_name'])));
+						                              esc_html($this->i18n_files($_author_counter)), esc_html($_author['display_name'])));
 						$enqueued_notices++; // Increment enqueued notices counter.
 					}
 				}
@@ -1854,7 +1854,7 @@ namespace quick_cache
 					{
 						$this->enqueue_notice('<img src="'.esc_attr($this->url('/client-s/images/clear.png')).'" style="float:left; margin:0 10px 0 0; border:0;" />'.
 						                      sprintf(__('<strong>Quick Cache:</strong> detected changes. Found %1$s in the cache for %2$s: <code>%3$s</code>; auto-clearing.', $this->text_domain),
-						                              esc_html($this->files_i18n($_term_counter)), esc_html($_term['taxonomy_label']), esc_html($_term['term_name'])));
+						                              esc_html($this->i18n_files($_term_counter)), esc_html($_term['taxonomy_label']), esc_html($_term['term_name'])));
 						$enqueued_notices++; // Increment enqueued notices counter.
 					}
 				}

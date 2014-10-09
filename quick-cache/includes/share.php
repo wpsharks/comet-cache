@@ -1582,7 +1582,7 @@ namespace quick_cache // Root namespace.
 			 *
 			 * @return string The phrase `X file` or `X files`.
 			 */
-			public function files_i18n($counter)
+			public function i18n_files($counter)
 			{
 				$counter = (integer)$counter; // Force integer.
 
@@ -1598,7 +1598,7 @@ namespace quick_cache // Root namespace.
 			 *
 			 * @return string The phrase `X directory` or `X directories`.
 			 */
-			public function dirs_i18n($counter)
+			public function i18n_dirs($counter)
 			{
 				$counter = (integer)$counter; // Force integer.
 
@@ -1614,7 +1614,7 @@ namespace quick_cache // Root namespace.
 			 *
 			 * @return string The phrase `X file/directory` or `X files/directories`.
 			 */
-			public function files_dirs_i18n($counter)
+			public function i18n_files_dirs($counter)
 			{
 				$counter = (integer)$counter; // Force integer.
 
