@@ -219,8 +219,8 @@ namespace quick_cache // Root namespace.
 			 */
 			public function cache_dir($rel_path = '')
 			{
-				if(method_exists($this, 'wp_content_dir_to') && isset($this->cache_sub_dir))
-					$cache_dir = $this->wp_content_dir_to($this->cache_sub_dir);
+				if(method_exists($this, 'wp_content_base_dir_to') && isset($this->cache_sub_dir))
+					$cache_dir = $this->wp_content_base_dir_to($this->cache_sub_dir);
 
 				else if(defined('QUICK_CACHE_DIR') && QUICK_CACHE_DIR)
 					$cache_dir = QUICK_CACHE_DIR; // Global constant.

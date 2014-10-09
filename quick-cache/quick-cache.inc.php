@@ -773,8 +773,7 @@ namespace quick_cache
 			{
 				$counter = 0; // Initialize.
 
-				// @TODO When set_time_limit() is disabled by PHP configuration, display a warning message to users upon plugin activation.
-				@set_time_limit(1800); // In case of HUGE sites w/ a very large directory. Errors are ignored in case `set_time_limit()` is disabled.
+				@set_time_limit(1800); // @TODO When disabled, display a warning.
 
 				/** @var $_dir_file \RecursiveDirectoryIterator For IDEs. */
 				if(is_dir($cache_dir = $this->cache_dir())) foreach($this->dir_regex_iteration($cache_dir, '/.+/') as $_dir_file)
@@ -810,7 +809,7 @@ namespace quick_cache
 			}
 
 			/**
-			 * Clears cache files for the current blog.
+			 * Clears cache files for the current host|blog.
 			 *
 			 * @since 140422 First documented version.
 			 *
@@ -828,30 +827,10 @@ namespace quick_cache
 				if(!is_dir($cache_dir = $this->cache_dir()))
 					return $counter; // Nothing to do.
 
-				$url                          = 'http://'.$_SERVER['HTTP_HOST'].$this->host_base_dir_tokens();
-				$cache_path_no_scheme_quv_ext = $this->build_cache_path($url, '', '', $this::CACHE_PATH_NO_SCHEME | $this::CACHE_PATH_NO_PATH_INDEX | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT);
-				$regex                        = '/^'.preg_quote($cache_dir, '/'). // Consider all schemes; all paths; and all possible variations.
-				                                '\/[^\/]+\/'.preg_quote($cache_path_no_scheme_quv_ext, '/').
-				                                '(?:\/index)?[.\/]/';
+				@set_time_limit(1800); // @TODO When disabled, display a warning.
 
-				// @TODO When set_time_limit() is disabled by PHP configuration, display a warning message to users upon plugin activation
-				@set_time_limit(1800); // In case of HUGE sites w/ a very large directory. Errors are ignored in case `set_time_limit()` is disabled.
-
-				/** @var $_dir_file \RecursiveDirectoryIterator For IDEs. */
-				foreach($this->dir_regex_iteration($cache_dir, $regex) as $_dir_file)
-				{
-					if(($_dir_file->isFile() || $_dir_file->isLink()) && strpos($_dir_file->getSubpathname(), '/') !== FALSE)
-						// Don't delete files in the immediate directory; e.g. `qc-advanced-cache` or `.htaccess`, etc.
-						// Actual `http|https/...` cache files are nested. Files in the immediate directory are for other purposes.
-						if(!unlink($_dir_file->getPathname())) // Throw exception if unable to delete.
-							throw new \exception(sprintf(__('Unable to clear file: `%1$s`.', $this->text_domain), $_dir_file->getPathname()));
-						else $counter++; // Increment counter for each file we purge.
-
-					else if($_dir_file->isDir()) // Directories are last in the iteration.
-						if(!rmdir($_dir_file->getPathname())) // Throw exception if unable to delete.
-							throw new \exception(sprintf(__('Unable to clear dir: `%1$s`.', $this->text_domain), $_dir_file->getPathname()));
-				}
-				unset($_dir_file); // Just a little housekeeping.
+				$regex = $this->build_host_cache_path_regex('', '.+');
+				$counter += $this->clear_files_from_host_cache_dir($regex);
 
 				return apply_filters(__METHOD__, $counter, get_defined_vars());
 			}
@@ -874,8 +853,7 @@ namespace quick_cache
 
 				$max_age = strtotime('-'.$this->options['cache_max_age']);
 
-				// @TODO When set_time_limit() is disabled by PHP configuration, display a warning message to users upon plugin activation
-				@set_time_limit(1800); // In case of HUGE sites w/ a very large directory. Errors are ignored in case `set_time_limit()` is disabled.
+				@set_time_limit(1800); // @TODO When disabled, display a warning.
 
 				/** @var $_file \RecursiveDirectoryIterator For IDEs. */
 				foreach($this->dir_regex_iteration($cache_dir, '/.+/') as $_file) if($_file->isFile() || $_file->isLink())
@@ -916,7 +894,7 @@ namespace quick_cache
 				// if($this->disable_auto_wipe_cache_routines())
 				// 	return $counter; // Nothing to do.
 
-				$counter = $this->wipe_cache();
+				$counter += $this->wipe_cache();
 
 				if($counter && is_admin() /* && $this->options['change_notifications_enable'] */)
 				{
@@ -964,7 +942,7 @@ namespace quick_cache
 				// if($this->disable_clear_cache_routines())
 				// 	return $counter; // Nothing to do.
 
-				$counter = $this->clear_cache();
+				$counter += $this->clear_cache();
 
 				if($counter && is_admin() /* && $this->options['change_notifications_enable'] */)
 					$this->enqueue_notice('<img src="'.esc_attr($this->url('/client-s/images/clear.png')).'" style="float:left; margin:0 10px 0 0; border:0;" />'.
@@ -2131,17 +2109,19 @@ namespace quick_cache
 			 * @throws \exception If `base_dir` is empty when this method is called upon;
 			 *    i.e. if you attempt to call upon this method before {@link setup()} runs.
 			 */
-			public function wp_content_dir_to($rel_dir_file)
+			public function wp_content_base_dir_to($rel_dir_file)
 			{
 				$rel_dir_file = trim((string)$rel_dir_file, '\\/'." \t\n\r\0\x0B");
 
-				if(empty($this->options['base_dir'])) // Security enhancement; NEVER allow this to be empty.
+				if(empty($this->options) || !is_array($this->options) || empty($this->options['base_dir']))
 					throw new \exception(__('Doing it wrong! Missing `base_dir` option value. MUST call this method after `setup()`.', $this->text_domain));
 
-				$wp_content_dir_to = WP_CONTENT_DIR.'/'.$this->options['base_dir'];
-				if(isset($rel_dir_file[0])) $wp_content_dir_to .= '/'.$rel_dir_file;
+				$wp_content_base_dir_to = WP_CONTENT_DIR.'/'.$this->options['base_dir'];
 
-				return apply_filters(__METHOD__, $wp_content_dir_to, get_defined_vars());
+				if(isset($rel_dir_file[0])) // Do we have this also?
+					$wp_content_base_dir_to .= '/'.$rel_dir_file;
+
+				return apply_filters(__METHOD__, $wp_content_base_dir_to, get_defined_vars());
 			}
 
 			/**
@@ -2157,17 +2137,19 @@ namespace quick_cache
 			 * @throws \exception If `base_dir` is empty when this method is called upon;
 			 *    i.e. if you attempt to call upon this method before {@link setup()} runs.
 			 */
-			public function basepath_to($rel_dir_file)
+			public function base_path_to($rel_dir_file)
 			{
 				$rel_dir_file = trim((string)$rel_dir_file, '\\/'." \t\n\r\0\x0B");
 
-				if(empty($this->options['base_dir'])) // Security enhancement; NEVER allow this to be empty.
+				if(empty($this->options) || !is_array($this->options) || empty($this->options['base_dir']))
 					throw new \exception(__('Doing it wrong! Missing `base_dir` option value. MUST call this method after `setup()`.', $this->text_domain));
 
-				$basepath_to = $this->options['base_dir'];
-				if(isset($rel_dir_file[0])) $basepath_to .= '/'.$rel_dir_file;
+				$base_path_to = $this->options['base_dir'];
 
-				return apply_filters(__METHOD__, $basepath_to, get_defined_vars());
+				if(isset($rel_dir_file[0])) // Do we have this also?
+					$base_path_to .= '/'.$rel_dir_file;
+
+				return apply_filters(__METHOD__, $base_path_to, get_defined_vars());
 			}
 
 			/**
@@ -2346,7 +2328,7 @@ namespace quick_cache
 
 				$possible_advanced_cache_constant_key_values = array_merge(
 					$this->options, // The following additional keys are dynamic.
-					array('cache_dir' => $this->basepath_to($this->cache_sub_dir)
+					array('cache_dir' => $this->base_path_to($this->cache_sub_dir)
 					));
 				foreach($possible_advanced_cache_constant_key_values as $_option => $_value)
 				{
@@ -2553,10 +2535,9 @@ namespace quick_cache
 			{
 				$counter = 0; // Initialize.
 
-				// @TODO When set_time_limit() is disabled by PHP configuration, display a warning message to users upon plugin activation.
-				@set_time_limit(1800); // In case of HUGE sites w/ a very large directory. Errors are ignored in case `set_time_limit()` is disabled.
+				@set_time_limit(1800); // @TODO When disabled, display a warning.
 
-				return ($counter += $this->delete_all_files_dirs_in($this->wp_content_dir_to(''), TRUE));
+				return ($counter += $this->delete_all_files_dirs_in($this->wp_content_base_dir_to(''), TRUE));
 			}
 		}
 
