@@ -1584,9 +1584,9 @@ namespace quick_cache // Root namespace.
 			 */
 			public function files_i18n($counter)
 			{
-				$counter = (integer)$counter;
+				$counter = (integer)$counter; // Force integer.
 
-				return $counter.' '._n('file', 'files', $counter, $this->text_domain);
+				return sprintf(_n('%1$s file', '%1$s files', $counter, $this->text_domain), $counter);
 			}
 
 			/**
@@ -1600,9 +1600,9 @@ namespace quick_cache // Root namespace.
 			 */
 			public function dirs_i18n($counter)
 			{
-				$counter = (integer)$counter;
+				$counter = (integer)$counter; // Force integer.
 
-				return $counter.' '._n('directory', 'directories', $counter, $this->text_domain);
+				return sprintf(_n('%1$s directory', '%1$s directories', $counter, $this->text_domain), $counter);
 			}
 
 			/**
@@ -1616,9 +1616,9 @@ namespace quick_cache // Root namespace.
 			 */
 			public function files_dirs_i18n($counter)
 			{
-				$counter = (integer)$counter;
+				$counter = (integer)$counter; // Force integer.
 
-				return $counter.' '._n('file/directory', 'files/directories', $counter, $this->text_domain);
+				return sprintf(_n('%1$s file/directory', '%1$s files/directories', $counter, $this->text_domain), $counter);
 			}
 
 			/* --------------------------------------------------------------------------------------
