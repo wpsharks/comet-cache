@@ -675,13 +675,13 @@ namespace quick_cache
 			if(!QUICK_CACHE_FEEDS_ENABLE && $this->is_feed())
 				return $this->maybe_set_debug_info($this::NC_DEBUG_FEED_REQUEST);
 
-			if(preg_match('/\/(?:wp\-[^\/]+|xmlrpc)\.php(?:[?]|$)/', $_SERVER['REQUEST_URI']))
+			if(preg_match('/\/(?:wp\-[^\/]+|xmlrpc)\.php(?:[?]|$)/i', $_SERVER['REQUEST_URI']))
 				return $this->maybe_set_debug_info($this::NC_DEBUG_WP_SYSTEMATICS);
 
-			if(is_admin() || preg_match('/\/wp-admin(?:[\/?]|$)/', $_SERVER['REQUEST_URI']))
+			if(is_admin() || preg_match('/\/wp-admin(?:[\/?]|$)/i', $_SERVER['REQUEST_URI']))
 				return $this->maybe_set_debug_info($this::NC_DEBUG_WP_ADMIN);
 
-			if(is_multisite() && preg_match('/\/files(?:[\/?]|$)/', $_SERVER['REQUEST_URI']))
+			if(is_multisite() && preg_match('/\/files(?:[\/?]|$)/i', $_SERVER['REQUEST_URI']))
 				return $this->maybe_set_debug_info($this::NC_DEBUG_MS_FILES);
 
 			if($this->is_like_user_logged_in()) // Commenters, password-protected access, or actually logged-in.
@@ -879,7 +879,7 @@ namespace quick_cache
 			if($this->is_404 && !QUICK_CACHE_CACHE_404_REQUESTS) // Not caching 404 errors.
 				return (boolean)$this->maybe_set_debug_info($this::NC_DEBUG_404_REQUEST);
 
-			if(strpos($cache, '<body id="error-page">') !== FALSE) // A WordPress-generated {@link \wp_die()} error?
+			if(stripos($cache, '<body id="error-page">') !== FALSE) // A WordPress-generated error?
 				return (boolean)$this->maybe_set_debug_info($this::NC_DEBUG_WP_ERROR_PAGE);
 
 			if(!$this->function_is_possible('http_response_code')) // Unable to reliably detect HTTP status code?
@@ -927,7 +927,6 @@ namespace quick_cache
 				                                                ($this->is_404) ? '404 [error document]' : $this->salt_location, $total_time, date('M jS, Y @ g:i a T'))).' -->';
 				$cache .= "\n".'<!-- '.htmlspecialchars(sprintf(__('This Quick Cache file will auto-expire (and be rebuilt) on: %1$s (based on your configured expiration time).', $this->text_domain), date('M jS, Y @ g:i a T', strtotime('+'.QUICK_CACHE_MAX_AGE)))).' -->';
 			}
-
 			/*
 			 * This is NOT a 404, or it is 404 and the 404 cache file doesn't yet exist (so we need to create it).
 			 */
