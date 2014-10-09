@@ -262,6 +262,12 @@ namespace quick_cache // Root namespace.
 			         | $plugin::CACHE_PATH_NO_USER | $plugin::CACHE_PATH_NO_VSALT
 			         | $plugin::CACHE_PATH_NO_EXT;
 
+			$host                  = $_SERVER['HTTP_HOST'];
+			$host_base_dir_tokens  = $this->plugin->host_base_dir_tokens();
+			$host_url              = rtrim('http://'.$host.$host_base_dir_tokens, '/');
+			$host_cache_path_flags = $flags | $plugin::CACHE_PATH_NO_QUV; // Add one more flag here.
+			$host_cache_path       = $this->plugin->build_cache_path($host_url, '', '', $host_cache_path_flags);
+
 			foreach($variations as $_key => $_variation)
 			{
 				if(!$_variation || !is_string($_variation))
@@ -272,13 +278,25 @@ namespace quick_cache // Root namespace.
 					$_flags = $flags | $plugin::CACHE_PATH_ALLOW_WILDCARDS;
 					list($_feed_type, $_wildcard_regex) = explode('::', $_key, 2);
 
-					$_cache_path_regex = preg_quote($this->plugin->build_cache_path($_variation, '', '', $_flags), '/');
-					$_cache_path_regex = preg_replace('/\\\\\*/', $_wildcard_regex, $_cache_path_regex);
-					$regex_frags[]     = $_cache_path_regex; // Add variation now.
+					$_cache_path                = $this->plugin->build_cache_path($_variation, '', '', $_flags);
+					$_relative_cache_path       = preg_replace('/^'.preg_quote($host_cache_path, '/').'(?:\/|$)/i', '', $_cache_path);
+					$_relative_cache_path_regex = preg_replace('/\\\\\*/', $_wildcard_regex, preg_quote($_relative_cache_path, '/'));
 
-					unset($_flags, $_feed_type, $_wildcard_regex, $_cache_path_regex); // Housekeeping.
+					$regex_frags[] = $_relative_cache_path_regex; // Add variation now.
+
+					unset($_flags, $_feed_type, $_wildcard_regex);// Housekeeping.
+					unset($_cache_path, $_relative_cache_path, $_relative_cache_path_regex);
 				}
-				else $regex_frags[] = preg_quote($this->plugin->build_cache_path($_variation, '', '', $flags), '/');
+				else
+				{
+					$_cache_path                = $this->plugin->build_cache_path($_variation, '', '', $flags);
+					$_relative_cache_path       = preg_replace('/^'.preg_quote($host_cache_path, '/').'(?:\/|$)/i', '', $_cache_path);
+					$_relative_cache_path_regex = preg_quote($_relative_cache_path, '/');
+
+					$regex_frags[] = $_relative_cache_path_regex; // Add variation now.
+
+					unset($_cache_path, $_relative_cache_path, $_relative_cache_path_regex);
+				}
 			}
 			unset($_key, $_variation); // Housekeeping.
 
