@@ -297,6 +297,39 @@ namespace quick_cache // Root namespace.
 				return $cache_path; // Do not filter.
 			}
 
+			/**
+			 * Variation of {@link build_cache_path()} for relative/regex.
+			 *
+			 * This converts a URL into a relative `cache/path`; i.e. relative to the current host|blog directory,
+			 *    and then converts that into a regex pattern w/ an optional custom `$regex` pattern suffix.
+			 *
+			 * @since 14xxxx Refactoring cache clear/purge routines.
+			 *
+			 * @param string $url The input URL to convert.
+			 *
+			 * @param string $regex Regex to come after the relative cache/path.
+			 *    Defaults to: `(?:\/index)?(?:\.|\/(?:page\/[0-9]+|comment\-page\-[0-9]+)[.\/])`.
+			 *
+			 * @return string The resulting `cache/path` based on the input `$url`; converted to regex pattern.
+			 *
+			 * @note This variation of {@link build_cache_path()} automatically forces the following flags.
+			 *
+			 *       - {@link CACHE_PATH_NO_SCHEME}
+			 *       - {@link CACHE_PATH_NO_HOST}
+			 *       - {@link CACHE_PATH_NO_PATH_INDEX}
+			 *       - {@link CACHE_PATH_NO_QUV}
+			 *       - {@link CACHE_PATH_NO_EXT}
+			 */
+			public function build_host_cache_path_regex($url, $regex = '(?:\/index)?(?:\.|\/(?:page\/[0-9]+|comment\-page\-[0-9]+)[.\/])')
+			{
+				$flags = $this::CACHE_PATH_NO_SCHEME | $this::CACHE_PATH_NO_HOST
+				         | $this::CACHE_PATH_NO_PATH_INDEX | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT;
+
+				$relative_cache_path = $this->build_cache_path((string)$url, '', '', $flags);
+
+				return '/^'.preg_quote($relative_cache_path, '/').(string)$regex;
+			}
+
 			/* --------------------------------------------------------------------------------------
 			 * Token generation utilities.
 			 -------------------------------------------------------------------------------------- */
@@ -1169,6 +1202,9 @@ namespace quick_cache // Root namespace.
 			 *       - {@link CACHE_PATH_NO_PATH_INDEX}
 			 *       - {@link CACHE_PATH_NO_QUV}
 			 *       - {@link CACHE_PATH_NO_EXT}
+			 *
+			 *    **TIP:** There is a variation of {@link build_cache_path()} to assist with this.
+			 *    Please see: {@link build_host_cache_path_regex()}. It is much easier to work with :-)
 			 *
 			 * @param boolean $check_max_age Check max age? i.e. use purge behavior?
 			 *
