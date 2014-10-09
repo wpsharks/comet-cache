@@ -787,14 +787,8 @@ namespace quick_cache
 
 				if($also_wipe_dir && is_dir($also_wipe_dir)) // Also wipe another directory?
 					// This is called w/ version-specific upgrades. That's the only use at this time.
-				{
-					$also_wipe_dir        = $this->n_dir_seps($also_wipe_dir);
-					$wp_content_dir_regex = preg_quote($this->n_dir_seps(WP_CONTENT_DIR), '/');
+					$counter += $this->delete_all_files_dirs_in($also_wipe_dir);
 
-					if(preg_match('/^'.$wp_content_dir_regex.'\/[^\/]+/i', $also_wipe_dir)) // A sub-directory?
-						if(!preg_match('/^'.$wp_content_dir_regex.'\/(?:mu\-plugins|themes|plugins)(?:\/|$)/i', $also_wipe_dir))
-							$counter += $this->delete_all_files_dirs_in($also_wipe_dir);
-				}
 				return apply_filters(__METHOD__, $counter, get_defined_vars());
 			}
 

@@ -1524,6 +1524,11 @@ namespace quick_cache // Root namespace.
 			 * @since 14xxxx Refactoring cache clear/purge routines.
 			 *
 			 * @param string  $dir The directory from which to delete files/dirs.
+			 *
+			 *    SECURITY: This directory MUST be located inside the `/wp-content/` directory.
+			 *    Also, it MUST be a sub-directory of `/wp-content/`, NOT the directory itself.
+			 *    Also, it cannot be: `mu-plugins`, `themes`, or `plugins`.
+			 *
 			 * @param boolean $delete_dir_too Delete parent? i.e. delete the `$dir` itself also?
 			 *
 			 * @return integer Total files/directories deleted by this routine (if any).
@@ -1537,8 +1542,15 @@ namespace quick_cache // Root namespace.
 				if(!($dir = trim((string)$dir)) || !is_dir($dir))
 					return $counter; // Nothing to do.
 
-				$dir      = $this->n_dir_seps($dir); // Normalize directory separators.
-				$dir_temp = $dir.'.'.uniqid('', TRUE).'.tmp'; // Atomic deletions.
+				$dir                  = $this->n_dir_seps($dir); // Normalize directory separators.
+				$dir_temp             = $dir.'.'.uniqid('', TRUE).'.tmp'; // Atomic deletions.
+				$wp_content_dir_regex = preg_quote($this->n_dir_seps(WP_CONTENT_DIR), '/');
+
+				if(!preg_match('/^'.$wp_content_dir_regex.'\/[^\/]+/i', $dir))
+					return $counter; // Security flag; do nothing in this case.
+
+				if(preg_match('/^'.$wp_content_dir_regex.'\/(?:mu\-plugins|themes|plugins)(?:\/|$)/i', $dir))
+					return $counter; // Security flag; do nothing in this case.
 
 				if(!rename($dir, $dir_temp)) // Work from tmp directory so deletions are atomic.
 					throw new \exception(sprintf(__('Unable to delete all files/dirs. Rename failure on tmp directory: `%1$s`.', $this->text_domain), $dir));
