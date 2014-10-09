@@ -1688,7 +1688,6 @@ namespace quick_cache
 			 *
 			 * @note If the author for the post is being changed, both the previous author
 			 *       and current author pages are purged, if the post status is applicable.
-			 *
 			 */
 			public function auto_purge_author_page_cache($post_ID, \WP_Post $post_after, \WP_Post $post_before)
 			{
@@ -1712,7 +1711,6 @@ namespace quick_cache
 
 				if(!is_dir($cache_dir = $this->cache_dir()))
 					return $counter; // Nothing to do.
-
 				/*
 				 * If we're changing the post author AND
 				 *    the previous post status was either 'published' or 'private'
@@ -1747,30 +1745,19 @@ namespace quick_cache
 
 				foreach($authors_to_purge as $_author)
 				{
-					$cache_path_no_scheme_quv_ext = $this->build_cache_path($_author['posts_url'], '', '', $this::CACHE_PATH_NO_SCHEME | $this::CACHE_PATH_NO_PATH_INDEX | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT);
-					$regex                        = '/^'.preg_quote($cache_dir, '/'). // Consider all schemes; all path paginations; and all possible variations.
-					                                '\/[^\/]+\/'.preg_quote($cache_path_no_scheme_quv_ext, '/').
-					                                '(?:\/index)?(?:\.|\/(?:page\/[0-9]+|comment\-page\-[0-9]+)[.\/])/';
+					$_author_regex   = $this->build_host_cache_path_regex($_author['posts_url']);
+					$_author_counter = $this->clear_files_from_host_cache_dir($_author_regex);
+					$counter += $_author_counter; // Add to overall counter.
 
-					/** @var $_file \RecursiveDirectoryIterator For IDEs. */
-					foreach($this->dir_regex_iteration($cache_dir, $regex) as $_file) if($_file->isFile() || $_file->isLink())
+					if($_author_counter && $enqueued_notices < 100 && is_admin() /* && $this->options['change_notifications_enable'] */)
 					{
-						if(strpos($_file->getSubpathname(), '/') === FALSE) continue;
-						// Don't delete files in the immediate directory; e.g. `qc-advanced-cache` or `.htaccess`, etc.
-						// Actual `http|https/...` cache files are nested. Files in the immediate directory are for other purposes.
-
-						if(!unlink($_file->getPathname())) // Throw exception if unable to delete.
-							throw new \exception(sprintf(__('Unable to auto-purge file: `%1$s`.', $this->text_domain), $_file->getPathname()));
-						$counter++; // Increment counter for each file purge.
-
-						if(!is_admin()) continue; // Stop here; this notice is N/A.
-
 						$this->enqueue_notice('<img src="'.esc_attr($this->url('/client-s/images/clear.png')).'" style="float:left; margin:0 10px 0 0; border:0;" />'.
-						                      sprintf(__('<strong>Quick Cache:</strong> detected changes. Found cache files for Author Page: <code>%1$s</code> (auto-purging).', $this->text_domain), esc_html($_author['display_name'])));
-						$enqueued_notices++; // Notice counter.
+						                      sprintf(__('<strong>Quick Cache:</strong> detected changes. Found %1$s in the cache for Author Page: <code>%2$s</code>; auto-clearing.', $this->text_domain),
+						                              esc_html($this->files_i18n($_author_counter)), esc_html($_author['display_name'])));
+						$enqueued_notices++; // Increment enqueued notices counter.
 					}
 				}
-				unset($_file, $_author); // Just a little housekeeping.
+				unset($_author, $_author_regex, $_author_counter); // Housekeeping.
 
 				$counter += $this->auto_purge_xml_feeds_cache('blog');
 				$counter += $this->auto_purge_xml_feeds_cache('post-authors', $post_ID);
@@ -1918,7 +1905,7 @@ namespace quick_cache
 					{
 						$this->enqueue_notice('<img src="'.esc_attr($this->url('/client-s/images/clear.png')).'" style="float:left; margin:0 10px 0 0; border:0;" />'.
 						                      sprintf(__('<strong>Quick Cache:</strong> detected changes. Found %1$s in the cache for %2$s: <code>%3$s</code>; auto-clearing.', $this->text_domain),
-						                              $this->files_i18n($_term_counter), $_term['taxonomy_label'], $_term['term_name']));
+						                              esc_html($this->files_i18n($_term_counter)), esc_html($_term['taxonomy_label']), esc_html($_term['term_name'])));
 						$enqueued_notices++; // Increment enqueued notices counter.
 					}
 				}
