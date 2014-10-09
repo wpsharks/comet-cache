@@ -1253,25 +1253,25 @@ namespace quick_cache // Root namespace.
 					if(!rename($_host_cache_dir, $_host_cache_dir_tmp)) // Work from tmp directory so deletions are atomic.
 						throw new \exception(sprintf(__('Unable to delete files. Rename failure on tmp directory: `%1$s`.', $this->text_domain), $_host_cache_dir));
 
-					/** @var $_dir_file \RecursiveDirectoryIterator Regex iterator reference for IDEs. */
-					foreach($this->dir_regex_iteration($_host_cache_dir_tmp, $_host_cache_dir_tmp_regex) as $_dir_file)
+					/** @var $_file_dir \RecursiveDirectoryIterator Regex iterator reference for IDEs. */
+					foreach($this->dir_regex_iteration($_host_cache_dir_tmp, $_host_cache_dir_tmp_regex) as $_file_dir)
 					{
-						if(($_dir_file->isFile() || $_dir_file->isLink()) // Files and/or symlinks only.
+						if(($_file_dir->isFile() || $_file_dir->isLink()) // Files and/or symlinks only.
 
 						   // Don't purge files in the immediate directory; e.g. `qc-advanced-cache` or `.htaccess`, etc.
 						   // Actual `http|https/...` cache files are nested. Files in the immediate directory are for other purposes.
-						   && ($_host_cache_dir !== $cache_dir || strpos($_dir_file->getSubpathname(), '/') !== FALSE)
+						   && ($_host_cache_dir !== $cache_dir || strpos($_file_dir->getSubpathname(), '/') !== FALSE)
 
-						   && (!$check_max_age || (!empty($max_age) && $_dir_file->getMTime() < $max_age))
+						   && (!$check_max_age || (!empty($max_age) && $_file_dir->getMTime() < $max_age))
 
 						) // Here we throw an exception if a deletion failure occurs.
 						{
-							if(!unlink($_dir_file->getPathname())) // Throw exception if unable to delete.
-								throw new \exception(sprintf(__('Unable to delete file: `%1$s`.', $this->text_domain), $_dir_file->getPathname()));
+							if(!unlink($_file_dir->getPathname())) // Throw exception if unable to delete.
+								throw new \exception(sprintf(__('Unable to delete file: `%1$s`.', $this->text_domain), $_file_dir->getPathname()));
 							$counter++; // Increment counter for each file we delete.
 						}
 					}
-					unset($_dir_file); // Housekeeping after this `foreach()` loop.
+					unset($_file_dir); // Housekeeping after this `foreach()` loop.
 
 					if(!rename($_host_cache_dir_tmp, $_host_cache_dir)) // Deletions are atomic; restore original directory now.
 						throw new \exception(sprintf(__('Unable to delete files. Rename failure on tmp directory: `%1$s`.', $this->text_domain), $_host_cache_dir_tmp));
@@ -1308,24 +1308,23 @@ namespace quick_cache // Root namespace.
 				if(!rename($dir, $dir_temp)) // Work from tmp directory so deletions are atomic.
 					throw new \exception(sprintf(__('Unable to delete all files/dirs. Rename failure on tmp directory: `%1$s`.', $this->text_domain), $dir));
 
-				/** @var $_dir_file \RecursiveDirectoryIterator Regex iterator reference for IDEs. */
-
-				foreach($this->dir_regex_iteration($dir_temp, '/.+/') as $_dir_file)
+				/** @var $_file_dir \RecursiveDirectoryIterator for IDEs. */
+				foreach($this->dir_regex_iteration($dir_temp, '/.+/') as $_file_dir)
 				{
-					if(($_dir_file->isFile() || $_dir_file->isLink())) // Files and/or symlinks.
+					if(($_file_dir->isFile() || $_file_dir->isLink())) // Files and/or symlinks.
 					{
-						if(!unlink($_dir_file->getPathname())) // Throw exception if unable to delete.
-							throw new \exception(sprintf(__('Unable to delete file: `%1$s`.', $this->text_domain), $_dir_file->getPathname()));
+						if(!unlink($_file_dir->getPathname())) // Throw exception if unable to delete.
+							throw new \exception(sprintf(__('Unable to delete file: `%1$s`.', $this->text_domain), $_file_dir->getPathname()));
 						$counter++; // Increment counter for each file we delete.
 					}
-					else if($_dir_file->isDir()) // Directories are last in the iteration; it should be empty now.
+					else if($_file_dir->isDir()) // Directories are last in the iteration; it should be empty now.
 					{
-						if(!rmdir($_dir_file->getPathname())) // Throw exception if unable to delete the directory itself.
-							throw new \exception(sprintf(__('Unable to delete dir: `%1$s`.', $this->text_domain), $_dir_file->getPathname()));
+						if(!rmdir($_file_dir->getPathname())) // Throw exception if unable to delete the directory itself.
+							throw new \exception(sprintf(__('Unable to delete dir: `%1$s`.', $this->text_domain), $_file_dir->getPathname()));
 						$counter++; // Increment counter for each directory we delete.
 					}
 				}
-				unset($_dir_file); // Housekeeping after this `foreach()` loop.
+				unset($_file_dir); // Housekeeping after this `foreach()` loop.
 
 				if(!rename($dir_temp, $dir)) // Deletions are atomic; restore original directory now.
 					throw new \exception(sprintf(__('Unable to delete all files/dirs. Rename failure on tmp directory: `%1$s`.', $this->text_domain), $dir_temp));
