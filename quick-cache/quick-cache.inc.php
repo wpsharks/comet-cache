@@ -1843,19 +1843,20 @@ namespace quick_cache
 
 				if($post_status === 'future' && !$force)
 					return $counter; // Nothing to do.
-
 				/*
-				 * Build an array of available taxonomies for this post (as taxonomy objects)
+				 * Build an array of available taxonomies for this post (as taxonomy objects).
 				 */
 				$taxonomies = get_object_taxonomies(get_post($id), 'objects');
-				if(!is_array($taxonomies)) return $counter; // Nothing to do
 
+				if(!is_array($taxonomies)) // No taxonomies?
+					return $counter; // Nothing to do.
 				/*
 				 * Build an array of terms associated with this post for each taxonomy.
 				 * Also save taxonomy label information for Dashboard messaging later.
 				 */
 				$terms           = array();
 				$taxonomy_labels = array();
+
 				foreach($taxonomies as $_taxonomy)
 				{
 					// Check if this is a term we should purge
@@ -1879,13 +1880,16 @@ namespace quick_cache
 					}
 				}
 				unset($_taxonomy, $_terms);
-				if(empty($terms)) return $counter; // Nothing to do.
 
+				if(empty($terms)) // No taxonomy terms?
+					return $counter; // Nothing to do.
 				/*
-				 * Build an array of terms with Term Names, Permalinks, and associated Taxonomy labels
+				 * Build an array of terms with term names,
+				 * permalinks, and associated taxonomy labels.
 				 */
 				$terms_to_purge = array();
 				$_i             = 0;
+
 				foreach($terms as $_term)
 				{
 					if(($_link = get_term_link($_term)))
@@ -1900,7 +1904,9 @@ namespace quick_cache
 					$_i++; // Array index counter.
 				}
 				unset($_term, $_link, $_i);
-				if(empty($terms_to_purge)) return $counter; // Nothing to do.
+
+				if(empty($terms_to_purge))
+					return $counter; // Nothing to do.
 
 				foreach($terms_to_purge as $_term)
 				{
