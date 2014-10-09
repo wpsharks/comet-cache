@@ -307,7 +307,6 @@ namespace quick_cache // Root namespace.
 			 * @since 14xxxx Refactoring cache clear/purge routines.
 			 *
 			 * @param string $url The input URL to convert.
-			 *    If this is empty, it will default to `home_url('/')`.
 			 *
 			 * @param string $regex_suffix_frag Regex fragment to come after the relative cache/path.
 			 *    Defaults to: `(?:\/index)?(?:\.|\/(?:page\/[0-9]+|comment\-page\-[0-9]+)[.\/])`.
@@ -325,17 +324,15 @@ namespace quick_cache // Root namespace.
 			 */
 			public function build_host_cache_path_regex($url, $regex_suffix_frag = '(?:\/index)?(?:\.|\/(?:page\/[0-9]+|comment\-page\-[0-9]+)[.\/])')
 			{
-				if(!($url = trim((string)$url)))
-					$url = home_url('/');
-
+				$url               = trim((string)$url);
 				$regex_suffix_frag = (string)$regex_suffix_frag;
 
 				$flags = $this::CACHE_PATH_NO_SCHEME | $this::CACHE_PATH_NO_HOST
 				         | $this::CACHE_PATH_NO_PATH_INDEX | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT;
 
-				$relative_cache_path = $this->build_cache_path((string)$url, '', '', $flags);
+				$relative_cache_path = $this->build_cache_path($url, '', '', $flags);
 
-				return '/^'.preg_quote($relative_cache_path, '/').(string)$regex_suffix_frag.'/i';
+				return '/^'.preg_quote($relative_cache_path, '/').$regex_suffix_frag.'/i';
 			}
 
 			/**
