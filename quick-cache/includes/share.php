@@ -216,9 +216,10 @@ namespace quick_cache // Root namespace.
 				else if(defined('QUICK_CACHE_DIR') && QUICK_CACHE_DIR)
 					$cache_dir = QUICK_CACHE_DIR; // Global constant.
 
-				else throw new \exception(__('Unable to determine cache directory location.', $this->text_domain));
+				if(empty($cache_dir)) // No cache directory?
+					throw new \exception(__('Unable to determine cache directory location.', $this->text_domain));
 
-				return $cache_dir.(($rel_path) ? '/'.ltrim((string)$rel_path) : '');
+				return $cache_dir.($rel_path ? '/'.ltrim((string)$rel_path) : '');
 			}
 
 			/**

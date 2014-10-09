@@ -1604,6 +1604,8 @@ namespace quick_cache
 			 *
 			 * @since 140918 First documented version.
 			 *
+			 * @param integer $post_id A WordPress post ID.
+			 *
 			 * @return integer Total files purged by this routine (if any).
 			 *
 			 * @throws \exception If a purge failure occurs.
@@ -1613,60 +1615,55 @@ namespace quick_cache
 			 *
 			 * @see auto_purge_post_cache()
 			 */
-			public function auto_purge_custom_post_type_archive_cache($id)
+			public function auto_purge_custom_post_type_archive_cache($post_id)
 			{
-				$counter          = 0; // Initialize.
-				$enqueued_notices = 0; // Initialize.
+				$counter = 0; // Initialize.
 
-				if(isset($this->cache[__FUNCTION__]))
+				if(!($post_id = (integer)$post_id))
+					return $counter; // Nothing to do.
+
+				if(isset($this->cache[__FUNCTION__][$post_id]))
 					return $counter; // Already did this.
-				$this->cache[__FUNCTION__] = -1;
+				$this->cache[__FUNCTION__][$post_id] = -1;
 
 				if(!$this->options['enable'])
 					return $counter; // Nothing to do.
 
+				// if(!$this->options['cache_purge_custom_post_type_enable'])
+				// 	return $counter; // Nothing to do.
+
 				if(!is_dir($cache_dir = $this->cache_dir()))
 					return $counter; // Nothing to do.
 
-				$post_type             = get_post_type($id);
-				$all_custom_post_types = get_post_types(array('_builtin' => FALSE));
+				if(!($post_type = get_post_type($post_id)))
+					return $counter; // Nothing to do.
 
-				if($post_type && !empty ($all_custom_post_types))
-					if(!in_array($post_type, array_keys($all_custom_post_types)))
-						return $counter; // Not a Custom Post Type. Nothing to do.
+				if(!($all_custom_post_types = get_post_types(array('_builtin' => FALSE))))
+					return $counter; // No custom post types.
 
-				$custom_post_type              = get_post_type_object($post_type);
-				$custom_post_type_name         = $custom_post_type->labels->name;
-				$custom_post_type_archive_link = get_post_type_archive_link($post_type);
+				if(!in_array($post_type, array_keys($all_custom_post_types), TRUE))
+					return $counter; // This is NOT a custom post type.
 
-				if(empty($custom_post_type_archive_link)) return $counter; // Nothing we can do.
+				if(!($custom_post_type = get_post_type_object($post_type)))
+					return $counter; // Unable to retrieve post type.
 
-				$cache_path_no_scheme_quv_ext = $this->build_cache_path($custom_post_type_archive_link, '', '', $this::CACHE_PATH_NO_SCHEME | $this::CACHE_PATH_NO_PATH_INDEX | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT);
-				$regex                        = '/^'.preg_quote($cache_dir, '/'). // Consider all schemes; all path paginations; and all possible variations.
-				                                '\/[^\/]+\/'.preg_quote($cache_path_no_scheme_quv_ext, '/').
-				                                '(?:\/index)?(?:\.|\/(?:page\/[0-9]+|comment\-page\-[0-9]+)[.\/])/';
+				if(empty($custom_post_type->labels->name)
+				   || !($custom_post_type_name = $custom_post_type->labels->name)
+				) $custom_post_type_name = __('Untitled', $this->text_domain);
 
-				/** @var $_file \RecursiveDirectoryIterator For IDEs. */
-				foreach($this->dir_regex_iteration($cache_dir, $regex) as $_file) if($_file->isFile() || $_file->isLink())
+				if(!($custom_post_type_archive_link = get_post_type_archive_link($post_type)))
+					return $counter; // Nothing to do; no link to work from in this case.
+
+				$regex = $this->build_host_cache_path_regex($custom_post_type_archive_link);
+				$counter += $this->clear_files_from_host_cache_dir($regex);
+
+				if($counter && is_admin() /* && $this->options['change_notifications_enable'] */)
 				{
-					if(strpos($_file->getSubpathname(), '/') === FALSE) continue;
-					// Don't delete files in the immediate directory; e.g. `qc-advanced-cache` or `.htaccess`, etc.
-					// Actual `http|https/...` cache files are nested. Files in the immediate directory are for other purposes.
-
-					if(!unlink($_file->getPathname())) // Throw exception if unable to delete.
-						throw new \exception(sprintf(__('Unable to auto-purge file: `%1$s`.', $this->text_domain), $_file->getPathname()));
-					$counter++; // Increment counter for each file purge.
-
-					if($enqueued_notices || !is_admin())
-						continue; // Stop here; we already issued a notice, or this notice is N/A.
-
 					$this->enqueue_notice('<img src="'.esc_attr($this->url('/client-s/images/clear.png')).'" style="float:left; margin:0 10px 0 0; border:0;" />'.
-					                      sprintf(__('<strong>Quick Cache:</strong> detected changes. Found cache file(s) for Custom Post Type <code>%1$s</code> (auto-purging).', $this->text_domain), $custom_post_type_name));
-					$enqueued_notices++; // Notice counter.
+					                      sprintf(__('<strong>Quick Cache:</strong> detected changes. Found %1$s in the cache for Custom Post Type: <code>%1$s</code>; auto-clearing.', $this->text_domain),
+					                              esc_html($this->files_i18n($counter)), esc_html($custom_post_type_name)));
 				}
-				unset($_file); // Just a little housekeeping.
-
-				$counter += $this->auto_purge_xml_feeds_cache('custom-post-type', $id);
+				$counter += $this->auto_purge_xml_feeds_cache('custom-post-type', $post_id);
 
 				return apply_filters(__METHOD__, $counter, get_defined_vars());
 			}
@@ -1678,7 +1675,7 @@ namespace quick_cache
 			 *
 			 * @since 140605 First documented version.
 			 *
-			 * @param integer  $post_ID A WordPress post ID.
+			 * @param integer  $post_id A WordPress post ID.
 			 * @param \WP_Post $post_after WP_Post object following the update.
 			 * @param \WP_Post $post_before WP_Post object before the update.
 			 *
@@ -1689,19 +1686,19 @@ namespace quick_cache
 			 * @note If the author for the post is being changed, both the previous author
 			 *       and current author pages are purged, if the post status is applicable.
 			 */
-			public function auto_purge_author_page_cache($post_ID, \WP_Post $post_after, \WP_Post $post_before)
+			public function auto_purge_author_page_cache($post_id, \WP_Post $post_after, \WP_Post $post_before)
 			{
-				$post_ID = (integer)$post_ID;
-
 				$counter          = 0; // Initialize.
 				$enqueued_notices = 0; // Initialize.
-
 				$authors          = array(); // Initialize.
 				$authors_to_purge = array(); // Initialize.
 
-				if(isset($this->cache[__FUNCTION__][$post_ID][$post_after->ID][$post_before->ID]))
+				if(!($post_id = (integer)$post_id))
+					return $counter; // Nothing to do.
+
+				if(isset($this->cache[__FUNCTION__][$post_id][$post_after->ID][$post_before->ID]))
 					return $counter; // Already did this.
-				$this->cache[__FUNCTION__][$post_ID][$post_after->ID][$post_before->ID] = -1;
+				$this->cache[__FUNCTION__][$post_id][$post_after->ID][$post_before->ID] = -1;
 
 				if(!$this->options['enable'])
 					return $counter; // Nothing to do.
@@ -1724,7 +1721,7 @@ namespace quick_cache
 				 */
 				if($post_after->post_author !== $post_before->post_author &&
 				   ($post_before->post_status === 'publish' || $post_before->post_status === 'private')
-				)
+				) // Clear both authors in this case.
 				{
 					$authors[] = (integer)$post_before->post_author;
 					$authors[] = (integer)$post_after->post_author;
@@ -1761,7 +1758,7 @@ namespace quick_cache
 				unset($_author, $_author_regex, $_author_counter); // Housekeeping.
 
 				$counter += $this->auto_purge_xml_feeds_cache('blog');
-				$counter += $this->auto_purge_xml_feeds_cache('post-authors', $post_ID);
+				$counter += $this->auto_purge_xml_feeds_cache('post-authors', $post_id);
 
 				return apply_filters(__METHOD__, $counter, get_defined_vars());
 			}
@@ -1774,7 +1771,7 @@ namespace quick_cache
 			 *
 			 * @since 140605 First documented version.
 			 *
-			 * @param integer $id A WordPress post ID.
+			 * @param integer $post_id A WordPress post ID.
 			 * @param bool    $force Defaults to a `FALSE` value.
 			 *    Pass as TRUE if purge should be done for `draft`, `pending`,
 			 *    or `future` post statuses.
@@ -1788,16 +1785,17 @@ namespace quick_cache
 			 *
 			 * @see auto_purge_post_cache()
 			 */
-			public function auto_purge_post_terms_cache($id, $force = FALSE)
+			public function auto_purge_post_terms_cache($post_id, $force = FALSE)
 			{
-				$id = (integer)$id;
-
 				$counter          = 0; // Initialize.
 				$enqueued_notices = 0; // Initialize.
 
-				if(isset($this->cache[__FUNCTION__][$id][(integer)$force]))
+				if(!($post_id = (integer)$post_id))
+					return $counter; // Nothing to do.
+
+				if(isset($this->cache[__FUNCTION__][$post_id][(integer)$force]))
 					return $counter; // Already did this.
-				$this->cache[__FUNCTION__][$id][(integer)$force] = -1;
+				$this->cache[__FUNCTION__][$post_id][(integer)$force] = -1;
 
 				if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
 					return $counter; // Nothing to do.
@@ -1813,7 +1811,7 @@ namespace quick_cache
 				if(!is_dir($cache_dir = $this->cache_dir()))
 					return $counter; // Nothing to do.
 
-				$post_status = get_post_status($id); // Cache this.
+				$post_status = get_post_status($post_id); // Cache this.
 
 				if($post_status === 'draft' && isset($GLOBALS['pagenow'], $_POST['publish'])
 				   && is_admin() && $GLOBALS['pagenow'] === 'post.php' && current_user_can('publish_posts')
@@ -1834,7 +1832,7 @@ namespace quick_cache
 				/*
 				 * Build an array of available taxonomies for this post (as taxonomy objects).
 				 */
-				$taxonomies = get_object_taxonomies(get_post($id), 'objects');
+				$taxonomies = get_object_taxonomies(get_post($post_id), 'objects');
 
 				if(!is_array($taxonomies)) // No taxonomies?
 					return $counter; // Nothing to do.
@@ -1855,7 +1853,7 @@ namespace quick_cache
 					if($_taxonomy->name !== 'category' && $_taxonomy->name !== 'post_tag' && !$this->options['cache_purge_term_other_enable'])
 						continue;
 
-					if(is_array($_terms = wp_get_post_terms($id, $_taxonomy->name)))
+					if(is_array($_terms = wp_get_post_terms($post_id, $_taxonomy->name)))
 					{
 						$terms = array_merge($terms, $_terms);
 
@@ -1912,7 +1910,7 @@ namespace quick_cache
 				}
 				unset($_term, $_term_regex, $_term_counter); // Housekeeping.
 
-				$counter += $this->auto_purge_xml_feeds_cache('post-terms', $id);
+				$counter += $this->auto_purge_xml_feeds_cache('post-terms', $post_id);
 
 				return apply_filters(__METHOD__, $counter, get_defined_vars());
 			}
@@ -1926,26 +1924,27 @@ namespace quick_cache
 			 * @attaches-to `pingback_post` hook.
 			 * @attaches-to `comment_post` hook.
 			 *
-			 * @param integer $id A WordPress comment ID.
+			 * @param integer $comment_id A WordPress comment ID.
 			 *
 			 * @return integer Total files purged by this routine (if any).
 			 *
 			 * @see auto_purge_post_cache()
 			 */
-			public function auto_purge_comment_post_cache($id)
+			public function auto_purge_comment_post_cache($comment_id)
 			{
-				$id = (integer)$id;
-
 				$counter = 0; // Initialize.
 
-				if(isset($this->cache[__FUNCTION__][$id]))
+				if(!($comment_id = (integer)$comment_id))
+					return $counter; // Nothing to do.
+
+				if(isset($this->cache[__FUNCTION__][$comment_id]))
 					return $counter; // Already did this.
-				$this->cache[__FUNCTION__][$id] = -1;
+				$this->cache[__FUNCTION__][$comment_id] = -1;
 
 				if(!$this->options['enable'])
 					return $counter; // Nothing to do.
 
-				if(!is_object($comment = get_comment($id)))
+				if(!is_object($comment = get_comment($comment_id)))
 					return $counter; // Nothing we can do.
 
 				if(empty($comment->comment_post_ID))
