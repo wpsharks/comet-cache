@@ -836,36 +836,30 @@ namespace quick_cache
 			}
 
 			/**
-			 * Purges expired cache files for the current blog.
+			 * Purges expired cache files for the current host|blog.
 			 *
 			 * @since 140422 First documented version.
 			 *
+			 * @param boolean $manually Defaults to a `FALSE` value.
+			 *    Pass as TRUE if the purging is done manually by the site owner.
+			 *
 			 * @return integer Total files purged by this routine (if any).
+			 *
+			 * @attaches-to `'_cron_'.__NAMESPACE__.'_cleanup'` via CRON job.
 			 *
 			 * @throws \exception If a purge failure occurs.
 			 */
-			public function purge_cache()
+			public function purge_cache($manually = FALSE)
 			{
 				$counter = 0; // Initialize.
 
 				if(!is_dir($cache_dir = $this->cache_dir()))
 					return $counter; // Nothing to do.
 
-				$max_age = strtotime('-'.$this->options['cache_max_age']);
-
 				@set_time_limit(1800); // @TODO When disabled, display a warning.
 
-				/** @var $_file \RecursiveDirectoryIterator For IDEs. */
-				foreach($this->dir_regex_iteration($cache_dir, '/.+/') as $_file) if($_file->isFile() || $_file->isLink())
-				{
-					if($_file->getMTime() < $max_age && strpos($_file->getSubpathname(), '/') !== FALSE)
-						// Don't delete files in the immediate directory; e.g. `qc-advanced-cache` or `.htaccess`, etc.
-						// Actual `http|https/...` cache files are nested. Files in the immediate directory are for other purposes.
-						if(!unlink($_file->getPathname())) // Throw exception if unable to delete.
-							throw new \exception(sprintf(__('Unable to purge file: `%1$s`.', $this->text_domain), $_file->getPathname()));
-						else $counter++; // Increment counter for each file we purge.
-				}
-				unset($_file); // Just a little housekeeping.
+				$regex = $this->build_host_cache_path_regex('', '.+');
+				$counter += $this->purge_files_from_host_cache_dir($regex);
 
 				return apply_filters(__METHOD__, $counter, get_defined_vars());
 			}
