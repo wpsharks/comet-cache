@@ -308,8 +308,9 @@ namespace quick_cache // Root namespace.
 			 *
 			 * @param string $url The input URL to convert.
 			 *
-			 * @param string $regex Regex to come after the relative cache/path.
+			 * @param string $regex_suffix_frag Regex fragment to come after the relative cache/path.
 			 *    Defaults to: `(?:\/index)?(?:\.|\/(?:page\/[0-9]+|comment\-page\-[0-9]+)[.\/])`.
+			 *    Note: this should NOT have delimiters; i.e. do NOT start or end with `/`.
 			 *
 			 * @return string The resulting `cache/path` based on the input `$url`; converted to regex pattern.
 			 *
@@ -321,14 +322,14 @@ namespace quick_cache // Root namespace.
 			 *       - {@link CACHE_PATH_NO_QUV}
 			 *       - {@link CACHE_PATH_NO_EXT}
 			 */
-			public function build_host_cache_path_regex($url, $regex = '(?:\/index)?(?:\.|\/(?:page\/[0-9]+|comment\-page\-[0-9]+)[.\/])')
+			public function build_host_cache_path_regex($url, $regex_suffix_frag = '(?:\/index)?(?:\.|\/(?:page\/[0-9]+|comment\-page\-[0-9]+)[.\/])')
 			{
 				$flags = $this::CACHE_PATH_NO_SCHEME | $this::CACHE_PATH_NO_HOST
 				         | $this::CACHE_PATH_NO_PATH_INDEX | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT;
 
 				$relative_cache_path = $this->build_cache_path((string)$url, '', '', $flags);
 
-				return '/^'.preg_quote($relative_cache_path, '/').(string)$regex;
+				return '/^'.preg_quote($relative_cache_path, '/').(string)$regex_suffix_frag.'/i';
 			}
 
 			/* --------------------------------------------------------------------------------------

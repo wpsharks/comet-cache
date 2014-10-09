@@ -1478,8 +1478,7 @@ namespace quick_cache
 			 */
 			public function auto_purge_home_page_cache()
 			{
-				$counter          = 0; // Initialize.
-				$enqueued_notices = 0; // Initialize.
+				$counter = 0; // Initialize.
 
 				if(isset($this->cache[__FUNCTION__]))
 					return $counter; // Already did this.
@@ -1494,31 +1493,15 @@ namespace quick_cache
 				if(!is_dir($cache_dir = $this->cache_dir()))
 					return $counter; // Nothing to do.
 
-				$cache_path_no_scheme_quv_ext = $this->build_cache_path(home_url('/'), '', '', $this::CACHE_PATH_NO_SCHEME | $this::CACHE_PATH_NO_PATH_INDEX | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT);
-				$regex                        = '/^'.preg_quote($cache_dir, '/'). // Consider all schemes; all path paginations; and all possible variations.
-				                                '\/[^\/]+\/'.preg_quote($cache_path_no_scheme_quv_ext, '/').
-				                                '(?:\/index)?(?:\.|\/(?:page\/[0-9]+|comment\-page\-[0-9]+)[.\/])/';
+				$regex = $this->build_host_cache_path_regex(home_url('/'));
+				$counter += $this->clear_files_from_host_cache_dir($regex);
 
-				/** @var $_file \RecursiveDirectoryIterator For IDEs. */
-				foreach($this->dir_regex_iteration($cache_dir, $regex) as $_file) if($_file->isFile() || $_file->isLink())
+				if($counter && is_admin() /* && $this->options['change_notifications_enable'] */)
 				{
-					if(strpos($_file->getSubpathname(), '/') === FALSE) continue;
-					// Don't delete files in the immediate directory; e.g. `qc-advanced-cache` or `.htaccess`, etc.
-					// Actual `http|https/...` cache files are nested. Files in the immediate directory are for other purposes.
-
-					if(!unlink($_file->getPathname())) // Throw exception if unable to delete.
-						throw new \exception(sprintf(__('Unable to auto-purge file: `%1$s`.', $this->text_domain), $_file->getPathname()));
-					$counter++; // Increment counter for each file purge.
-
-					if($enqueued_notices || !is_admin())
-						continue; // Stop here; we already issued a notice, or this notice is N/A.
-
 					$this->enqueue_notice('<img src="'.esc_attr($this->url('/client-s/images/clear.png')).'" style="float:left; margin:0 10px 0 0; border:0;" />'.
-					                      __('<strong>Quick Cache:</strong> detected changes. Found cache file(s) for the designated "Home Page" (auto-purging).', $this->text_domain));
-					$enqueued_notices++; // Notice counter.
+					                      sprintf(__('<strong>Quick Cache:</strong> detected changes. Found %1$s in the cache for the designated "Home Page"; auto-clearing.', $this->text_domain),
+					                              esc_html($this->files_i18n($counter))));
 				}
-				unset($_file); // Just a little housekeeping.
-
 				$counter += $this->auto_purge_xml_feeds_cache('blog');
 
 				return apply_filters(__METHOD__, $counter, get_defined_vars());
