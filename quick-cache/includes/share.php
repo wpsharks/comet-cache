@@ -299,7 +299,7 @@ namespace quick_cache // Root namespace.
 			}
 
 			/**
-			 * Variation of {@link build_cache_path()} for relative/regex.
+			 * Variation of {@link build_cache_path()} for relative regex.
 			 *
 			 * This converts a URL into a relative `cache/path`; i.e. relative to the current host|blog directory,
 			 *    and then converts that into a regex pattern w/ an optional custom `$regex` pattern suffix.
@@ -307,6 +307,7 @@ namespace quick_cache // Root namespace.
 			 * @since 14xxxx Refactoring cache clear/purge routines.
 			 *
 			 * @param string $url The input URL to convert.
+			 *    If this is empty, it will default to `home_url('/')`.
 			 *
 			 * @param string $regex_suffix_frag Regex fragment to come after the relative cache/path.
 			 *    Defaults to: `(?:\/index)?(?:\.|\/(?:page\/[0-9]+|comment\-page\-[0-9]+)[.\/])`.
@@ -324,12 +325,56 @@ namespace quick_cache // Root namespace.
 			 */
 			public function build_host_cache_path_regex($url, $regex_suffix_frag = '(?:\/index)?(?:\.|\/(?:page\/[0-9]+|comment\-page\-[0-9]+)[.\/])')
 			{
+				if(!($url = trim((string)$url)))
+					$url = home_url('/');
+
+				$regex_suffix_frag = (string)$regex_suffix_frag;
+
 				$flags = $this::CACHE_PATH_NO_SCHEME | $this::CACHE_PATH_NO_HOST
 				         | $this::CACHE_PATH_NO_PATH_INDEX | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT;
 
 				$relative_cache_path = $this->build_cache_path((string)$url, '', '', $flags);
 
 				return '/^'.preg_quote($relative_cache_path, '/').(string)$regex_suffix_frag.'/i';
+			}
+
+			/**
+			 * Variation of {@link build_cache_path()} for relative regex.
+			 *
+			 * This converts URIs into relative `cache/paths`; i.e. relative to the current host|blog directory,
+			 *    and then converts those into `(?:regex|patterns)` with piped `|` alternatives.
+			 *
+			 * @since 14xxxx Refactoring cache clear/purge routines.
+			 *
+			 * @param string $uris A line-delimited list of URIs. These may contain `*` wildcards also.
+			 *
+			 * @return string The resulting `cache/paths` based on the input `$uris`; converted to `(?:regex|patterns)`.
+			 *
+			 * @note This variation of {@link build_cache_path()} automatically forces the following flags.
+			 *
+			 *       - {@link CACHE_PATH_ALLOW_WILDCARDS}
+			 *       - {@link CACHE_PATH_NO_SCHEME}
+			 *       - {@link CACHE_PATH_NO_HOST}
+			 *       - {@link CACHE_PATH_NO_PATH_INDEX}
+			 *       - {@link CACHE_PATH_NO_QUV}
+			 *       - {@link CACHE_PATH_NO_EXT}
+			 */
+			public function build_host_cache_path_regex_patterns_from_wc_uris($uris)
+			{
+				if(!($uris = trim((string)$uris)))
+					return ''; // Nothing to do.
+
+				$_this = $this; // Reference for the closure below.
+				$flags = $this::CACHE_PATH_ALLOW_WILDCARDS | $this::CACHE_PATH_NO_SCHEME | $this::CACHE_PATH_NO_HOST
+				         | $this::CACHE_PATH_NO_PATH_INDEX | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT;
+
+				return '(?:'.implode('|', array_map(function ($pattern) use ($_this, $flags)
+				{
+					$pattern = $_this->build_cache_path(home_url('/'.trim($pattern, '/')), '', '', $flags);
+
+					return preg_replace('/\\\\\*/', '.*?', preg_quote($pattern, '/')); #
+
+				}, preg_split('/['."\r\n".']+/', $uris, NULL, PREG_SPLIT_NO_EMPTY))).')';
 			}
 
 			/* --------------------------------------------------------------------------------------

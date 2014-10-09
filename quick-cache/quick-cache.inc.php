@@ -1413,8 +1413,7 @@ namespace quick_cache
 			 */
 			public function auto_purge_xml_sitemaps_cache()
 			{
-				$counter          = 0; // Initialize.
-				$enqueued_notices = 0; // Initialize.
+				$counter = 0; // Initialize.
 
 				if(isset($this->cache[__FUNCTION__]))
 					return $counter; // Already did this.
@@ -1423,42 +1422,27 @@ namespace quick_cache
 				if(!$this->options['enable'])
 					return $counter; // Nothing to do.
 
+				// if(!$this->options['cache_purge_xml_sitemaps_enable'])
+				// 	return $counter; // Nothing to do.
+
+				// if(!$this->options['cache_purge_xml_sitemap_patterns'])
+				// 	return $counter; // Nothing to do.
+
 				if(!is_dir($cache_dir = $this->cache_dir()))
 					return $counter; // Nothing to do.
 
-				$_this                        = $this; // Needed in the closure below.
-				$patterns                     = '(?:'.implode('|', array_map(function ($pattern) use ($_this)
-					{
-						$pattern = $_this->build_cache_path(home_url('/'.trim($pattern, '/')), '', '', // Convert to a cache path w/ possible wildcards.
-						                                    $_this::CACHE_PATH_ALLOW_WILDCARDS | $_this::CACHE_PATH_NO_SCHEME | $_this::CACHE_PATH_NO_HOST
-						                                    | $_this::CACHE_PATH_NO_PATH_INDEX | $_this::CACHE_PATH_NO_QUV | $_this::CACHE_PATH_NO_EXT);
-						return preg_replace('/\\\\\*/', '.*?', preg_quote($pattern, '/')); // Wildcards.
+				if(!($patterns = $this->build_host_cache_path_regex_patterns_from_wc_uris($this->options['cache_purge_xml_sitemap_patterns'])))
+					return $counter; // There are no patterns to look for.
 
-					}, preg_split('/['."\r\n".']+/', '/sitemap*.xml', NULL, PREG_SPLIT_NO_EMPTY))).')';
-				$cache_path_no_scheme_quv_ext = $this->build_cache_path(home_url('/'), '', '', $this::CACHE_PATH_NO_SCHEME | $this::CACHE_PATH_NO_PATH_INDEX | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT);
-				$regex                        = '/^'.preg_quote($cache_dir, '/'). // Consider all schemes; all path paginations; and all possible variations.
-				                                '\/[^\/]+\/'.preg_quote($cache_path_no_scheme_quv_ext, '/').
-				                                '\/'.$patterns.'\./';
+				$regex = $this->build_host_cache_path_regex(home_url('/'), '\/'.$patterns.'\.');
+				$counter += $this->clear_files_from_host_cache_dir($regex);
 
-				/** @var $_file \RecursiveDirectoryIterator For IDEs. */
-				foreach($this->dir_regex_iteration($cache_dir, $regex) as $_file) if($_file->isFile() || $_file->isLink())
+				if($counter && is_admin() /* && $this->options['change_notifications_enable'] */)
 				{
-					if(strpos($_file->getSubpathname(), '/') === FALSE) continue;
-					// Don't delete files in the immediate directory; e.g. `qc-advanced-cache` or `.htaccess`, etc.
-					// Actual `http|https/...` cache files are nested. Files in the immediate directory are for other purposes.
-
-					if(!unlink($_file->getPathname())) // Throw exception if unable to delete.
-						throw new \exception(sprintf(__('Unable to auto-purge XML sitemap file: `%1$s`.', $this->text_domain), $_file->getPathname()));
-					$counter++; // Increment counter for each file purge.
-
-					if($enqueued_notices || !is_admin()) continue; // Stop here; we already issued a notice, or this notice is N/A.
-
 					$this->enqueue_notice('<img src="'.esc_attr($this->url('/client-s/images/clear.png')).'" style="float:left; margin:0 10px 0 0; border:0;" />'.
-					                      __('<strong>Quick Cache:</strong> detected changes. Found XML sitemaps (auto-purging).', $this->text_domain));
-					$enqueued_notices++; // Notice counter.
+					                      sprintf(__('<strong>Quick Cache:</strong> detected changes. Found %1$s in the cache for XML sitemaps; auto-clearing.', $this->text_domain),
+					                              esc_html($this->files_i18n($counter))));
 				}
-				unset($_file); // Just a little housekeeping.
-
 				return apply_filters(__METHOD__, $counter, get_defined_vars());
 			}
 
