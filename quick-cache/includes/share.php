@@ -1455,7 +1455,7 @@ namespace quick_cache // Root namespace.
 				{
 					if(($_file_dir->isFile() || $_file_dir->isLink()) // Files and/or symlinks only.
 
-					   // Don't purge files in the immediate directory; e.g. `qc-advanced-cache` or `.htaccess`, etc.
+					   // Don't delete files in the immediate directory; e.g. `qc-advanced-cache` or `.htaccess`, etc.
 					   // Actual `http|https/...` cache files are nested. Files in the immediate directory are for other purposes.
 					   && (strpos($_file_dir->getSubpathname(), '/') !== FALSE)
 
@@ -1467,6 +1467,12 @@ namespace quick_cache // Root namespace.
 						if(!unlink($_file_dir->getPathname())) // Throw exception if unable to delete.
 							throw new \exception(sprintf(__('Unable to delete file: `%1$s`.', $this->text_domain), $_file_dir->getPathname()));
 						$counter++; // Increment counter for each file we delete.
+					}
+					else if(!$check_max_age && $regex === '/^.+/i' && $_file_dir->isDir()) // Directories too?
+					{
+						if(!rmdir($_file_dir->getPathname())) // Throw exception if unable to delete the directory itself.
+							throw new \exception(sprintf(__('Unable to delete dir: `%1$s`.', $this->text_domain), $_file_dir->getPathname()));
+						# $counter++; // Increment counter for each directory we delete. ~ NO don't do that here.
 					}
 				}
 				unset($_file_dir); // Housekeeping after this `foreach()` loop.
@@ -1564,7 +1570,7 @@ namespace quick_cache // Root namespace.
 					{
 						if(($_file_dir->isFile() || $_file_dir->isLink()) // Files and/or symlinks only.
 
-						   // Don't purge files in the immediate directory; e.g. `qc-advanced-cache` or `.htaccess`, etc.
+						   // Don't delete files in the immediate directory; e.g. `qc-advanced-cache` or `.htaccess`, etc.
 						   // Actual `http|https/...` cache files are nested. Files in the immediate directory are for other purposes.
 						   && ($_host_cache_dir !== $cache_dir || strpos($_file_dir->getSubpathname(), '/') !== FALSE)
 
@@ -1576,6 +1582,12 @@ namespace quick_cache // Root namespace.
 							if(!unlink($_file_dir->getPathname())) // Throw exception if unable to delete.
 								throw new \exception(sprintf(__('Unable to delete file: `%1$s`.', $this->text_domain), $_file_dir->getPathname()));
 							$counter++; // Increment counter for each file we delete.
+						}
+						else if(!$check_max_age && $regex === '/^.+/i' && $_file_dir->isDir()) // Directories too?
+						{
+							if(!rmdir($_file_dir->getPathname())) // Throw exception if unable to delete the directory itself.
+								throw new \exception(sprintf(__('Unable to delete dir: `%1$s`.', $this->text_domain), $_file_dir->getPathname()));
+							# $counter++; // Increment counter for each directory we delete. ~ NO don't do that here.
 						}
 					}
 					unset($_file_dir); // Housekeeping after this `foreach()` loop.
