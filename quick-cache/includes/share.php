@@ -1225,7 +1225,7 @@ namespace quick_cache // Root namespace.
 			/**
 			 * Normalizes directory/file separators.
 			 *
-			 * @since 140829 Implementing XML/RSS feed purging.
+			 * @since 140829 Implementing XML/RSS feed clearing.
 			 *
 			 * @param string  $dir_file Directory/file path.
 			 *

@@ -1108,7 +1108,7 @@ namespace quick_cache
 				require_once dirname(__FILE__).'/includes/utils-feed.php';
 				$utils = new utils_feed(); // Feed utilities.
 
-				switch($type) // Handle purging based on the `$type`.
+				switch($type) // Handle clearing based on the `$type`.
 				{
 					case 'blog': // The blog feed; i.e. `/feed/` on most WP installs.
 
@@ -1436,7 +1436,7 @@ namespace quick_cache
 				 *    the new post status is 'published' or 'private'
 				 * then clear the author page for the current author.
 				 *
-				 * Else return the counter; post status does not warrant purging author page cache.
+				 * Else return the counter; post status does not warrant clearing author page cache.
 				 */
 				if($post_after->post_author !== $post_before->post_author &&
 				   ($post_before->post_status === 'publish' || $post_before->post_status === 'private')
