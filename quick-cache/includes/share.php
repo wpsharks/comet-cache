@@ -19,6 +19,24 @@ namespace quick_cache // Root namespace.
 			 -------------------------------------------------------------------------------------- */
 
 			/**
+			 * Name of this plugin.
+			 *
+			 * @since 14xxxx Refactoring.
+			 *
+			 * @var string Plugin name.
+			 */
+			public $name = 'Quick Cache';
+
+			/**
+			 * Short name for this plugin.
+			 *
+			 * @since 14xxxx Refactoring.
+			 *
+			 * @var string Short name for this plugin.
+			 */
+			public $short_name = 'QC';
+
+			/**
 			 * Identifies pro version of Quick Cache.
 			 *
 			 * @since 140422 First documented version.
@@ -35,6 +53,15 @@ namespace quick_cache // Root namespace.
 			 * @var string Current version of the software.
 			 */
 			public $version = '141001';
+
+			/**
+			 * Plugin slug; based on `__NAMESPACE__`.
+			 *
+			 * @since 14xxxx Refactoring.
+			 *
+			 * @var string Plugin slug; based on `__NAMESPACE__`.
+			 */
+			public $slug = '';
 
 			/**
 			 * Text domain for translations; based on `__NAMESPACE__`.
@@ -199,7 +226,7 @@ namespace quick_cache // Root namespace.
 				if(strpos(__NAMESPACE__, '\\') !== FALSE) // Sanity check.
 					throw new \exception('Not a root namespace: `'.__NAMESPACE__.'`.');
 
-				$this->text_domain = str_replace('_', '-', __NAMESPACE__);
+				$this->slug = $this->text_domain = str_replace('_', '-', __NAMESPACE__);
 			}
 
 			/* --------------------------------------------------------------------------------------

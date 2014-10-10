@@ -25,13 +25,6 @@ namespace quick_cache
 		class plugin extends share
 		{
 			/**
-			 * Plugin slug; based on `__NAMESPACE__`.
-			 *
-			 * @since 14xxxx Adding plugin slug property.
-			 */
-			public $slug = '';
-
-			/**
 			 * Stub `__FILE__` location.
 			 *
 			 * @since 140422 First documented version.
@@ -132,7 +125,6 @@ namespace quick_cache
 				/* -------------------------------------------------------------- */
 
 				$this->enable_hooks = (boolean)$enable_hooks;
-				$this->slug         = str_replace('_', '-', __NAMESPACE__);
 				$this->file         = preg_replace('/\.inc\.php$/', '.php', __FILE__);
 
 				/* -------------------------------------------------------------- */
