@@ -1153,7 +1153,7 @@ namespace quick_cache
 				for($_i = 0; $_i < count($variation_regex_frags); $_i = $_i + $in_sets_of)
 				{
 					$_variation_regex_frags = array_slice($variation_regex_frags, $_i, $in_sets_of);
-					$_regex                 = '/^\/(?:'.implode('|', $_variation_regex_frags).')\./';
+					$_regex                 = '/^\/(?:'.implode('|', $_variation_regex_frags).')\./i';
 					$counter += $this->clear_files_from_host_cache_dir($_regex);
 				}
 				unset($_i, $_variation_regex_frags, $_regex); // Housekeeping.
@@ -1557,13 +1557,11 @@ namespace quick_cache
 
 				foreach($taxonomies as $_taxonomy)
 				{
-					// Check if this is a term we should clear.
-					if($_taxonomy->name === 'category' && !$this->options['cache_clear_term_category_enable'])
-						continue;
-					if($_taxonomy->name === 'post_tag' && !$this->options['cache_clear_term_post_tag_enable'])
-						continue;
-					if($_taxonomy->name !== 'category' && $_taxonomy->name !== 'post_tag' && !$this->options['cache_clear_term_other_enable'])
-						continue;
+					if( // Check if this is a taxonomy/term that we should clear.
+						($_taxonomy->name === 'category' && !$this->options['cache_clear_term_category_enable'])
+						|| ($_taxonomy->name === 'post_tag' && !$this->options['cache_clear_term_post_tag_enable'])
+						|| ($_taxonomy->name !== 'category' && $_taxonomy->name !== 'post_tag' && !$this->options['cache_clear_term_other_enable'])
+					) continue; // Continue; nothing to do for this taxonomy.
 
 					if(is_array($_terms = wp_get_post_terms($post_id, $_taxonomy->name)))
 					{

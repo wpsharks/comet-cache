@@ -287,7 +287,7 @@ namespace quick_cache // Root namespace.
 					unset($_flags, $_feed_type, $_wildcard_regex);// Housekeeping.
 					unset($_cache_path, $_relative_cache_path, $_relative_cache_path_regex);
 				}
-				else
+				else // This is just a regular variation; i.e. a URL without any regex/wildcard to parse.
 				{
 					$_cache_path                = $this->plugin->build_cache_path($_variation, '', '', $flags);
 					$_relative_cache_path       = preg_replace('/^'.preg_quote($host_cache_path, '/').'(?:\/|$)/i', '', $_cache_path);

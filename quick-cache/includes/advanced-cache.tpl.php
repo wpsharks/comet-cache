@@ -910,7 +910,7 @@ namespace quick_cache
 
 			# This is where a new 404 request might be detected for the first time; and where the 404 error file already exists in this case.
 
-			$cache_file_tmp = $this->cache_file.'.'.uniqid('', TRUE).'.tmp'; // Cache/symlink creation is atomic; e.g. tmp file w/ rename.
+			$cache_file_tmp = $this->add_tmp_suffix($this->cache_file); // Cache/symlink creation is atomic; e.g. tmp file w/ rename.
 
 			if($this->is_404 && is_file($this->cache_file_404))
 				if(!(symlink($this->cache_file_404, $cache_file_tmp) && rename($cache_file_tmp, $this->cache_file)))

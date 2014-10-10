@@ -1285,6 +1285,20 @@ namespace quick_cache // Root namespace.
 				return $dir_file; // Normalized now.
 			}
 
+			/**
+			 * Adds a tmp name suffix to a directory/file path.
+			 *
+			 * @since 14xxxx Refactoring cache clear/purge routines.
+			 *
+			 * @param string $dir_file An input directory or file path.
+			 *
+			 * @return string The original `$dir_file` with a tmp name suffix.
+			 */
+			public function add_tmp_suffix($dir_file)
+			{
+				return (string)rtrim($dir_file, DIRECTORY_SEPARATOR.'\\/').'-'.str_replace('.', '', uniqid('', TRUE)).'-tmp';
+			}
+
 			/* --------------------------------------------------------------------------------------
 			 * File/directory iteration utilities for Quick Cache.
 			 -------------------------------------------------------------------------------------- */
@@ -1424,11 +1438,14 @@ namespace quick_cache // Root namespace.
 				if($check_max_age && !($max_age = strtotime('-'.$this->options['cache_max_age'])))
 					return $counter; // Invalid cache expiration time.
 
-				$cache_dir_tmp       = $cache_dir.'.'.uniqid('', TRUE).'.tmp'; // Tmp directory.
+				$cache_dir_tmp       = $this->add_tmp_suffix($cache_dir); // Temporary directory.
 				$cache_dir_tmp_regex = $regex; // Initialize host-specific regex pattern for the tmp directory.
 				$cache_dir_tmp_regex = '\\/'.ltrim($cache_dir_tmp_regex, '^\\/'); // Make sure it begins with an escaped `/`.
 				$cache_dir_tmp_regex = $this->str_ireplace_once(preg_quote($cache_dir.'/', '/'), '', $cache_dir_tmp_regex);
 				$cache_dir_tmp_regex = '/^'.preg_quote($cache_dir_tmp.'/', '/').ltrim($cache_dir_tmp_regex, '^\\/');
+
+				# if(WP_DEBUG) file_put_contents(WP_CONTENT_DIR.'/qc-debug.log', print_r($regex, TRUE)."\n".print_r($cache_dir_tmp_regex, TRUE)."\n\n", FILE_APPEND);
+				// Uncomment the above line to debug regex pattern matching used by this routine; and others that call upon it.
 
 				if(!rename($cache_dir, $cache_dir_tmp)) // Work from tmp directory so deletions are atomic.
 					throw new \exception(sprintf(__('Unable to delete files. Rename failure on directory: `%1$s`.', $this->text_domain), $cache_dir));
@@ -1529,12 +1546,15 @@ namespace quick_cache // Root namespace.
 
 					if(!$_host_cache_dir || !is_dir($_host_cache_dir)) continue; // Nothing to do.
 
-					$_host_cache_dir_tmp       = $_host_cache_dir.'.'.uniqid('', TRUE).'.tmp'; // Tmp directory.
+					$_host_cache_dir_tmp       = $this->add_tmp_suffix($_host_cache_dir); // Temporary directory.
 					$_host_cache_dir_tmp_regex = $regex; // Initialize host-specific regex pattern for the tmp directory.
 					$_host_cache_dir_tmp_regex = '\\/'.ltrim($_host_cache_dir_tmp_regex, '^\\/'); // Make sure it begins with an escaped `/`.
 					$_host_cache_dir_tmp_regex = $this->str_ireplace_once(preg_quote($_host_cache_path.'/', '/'), '', $_host_cache_dir_tmp_regex);
 					$_host_cache_dir_tmp_regex = $this->str_ireplace_once(preg_quote($_host_cache_dir.'/', '/'), '', $_host_cache_dir_tmp_regex);
 					$_host_cache_dir_tmp_regex = '/^'.preg_quote($_host_cache_dir_tmp.'/', '/').ltrim($_host_cache_dir_tmp_regex, '^\\/');
+
+					# if(WP_DEBUG) file_put_contents(WP_CONTENT_DIR.'/qc-debug.log', print_r($regex, TRUE)."\n".print_r($_host_cache_dir_tmp_regex, TRUE)."\n\n", FILE_APPEND);
+					// Uncomment the above line to debug regex pattern matching used by this routine; and others that call upon it.
 
 					if(!rename($_host_cache_dir, $_host_cache_dir_tmp)) // Work from tmp directory so deletions are atomic.
 						throw new \exception(sprintf(__('Unable to delete files. Rename failure on tmp directory: `%1$s`.', $this->text_domain), $_host_cache_dir));
@@ -1594,8 +1614,8 @@ namespace quick_cache // Root namespace.
 				if(!($dir = trim((string)$dir)) || !is_dir($dir))
 					return $counter; // Nothing to do.
 
-				$dir                  = $this->n_dir_seps($dir); // Normalize directory separators.
-				$dir_temp             = $dir.'.'.uniqid('', TRUE).'.tmp'; // Atomic deletions.
+				$dir                  = $this->n_dir_seps($dir); // Normalize separators.
+				$dir_temp             = $this->add_tmp_suffix($dir); // Temporary directory.
 				$wp_content_dir_regex = preg_quote($this->n_dir_seps(WP_CONTENT_DIR), '/');
 
 				if(!preg_match('/^'.$wp_content_dir_regex.'\/[^\/]+/i', $dir))
