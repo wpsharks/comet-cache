@@ -168,14 +168,15 @@ namespace quick_cache // Root namespace.
 				echo '   </a>'."\n";
 
 				echo '   <div class="plugin-menu-page-panel-body clearfix">'."\n";
-				echo '      <h3>'.__('Clearing the Cache (Manually)', $this->plugin->text_domain).'</h3>'."\n";
+				echo '      <h2 style="margin-top:0; font-weight:bold;">'.__('Clearing the Cache Manually', $this->plugin->text_domain).'</h2>'."\n";
 				echo '      <img src="'.esc_attr($this->plugin->url('/client-s/images/cc-screenshot.png')).'" class="screenshot" />'."\n";
 				echo '      <p>'.__('Once Quick Cache is enabled, you will find this new option in your WordPress Admin Bar (see screenshot on right). Clicking this button will clear the cache and you can start fresh at anytime (e.g. you can do this manually; and as often as you wish).', $this->plugin->text_domain).'</p>'."\n";
 				echo '      <p>'.__('Depending on the structure of your site, there could be many reasons to clear the cache. However, the most common reasons are related to Post/Page edits or deletions, Category/Tag edits or deletions, and Theme changes. Quick Cache handles most scenarios all by itself. However, many site owners like to clear the cache manually; for a variety of reasons (just to force a refresh).', $this->plugin->text_domain).'</p>'."\n";
-				echo '      <p><select name="'.esc_attr(__NAMESPACE__).'[save_options][admin_bar_enable]">'."\n";
+				echo '      <p><select name="'.esc_attr(__NAMESPACE__).'[save_options][admin_bar_enable]" style="width:auto;">'."\n";
 				echo '            <option value="1" selected="selected">'.__('Yes, enable the &quot;Clear Cache&quot; button in the WordPress admin bar.', $this->plugin->text_domain).'</option>'."\n";
 				echo '            <option value="0">'.__('No, I don\'t intend to clear the cache manually; exclude from admin bar.', $this->plugin->text_domain).'</option>'."\n";
 				echo '         </select></p>'."\n";
+				echo '      <hr />'."\n";
 				echo '      <h3>'.__('Running the <a href="http://www.websharks-inc.com/product/s2clean/" target="_blank">s2Clean Theme</a> by WebSharks?', $this->plugin->text_domain).'</h3>'."\n";
 				echo '      <p>'.__('If s2Clean is installed, Quick Cache can be configured to clear the Markdown cache too (if you\'ve enabled Markdown processing with s2Clean). The s2Clean Markdown cache is only cleared when you manually clear the cache (with Quick Cache); and only if you enable this option here. Note: s2Clean\'s Markdown cache is extremely dynamic. Just like the rest of your site, s2Clean caches do NOT need to be cleared away at all, as this happens automatically when your content changes. However, some developers find this feature useful while developing their site; just to force a refresh.', $this->plugin->text_domain).'</p>'."\n";
 				echo '      <p><select name="'.esc_attr(__NAMESPACE__).'[save_options][cache_clear_s2clean_enable]">'."\n";
@@ -187,10 +188,10 @@ namespace quick_cache // Root namespace.
 				echo '      <p style="margin-bottom:0;"><textarea name="'.esc_attr(__NAMESPACE__).'[save_options][cache_clear_eval_code]" rows="5" spellcheck="false" class="monospace"></textarea></p>'."\n";
 				echo '      <p class="info" style="margin-top:0;">'.__('<strong>Example:</strong> <code>&lt;?php apc_clear_cache(); echo \'&lt;p&gt;Also cleared APC cache.&lt;/p&gt;\'; ?&gt;</code>', $this->plugin->text_domain).'</p>'."\n";
 				echo '      <hr />'."\n";
-				echo '      <h3>'.__('Clearing the Cache Automatically', $this->plugin->text_domain).'</h3>'."\n";
+				echo '      <h2 style="font-weight:bold;">'.__('Clearing the Cache Automatically', $this->plugin->text_domain).'</h2>'."\n";
 				echo '      <img src="'.esc_attr($this->plugin->url('/client-s/images/ap-screenshot.png')).'" class="screenshot" />'."\n";
 				echo '      <p>'.__('This is built into the Quick Cache plugin; e.g. this functionality is "always on". If you edit a Post/Page (or delete one), Quick Cache will automatically clear the cache file(s) associated with that content. This way a new updated version of the cache will be created automatically the next time this content is accessed. Simple updates like this occur each time you make changes in the Dashboard, and Quick Cache will notify you of these as they occur. Quick Cache monitors changes to Posts (of any kind, including Pages), Categories, Tags, Links, Themes (even Users); and more. Notifications in the Dashboard regarding these detections can be enabled/disabled below.', $this->plugin->text_domain).'</p>'."\n";
-				echo '      <p><select name="'.esc_attr(__NAMESPACE__).'[save_options][change_notifications_enable]">'."\n";
+				echo '      <p><select name="'.esc_attr(__NAMESPACE__).'[save_options][change_notifications_enable]" style="width:auto;">'."\n";
 				echo '            <option value="1" selected="selected">'.__('Yes, enable Quick Cache notifications in the Dashboard when changes are detected &amp; one or more cache files are cleared automatically.', $this->plugin->text_domain).'</option>'."\n";
 				echo '            <option value="0">'.__('No, I don\'t want to know (don\'t really care) what Quick Cache is doing behind-the-scene.', $this->plugin->text_domain).'</option>'."\n";
 				echo '         </select></p>'."\n";
