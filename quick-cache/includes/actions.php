@@ -1,4 +1,6 @@
 <?php
+// @TODO Add docBlocks to this class.
+
 namespace quick_cache // Root namespace.
 {
 	if(!defined('WPINC')) // MUST have WordPress.

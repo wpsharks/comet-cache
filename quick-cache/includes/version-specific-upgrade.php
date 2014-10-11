@@ -47,6 +47,7 @@ namespace quick_cache // Root namespace.
 				$this->from_lt_v140104();
 				$this->from_lt_v140605();
 				$this->from_lt_v140612();
+				$this->from_lt_v141009();
 			}
 
 			/*
@@ -116,18 +117,55 @@ namespace quick_cache // Root namespace.
 			{
 				if(version_compare($this->prev_version, '140612', '<'))
 				{
-					if(stripos($this->plugin->options['base_dir'], basename(WP_CONTENT_DIR)) !== FALSE)
+					if(is_array($existing_options = get_option(__NAMESPACE__.'_options')))
 					{
-						$this->plugin->wipe_cache(FALSE, ABSPATH.$this->plugin->options['base_dir']);
-						$this->plugin->options['base_dir'] = $this->plugin->default_options['base_dir'];
+						if(!empty($existing_options['base_dir']) && stripos($existing_options['base_dir'], basename(WP_CONTENT_DIR)) !== FALSE)
+						{
+							$this->plugin->wipe_cache(FALSE, ABSPATH.$existing_options['base_dir']);
+							$this->plugin->options['base_dir'] = $this->plugin->default_options['base_dir'];
 
-						update_option(__NAMESPACE__.'_options', $this->plugin->options);
-						if(is_multisite()) update_site_option(__NAMESPACE__.'_options', $this->plugin->options);
+							update_option(__NAMESPACE__.'_options', $this->plugin->options);
+							if(is_multisite()) update_site_option(__NAMESPACE__.'_options', $this->plugin->options);
 
-						$this->plugin->enqueue_notice( // Give site owners a quick heads up about this.
-							'<p>'.__('<strong>Quick Cache Notice:</strong> This version of Quick Cache changes the default base directory that it uses, from <code>ABSPATH</code> to <code>WP_CONTENT_DIR</code>. This is for improved compatibility with installations that choose to use a custom <code>WP_CONTENT_DIR</code> location.', $this->plugin->text_domain).
-							' '.__('Quick Cache has detected that your previously configured cache directory may have been in conflict with this change. As a result, your Quick Cache configuration has been updated to the new default value; just to keep things running smoothly for you :-). If you would like to review this change, please see: <code>Dashboard ⥱ Quick Cache ⥱ Directory &amp; Expiration Time</code>; where you may customize it further if necessary.', $this->plugin->text_domain).'</p>'
-						);
+							$this->plugin->enqueue_notice( // Give site owners a quick heads up about this.
+								'<p>'.__('<strong>Quick Cache Notice:</strong> This version of Quick Cache changes the default base directory that it uses, from <code>ABSPATH</code> to <code>WP_CONTENT_DIR</code>. This is for improved compatibility with installations that choose to use a custom <code>WP_CONTENT_DIR</code> location.', $this->plugin->text_domain).
+								' '.__('Quick Cache has detected that your previously configured cache directory may have been in conflict with this change. As a result, your Quick Cache configuration has been updated to the new default value; just to keep things running smoothly for you :-). If you would like to review this change, please see: <code>Dashboard ⥱ Quick Cache ⥱ Directory &amp; Expiration Time</code>; where you may customize it further if necessary.', $this->plugin->text_domain).'</p>'
+							);
+						}
+					}
+				}
+			}
+
+			/**
+			 * Upgrading from a version before we changed several `cache_purge_*` optinos to `cache_clear_*`.
+			 *    If so, we need to use the existing options to fill the new keys.
+			 *    And, of course, then we save the updated options.
+			 */
+			public function from_lt_v141009()
+			{
+				if(version_compare($this->prev_version, '141009', '<'))
+				{
+					if(is_array($existing_options = get_option(__NAMESPACE__.'_options')))
+					{
+						foreach(array('cache_purge_home_page_enable',
+						              'cache_purge_posts_page_enable',
+						              'cache_purge_author_page_enable',
+						              'cache_purge_term_category_enable',
+						              'cache_purge_term_post_tag_enable',
+						              'cache_purge_term_other_enable'
+						        ) as $_old_purge_option)
+							if(isset($existing_options[$_old_purge_option][0]))
+							{
+								$found_old_purge_options                                                  = TRUE;
+								$this->plugin->options[str_replace('purge', 'clear', $_old_purge_option)] = $existing_options[$_old_purge_option][0];
+							}
+						unset($_old_purge_option); // Housekeeping.
+
+						if(!empty($found_old_purge_options))
+						{
+							update_option(__NAMESPACE__.'_options', $this->plugin->options);
+							if(is_multisite()) update_site_option(__NAMESPACE__.'_options', $this->plugin->options);
+						}
 					}
 				}
 			}
