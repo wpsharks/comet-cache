@@ -1075,7 +1075,7 @@ namespace quick_cache // Root namespace.
 			 *
 			 * @warning Do NOT call upon this method until the end of a script execution.
 			 *
-			 * @see http://bit.ly/1zwwIrM
+			 * @see http://www.websharks-inc.com/r/wikipedia-http-header-response-fields/
 			 */
 			public function cacheable_headers_list()
 			{
