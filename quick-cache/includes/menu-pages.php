@@ -468,7 +468,7 @@ namespace quick_cache // Root namespace.
 				echo '<div class="plugin-menu-page-panel pro-preview">'."\n";
 
 				echo '   <a href="#" class="plugin-menu-page-panel-heading">'."\n";
-				echo '      <i class="fa fa-gears"></i> '.__('HTML Compression (Experimental)', $this->plugin->text_domain)."\n";
+				echo '      <i class="fa fa-gears"></i> '.__('HTML Compression', $this->plugin->text_domain)."\n";
 				echo '   </a>'."\n";
 
 				echo '   <div class="plugin-menu-page-panel-body clearfix">'."\n";
