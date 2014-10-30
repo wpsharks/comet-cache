@@ -561,12 +561,12 @@ namespace quick_cache // Root namespace.
 				echo '<div class="plugin-menu-page-panel pro-preview">'."\n";
 
 				echo '   <a href="#" class="plugin-menu-page-panel-heading">'."\n";
-				echo '      <i class="fa fa-gears"></i> '.__('Static CDN Filters (e.g. MaxCDN/CloudFront)', $this->plugin->text_domain)."\n";
+				echo '      <i class="fa fa-gears"></i> '.__('Static CDN Filters', $this->plugin->text_domain)."\n";
 				echo '   </a>'."\n";
 
 				echo '   <div class="plugin-menu-page-panel-body clearfix">'."\n";
 				echo '      <i class="fa fa-question-circle fa-4x" style="float:right; margin: 0 0 0 25px;"></i>'."\n";
-				echo '      <h3>'.__('Enable Static CDN Filters?', $this->plugin->text_domain).'</h3>'."\n";
+				echo '      <h3>'.__('Enable Static CDN Filters (e.g. MaxCDN/CloudFront)?', $this->plugin->text_domain).'</h3>'."\n";
 				echo '      <p>'.__('This feature allows you to serve some and/or ALL static files on your site from a CDN of your choosing. This is made possible through content/URL filters exposed by WordPress and implemented by Quick Cache. All it requires is that you setup a CDN host name sourced by your WordPress installation domain. You enter that CDN host name below and Quick Cache will do the rest! Super easy, and it does\'nt require any DNS changes either :-) Please <a href="https://github.com/websharks/quick-cache/wiki/Static-CDN-Filters-(General-Instructions)" target="_blank">click here</a> for a general set of instructions.', $this->plugin->text_domain).'</p>'."\n";
 				echo '      <p>'.__('<strong>What\'s a CDN?</strong> It\'s a Content Delivery Network (i.e. a network of optimized servers) designed to cache static resources served from your site (e.g. JS/CSS/images and other static files) onto it\'s own servers, which are located strategically in various geographic areas around the world. Integrating a CDN for static files can dramatically improve the speed and performance of your site, lower the burden on your own server, and reduce latency associated with visitors attempting to access your site from geographic areas of the world that might be very far away from the primary location of your own web servers.', $this->plugin->text_domain).'</p>'."\n";
 				echo '      <p><select name="'.esc_attr(__NAMESPACE__).'[save_options][cdn_enable]">'."\n";
