@@ -561,6 +561,65 @@ namespace quick_cache // Root namespace.
 				echo '<div class="plugin-menu-page-panel pro-preview">'."\n";
 
 				echo '   <a href="#" class="plugin-menu-page-panel-heading">'."\n";
+				echo '      <i class="fa fa-gears"></i> '.__('Static CDN Filters (e.g. MaxCDN/CloudFront)', $this->plugin->text_domain)."\n";
+				echo '   </a>'."\n";
+
+				echo '   <div class="plugin-menu-page-panel-body clearfix">'."\n";
+				echo '      <i class="fa fa-question-circle fa-4x" style="float:right; margin: 0 0 0 25px;"></i>'."\n";
+				echo '      <h3>'.__('Enable Static CDN Filters?', $this->plugin->text_domain).'</h3>'."\n";
+				echo '      <p>'.__('This feature allows you to serve some and/or ALL static files on your site from a CDN of your choosing. This is made possible through content/URL filters exposed by WordPress and implemented by Quick Cache. All it requires is that you setup a CDN host name sourced by your WordPress installation domain. You enter that CDN host name below and Quick Cache will do the rest! Super easy, and it does\'nt require any DNS changes either :-) Please <a href="https://github.com/websharks/quick-cache/wiki/Static-CDN-Filters-(General-Instructions)" target="_blank">click here</a> for a general set of instructions.', $this->plugin->text_domain).'</p>'."\n";
+				echo '      <p>'.__('<strong>What\'s a CDN?</strong> It\'s a Content Delivery Network (i.e. a network of optimized servers) designed to cache static resources served from your site (e.g. JS/CSS/images and other static files) onto it\'s own servers, which are located strategically in various geographic areas around the world. Integrating a CDN for static files can dramatically improve the speed and performance of your site, lower the burden on your own server, and reduce latency associated with visitors attempting to access your site from geographic areas of the world that might be very far away from the primary location of your own web servers.', $this->plugin->text_domain).'</p>'."\n";
+				echo '      <p><select name="'.esc_attr(__NAMESPACE__).'[save_options][cdn_enable]">'."\n";
+				echo '            <option value="0" selected="selected">'.__('No, I do NOT want CDN filters applied at runtime.', $this->plugin->text_domain).'</option>'."\n";
+				echo '            <option value="1">'.__('Yes, I want CDN filters applied w/ my configuration below.', $this->plugin->text_domain).'</option>'."\n";
+				echo '         </select></p>'."\n";
+				echo '      <hr />'."\n";
+				echo '      <div class="plugin-menu-page-panel-if-enabled">'."\n";
+				echo '         <h3>'.__('CDN Host Name (Absolutely Required)', $this->plugin->text_domain).'</h3>'."\n";
+				echo '         <p class="info" style="display:block;">'. // This note includes two graphics. One for MaxCDN; another for CloudFront.
+				     '            <a href="http://aws.amazon.com/cloudfront/" target="_blank"><img src="'.esc_attr($this->plugin->url('/client-s/images/cloudfront-logo.png')).'" style="width:75px; float:right; margin: 8px 10px 0 25px;" /></a>'.
+				     '            <a href="https://www.maxcdn.com/websharks/" target="_blank"><img src="'.esc_attr($this->plugin->url('/client-s/images/maxcdn-logo.png')).'" style="width:125px; float:right; margin: 20px 0 0 25px;" /></a>'.
+				     '            '.__('This one field is really all that\'s necessary to get Static CDN Filters working! However, it does requires a little bit of work on your part. You need to setup and configure a CDN before you can fill in this field. One you configure a CDN, you\'ll receive a host name (provided by your CDN), which you\'ll enter here; e.g. <code>js9dgjsl4llqpp.cloudfront.net</code>. We recommend <a href="https://www.maxcdn.com/websharks/" target="_blank">MaxCDN</a> and/or <a href="http://aws.amazon.com/cloudfront/" target="_blank">Amazon CloudFront</a>, but this should work with many of the most popular CDNs. Please read <a href="https://github.com/websharks/quick-cache/wiki/Static-CDN-Filters-(General-Instructions)" target="_blank">this article</a> for a general set of instructions. We also have a <a href="https://github.com/websharks/quick-cache/wiki/Static-CDN-Filters-(CloudFront)" target="_blank">CloudFront tutorial video</a> that walks you through the process.', $this->plugin->text_domain).'</option>'."\n";
+				echo '         <p><input type="text" name="'.esc_attr(__NAMESPACE__).'[save_options][cdn_host]" value="" /></p>'."\n";
+				echo '         <h3>'.__('CDN Host Supports HTTPS Connections?', $this->plugin->text_domain).'</h3>'."\n";
+				echo '         <p><select name="'.esc_attr(__NAMESPACE__).'[save_options][cdn_over_ssl]" autocomplete="off">'."\n";
+				echo '               <option value="0" selected="selected">'.__('No, I don\'t serve content over https://; or I haven\'t configured my CDN w/ an SSL certificate.', $this->plugin->text_domain).'</option>'."\n";
+				echo '               <option value="1">'.__('Yes, I\'ve configured my CDN w/ an SSL certificate; I need https:// enabled.', $this->plugin->text_domain).'</option>'."\n";
+				echo '            </select></p>'."\n";
+				echo '         <hr />'."\n";
+				echo '         <p class="info" style="display:block;">'.__('Everything else below is 100% completely optional; i.e. not required to enjoy the benefits of Static CDN Filters.', $this->plugin->text_domain).'</p>'."\n";
+				echo '         <hr />'."\n";
+				echo '         <h3>'.__('Whitelisted File Extensions (Optional; Comma-Delimited)', $this->plugin->text_domain).'</h3>'."\n";
+				echo '         <p><input type="text" name="'.esc_attr(__NAMESPACE__).'[save_options][cdn_whitelisted_extensions]" value="" /></p>'."\n";
+				echo '         <p>'.__('If you leave this empty a default set of extensions are taken from WordPress itself. The default set of whitelisted file extensions includes everything supported by the WordPress media library. This includes the following: <code style="white-space:normal; word-wrap:break-word;">'.esc_html(str_replace('|', ',', implode('|', array_keys(wp_get_mime_types())))).'</code>.', $this->plugin->text_domain).'</p>'."\n";
+				echo '         <h3>'.__('Blacklisted File Extensions (Optional; Comma-Delimited)', $this->plugin->text_domain).'</h3>'."\n";
+				echo '         <p><input type="text" name="'.esc_attr(__NAMESPACE__).'[save_options][cdn_blacklisted_extensions]" value="" /></p>'."\n";
+				echo '         <p>'.__('With or without a whitelist, you can force exclusions by explicitly blacklisting certain file extensions of your choosing. Please note, the <code>php</code> extension will never be considered a static resource; i.e. it is automatically blacklisted at all times.', $this->plugin->text_domain).'</p>'."\n";
+				echo '         <hr />'."\n";
+				echo '         <h3>'.__('Whitelisted URI Inclusion Patterns (Optional; One Per Line)', $this->plugin->text_domain).'</h3>'."\n";
+				echo '         <p><textarea name="'.esc_attr(__NAMESPACE__).'[save_options][cdn_whitelisted_uri_patterns]" rows="5" spellcheck="false" class="monospace"></textarea></p>'."\n";
+				echo '         <p class="info" style="display:block;">'.__('<strong>Note:</strong> please remember that your entries here should be formatted as a line-delimited list; e.g. one inclusion pattern per line.', $this->plugin->text_domain).'</p>'."\n";
+				echo '         <p>'.__('If provided, only local URIs matching one of the patterns you list here will be served from your CDN Host Name. URI patterns are caSe-insensitive. A wildcard <code>*</code> will match zero or more characters in any of your patterns. For instance, <code>*/wp-content/*</code> here would indicate that you only want to filter URLs that lead to files located inside the <code>wp-content</code> directory. Adding an additional line with <code>*/wp-includes/*</code> would filter URLs in the <code>wp-includes</code> directory also. <strong>If you leave this empty</strong>, ALL files matching a static file extension will be served from your CDN; i.e. the default behavior.', $this->plugin->text_domain).'</p>'."\n";
+				echo '         <p>'.__('Please note that URI patterns are tested against a file\'s path (i.e. a file\'s URI, and NOT its full URL). A URI always starts with a leading <code>/</code>. To clarify, a URI is the portion of the URL which comes after the host name. For instance, given the following URL: <code>http://example.com/path/to/style.css?ver=3</code>, the URI you are matching against would be: <code>/path/to/style.css?ver=3</code>. To whitelist this URI, you could use a line that contains something like this: <code>/path/to/*.css*</code>', $this->plugin->text_domain).'</p>'."\n";
+				echo '         <h3>'.__('Blacklisted URI Exclusion Patterns (Optional; One Per Line)', $this->plugin->text_domain).'</h3>'."\n";
+				echo '         <p><textarea name="'.esc_attr(__NAMESPACE__).'[save_options][cdn_blacklisted_uri_patterns]" rows="5" spellcheck="false" class="monospace"></textarea></p>'."\n";
+				echo '         <p>'.__('With or without a whitelist, you can force exclusions by explicitly blacklisting certain URI patterns. URI patterns are caSe-insensitive. A wildcard <code>*</code> will match zero or more characters in any of your patterns.', $this->plugin->text_domain).'</p>'."\n";
+				echo '         <p class="info" style="display:block;">'.__('<strong>Note:</strong> please remember that your entries here should be formatted as a line-delimited list; e.g. one exclusion pattern per line.', $this->plugin->text_domain).'</p>'."\n";
+				echo '         <hr />'."\n";
+				echo '         <h3>'.__('Query String Invalidation Variable Name', $this->plugin->text_domain).'</h3>'."\n";
+				echo '         <p><input type="text" name="'.esc_attr(__NAMESPACE__).'[save_options][cdn_invalidation_var]" value="iv" /></p>'."\n";
+				echo '         <p>'.__('Each filtered URL (which then leads to your CDN) will include this query string variable as an easy way to invalidate the CDN cache at any time. Invalidating the CDN cache is simply a matter of changing the global invalidation counter (i.e. the value assigned to this query string variable). Quick Cache manages invalidations automatically; i.e. Quick Cache will automatically bump an internal counter each time you upgrade a WordPress component (e.g. a plugin, theme, or WP itself). Or, if you ask Quick Cache to invalidate the CDN cache (e.g. a manual clearing of the CDN cache); the internal counter is bumped then too. In short, Quick Cache handles cache invalidations for you reliably. This option simply allows you to customize the query string variable name which makes cache invalidations possible. <strong>Please note, the default value is adequate for most sites. You can change this if you like, but it\'s not necessary.</strong>', $this->plugin->text_domain).'</p>'."\n";
+				echo '         <p class="info" style="display:block;">'.__('<strong>Note:</strong> If you empty this field, it will effectively disable the Quick Cache invalidation system for Static CDN Filters; i.e. the query string variable will NOT be included if you do not supply a variable name.', $this->plugin->text_domain).'</p>'."\n";
+				echo '      </div>'."\n";
+				echo '   </div>'."\n";
+
+				echo '</div>'."\n";
+			}
+			if($this->plugin->is_pro_preview())
+			{
+				echo '<div class="plugin-menu-page-panel pro-preview">'."\n";
+
+				echo '   <a href="#" class="plugin-menu-page-panel-heading">'."\n";
 				echo '      <i class="fa fa-gears"></i> '.__('Dynamic Version Salt', $this->plugin->text_domain)."\n";
 				echo '   </a>'."\n";
 
