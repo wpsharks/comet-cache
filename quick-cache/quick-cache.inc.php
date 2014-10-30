@@ -158,28 +158,47 @@ namespace quick_cache
 				load_plugin_textdomain($this->text_domain);
 
 				$this->default_options = array(
-					'version'                          => $this->version,
+					/* Core/systematic plugin options. */
 
+					'version'                          => $this->version,
 					'crons_setup'                      => '0', // `0` or timestamp.
 
+					/* Primary switch; enable? */
+
 					'enable'                           => '0', // `0|1`.
-					'debugging_enable'                 => '1', // `0|1|2` // 2 indicates greater debugging detail.
-					'cache_clear_home_page_enable'     => '1', // `0|1`.
-					'cache_clear_posts_page_enable'    => '1', // `0|1`.
-					'cache_clear_author_page_enable'   => '1', // `0|1`.
-					'cache_clear_term_category_enable' => '1', // `0|1`.
-					'cache_clear_term_post_tag_enable' => '1', // `0|1`.
-					'cache_clear_term_other_enable'    => '0', // `0|1`.
-					'allow_browser_cache'              => '0', // `0|1`.
+
+					/* Related to debugging. */
+
+					'debugging_enable'                 => '1',
+					// `0|1|2` // 2 indicates greater debugging detail.
+
+					/* Related to cache directory. */
 
 					'base_dir'                         => 'cache/quick-cache', // Relative to `WP_CONTENT_DIR`.
 					'cache_max_age'                    => '7 days', // `strtotime()` compatible.
 
+					/* Related to automatic cache clearing. */
+
+					'cache_clear_home_page_enable'     => '1', // `0|1`.
+					'cache_clear_posts_page_enable'    => '1', // `0|1`.
+
+					'cache_clear_author_page_enable'   => '1', // `0|1`.
+
+					'cache_clear_term_category_enable' => '1', // `0|1`.
+					'cache_clear_term_post_tag_enable' => '1', // `0|1`.
+					'cache_clear_term_other_enable'    => '0', // `0|1`.
+
+					/* Misc. cache behaviors. */
+
+					'allow_browser_cache'              => '0', // `0|1`.
 					'get_requests'                     => '0', // `0|1`.
 					'feeds_enable'                     => '0', // `0|1`.
 					'cache_404_requests'               => '0', // `0|1`.
 
-					'uninstall_on_deletion'            => '0' // `0|1`.
+					/* Related to uninstallation routines. */
+
+					'uninstall_on_deletion'            => '0', // `0|1`.
+
 				); // Default options are merged with those defined by the site owner.
 				$options               = (is_array($options = get_option(__NAMESPACE__.'_options'))) ? $options : array();
 				if(is_multisite() && is_array($site_options = get_site_option(__NAMESPACE__.'_options')))
