@@ -48,6 +48,7 @@ namespace quick_cache // Root namespace.
 				$this->from_lt_v140605();
 				$this->from_lt_v140612();
 				$this->from_lt_v141009();
+				$this->from_lt_v141105();
 			}
 
 			/*
@@ -168,6 +169,15 @@ namespace quick_cache // Root namespace.
 						}
 					}
 				}
+			}
+
+			/*
+			 * Upgrading from a version prior to the first announcement that Quick Cache is changing its name to ZenCache
+			 */
+			public function from_lt_v141105()
+			{
+				if(version_compare($this->prev_version, '141105', '<'))
+					$this->plugin->enqueue_notice(__('<strong>Important Quick Cache Announcement:</strong> Quick Cache is changing its name to ZenCache! Read more about this change <a href="http://www.websharks-inc.com/post/quick-cache-is-changing-its-name/" target="_blank">here</a>.', $this->plugin->text_domain), 'persistent-quick-cache-to-zencache-notice1', TRUE);
 			}
 		}
 	}
