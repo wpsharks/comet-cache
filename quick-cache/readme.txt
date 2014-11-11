@@ -1,6 +1,6 @@
 === Quick Cache (Speed Without Compromise) ===
 
-Stable tag: 141103
+Stable tag: 141110
 Requires at least: 3.7
 Tested up to: 4.0
 Text Domain: quick-cache
@@ -319,6 +319,22 @@ Released under the terms of the [GNU General Public License](http://www.gnu.org/
 Requires PHP v5.3+. The latest version of Quick Cache is a complete rewrite (OOP design). Faster! and even more dependable. NOTE: the free version of Quick Cache (this new LITE version); while it remains fully functional and is more-than-adequate for most sites; is now limited in some ways. The following advanced features from the previous release are no longer available in the lite version: a custom MD5 Version Salt, custom Exclusion Patterns, a Clear Cache button in admin bar. These, and other features; are now available only in the pro version of the plugin. For further details, please see: <http://www.websharks-inc.com/product/quick-cache/>.
 
 == Changelog ==
+
+= v141110 =
+
+- **Announcement**: Quick Cache is changing its name to ZenCache! See [the blog post](http://www.websharks-inc.com/post/quick-cache-is-changing-its-name/) for full details.
+- **Enhancement**: All dashboard notices will now include the number of files cleared for each notice.  Props @jaswsinc. See [#351](https://github.com/websharks/quick-cache/pull/351).
+- **Enhancement**:  Quick Cache is now capable of doing atomic clearing/purging/wiping. On a Multisite network, this is now accomplished on a blog-specific basis, without needing to scan the entire network-wide cache directory. This should improve performance considerably on large networks (i.e. those with VERY large cache directories). Props @jaswsinc. See [#288](https://github.com/websharks/quick-cache/issues/288) and [#351](https://github.com/websharks/quick-cache/pull/351).
+- **Enhancement**: Added a new class file (`/includes/utils-feed.php`) and refactored the XML feed clearing routine. With these utilities in place, the `auto_clear_xml_feeds_cache()` method is now much easier to deal with and comprehend. Props @jaswsinc. See [#351](https://github.com/websharks/quick-cache/pull/351).
+- **Enhancement**: Quick Cache now scans each scheme sub-directory, i.e. `/http/` and `/https/`, separately to help break apart what was previously a much larger directory scan for sites that serve pages over both schemes. This will improve performance on both standard and Multisite network installs. See [#351](https://github.com/websharks/quick-cache/pull/351).
+- **Enhancement**: Refactored codebase to improve modularity by creating new methods in `includes/share.php` for network-wide clearing/purging/wiping, host/blog-specific clearing/purging/wiping, recursively deleting a directory, assisting in translations, and several new string utilities. Props @jaswsinc. See [#351](https://github.com/websharks/quick-cache/pull/351).
+- **Enhancement**: Renamed all `\quick_cache\plugin::auto_purge_*` methods, giving them the proper prefix of `auto_clear_*` instead to reflect proper Wipe/Clear/Purge terminology. Along with this, all of the `auto_purge_` option keys have been renamed as well. See new [Wipe/Clear/Purge wiki article](http://www.websharks-inc.com/r/quick-cache-wipeclearpurge-terminology-wiki/) for a description of these terms. Props @jaswsinc. See [#351](https://github.com/websharks/quick-cache/pull/351).
+- **Enhancement**: All URI and Referrer exclusion patterns are now caSe insensitive. WordPress v4.0 will serve URIs without cAse sensitivity. All of the Quick Cache codebase has been updated to support caSe insensitive clearing/purging/wiping; along with caSe insensitive pattern matching against URIs. Props @jaswsinc. See [#351](https://github.com/websharks/quick-cache/pull/351).
+- **Bug Fix (Pro)**: Fixed a bug with the Auto-Clear Author Cache routine that was presenting dashboard notices even when `change_notifications_enable` was off. Props @jaswsinc. See [#351](https://github.com/websharks/quick-cache/pull/351).
+- **Bug Fix**: Fixed a bug that was occasionally generating "Fatal Error: 'Unable to clear dir'" messages. The root cause of this is believed to be non-atomic purging of cache directories which, on a busy site, could result in new cache files being created before a purging routine was finished clearing the directory. Clearing/purging/wiping is now atomic in all scenarios. Props @jaswsinc. See [#288](https://github.com/websharks/quick-cache/issues/288) and [#351](https://github.com/websharks/quick-cache/pull/351).
+- **Bug Fix**: Fixed a bug in the Auto-Clear Custom Post Type Archive Cache that was not checking for the `$post_id` in `$this->static[__FUNCTION__]`. Props @jaswsinc. See [#351](https://github.com/websharks/quick-cache/pull/351).
+- **Bug Fix**: Fixed a bug with the uninstaller whereby attempting to uninstall after receiving a notice that PHP 5.3+ is required would result in a blank screen and require manual removal of the plugin. See [#334](https://github.com/websharks/quick-cache/issues/334).
+- **Bug Fix**: Fixed an issue with detecting cacheable requests that was, in rare instances, resulting in blank white pages for some site owners. See [#279](https://github.com/websharks/quick-cache/issues/279).
 
 = v141001 =
 
