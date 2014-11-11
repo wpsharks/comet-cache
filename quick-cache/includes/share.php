@@ -21,7 +21,7 @@ namespace quick_cache // Root namespace.
 			/**
 			 * Name of this plugin.
 			 *
-			 * @since 14xxxx Refactoring.
+			 * @since 141110 Refactoring.
 			 *
 			 * @var string Plugin name.
 			 */
@@ -30,7 +30,7 @@ namespace quick_cache // Root namespace.
 			/**
 			 * Short name for this plugin.
 			 *
-			 * @since 14xxxx Refactoring.
+			 * @since 141110 Refactoring.
 			 *
 			 * @var string Short name for this plugin.
 			 */
@@ -52,12 +52,12 @@ namespace quick_cache // Root namespace.
 			 *
 			 * @var string Current version of the software.
 			 */
-			public $version = '141001';
+			public $version = '141110';
 
 			/**
 			 * Plugin slug; based on `__NAMESPACE__`.
 			 *
-			 * @since 14xxxx Refactoring.
+			 * @since 141110 Refactoring.
 			 *
 			 * @var string Plugin slug; based on `__NAMESPACE__`.
 			 */
@@ -206,7 +206,7 @@ namespace quick_cache // Root namespace.
 			/**
 			 * Default cache path regex suffix frag.
 			 *
-			 * @since 14xxxx Refactoring cache clear/purge routines.
+			 * @since 141110 Refactoring cache clear/purge routines.
 			 *
 			 * @var string Default regex suffix frag used in cache path patterns.
 			 */
@@ -340,7 +340,7 @@ namespace quick_cache // Root namespace.
 			 * This converts a URL into a relative `cache/path`; i.e. relative to the cache directory,
 			 *    and then converts that into a regex pattern w/ an optional custom `$regex_suffix_frag`.
 			 *
-			 * @since 14xxxx Refactoring cache clear/purge routines.
+			 * @since 141110 Refactoring cache clear/purge routines.
 			 *
 			 * @param string $url The input URL to convert. This CAN be left empty when necessary.
 			 *    If empty, the final regex pattern will be `/^'.$regex_suffix_frag.'/i`.
@@ -390,7 +390,7 @@ namespace quick_cache // Root namespace.
 			 * This converts a URL into a relative `cache/path`; i.e. relative to the current host|blog directory,
 			 *    and then converts that into a regex pattern w/ an optional custom `$regex_suffix_frag`.
 			 *
-			 * @since 14xxxx Refactoring cache clear/purge routines.
+			 * @since 141110 Refactoring cache clear/purge routines.
 			 *
 			 * @param string $url The input URL to convert. This CAN be left empty when necessary.
 			 *    If empty, the final regex pattern will be `/^'.$regex_suffix_frag.'/i`.
@@ -443,7 +443,7 @@ namespace quick_cache // Root namespace.
 			 * This converts URIs into relative `cache/paths`; i.e. relative to the current host|blog directory,
 			 *    and then converts those into `(?:regex|fragments)` with piped `|` alternatives.
 			 *
-			 * @since 14xxxx Refactoring cache clear/purge routines.
+			 * @since 141110 Refactoring cache clear/purge routines.
 			 *
 			 * @param string $uris A line-delimited list of URIs. These may contain `*` wildcards also.
 			 *
@@ -698,7 +698,7 @@ namespace quick_cache // Root namespace.
 			/**
 			 * Is the current request method `POST`, `PUT` or `DELETE`?
 			 *
-			 * @since 14xxxx Updating `is_uncacheable_request_method()` and restoring this one.
+			 * @since 141110 Updating `is_uncacheable_request_method()` and restoring this one.
 			 *
 			 * @return boolean `TRUE` if current request method is `POST`, `PUT` or `DELETE`.
 			 *
@@ -722,7 +722,7 @@ namespace quick_cache // Root namespace.
 			/**
 			 * Is the current request method is uncacheable?
 			 *
-			 * @since 14xxxx Reversing logic; only allow `GET` requests to be cached.
+			 * @since 141110 Reversing logic; only allow `GET` requests to be cached.
 			 * @since 140725 Adding HEAD/OPTIONS/TRACE/CONNECT to the list of uncacheables.
 			 *
 			 * @return boolean `TRUE` if current request method is uncacheable.
@@ -1209,7 +1209,7 @@ namespace quick_cache // Root namespace.
 			/**
 			 * String replace ONE time.
 			 *
-			 * @since 14xxxx Refactoring cache clear/purge routines.
+			 * @since 141110 Refactoring cache clear/purge routines.
 			 *
 			 * @param string  $needle A string to search/replace.
 			 * @param string  $replace What to replace `$needle` with.
@@ -1236,7 +1236,7 @@ namespace quick_cache // Root namespace.
 			/**
 			 * String replace ONE time (caSe-insensitive).
 			 *
-			 * @since 14xxxx Refactoring cache clear/purge routines.
+			 * @since 141110 Refactoring cache clear/purge routines.
 			 *
 			 * @param string $needle A string to search/replace.
 			 * @param string $replace What to replace `$needle` with.
@@ -1288,7 +1288,7 @@ namespace quick_cache // Root namespace.
 			/**
 			 * Adds a tmp name suffix to a directory/file path.
 			 *
-			 * @since 14xxxx Refactoring cache clear/purge routines.
+			 * @since 141110 Refactoring cache clear/purge routines.
 			 *
 			 * @param string $dir_file An input directory or file path.
 			 *
@@ -1327,7 +1327,7 @@ namespace quick_cache // Root namespace.
 			 * Clear files from the cache directory (for all hosts/blogs);
 			 *    i.e. those that match a specific regex pattern.
 			 *
-			 * @since 14xxxx Refactoring cache clear/purge routines.
+			 * @since 141110 Refactoring cache clear/purge routines.
 			 *
 			 * @param string $regex A regex pattern; see {@link delete_files_from_cache_dir()}.
 			 *
@@ -1344,7 +1344,7 @@ namespace quick_cache // Root namespace.
 			 * Clear files from the cache directory (for the current host);
 			 *    i.e. those that match a specific regex pattern.
 			 *
-			 * @since 14xxxx Refactoring cache clear/purge routines.
+			 * @since 141110 Refactoring cache clear/purge routines.
 			 *
 			 * @param string $regex A regex pattern; see {@link delete_files_from_host_cache_dir()}.
 			 *
@@ -1361,7 +1361,7 @@ namespace quick_cache // Root namespace.
 			 * Purge files from the cache directory (for all hosts/blogs);
 			 *    i.e. those that match a specific regex pattern.
 			 *
-			 * @since 14xxxx Refactoring cache clear/purge routines.
+			 * @since 141110 Refactoring cache clear/purge routines.
 			 *
 			 * @param string $regex A regex pattern; see {@link delete_files_from_cache_dir()}.
 			 *
@@ -1378,7 +1378,7 @@ namespace quick_cache // Root namespace.
 			 * Purge files from the cache directory (for the current host);
 			 *    i.e. those that match a specific regex pattern.
 			 *
-			 * @since 14xxxx Refactoring cache clear/purge routines.
+			 * @since 141110 Refactoring cache clear/purge routines.
 			 *
 			 * @param string $regex A regex pattern; see {@link delete_files_from_host_cache_dir()}.
 			 *
@@ -1395,7 +1395,7 @@ namespace quick_cache // Root namespace.
 			 * Delete files from the cache directory (for all hosts/blogs);
 			 *    i.e. those that match a specific regex pattern.
 			 *
-			 * @since 14xxxx Refactoring cache clear/purge routines.
+			 * @since 141110 Refactoring cache clear/purge routines.
 			 *
 			 * @param string  $regex A `/[regex pattern]/`; relative to the cache directory.
 			 *    e.g. `/^http\/example\.com\/my\-slug(?:\/index)?(?:\.|\/(?:page\/[0-9]+|comment\-page\-[0-9]+)[.\/])/`
@@ -1487,7 +1487,7 @@ namespace quick_cache // Root namespace.
 			 * Delete files from the cache directory (for the current host);
 			 *    i.e. those that match a specific regex pattern.
 			 *
-			 * @since 14xxxx Refactoring cache clear/purge routines.
+			 * @since 141110 Refactoring cache clear/purge routines.
 			 *
 			 * @param string  $regex A `/[regex pattern]/`; relative to the host cache directory.
 			 *    e.g. `/^my\-slug(?:\/index)?(?:\.|\/(?:page\/[0-9]+|comment\-page\-[0-9]+)[.\/])/`
@@ -1605,7 +1605,7 @@ namespace quick_cache // Root namespace.
 			 * Delete all files/dirs from a directory (for all schemes/hosts);
 			 *    including `qc-` prefixed files; or anything else for that matter.
 			 *
-			 * @since 14xxxx Refactoring cache clear/purge routines.
+			 * @since 141110 Refactoring cache clear/purge routines.
 			 *
 			 * @param string  $dir The directory from which to delete files/dirs.
 			 *

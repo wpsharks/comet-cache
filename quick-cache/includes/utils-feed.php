@@ -3,7 +3,7 @@
  * Feed Utilities
  *
  * @package quick_cache\utils_feed
- * @since 14xxxx Refactoring cache clear/purge routines.
+ * @since 141110 Refactoring cache clear/purge routines.
  * @copyright WebSharks, Inc. <http://www.websharks-inc.com>
  * @license GNU General Public License, version 2
  */
@@ -20,42 +20,42 @@ namespace quick_cache // Root namespace.
 		/**
 		 * @var plugin Quick Cache instance.
 		 *
-		 * @since 14xxxx Refactoring cache clear/purge routines.
+		 * @since 141110 Refactoring cache clear/purge routines.
 		 */
 		protected $plugin;
 
 		/**
 		 * @var string WordPress `home_url('/')`.
 		 *
-		 * @since 14xxxx Refactoring cache clear/purge routines.
+		 * @since 141110 Refactoring cache clear/purge routines.
 		 */
 		protected $home_url;
 
 		/**
 		 * @var string Default feed type; e.g. `rss2`.
 		 *
-		 * @since 14xxxx Refactoring cache clear/purge routines.
+		 * @since 141110 Refactoring cache clear/purge routines.
 		 */
 		protected $default_feed;
 
 		/**
 		 * @var boolean Using SEO-friendly permalinks?
 		 *
-		 * @since 14xxxx Refactoring cache clear/purge routines.
+		 * @since 141110 Refactoring cache clear/purge routines.
 		 */
 		protected $seo_friendly_permalinks;
 
 		/**
 		 * @var array All unique feed types.
 		 *
-		 * @since 14xxxx Refactoring cache clear/purge routines.
+		 * @since 141110 Refactoring cache clear/purge routines.
 		 */
 		protected $feed_types;
 
 		/**
 		 * Class constructor.
 		 *
-		 * @since 14xxxx Refactoring cache clear/purge routines.
+		 * @since 141110 Refactoring cache clear/purge routines.
 		 */
 		public function __construct()
 		{
@@ -70,7 +70,7 @@ namespace quick_cache // Root namespace.
 		/**
 		 * Feed link variations.
 		 *
-		 * @since 14xxxx Refactoring cache clear/purge routines.
+		 * @since 141110 Refactoring cache clear/purge routines.
 		 *
 		 * @param string $type_prefix A feed type prefix; optional.
 		 *
@@ -90,7 +90,7 @@ namespace quick_cache // Root namespace.
 		/**
 		 * Post comments; feed link variations.
 		 *
-		 * @since 14xxxx Refactoring cache clear/purge routines.
+		 * @since 141110 Refactoring cache clear/purge routines.
 		 *
 		 * @param \WP_Post A WordPress post class instance.
 		 *
@@ -110,7 +110,7 @@ namespace quick_cache // Root namespace.
 		/**
 		 * Post author; feed link variations.
 		 *
-		 * @since 14xxxx Refactoring cache clear/purge routines.
+		 * @since 141110 Refactoring cache clear/purge routines.
 		 *
 		 * @param \WP_Post A WordPress post class instance.
 		 *
@@ -137,7 +137,7 @@ namespace quick_cache // Root namespace.
 		/**
 		 * Post type archive; feed link variations.
 		 *
-		 * @since 14xxxx Refactoring cache clear/purge routines.
+		 * @since 141110 Refactoring cache clear/purge routines.
 		 *
 		 * @param \WP_Post A WordPress post class instance.
 		 *
@@ -157,7 +157,7 @@ namespace quick_cache // Root namespace.
 		/**
 		 * Post terms; feed link variations.
 		 *
-		 * @since 14xxxx Refactoring cache clear/purge routines.
+		 * @since 141110 Refactoring cache clear/purge routines.
 		 *
 		 * @param \WP_Post A WordPress post class instance.
 		 *
@@ -237,7 +237,7 @@ namespace quick_cache // Root namespace.
 		/**
 		 * Convert variations into regex fragments; relative to the current host|blog directory.
 		 *
-		 * @since 14xxxx Refactoring cache clear/purge routines.
+		 * @since 141110 Refactoring cache clear/purge routines.
 		 *
 		 * @param array $variations An array of variations built by other class members.
 		 *
