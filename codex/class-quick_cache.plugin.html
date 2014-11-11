@@ -7,7 +7,7 @@
 	<title>Class quick_cache\plugin | Quick Cache Lite</title>
 
 	<script type="text/javascript" src="resources/combined.js?822040270"></script>
-	<script type="text/javascript" src="elementlist.js?1748627827"></script>
+	<script type="text/javascript" src="elementlist.js?1035181410"></script>
 	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3403148767" />
 
 </head>
@@ -40,6 +40,7 @@
 				<li class="active"><a href="class-quick_cache.plugin.html">plugin</a></li>
 				<li><a href="class-quick_cache.share.html">share</a></li>
 				<li><a href="class-quick_cache.uninstall.html">uninstall</a></li>
+				<li><a href="class-quick_cache.utils_feed.html">utils_feed</a></li>
 				<li><a href="class-quick_cache.version_specific_upgrade.html">version_specific_upgrade</a></li>
 			</ul>
 
@@ -136,7 +137,7 @@
 				<b>Since:</b>
 				<p>140422 First documented version.</p>
 <br />
-		<b>Located at</b> <a href="source-class-quick_cache.plugin.html#19-2617" title="Go to source code">quick-cache/quick-cache.inc.php</a><br />
+		<b>Located at</b> <a href="source-class-quick_cache.plugin.html#19-2349" title="Go to source code">quick-cache/quick-cache.inc.php</a><br />
 	</div>
 
 
@@ -154,7 +155,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#___construct">#</a>
-		<code><a href="source-class-quick_cache.plugin.html#113-133" title="Go to source code">__construct</a>( <span>boolean <var>$enable_hooks</var> = <span class="php-keyword1">TRUE</span></span> )</code>
+		<code><a href="source-class-quick_cache.plugin.html#113-140" title="Go to source code">__construct</a>( <span>boolean <var>$enable_hooks</var> = <span class="php-keyword1">TRUE</span></span> )</code>
 
 		<div class="description short">
 			<p>Quick Cache plugin constructor.</p>
@@ -199,7 +200,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_setup">#</a>
-		<code><a href="source-class-quick_cache.plugin.html#135-286" title="Go to source code">setup</a>( )</code>
+		<code><a href="source-class-quick_cache.plugin.html#142-329" title="Go to source code">setup</a>( )</code>
 
 		<div class="description short">
 			<p>Setup the Quick Cache plugin.</p>
@@ -235,7 +236,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_wpdb">#</a>
-		<code><a href="source-class-quick_cache.plugin.html#288-298" title="Go to source code">wpdb</a>( )</code>
+		<code><a href="source-class-quick_cache.plugin.html#331-341" title="Go to source code">wpdb</a>( )</code>
 
 		<div class="description short">
 			<p>WordPress database instance.</p>
@@ -276,7 +277,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_activate">#</a>
-		<code><a href="source-class-quick_cache.plugin.html#300-318" title="Go to source code">activate</a>( )</code>
+		<code><a href="source-class-quick_cache.plugin.html#343-361" title="Go to source code">activate</a>( )</code>
 
 		<div class="description short">
 			<p>Plugin activation hook.</p>
@@ -317,7 +318,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_check_version">#</a>
-		<code><a href="source-class-quick_cache.plugin.html#320-349" title="Go to source code">check_version</a>( )</code>
+		<code><a href="source-class-quick_cache.plugin.html#363-392" title="Go to source code">check_version</a>( )</code>
 
 		<div class="description short">
 			<p>Check current plugin version that installed in WP.</p>
@@ -358,7 +359,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_deactivate">#</a>
-		<code><a href="source-class-quick_cache.plugin.html#351-363" title="Go to source code">deactivate</a>( )</code>
+		<code><a href="source-class-quick_cache.plugin.html#394-408" title="Go to source code">deactivate</a>( )</code>
 
 		<div class="description short">
 			<p>Plugin deactivation hook.</p>
@@ -399,7 +400,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_uninstall">#</a>
-		<code><a href="source-class-quick_cache.plugin.html#365-401" title="Go to source code">uninstall</a>( )</code>
+		<code><a href="source-class-quick_cache.plugin.html#410-451" title="Go to source code">uninstall</a>( )</code>
 
 		<div class="description short">
 			<p>Plugin uninstall hook.</p>
@@ -440,7 +441,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_is_pro_preview">#</a>
-		<code><a href="source-class-quick_cache.plugin.html#403-419" title="Go to source code">is_pro_preview</a>( )</code>
+		<code><a href="source-class-quick_cache.plugin.html#453-469" title="Go to source code">is_pro_preview</a>( )</code>
 
 		<div class="description short">
 			<p>Current request is for a pro version preview?</p>
@@ -481,7 +482,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_url">#</a>
-		<code><a href="source-class-quick_cache.plugin.html#421-443" title="Go to source code">url</a>( <span>string <var>$file</var> = <span class="php-quote">''</span></span>, <span>string <var>$scheme</var> = <span class="php-quote">''</span></span> )</code>
+		<code><a href="source-class-quick_cache.plugin.html#471-493" title="Go to source code">url</a>( <span>string <var>$file</var> = <span class="php-quote">''</span></span>, <span>string <var>$scheme</var> = <span class="php-quote">''</span></span> )</code>
 
 		<div class="description short">
 			<p>URL to a Quick Cache plugin file.</p>
@@ -531,7 +532,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_actions">#</a>
-		<code><a href="source-class-quick_cache.plugin.html#445-456" title="Go to source code">actions</a>( )</code>
+		<code><a href="source-class-quick_cache.plugin.html#495-506" title="Go to source code">actions</a>( )</code>
 
 		<div class="description short">
 			<p>Plugin action handler.</p>
@@ -572,7 +573,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_enqueue_admin_styles">#</a>
-		<code><a href="source-class-quick_cache.plugin.html#458-473" title="Go to source code">enqueue_admin_styles</a>( )</code>
+		<code><a href="source-class-quick_cache.plugin.html#508-523" title="Go to source code">enqueue_admin_styles</a>( )</code>
 
 		<div class="description short">
 			<p>Adds CSS for administrative menu pages.</p>
@@ -613,7 +614,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_enqueue_admin_scripts">#</a>
-		<code><a href="source-class-quick_cache.plugin.html#475-490" title="Go to source code">enqueue_admin_scripts</a>( )</code>
+		<code><a href="source-class-quick_cache.plugin.html#525-540" title="Go to source code">enqueue_admin_scripts</a>( )</code>
 
 		<div class="description short">
 			<p>Adds JS for administrative menu pages.</p>
@@ -654,7 +655,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_add_network_menu_pages">#</a>
-		<code><a href="source-class-quick_cache.plugin.html#492-504" title="Go to source code">add_network_menu_pages</a>( )</code>
+		<code><a href="source-class-quick_cache.plugin.html#542-554" title="Go to source code">add_network_menu_pages</a>( )</code>
 
 		<div class="description short">
 			<p>Creates network admin menu pages.</p>
@@ -695,7 +696,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_add_menu_pages">#</a>
-		<code><a href="source-class-quick_cache.plugin.html#506-520" title="Go to source code">add_menu_pages</a>( )</code>
+		<code><a href="source-class-quick_cache.plugin.html#556-570" title="Go to source code">add_menu_pages</a>( )</code>
 
 		<div class="description short">
 			<p>Creates admin menu pages.</p>
@@ -736,7 +737,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_add_settings_link">#</a>
-		<code><a href="source-class-quick_cache.plugin.html#522-540" title="Go to source code">add_settings_link</a>( <span>array <var>$links</var></span> )</code>
+		<code><a href="source-class-quick_cache.plugin.html#572-590" title="Go to source code">add_settings_link</a>( <span>array <var>$links</var></span> )</code>
 
 		<div class="description short">
 			<p>Adds link(s) to Quick Cache row on the WP plugins page.</p>
@@ -788,7 +789,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_menu_page_options">#</a>
-		<code><a href="source-class-quick_cache.plugin.html#542-555" title="Go to source code">menu_page_options</a>( )</code>
+		<code><a href="source-class-quick_cache.plugin.html#592-605" title="Go to source code">menu_page_options</a>( )</code>
 
 		<div class="description short">
 			<p>Loads the admin menu page options.</p>
@@ -829,7 +830,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_all_admin_notices">#</a>
-		<code><a href="source-class-quick_cache.plugin.html#557-588" title="Go to source code">all_admin_notices</a>( )</code>
+		<code><a href="source-class-quick_cache.plugin.html#607-638" title="Go to source code">all_admin_notices</a>( )</code>
 
 		<div class="description short">
 			<p>Render admin notices; across all admin dashboard views.</p>
@@ -870,7 +871,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_enqueue_notice">#</a>
-		<code><a href="source-class-quick_cache.plugin.html#590-626" title="Go to source code">enqueue_notice</a>( <span>string <var>$notice</var></span>, <span>string <var>$persistent_key</var> = <span class="php-quote">''</span></span>, <span>boolean <var>$push_to_top</var> = <span class="php-keyword1">FALSE</span></span> )</code>
+		<code><a href="source-class-quick_cache.plugin.html#640-676" title="Go to source code">enqueue_notice</a>( <span>string <var>$notice</var></span>, <span>string <var>$persistent_key</var> = <span class="php-quote">''</span></span>, <span>boolean <var>$push_to_top</var> = <span class="php-keyword1">FALSE</span></span> )</code>
 
 		<div class="description short">
 			<p>Enqueue an administrative notice.</p>
@@ -920,7 +921,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_all_admin_errors">#</a>
-		<code><a href="source-class-quick_cache.plugin.html#628-659" title="Go to source code">all_admin_errors</a>( )</code>
+		<code><a href="source-class-quick_cache.plugin.html#678-709" title="Go to source code">all_admin_errors</a>( )</code>
 
 		<div class="description short">
 			<p>Render admin errors; across all admin dashboard views.</p>
@@ -961,7 +962,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_enqueue_error">#</a>
-		<code><a href="source-class-quick_cache.plugin.html#661-697" title="Go to source code">enqueue_error</a>( <span>string <var>$error</var></span>, <span>string <var>$persistent_key</var> = <span class="php-quote">''</span></span>, <span>boolean <var>$push_to_top</var> = <span class="php-keyword1">FALSE</span></span> )</code>
+		<code><a href="source-class-quick_cache.plugin.html#711-747" title="Go to source code">enqueue_error</a>( <span>string <var>$error</var></span>, <span>string <var>$persistent_key</var> = <span class="php-quote">''</span></span>, <span>boolean <var>$push_to_top</var> = <span class="php-keyword1">FALSE</span></span> )</code>
 
 		<div class="description short">
 			<p>Enqueue an administrative error.</p>
@@ -1011,7 +1012,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_extend_cron_schedules">#</a>
-		<code><a href="source-class-quick_cache.plugin.html#699-715" title="Go to source code">extend_cron_schedules</a>( <span>array <var>$schedules</var></span> )</code>
+		<code><a href="source-class-quick_cache.plugin.html#749-765" title="Go to source code">extend_cron_schedules</a>( <span>array <var>$schedules</var></span> )</code>
 
 		<div class="description short">
 			<p>Extends WP-Cron schedules.</p>
@@ -1063,7 +1064,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_wipe_cache">#</a>
-		<code><a href="source-class-quick_cache.plugin.html#717-772" title="Go to source code">wipe_cache</a>( <span>boolean <var>$manually</var> = <span class="php-keyword1">FALSE</span></span>, <span>string <var>$also_wipe_dir</var> = <span class="php-quote">''</span></span> )</code>
+		<code><a href="source-class-quick_cache.plugin.html#767-805" title="Go to source code">wipe_cache</a>( <span>boolean <var>$manually</var> = <span class="php-keyword1">FALSE</span></span>, <span>string <var>$also_wipe_dir</var> = <span class="php-quote">''</span></span> )</code>
 
 		<div class="description short">
 			<p>Wipes out all cache files in the cache directory.</p>
@@ -1083,9 +1084,14 @@
 </dd>
 					<dt><var>$also_wipe_dir</var></dt>
 					<dd><code>string</code><br><p>$also_wipe_dir Defaults to an empty string.
-   By default (i.e. when this is empty) we only wipe <code><a href="class-quick_cache.plugin.html#$cache_sub_dir">quick_cache\plugin::<var>$cache_sub_dir</var></a></code> files.
-   WARNING: if this is passed, EVERYTHING inside this directory is deleted recursively;
+   By default (i.e. when this is empty) we only wipe <code><a href="class-quick_cache.plugin.html#$cache_sub_dir">quick_cache\plugin::<var>$cache_sub_dir</var></a></code> files.</p>
+
+<p>WARNING: If this is passed, EVERYTHING inside this directory is deleted recursively;
       in addition to deleting all of the <code><a href="class-quick_cache.plugin.html#$cache_sub_dir">quick_cache\plugin::<var>$cache_sub_dir</var></a></code> files.</p>
+
+<p>SECURITY: This directory MUST be located inside the <code>/wp-content/</code> directory.
+   Also, it MUST be a sub-directory of <code>/wp-content/</code>, NOT the directory itself.
+   Also, it cannot be: <code>mu-plugins</code>, <code>themes</code>, or <code>plugins</code>.</p>
 </dd>
 				</dl></div>
 
@@ -1122,15 +1128,15 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_clear_cache">#</a>
-		<code><a href="source-class-quick_cache.plugin.html#774-819" title="Go to source code">clear_cache</a>( <span>boolean <var>$manually</var> = <span class="php-keyword1">FALSE</span></span> )</code>
+		<code><a href="source-class-quick_cache.plugin.html#807-832" title="Go to source code">clear_cache</a>( <span>boolean <var>$manually</var> = <span class="php-keyword1">FALSE</span></span> )</code>
 
 		<div class="description short">
-			<p>Clears cache files for the current blog.</p>
+			<p>Clears cache files for the current host|blog.</p>
 
 		</div>
 
 		<div class="description detailed hidden">
-			<p>Clears cache files for the current blog.</p>
+			<p>Clears cache files for the current host|blog.</p>
 
 
 
@@ -1175,18 +1181,25 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_purge_cache">#</a>
-		<code><a href="source-class-quick_cache.plugin.html#821-855" title="Go to source code">purge_cache</a>( )</code>
+		<code><a href="source-class-quick_cache.plugin.html#834-861" title="Go to source code">purge_cache</a>( <span>boolean <var>$manually</var> = <span class="php-keyword1">FALSE</span></span> )</code>
 
 		<div class="description short">
-			<p>Purges expired cache files for the current blog.</p>
+			<p>Purges expired cache files for the current host|blog.</p>
 
 		</div>
 
 		<div class="description detailed hidden">
-			<p>Purges expired cache files for the current blog.</p>
+			<p>Purges expired cache files for the current host|blog.</p>
 
 
 
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$manually</var></dt>
+					<dd><code>boolean</code><br><p>$manually Defaults to a <code>FALSE</code> value.
+   Pass as TRUE if the purging is done manually by the site owner.</p>
+</dd>
+				</dl></div>
 
 				<h4>Returns</h4>
 				<div class="list">
@@ -1205,6 +1218,11 @@
 						<p>140422 First documented version.</p>
 <br />
 				</div>
+				<h4>Attaches-to</h4>
+				<div class="list">
+						<p><code>'_cron_'.__NAMESPACE__.'_cleanup'</code> via CRON job.</p>
+<br />
+				</div>
 
 
 		</div>
@@ -1221,7 +1239,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_auto_wipe_cache">#</a>
-		<code><a href="source-class-quick_cache.plugin.html#857-885" title="Go to source code">auto_wipe_cache</a>( )</code>
+		<code><a href="source-class-quick_cache.plugin.html#863-893" title="Go to source code">auto_wipe_cache</a>( )</code>
 
 		<div class="description short">
 			<p>Automatically wipes out all cache files in the cache directory.</p>
@@ -1268,7 +1286,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_auto_clear_cache">#</a>
-		<code><a href="source-class-quick_cache.plugin.html#887-928" title="Go to source code">auto_clear_cache</a>( )</code>
+		<code><a href="source-class-quick_cache.plugin.html#895-937" title="Go to source code">auto_clear_cache</a>( )</code>
 
 		<div class="description short">
 			<p>Automatically clears all cache files for the current blog.</p>
@@ -1326,7 +1344,7 @@
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="auto_purge_post_cache" id="_auto_purge_post_cache">
+	<tr data-order="auto_clear_post_cache" id="_auto_clear_post_cache">
 
 		<td class="attributes"><code>
 			 public 
@@ -1336,40 +1354,40 @@
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_auto_purge_post_cache">#</a>
-		<code><a href="source-class-quick_cache.plugin.html#930-1041" title="Go to source code">auto_purge_post_cache</a>( <span>integer <var>$id</var></span>, <span>boolean <var>$force</var> = <span class="php-keyword1">FALSE</span></span> )</code>
+		<a class="anchor" href="#_auto_clear_post_cache">#</a>
+		<code><a href="source-class-quick_cache.plugin.html#939-1036" title="Go to source code">auto_clear_post_cache</a>( <span>integer <var>$post_id</var></span>, <span>boolean <var>$force</var> = <span class="php-keyword1">FALSE</span></span> )</code>
 
 		<div class="description short">
-			<p>Automatically purge cache files for a particular post.</p>
+			<p>Automatically clears cache files for a particular post.</p>
 
 		</div>
 
 		<div class="description detailed hidden">
-			<p>Automatically purge cache files for a particular post.</p>
+			<p>Automatically clears cache files for a particular post.</p>
 
 
 
 				<h4>Parameters</h4>
 				<div class="list"><dl>
-					<dt><var>$id</var></dt>
-					<dd><code>integer</code><br><p>$id A WordPress post ID.</p>
+					<dt><var>$post_id</var></dt>
+					<dd><code>integer</code><br><p>$post_id A WordPress post ID.</p>
 </dd>
 					<dt><var>$force</var></dt>
 					<dd><code>boolean</code><br><p>$force Defaults to a <code>FALSE</code> value.
-   Pass as TRUE if purge should be done for <code>draft</code>, <code>pending</code>,
+   Pass as TRUE if clearing should be done for <code>draft</code>, <code>pending</code>,
    <code>future</code>, or <code>trash</code> post statuses.</p>
 </dd>
 				</dl></div>
 
 				<h4>Returns</h4>
 				<div class="list">
-					<code>integer</code><br><p>Total files purged by this routine (if any).</p>
+					<code>integer</code><br><p>Total files cleared by this routine (if any).</p>
 <br />
 				</div>
 
 				<h4>Throws</h4>
 				<div class="list">
-					<code>exception</code><br><p>If a purge failure occurs.</p>
+					<code>exception</code><br><p>If a clear failure occurs.</p>
 <br />
 				</div>
 
@@ -1380,8 +1398,8 @@
 				</div>
 				<h4>See</h4>
 				<div class="list">
-						<code><code><a href="class-quick_cache.plugin.html#_auto_purge_comment_post_cache">quick_cache\plugin::auto_purge_comment_post_cache()</a></code></code><br />
-						<code><code><a href="class-quick_cache.plugin.html#_auto_purge_post_cache_transition">quick_cache\plugin::auto_purge_post_cache_transition()</a></code></code><br />
+						<code><code><a href="class-quick_cache.plugin.html#_auto_clear_comment_post_cache">quick_cache\plugin::auto_clear_comment_post_cache()</a></code></code><br />
+						<code><code><a href="class-quick_cache.plugin.html#_auto_clear_post_cache_transition">quick_cache\plugin::auto_clear_post_cache_transition()</a></code></code><br />
 				</div>
 				<h4>Attaches-to</h4>
 				<div class="list">
@@ -1403,7 +1421,7 @@
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="auto_purge_post_cache_transition" id="_auto_purge_post_cache_transition">
+	<tr data-order="auto_clear_post_cache_transition" id="_auto_clear_post_cache_transition">
 
 		<td class="attributes"><code>
 			 public 
@@ -1413,17 +1431,17 @@
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_auto_purge_post_cache_transition">#</a>
-		<code><a href="source-class-quick_cache.plugin.html#1043-1085" title="Go to source code">auto_purge_post_cache_transition</a>( <span>string <var>$new_status</var></span>, <span>string <var>$old_status</var></span>, <span>WP_Post <var>$post</var></span> )</code>
+		<a class="anchor" href="#_auto_clear_post_cache_transition">#</a>
+		<code><a href="source-class-quick_cache.plugin.html#1038-1080" title="Go to source code">auto_clear_post_cache_transition</a>( <span>string <var>$new_status</var></span>, <span>string <var>$old_status</var></span>, <span>WP_Post <var>$post</var></span> )</code>
 
 		<div class="description short">
-			<p>Automatically purge cache files for a particular post when transitioning
+			<p>Automatically clears cache files for a particular post when transitioning
    from <code>publish</code> or <code>private</code> post status to <code>draft</code>, <code>future</code>, <code>private</code>, or <code>trash</code>.</p>
 
 		</div>
 
 		<div class="description detailed hidden">
-			<p>Automatically purge cache files for a particular post when transitioning from <code>publish</code> or <code>private</code> post status to <code>draft</code>, <code>future</code>, <code>private</code>, or <code>trash</code>.</p>
+			<p>Automatically clears cache files for a particular post when transitioning from <code>publish</code> or <code>private</code> post status to <code>draft</code>, <code>future</code>, <code>private</code>, or <code>trash</code>.</p>
 
 
 
@@ -1442,13 +1460,13 @@
 
 				<h4>Returns</h4>
 				<div class="list">
-					<code>integer</code><br><p>Total files purged by this routine (if any).</p>
+					<code>integer</code><br><p>Total files cleared by this routine (if any).</p>
 <br />
 				</div>
 
 				<h4>Throws</h4>
 				<div class="list">
-					<code>exception</code><br><p>If a purge failure occurs.</p>
+					<code>exception</code><br><p>If a clear failure occurs.</p>
 <br />
 				</div>
 
@@ -1459,7 +1477,7 @@
 				</div>
 				<h4>See</h4>
 				<div class="list">
-						<code><code><a href="class-quick_cache.plugin.html#_auto_purge_post_cache">quick_cache\plugin::auto_purge_post_cache()</a></code></code><br />
+						<code><code><a href="class-quick_cache.plugin.html#_auto_clear_post_cache">quick_cache\plugin::auto_clear_post_cache()</a></code></code><br />
 				</div>
 				<h4>Attaches-to</h4>
 				<div class="list">
@@ -1477,7 +1495,7 @@
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="auto_purge_xml_feeds_cache" id="_auto_purge_xml_feeds_cache">
+	<tr data-order="auto_clear_xml_feeds_cache" id="_auto_clear_xml_feeds_cache">
 
 		<td class="attributes"><code>
 			 public 
@@ -1487,23 +1505,23 @@
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_auto_purge_xml_feeds_cache">#</a>
-		<code><a href="source-class-quick_cache.plugin.html#1087-1360" title="Go to source code">auto_purge_xml_feeds_cache</a>( <span>string <var>$type</var></span>, <span>integer <var>$post_id</var> = <span class="php-num">0</span></span> )</code>
+		<a class="anchor" href="#_auto_clear_xml_feeds_cache">#</a>
+		<code><a href="source-class-quick_cache.plugin.html#1082-1187" title="Go to source code">auto_clear_xml_feeds_cache</a>( <span>string <var>$type</var></span>, <span>integer <var>$post_id</var> = <span class="php-num">0</span></span> )</code>
 
 		<div class="description short">
-			<p>Automatically purges cache files related to XML feeds.</p>
+			<p>Automatically clears cache files related to XML feeds.</p>
 
 		</div>
 
 		<div class="description detailed hidden">
-			<p>Automatically purges cache files related to XML feeds.</p>
+			<p>Automatically clears cache files related to XML feeds.</p>
 
 
 
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$type</var></dt>
-					<dd><code>string</code><br><p>$type Type of feed(s) to auto-purge.</p>
+					<dd><code>string</code><br><p>$type Type of feed(s) to auto-clear.</p>
 </dd>
 					<dt><var>$post_id</var></dt>
 					<dd><code>integer</code><br><p>$post_id A Post ID (when applicable).</p>
@@ -1512,13 +1530,13 @@
 
 				<h4>Returns</h4>
 				<div class="list">
-					<code>integer</code><br><p>Total files purged by this routine (if any).</p>
+					<code>integer</code><br><p>Total files cleared by this routine (if any).</p>
 <br />
 				</div>
 
 				<h4>Throws</h4>
 				<div class="list">
-					<code>exception</code><br><p>If a purge failure occurs.</p>
+					<code>exception</code><br><p>If a clear failure occurs.</p>
 <br />
 				</div>
 
@@ -1538,7 +1556,7 @@
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="auto_purge_xml_sitemaps_cache" id="_auto_purge_xml_sitemaps_cache">
+	<tr data-order="auto_clear_xml_sitemaps_cache" id="_auto_clear_xml_sitemaps_cache">
 
 		<td class="attributes"><code>
 			 public 
@@ -1548,29 +1566,29 @@
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_auto_purge_xml_sitemaps_cache">#</a>
-		<code><a href="source-class-quick_cache.plugin.html#1362-1425" title="Go to source code">auto_purge_xml_sitemaps_cache</a>( )</code>
+		<a class="anchor" href="#_auto_clear_xml_sitemaps_cache">#</a>
+		<code><a href="source-class-quick_cache.plugin.html#1189-1230" title="Go to source code">auto_clear_xml_sitemaps_cache</a>( )</code>
 
 		<div class="description short">
-			<p>Automatically purges cache files related to XML sitemaps.</p>
+			<p>Automatically clears cache files related to XML sitemaps.</p>
 
 		</div>
 
 		<div class="description detailed hidden">
-			<p>Automatically purges cache files related to XML sitemaps.</p>
+			<p>Automatically clears cache files related to XML sitemaps.</p>
 
 
 
 
 				<h4>Returns</h4>
 				<div class="list">
-					<code>integer</code><br><p>Total files purged by this routine (if any).</p>
+					<code>integer</code><br><p>Total files cleared by this routine (if any).</p>
 <br />
 				</div>
 
 				<h4>Throws</h4>
 				<div class="list">
-					<code>exception</code><br><p>If a purge failure occurs.</p>
+					<code>exception</code><br><p>If a clear failure occurs.</p>
 <br />
 				</div>
 
@@ -1581,12 +1599,12 @@
 				</div>
 				<h4>See</h4>
 				<div class="list">
-						<code><code><a href="class-quick_cache.plugin.html#_auto_purge_post_cache">quick_cache\plugin::auto_purge_post_cache()</a></code></code><br />
+						<code><code><a href="class-quick_cache.plugin.html#_auto_clear_post_cache">quick_cache\plugin::auto_clear_post_cache()</a></code></code><br />
 				</div>
 				<h4>Note</h4>
 				<div class="list">
 						<p>Unlike many of the other <code>auto_</code> methods, this one is NOT currently
-   attached to any hooks. However, it is called upon by <code><a href="class-quick_cache.plugin.html#_auto_purge_post_cache">quick_cache\plugin::auto_purge_post_cache()</a></code>.</p>
+   attached to any hooks. However, it is called upon by <code><a href="class-quick_cache.plugin.html#_auto_clear_post_cache">quick_cache\plugin::auto_clear_post_cache()</a></code>.</p>
 <br />
 				</div>
 
@@ -1594,7 +1612,7 @@
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="auto_purge_home_page_cache" id="_auto_purge_home_page_cache">
+	<tr data-order="auto_clear_home_page_cache" id="_auto_clear_home_page_cache">
 
 		<td class="attributes"><code>
 			 public 
@@ -1604,29 +1622,29 @@
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_auto_purge_home_page_cache">#</a>
-		<code><a href="source-class-quick_cache.plugin.html#1427-1487" title="Go to source code">auto_purge_home_page_cache</a>( )</code>
+		<a class="anchor" href="#_auto_clear_home_page_cache">#</a>
+		<code><a href="source-class-quick_cache.plugin.html#1232-1275" title="Go to source code">auto_clear_home_page_cache</a>( )</code>
 
 		<div class="description short">
-			<p>Automatically purges cache files for the home page.</p>
+			<p>Automatically clears cache files for the home page.</p>
 
 		</div>
 
 		<div class="description detailed hidden">
-			<p>Automatically purges cache files for the home page.</p>
+			<p>Automatically clears cache files for the home page.</p>
 
 
 
 
 				<h4>Returns</h4>
 				<div class="list">
-					<code>integer</code><br><p>Total files purged by this routine (if any).</p>
+					<code>integer</code><br><p>Total files cleared by this routine (if any).</p>
 <br />
 				</div>
 
 				<h4>Throws</h4>
 				<div class="list">
-					<code>exception</code><br><p>If a purge failure occurs.</p>
+					<code>exception</code><br><p>If a clear failure occurs.</p>
 <br />
 				</div>
 
@@ -1637,12 +1655,12 @@
 				</div>
 				<h4>See</h4>
 				<div class="list">
-						<code><code><a href="class-quick_cache.plugin.html#_auto_purge_post_cache">quick_cache\plugin::auto_purge_post_cache()</a></code></code><br />
+						<code><code><a href="class-quick_cache.plugin.html#_auto_clear_post_cache">quick_cache\plugin::auto_clear_post_cache()</a></code></code><br />
 				</div>
 				<h4>Note</h4>
 				<div class="list">
 						<p>Unlike many of the other <code>auto_</code> methods, this one is NOT currently
-   attached to any hooks. However, it is called upon by <code><a href="class-quick_cache.plugin.html#_auto_purge_post_cache">quick_cache\plugin::auto_purge_post_cache()</a></code>.</p>
+   attached to any hooks. However, it is called upon by <code><a href="class-quick_cache.plugin.html#_auto_clear_post_cache">quick_cache\plugin::auto_clear_post_cache()</a></code>.</p>
 <br />
 				</div>
 
@@ -1650,7 +1668,7 @@
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="auto_purge_posts_page_cache" id="_auto_purge_posts_page_cache">
+	<tr data-order="auto_clear_posts_page_cache" id="_auto_clear_posts_page_cache">
 
 		<td class="attributes"><code>
 			 public 
@@ -1660,29 +1678,29 @@
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_auto_purge_posts_page_cache">#</a>
-		<code><a href="source-class-quick_cache.plugin.html#1489-1562" title="Go to source code">auto_purge_posts_page_cache</a>( )</code>
+		<a class="anchor" href="#_auto_clear_posts_page_cache">#</a>
+		<code><a href="source-class-quick_cache.plugin.html#1277-1333" title="Go to source code">auto_clear_posts_page_cache</a>( )</code>
 
 		<div class="description short">
-			<p>Automatically purges cache files for the posts page.</p>
+			<p>Automatically clears cache files for the posts page.</p>
 
 		</div>
 
 		<div class="description detailed hidden">
-			<p>Automatically purges cache files for the posts page.</p>
+			<p>Automatically clears cache files for the posts page.</p>
 
 
 
 
 				<h4>Returns</h4>
 				<div class="list">
-					<code>integer</code><br><p>Total files purged by this routine (if any).</p>
+					<code>integer</code><br><p>Total files cleared by this routine (if any).</p>
 <br />
 				</div>
 
 				<h4>Throws</h4>
 				<div class="list">
-					<code>exception</code><br><p>If a purge failure occurs.</p>
+					<code>exception</code><br><p>If a clear failure occurs.</p>
 <br />
 				</div>
 
@@ -1693,12 +1711,12 @@
 				</div>
 				<h4>See</h4>
 				<div class="list">
-						<code><code><a href="class-quick_cache.plugin.html#_auto_purge_post_cache">quick_cache\plugin::auto_purge_post_cache()</a></code></code><br />
+						<code><code><a href="class-quick_cache.plugin.html#_auto_clear_post_cache">quick_cache\plugin::auto_clear_post_cache()</a></code></code><br />
 				</div>
 				<h4>Note</h4>
 				<div class="list">
 						<p>Unlike many of the other <code>auto_</code> methods, this one is NOT currently
-   attached to any hooks. However, it is called upon by <code><a href="class-quick_cache.plugin.html#_auto_purge_post_cache">quick_cache\plugin::auto_purge_post_cache()</a></code>.</p>
+   attached to any hooks. However, it is called upon by <code><a href="class-quick_cache.plugin.html#_auto_clear_post_cache">quick_cache\plugin::auto_clear_post_cache()</a></code>.</p>
 <br />
 				</div>
 
@@ -1706,7 +1724,7 @@
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="auto_purge_custom_post_type_archive_cache" id="_auto_purge_custom_post_type_archive_cache">
+	<tr data-order="auto_clear_custom_post_type_archive_cache" id="_auto_clear_custom_post_type_archive_cache">
 
 		<td class="attributes"><code>
 			 public 
@@ -1716,29 +1734,35 @@
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_auto_purge_custom_post_type_archive_cache">#</a>
-		<code><a href="source-class-quick_cache.plugin.html#1564-1634" title="Go to source code">auto_purge_custom_post_type_archive_cache</a>( <span>mixed <var>$id</var></span> )</code>
+		<a class="anchor" href="#_auto_clear_custom_post_type_archive_cache">#</a>
+		<code><a href="source-class-quick_cache.plugin.html#1335-1399" title="Go to source code">auto_clear_custom_post_type_archive_cache</a>( <span>integer <var>$post_id</var></span> )</code>
 
 		<div class="description short">
-			<p>Automatically purges cache files for a custom post type archive view.</p>
+			<p>Automatically clears cache files for a custom post type archive view.</p>
 
 		</div>
 
 		<div class="description detailed hidden">
-			<p>Automatically purges cache files for a custom post type archive view.</p>
+			<p>Automatically clears cache files for a custom post type archive view.</p>
 
 
 
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$post_id</var></dt>
+					<dd><code>integer</code><br><p>$post_id A WordPress post ID.</p>
+</dd>
+				</dl></div>
 
 				<h4>Returns</h4>
 				<div class="list">
-					<code>integer</code><br><p>Total files purged by this routine (if any).</p>
+					<code>integer</code><br><p>Total files cleared by this routine (if any).</p>
 <br />
 				</div>
 
 				<h4>Throws</h4>
 				<div class="list">
-					<code>exception</code><br><p>If a purge failure occurs.</p>
+					<code>exception</code><br><p>If a clear failure occurs.</p>
 <br />
 				</div>
 
@@ -1749,12 +1773,12 @@
 				</div>
 				<h4>See</h4>
 				<div class="list">
-						<code><code><a href="class-quick_cache.plugin.html#_auto_purge_post_cache">quick_cache\plugin::auto_purge_post_cache()</a></code></code><br />
+						<code><code><a href="class-quick_cache.plugin.html#_auto_clear_post_cache">quick_cache\plugin::auto_clear_post_cache()</a></code></code><br />
 				</div>
 				<h4>Note</h4>
 				<div class="list">
 						<p>Unlike many of the other <code>auto_</code> methods, this one is NOT currently
-   attached to any hooks. However, it is called upon by <code><a href="class-quick_cache.plugin.html#_auto_purge_post_cache">quick_cache\plugin::auto_purge_post_cache()</a></code>.</p>
+   attached to any hooks. However, it is called upon by <code><a href="class-quick_cache.plugin.html#_auto_clear_post_cache">quick_cache\plugin::auto_clear_post_cache()</a></code>.</p>
 <br />
 				</div>
 
@@ -1762,7 +1786,7 @@
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="auto_purge_author_page_cache" id="_auto_purge_author_page_cache">
+	<tr data-order="auto_clear_author_page_cache" id="_auto_clear_author_page_cache">
 
 		<td class="attributes"><code>
 			 public 
@@ -1772,23 +1796,23 @@
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_auto_purge_author_page_cache">#</a>
-		<code><a href="source-class-quick_cache.plugin.html#1636-1741" title="Go to source code">auto_purge_author_page_cache</a>( <span>integer <var>$post_ID</var></span>, <span>WP_Post <var>$post_after</var></span>, <span>WP_Post <var>$post_before</var></span> )</code>
+		<a class="anchor" href="#_auto_clear_author_page_cache">#</a>
+		<code><a href="source-class-quick_cache.plugin.html#1401-1494" title="Go to source code">auto_clear_author_page_cache</a>( <span>integer <var>$post_id</var></span>, <span>WP_Post <var>$post_after</var></span>, <span>WP_Post <var>$post_before</var></span> )</code>
 
 		<div class="description short">
-			<p>Automatically purges cache files for the author page(s).</p>
+			<p>Automatically clears cache files for the author page(s).</p>
 
 		</div>
 
 		<div class="description detailed hidden">
-			<p>Automatically purges cache files for the author page(s).</p>
+			<p>Automatically clears cache files for the author page(s).</p>
 
 
 
 				<h4>Parameters</h4>
 				<div class="list"><dl>
-					<dt><var>$post_ID</var></dt>
-					<dd><code>integer</code><br><p>$post_ID A WordPress post ID.</p>
+					<dt><var>$post_id</var></dt>
+					<dd><code>integer</code><br><p>$post_id A WordPress post ID.</p>
 </dd>
 					<dt><var>$post_after</var></dt>
 					<dd><code>WP_Post</code><br><p>$post_after WP_Post object following the update.</p>
@@ -1800,13 +1824,13 @@
 
 				<h4>Returns</h4>
 				<div class="list">
-					<code>integer</code><br><p>Total files purged by this routine (if any).</p>
+					<code>integer</code><br><p>Total files cleared by this routine (if any).</p>
 <br />
 				</div>
 
 				<h4>Throws</h4>
 				<div class="list">
-					<code>exception</code><br><p>If a purge failure occurs.</p>
+					<code>exception</code><br><p>If a clear failure occurs.</p>
 <br />
 				</div>
 
@@ -1823,7 +1847,7 @@
 				<h4>Note</h4>
 				<div class="list">
 						<p>If the author for the post is being changed, both the previous author
-      and current author pages are purged, if the post status is applicable.</p>
+      and current author pages are cleared, if the post status is applicable.</p>
 <br />
 				</div>
 
@@ -1831,7 +1855,7 @@
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="auto_purge_post_terms_cache" id="_auto_purge_post_terms_cache">
+	<tr data-order="auto_clear_post_terms_cache" id="_auto_clear_post_terms_cache">
 
 		<td class="attributes"><code>
 			 public 
@@ -1841,40 +1865,40 @@
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_auto_purge_post_terms_cache">#</a>
-		<code><a href="source-class-quick_cache.plugin.html#1743-1898" title="Go to source code">auto_purge_post_terms_cache</a>( <span>integer <var>$id</var></span>, <span>boolean <var>$force</var> = <span class="php-keyword1">FALSE</span></span> )</code>
+		<a class="anchor" href="#_auto_clear_post_terms_cache">#</a>
+		<code><a href="source-class-quick_cache.plugin.html#1496-1645" title="Go to source code">auto_clear_post_terms_cache</a>( <span>integer <var>$post_id</var></span>, <span>boolean <var>$force</var> = <span class="php-keyword1">FALSE</span></span> )</code>
 
 		<div class="description short">
-			<p>Automatically purge cache files for terms associated with a post.</p>
+			<p>Automatically clears cache files for terms associated with a post.</p>
 
 		</div>
 
 		<div class="description detailed hidden">
-			<p>Automatically purge cache files for terms associated with a post.</p>
+			<p>Automatically clears cache files for terms associated with a post.</p>
 
 
 
 				<h4>Parameters</h4>
 				<div class="list"><dl>
-					<dt><var>$id</var></dt>
-					<dd><code>integer</code><br><p>$id A WordPress post ID.</p>
+					<dt><var>$post_id</var></dt>
+					<dd><code>integer</code><br><p>$post_id A WordPress post ID.</p>
 </dd>
 					<dt><var>$force</var></dt>
 					<dd><code>boolean</code><br><p>$force Defaults to a <code>FALSE</code> value.
-   Pass as TRUE if purge should be done for <code>draft</code>, <code>pending</code>,
+   Pass as TRUE if clearing should be done for <code>draft</code>, <code>pending</code>,
    or <code>future</code> post statuses.</p>
 </dd>
 				</dl></div>
 
 				<h4>Returns</h4>
 				<div class="list">
-					<code>integer</code><br><p>Total files purged by this routine (if any).</p>
+					<code>integer</code><br><p>Total files cleared by this routine (if any).</p>
 <br />
 				</div>
 
 				<h4>Throws</h4>
 				<div class="list">
-					<code>exception</code><br><p>If a purge failure occurs.</p>
+					<code>exception</code><br><p>If a clear failure occurs.</p>
 <br />
 				</div>
 
@@ -1885,7 +1909,7 @@
 				</div>
 				<h4>See</h4>
 				<div class="list">
-						<code><code><a href="class-quick_cache.plugin.html#_auto_purge_post_cache">quick_cache\plugin::auto_purge_post_cache()</a></code></code><br />
+						<code><code><a href="class-quick_cache.plugin.html#_auto_clear_post_cache">quick_cache\plugin::auto_clear_post_cache()</a></code></code><br />
 				</div>
 				<h4>Attaches-to</h4>
 				<div class="list">
@@ -1897,7 +1921,7 @@
 				<h4>Note</h4>
 				<div class="list">
 						<p>In addition to the hooks this is attached to, it is also
-   called upon by <code><a href="class-quick_cache.plugin.html#_auto_purge_post_cache">quick_cache\plugin::auto_purge_post_cache()</a></code>.</p>
+   called upon by <code><a href="class-quick_cache.plugin.html#_auto_clear_post_cache">quick_cache\plugin::auto_clear_post_cache()</a></code>.</p>
 <br />
 				</div>
 
@@ -1905,7 +1929,7 @@
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="auto_purge_comment_post_cache" id="_auto_purge_comment_post_cache">
+	<tr data-order="auto_clear_comment_post_cache" id="_auto_clear_comment_post_cache">
 
 		<td class="attributes"><code>
 			 public 
@@ -1915,29 +1939,29 @@
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_auto_purge_comment_post_cache">#</a>
-		<code><a href="source-class-quick_cache.plugin.html#1900-1946" title="Go to source code">auto_purge_comment_post_cache</a>( <span>integer <var>$id</var></span> )</code>
+		<a class="anchor" href="#_auto_clear_comment_post_cache">#</a>
+		<code><a href="source-class-quick_cache.plugin.html#1647-1694" title="Go to source code">auto_clear_comment_post_cache</a>( <span>integer <var>$comment_id</var></span> )</code>
 
 		<div class="description short">
-			<p>Automatically purges cache files for a post associated with a particular comment.</p>
+			<p>Automatically clears cache files for a post associated with a particular comment.</p>
 
 		</div>
 
 		<div class="description detailed hidden">
-			<p>Automatically purges cache files for a post associated with a particular comment.</p>
+			<p>Automatically clears cache files for a post associated with a particular comment.</p>
 
 
 
 				<h4>Parameters</h4>
 				<div class="list"><dl>
-					<dt><var>$id</var></dt>
-					<dd><code>integer</code><br><p>$id A WordPress comment ID.</p>
+					<dt><var>$comment_id</var></dt>
+					<dd><code>integer</code><br><p>$comment_id A WordPress comment ID.</p>
 </dd>
 				</dl></div>
 
 				<h4>Returns</h4>
 				<div class="list">
-					<code>integer</code><br><p>Total files purged by this routine (if any).</p>
+					<code>integer</code><br><p>Total files cleared by this routine (if any).</p>
 <br />
 				</div>
 
@@ -1949,7 +1973,7 @@
 				</div>
 				<h4>See</h4>
 				<div class="list">
-						<code><code><a href="class-quick_cache.plugin.html#_auto_purge_post_cache">quick_cache\plugin::auto_purge_post_cache()</a></code></code><br />
+						<code><code><a href="class-quick_cache.plugin.html#_auto_clear_post_cache">quick_cache\plugin::auto_clear_post_cache()</a></code></code><br />
 				</div>
 				<h4>Attaches-to</h4>
 				<div class="list">
@@ -1965,7 +1989,7 @@
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="auto_purge_comment_transition" id="_auto_purge_comment_transition">
+	<tr data-order="auto_clear_comment_transition" id="_auto_clear_comment_transition">
 
 		<td class="attributes"><code>
 			 public 
@@ -1975,16 +1999,16 @@
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_auto_purge_comment_transition">#</a>
-		<code><a href="source-class-quick_cache.plugin.html#1948-1992" title="Go to source code">auto_purge_comment_transition</a>( <span>string <var>$new_status</var></span>, <span>string <var>$old_status</var></span>, <span>WP_Post <var>$comment</var></span> )</code>
+		<a class="anchor" href="#_auto_clear_comment_transition">#</a>
+		<code><a href="source-class-quick_cache.plugin.html#1696-1740" title="Go to source code">auto_clear_comment_transition</a>( <span>string <var>$new_status</var></span>, <span>string <var>$old_status</var></span>, <span>WP_Post <var>$comment</var></span> )</code>
 
 		<div class="description short">
-			<p>Automatically purges cache files for a post associated with a particular comment.</p>
+			<p>Automatically clears cache files for a post associated with a particular comment.</p>
 
 		</div>
 
 		<div class="description detailed hidden">
-			<p>Automatically purges cache files for a post associated with a particular comment.</p>
+			<p>Automatically clears cache files for a post associated with a particular comment.</p>
 
 
 
@@ -2003,13 +2027,13 @@
 
 				<h4>Returns</h4>
 				<div class="list">
-					<code>integer</code><br><p>Total files purged by this routine (if any).</p>
+					<code>integer</code><br><p>Total files cleared by this routine (if any).</p>
 <br />
 				</div>
 
 				<h4>Throws</h4>
 				<div class="list">
-					<code>exception</code><br><p>If a purge failure occurs.</p>
+					<code>exception</code><br><p>If a clear failure occurs.</p>
 <br />
 				</div>
 
@@ -2020,7 +2044,7 @@
 				</div>
 				<h4>See</h4>
 				<div class="list">
-						<code><code><a href="class-quick_cache.plugin.html#_auto_purge_comment_post_cache">quick_cache\plugin::auto_purge_comment_post_cache()</a></code></code><br />
+						<code><code><a href="class-quick_cache.plugin.html#_auto_clear_comment_post_cache">quick_cache\plugin::auto_clear_comment_post_cache()</a></code></code><br />
 				</div>
 				<h4>Attaches-to</h4>
 				<div class="list">
@@ -2049,7 +2073,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_maybe_auto_clear_cache">#</a>
-		<code><a href="source-class-quick_cache.plugin.html#1994-2026" title="Go to source code">maybe_auto_clear_cache</a>( )</code>
+		<code><a href="source-class-quick_cache.plugin.html#1742-1774" title="Go to source code">maybe_auto_clear_cache</a>( )</code>
 
 		<div class="description short">
 			<p>Automatically clears all cache files for current blog under various conditions;
@@ -2095,7 +2119,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_jetpack_custom_css">#</a>
-		<code><a href="source-class-quick_cache.plugin.html#2028-2041" title="Go to source code">jetpack_custom_css</a>( <span>mixed <var>$args</var></span> )</code>
+		<code><a href="source-class-quick_cache.plugin.html#1776-1791" title="Go to source code">jetpack_custom_css</a>( <span>array <var>$args</var></span> )</code>
 
 		<div class="description short">
 			<p>Automatically clears all cache files for current blog when JetPack Custom CSS is saved.</p>
@@ -2107,6 +2131,12 @@
 
 
 
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$args</var></dt>
+					<dd><code>array</code><br><p>$args Args passed in by hook.</p>
+</dd>
+				</dl></div>
 
 
 
@@ -2140,7 +2170,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_upgrader_process_complete">#</a>
-		<code><a href="source-class-quick_cache.plugin.html#2043-2154" title="Go to source code">upgrader_process_complete</a>( <span>WP_Upgrader <var>$upgrader_instance</var></span>, <span>array <var>$data</var></span> )</code>
+		<code><a href="source-class-quick_cache.plugin.html#1793-1904" title="Go to source code">upgrader_process_complete</a>( <span>WP_Upgrader <var>$upgrader_instance</var></span>, <span>array <var>$data</var></span> )</code>
 
 		<div class="description short">
 			<p>Automatically clears all cache files for current blog when WordPress core, or an active component, is upgraded.</p>
@@ -2192,7 +2222,7 @@
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="wp_content_dir_to" id="_wp_content_dir_to">
+	<tr data-order="wp_content_base_dir_to" id="_wp_content_base_dir_to">
 
 		<td class="attributes"><code>
 			 public 
@@ -2202,8 +2232,8 @@
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_wp_content_dir_to">#</a>
-		<code><a href="source-class-quick_cache.plugin.html#2156-2180" title="Go to source code">wp_content_dir_to</a>( <span>string <var>$rel_dir_file</var></span> )</code>
+		<a class="anchor" href="#_wp_content_base_dir_to">#</a>
+		<code><a href="source-class-quick_cache.plugin.html#1906-1932" title="Go to source code">wp_content_base_dir_to</a>( <span>string <var>$rel_dir_file</var></span> )</code>
 
 		<div class="description short">
 			<p>This constructs an absolute server directory path (no trailing slashes);
@@ -2246,7 +2276,7 @@
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="basepath_to" id="_basepath_to">
+	<tr data-order="base_path_to" id="_base_path_to">
 
 		<td class="attributes"><code>
 			 public 
@@ -2256,8 +2286,8 @@
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_basepath_to">#</a>
-		<code><a href="source-class-quick_cache.plugin.html#2182-2206" title="Go to source code">basepath_to</a>( <span>string <var>$rel_dir_file</var></span> )</code>
+		<a class="anchor" href="#_base_path_to">#</a>
+		<code><a href="source-class-quick_cache.plugin.html#1934-1960" title="Go to source code">base_path_to</a>( <span>string <var>$rel_dir_file</var></span> )</code>
 
 		<div class="description short">
 			<p>This constructs a relative/base directory path (no leading/trailing slashes).
@@ -2311,7 +2341,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_find_wp_config_file">#</a>
-		<code><a href="source-class-quick_cache.plugin.html#2208-2227" title="Go to source code">find_wp_config_file</a>( )</code>
+		<code><a href="source-class-quick_cache.plugin.html#1962-1981" title="Go to source code">find_wp_config_file</a>( )</code>
 
 		<div class="description short">
 			<p>Finds absolute server path to <code>/wp-config.php</code> file.</p>
@@ -2353,7 +2383,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_add_wp_cache_to_wp_config">#</a>
-		<code><a href="source-class-quick_cache.plugin.html#2229-2269" title="Go to source code">add_wp_cache_to_wp_config</a>( )</code>
+		<code><a href="source-class-quick_cache.plugin.html#1983-2023" title="Go to source code">add_wp_cache_to_wp_config</a>( )</code>
 
 		<div class="description short">
 			<p>Adds <code>define('WP_CACHE', TRUE);</code> to the <code>/wp-config.php</code> file.</p>
@@ -2395,7 +2425,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_remove_wp_cache_from_wp_config">#</a>
-		<code><a href="source-class-quick_cache.plugin.html#2271-2308" title="Go to source code">remove_wp_cache_from_wp_config</a>( )</code>
+		<code><a href="source-class-quick_cache.plugin.html#2025-2062" title="Go to source code">remove_wp_cache_from_wp_config</a>( )</code>
 
 		<div class="description short">
 			<p>Removes <code>define('WP_CACHE', TRUE);</code> from the <code>/wp-config.php</code> file.</p>
@@ -2437,7 +2467,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_check_advanced_cache">#</a>
-		<code><a href="source-class-quick_cache.plugin.html#2310-2339" title="Go to source code">check_advanced_cache</a>( )</code>
+		<code><a href="source-class-quick_cache.plugin.html#2064-2093" title="Go to source code">check_advanced_cache</a>( )</code>
 
 		<div class="description short">
 			<p>Checks to make sure the <code>qc-advanced-cache</code> file still exists;
@@ -2491,7 +2521,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_add_advanced_cache">#</a>
-		<code><a href="source-class-quick_cache.plugin.html#2341-2431" title="Go to source code">add_advanced_cache</a>( )</code>
+		<code><a href="source-class-quick_cache.plugin.html#2095-2185" title="Go to source code">add_advanced_cache</a>( )</code>
 
 		<div class="description short">
 			<p>Creates and adds the <code>advanced-cache.php</code> file.</p>
@@ -2548,7 +2578,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_remove_advanced_cache">#</a>
-		<code><a href="source-class-quick_cache.plugin.html#2433-2473" title="Go to source code">remove_advanced_cache</a>( )</code>
+		<code><a href="source-class-quick_cache.plugin.html#2187-2227" title="Go to source code">remove_advanced_cache</a>( )</code>
 
 		<div class="description short">
 			<p>Removes the <code>advanced-cache.php</code> file.</p>
@@ -2606,7 +2636,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_delete_advanced_cache">#</a>
-		<code><a href="source-class-quick_cache.plugin.html#2475-2500" title="Go to source code">delete_advanced_cache</a>( )</code>
+		<code><a href="source-class-quick_cache.plugin.html#2229-2254" title="Go to source code">delete_advanced_cache</a>( )</code>
 
 		<div class="description short">
 			<p>Deletes the <code>advanced-cache.php</code> file.</p>
@@ -2656,7 +2686,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_check_blog_paths">#</a>
-		<code><a href="source-class-quick_cache.plugin.html#2502-2533" title="Go to source code">check_blog_paths</a>( )</code>
+		<code><a href="source-class-quick_cache.plugin.html#2256-2287" title="Go to source code">check_blog_paths</a>( )</code>
 
 		<div class="description short">
 			<p>Checks to make sure the <code>qc-blog-paths</code> file still exists;
@@ -2710,7 +2740,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_update_blog_paths">#</a>
-		<code><a href="source-class-quick_cache.plugin.html#2535-2578" title="Go to source code">update_blog_paths</a>( <span>mixed <var>$enable_live_network_counts</var> = <span class="php-keyword1">NULL</span></span> )</code>
+		<code><a href="source-class-quick_cache.plugin.html#2289-2332" title="Go to source code">update_blog_paths</a>( <span>mixed <var>$enable_live_network_counts</var> = <span class="php-keyword1">NULL</span></span> )</code>
 
 		<div class="description short">
 			<p>Creates and/or updates the <code>qc-blog-paths</code> file.</p>
@@ -2767,7 +2797,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_remove_base_dir">#</a>
-		<code><a href="source-class-quick_cache.plugin.html#2580-2616" title="Go to source code">remove_base_dir</a>( )</code>
+		<code><a href="source-class-quick_cache.plugin.html#2334-2348" title="Go to source code">remove_base_dir</a>( )</code>
 
 		<div class="description short">
 			<p>Removes the entire base directory.</p>
@@ -2786,15 +2816,10 @@
 <br />
 				</div>
 
-				<h4>Throws</h4>
-				<div class="list">
-					<code>exception</code><br><p>If a wipe failure occurs.</p>
-<br />
-				</div>
 
 				<h4>Since</h4>
 				<div class="list">
-						<p>14xxx First documented version.</p>
+						<p>140422 First documented version.</p>
 <br />
 				</div>
 
@@ -2811,10 +2836,18 @@
 			<a href="class-quick_cache.share.html#_add_action">add_action()</a>, 
 			<a href="class-quick_cache.share.html#_add_filter">add_filter()</a>, 
 			<a href="class-quick_cache.share.html#_add_hook">add_hook()</a>, 
+			<a href="class-quick_cache.share.html#_add_tmp_suffix">add_tmp_suffix()</a>, 
 			<a href="class-quick_cache.share.html#_apply_filters">apply_filters()</a>, 
 			<a href="class-quick_cache.share.html#_build_cache_path">build_cache_path()</a>, 
+			<a href="class-quick_cache.share.html#_build_cache_path_regex">build_cache_path_regex()</a>, 
+			<a href="class-quick_cache.share.html#_build_host_cache_path_regex">build_host_cache_path_regex()</a>, 
+			<a href="class-quick_cache.share.html#_build_host_cache_path_regex_frags_from_wc_uris">build_host_cache_path_regex_frags_from_wc_uris()</a>, 
 			<a href="class-quick_cache.share.html#_cache_dir">cache_dir()</a>, 
 			<a href="class-quick_cache.share.html#_cacheable_headers_list">cacheable_headers_list()</a>, 
+			<a href="class-quick_cache.share.html#_clear_files_from_cache_dir">clear_files_from_cache_dir()</a>, 
+			<a href="class-quick_cache.share.html#_clear_files_from_host_cache_dir">clear_files_from_host_cache_dir()</a>, 
+			<a href="class-quick_cache.share.html#_delete_all_files_dirs_in">delete_all_files_dirs_in()</a>, 
+			<a href="class-quick_cache.share.html#_delete_files_from_cache_dir">delete_files_from_cache_dir()</a>, 
 			<a href="class-quick_cache.share.html#_delete_files_from_host_cache_dir">delete_files_from_host_cache_dir()</a>, 
 			<a href="class-quick_cache.share.html#_dir_regex_iteration">dir_regex_iteration()</a>, 
 			<a href="class-quick_cache.share.html#_do_action">do_action()</a>, 
@@ -2830,6 +2863,9 @@
 			<a href="class-quick_cache.share.html#_host_token">host_token()</a>, 
 			<a href="class-quick_cache.share.html#_http_protocol">http_protocol()</a>, 
 			<a href="class-quick_cache.share.html#_http_status">http_status()</a>, 
+			<a href="class-quick_cache.share.html#_i18n_dirs">i18n_dirs()</a>, 
+			<a href="class-quick_cache.share.html#_i18n_files">i18n_files()</a>, 
+			<a href="class-quick_cache.share.html#_i18n_files_dirs">i18n_files_dirs()</a>, 
 			<a href="class-quick_cache.share.html#_is_auto_cache_engine">is_auto_cache_engine()</a>, 
 			<a href="class-quick_cache.share.html#_is_extension_loaded">is_extension_loaded()</a>, 
 			<a href="class-quick_cache.share.html#_is_feed">is_feed()</a>, 
@@ -2837,12 +2873,17 @@
 			<a href="class-quick_cache.share.html#_is_html_xml_doc">is_html_xml_doc()</a>, 
 			<a href="class-quick_cache.share.html#_is_like_user_logged_in">is_like_user_logged_in()</a>, 
 			<a href="class-quick_cache.share.html#_is_localhost">is_localhost()</a>, 
+			<a href="class-quick_cache.share.html#_is_post_put_delete_request">is_post_put_delete_request()</a>, 
 			<a href="class-quick_cache.share.html#_is_ssl">is_ssl()</a>, 
 			<a href="class-quick_cache.share.html#_is_uncacheable_request_method">is_uncacheable_request_method()</a>, 
 			<a href="class-quick_cache.share.html#_n_dir_seps">n_dir_seps()</a>, 
+			<a href="class-quick_cache.share.html#_purge_files_from_cache_dir">purge_files_from_cache_dir()</a>, 
+			<a href="class-quick_cache.share.html#_purge_files_from_host_cache_dir">purge_files_from_host_cache_dir()</a>, 
 			<a href="class-quick_cache.share.html#_remove_action">remove_action()</a>, 
 			<a href="class-quick_cache.share.html#_remove_filter">remove_filter()</a>, 
 			<a href="class-quick_cache.share.html#_remove_hook">remove_hook()</a>, 
+			<a href="class-quick_cache.share.html#_str_ireplace_once">str_ireplace_once()</a>, 
+			<a href="class-quick_cache.share.html#_str_replace_once">str_replace_once()</a>, 
 			<a href="class-quick_cache.share.html#_user_token">user_token()</a>
 		</code></td>
 	</tr>
@@ -2868,7 +2909,8 @@
 			<a href="class-quick_cache.share.html#CACHE_PATH_NO_QUV"><b>CACHE_PATH_NO_QUV</b></a>, 
 			<a href="class-quick_cache.share.html#CACHE_PATH_NO_SCHEME"><b>CACHE_PATH_NO_SCHEME</b></a>, 
 			<a href="class-quick_cache.share.html#CACHE_PATH_NO_USER"><b>CACHE_PATH_NO_USER</b></a>, 
-			<a href="class-quick_cache.share.html#CACHE_PATH_NO_VSALT"><b>CACHE_PATH_NO_VSALT</b></a>
+			<a href="class-quick_cache.share.html#CACHE_PATH_NO_VSALT"><b>CACHE_PATH_NO_VSALT</b></a>, 
+			<a href="class-quick_cache.share.html#CACHE_PATH_REGEX_DEFAULT_SUFFIX_FRAG"><b>CACHE_PATH_REGEX_DEFAULT_SUFFIX_FRAG</b></a>
 		</code></td>
 	</tr>
 	</table>
@@ -3156,6 +3198,9 @@
 			<a href="class-quick_cache.share.html#$hooks"><var>$hooks</var></a>, 
 			<a href="class-quick_cache.share.html#$htaccess_deny"><var>$htaccess_deny</var></a>, 
 			<a href="class-quick_cache.share.html#$is_pro"><var>$is_pro</var></a>, 
+			<a href="class-quick_cache.share.html#$name"><var>$name</var></a>, 
+			<a href="class-quick_cache.share.html#$short_name"><var>$short_name</var></a>, 
+			<a href="class-quick_cache.share.html#$slug"><var>$slug</var></a>, 
 			<a href="class-quick_cache.share.html#$static"><var>$static</var></a>, 
 			<a href="class-quick_cache.share.html#$text_domain"><var>$text_domain</var></a>, 
 			<a href="class-quick_cache.share.html#$user_login_cookie_expired_or_invalid"><var>$user_login_cookie_expired_or_invalid</var></a>, 

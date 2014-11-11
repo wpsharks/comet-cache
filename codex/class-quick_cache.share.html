@@ -7,7 +7,7 @@
 	<title>Class quick_cache\share | Quick Cache Lite</title>
 
 	<script type="text/javascript" src="resources/combined.js?822040270"></script>
-	<script type="text/javascript" src="elementlist.js?1748627827"></script>
+	<script type="text/javascript" src="elementlist.js?1035181410"></script>
 	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3403148767" />
 
 </head>
@@ -40,6 +40,7 @@
 				<li><a href="class-quick_cache.plugin.html">plugin</a></li>
 				<li class="active"><a href="class-quick_cache.share.html">share</a></li>
 				<li><a href="class-quick_cache.uninstall.html">uninstall</a></li>
+				<li><a href="class-quick_cache.utils_feed.html">utils_feed</a></li>
 				<li><a href="class-quick_cache.version_specific_upgrade.html">version_specific_upgrade</a></li>
 			</ul>
 
@@ -127,7 +128,7 @@
 				<b>Since:</b>
 				<p>140725 Reorganizing class members.</p>
 <br />
-		<b>Located at</b> <a href="source-class-quick_cache.share.html#9-1302" title="Go to source code">quick-cache/includes/share.php</a><br />
+		<b>Located at</b> <a href="source-class-quick_cache.share.html#9-1923" title="Go to source code">quick-cache/includes/share.php</a><br />
 	</div>
 
 
@@ -145,7 +146,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#___construct">#</a>
-		<code><a href="source-class-quick_cache.share.html#183-194" title="Go to source code">__construct</a>( )</code>
+		<code><a href="source-class-quick_cache.share.html#219-230" title="Go to source code">__construct</a>( )</code>
 
 		<div class="description short">
 			<p>Class constructor.</p>
@@ -181,7 +182,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_cache_dir">#</a>
-		<code><a href="source-class-quick_cache.share.html#200-222" title="Go to source code">cache_dir</a>( <span>string <var>$rel_path</var> = <span class="php-quote">''</span></span> )</code>
+		<code><a href="source-class-quick_cache.share.html#236-259" title="Go to source code">cache_dir</a>( <span>string <var>$rel_path</var> = <span class="php-quote">''</span></span> )</code>
 
 		<div class="description short">
 			<p>Absolute server path to the cache directory.</p>
@@ -233,15 +234,15 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_build_cache_path">#</a>
-		<code><a href="source-class-quick_cache.share.html#224-298" title="Go to source code">build_cache_path</a>( <span>string <var>$url</var></span>, <span>string <var>$with_user_token</var> = <span class="php-quote">''</span></span>, <span>string <var>$with_version_salt</var> = <span class="php-quote">''</span></span>, <span>integer <var>$flags</var> = <span class="php-num">0</span></span> )</code>
+		<code><a href="source-class-quick_cache.share.html#261-335" title="Go to source code">build_cache_path</a>( <span>string <var>$url</var></span>, <span>string <var>$with_user_token</var> = <span class="php-quote">''</span></span>, <span>string <var>$with_version_salt</var> = <span class="php-quote">''</span></span>, <span>integer <var>$flags</var> = <span class="php-num">0</span></span> )</code>
 
 		<div class="description short">
-			<p>Converts a URL into a <code>cache/path</code>.</p>
+			<p>Converts a URL into a relative <code>cache/path</code>; i.e. relative to the cache directory.</p>
 
 		</div>
 
 		<div class="description detailed hidden">
-			<p>Converts a URL into a <code>cache/path</code>.</p>
+			<p>Converts a URL into a relative <code>cache/path</code>; i.e. relative to the cache directory.</p>
 
 
 
@@ -263,7 +264,7 @@
 
 				<h4>Returns</h4>
 				<div class="list">
-					<code>string</code><br><p>The resulting <code>cache/path</code> based on the input <code>$url</code>.</p>
+					<code>string</code><br><p>The resulting relative <code>cache/path</code> based on the input <code>$url</code>; i.e. relative to the cache directory.</p>
 <br />
 				</div>
 
@@ -271,6 +272,220 @@
 				<h4>Since</h4>
 				<div class="list">
 						<p>140422 First documented version.</p>
+<br />
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="build_cache_path_regex" id="_build_cache_path_regex">
+
+		<td class="attributes"><code>
+			 public 
+			string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_build_cache_path_regex">#</a>
+		<code><a href="source-class-quick_cache.share.html#337-385" title="Go to source code">build_cache_path_regex</a>( <span>string <var>$url</var></span>, <span>string <var>$regex_suffix_frag</var> = <code><a href="class-quick_cache.share.html#CACHE_PATH_REGEX_DEFAULT_SUFFIX_FRAG">quick_cache\share::<b>CACHE_PATH_REGEX_DEFAULT_SUFFIX_FRAG</b></a></code></span> )</code>
+
+		<div class="description short">
+			<p>Variation of <code><a href="class-quick_cache.share.html#_build_cache_path">quick_cache\share::build_cache_path()</a></code> for relative regex.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Variation of <code><a href="class-quick_cache.share.html#_build_cache_path">quick_cache\share::build_cache_path()</a></code> for relative regex.</p>
+
+<p>This converts a URL into a relative <code>cache/path</code>; i.e. relative to the cache directory, and then converts that into a regex pattern w/ an optional custom <code>$regex_suffix_frag</code>.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$url</var></dt>
+					<dd><code>string</code><br><p>$url The input URL to convert. This CAN be left empty when necessary.
+   If empty, the final regex pattern will be <code>/^'.$regex_suffix_frag.'/i</code>.
+   If empty, it's a good idea to start <code>$regex_suffix_frag</code> with <code>.*?</code>.</p>
+</dd>
+					<dt><var>$regex_suffix_frag</var></dt>
+					<dd><code>string</code><br><p>$regex_suffix_frag Regex fragment to come after the relative cache/path.
+   Defaults to: <code>(?:\/index)?(?:\.|\/(?:page\/[0-9]+|comment\-page\-[0-9]+)[.\/])</code>.
+   Note: this should NOT have delimiters; i.e. do NOT start or end with <code>/</code>.
+   See also: <code><a href="class-quick_cache.share.html#CACHE_PATH_REGEX_DEFAULT_SUFFIX_FRAG">quick_cache\share::<b>CACHE_PATH_REGEX_DEFAULT_SUFFIX_FRAG</b></a></code>.</p>
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>string</code><br><p>The resulting relative <code>cache/path</code> based on the input <code>$url</code>; converted to regex pattern.
+   Note that <code>http://</code> or <code>https://</code> is automatically converted to <code>\/https?\/</code> here.
+      This allows the pattern to pick up either scheme.</p>
+<br />
+				</div>
+
+
+				<h4>Since</h4>
+				<div class="list">
+						<p>141110 Refactoring cache clear/purge routines.</p>
+<br />
+				</div>
+				<h4>See</h4>
+				<div class="list">
+						<code><code><a href="class-quick_cache.share.html#CACHE_PATH_REGEX_DEFAULT_SUFFIX_FRAG">quick_cache\share::<b>CACHE_PATH_REGEX_DEFAULT_SUFFIX_FRAG</b></a></code></code><br />
+				</div>
+				<h4>Note</h4>
+				<div class="list">
+						<p>This variation of <code><a href="class-quick_cache.share.html#_build_cache_path">quick_cache\share::build_cache_path()</a></code> automatically forces the following flags.</p>
+
+<pre><code>  - <code><a href="class-quick_cache.share.html#CACHE_PATH_NO_PATH_INDEX">quick_cache\share::<b>CACHE_PATH_NO_PATH_INDEX</b></a></code>
+  - <code><a href="class-quick_cache.share.html#CACHE_PATH_NO_QUV">quick_cache\share::<b>CACHE_PATH_NO_QUV</b></a></code>
+  - <code><a href="class-quick_cache.share.html#CACHE_PATH_NO_EXT">quick_cache\share::<b>CACHE_PATH_NO_EXT</b></a></code>
+</code></pre>
+<br />
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="build_host_cache_path_regex" id="_build_host_cache_path_regex">
+
+		<td class="attributes"><code>
+			 public 
+			string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_build_host_cache_path_regex">#</a>
+		<code><a href="source-class-quick_cache.share.html#387-438" title="Go to source code">build_host_cache_path_regex</a>( <span>string <var>$url</var></span>, <span>string <var>$regex_suffix_frag</var> = <code><a href="class-quick_cache.share.html#CACHE_PATH_REGEX_DEFAULT_SUFFIX_FRAG">quick_cache\share::<b>CACHE_PATH_REGEX_DEFAULT_SUFFIX_FRAG</b></a></code></span> )</code>
+
+		<div class="description short">
+			<p>Variation of <code><a href="class-quick_cache.share.html#_build_cache_path">quick_cache\share::build_cache_path()</a></code> for relative regex.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Variation of <code><a href="class-quick_cache.share.html#_build_cache_path">quick_cache\share::build_cache_path()</a></code> for relative regex.</p>
+
+<p>This converts a URL into a relative <code>cache/path</code>; i.e. relative to the current host|blog directory, and then converts that into a regex pattern w/ an optional custom <code>$regex_suffix_frag</code>.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$url</var></dt>
+					<dd><code>string</code><br><p>$url The input URL to convert. This CAN be left empty when necessary.
+   If empty, the final regex pattern will be <code>/^'.$regex_suffix_frag.'/i</code>.
+   If empty, it's a good idea to start <code>$regex_suffix_frag</code> with <code>.*?</code>.</p>
+</dd>
+					<dt><var>$regex_suffix_frag</var></dt>
+					<dd><code>string</code><br><p>$regex_suffix_frag Regex fragment to come after the relative cache/path.
+   Defaults to: <code>(?:\/index)?(?:\.|\/(?:page\/[0-9]+|comment\-page\-[0-9]+)[.\/])</code>.
+   Note: this should NOT have delimiters; i.e. do NOT start or end with <code>/</code>.
+   See also: <code><a href="class-quick_cache.share.html#CACHE_PATH_REGEX_DEFAULT_SUFFIX_FRAG">quick_cache\share::<b>CACHE_PATH_REGEX_DEFAULT_SUFFIX_FRAG</b></a></code>.</p>
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>string</code><br><p>The resulting relative <code>cache/path</code> based on the input <code>$url</code>; converted to regex pattern.</p>
+<br />
+				</div>
+
+
+				<h4>Since</h4>
+				<div class="list">
+						<p>141110 Refactoring cache clear/purge routines.</p>
+<br />
+				</div>
+				<h4>See</h4>
+				<div class="list">
+						<code><code><a href="class-quick_cache.share.html#CACHE_PATH_REGEX_DEFAULT_SUFFIX_FRAG">quick_cache\share::<b>CACHE_PATH_REGEX_DEFAULT_SUFFIX_FRAG</b></a></code></code><br />
+				</div>
+				<h4>Note</h4>
+				<div class="list">
+						<p>This variation of <code><a href="class-quick_cache.share.html#_build_cache_path">quick_cache\share::build_cache_path()</a></code> automatically forces the following flags.</p>
+
+<pre><code>  - <code><a href="class-quick_cache.share.html#CACHE_PATH_NO_SCHEME">quick_cache\share::<b>CACHE_PATH_NO_SCHEME</b></a></code>
+  - <code><a href="class-quick_cache.share.html#CACHE_PATH_NO_HOST">quick_cache\share::<b>CACHE_PATH_NO_HOST</b></a></code>
+  - <code><a href="class-quick_cache.share.html#CACHE_PATH_NO_PATH_INDEX">quick_cache\share::<b>CACHE_PATH_NO_PATH_INDEX</b></a></code>
+  - <code><a href="class-quick_cache.share.html#CACHE_PATH_NO_QUV">quick_cache\share::<b>CACHE_PATH_NO_QUV</b></a></code>
+  - <code><a href="class-quick_cache.share.html#CACHE_PATH_NO_EXT">quick_cache\share::<b>CACHE_PATH_NO_EXT</b></a></code>
+</code></pre>
+<br />
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="build_host_cache_path_regex_frags_from_wc_uris" id="_build_host_cache_path_regex_frags_from_wc_uris">
+
+		<td class="attributes"><code>
+			 public 
+			string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_build_host_cache_path_regex_frags_from_wc_uris">#</a>
+		<code><a href="source-class-quick_cache.share.html#440-489" title="Go to source code">build_host_cache_path_regex_frags_from_wc_uris</a>( <span>string <var>$uris</var></span>, <span>string <var>$regex_suffix_frag</var> = <code><a href="class-quick_cache.share.html#CACHE_PATH_REGEX_DEFAULT_SUFFIX_FRAG">quick_cache\share::<b>CACHE_PATH_REGEX_DEFAULT_SUFFIX_FRAG</b></a></code></span> )</code>
+
+		<div class="description short">
+			<p>Variation of <code><a href="class-quick_cache.share.html#_build_cache_path">quick_cache\share::build_cache_path()</a></code> for relative regex fragments.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Variation of <code><a href="class-quick_cache.share.html#_build_cache_path">quick_cache\share::build_cache_path()</a></code> for relative regex fragments.</p>
+
+<p>This converts URIs into relative <code>cache/paths</code>; i.e. relative to the current host|blog directory, and then converts those into <code>(?:regex|fragments)</code> with piped <code>|</code> alternatives.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$uris</var></dt>
+					<dd><code>string</code><br><p>$uris A line-delimited list of URIs. These may contain <code>*</code> wildcards also.</p>
+</dd>
+					<dt><var>$regex_suffix_frag</var></dt>
+					<dd><code>string</code><br><p>$regex_suffix_frag Regex fragment to come after each relative cache/path.
+   Defaults to: <code>(?:\/index)?(?:\.|\/(?:page\/[0-9]+|comment\-page\-[0-9]+)[.\/])</code>.
+   Note: this should NOT have delimiters; i.e. do NOT start or end with <code>/</code>.
+   See also: <code><a href="class-quick_cache.share.html#CACHE_PATH_REGEX_DEFAULT_SUFFIX_FRAG">quick_cache\share::<b>CACHE_PATH_REGEX_DEFAULT_SUFFIX_FRAG</b></a></code>.</p>
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>string</code><br><p>The resulting <code>cache/paths</code> based on the input <code>$uris</code>; converted to <code>(?:regex|fragments)</code>.</p>
+<br />
+				</div>
+
+
+				<h4>Since</h4>
+				<div class="list">
+						<p>141110 Refactoring cache clear/purge routines.</p>
+<br />
+				</div>
+				<h4>Note</h4>
+				<div class="list">
+						<p>This variation of <code><a href="class-quick_cache.share.html#_build_cache_path">quick_cache\share::build_cache_path()</a></code> automatically forces the following flags.</p>
+
+<pre><code>  - <code><a href="class-quick_cache.share.html#CACHE_PATH_ALLOW_WILDCARDS">quick_cache\share::<b>CACHE_PATH_ALLOW_WILDCARDS</b></a></code>
+  - <code><a href="class-quick_cache.share.html#CACHE_PATH_NO_SCHEME">quick_cache\share::<b>CACHE_PATH_NO_SCHEME</b></a></code>
+  - <code><a href="class-quick_cache.share.html#CACHE_PATH_NO_HOST">quick_cache\share::<b>CACHE_PATH_NO_HOST</b></a></code>
+  - <code><a href="class-quick_cache.share.html#CACHE_PATH_NO_PATH_INDEX">quick_cache\share::<b>CACHE_PATH_NO_PATH_INDEX</b></a></code>
+  - <code><a href="class-quick_cache.share.html#CACHE_PATH_NO_QUV">quick_cache\share::<b>CACHE_PATH_NO_QUV</b></a></code>
+  - <code><a href="class-quick_cache.share.html#CACHE_PATH_NO_EXT">quick_cache\share::<b>CACHE_PATH_NO_EXT</b></a></code>
+</code></pre>
 <br />
 				</div>
 
@@ -289,7 +504,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_host_token">#</a>
-		<code><a href="source-class-quick_cache.share.html#304-327" title="Go to source code">host_token</a>( <span>boolean <var>$dashify</var> = <span class="php-keyword1">FALSE</span></span> )</code>
+		<code><a href="source-class-quick_cache.share.html#495-518" title="Go to source code">host_token</a>( <span>boolean <var>$dashify</var> = <span class="php-keyword1">FALSE</span></span> )</code>
 
 		<div class="description short">
 			<p>Produces a token based on the current <code>$_SERVER['HTTP_HOST']</code>.</p>
@@ -342,7 +557,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_host_base_token">#</a>
-		<code><a href="source-class-quick_cache.share.html#329-366" title="Go to source code">host_base_token</a>( <span>boolean <var>$dashify</var> = <span class="php-keyword1">FALSE</span></span> )</code>
+		<code><a href="source-class-quick_cache.share.html#520-560" title="Go to source code">host_base_token</a>( <span>boolean <var>$dashify</var> = <span class="php-keyword1">FALSE</span></span> )</code>
 
 		<div class="description short">
 			<p>Produces a token based on the current site's base directory.</p>
@@ -401,7 +616,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_host_dir_token">#</a>
-		<code><a href="source-class-quick_cache.share.html#368-409" title="Go to source code">host_dir_token</a>( <span>boolean <var>$dashify</var> = <span class="php-keyword1">FALSE</span></span> )</code>
+		<code><a href="source-class-quick_cache.share.html#562-604" title="Go to source code">host_dir_token</a>( <span>boolean <var>$dashify</var> = <span class="php-keyword1">FALSE</span></span> )</code>
 
 		<div class="description short">
 			<p>Produces a token based on the current blog's sub-directory.</p>
@@ -460,7 +675,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_host_base_dir_tokens">#</a>
-		<code><a href="source-class-quick_cache.share.html#411-436" title="Go to source code">host_base_dir_tokens</a>( <span>boolean <var>$dashify</var> = <span class="php-keyword1">FALSE</span></span> )</code>
+		<code><a href="source-class-quick_cache.share.html#606-631" title="Go to source code">host_base_dir_tokens</a>( <span>boolean <var>$dashify</var> = <span class="php-keyword1">FALSE</span></span> )</code>
 
 		<div class="description short">
 			<p>Produces tokens for the current site's base directory &amp; current blog's sub-directory.</p>
@@ -518,7 +733,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_user_token">#</a>
-		<code><a href="source-class-quick_cache.share.html#438-476" title="Go to source code">user_token</a>( )</code>
+		<code><a href="source-class-quick_cache.share.html#633-671" title="Go to source code">user_token</a>( )</code>
 
 		<div class="description short">
 			<p>Produces a token based on the current user.</p>
@@ -574,7 +789,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_is_get_request_w_query">#</a>
-		<code><a href="source-class-quick_cache.share.html#482-501" title="Go to source code">is_get_request_w_query</a>( )</code>
+		<code><a href="source-class-quick_cache.share.html#677-696" title="Go to source code">is_get_request_w_query</a>( )</code>
 
 		<div class="description short">
 			<p>Does the current request include a query string?</p>
@@ -609,6 +824,52 @@
 		</div>
 		</div></td>
 	</tr>
+	<tr data-order="is_post_put_delete_request" id="_is_post_put_delete_request">
+
+		<td class="attributes"><code>
+			 public 
+			boolean
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_is_post_put_delete_request">#</a>
+		<code><a href="source-class-quick_cache.share.html#698-720" title="Go to source code">is_post_put_delete_request</a>( )</code>
+
+		<div class="description short">
+			<p>Is the current request method <code>POST</code>, <code>PUT</code> or <code>DELETE</code>?</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Is the current request method <code>POST</code>, <code>PUT</code> or <code>DELETE</code>?</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>boolean</code><br><p><code>TRUE</code> if current request method is <code>POST</code>, <code>PUT</code> or <code>DELETE</code>.</p>
+<br />
+				</div>
+
+
+				<h4>Since</h4>
+				<div class="list">
+						<p>141110 Updating <code>is_uncacheable_request_method()</code> and restoring this one.</p>
+<br />
+				</div>
+				<h4>Note</h4>
+				<div class="list">
+						<p>The return value of this function is cached to reduce overhead on repeat calls.</p>
+<br />
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
 	<tr data-order="is_uncacheable_request_method" id="_is_uncacheable_request_method">
 
 		<td class="attributes"><code>
@@ -620,7 +881,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_is_uncacheable_request_method">#</a>
-		<code><a href="source-class-quick_cache.share.html#503-523" title="Go to source code">is_uncacheable_request_method</a>( )</code>
+		<code><a href="source-class-quick_cache.share.html#722-745" title="Go to source code">is_uncacheable_request_method</a>( )</code>
 
 		<div class="description short">
 			<p>Is the current request method is uncacheable?</p>
@@ -642,6 +903,8 @@
 
 				<h4>Since</h4>
 				<div class="list">
+						<p>141110 Reversing logic; only allow <code>GET</code> requests to be cached.</p>
+<br />
 						<p>140725 Adding HEAD/OPTIONS/TRACE/CONNECT to the list of uncacheables.</p>
 <br />
 				</div>
@@ -666,7 +929,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_is_like_user_logged_in">#</a>
-		<code><a href="source-class-quick_cache.share.html#525-561" title="Go to source code">is_like_user_logged_in</a>( )</code>
+		<code><a href="source-class-quick_cache.share.html#747-783" title="Go to source code">is_like_user_logged_in</a>( )</code>
 
 		<div class="description short">
 			<p>Should the current user should be considered a logged-in user?</p>
@@ -712,7 +975,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_is_localhost">#</a>
-		<code><a href="source-class-quick_cache.share.html#563-585" title="Go to source code">is_localhost</a>( )</code>
+		<code><a href="source-class-quick_cache.share.html#785-807" title="Go to source code">is_localhost</a>( )</code>
 
 		<div class="description short">
 			<p>Are we in a LOCALHOST environment?</p>
@@ -758,7 +1021,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_is_auto_cache_engine">#</a>
-		<code><a href="source-class-quick_cache.share.html#587-606" title="Go to source code">is_auto_cache_engine</a>( )</code>
+		<code><a href="source-class-quick_cache.share.html#809-828" title="Go to source code">is_auto_cache_engine</a>( )</code>
 
 		<div class="description short">
 			<p>Is the current request for the Auto-Cache Engine?</p>
@@ -804,7 +1067,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_is_feed">#</a>
-		<code><a href="source-class-quick_cache.share.html#608-629" title="Go to source code">is_feed</a>( )</code>
+		<code><a href="source-class-quick_cache.share.html#830-851" title="Go to source code">is_feed</a>( )</code>
 
 		<div class="description short">
 			<p>Is the current request for a feed?</p>
@@ -850,7 +1113,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_is_ssl">#</a>
-		<code><a href="source-class-quick_cache.share.html#631-658" title="Go to source code">is_ssl</a>( )</code>
+		<code><a href="source-class-quick_cache.share.html#853-880" title="Go to source code">is_ssl</a>( )</code>
 
 		<div class="description short">
 			<p>Is the current request over SSL?</p>
@@ -896,7 +1159,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_is_html_xml_doc">#</a>
-		<code><a href="source-class-quick_cache.share.html#660-675" title="Go to source code">is_html_xml_doc</a>( <span>string <var>$doc</var></span> )</code>
+		<code><a href="source-class-quick_cache.share.html#882-897" title="Go to source code">is_html_xml_doc</a>( <span>string <var>$doc</var></span> )</code>
 
 		<div class="description short">
 			<p>Is a document/string an HTML/XML doc; or no?</p>
@@ -943,7 +1206,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_has_a_cacheable_content_type">#</a>
-		<code><a href="source-class-quick_cache.share.html#677-702" title="Go to source code">has_a_cacheable_content_type</a>( )</code>
+		<code><a href="source-class-quick_cache.share.html#899-924" title="Go to source code">has_a_cacheable_content_type</a>( )</code>
 
 		<div class="description short">
 			<p>Does the current request have a cacheable content type?</p>
@@ -994,7 +1257,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_has_a_cacheable_status">#</a>
-		<code><a href="source-class-quick_cache.share.html#704-731" title="Go to source code">has_a_cacheable_status</a>( )</code>
+		<code><a href="source-class-quick_cache.share.html#926-953" title="Go to source code">has_a_cacheable_status</a>( )</code>
 
 		<div class="description short">
 			<p>Does the current request have a cacheable HTTP status code?</p>
@@ -1045,7 +1308,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_is_extension_loaded">#</a>
-		<code><a href="source-class-quick_cache.share.html#737-753" title="Go to source code">is_extension_loaded</a>( <span>string <var>$extension</var></span> )</code>
+		<code><a href="source-class-quick_cache.share.html#959-975" title="Go to source code">is_extension_loaded</a>( <span>string <var>$extension</var></span> )</code>
 
 		<div class="description short">
 			<p>Checks if a PHP extension is loaded up.</p>
@@ -1097,7 +1360,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_function_is_possible">#</a>
-		<code><a href="source-class-quick_cache.share.html#755-796" title="Go to source code">function_is_possible</a>( <span>string <var>$function</var></span> )</code>
+		<code><a href="source-class-quick_cache.share.html#977-1018" title="Go to source code">function_is_possible</a>( <span>string <var>$function</var></span> )</code>
 
 		<div class="description short">
 			<p>Is a particular function possible in every way?</p>
@@ -1150,7 +1413,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_http_protocol">#</a>
-		<code><a href="source-class-quick_cache.share.html#802-821" title="Go to source code">http_protocol</a>( )</code>
+		<code><a href="source-class-quick_cache.share.html#1024-1043" title="Go to source code">http_protocol</a>( )</code>
 
 		<div class="description short">
 			<p>Current HTTP protocol; i.e. <code>HTTP/1.0</code> or <code>HTTP/1.1</code>.</p>
@@ -1191,7 +1454,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_headers_list">#</a>
-		<code><a href="source-class-quick_cache.share.html#823-844" title="Go to source code">headers_list</a>( )</code>
+		<code><a href="source-class-quick_cache.share.html#1045-1066" title="Go to source code">headers_list</a>( )</code>
 
 		<div class="description short">
 			<p>An array of all headers sent via PHP; and the current HTTP status header too.</p>
@@ -1238,7 +1501,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_cacheable_headers_list">#</a>
-		<code><a href="source-class-quick_cache.share.html#846-925" title="Go to source code">cacheable_headers_list</a>( )</code>
+		<code><a href="source-class-quick_cache.share.html#1068-1147" title="Go to source code">cacheable_headers_list</a>( )</code>
 
 		<div class="description short">
 			<p>An array of all cacheable/safe headers sent via PHP; and the current HTTP status header too.</p>
@@ -1266,7 +1529,7 @@
 				</div>
 				<h4>See</h4>
 				<div class="list">
-						<p>http://bit.ly/1zwwIrM</p>
+						<p>http://www.websharks-inc.com/r/wikipedia-http-header-response-fields/</p>
 <br />
 				</div>
 				<h4>Warning</h4>
@@ -1290,7 +1553,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_http_status">#</a>
-		<code><a href="source-class-quick_cache.share.html#927-965" title="Go to source code">http_status</a>( )</code>
+		<code><a href="source-class-quick_cache.share.html#1149-1187" title="Go to source code">http_status</a>( )</code>
 
 		<div class="description short">
 			<p>HTTP status code if at all possible.</p>
@@ -1336,7 +1599,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_esc_sq">#</a>
-		<code><a href="source-class-quick_cache.share.html#971-985" title="Go to source code">esc_sq</a>( <span>string <var>$string</var></span>, <span>integer <var>$times</var> = <span class="php-num">1</span></span> )</code>
+		<code><a href="source-class-quick_cache.share.html#1193-1207" title="Go to source code">esc_sq</a>( <span>string <var>$string</var></span>, <span>integer <var>$times</var> = <span class="php-num">1</span></span> )</code>
 
 		<div class="description short">
 			<p>Escape single quotes.</p>
@@ -1376,6 +1639,116 @@
 		</div>
 		</div></td>
 	</tr>
+	<tr data-order="str_replace_once" id="_str_replace_once">
+
+		<td class="attributes"><code>
+			 public 
+			string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_str_replace_once">#</a>
+		<code><a href="source-class-quick_cache.share.html#1209-1234" title="Go to source code">str_replace_once</a>( <span>string <var>$needle</var></span>, <span>string <var>$replace</var></span>, <span>string <var>$haystack</var></span>, <span>boolean <var>$caSe_insensitive</var> = <span class="php-keyword1">FALSE</span></span> )</code>
+
+		<div class="description short">
+			<p>String replace ONE time.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>String replace ONE time.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$needle</var></dt>
+					<dd><code>string</code><br><p>$needle A string to search/replace.</p>
+</dd>
+					<dt><var>$replace</var></dt>
+					<dd><code>string</code><br><p>$replace What to replace <code>$needle</code> with.</p>
+</dd>
+					<dt><var>$haystack</var></dt>
+					<dd><code>string</code><br><p>$haystack The string/haystack to search in.</p>
+</dd>
+					<dt><var>$caSe_insensitive</var></dt>
+					<dd><code>boolean</code><br><p>$caSe_insensitive Defaults to a <code>FALSE</code> value.
+   Pass this as <code>TRUE</code> to a caSe-insensitive search/replace.</p>
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>string</code><br><p>The <code>$haystack</code>, with <code>$needle</code> replaced with <code>$replace</code> ONE time only.</p>
+<br />
+				</div>
+
+
+				<h4>Since</h4>
+				<div class="list">
+						<p>141110 Refactoring cache clear/purge routines.</p>
+<br />
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="str_ireplace_once" id="_str_ireplace_once">
+
+		<td class="attributes"><code>
+			 public 
+			string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_str_ireplace_once">#</a>
+		<code><a href="source-class-quick_cache.share.html#1236-1250" title="Go to source code">str_ireplace_once</a>( <span>string <var>$needle</var></span>, <span>string <var>$replace</var></span>, <span>string <var>$haystack</var></span> )</code>
+
+		<div class="description short">
+			<p>String replace ONE time (caSe-insensitive).</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>String replace ONE time (caSe-insensitive).</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$needle</var></dt>
+					<dd><code>string</code><br><p>$needle A string to search/replace.</p>
+</dd>
+					<dt><var>$replace</var></dt>
+					<dd><code>string</code><br><p>$replace What to replace <code>$needle</code> with.</p>
+</dd>
+					<dt><var>$haystack</var></dt>
+					<dd><code>string</code><br><p>$haystack The string/haystack to search in.</p>
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>string</code><br><p>The <code>$haystack</code>, with <code>$needle</code> replaced with <code>$replace</code> ONE time only.</p>
+<br />
+				</div>
+
+
+				<h4>Since</h4>
+				<div class="list">
+						<p>141110 Refactoring cache clear/purge routines.</p>
+<br />
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
 	<tr data-order="n_dir_seps" id="_n_dir_seps">
 
 		<td class="attributes"><code>
@@ -1387,7 +1760,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_n_dir_seps">#</a>
-		<code><a href="source-class-quick_cache.share.html#987-1021" title="Go to source code">n_dir_seps</a>( <span>string <var>$dir_file</var></span>, <span>boolean <var>$allow_trailing_slash</var> = <span class="php-keyword1">FALSE</span></span> )</code>
+		<code><a href="source-class-quick_cache.share.html#1252-1286" title="Go to source code">n_dir_seps</a>( <span>string <var>$dir_file</var></span>, <span>boolean <var>$allow_trailing_slash</var> = <span class="php-keyword1">FALSE</span></span> )</code>
 
 		<div class="description short">
 			<p>Normalizes directory/file separators.</p>
@@ -1419,7 +1792,54 @@
 
 				<h4>Since</h4>
 				<div class="list">
-						<p>140829 Implementing XML/RSS feed purging.</p>
+						<p>140829 Implementing XML/RSS feed clearing.</p>
+<br />
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="add_tmp_suffix" id="_add_tmp_suffix">
+
+		<td class="attributes"><code>
+			 public 
+			string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_add_tmp_suffix">#</a>
+		<code><a href="source-class-quick_cache.share.html#1288-1300" title="Go to source code">add_tmp_suffix</a>( <span>string <var>$dir_file</var></span> )</code>
+
+		<div class="description short">
+			<p>Adds a tmp name suffix to a directory/file path.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Adds a tmp name suffix to a directory/file path.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$dir_file</var></dt>
+					<dd><code>string</code><br><p>$dir_file An input directory or file path.</p>
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>string</code><br><p>The original <code>$dir_file</code> with a tmp name suffix.</p>
+<br />
+				</div>
+
+
+				<h4>Since</h4>
+				<div class="list">
+						<p>141110 Refactoring cache clear/purge routines.</p>
 <br />
 				</div>
 
@@ -1438,7 +1858,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_dir_regex_iteration">#</a>
-		<code><a href="source-class-quick_cache.share.html#1023-1041" title="Go to source code">dir_regex_iteration</a>( <span>string <var>$dir</var></span>, <span>string <var>$regex</var></span> )</code>
+		<code><a href="source-class-quick_cache.share.html#1306-1324" title="Go to source code">dir_regex_iteration</a>( <span>string <var>$dir</var></span>, <span>string <var>$regex</var></span> )</code>
 
 		<div class="description short">
 			<p>Recursive directory iterator based on a regex pattern.</p>
@@ -1478,7 +1898,7 @@
 		</div>
 		</div></td>
 	</tr>
-	<tr data-order="delete_files_from_host_cache_dir" id="_delete_files_from_host_cache_dir">
+	<tr data-order="clear_files_from_cache_dir" id="_clear_files_from_cache_dir">
 
 		<td class="attributes"><code>
 			 public 
@@ -1488,23 +1908,251 @@
 		</td>
 
 		<td class="name"><div>
-		<a class="anchor" href="#_delete_files_from_host_cache_dir">#</a>
-		<code><a href="source-class-quick_cache.share.html#1043-1101" title="Go to source code">delete_files_from_host_cache_dir</a>( <span>string <var>$regex</var></span> )</code>
+		<a class="anchor" href="#_clear_files_from_cache_dir">#</a>
+		<code><a href="source-class-quick_cache.share.html#1326-1341" title="Go to source code">clear_files_from_cache_dir</a>( <span>string <var>$regex</var></span> )</code>
 
 		<div class="description short">
-			<p>Deletes files from the cache directory (for the current host) that match a regex pattern.</p>
+			<p>Clear files from the cache directory (for all hosts/blogs);
+   i.e. those that match a specific regex pattern.</p>
 
 		</div>
 
 		<div class="description detailed hidden">
-			<p>Deletes files from the cache directory (for the current host) that match a regex pattern.</p>
+			<p>Clear files from the cache directory (for all hosts/blogs); i.e. those that match a specific regex pattern.</p>
 
 
 
 				<h4>Parameters</h4>
 				<div class="list"><dl>
 					<dt><var>$regex</var></dt>
-					<dd><code>string</code><br><p>$regex A regex pattern; compares to each full file path.</p>
+					<dd><code>string</code><br><p>$regex A regex pattern; see <code><a href="class-quick_cache.share.html#_delete_files_from_cache_dir">quick_cache\share::delete_files_from_cache_dir()</a></code>.</p>
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>integer</code><br><p>Total files cleared by this routine (if any).</p>
+<br />
+				</div>
+
+
+				<h4>Since</h4>
+				<div class="list">
+						<p>141110 Refactoring cache clear/purge routines.</p>
+<br />
+				</div>
+				<h4>See</h4>
+				<div class="list">
+						<code><code><a href="class-quick_cache.share.html#_delete_files_from_cache_dir">quick_cache\share::delete_files_from_cache_dir()</a></code></code><br />
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="clear_files_from_host_cache_dir" id="_clear_files_from_host_cache_dir">
+
+		<td class="attributes"><code>
+			 public 
+			integer
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_clear_files_from_host_cache_dir">#</a>
+		<code><a href="source-class-quick_cache.share.html#1343-1358" title="Go to source code">clear_files_from_host_cache_dir</a>( <span>string <var>$regex</var></span> )</code>
+
+		<div class="description short">
+			<p>Clear files from the cache directory (for the current host);
+   i.e. those that match a specific regex pattern.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Clear files from the cache directory (for the current host); i.e. those that match a specific regex pattern.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$regex</var></dt>
+					<dd><code>string</code><br><p>$regex A regex pattern; see <code><a href="class-quick_cache.share.html#_delete_files_from_host_cache_dir">quick_cache\share::delete_files_from_host_cache_dir()</a></code>.</p>
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>integer</code><br><p>Total files cleared by this routine (if any).</p>
+<br />
+				</div>
+
+
+				<h4>Since</h4>
+				<div class="list">
+						<p>141110 Refactoring cache clear/purge routines.</p>
+<br />
+				</div>
+				<h4>See</h4>
+				<div class="list">
+						<code><code><a href="class-quick_cache.share.html#_delete_files_from_host_cache_dir">quick_cache\share::delete_files_from_host_cache_dir()</a></code></code><br />
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="purge_files_from_cache_dir" id="_purge_files_from_cache_dir">
+
+		<td class="attributes"><code>
+			 public 
+			integer
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_purge_files_from_cache_dir">#</a>
+		<code><a href="source-class-quick_cache.share.html#1360-1375" title="Go to source code">purge_files_from_cache_dir</a>( <span>string <var>$regex</var></span> )</code>
+
+		<div class="description short">
+			<p>Purge files from the cache directory (for all hosts/blogs);
+   i.e. those that match a specific regex pattern.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Purge files from the cache directory (for all hosts/blogs); i.e. those that match a specific regex pattern.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$regex</var></dt>
+					<dd><code>string</code><br><p>$regex A regex pattern; see <code><a href="class-quick_cache.share.html#_delete_files_from_cache_dir">quick_cache\share::delete_files_from_cache_dir()</a></code>.</p>
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>integer</code><br><p>Total files purged by this routine (if any).</p>
+<br />
+				</div>
+
+
+				<h4>Since</h4>
+				<div class="list">
+						<p>141110 Refactoring cache clear/purge routines.</p>
+<br />
+				</div>
+				<h4>See</h4>
+				<div class="list">
+						<code><code><a href="class-quick_cache.share.html#_delete_files_from_cache_dir">quick_cache\share::delete_files_from_cache_dir()</a></code></code><br />
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="purge_files_from_host_cache_dir" id="_purge_files_from_host_cache_dir">
+
+		<td class="attributes"><code>
+			 public 
+			integer
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_purge_files_from_host_cache_dir">#</a>
+		<code><a href="source-class-quick_cache.share.html#1377-1392" title="Go to source code">purge_files_from_host_cache_dir</a>( <span>string <var>$regex</var></span> )</code>
+
+		<div class="description short">
+			<p>Purge files from the cache directory (for the current host);
+   i.e. those that match a specific regex pattern.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Purge files from the cache directory (for the current host); i.e. those that match a specific regex pattern.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$regex</var></dt>
+					<dd><code>string</code><br><p>$regex A regex pattern; see <code><a href="class-quick_cache.share.html#_delete_files_from_host_cache_dir">quick_cache\share::delete_files_from_host_cache_dir()</a></code>.</p>
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>integer</code><br><p>Total files purged by this routine (if any).</p>
+<br />
+				</div>
+
+
+				<h4>Since</h4>
+				<div class="list">
+						<p>141110 Refactoring cache clear/purge routines.</p>
+<br />
+				</div>
+				<h4>See</h4>
+				<div class="list">
+						<code><code><a href="class-quick_cache.share.html#_delete_files_from_host_cache_dir">quick_cache\share::delete_files_from_host_cache_dir()</a></code></code><br />
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="delete_files_from_cache_dir" id="_delete_files_from_cache_dir">
+
+		<td class="attributes"><code>
+			 public 
+			integer
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_delete_files_from_cache_dir">#</a>
+		<code><a href="source-class-quick_cache.share.html#1394-1484" title="Go to source code">delete_files_from_cache_dir</a>( <span>string <var>$regex</var></span>, <span>boolean <var>$check_max_age</var> = <span class="php-keyword1">FALSE</span></span> )</code>
+
+		<div class="description short">
+			<p>Delete files from the cache directory (for all hosts/blogs);
+   i.e. those that match a specific regex pattern.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Delete files from the cache directory (for all hosts/blogs); i.e. those that match a specific regex pattern.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$regex</var></dt>
+					<dd><code>string</code><br><p>$regex A <code>/[regex pattern]/</code>; relative to the cache directory.
+   e.g. <code>/^http\/example\.com\/my\-slug(?:\/index)?(?:\.|\/(?:page\/[0-9]+|comment\-page\-[0-9]+)[.\/])/</code></p>
+
+<p>Or, this can also be a full/absolute regex pattern against an absolute path;
+   provided that it always starts with <code>/^</code>; including the full absolute cache/host directory path.
+   e.g. <code>/^\/cache\/dir\/http\/example\.com\/my\-slug(?:\/index)?(?:\.|\/(?:page\/[0-9]+|comment\-page\-[0-9]+)[.\/])/</code></p>
+
+<p>NOTE: Paths used in any/all regex patterns should be generated with <code><a href="class-quick_cache.share.html#_build_cache_path">quick_cache\share::build_cache_path()</a></code>.
+      Recommended flags to <code><a href="class-quick_cache.share.html#_build_cache_path">quick_cache\share::build_cache_path()</a></code> include the following.</p>
+
+<pre><code>  - <code><a href="class-quick_cache.share.html#CACHE_PATH_NO_PATH_INDEX">quick_cache\share::<b>CACHE_PATH_NO_PATH_INDEX</b></a></code>
+  - <code><a href="class-quick_cache.share.html#CACHE_PATH_NO_QUV">quick_cache\share::<b>CACHE_PATH_NO_QUV</b></a></code>
+  - <code><a href="class-quick_cache.share.html#CACHE_PATH_NO_EXT">quick_cache\share::<b>CACHE_PATH_NO_EXT</b></a></code>
+</code></pre>
+
+<p><strong>TIP:</strong> There is a variation of <code><a href="class-quick_cache.share.html#_build_cache_path">quick_cache\share::build_cache_path()</a></code> to assist with this.
+   Please see: <code><a href="class-quick_cache.share.html#_build_cache_path_regex">quick_cache\share::build_cache_path_regex()</a></code>. It is much easier to work with :-)</p>
+</dd>
+					<dt><var>$check_max_age</var></dt>
+					<dd><code>boolean</code><br><p>$check_max_age Check max age? i.e. use purge behavior?</p>
 </dd>
 				</dl></div>
 
@@ -1522,22 +2170,282 @@
 
 				<h4>Since</h4>
 				<div class="list">
-						<p>140829 Implementing XML/RSS feed purging.</p>
+						<p>141110 Refactoring cache clear/purge routines.</p>
 <br />
 				</div>
-				<h4>TODO</h4>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="delete_files_from_host_cache_dir" id="_delete_files_from_host_cache_dir">
+
+		<td class="attributes"><code>
+			 public 
+			integer
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_delete_files_from_host_cache_dir">#</a>
+		<code><a href="source-class-quick_cache.share.html#1486-1602" title="Go to source code">delete_files_from_host_cache_dir</a>( <span>string <var>$regex</var></span>, <span>boolean <var>$check_max_age</var> = <span class="php-keyword1">FALSE</span></span> )</code>
+
+		<div class="description short">
+			<p>Delete files from the cache directory (for the current host);
+   i.e. those that match a specific regex pattern.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Delete files from the cache directory (for the current host); i.e. those that match a specific regex pattern.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$regex</var></dt>
+					<dd><code>string</code><br><p>$regex A <code>/[regex pattern]/</code>; relative to the host cache directory.
+   e.g. <code>/^my\-slug(?:\/index)?(?:\.|\/(?:page\/[0-9]+|comment\-page\-[0-9]+)[.\/])/</code></p>
+
+<p>Or, this can also be a full/absolute regex pattern against an absolute path;
+   provided that it always starts with <code>/^</code>; including the full absolute cache/host directory path.
+   e.g. <code>/^\/cache\/dir\/http\/example\.com\/my\-slug(?:\/index)?(?:\.|\/(?:page\/[0-9]+|comment\-page\-[0-9]+)[.\/])/</code></p>
+
+<p>NOTE: Paths used in any/all regex patterns should be generated with <code><a href="class-quick_cache.share.html#_build_cache_path">quick_cache\share::build_cache_path()</a></code>.
+      Recommended flags to <code><a href="class-quick_cache.share.html#_build_cache_path">quick_cache\share::build_cache_path()</a></code> include the following.</p>
+
+<pre><code>  - <code><a href="class-quick_cache.share.html#CACHE_PATH_NO_SCHEME">quick_cache\share::<b>CACHE_PATH_NO_SCHEME</b></a></code>
+  - <code><a href="class-quick_cache.share.html#CACHE_PATH_NO_HOST">quick_cache\share::<b>CACHE_PATH_NO_HOST</b></a></code>
+  - <code><a href="class-quick_cache.share.html#CACHE_PATH_NO_PATH_INDEX">quick_cache\share::<b>CACHE_PATH_NO_PATH_INDEX</b></a></code>
+  - <code><a href="class-quick_cache.share.html#CACHE_PATH_NO_QUV">quick_cache\share::<b>CACHE_PATH_NO_QUV</b></a></code>
+  - <code><a href="class-quick_cache.share.html#CACHE_PATH_NO_EXT">quick_cache\share::<b>CACHE_PATH_NO_EXT</b></a></code>
+</code></pre>
+
+<p><strong>TIP:</strong> There is a variation of <code><a href="class-quick_cache.share.html#_build_cache_path">quick_cache\share::build_cache_path()</a></code> to assist with this.
+   Please see: <code><a href="class-quick_cache.share.html#_build_host_cache_path_regex">quick_cache\share::build_host_cache_path_regex()</a></code>. It is much easier to work with :-)</p>
+</dd>
+					<dt><var>$check_max_age</var></dt>
+					<dd><code>boolean</code><br><p>$check_max_age Check max age? i.e. use purge behavior?</p>
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
 				<div class="list">
-						<p>@raamdev I think we could take the same concept introduced by this routine and use it to build others
-   that deal with purging/clearing/wiping; thereby centralizing this sort of job, making QC DRYer.
-   Also, this type of routine works to improve speed when running on a large MS network.</p>
+					<code>integer</code><br><p>Total files deleted by this routine (if any).</p>
+<br />
+				</div>
 
-<p>Suggested class members to come in a future release of QC.
-      - <code>purge_files_from_host_cache_dir()</code>
-      - <code>clear_files_from_host_cache_dir()</code></p>
+				<h4>Throws</h4>
+				<div class="list">
+					<code>exception</code><br><p>If unable to delete a file for any reason.</p>
+<br />
+				</div>
 
-<p>Also, this class member (i.e. <code>delete_files_from_host_cache_dir()</code>) could be
-      used by many of the existing auto-purge routines. Thereby requiring less code
-      and speeding QC up overall; i.e. making it faster on large MS networks.</p>
+				<h4>Since</h4>
+				<div class="list">
+						<p>141110 Refactoring cache clear/purge routines.</p>
+<br />
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="delete_all_files_dirs_in" id="_delete_all_files_dirs_in">
+
+		<td class="attributes"><code>
+			 public 
+			integer
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_delete_all_files_dirs_in">#</a>
+		<code><a href="source-class-quick_cache.share.html#1604-1670" title="Go to source code">delete_all_files_dirs_in</a>( <span>string <var>$dir</var></span>, <span>boolean <var>$delete_dir_too</var> = <span class="php-keyword1">FALSE</span></span> )</code>
+
+		<div class="description short">
+			<p>Delete all files/dirs from a directory (for all schemes/hosts);
+   including <code>qc-</code> prefixed files; or anything else for that matter.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Delete all files/dirs from a directory (for all schemes/hosts); including <code>qc-</code> prefixed files; or anything else for that matter.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$dir</var></dt>
+					<dd><code>string</code><br><p>$dir The directory from which to delete files/dirs.</p>
+
+<p>SECURITY: This directory MUST be located inside the <code>/wp-content/</code> directory.
+   Also, it MUST be a sub-directory of <code>/wp-content/</code>, NOT the directory itself.
+   Also, it cannot be: <code>mu-plugins</code>, <code>themes</code>, or <code>plugins</code>.</p>
+</dd>
+					<dt><var>$delete_dir_too</var></dt>
+					<dd><code>boolean</code><br><p>$delete_dir_too Delete parent? i.e. delete the <code>$dir</code> itself also?</p>
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>integer</code><br><p>Total files/directories deleted by this routine (if any).</p>
+<br />
+				</div>
+
+				<h4>Throws</h4>
+				<div class="list">
+					<code>exception</code><br><p>If unable to delete a file/directory for any reason.</p>
+<br />
+				</div>
+
+				<h4>Since</h4>
+				<div class="list">
+						<p>141110 Refactoring cache clear/purge routines.</p>
+<br />
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="i18n_files" id="_i18n_files">
+
+		<td class="attributes"><code>
+			 public 
+			string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_i18n_files">#</a>
+		<code><a href="source-class-quick_cache.share.html#1676-1690" title="Go to source code">i18n_files</a>( <span>integer <var>$counter</var></span> )</code>
+
+		<div class="description short">
+			<p><code>X file</code> or <code>X files</code>, translated w/ singlular/plural context.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p><code>X file</code> or <code>X files</code>, translated w/ singlular/plural context.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$counter</var></dt>
+					<dd><code>integer</code><br><p>$counter Total files; i.e. the counter.</p>
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>string</code><br><p>The phrase <code>X file</code> or <code>X files</code>.</p>
+<br />
+				</div>
+
+
+				<h4>Since</h4>
+				<div class="list">
+						<p>140422 First documented version.</p>
+<br />
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="i18n_dirs" id="_i18n_dirs">
+
+		<td class="attributes"><code>
+			 public 
+			string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_i18n_dirs">#</a>
+		<code><a href="source-class-quick_cache.share.html#1692-1706" title="Go to source code">i18n_dirs</a>( <span>integer <var>$counter</var></span> )</code>
+
+		<div class="description short">
+			<p><code>X directory</code> or <code>X directories</code>, translated w/ singlular/plural context.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p><code>X directory</code> or <code>X directories</code>, translated w/ singlular/plural context.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$counter</var></dt>
+					<dd><code>integer</code><br><p>$counter Total directories; i.e. the counter.</p>
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>string</code><br><p>The phrase <code>X directory</code> or <code>X directories</code>.</p>
+<br />
+				</div>
+
+
+				<h4>Since</h4>
+				<div class="list">
+						<p>140422 First documented version.</p>
+<br />
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="i18n_files_dirs" id="_i18n_files_dirs">
+
+		<td class="attributes"><code>
+			 public 
+			string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_i18n_files_dirs">#</a>
+		<code><a href="source-class-quick_cache.share.html#1708-1722" title="Go to source code">i18n_files_dirs</a>( <span>integer <var>$counter</var></span> )</code>
+
+		<div class="description short">
+			<p><code>X file/directory</code> or <code>X files/directories</code>, translated w/ singlular/plural context.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p><code>X file/directory</code> or <code>X files/directories</code>, translated w/ singlular/plural context.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$counter</var></dt>
+					<dd><code>integer</code><br><p>$counter Total files/directories; i.e. the counter.</p>
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>string</code><br><p>The phrase <code>X file/directory</code> or <code>X files/directories</code>.</p>
+<br />
+				</div>
+
+
+				<h4>Since</h4>
+				<div class="list">
+						<p>140422 First documented version.</p>
 <br />
 				</div>
 
@@ -1556,7 +2464,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_hook_id">#</a>
-		<code><a href="source-class-quick_cache.share.html#1107-1134" title="Go to source code">hook_id</a>( <span>string|callable|mixed <var>$function</var></span> )</code>
+		<code><a href="source-class-quick_cache.share.html#1728-1755" title="Go to source code">hook_id</a>( <span>string|callable|mixed <var>$function</var></span> )</code>
 
 		<div class="description short">
 			<p>Assigns an ID to each callable attached to a hook/filter.</p>
@@ -1608,7 +2516,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_add_hook">#</a>
-		<code><a href="source-class-quick_cache.share.html#1136-1153" title="Go to source code">add_hook</a>( <span>string <var>$hook</var></span>, <span>string|callable|mixed <var>$function</var></span>, <span>integer <var>$priority</var> = <span class="php-num">10</span></span>, <span>integer <var>$accepted_args</var> = <span class="php-num">1</span></span> )</code>
+		<code><a href="source-class-quick_cache.share.html#1757-1774" title="Go to source code">add_hook</a>( <span>string <var>$hook</var></span>, <span>string|callable|mixed <var>$function</var></span>, <span>integer <var>$priority</var> = <span class="php-num">10</span></span>, <span>integer <var>$accepted_args</var> = <span class="php-num">1</span></span> )</code>
 
 		<div class="description short">
 			<p>Adds a new hook (works with both actions &amp; filters).</p>
@@ -1664,7 +2572,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_add_action">#</a>
-		<code><a href="source-class-quick_cache.share.html#1155-1167" title="Go to source code">add_action</a>( )</code>
+		<code><a href="source-class-quick_cache.share.html#1776-1788" title="Go to source code">add_action</a>( )</code>
 
 		<div class="description short">
 			<p>Adds a new action hook.</p>
@@ -1709,7 +2617,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_add_filter">#</a>
-		<code><a href="source-class-quick_cache.share.html#1169-1181" title="Go to source code">add_filter</a>( )</code>
+		<code><a href="source-class-quick_cache.share.html#1790-1802" title="Go to source code">add_filter</a>( )</code>
 
 		<div class="description short">
 			<p>Adds a new filter.</p>
@@ -1754,7 +2662,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_remove_hook">#</a>
-		<code><a href="source-class-quick_cache.share.html#1183-1202" title="Go to source code">remove_hook</a>( <span>string <var>$hook</var></span>, <span>string|callable|mixed <var>$function</var></span>, <span>integer <var>$priority</var> = <span class="php-num">10</span></span> )</code>
+		<code><a href="source-class-quick_cache.share.html#1804-1823" title="Go to source code">remove_hook</a>( <span>string <var>$hook</var></span>, <span>string|callable|mixed <var>$function</var></span>, <span>integer <var>$priority</var> = <span class="php-num">10</span></span> )</code>
 
 		<div class="description short">
 			<p>Removes a hook (works with both actions &amp; filters).</p>
@@ -1807,7 +2715,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_remove_action">#</a>
-		<code><a href="source-class-quick_cache.share.html#1204-1216" title="Go to source code">remove_action</a>( )</code>
+		<code><a href="source-class-quick_cache.share.html#1825-1837" title="Go to source code">remove_action</a>( )</code>
 
 		<div class="description short">
 			<p>Removes an action.</p>
@@ -1852,7 +2760,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_remove_filter">#</a>
-		<code><a href="source-class-quick_cache.share.html#1218-1230" title="Go to source code">remove_filter</a>( )</code>
+		<code><a href="source-class-quick_cache.share.html#1839-1851" title="Go to source code">remove_filter</a>( )</code>
 
 		<div class="description short">
 			<p>Removes a filter.</p>
@@ -1897,7 +2805,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_do_action">#</a>
-		<code><a href="source-class-quick_cache.share.html#1232-1256" title="Go to source code">do_action</a>( <span>string <var>$hook</var></span> )</code>
+		<code><a href="source-class-quick_cache.share.html#1853-1877" title="Go to source code">do_action</a>( <span>string <var>$hook</var></span> )</code>
 
 		<div class="description short">
 			<p>Runs any callables attached to an action.</p>
@@ -1939,7 +2847,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_apply_filters">#</a>
-		<code><a href="source-class-quick_cache.share.html#1258-1288" title="Go to source code">apply_filters</a>( <span>string <var>$hook</var></span>, <span>mixed <var>$value</var></span> )</code>
+		<code><a href="source-class-quick_cache.share.html#1879-1909" title="Go to source code">apply_filters</a>( <span>string <var>$hook</var></span>, <span>mixed <var>$value</var></span> )</code>
 
 		<div class="description short">
 			<p>Runs any callables attached to a filter.</p>
@@ -1993,7 +2901,7 @@
 
 		<td class="attributes"><code>integer</code></td>
 		<td class="name"><code>
-				<a href="source-class-quick_cache.share.html#89-96" title="Go to source code"><b>CACHE_PATH_NO_SCHEME</b></a>
+				<a href="source-class-quick_cache.share.html#116-123" title="Go to source code"><b>CACHE_PATH_NO_SCHEME</b></a>
 		</code></td>
 		<td class="value"><code><span class="php-num">1</span></code></td>
 		<td class="description"><div>
@@ -2020,7 +2928,7 @@
 
 		<td class="attributes"><code>integer</code></td>
 		<td class="name"><code>
-				<a href="source-class-quick_cache.share.html#98-105" title="Go to source code"><b>CACHE_PATH_NO_HOST</b></a>
+				<a href="source-class-quick_cache.share.html#125-132" title="Go to source code"><b>CACHE_PATH_NO_HOST</b></a>
 		</code></td>
 		<td class="value"><code><span class="php-num">2</span></code></td>
 		<td class="description"><div>
@@ -2047,7 +2955,7 @@
 
 		<td class="attributes"><code>integer</code></td>
 		<td class="name"><code>
-				<a href="source-class-quick_cache.share.html#107-114" title="Go to source code"><b>CACHE_PATH_NO_PATH</b></a>
+				<a href="source-class-quick_cache.share.html#134-141" title="Go to source code"><b>CACHE_PATH_NO_PATH</b></a>
 		</code></td>
 		<td class="value"><code><span class="php-num">4</span></code></td>
 		<td class="description"><div>
@@ -2074,7 +2982,7 @@
 
 		<td class="attributes"><code>integer</code></td>
 		<td class="name"><code>
-				<a href="source-class-quick_cache.share.html#116-123" title="Go to source code"><b>CACHE_PATH_NO_PATH_INDEX</b></a>
+				<a href="source-class-quick_cache.share.html#143-150" title="Go to source code"><b>CACHE_PATH_NO_PATH_INDEX</b></a>
 		</code></td>
 		<td class="value"><code><span class="php-num">8</span></code></td>
 		<td class="description"><div>
@@ -2101,7 +3009,7 @@
 
 		<td class="attributes"><code>integer</code></td>
 		<td class="name"><code>
-				<a href="source-class-quick_cache.share.html#125-132" title="Go to source code"><b>CACHE_PATH_NO_QUV</b></a>
+				<a href="source-class-quick_cache.share.html#152-159" title="Go to source code"><b>CACHE_PATH_NO_QUV</b></a>
 		</code></td>
 		<td class="value"><code><span class="php-num">16</span></code></td>
 		<td class="description"><div>
@@ -2128,7 +3036,7 @@
 
 		<td class="attributes"><code>integer</code></td>
 		<td class="name"><code>
-				<a href="source-class-quick_cache.share.html#134-141" title="Go to source code"><b>CACHE_PATH_NO_QUERY</b></a>
+				<a href="source-class-quick_cache.share.html#161-168" title="Go to source code"><b>CACHE_PATH_NO_QUERY</b></a>
 		</code></td>
 		<td class="value"><code><span class="php-num">32</span></code></td>
 		<td class="description"><div>
@@ -2155,7 +3063,7 @@
 
 		<td class="attributes"><code>integer</code></td>
 		<td class="name"><code>
-				<a href="source-class-quick_cache.share.html#143-150" title="Go to source code"><b>CACHE_PATH_NO_USER</b></a>
+				<a href="source-class-quick_cache.share.html#170-177" title="Go to source code"><b>CACHE_PATH_NO_USER</b></a>
 		</code></td>
 		<td class="value"><code><span class="php-num">64</span></code></td>
 		<td class="description"><div>
@@ -2182,7 +3090,7 @@
 
 		<td class="attributes"><code>integer</code></td>
 		<td class="name"><code>
-				<a href="source-class-quick_cache.share.html#152-159" title="Go to source code"><b>CACHE_PATH_NO_VSALT</b></a>
+				<a href="source-class-quick_cache.share.html#179-186" title="Go to source code"><b>CACHE_PATH_NO_VSALT</b></a>
 		</code></td>
 		<td class="value"><code><span class="php-num">128</span></code></td>
 		<td class="description"><div>
@@ -2209,7 +3117,7 @@
 
 		<td class="attributes"><code>integer</code></td>
 		<td class="name"><code>
-				<a href="source-class-quick_cache.share.html#161-168" title="Go to source code"><b>CACHE_PATH_NO_EXT</b></a>
+				<a href="source-class-quick_cache.share.html#188-195" title="Go to source code"><b>CACHE_PATH_NO_EXT</b></a>
 		</code></td>
 		<td class="value"><code><span class="php-num">256</span></code></td>
 		<td class="description"><div>
@@ -2236,7 +3144,7 @@
 
 		<td class="attributes"><code>integer</code></td>
 		<td class="name"><code>
-				<a href="source-class-quick_cache.share.html#170-177" title="Go to source code"><b>CACHE_PATH_ALLOW_WILDCARDS</b></a>
+				<a href="source-class-quick_cache.share.html#197-204" title="Go to source code"><b>CACHE_PATH_ALLOW_WILDCARDS</b></a>
 		</code></td>
 		<td class="value"><code><span class="php-num">512</span></code></td>
 		<td class="description"><div>
@@ -2259,6 +3167,33 @@
 			</div>
 		</div></td>
 	</tr>
+	<tr data-order="CACHE_PATH_REGEX_DEFAULT_SUFFIX_FRAG" id="CACHE_PATH_REGEX_DEFAULT_SUFFIX_FRAG">
+
+		<td class="attributes"><code>string</code></td>
+		<td class="name"><code>
+				<a href="source-class-quick_cache.share.html#206-213" title="Go to source code"><b>CACHE_PATH_REGEX_DEFAULT_SUFFIX_FRAG</b></a>
+		</code></td>
+		<td class="value"><code><span class="php-quote">'(?:\/index)?(?:\.|\/(?:page\/[0-9]+|comment\-page\-[0-9]+)[.\/])'</span></code></td>
+		<td class="description"><div>
+			<a href="#CACHE_PATH_REGEX_DEFAULT_SUFFIX_FRAG" class="anchor">#</a>
+
+			<div class="description short">
+				<p>Default cache path regex suffix frag.</p>
+
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Default cache path regex suffix frag.</p>
+
+
+					<h4>Since</h4>
+					<div class="list">
+							<p>141110 Refactoring cache clear/purge routines.</p>
+<br />
+					</div>
+			</div>
+		</div></td>
+	</tr>
 	</table>
 
 
@@ -2266,6 +3201,66 @@
 
 	<table class="summary" id="properties">
 	<caption>Properties summary</caption>
+	<tr data-order="name" id="$name">
+		<td class="attributes"><code>
+			public  
+			string
+		</code></td>
+
+		<td class="name">
+				<a href="source-class-quick_cache.share.html#21-28" title="Go to source code"><var>$name</var></a>
+		</td>
+		<td class="value"><code><span class="php-quote">'Quick Cache'</span></code></td>
+		<td class="description"><div>
+			<a href="#$name" class="anchor">#</a>
+
+			<div class="description short">
+				<p>Name of this plugin.</p>
+
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Name of this plugin.</p>
+
+
+					<h4>Since</h4>
+					<div class="list">
+							<p>141110 Refactoring.</p>
+<br />
+					</div>
+			</div>
+		</div></td>
+	</tr>
+	<tr data-order="short_name" id="$short_name">
+		<td class="attributes"><code>
+			public  
+			string
+		</code></td>
+
+		<td class="name">
+				<a href="source-class-quick_cache.share.html#30-37" title="Go to source code"><var>$short_name</var></a>
+		</td>
+		<td class="value"><code><span class="php-quote">'QC'</span></code></td>
+		<td class="description"><div>
+			<a href="#$short_name" class="anchor">#</a>
+
+			<div class="description short">
+				<p>Short name for this plugin.</p>
+
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Short name for this plugin.</p>
+
+
+					<h4>Since</h4>
+					<div class="list">
+							<p>141110 Refactoring.</p>
+<br />
+					</div>
+			</div>
+		</div></td>
+	</tr>
 	<tr data-order="is_pro" id="$is_pro">
 		<td class="attributes"><code>
 			public  
@@ -2273,7 +3268,7 @@
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-quick_cache.share.html#21-28" title="Go to source code"><var>$is_pro</var></a>
+				<a href="source-class-quick_cache.share.html#39-46" title="Go to source code"><var>$is_pro</var></a>
 		</td>
 		<td class="value"><code><span class="php-keyword1">FALSE</span></code></td>
 		<td class="description"><div>
@@ -2303,9 +3298,9 @@
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-quick_cache.share.html#30-37" title="Go to source code"><var>$version</var></a>
+				<a href="source-class-quick_cache.share.html#48-55" title="Go to source code"><var>$version</var></a>
 		</td>
-		<td class="value"><code><span class="php-quote">'141001'</span></code></td>
+		<td class="value"><code><span class="php-quote">'141110'</span></code></td>
 		<td class="description"><div>
 			<a href="#$version" class="anchor">#</a>
 
@@ -2326,6 +3321,36 @@
 			</div>
 		</div></td>
 	</tr>
+	<tr data-order="slug" id="$slug">
+		<td class="attributes"><code>
+			public  
+			string
+		</code></td>
+
+		<td class="name">
+				<a href="source-class-quick_cache.share.html#57-64" title="Go to source code"><var>$slug</var></a>
+		</td>
+		<td class="value"><code><span class="php-quote">''</span></code></td>
+		<td class="description"><div>
+			<a href="#$slug" class="anchor">#</a>
+
+			<div class="description short">
+				<p>Plugin slug; based on <code>__NAMESPACE__</code>.</p>
+
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Plugin slug; based on <code>__NAMESPACE__</code>.</p>
+
+
+					<h4>Since</h4>
+					<div class="list">
+							<p>141110 Refactoring.</p>
+<br />
+					</div>
+			</div>
+		</div></td>
+	</tr>
 	<tr data-order="text_domain" id="$text_domain">
 		<td class="attributes"><code>
 			public  
@@ -2333,7 +3358,7 @@
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-quick_cache.share.html#39-46" title="Go to source code"><var>$text_domain</var></a>
+				<a href="source-class-quick_cache.share.html#66-73" title="Go to source code"><var>$text_domain</var></a>
 		</td>
 		<td class="value"><code><span class="php-quote">''</span></code></td>
 		<td class="description"><div>
@@ -2363,7 +3388,7 @@
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-quick_cache.share.html#48-55" title="Go to source code"><var>$cache</var></a>
+				<a href="source-class-quick_cache.share.html#75-82" title="Go to source code"><var>$cache</var></a>
 		</td>
 		<td class="value"><code><span class="php-keyword1">array</span>()</code></td>
 		<td class="description"><div>
@@ -2393,7 +3418,7 @@
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-quick_cache.share.html#57-64" title="Go to source code"><var>$static</var></a>
+				<a href="source-class-quick_cache.share.html#84-91" title="Go to source code"><var>$static</var></a>
 		</td>
 		<td class="value"><code><span class="php-keyword1">array</span>()</code></td>
 		<td class="description"><div>
@@ -2423,7 +3448,7 @@
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-quick_cache.share.html#66-73" title="Go to source code"><var>$hooks</var></a>
+				<a href="source-class-quick_cache.share.html#93-100" title="Go to source code"><var>$hooks</var></a>
 		</td>
 		<td class="value"><code><span class="php-keyword1">array</span>()</code></td>
 		<td class="description"><div>
@@ -2453,7 +3478,7 @@
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-quick_cache.share.html#75-83" title="Go to source code"><var>$user_login_cookie_expired_or_invalid</var></a>
+				<a href="source-class-quick_cache.share.html#102-110" title="Go to source code"><var>$user_login_cookie_expired_or_invalid</var></a>
 		</td>
 		<td class="value"><code><span class="php-keyword1">FALSE</span></code></td>
 		<td class="description"><div>
@@ -2483,7 +3508,7 @@
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-quick_cache.share.html#1294-1301" title="Go to source code"><var>$htaccess_deny</var></a>
+				<a href="source-class-quick_cache.share.html#1915-1922" title="Go to source code"><var>$htaccess_deny</var></a>
 		</td>
 		<td class="value"><code><span class="php-quote">&quot;&lt;IfModule authz_core_module&gt;\n\tRequire all denied\n&lt;/IfModule&gt;\n&lt;IfModule !authz_core_module&gt;\n\tdeny from all\n&lt;/IfModule&gt;&quot;</span></code></td>
 		<td class="description"><div>

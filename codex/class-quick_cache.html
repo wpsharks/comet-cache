@@ -7,7 +7,7 @@
 	<title>Class quick_cache | Quick Cache Lite</title>
 
 	<script type="text/javascript" src="resources/combined.js?822040270"></script>
-	<script type="text/javascript" src="elementlist.js?1748627827"></script>
+	<script type="text/javascript" src="elementlist.js?1035181410"></script>
 	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3403148767" />
 
 </head>
@@ -113,14 +113,9 @@
 		
 		
 		
-		<b>Package:</b> quick\cache\api<br />
+		
 
-				<b>Copyright:</b>
-				<p>WebSharks, Inc. <a href="http://www.websharks-inc.com">http://www.websharks-inc.com</a></p>
-<br />
-				<b>License:</b>
-				<a href="GNU">General Public License, version 2</a><br />
-		<b>Located at</b> <a href="source-class-quick_cache.html#35-87" title="Go to source code">quick-cache/includes/api-class.php</a><br />
+		<b>Located at</b> <a href="source-class-quick_cache.html#15-89" title="Go to source code">quick-cache/includes/api-class.php</a><br />
 	</div>
 
 
@@ -138,15 +133,15 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_plugin">#</a>
-		<code><a href="source-class-quick_cache.html#40-46" title="Go to source code">plugin</a>( )</code>
+		<code><a href="source-class-quick_cache.html#20-28" title="Go to source code">plugin</a>( )</code>
 
 		<div class="description short">
-			
+			<p>Current QC plugin instance.</p>
 
 		</div>
 
 		<div class="description detailed hidden">
-			
+			<p>Current QC plugin instance.</p>
 
 
 
@@ -174,15 +169,15 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_version">#</a>
-		<code><a href="source-class-quick_cache.html#48-54" title="Go to source code">version</a>( )</code>
+		<code><a href="source-class-quick_cache.html#30-38" title="Go to source code">version</a>( )</code>
 
 		<div class="description short">
-			
+			<p>Gives you the current version string.</p>
 
 		</div>
 
 		<div class="description detailed hidden">
-			
+			<p>Gives you the current version string.</p>
 
 
 
@@ -210,15 +205,15 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_options">#</a>
-		<code><a href="source-class-quick_cache.html#56-62" title="Go to source code">options</a>( )</code>
+		<code><a href="source-class-quick_cache.html#40-48" title="Go to source code">options</a>( )</code>
 
 		<div class="description short">
-			
+			<p>Gives you the current array of configured options.</p>
 
 		</div>
 
 		<div class="description detailed hidden">
-			
+			<p>Gives you the current array of configured options.</p>
 
 
 
@@ -246,15 +241,15 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_purge">#</a>
-		<code><a href="source-class-quick_cache.html#64-70" title="Go to source code">purge</a>( )</code>
+		<code><a href="source-class-quick_cache.html#50-61" title="Go to source code">purge</a>( )</code>
 
 		<div class="description short">
-			
+			<p>Purges expired cache files, leaving all others intact.</p>
 
 		</div>
 
 		<div class="description detailed hidden">
-			
+			<p>Purges expired cache files, leaving all others intact.</p>
 
 
 
@@ -266,6 +261,12 @@
 				</div>
 
 
+				<h4>Note</h4>
+				<div class="list">
+						<p>This occurs automatically over time via WP Cron;
+   but this will force an immediate purge if you so desire.</p>
+<br />
+				</div>
 
 
 		</div>
@@ -282,15 +283,15 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_clear">#</a>
-		<code><a href="source-class-quick_cache.html#72-78" title="Go to source code">clear</a>( )</code>
+		<code><a href="source-class-quick_cache.html#63-74" title="Go to source code">clear</a>( )</code>
 
 		<div class="description short">
-			
+			<p>This erases the entire cache for the current blog.</p>
 
 		</div>
 
 		<div class="description detailed hidden">
-			
+			<p>This erases the entire cache for the current blog.</p>
 
 
 
@@ -302,6 +303,12 @@
 				</div>
 
 
+				<h4>Note</h4>
+				<div class="list">
+						<p>In a multisite network this impacts only the current blog,
+   it does not clear the cache for other child blogs.</p>
+<br />
+				</div>
 
 
 		</div>
@@ -318,15 +325,15 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_wipe">#</a>
-		<code><a href="source-class-quick_cache.html#80-86" title="Go to source code">wipe</a>( )</code>
+		<code><a href="source-class-quick_cache.html#76-88" title="Go to source code">wipe</a>( )</code>
 
 		<div class="description short">
-			
+			<p>This wipes out the entire cache.</p>
 
 		</div>
 
 		<div class="description detailed hidden">
-			
+			<p>This wipes out the entire cache.</p>
 
 
 
@@ -338,6 +345,13 @@
 				</div>
 
 
+				<h4>Note</h4>
+				<div class="list">
+						<p>On a standard WP installation this is the same as quick_cache::clear();
+   but on a multisite installation it impacts the entire network
+   (i.e. wipes the cache for all blogs in the network).</p>
+<br />
+				</div>
 
 
 		</div>

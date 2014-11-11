@@ -7,7 +7,7 @@
 	<title>Class quick_cache\advanced_cache | Quick Cache Lite</title>
 
 	<script type="text/javascript" src="resources/combined.js?822040270"></script>
-	<script type="text/javascript" src="elementlist.js?1748627827"></script>
+	<script type="text/javascript" src="elementlist.js?1035181410"></script>
 	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3403148767" />
 
 </head>
@@ -40,6 +40,7 @@
 				<li><a href="class-quick_cache.plugin.html">plugin</a></li>
 				<li><a href="class-quick_cache.share.html">share</a></li>
 				<li><a href="class-quick_cache.uninstall.html">uninstall</a></li>
+				<li><a href="class-quick_cache.utils_feed.html">utils_feed</a></li>
 				<li><a href="class-quick_cache.version_specific_upgrade.html">version_specific_upgrade</a></li>
 			</ul>
 
@@ -136,7 +137,7 @@
 				<b>Since:</b>
 				<p>140422 First documented version.</p>
 <br />
-		<b>Located at</b> <a href="source-class-quick_cache.advanced_cache.html#137-1097" title="Go to source code">quick-cache/includes/advanced-cache.tpl.php</a><br />
+		<b>Located at</b> <a href="source-class-quick_cache.advanced_cache.html#137-1096" title="Go to source code">quick-cache/includes/advanced-cache.tpl.php</a><br />
 	</div>
 
 
@@ -514,7 +515,7 @@ Therefore, this flag is set before shutdown_action_hook() fires, and thus before
 
 		<td class="name"><div>
 		<a class="anchor" href="#_output_buffer_callback_handler">#</a>
-		<code><a href="source-class-quick_cache.advanced_cache.html#827-950" title="Go to source code">output_buffer_callback_handler</a>( <span>string <var>$buffer</var></span>, <span>integer <var>$phase</var></span> )</code>
+		<code><a href="source-class-quick_cache.advanced_cache.html#827-949" title="Go to source code">output_buffer_callback_handler</a>( <span>string <var>$buffer</var></span>, <span>integer <var>$phase</var></span> )</code>
 
 		<div class="description short">
 			<p>Output buffer handler; i.e. the cache file generator.</p>
@@ -580,7 +581,7 @@ Therefore, this flag is set before shutdown_action_hook() fires, and thus before
 
 		<td class="name"><div>
 		<a class="anchor" href="#_maybe_echo_nc_debug_info">#</a>
-		<code><a href="source-class-quick_cache.advanced_cache.html#952-971" title="Go to source code">maybe_echo_nc_debug_info</a>( )</code>
+		<code><a href="source-class-quick_cache.advanced_cache.html#951-970" title="Go to source code">maybe_echo_nc_debug_info</a>( )</code>
 
 		<div class="description short">
 			<p>Echoes <code>NC_DEBUG_</code> info in the WordPress <code>shutdown</code> phase (if applicable).</p>
@@ -621,7 +622,7 @@ Therefore, this flag is set before shutdown_action_hook() fires, and thus before
 
 		<td class="name"><div>
 		<a class="anchor" href="#_maybe_get_nc_debug_info">#</a>
-		<code><a href="source-class-quick_cache.advanced_cache.html#973-1096" title="Go to source code">maybe_get_nc_debug_info</a>( <span>string <var>$reason_code</var> = <span class="php-quote">''</span></span>, <span>string <var>$reason</var> = <span class="php-quote">''</span></span> )</code>
+		<code><a href="source-class-quick_cache.advanced_cache.html#972-1095" title="Go to source code">maybe_get_nc_debug_info</a>( <span>string <var>$reason_code</var> = <span class="php-quote">''</span></span>, <span>string <var>$reason</var> = <span class="php-quote">''</span></span> )</code>
 
 		<div class="description short">
 			<p>Gets <code>NC_DEBUG_</code> info (if applicable).</p>
@@ -669,10 +670,18 @@ Therefore, this flag is set before shutdown_action_hook() fires, and thus before
 			<a href="class-quick_cache.share.html#_add_action">add_action()</a>, 
 			<a href="class-quick_cache.share.html#_add_filter">add_filter()</a>, 
 			<a href="class-quick_cache.share.html#_add_hook">add_hook()</a>, 
+			<a href="class-quick_cache.share.html#_add_tmp_suffix">add_tmp_suffix()</a>, 
 			<a href="class-quick_cache.share.html#_apply_filters">apply_filters()</a>, 
 			<a href="class-quick_cache.share.html#_build_cache_path">build_cache_path()</a>, 
+			<a href="class-quick_cache.share.html#_build_cache_path_regex">build_cache_path_regex()</a>, 
+			<a href="class-quick_cache.share.html#_build_host_cache_path_regex">build_host_cache_path_regex()</a>, 
+			<a href="class-quick_cache.share.html#_build_host_cache_path_regex_frags_from_wc_uris">build_host_cache_path_regex_frags_from_wc_uris()</a>, 
 			<a href="class-quick_cache.share.html#_cache_dir">cache_dir()</a>, 
 			<a href="class-quick_cache.share.html#_cacheable_headers_list">cacheable_headers_list()</a>, 
+			<a href="class-quick_cache.share.html#_clear_files_from_cache_dir">clear_files_from_cache_dir()</a>, 
+			<a href="class-quick_cache.share.html#_clear_files_from_host_cache_dir">clear_files_from_host_cache_dir()</a>, 
+			<a href="class-quick_cache.share.html#_delete_all_files_dirs_in">delete_all_files_dirs_in()</a>, 
+			<a href="class-quick_cache.share.html#_delete_files_from_cache_dir">delete_files_from_cache_dir()</a>, 
 			<a href="class-quick_cache.share.html#_delete_files_from_host_cache_dir">delete_files_from_host_cache_dir()</a>, 
 			<a href="class-quick_cache.share.html#_dir_regex_iteration">dir_regex_iteration()</a>, 
 			<a href="class-quick_cache.share.html#_do_action">do_action()</a>, 
@@ -688,6 +697,9 @@ Therefore, this flag is set before shutdown_action_hook() fires, and thus before
 			<a href="class-quick_cache.share.html#_host_token">host_token()</a>, 
 			<a href="class-quick_cache.share.html#_http_protocol">http_protocol()</a>, 
 			<a href="class-quick_cache.share.html#_http_status">http_status()</a>, 
+			<a href="class-quick_cache.share.html#_i18n_dirs">i18n_dirs()</a>, 
+			<a href="class-quick_cache.share.html#_i18n_files">i18n_files()</a>, 
+			<a href="class-quick_cache.share.html#_i18n_files_dirs">i18n_files_dirs()</a>, 
 			<a href="class-quick_cache.share.html#_is_auto_cache_engine">is_auto_cache_engine()</a>, 
 			<a href="class-quick_cache.share.html#_is_extension_loaded">is_extension_loaded()</a>, 
 			<a href="class-quick_cache.share.html#_is_feed">is_feed()</a>, 
@@ -695,12 +707,17 @@ Therefore, this flag is set before shutdown_action_hook() fires, and thus before
 			<a href="class-quick_cache.share.html#_is_html_xml_doc">is_html_xml_doc()</a>, 
 			<a href="class-quick_cache.share.html#_is_like_user_logged_in">is_like_user_logged_in()</a>, 
 			<a href="class-quick_cache.share.html#_is_localhost">is_localhost()</a>, 
+			<a href="class-quick_cache.share.html#_is_post_put_delete_request">is_post_put_delete_request()</a>, 
 			<a href="class-quick_cache.share.html#_is_ssl">is_ssl()</a>, 
 			<a href="class-quick_cache.share.html#_is_uncacheable_request_method">is_uncacheable_request_method()</a>, 
 			<a href="class-quick_cache.share.html#_n_dir_seps">n_dir_seps()</a>, 
+			<a href="class-quick_cache.share.html#_purge_files_from_cache_dir">purge_files_from_cache_dir()</a>, 
+			<a href="class-quick_cache.share.html#_purge_files_from_host_cache_dir">purge_files_from_host_cache_dir()</a>, 
 			<a href="class-quick_cache.share.html#_remove_action">remove_action()</a>, 
 			<a href="class-quick_cache.share.html#_remove_filter">remove_filter()</a>, 
 			<a href="class-quick_cache.share.html#_remove_hook">remove_hook()</a>, 
+			<a href="class-quick_cache.share.html#_str_ireplace_once">str_ireplace_once()</a>, 
+			<a href="class-quick_cache.share.html#_str_replace_once">str_replace_once()</a>, 
 			<a href="class-quick_cache.share.html#_user_token">user_token()</a>
 		</code></td>
 	</tr>
@@ -1404,7 +1421,8 @@ Therefore, this flag is set before shutdown_action_hook() fires, and thus before
 			<a href="class-quick_cache.share.html#CACHE_PATH_NO_QUV"><b>CACHE_PATH_NO_QUV</b></a>, 
 			<a href="class-quick_cache.share.html#CACHE_PATH_NO_SCHEME"><b>CACHE_PATH_NO_SCHEME</b></a>, 
 			<a href="class-quick_cache.share.html#CACHE_PATH_NO_USER"><b>CACHE_PATH_NO_USER</b></a>, 
-			<a href="class-quick_cache.share.html#CACHE_PATH_NO_VSALT"><b>CACHE_PATH_NO_VSALT</b></a>
+			<a href="class-quick_cache.share.html#CACHE_PATH_NO_VSALT"><b>CACHE_PATH_NO_VSALT</b></a>, 
+			<a href="class-quick_cache.share.html#CACHE_PATH_REGEX_DEFAULT_SUFFIX_FRAG"><b>CACHE_PATH_REGEX_DEFAULT_SUFFIX_FRAG</b></a>
 		</code></td>
 	</tr>
 	</table>
@@ -1999,6 +2017,9 @@ Therefore, this flag is set before shutdown_action_hook() fires, and thus before
 			<a href="class-quick_cache.share.html#$hooks"><var>$hooks</var></a>, 
 			<a href="class-quick_cache.share.html#$htaccess_deny"><var>$htaccess_deny</var></a>, 
 			<a href="class-quick_cache.share.html#$is_pro"><var>$is_pro</var></a>, 
+			<a href="class-quick_cache.share.html#$name"><var>$name</var></a>, 
+			<a href="class-quick_cache.share.html#$short_name"><var>$short_name</var></a>, 
+			<a href="class-quick_cache.share.html#$slug"><var>$slug</var></a>, 
 			<a href="class-quick_cache.share.html#$static"><var>$static</var></a>, 
 			<a href="class-quick_cache.share.html#$text_domain"><var>$text_domain</var></a>, 
 			<a href="class-quick_cache.share.html#$user_login_cookie_expired_or_invalid"><var>$user_login_cookie_expired_or_invalid</var></a>, 

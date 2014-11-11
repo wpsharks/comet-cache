@@ -7,7 +7,7 @@
 	<title>Class quick_cache\version_specific_upgrade | Quick Cache Lite</title>
 
 	<script type="text/javascript" src="resources/combined.js?822040270"></script>
-	<script type="text/javascript" src="elementlist.js?1748627827"></script>
+	<script type="text/javascript" src="elementlist.js?1035181410"></script>
 	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3403148767" />
 
 </head>
@@ -40,6 +40,7 @@
 				<li><a href="class-quick_cache.plugin.html">plugin</a></li>
 				<li><a href="class-quick_cache.share.html">share</a></li>
 				<li><a href="class-quick_cache.uninstall.html">uninstall</a></li>
+				<li><a href="class-quick_cache.utils_feed.html">utils_feed</a></li>
 				<li class="active"><a href="class-quick_cache.version_specific_upgrade.html">version_specific_upgrade</a></li>
 			</ul>
 
@@ -122,7 +123,7 @@
 				<b>Since:</b>
 				<p>140725 Reorganizing class members.</p>
 <br />
-		<b>Located at</b> <a href="source-class-quick_cache.version_specific_upgrade.html#9-134" title="Go to source code">quick-cache/includes/version-specific-upgrade.php</a><br />
+		<b>Located at</b> <a href="source-class-quick_cache.version_specific_upgrade.html#9-182" title="Go to source code">quick-cache/includes/version-specific-upgrade.php</a><br />
 	</div>
 
 
@@ -182,7 +183,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_run_handlers">#</a>
-		<code><a href="source-class-quick_cache.version_specific_upgrade.html#41-50" title="Go to source code">run_handlers</a>( )</code>
+		<code><a href="source-class-quick_cache.version_specific_upgrade.html#41-52" title="Go to source code">run_handlers</a>( )</code>
 
 		<div class="description short">
 			<p>Runs upgrade handlers in the proper order.</p>
@@ -213,7 +214,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_from_lt_v110523">#</a>
-		<code><a href="source-class-quick_cache.version_specific_upgrade.html#55-68" title="Go to source code">from_lt_v110523</a>( )</code>
+		<code><a href="source-class-quick_cache.version_specific_upgrade.html#57-70" title="Go to source code">from_lt_v110523</a>( )</code>
 
 		<div class="description short">
 			
@@ -244,7 +245,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_from_lt_v140104">#</a>
-		<code><a href="source-class-quick_cache.version_specific_upgrade.html#73-77" title="Go to source code">from_lt_v140104</a>( )</code>
+		<code><a href="source-class-quick_cache.version_specific_upgrade.html#75-79" title="Go to source code">from_lt_v140104</a>( )</code>
 
 		<div class="description short">
 			
@@ -275,7 +276,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_from_lt_v140605">#</a>
-		<code><a href="source-class-quick_cache.version_specific_upgrade.html#84-108" title="Go to source code">from_lt_v140605</a>( )</code>
+		<code><a href="source-class-quick_cache.version_specific_upgrade.html#86-110" title="Go to source code">from_lt_v140605</a>( )</code>
 
 		<div class="description short">
 			
@@ -306,7 +307,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_from_lt_v140612">#</a>
-		<code><a href="source-class-quick_cache.version_specific_upgrade.html#110-133" title="Go to source code">from_lt_v140612</a>( )</code>
+		<code><a href="source-class-quick_cache.version_specific_upgrade.html#112-138" title="Go to source code">from_lt_v140612</a>( )</code>
 
 		<div class="description short">
 			<p>Upgrading from a version before we changed base directory from <code>ABSPATH</code> to <code>WP_CONTENT_DIR</code>.
@@ -317,6 +318,70 @@
 
 		<div class="description detailed hidden">
 			<p>Upgrading from a version before we changed base directory from <code>ABSPATH</code> to <code>WP_CONTENT_DIR</code>. If so, we need to reset the cache location on sites that have <code>wp-content</code> in their base directory.</p>
+
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="from_lt_v141009" id="_from_lt_v141009">
+
+		<td class="attributes"><code>
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_from_lt_v141009">#</a>
+		<code><a href="source-class-quick_cache.version_specific_upgrade.html#140-172" title="Go to source code">from_lt_v141009</a>( )</code>
+
+		<div class="description short">
+			<p>Upgrading from a version before we changed several <code>cache_purge_*</code> optinos to <code>cache_clear_*</code>.
+   If so, we need to use the existing options to fill the new keys.
+   And, of course, then we save the updated options.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Upgrading from a version before we changed several <code>cache_purge_*</code> optinos to <code>cache_clear_*</code>. If so, we need to use the existing options to fill the new keys. And, of course, then we save the updated options.</p>
+
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="from_lt_v141105" id="_from_lt_v141105">
+
+		<td class="attributes"><code>
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_from_lt_v141105">#</a>
+		<code><a href="source-class-quick_cache.version_specific_upgrade.html#177-181" title="Go to source code">from_lt_v141105</a>( )</code>
+
+		<div class="description short">
+			
+
+		</div>
+
+		<div class="description detailed hidden">
+			
 
 
 
