@@ -19,6 +19,24 @@ namespace quick_cache // Root namespace.
 			 -------------------------------------------------------------------------------------- */
 
 			/**
+			 * Name of this plugin.
+			 *
+			 * @since 141110 Refactoring.
+			 *
+			 * @var string Plugin name.
+			 */
+			public $name = 'Quick Cache';
+
+			/**
+			 * Short name for this plugin.
+			 *
+			 * @since 141110 Refactoring.
+			 *
+			 * @var string Short name for this plugin.
+			 */
+			public $short_name = 'QC';
+
+			/**
 			 * Identifies pro version of Quick Cache.
 			 *
 			 * @since 140422 First documented version.
@@ -34,7 +52,16 @@ namespace quick_cache // Root namespace.
 			 *
 			 * @var string Current version of the software.
 			 */
-			public $version = '141001';
+			public $version = '141110';
+
+			/**
+			 * Plugin slug; based on `__NAMESPACE__`.
+			 *
+			 * @since 141110 Refactoring.
+			 *
+			 * @var string Plugin slug; based on `__NAMESPACE__`.
+			 */
+			public $slug = '';
 
 			/**
 			 * Text domain for translations; based on `__NAMESPACE__`.
@@ -176,6 +203,15 @@ namespace quick_cache // Root namespace.
 			 */
 			const CACHE_PATH_ALLOW_WILDCARDS = 512;
 
+			/**
+			 * Default cache path regex suffix frag.
+			 *
+			 * @since 141110 Refactoring cache clear/purge routines.
+			 *
+			 * @var string Default regex suffix frag used in cache path patterns.
+			 */
+			const CACHE_PATH_REGEX_DEFAULT_SUFFIX_FRAG = '(?:\/index)?(?:\.|\/(?:page\/[0-9]+|comment\-page\-[0-9]+)[.\/])';
+
 			/* --------------------------------------------------------------------------------------
 			 * Shared constructor.
 			 -------------------------------------------------------------------------------------- */
@@ -190,7 +226,7 @@ namespace quick_cache // Root namespace.
 				if(strpos(__NAMESPACE__, '\\') !== FALSE) // Sanity check.
 					throw new \exception('Not a root namespace: `'.__NAMESPACE__.'`.');
 
-				$this->text_domain = str_replace('_', '-', __NAMESPACE__);
+				$this->slug = $this->text_domain = str_replace('_', '-', __NAMESPACE__);
 			}
 
 			/* --------------------------------------------------------------------------------------
@@ -210,19 +246,20 @@ namespace quick_cache // Root namespace.
 			 */
 			public function cache_dir($rel_path = '')
 			{
-				if(method_exists($this, 'wp_content_dir_to') && isset($this->cache_sub_dir))
-					$cache_dir = $this->wp_content_dir_to($this->cache_sub_dir);
+				if(method_exists($this, 'wp_content_base_dir_to') && isset($this->cache_sub_dir))
+					$cache_dir = $this->wp_content_base_dir_to($this->cache_sub_dir);
 
 				else if(defined('QUICK_CACHE_DIR') && QUICK_CACHE_DIR)
 					$cache_dir = QUICK_CACHE_DIR; // Global constant.
 
-				else throw new \exception(__('Unable to determine cache directory location.', $this->text_domain));
+				if(empty($cache_dir)) // No cache directory?
+					throw new \exception(__('Unable to determine cache directory location.', $this->text_domain));
 
-				return $cache_dir.(($rel_path) ? '/'.ltrim((string)$rel_path) : '');
+				return $cache_dir.($rel_path ? '/'.ltrim((string)$rel_path) : '');
 			}
 
 			/**
-			 * Converts a URL into a `cache/path`.
+			 * Converts a URL into a relative `cache/path`; i.e. relative to the cache directory.
 			 *
 			 * @since 140422 First documented version.
 			 *
@@ -231,7 +268,7 @@ namespace quick_cache // Root namespace.
 			 * @param string  $with_version_salt Optional version salt (if applicable).
 			 * @param integer $flags Optional flags; a bitmask provided by `CACHE_PATH_*` constants.
 			 *
-			 * @return string The resulting `cache/path` based on the input `$url`.
+			 * @return string The resulting relative `cache/path` based on the input `$url`; i.e. relative to the cache directory.
 			 */
 			public function build_cache_path($url, $with_user_token = '', $with_version_salt = '', $flags = 0)
 			{
@@ -297,6 +334,160 @@ namespace quick_cache // Root namespace.
 				return $cache_path; // Do not filter.
 			}
 
+			/**
+			 * Variation of {@link build_cache_path()} for relative regex.
+			 *
+			 * This converts a URL into a relative `cache/path`; i.e. relative to the cache directory,
+			 *    and then converts that into a regex pattern w/ an optional custom `$regex_suffix_frag`.
+			 *
+			 * @since 141110 Refactoring cache clear/purge routines.
+			 *
+			 * @param string $url The input URL to convert. This CAN be left empty when necessary.
+			 *    If empty, the final regex pattern will be `/^'.$regex_suffix_frag.'/i`.
+			 *    If empty, it's a good idea to start `$regex_suffix_frag` with `.*?`.
+			 *
+			 * @param string $regex_suffix_frag Regex fragment to come after the relative cache/path.
+			 *    Defaults to: `(?:\/index)?(?:\.|\/(?:page\/[0-9]+|comment\-page\-[0-9]+)[.\/])`.
+			 *    Note: this should NOT have delimiters; i.e. do NOT start or end with `/`.
+			 *    See also: {@link CACHE_PATH_REGEX_DEFAULT_SUFFIX_FRAG}.
+			 *
+			 * @return string The resulting relative `cache/path` based on the input `$url`; converted to regex pattern.
+			 *    Note that `http://` or `https://` is automatically converted to `\/https?\/` here.
+			 *       This allows the pattern to pick up either scheme.
+			 *
+			 * @note This variation of {@link build_cache_path()} automatically forces the following flags.
+			 *
+			 *       - {@link CACHE_PATH_NO_PATH_INDEX}
+			 *       - {@link CACHE_PATH_NO_QUV}
+			 *       - {@link CACHE_PATH_NO_EXT}
+			 *
+			 * @see CACHE_PATH_REGEX_DEFAULT_SUFFIX_FRAG
+			 */
+			public function build_cache_path_regex($url, $regex_suffix_frag = self::CACHE_PATH_REGEX_DEFAULT_SUFFIX_FRAG)
+			{
+				$url                           = trim((string)$url);
+				$regex_suffix_frag             = (string)$regex_suffix_frag;
+				$abs_relative_cache_path_regex = ''; // Initialize.
+
+				if($url) // Only necessary if there is a URL to deal with here.
+				{
+					$flags = $this::CACHE_PATH_NO_PATH_INDEX
+					         | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT;
+
+					$relative_cache_path           = $this->build_cache_path($url, '', '', $flags);
+					$abs_relative_cache_path       = isset($relative_cache_path[0]) ? '/'.$relative_cache_path : '';
+					$abs_relative_cache_path_regex = preg_quote($abs_relative_cache_path, '/');
+
+					if($abs_relative_cache_path_regex) $abs_relative_cache_path_regex = // `http` and `https` schemes.
+						preg_replace('/^\\\\\/https?\\\\\//i', '\/https?\/', $abs_relative_cache_path_regex);
+				}
+				return '/^'.$abs_relative_cache_path_regex.$regex_suffix_frag.'/i';
+			}
+
+			/**
+			 * Variation of {@link build_cache_path()} for relative regex.
+			 *
+			 * This converts a URL into a relative `cache/path`; i.e. relative to the current host|blog directory,
+			 *    and then converts that into a regex pattern w/ an optional custom `$regex_suffix_frag`.
+			 *
+			 * @since 141110 Refactoring cache clear/purge routines.
+			 *
+			 * @param string $url The input URL to convert. This CAN be left empty when necessary.
+			 *    If empty, the final regex pattern will be `/^'.$regex_suffix_frag.'/i`.
+			 *    If empty, it's a good idea to start `$regex_suffix_frag` with `.*?`.
+			 *
+			 * @param string $regex_suffix_frag Regex fragment to come after the relative cache/path.
+			 *    Defaults to: `(?:\/index)?(?:\.|\/(?:page\/[0-9]+|comment\-page\-[0-9]+)[.\/])`.
+			 *    Note: this should NOT have delimiters; i.e. do NOT start or end with `/`.
+			 *    See also: {@link CACHE_PATH_REGEX_DEFAULT_SUFFIX_FRAG}.
+			 *
+			 * @return string The resulting relative `cache/path` based on the input `$url`; converted to regex pattern.
+			 *
+			 * @note This variation of {@link build_cache_path()} automatically forces the following flags.
+			 *
+			 *       - {@link CACHE_PATH_NO_SCHEME}
+			 *       - {@link CACHE_PATH_NO_HOST}
+			 *       - {@link CACHE_PATH_NO_PATH_INDEX}
+			 *       - {@link CACHE_PATH_NO_QUV}
+			 *       - {@link CACHE_PATH_NO_EXT}
+			 *
+			 * @see CACHE_PATH_REGEX_DEFAULT_SUFFIX_FRAG
+			 */
+			public function build_host_cache_path_regex($url, $regex_suffix_frag = self::CACHE_PATH_REGEX_DEFAULT_SUFFIX_FRAG)
+			{
+				$url                           = trim((string)$url);
+				$regex_suffix_frag             = (string)$regex_suffix_frag;
+				$abs_relative_cache_path_regex = ''; // Initialize.
+
+				if($url) // Only necessary if there is a URL to deal with here.
+				{
+					$flags = $this::CACHE_PATH_NO_SCHEME | $this::CACHE_PATH_NO_HOST | $this::CACHE_PATH_NO_PATH_INDEX
+					         | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT;
+
+					$host                 = $_SERVER['HTTP_HOST'];
+					$host_base_dir_tokens = $this->host_base_dir_tokens();
+					$host_url             = rtrim('http://'.$host.$host_base_dir_tokens, '/');
+					$host_cache_path      = $this->build_cache_path($host_url, '', '', $flags);
+
+					$cache_path                    = $this->build_cache_path($url, '', '', $flags);
+					$relative_cache_path           = preg_replace('/^'.preg_quote($host_cache_path, '/').'(?:\/|$)/i', '', $cache_path);
+					$abs_relative_cache_path       = isset($relative_cache_path[0]) ? '/'.$relative_cache_path : '';
+					$abs_relative_cache_path_regex = preg_quote($abs_relative_cache_path, '/');
+				}
+				return '/^'.$abs_relative_cache_path_regex.$regex_suffix_frag.'/i';
+			}
+
+			/**
+			 * Variation of {@link build_cache_path()} for relative regex fragments.
+			 *
+			 * This converts URIs into relative `cache/paths`; i.e. relative to the current host|blog directory,
+			 *    and then converts those into `(?:regex|fragments)` with piped `|` alternatives.
+			 *
+			 * @since 141110 Refactoring cache clear/purge routines.
+			 *
+			 * @param string $uris A line-delimited list of URIs. These may contain `*` wildcards also.
+			 *
+			 * @param string $regex_suffix_frag Regex fragment to come after each relative cache/path.
+			 *    Defaults to: `(?:\/index)?(?:\.|\/(?:page\/[0-9]+|comment\-page\-[0-9]+)[.\/])`.
+			 *    Note: this should NOT have delimiters; i.e. do NOT start or end with `/`.
+			 *    See also: {@link CACHE_PATH_REGEX_DEFAULT_SUFFIX_FRAG}.
+			 *
+			 * @return string The resulting `cache/paths` based on the input `$uris`; converted to `(?:regex|fragments)`.
+			 *
+			 * @note This variation of {@link build_cache_path()} automatically forces the following flags.
+			 *
+			 *       - {@link CACHE_PATH_ALLOW_WILDCARDS}
+			 *       - {@link CACHE_PATH_NO_SCHEME}
+			 *       - {@link CACHE_PATH_NO_HOST}
+			 *       - {@link CACHE_PATH_NO_PATH_INDEX}
+			 *       - {@link CACHE_PATH_NO_QUV}
+			 *       - {@link CACHE_PATH_NO_EXT}
+			 */
+			public function build_host_cache_path_regex_frags_from_wc_uris($uris, $regex_suffix_frag = self::CACHE_PATH_REGEX_DEFAULT_SUFFIX_FRAG)
+			{
+				if(!($uris = trim((string)$uris)))
+					return ''; // Nothing to do.
+
+				$_this             = $this; // Reference for the closure below.
+				$regex_suffix_frag = (string)$regex_suffix_frag; // Force a string value.
+				$flags             = $this::CACHE_PATH_ALLOW_WILDCARDS | $this::CACHE_PATH_NO_SCHEME | $this::CACHE_PATH_NO_HOST
+				                     | $this::CACHE_PATH_NO_PATH_INDEX | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT;
+
+				$host                 = $_SERVER['HTTP_HOST'];
+				$host_base_dir_tokens = $this->host_base_dir_tokens();
+				$host_url             = rtrim('http://'.$host.$host_base_dir_tokens, '/');
+				$host_cache_path      = $this->build_cache_path($host_url, '', '', $flags);
+
+				return '(?:'.implode('|', array_map(function ($pattern) use ($_this, $regex_suffix_frag, $flags, $host_url, $host_cache_path)
+				{
+					$cache_path          = $_this->build_cache_path($host_url.'/'.trim($pattern, '/'), '', '', $flags);
+					$relative_cache_path = preg_replace('/^'.preg_quote($host_cache_path, '/').'(?:\/|$)/i', '', $cache_path);
+
+					return preg_replace('/\\\\\*/', '.*?', preg_quote($relative_cache_path, '/')).$regex_suffix_frag; #
+
+				}, preg_split('/['."\r\n".']+/', $uris, NULL, PREG_SPLIT_NO_EMPTY))).')';
+			}
+
 			/* --------------------------------------------------------------------------------------
 			 * Token generation utilities.
 			 -------------------------------------------------------------------------------------- */
@@ -321,7 +512,7 @@ namespace quick_cache // Root namespace.
 					return static::$static[__FUNCTION__][$dashify];
 
 				$host        = strtolower($_SERVER['HTTP_HOST']);
-				$token_value = ($dashify) ? trim(preg_replace('/[^a-z0-9\/]/i', '-', $host), '-') : $host;
+				$token_value = $dashify ? trim(preg_replace('/[^a-z0-9\/]/i', '-', $host), '-') : $host;
 
 				return (static::$static[__FUNCTION__][$dashify] = $token_value);
 			}
@@ -349,18 +540,21 @@ namespace quick_cache // Root namespace.
 				if(isset(static::$static[__FUNCTION__][$dashify]))
 					return static::$static[__FUNCTION__][$dashify];
 
-				$host_base_token = '/'; // Assume NOT multisite; or running it's own domain.
+				$host_base_token = '/'; // Assume NOT multisite; or own domain.
 
 				if(is_multisite() && (!defined('SUBDOMAIN_INSTALL') || !SUBDOMAIN_INSTALL))
 				{ // Multisite w/ sub-directories; need a valid sub-directory token.
 
-					if(defined('PATH_CURRENT_SITE')) $host_base_token = PATH_CURRENT_SITE;
-					else if(!empty($GLOBALS['base'])) $host_base_token = $GLOBALS['base'];
+					if(defined('PATH_CURRENT_SITE'))
+						$host_base_token = PATH_CURRENT_SITE;
+
+					else if(!empty($GLOBALS['base']))
+						$host_base_token = $GLOBALS['base'];
 
 					$host_base_token = trim($host_base_token, '\\/'." \t\n\r\0\x0B");
-					$host_base_token = (isset($host_base_token[0])) ? '/'.$host_base_token.'/' : '/';
+					$host_base_token = isset($host_base_token[0]) ? '/'.$host_base_token.'/' : '/';
 				}
-				$token_value = ($dashify) ? trim(preg_replace('/[^a-z0-9\/]/i', '-', $host_base_token), '-') : $host_base_token;
+				$token_value = $dashify ? trim(preg_replace('/[^a-z0-9\/]/i', '-', $host_base_token), '-') : $host_base_token;
 
 				return (static::$static[__FUNCTION__][$dashify] = $token_value);
 			}
@@ -388,7 +582,8 @@ namespace quick_cache // Root namespace.
 				if(isset(static::$static[__FUNCTION__][$dashify]))
 					return static::$static[__FUNCTION__][$dashify];
 
-				$host_dir_token = '/'; // Assume NOT multisite; or on it's own domain.
+				$host_dir_token = '/'; // Assume NOT multisite; or own domain.
+
 				if(is_multisite() && (!defined('SUBDOMAIN_INSTALL') || !SUBDOMAIN_INSTALL))
 				{ // Multisite w/ sub-directories; need a valid sub-directory token.
 
@@ -396,14 +591,14 @@ namespace quick_cache // Root namespace.
 						preg_replace('/^'.preg_quote($this->host_base_token(), '/').'/', '', $_SERVER['REQUEST_URI']);
 
 					list($host_dir_token) = explode('/', trim($uri_minus_base, '/'));
-					$host_dir_token = (isset($host_dir_token[0])) ? '/'.$host_dir_token.'/' : '/';
+					$host_dir_token = isset($host_dir_token[0]) ? '/'.$host_dir_token.'/' : '/';
 
 					if($host_dir_token !== '/' // Perhaps NOT the main site?
 					   && (!is_file(($cache_dir = $this->cache_dir()).'/qc-blog-paths') // NOT a read/valid blog path?
 					       || !in_array($host_dir_token, unserialize(file_get_contents($cache_dir.'/qc-blog-paths')), TRUE))
 					) $host_dir_token = '/'; // Main site; e.g. this is NOT a real/valid child blog path.
 				}
-				$token_value = ($dashify) ? trim(preg_replace('/[^a-z0-9\/]/i', '-', $host_dir_token), '-') : $host_dir_token;
+				$token_value = $dashify ? trim(preg_replace('/[^a-z0-9\/]/i', '-', $host_dir_token), '-') : $host_dir_token;
 
 				return (static::$static[__FUNCTION__][$dashify] = $token_value);
 			}
@@ -494,7 +689,31 @@ namespace quick_cache // Root namespace.
 					return static::$static[__FUNCTION__];
 
 				if(!empty($_GET) || isset($_SERVER['QUERY_STRING'][0]))
-					if(!(isset($_GET['qcABC']) && count($_GET) === 1)) // Ignore this special case.
+					if(!(isset($_GET['qcABC']) && count($_GET) === 1)) // Special case.
+						return (static::$static[__FUNCTION__] = TRUE);
+
+				return (static::$static[__FUNCTION__] = FALSE);
+			}
+
+			/**
+			 * Is the current request method `POST`, `PUT` or `DELETE`?
+			 *
+			 * @since 141110 Updating `is_uncacheable_request_method()` and restoring this one.
+			 *
+			 * @return boolean `TRUE` if current request method is `POST`, `PUT` or `DELETE`.
+			 *
+			 * @note The return value of this function is cached to reduce overhead on repeat calls.
+			 */
+			public function is_post_put_delete_request()
+			{
+				if(isset(static::$static[__FUNCTION__]))
+					return static::$static[__FUNCTION__];
+
+				if(!empty($_POST)) // Being thorough.
+					return (static::$static[__FUNCTION__] = TRUE);
+
+				if(!empty($_SERVER['REQUEST_METHOD']))
+					if(in_array(strtoupper($_SERVER['REQUEST_METHOD']), array('POST', 'PUT', 'DELETE'), TRUE))
 						return (static::$static[__FUNCTION__] = TRUE);
 
 				return (static::$static[__FUNCTION__] = FALSE);
@@ -503,6 +722,7 @@ namespace quick_cache // Root namespace.
 			/**
 			 * Is the current request method is uncacheable?
 			 *
+			 * @since 141110 Reversing logic; only allow `GET` requests to be cached.
 			 * @since 140725 Adding HEAD/OPTIONS/TRACE/CONNECT to the list of uncacheables.
 			 *
 			 * @return boolean `TRUE` if current request method is uncacheable.
@@ -514,9 +734,11 @@ namespace quick_cache // Root namespace.
 				if(isset(static::$static[__FUNCTION__]))
 					return static::$static[__FUNCTION__];
 
+				if(!empty($_POST)) // Being thorough.
+					return (static::$static[__FUNCTION__] = TRUE);
+
 				if(!empty($_SERVER['REQUEST_METHOD']))
-					if(in_array(strtoupper($_SERVER['REQUEST_METHOD']),
-					            array('POST', 'PUT', 'DELETE', 'HEAD', 'OPTIONS', 'TRACE', 'CONNECT'), TRUE))
+					if(!in_array(strtoupper($_SERVER['REQUEST_METHOD']), array('GET'), TRUE))
 						return (static::$static[__FUNCTION__] = TRUE);
 
 				return (static::$static[__FUNCTION__] = FALSE);
@@ -853,7 +1075,7 @@ namespace quick_cache // Root namespace.
 			 *
 			 * @warning Do NOT call upon this method until the end of a script execution.
 			 *
-			 * @see http://bit.ly/1zwwIrM
+			 * @see http://www.websharks-inc.com/r/wikipedia-http-header-response-fields/
 			 */
 			public function cacheable_headers_list()
 			{
@@ -985,9 +1207,52 @@ namespace quick_cache // Root namespace.
 			}
 
 			/**
+			 * String replace ONE time.
+			 *
+			 * @since 141110 Refactoring cache clear/purge routines.
+			 *
+			 * @param string  $needle A string to search/replace.
+			 * @param string  $replace What to replace `$needle` with.
+			 * @param string  $haystack The string/haystack to search in.
+			 *
+			 * @param boolean $caSe_insensitive Defaults to a `FALSE` value.
+			 *    Pass this as `TRUE` to a caSe-insensitive search/replace.
+			 *
+			 * @return string The `$haystack`, with `$needle` replaced with `$replace` ONE time only.
+			 */
+			public function str_replace_once($needle, $replace, $haystack, $caSe_insensitive = FALSE)
+			{
+				$needle      = (string)$needle;
+				$replace     = (string)$replace;
+				$haystack    = (string)$haystack;
+				$caSe_strpos = $caSe_insensitive ? 'stripos' : 'strpos';
+
+				if(($needle_strpos = $caSe_strpos($haystack, $needle)) === FALSE)
+					return $haystack; // Nothing to replace.
+
+				return (string)substr_replace($haystack, $replace, $needle_strpos, strlen($needle));
+			}
+
+			/**
+			 * String replace ONE time (caSe-insensitive).
+			 *
+			 * @since 141110 Refactoring cache clear/purge routines.
+			 *
+			 * @param string $needle A string to search/replace.
+			 * @param string $replace What to replace `$needle` with.
+			 * @param string $haystack The string/haystack to search in.
+			 *
+			 * @return string The `$haystack`, with `$needle` replaced with `$replace` ONE time only.
+			 */
+			public function str_ireplace_once($needle, $replace, $haystack)
+			{
+				return $this->str_replace_once($needle, $replace, $haystack, TRUE);
+			}
+
+			/**
 			 * Normalizes directory/file separators.
 			 *
-			 * @since 140829 Implementing XML/RSS feed purging.
+			 * @since 140829 Implementing XML/RSS feed clearing.
 			 *
 			 * @param string  $dir_file Directory/file path.
 			 *
@@ -1021,6 +1286,24 @@ namespace quick_cache // Root namespace.
 			}
 
 			/**
+			 * Adds a tmp name suffix to a directory/file path.
+			 *
+			 * @since 141110 Refactoring cache clear/purge routines.
+			 *
+			 * @param string $dir_file An input directory or file path.
+			 *
+			 * @return string The original `$dir_file` with a tmp name suffix.
+			 */
+			public function add_tmp_suffix($dir_file)
+			{
+				return (string)rtrim($dir_file, DIRECTORY_SEPARATOR.'\\/').'-'.str_replace('.', '', uniqid('', TRUE)).'-tmp';
+			}
+
+			/* --------------------------------------------------------------------------------------
+			 * File/directory iteration utilities for Quick Cache.
+			 -------------------------------------------------------------------------------------- */
+
+			/**
 			 * Recursive directory iterator based on a regex pattern.
 			 *
 			 * @since 140422 First documented version.
@@ -1041,29 +1324,197 @@ namespace quick_cache // Root namespace.
 			}
 
 			/**
-			 * Deletes files from the cache directory (for the current host) that match a regex pattern.
+			 * Clear files from the cache directory (for all hosts/blogs);
+			 *    i.e. those that match a specific regex pattern.
 			 *
-			 * @since 140829 Implementing XML/RSS feed purging.
+			 * @since 141110 Refactoring cache clear/purge routines.
 			 *
-			 * @param string $regex A regex pattern; compares to each full file path.
+			 * @param string $regex A regex pattern; see {@link delete_files_from_cache_dir()}.
+			 *
+			 * @return integer Total files cleared by this routine (if any).
+			 *
+			 * @see delete_files_from_cache_dir()
+			 */
+			public function clear_files_from_cache_dir($regex)
+			{
+				return $this->delete_files_from_cache_dir($regex);
+			}
+
+			/**
+			 * Clear files from the cache directory (for the current host);
+			 *    i.e. those that match a specific regex pattern.
+			 *
+			 * @since 141110 Refactoring cache clear/purge routines.
+			 *
+			 * @param string $regex A regex pattern; see {@link delete_files_from_host_cache_dir()}.
+			 *
+			 * @return integer Total files cleared by this routine (if any).
+			 *
+			 * @see delete_files_from_host_cache_dir()
+			 */
+			public function clear_files_from_host_cache_dir($regex)
+			{
+				return $this->delete_files_from_host_cache_dir($regex);
+			}
+
+			/**
+			 * Purge files from the cache directory (for all hosts/blogs);
+			 *    i.e. those that match a specific regex pattern.
+			 *
+			 * @since 141110 Refactoring cache clear/purge routines.
+			 *
+			 * @param string $regex A regex pattern; see {@link delete_files_from_cache_dir()}.
+			 *
+			 * @return integer Total files purged by this routine (if any).
+			 *
+			 * @see delete_files_from_cache_dir()
+			 */
+			public function purge_files_from_cache_dir($regex)
+			{
+				return $this->delete_files_from_cache_dir($regex, TRUE);
+			}
+
+			/**
+			 * Purge files from the cache directory (for the current host);
+			 *    i.e. those that match a specific regex pattern.
+			 *
+			 * @since 141110 Refactoring cache clear/purge routines.
+			 *
+			 * @param string $regex A regex pattern; see {@link delete_files_from_host_cache_dir()}.
+			 *
+			 * @return integer Total files purged by this routine (if any).
+			 *
+			 * @see delete_files_from_host_cache_dir()
+			 */
+			public function purge_files_from_host_cache_dir($regex)
+			{
+				return $this->delete_files_from_host_cache_dir($regex, TRUE);
+			}
+
+			/**
+			 * Delete files from the cache directory (for all hosts/blogs);
+			 *    i.e. those that match a specific regex pattern.
+			 *
+			 * @since 141110 Refactoring cache clear/purge routines.
+			 *
+			 * @param string  $regex A `/[regex pattern]/`; relative to the cache directory.
+			 *    e.g. `/^http\/example\.com\/my\-slug(?:\/index)?(?:\.|\/(?:page\/[0-9]+|comment\-page\-[0-9]+)[.\/])/`
+			 *
+			 *    Or, this can also be a full/absolute regex pattern against an absolute path;
+			 *    provided that it always starts with `/^`; including the full absolute cache/host directory path.
+			 *    e.g. `/^\/cache\/dir\/http\/example\.com\/my\-slug(?:\/index)?(?:\.|\/(?:page\/[0-9]+|comment\-page\-[0-9]+)[.\/])/`
+			 *
+			 *    NOTE: Paths used in any/all regex patterns should be generated with {@link build_cache_path()}.
+			 *       Recommended flags to {@link build_cache_path()} include the following.
+			 *
+			 *       - {@link CACHE_PATH_NO_PATH_INDEX}
+			 *       - {@link CACHE_PATH_NO_QUV}
+			 *       - {@link CACHE_PATH_NO_EXT}
+			 *
+			 *    **TIP:** There is a variation of {@link build_cache_path()} to assist with this.
+			 *    Please see: {@link build_cache_path_regex()}. It is much easier to work with :-)
+			 *
+			 * @param boolean $check_max_age Check max age? i.e. use purge behavior?
 			 *
 			 * @return integer Total files deleted by this routine (if any).
 			 *
 			 * @throws \exception If unable to delete a file for any reason.
-			 *
-			 * @TODO @raamdev I think we could take the same concept introduced by this routine and use it to build others
-			 *    that deal with purging/clearing/wiping; thereby centralizing this sort of job, making QC DRYer.
-			 *    Also, this type of routine works to improve speed when running on a large MS network.
-			 *
-			 *    Suggested class members to come in a future release of QC.
-			 *       - `purge_files_from_host_cache_dir()`
-			 *       - `clear_files_from_host_cache_dir()`
-			 *
-			 *    Also, this class member (i.e. `delete_files_from_host_cache_dir()`) could be
-			 *       used by many of the existing auto-purge routines. Thereby requiring less code
-			 *       and speeding QC up overall; i.e. making it faster on large MS networks.
 			 */
-			public function delete_files_from_host_cache_dir($regex)
+			public function delete_files_from_cache_dir($regex, $check_max_age = FALSE)
+			{
+				$counter = 0; // Initialize.
+
+				if(!($regex = (string)$regex))
+					return $counter; // Nothing to do.
+
+				if(!is_dir($cache_dir = $this->cache_dir()))
+					return $counter; // Nothing to do.
+
+				$cache_dir = $this->n_dir_seps($cache_dir);
+
+				if($check_max_age && (empty($this->options) || !is_array($this->options) || !isset($this->options['cache_max_age'])))
+					throw new \exception(__('The `options` property w/ a `cache_max_age` key is not defined in this class.', $this->text_domain));
+
+				if($check_max_age && !($max_age = strtotime('-'.$this->options['cache_max_age'])))
+					return $counter; // Invalid cache expiration time.
+
+				$cache_dir_tmp       = $this->add_tmp_suffix($cache_dir); // Temporary directory.
+				$cache_dir_tmp_regex = $regex; // Initialize host-specific regex pattern for the tmp directory.
+				$cache_dir_tmp_regex = '\\/'.ltrim($cache_dir_tmp_regex, '^\\/'); // Make sure it begins with an escaped `/`.
+				$cache_dir_tmp_regex = $this->str_ireplace_once(preg_quote($cache_dir.'/', '/'), '', $cache_dir_tmp_regex);
+				$cache_dir_tmp_regex = '/^'.preg_quote($cache_dir_tmp.'/', '/').ltrim($cache_dir_tmp_regex, '^\\/');
+
+				# if(WP_DEBUG) file_put_contents(WP_CONTENT_DIR.'/qc-debug.log', print_r($regex, TRUE)."\n".print_r($cache_dir_tmp_regex, TRUE)."\n\n", FILE_APPEND);
+				// Uncomment the above line to debug regex pattern matching used by this routine; and others that call upon it.
+
+				if(!rename($cache_dir, $cache_dir_tmp)) // Work from tmp directory so deletions are atomic.
+					throw new \exception(sprintf(__('Unable to delete files. Rename failure on directory: `%1$s`.', $this->text_domain), $cache_dir));
+
+				/** @var $_file_dir \RecursiveDirectoryIterator Regex iterator reference for IDEs. */
+				foreach($this->dir_regex_iteration($cache_dir_tmp, $cache_dir_tmp_regex) as $_file_dir)
+				{
+					if(($_file_dir->isFile() || $_file_dir->isLink()) // Files and/or symlinks only.
+
+					   // Don't delete files in the immediate directory; e.g. `qc-advanced-cache` or `.htaccess`, etc.
+					   // Actual `http|https/...` cache files are nested. Files in the immediate directory are for other purposes.
+					   && (strpos($_file_dir->getSubpathname(), '/') !== FALSE)
+
+					   // If NOT checking max age; or if we ARE, and the file has expired now.
+					   && (!$check_max_age || (!empty($max_age) && $_file_dir->getMTime() < $max_age))
+
+					) // Throw an exception if a deletion failure occurs.
+					{
+						if(!unlink($_file_dir->getPathname())) // Throw exception if unable to delete.
+							throw new \exception(sprintf(__('Unable to delete file: `%1$s`.', $this->text_domain), $_file_dir->getPathname()));
+						$counter++; // Increment counter for each file we delete.
+					}
+					else if(!$check_max_age && $regex === '/^.+/i' && $_file_dir->isDir()) // Directories too?
+					{
+						if(!rmdir($_file_dir->getPathname())) // Throw exception if unable to delete the directory itself.
+							throw new \exception(sprintf(__('Unable to delete dir: `%1$s`.', $this->text_domain), $_file_dir->getPathname()));
+						# $counter++; // Increment counter for each directory we delete. ~ NO don't do that here.
+					}
+				}
+				unset($_file_dir); // Housekeeping after this `foreach()` loop.
+
+				if(!rename($cache_dir_tmp, $cache_dir)) // Deletions are atomic; restore original directory now.
+					throw new \exception(sprintf(__('Unable to delete files. Rename failure on tmp directory: `%1$s`.', $this->text_domain), $cache_dir_tmp));
+
+				return $counter; // Total files deleted by this routine.
+			}
+
+			/**
+			 * Delete files from the cache directory (for the current host);
+			 *    i.e. those that match a specific regex pattern.
+			 *
+			 * @since 141110 Refactoring cache clear/purge routines.
+			 *
+			 * @param string  $regex A `/[regex pattern]/`; relative to the host cache directory.
+			 *    e.g. `/^my\-slug(?:\/index)?(?:\.|\/(?:page\/[0-9]+|comment\-page\-[0-9]+)[.\/])/`
+			 *
+			 *    Or, this can also be a full/absolute regex pattern against an absolute path;
+			 *    provided that it always starts with `/^`; including the full absolute cache/host directory path.
+			 *    e.g. `/^\/cache\/dir\/http\/example\.com\/my\-slug(?:\/index)?(?:\.|\/(?:page\/[0-9]+|comment\-page\-[0-9]+)[.\/])/`
+			 *
+			 *    NOTE: Paths used in any/all regex patterns should be generated with {@link build_cache_path()}.
+			 *       Recommended flags to {@link build_cache_path()} include the following.
+			 *
+			 *       - {@link CACHE_PATH_NO_SCHEME}
+			 *       - {@link CACHE_PATH_NO_HOST}
+			 *       - {@link CACHE_PATH_NO_PATH_INDEX}
+			 *       - {@link CACHE_PATH_NO_QUV}
+			 *       - {@link CACHE_PATH_NO_EXT}
+			 *
+			 *    **TIP:** There is a variation of {@link build_cache_path()} to assist with this.
+			 *    Please see: {@link build_host_cache_path_regex()}. It is much easier to work with :-)
+			 *
+			 * @param boolean $check_max_age Check max age? i.e. use purge behavior?
+			 *
+			 * @return integer Total files deleted by this routine (if any).
+			 *
+			 * @throws \exception If unable to delete a file for any reason.
+			 */
+			public function delete_files_from_host_cache_dir($regex, $check_max_age = FALSE)
 			{
 				$counter = 0; // Initialize.
 
@@ -1077,27 +1528,197 @@ namespace quick_cache // Root namespace.
 				$host_base_dir_tokens = $this->host_base_dir_tokens();
 				$cache_dir            = $this->n_dir_seps($cache_dir);
 
-				foreach(array('http', 'https') as $_host_scheme) // Consider all possible schemes.
-				{
-					$_host_url        = $_host_scheme.'://'.$host.$host_base_dir_tokens; // Base URL for this host (w/ MS support).
-					$_host_cache_path = $this->build_cache_path($_host_url, '', '', $this::CACHE_PATH_NO_PATH_INDEX | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT);
-					$_host_cache_dir  = $this->n_dir_seps($cache_dir.'/'.$_host_cache_path);
+				if($check_max_age && (empty($this->options) || !is_array($this->options) || !isset($this->options['cache_max_age'])))
+					throw new \exception(__('The `options` property w/ a `cache_max_age` key is not defined in this class.', $this->text_domain));
 
-					/** @var $_dir_file \RecursiveDirectoryIterator For IDEs. */
-					if($_host_cache_dir && is_dir($_host_cache_dir)) foreach($this->dir_regex_iteration($_host_cache_dir, $regex) as $_dir_file)
+				if($check_max_age && !($max_age = strtotime('-'.$this->options['cache_max_age'])))
+					return $counter; // Invalid cache expiration time.
+
+				foreach(array('http', 'https') as $_host_scheme) // Consider `http|https` schemes.
+
+					/* This multi-scheme iteration could (alternatively) be accomplished via regex `\/https?\/`.
+						HOWEVER, since this operation is supposed to impact only a single host in a network, and because
+						we want to do atomic deletions, we iterate and rename `$_host_cache_dir` for each scheme.
+
+						It's also worth noting that most high traffic sites will not be in the habit of serving
+						pages over SSL all the time; so this really should not have a significant performance hit.
+						In fact, it may improve performance since we are traversing each sub-directory separately;
+						i.e. we don't need to glob both `http` and `https` traffic into a single directory scan. */
+				{
+					$_host_url              = $_host_scheme.'://'.$host.$host_base_dir_tokens; // Base URL for this host|blog.
+					$_host_cache_path_flags = $this::CACHE_PATH_NO_PATH_INDEX | $this::CACHE_PATH_NO_QUV | $this::CACHE_PATH_NO_EXT;
+					$_host_cache_path       = $this->build_cache_path($_host_url, '', '', $_host_cache_path_flags);
+					$_host_cache_dir        = $this->n_dir_seps($cache_dir.'/'.$_host_cache_path); // Normalize.
+
+					if(!$_host_cache_dir || !is_dir($_host_cache_dir)) continue; // Nothing to do.
+
+					$_host_cache_dir_tmp       = $this->add_tmp_suffix($_host_cache_dir); // Temporary directory.
+					$_host_cache_dir_tmp_regex = $regex; // Initialize host-specific regex pattern for the tmp directory.
+					$_host_cache_dir_tmp_regex = '\\/'.ltrim($_host_cache_dir_tmp_regex, '^\\/'); // Make sure it begins with an escaped `/`.
+					$_host_cache_dir_tmp_regex = $this->str_ireplace_once(preg_quote($_host_cache_path.'/', '/'), '', $_host_cache_dir_tmp_regex);
+					$_host_cache_dir_tmp_regex = $this->str_ireplace_once(preg_quote($_host_cache_dir.'/', '/'), '', $_host_cache_dir_tmp_regex);
+					$_host_cache_dir_tmp_regex = '/^'.preg_quote($_host_cache_dir_tmp.'/', '/').ltrim($_host_cache_dir_tmp_regex, '^\\/');
+
+					# if(WP_DEBUG) file_put_contents(WP_CONTENT_DIR.'/qc-debug.log', print_r($regex, TRUE)."\n".print_r($_host_cache_dir_tmp_regex, TRUE)."\n\n", FILE_APPEND);
+					// Uncomment the above line to debug regex pattern matching used by this routine; and others that call upon it.
+
+					if(!rename($_host_cache_dir, $_host_cache_dir_tmp)) // Work from tmp directory so deletions are atomic.
+						throw new \exception(sprintf(__('Unable to delete files. Rename failure on tmp directory: `%1$s`.', $this->text_domain), $_host_cache_dir));
+
+					/** @var $_file_dir \RecursiveDirectoryIterator Regex iterator reference for IDEs. */
+					foreach($this->dir_regex_iteration($_host_cache_dir_tmp, $_host_cache_dir_tmp_regex) as $_file_dir)
 					{
-						if(($_dir_file->isFile() || $_dir_file->isLink()) && ($_host_cache_dir !== $cache_dir || strpos($_dir_file->getSubpathname(), '/') !== FALSE))
-							// Don't delete files in the immediate directory; e.g. `qc-advanced-cache` or `.htaccess`, etc.
-							// Actual `http|https/...` cache files are nested. Files in the immediate directory are for other purposes.
-							if(!unlink($_dir_file->getPathname())) // Throw exception if unable to delete.
-								throw new \exception(sprintf(__('Unable to delete file: `%1$s`.', $this->text_domain), $_dir_file->getPathname()));
-							else $counter++; // Increment counter for each file we purge.
+						if(($_file_dir->isFile() || $_file_dir->isLink()) // Files and/or symlinks only.
+
+						   // Don't delete files in the immediate directory; e.g. `qc-advanced-cache` or `.htaccess`, etc.
+						   // Actual `http|https/...` cache files are nested. Files in the immediate directory are for other purposes.
+						   && ($_host_cache_dir !== $cache_dir || strpos($_file_dir->getSubpathname(), '/') !== FALSE)
+
+						   // If NOT checking max age; or if we ARE, and the file has expired now.
+						   && (!$check_max_age || (!empty($max_age) && $_file_dir->getMTime() < $max_age))
+
+						) // Throw an exception if a deletion failure occurs.
+						{
+							if(!unlink($_file_dir->getPathname())) // Throw exception if unable to delete.
+								throw new \exception(sprintf(__('Unable to delete file: `%1$s`.', $this->text_domain), $_file_dir->getPathname()));
+							$counter++; // Increment counter for each file we delete.
+						}
+						else if(!$check_max_age && $regex === '/^.+/i' && $_file_dir->isDir()) // Directories too?
+						{
+							if(!rmdir($_file_dir->getPathname())) // Throw exception if unable to delete the directory itself.
+								throw new \exception(sprintf(__('Unable to delete dir: `%1$s`.', $this->text_domain), $_file_dir->getPathname()));
+							# $counter++; // Increment counter for each directory we delete. ~ NO don't do that here.
+						}
 					}
-					unset($_dir_file); // Housekeeping.
+					unset($_file_dir); // Housekeeping after this `foreach()` loop.
+
+					if(!rename($_host_cache_dir_tmp, $_host_cache_dir)) // Deletions are atomic; restore original directory now.
+						throw new \exception(sprintf(__('Unable to delete files. Rename failure on tmp directory: `%1$s`.', $this->text_domain), $_host_cache_dir_tmp));
 				}
-				unset($_host_scheme, $_host_url, $_host_cache_path, $_host_cache_dir); // Housekeeping.
+				unset($_host_scheme, $_host_url, $_host_cache_path_flags, $_host_cache_path,
+					$_host_cache_dir, $_host_cache_dir_tmp, $_host_cache_dir_tmp_regex); // Housekeeping.
 
 				return $counter; // Total files deleted by this routine.
+			}
+
+			/**
+			 * Delete all files/dirs from a directory (for all schemes/hosts);
+			 *    including `qc-` prefixed files; or anything else for that matter.
+			 *
+			 * @since 141110 Refactoring cache clear/purge routines.
+			 *
+			 * @param string  $dir The directory from which to delete files/dirs.
+			 *
+			 *    SECURITY: This directory MUST be located inside the `/wp-content/` directory.
+			 *    Also, it MUST be a sub-directory of `/wp-content/`, NOT the directory itself.
+			 *    Also, it cannot be: `mu-plugins`, `themes`, or `plugins`.
+			 *
+			 * @param boolean $delete_dir_too Delete parent? i.e. delete the `$dir` itself also?
+			 *
+			 * @return integer Total files/directories deleted by this routine (if any).
+			 *
+			 * @throws \exception If unable to delete a file/directory for any reason.
+			 */
+			public function delete_all_files_dirs_in($dir, $delete_dir_too = FALSE)
+			{
+				$counter = 0; // Initialize.
+
+				if(!($dir = trim((string)$dir)) || !is_dir($dir))
+					return $counter; // Nothing to do.
+
+				$dir                  = $this->n_dir_seps($dir); // Normalize separators.
+				$dir_temp             = $this->add_tmp_suffix($dir); // Temporary directory.
+				$wp_content_dir_regex = preg_quote($this->n_dir_seps(WP_CONTENT_DIR), '/');
+
+				if(!preg_match('/^'.$wp_content_dir_regex.'\/[^\/]+/i', $dir))
+					return $counter; // Security flag; do nothing in this case.
+
+				if(preg_match('/^'.$wp_content_dir_regex.'\/(?:mu\-plugins|themes|plugins)(?:\/|$)/i', $dir))
+					return $counter; // Security flag; do nothing in this case.
+
+				if(!rename($dir, $dir_temp)) // Work from tmp directory so deletions are atomic.
+					throw new \exception(sprintf(__('Unable to delete all files/dirs. Rename failure on tmp directory: `%1$s`.', $this->text_domain), $dir));
+
+				/** @var $_file_dir \RecursiveDirectoryIterator for IDEs. */
+				foreach($this->dir_regex_iteration($dir_temp, '/.+/') as $_file_dir)
+				{
+					if(($_file_dir->isFile() || $_file_dir->isLink())) // Files and/or symlinks.
+					{
+						if(!unlink($_file_dir->getPathname())) // Throw exception if unable to delete.
+							throw new \exception(sprintf(__('Unable to delete file: `%1$s`.', $this->text_domain), $_file_dir->getPathname()));
+						$counter++; // Increment counter for each file we delete.
+					}
+					else if($_file_dir->isDir()) // Directories are last in the iteration; it should be empty now.
+					{
+						if(!rmdir($_file_dir->getPathname())) // Throw exception if unable to delete the directory itself.
+							throw new \exception(sprintf(__('Unable to delete dir: `%1$s`.', $this->text_domain), $_file_dir->getPathname()));
+						$counter++; // Increment counter for each directory we delete.
+					}
+				}
+				unset($_file_dir); // Housekeeping after this `foreach()` loop.
+
+				if(!rename($dir_temp, $dir)) // Deletions are atomic; restore original directory now.
+					throw new \exception(sprintf(__('Unable to delete all files/dirs. Rename failure on tmp directory: `%1$s`.', $this->text_domain), $dir_temp));
+
+				if($delete_dir_too) // Delete parent? i.e. delete the `$dir` itself also?
+				{
+					if(!rmdir($dir)) // Throw exception if unable to delete.
+						throw new \exception(sprintf(__('Unable to delete directory: `%1$s`.', $this->text_domain), $dir));
+					$counter++; // Increment counter for each directory we delete.
+				}
+				return $counter; // Total files deleted by this routine.
+			}
+
+			/* --------------------------------------------------------------------------------------
+			 * Translation utilities for Quick Cache.
+			 -------------------------------------------------------------------------------------- */
+
+			/**
+			 * `X file` or `X files`, translated w/ singlular/plural context.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @param integer $counter Total files; i.e. the counter.
+			 *
+			 * @return string The phrase `X file` or `X files`.
+			 */
+			public function i18n_files($counter)
+			{
+				$counter = (integer)$counter; // Force integer.
+
+				return sprintf(_n('%1$s file', '%1$s files', $counter, $this->text_domain), $counter);
+			}
+
+			/**
+			 * `X directory` or `X directories`, translated w/ singlular/plural context.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @param integer $counter Total directories; i.e. the counter.
+			 *
+			 * @return string The phrase `X directory` or `X directories`.
+			 */
+			public function i18n_dirs($counter)
+			{
+				$counter = (integer)$counter; // Force integer.
+
+				return sprintf(_n('%1$s directory', '%1$s directories', $counter, $this->text_domain), $counter);
+			}
+
+			/**
+			 * `X file/directory` or `X files/directories`, translated w/ singlular/plural context.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @param integer $counter Total files/directories; i.e. the counter.
+			 *
+			 * @return string The phrase `X file/directory` or `X files/directories`.
+			 */
+			public function i18n_files_dirs($counter)
+			{
+				$counter = (integer)$counter; // Force integer.
+
+				return sprintf(_n('%1$s file/directory', '%1$s files/directories', $counter, $this->text_domain), $counter);
 			}
 
 			/* --------------------------------------------------------------------------------------
