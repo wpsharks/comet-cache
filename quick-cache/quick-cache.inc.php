@@ -2117,7 +2117,7 @@ namespace quick_cache
 				if(!$this->remove_advanced_cache())
 					return FALSE; // Still exists.
 
-				$cache_dir               = $this->cache_dir(); // Current cache directory.
+				$cache_dir               = $this->cache_dir();
 				$advanced_cache_file     = WP_CONTENT_DIR.'/advanced-cache.php';
 				$advanced_cache_template = dirname(__FILE__).'/includes/advanced-cache.tpl.php';
 
@@ -2169,19 +2169,21 @@ namespace quick_cache
 				if(!file_put_contents($advanced_cache_file, $advanced_cache_contents))
 					return FALSE; // Failure; could not write file.
 
-				if(!is_dir($cache_dir))
-					mkdir($cache_dir, 0775, TRUE);
+				$cache_lock = $this->cache_lock(); // Lock cache.
+
+				if(!is_dir($cache_dir)) mkdir($cache_dir, 0775, TRUE);
 
 				if(is_writable($cache_dir) && !is_file($cache_dir.'/.htaccess'))
 					file_put_contents($cache_dir.'/.htaccess', $this->htaccess_deny);
 
-				if(!is_file($cache_dir.'/.htaccess'))
-					return NULL; // Failure; could not write .htaccess file. Special return value (NULL) in this case.
+				if(!is_dir($cache_dir) || !is_writable($cache_dir) || !is_file($cache_dir.'/.htaccess') || !file_put_contents($cache_dir.'/qc-advanced-cache', time()))
+				{
+					$this->cache_unlock($cache_lock); // Unlock cache.
+					return NULL; // Special return value (NULL) in this case.
+				}
+				$this->cache_unlock($cache_lock); // Unlock cache.
 
-				if(!is_dir($cache_dir) || !is_writable($cache_dir) || !file_put_contents($cache_dir.'/qc-advanced-cache', time()))
-					return NULL; // Failure; could not write cache entry. Special return value (NULL) in this case.
-
-				return TRUE; // All done :-)
+				return TRUE; // Success!
 			}
 
 			/**
@@ -2309,10 +2311,10 @@ namespace quick_cache
 
 				if(!is_multisite()) return $value; // N/A.
 
-				$cache_dir = $this->cache_dir(); // cache dir.
+				$cache_dir  = $this->cache_dir(); // Cache dir.
+				$cache_lock = $this->cache_lock(); // Lock.
 
-				if(!is_dir($cache_dir))
-					mkdir($cache_dir, 0775, TRUE);
+				if(!is_dir($cache_dir)) mkdir($cache_dir, 0775, TRUE);
 
 				if(is_writable($cache_dir) && !is_file($cache_dir.'/.htaccess'))
 					file_put_contents($cache_dir.'/.htaccess', $this->htaccess_deny);
@@ -2328,6 +2330,8 @@ namespace quick_cache
 
 					file_put_contents($cache_dir.'/qc-blog-paths', serialize($paths));
 				}
+				$this->cache_unlock($cache_lock); // Unlock cache directory.
+
 				return $value; // Pass through untouched (always).
 			}
 
