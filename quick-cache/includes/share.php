@@ -1494,9 +1494,14 @@ namespace quick_cache // Root namespace.
 
 				$cache_dir_tmp       = $this->add_tmp_suffix($cache_dir); // Temporary directory.
 				$cache_dir_tmp_regex = $regex; // Initialize host-specific regex pattern for the tmp directory.
+
 				$cache_dir_tmp_regex = '\\/'.ltrim($cache_dir_tmp_regex, '^\\/'); // Make sure it begins with an escaped `/`.
 				$cache_dir_tmp_regex = $this->str_ireplace_once(preg_quote($cache_dir.'/', '/'), '', $cache_dir_tmp_regex);
-				$cache_dir_tmp_regex = '/^'.preg_quote($cache_dir_tmp.'/', '/').ltrim($cache_dir_tmp_regex, '^\\/');
+
+				$cache_dir_tmp_regex = ltrim($cache_dir_tmp_regex, '^\\/');
+				if(strpos($cache_dir_tmp_regex, '(?:\/') === 0 || strpos($cache_dir_tmp_regex, '(\/') === 0)
+					$cache_dir_tmp_regex = '/^'.preg_quote($cache_dir_tmp, '/').$cache_dir_tmp_regex;
+				else $cache_dir_tmp_regex = '/^'.preg_quote($cache_dir_tmp.'/', '/').$cache_dir_tmp_regex;
 
 				# if(WP_DEBUG) file_put_contents(WP_CONTENT_DIR.'/qc-debug.log', print_r($regex, TRUE)."\n".print_r($cache_dir_tmp_regex, TRUE)."\n\n", FILE_APPEND);
 				// Uncomment the above line to debug regex pattern matching used by this routine; and others that call upon it.
@@ -1616,10 +1621,15 @@ namespace quick_cache // Root namespace.
 
 					$_host_cache_dir_tmp       = $this->add_tmp_suffix($_host_cache_dir); // Temporary directory.
 					$_host_cache_dir_tmp_regex = $regex; // Initialize host-specific regex pattern for the tmp directory.
+
 					$_host_cache_dir_tmp_regex = '\\/'.ltrim($_host_cache_dir_tmp_regex, '^\\/'); // Make sure it begins with an escaped `/`.
 					$_host_cache_dir_tmp_regex = $this->str_ireplace_once(preg_quote($_host_cache_path.'/', '/'), '', $_host_cache_dir_tmp_regex);
 					$_host_cache_dir_tmp_regex = $this->str_ireplace_once(preg_quote($_host_cache_dir.'/', '/'), '', $_host_cache_dir_tmp_regex);
-					$_host_cache_dir_tmp_regex = '/^'.preg_quote($_host_cache_dir_tmp.'/', '/').ltrim($_host_cache_dir_tmp_regex, '^\\/');
+
+					$_host_cache_dir_tmp_regex = ltrim($_host_cache_dir_tmp_regex, '^\\/');
+					if(strpos($_host_cache_dir_tmp_regex, '(?:\/') === 0 || strpos($_host_cache_dir_tmp_regex, '(\/') === 0)
+						$_host_cache_dir_tmp_regex = '/^'.preg_quote($_host_cache_dir_tmp, '/').$_host_cache_dir_tmp_regex;
+					else $_host_cache_dir_tmp_regex = '/^'.preg_quote($_host_cache_dir_tmp.'/', '/').$_host_cache_dir_tmp_regex;
 
 					# if(WP_DEBUG) file_put_contents(WP_CONTENT_DIR.'/qc-debug.log', print_r($regex, TRUE)."\n".print_r($_host_cache_dir_tmp_regex, TRUE)."\n\n", FILE_APPEND);
 					// Uncomment the above line to debug regex pattern matching used by this routine; and others that call upon it.
