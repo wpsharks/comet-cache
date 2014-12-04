@@ -1795,16 +1795,21 @@ namespace quick_cache // Root namespace.
 			 */
 			public function cache_lock()
 			{
+				if(!($wp_config_file = $this->find_wp_config_file()))
+					throw new \exception(__('Unable to find the wp-config.php file.', $this->text_domain));
+
 				if($this->function_is_possible('sem_get'))
-					if(($resource = sem_get(1976, 1)) && sem_acquire($resource))
-						return array('type' => 'sem', 'resource' => $resource);
+					if(($ipc_key = ftok($wp_config_file, 'w')))
+						if(($resource = sem_get($ipc_key, 1)) && sem_acquire($resource))
+							return array('type' => 'sem', 'resource' => $resource);
 
 				// Use `flock()` as a decent fallback when `sem_get()` is not possible.
 
 				if(!($tmp_dir = $this->get_tmp_dir()))
 					throw new \exception(__('No writable tmp directory.', $this->text_domain));
 
-				$mutex = $tmp_dir.'/'.$this->slug.'.lock';
+				$inode_key = fileinode($wp_config_file);
+				$mutex = $tmp_dir.'/'.$this->slug.'-'.$inode_key.'.lock';
 				if(!($resource = fopen($mutex, 'w')) || !flock($resource, LOCK_EX))
 					throw new \exception(__('Unable to obtain an exclusive lock.', $this->text_domain));
 
