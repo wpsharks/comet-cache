@@ -1367,7 +1367,7 @@ namespace quick_cache // Root namespace.
 
 				else $wp_config_file = ''; // Unable to find `/wp-config.php` file.
 
-				return apply_filters(__METHOD__, $wp_config_file, get_defined_vars());
+				return $wp_config_file;
 			}
 
 			/* --------------------------------------------------------------------------------------
