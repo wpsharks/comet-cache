@@ -1349,6 +1349,27 @@ namespace quick_cache // Root namespace.
 				return ($tmp_dir = ''); // Failed to locate.
 			}
 
+			/**
+			 * Finds absolute server path to `/wp-config.php` file.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @return string Absolute server path to `/wp-config.php` file;
+			 *    else an empty string if unable to locate the file.
+			 */
+			public function find_wp_config_file()
+			{
+				if(is_file($abspath_wp_config = ABSPATH.'wp-config.php'))
+					$wp_config_file = $abspath_wp_config;
+
+				else if(is_file($dirname_abspath_wp_config = dirname(ABSPATH).'/wp-config.php'))
+					$wp_config_file = $dirname_abspath_wp_config;
+
+				else $wp_config_file = ''; // Unable to find `/wp-config.php` file.
+
+				return apply_filters(__METHOD__, $wp_config_file, get_defined_vars());
+			}
+
 			/* --------------------------------------------------------------------------------------
 			 * File/directory iteration utilities for Quick Cache.
 			 -------------------------------------------------------------------------------------- */
