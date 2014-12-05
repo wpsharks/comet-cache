@@ -7,7 +7,7 @@
 
 	<title>File quick-cache/quick-cache.inc.php | Quick Cache Lite</title>
 
-	<script type="text/javascript" src="resources/combined.js?822040270"></script>
+	<script type="text/javascript" src="resources/combined.js?3172704083"></script>
 	<script type="text/javascript" src="elementlist.js?1035181410"></script>
 	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3403148767" />
 
@@ -2061,427 +2061,410 @@
 </span><span id="1960" class="l"><a class="l" href="#1960">1960: </a>            }
 </span><span id="1961" class="l"><a class="l" href="#1961">1961: </a>
 </span><span id="1962" class="l"><a class="l" href="#1962">1962: </a>            <span class="php-comment">/**
-</span></span><span id="1963" class="l"><a class="l" href="#1963">1963: </a><span class="php-comment">             * Finds absolute server path to `/wp-config.php` file.
+</span></span><span id="1963" class="l"><a class="l" href="#1963">1963: </a><span class="php-comment">             * Adds `define('WP_CACHE', TRUE);` to the `/wp-config.php` file.
 </span></span><span id="1964" class="l"><a class="l" href="#1964">1964: </a><span class="php-comment">             *
 </span></span><span id="1965" class="l"><a class="l" href="#1965">1965: </a><span class="php-comment">             * @since 140422 First documented version.
 </span></span><span id="1966" class="l"><a class="l" href="#1966">1966: </a><span class="php-comment">             *
-</span></span><span id="1967" class="l"><a class="l" href="#1967">1967: </a><span class="php-comment">             * @return string Absolute server path to `/wp-config.php` file;
-</span></span><span id="1968" class="l"><a class="l" href="#1968">1968: </a><span class="php-comment">             *    else an empty string if unable to locate the file.
+</span></span><span id="1967" class="l"><a class="l" href="#1967">1967: </a><span class="php-comment">             * @return string The new contents of the updated `/wp-config.php` file;
+</span></span><span id="1968" class="l"><a class="l" href="#1968">1968: </a><span class="php-comment">             *    else an empty string if unable to add the `WP_CACHE` constant.
 </span></span><span id="1969" class="l"><a class="l" href="#1969">1969: </a><span class="php-comment">             */</span>
-</span><span id="1970" class="l"><a class="l" href="#1970">1970: </a>            <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_find_wp_config_file" href="#_find_wp_config_file">find_wp_config_file</a>()
+</span><span id="1970" class="l"><a class="l" href="#1970">1970: </a>            <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_add_wp_cache_to_wp_config" href="#_add_wp_cache_to_wp_config">add_wp_cache_to_wp_config</a>()
 </span><span id="1971" class="l"><a class="l" href="#1971">1971: </a>            {
-</span><span id="1972" class="l"><a class="l" href="#1972">1972: </a>                <span class="php-keyword1">if</span>(<span class="php-keyword2">is_file</span>(<span class="php-var">$abspath_wp_config</span> = ABSPATH.<span class="php-quote">'wp-config.php'</span>))
-</span><span id="1973" class="l"><a class="l" href="#1973">1973: </a>                    <span class="php-var">$wp_config_file</span> = <span class="php-var">$abspath_wp_config</span>;
+</span><span id="1972" class="l"><a class="l" href="#1972">1972: </a>                <span class="php-keyword1">if</span>(!<span class="php-var">$this</span>-&gt;options[<span class="php-quote">'enable'</span>])
+</span><span id="1973" class="l"><a class="l" href="#1973">1973: </a>                    <span class="php-keyword1">return</span> <span class="php-quote">''</span>; <span class="php-comment">// Nothing to do.</span>
 </span><span id="1974" class="l"><a class="l" href="#1974">1974: </a>
-</span><span id="1975" class="l"><a class="l" href="#1975">1975: </a>                <span class="php-keyword1">else</span> <span class="php-keyword1">if</span>(<span class="php-keyword2">is_file</span>(<span class="php-var">$dirname_abspath_wp_config</span> = <span class="php-keyword2">dirname</span>(ABSPATH).<span class="php-quote">'/wp-config.php'</span>))
-</span><span id="1976" class="l"><a class="l" href="#1976">1976: </a>                    <span class="php-var">$wp_config_file</span> = <span class="php-var">$dirname_abspath_wp_config</span>;
+</span><span id="1975" class="l"><a class="l" href="#1975">1975: </a>                <span class="php-keyword1">if</span>(!(<span class="php-var">$wp_config_file</span> = <span class="php-var">$this</span>-&gt;find_wp_config_file()))
+</span><span id="1976" class="l"><a class="l" href="#1976">1976: </a>                    <span class="php-keyword1">return</span> <span class="php-quote">''</span>; <span class="php-comment">// Unable to find `/wp-config.php`.</span>
 </span><span id="1977" class="l"><a class="l" href="#1977">1977: </a>
-</span><span id="1978" class="l"><a class="l" href="#1978">1978: </a>                <span class="php-keyword1">else</span> <span class="php-var">$wp_config_file</span> = <span class="php-quote">''</span>; <span class="php-comment">// Unable to find `/wp-config.php` file.</span>
-</span><span id="1979" class="l"><a class="l" href="#1979">1979: </a>
-</span><span id="1980" class="l"><a class="l" href="#1980">1980: </a>                <span class="php-keyword1">return</span> apply_filters(__METHOD__, <span class="php-var">$wp_config_file</span>, <span class="php-keyword2">get_defined_vars</span>());
-</span><span id="1981" class="l"><a class="l" href="#1981">1981: </a>            }
-</span><span id="1982" class="l"><a class="l" href="#1982">1982: </a>
-</span><span id="1983" class="l"><a class="l" href="#1983">1983: </a>            <span class="php-comment">/**
-</span></span><span id="1984" class="l"><a class="l" href="#1984">1984: </a><span class="php-comment">             * Adds `define('WP_CACHE', TRUE);` to the `/wp-config.php` file.
-</span></span><span id="1985" class="l"><a class="l" href="#1985">1985: </a><span class="php-comment">             *
-</span></span><span id="1986" class="l"><a class="l" href="#1986">1986: </a><span class="php-comment">             * @since 140422 First documented version.
-</span></span><span id="1987" class="l"><a class="l" href="#1987">1987: </a><span class="php-comment">             *
-</span></span><span id="1988" class="l"><a class="l" href="#1988">1988: </a><span class="php-comment">             * @return string The new contents of the updated `/wp-config.php` file;
-</span></span><span id="1989" class="l"><a class="l" href="#1989">1989: </a><span class="php-comment">             *    else an empty string if unable to add the `WP_CACHE` constant.
-</span></span><span id="1990" class="l"><a class="l" href="#1990">1990: </a><span class="php-comment">             */</span>
-</span><span id="1991" class="l"><a class="l" href="#1991">1991: </a>            <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_add_wp_cache_to_wp_config" href="#_add_wp_cache_to_wp_config">add_wp_cache_to_wp_config</a>()
-</span><span id="1992" class="l"><a class="l" href="#1992">1992: </a>            {
-</span><span id="1993" class="l"><a class="l" href="#1993">1993: </a>                <span class="php-keyword1">if</span>(!<span class="php-var">$this</span>-&gt;options[<span class="php-quote">'enable'</span>])
-</span><span id="1994" class="l"><a class="l" href="#1994">1994: </a>                    <span class="php-keyword1">return</span> <span class="php-quote">''</span>; <span class="php-comment">// Nothing to do.</span>
-</span><span id="1995" class="l"><a class="l" href="#1995">1995: </a>
-</span><span id="1996" class="l"><a class="l" href="#1996">1996: </a>                <span class="php-keyword1">if</span>(!(<span class="php-var">$wp_config_file</span> = <span class="php-var">$this</span>-&gt;find_wp_config_file()))
-</span><span id="1997" class="l"><a class="l" href="#1997">1997: </a>                    <span class="php-keyword1">return</span> <span class="php-quote">''</span>; <span class="php-comment">// Unable to find `/wp-config.php`.</span>
-</span><span id="1998" class="l"><a class="l" href="#1998">1998: </a>
-</span><span id="1999" class="l"><a class="l" href="#1999">1999: </a>                <span class="php-keyword1">if</span>(!<span class="php-keyword2">is_readable</span>(<span class="php-var">$wp_config_file</span>)) <span class="php-keyword1">return</span> <span class="php-quote">''</span>; <span class="php-comment">// Not possible.</span>
-</span><span id="2000" class="l"><a class="l" href="#2000">2000: </a>                <span class="php-keyword1">if</span>(!(<span class="php-var">$wp_config_file_contents</span> = <span class="php-keyword2">file_get_contents</span>(<span class="php-var">$wp_config_file</span>)))
-</span><span id="2001" class="l"><a class="l" href="#2001">2001: </a>                    <span class="php-keyword1">return</span> <span class="php-quote">''</span>; <span class="php-comment">// Failure; could not read file.</span>
-</span><span id="2002" class="l"><a class="l" href="#2002">2002: </a>
-</span><span id="2003" class="l"><a class="l" href="#2003">2003: </a>                <span class="php-keyword1">if</span>(<span class="php-keyword2">preg_match</span>(<span class="php-quote">'/define\s*\(\s*([\'&quot;])WP_CACHE\\1\s*,\s*(?:\-?[1-9][0-9\.]*|TRUE|([\'&quot;])(?:[^0\'&quot;]|[^\'&quot;]{2,})\\2)\s*\)\s*;/i'</span>, <span class="php-var">$wp_config_file_contents</span>))
-</span><span id="2004" class="l"><a class="l" href="#2004">2004: </a>                    <span class="php-keyword1">return</span> <span class="php-var">$wp_config_file_contents</span>; <span class="php-comment">// It's already in there; no need to modify this file.</span>
-</span><span id="2005" class="l"><a class="l" href="#2005">2005: </a>
-</span><span id="2006" class="l"><a class="l" href="#2006">2006: </a>                <span class="php-keyword1">if</span>(!(<span class="php-var">$wp_config_file_contents</span> = <span class="php-var">$this</span>-&gt;remove_wp_cache_from_wp_config()))
-</span><span id="2007" class="l"><a class="l" href="#2007">2007: </a>                    <span class="php-keyword1">return</span> <span class="php-quote">''</span>; <span class="php-comment">// Unable to remove previous value.</span>
-</span><span id="2008" class="l"><a class="l" href="#2008">2008: </a>
-</span><span id="2009" class="l"><a class="l" href="#2009">2009: </a>                <span class="php-keyword1">if</span>(!(<span class="php-var">$wp_config_file_contents</span> = <span class="php-keyword2">preg_replace</span>(<span class="php-quote">'/^\s*(\&lt;\?php|\&lt;\?)\s+/i'</span>, <span class="php-quote">'${1}'</span>.<span class="php-quote">&quot;\n&quot;</span>.<span class="php-quote">&quot;define('WP_CACHE', TRUE);&quot;</span>.<span class="php-quote">&quot;\n&quot;</span>, <span class="php-var">$wp_config_file_contents</span>, <span class="php-num">1</span>)))
-</span><span id="2010" class="l"><a class="l" href="#2010">2010: </a>                    <span class="php-keyword1">return</span> <span class="php-quote">''</span>; <span class="php-comment">// Failure; something went terribly wrong here.</span>
-</span><span id="2011" class="l"><a class="l" href="#2011">2011: </a>
-</span><span id="2012" class="l"><a class="l" href="#2012">2012: </a>                <span class="php-keyword1">if</span>(<span class="php-keyword2">strpos</span>(<span class="php-var">$wp_config_file_contents</span>, <span class="php-quote">&quot;define('WP_CACHE', TRUE);&quot;</span>) === <span class="php-keyword1">FALSE</span>)
-</span><span id="2013" class="l"><a class="l" href="#2013">2013: </a>                    <span class="php-keyword1">return</span> <span class="php-quote">''</span>; <span class="php-comment">// Failure; unable to add; unexpected PHP code.</span>
-</span><span id="2014" class="l"><a class="l" href="#2014">2014: </a>
-</span><span id="2015" class="l"><a class="l" href="#2015">2015: </a>                <span class="php-keyword1">if</span>(<span class="php-keyword2">defined</span>(<span class="php-quote">'DISALLOW_FILE_MODS'</span>) &amp;&amp; DISALLOW_FILE_MODS)
-</span><span id="2016" class="l"><a class="l" href="#2016">2016: </a>                    <span class="php-keyword1">return</span> <span class="php-quote">''</span>; <span class="php-comment">// We may NOT edit any files.</span>
-</span><span id="2017" class="l"><a class="l" href="#2017">2017: </a>
-</span><span id="2018" class="l"><a class="l" href="#2018">2018: </a>                <span class="php-keyword1">if</span>(!<span class="php-keyword2">is_writable</span>(<span class="php-var">$wp_config_file</span>)) <span class="php-keyword1">return</span> <span class="php-quote">''</span>; <span class="php-comment">// Not possible.</span>
-</span><span id="2019" class="l"><a class="l" href="#2019">2019: </a>                <span class="php-keyword1">if</span>(!<span class="php-keyword2">file_put_contents</span>(<span class="php-var">$wp_config_file</span>, <span class="php-var">$wp_config_file_contents</span>))
-</span><span id="2020" class="l"><a class="l" href="#2020">2020: </a>                    <span class="php-keyword1">return</span> <span class="php-quote">''</span>; <span class="php-comment">// Failure; could not write changes.</span>
-</span><span id="2021" class="l"><a class="l" href="#2021">2021: </a>
-</span><span id="2022" class="l"><a class="l" href="#2022">2022: </a>                <span class="php-keyword1">return</span> apply_filters(__METHOD__, <span class="php-var">$wp_config_file_contents</span>, <span class="php-keyword2">get_defined_vars</span>());
-</span><span id="2023" class="l"><a class="l" href="#2023">2023: </a>            }
-</span><span id="2024" class="l"><a class="l" href="#2024">2024: </a>
-</span><span id="2025" class="l"><a class="l" href="#2025">2025: </a>            <span class="php-comment">/**
-</span></span><span id="2026" class="l"><a class="l" href="#2026">2026: </a><span class="php-comment">             * Removes `define('WP_CACHE', TRUE);` from the `/wp-config.php` file.
-</span></span><span id="2027" class="l"><a class="l" href="#2027">2027: </a><span class="php-comment">             *
-</span></span><span id="2028" class="l"><a class="l" href="#2028">2028: </a><span class="php-comment">             * @since 140422 First documented version.
-</span></span><span id="2029" class="l"><a class="l" href="#2029">2029: </a><span class="php-comment">             *
-</span></span><span id="2030" class="l"><a class="l" href="#2030">2030: </a><span class="php-comment">             * @return string The new contents of the updated `/wp-config.php` file;
-</span></span><span id="2031" class="l"><a class="l" href="#2031">2031: </a><span class="php-comment">             *    else an empty string if unable to remove the `WP_CACHE` constant.
-</span></span><span id="2032" class="l"><a class="l" href="#2032">2032: </a><span class="php-comment">             */</span>
-</span><span id="2033" class="l"><a class="l" href="#2033">2033: </a>            <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_remove_wp_cache_from_wp_config" href="#_remove_wp_cache_from_wp_config">remove_wp_cache_from_wp_config</a>()
-</span><span id="2034" class="l"><a class="l" href="#2034">2034: </a>            {
-</span><span id="2035" class="l"><a class="l" href="#2035">2035: </a>                <span class="php-keyword1">if</span>(!(<span class="php-var">$wp_config_file</span> = <span class="php-var">$this</span>-&gt;find_wp_config_file()))
-</span><span id="2036" class="l"><a class="l" href="#2036">2036: </a>                    <span class="php-keyword1">return</span> <span class="php-quote">''</span>; <span class="php-comment">// Unable to find `/wp-config.php`.</span>
-</span><span id="2037" class="l"><a class="l" href="#2037">2037: </a>
-</span><span id="2038" class="l"><a class="l" href="#2038">2038: </a>                <span class="php-keyword1">if</span>(!<span class="php-keyword2">is_readable</span>(<span class="php-var">$wp_config_file</span>)) <span class="php-keyword1">return</span> <span class="php-quote">''</span>; <span class="php-comment">// Not possible.</span>
-</span><span id="2039" class="l"><a class="l" href="#2039">2039: </a>                <span class="php-keyword1">if</span>(!(<span class="php-var">$wp_config_file_contents</span> = <span class="php-keyword2">file_get_contents</span>(<span class="php-var">$wp_config_file</span>)))
-</span><span id="2040" class="l"><a class="l" href="#2040">2040: </a>                    <span class="php-keyword1">return</span> <span class="php-quote">''</span>; <span class="php-comment">// Failure; could not read file.</span>
-</span><span id="2041" class="l"><a class="l" href="#2041">2041: </a>
-</span><span id="2042" class="l"><a class="l" href="#2042">2042: </a>                <span class="php-keyword1">if</span>(!<span class="php-keyword2">preg_match</span>(<span class="php-quote">'/([\'&quot;])WP_CACHE\\1/i'</span>, <span class="php-var">$wp_config_file_contents</span>))
-</span><span id="2043" class="l"><a class="l" href="#2043">2043: </a>                    <span class="php-keyword1">return</span> <span class="php-var">$wp_config_file_contents</span>; <span class="php-comment">// Already gone.</span>
-</span><span id="2044" class="l"><a class="l" href="#2044">2044: </a>
-</span><span id="2045" class="l"><a class="l" href="#2045">2045: </a>                <span class="php-keyword1">if</span>(<span class="php-keyword2">preg_match</span>(<span class="php-quote">'/define\s*\(\s*([\'&quot;])WP_CACHE\\1\s*,\s*(?:0|FALSE|NULL|([\'&quot;])0?\\2)\s*\)\s*;/i'</span>, <span class="php-var">$wp_config_file_contents</span>))
-</span><span id="2046" class="l"><a class="l" href="#2046">2046: </a>                    <span class="php-keyword1">return</span> <span class="php-var">$wp_config_file_contents</span>; <span class="php-comment">// It's already disabled; no need to modify this file.</span>
-</span><span id="2047" class="l"><a class="l" href="#2047">2047: </a>
-</span><span id="2048" class="l"><a class="l" href="#2048">2048: </a>                <span class="php-keyword1">if</span>(!(<span class="php-var">$wp_config_file_contents</span> = <span class="php-keyword2">preg_replace</span>(<span class="php-quote">'/define\s*\(\s*([\'&quot;])WP_CACHE\\1\s*,\s*(?:\-?[0-9\.]+|TRUE|FALSE|NULL|([\'&quot;])[^\'&quot;]*\\2)\s*\)\s*;/i'</span>, <span class="php-quote">''</span>, <span class="php-var">$wp_config_file_contents</span>)))
-</span><span id="2049" class="l"><a class="l" href="#2049">2049: </a>                    <span class="php-keyword1">return</span> <span class="php-quote">''</span>; <span class="php-comment">// Failure; something went terribly wrong here.</span>
-</span><span id="2050" class="l"><a class="l" href="#2050">2050: </a>
-</span><span id="2051" class="l"><a class="l" href="#2051">2051: </a>                <span class="php-keyword1">if</span>(<span class="php-keyword2">preg_match</span>(<span class="php-quote">'/([\'&quot;])WP_CACHE\\1/i'</span>, <span class="php-var">$wp_config_file_contents</span>))
-</span><span id="2052" class="l"><a class="l" href="#2052">2052: </a>                    <span class="php-keyword1">return</span> <span class="php-quote">''</span>; <span class="php-comment">// Failure; perhaps the `/wp-config.php` file contains syntax we cannot remove safely.</span>
-</span><span id="2053" class="l"><a class="l" href="#2053">2053: </a>
-</span><span id="2054" class="l"><a class="l" href="#2054">2054: </a>                <span class="php-keyword1">if</span>(<span class="php-keyword2">defined</span>(<span class="php-quote">'DISALLOW_FILE_MODS'</span>) &amp;&amp; DISALLOW_FILE_MODS)
-</span><span id="2055" class="l"><a class="l" href="#2055">2055: </a>                    <span class="php-keyword1">return</span> <span class="php-quote">''</span>; <span class="php-comment">// We may NOT edit any files.</span>
-</span><span id="2056" class="l"><a class="l" href="#2056">2056: </a>
-</span><span id="2057" class="l"><a class="l" href="#2057">2057: </a>                <span class="php-keyword1">if</span>(!<span class="php-keyword2">is_writable</span>(<span class="php-var">$wp_config_file</span>)) <span class="php-keyword1">return</span> <span class="php-quote">''</span>; <span class="php-comment">// Not possible.</span>
-</span><span id="2058" class="l"><a class="l" href="#2058">2058: </a>                <span class="php-keyword1">if</span>(!<span class="php-keyword2">file_put_contents</span>(<span class="php-var">$wp_config_file</span>, <span class="php-var">$wp_config_file_contents</span>))
-</span><span id="2059" class="l"><a class="l" href="#2059">2059: </a>                    <span class="php-keyword1">return</span> <span class="php-quote">''</span>; <span class="php-comment">// Failure; could not write changes.</span>
-</span><span id="2060" class="l"><a class="l" href="#2060">2060: </a>
-</span><span id="2061" class="l"><a class="l" href="#2061">2061: </a>                <span class="php-keyword1">return</span> apply_filters(__METHOD__, <span class="php-var">$wp_config_file_contents</span>, <span class="php-keyword2">get_defined_vars</span>());
-</span><span id="2062" class="l"><a class="l" href="#2062">2062: </a>            }
-</span><span id="2063" class="l"><a class="l" href="#2063">2063: </a>
-</span><span id="2064" class="l"><a class="l" href="#2064">2064: </a>            <span class="php-comment">/**
-</span></span><span id="2065" class="l"><a class="l" href="#2065">2065: </a><span class="php-comment">             * Checks to make sure the `qc-advanced-cache` file still exists;
-</span></span><span id="2066" class="l"><a class="l" href="#2066">2066: </a><span class="php-comment">             *    and if it doesn't, the `advanced-cache.php` is regenerated automatically.
-</span></span><span id="2067" class="l"><a class="l" href="#2067">2067: </a><span class="php-comment">             *
-</span></span><span id="2068" class="l"><a class="l" href="#2068">2068: </a><span class="php-comment">             * @since 140422 First documented version.
-</span></span><span id="2069" class="l"><a class="l" href="#2069">2069: </a><span class="php-comment">             *
-</span></span><span id="2070" class="l"><a class="l" href="#2070">2070: </a><span class="php-comment">             * @attaches-to `init` hook.
-</span></span><span id="2071" class="l"><a class="l" href="#2071">2071: </a><span class="php-comment">             *
-</span></span><span id="2072" class="l"><a class="l" href="#2072">2072: </a><span class="php-comment">             * @note This runs so that remote deployments which completely wipe out an
-</span></span><span id="2073" class="l"><a class="l" href="#2073">2073: </a><span class="php-comment">             *    existing set of website files (like the AWS Elastic Beanstalk does) will NOT cause Quick Cache
-</span></span><span id="2074" class="l"><a class="l" href="#2074">2074: </a><span class="php-comment">             *    to stop functioning due to the lack of an `advanced-cache.php` file, which is generated by Quick Cache.
-</span></span><span id="2075" class="l"><a class="l" href="#2075">2075: </a><span class="php-comment">             *
-</span></span><span id="2076" class="l"><a class="l" href="#2076">2076: </a><span class="php-comment">             *    For instance, if you have a Git repo with all of your site files; when you push those files
-</span></span><span id="2077" class="l"><a class="l" href="#2077">2077: </a><span class="php-comment">             *    to your website to deploy them, you most likely do NOT have the `advanced-cache.php` file.
-</span></span><span id="2078" class="l"><a class="l" href="#2078">2078: </a><span class="php-comment">             *    Quick Cache creates this file on its own. Thus, if it's missing (and QC is active)
-</span></span><span id="2079" class="l"><a class="l" href="#2079">2079: </a><span class="php-comment">             *    we simply regenerate the file automatically to keep Quick Cache running.
-</span></span><span id="2080" class="l"><a class="l" href="#2080">2080: </a><span class="php-comment">             */</span>
-</span><span id="2081" class="l"><a class="l" href="#2081">2081: </a>            <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_check_advanced_cache" href="#_check_advanced_cache">check_advanced_cache</a>()
-</span><span id="2082" class="l"><a class="l" href="#2082">2082: </a>            {
-</span><span id="2083" class="l"><a class="l" href="#2083">2083: </a>                <span class="php-keyword1">if</span>(!<span class="php-var">$this</span>-&gt;options[<span class="php-quote">'enable'</span>])
-</span><span id="2084" class="l"><a class="l" href="#2084">2084: </a>                    <span class="php-keyword1">return</span>; <span class="php-comment">// Nothing to do.</span>
-</span><span id="2085" class="l"><a class="l" href="#2085">2085: </a>
-</span><span id="2086" class="l"><a class="l" href="#2086">2086: </a>                <span class="php-keyword1">if</span>(!<span class="php-keyword1">empty</span>(<span class="php-var">$_REQUEST</span>[__NAMESPACE__]))
-</span><span id="2087" class="l"><a class="l" href="#2087">2087: </a>                    <span class="php-keyword1">return</span>; <span class="php-comment">// Skip on plugin actions.</span>
-</span><span id="2088" class="l"><a class="l" href="#2088">2088: </a>
-</span><span id="2089" class="l"><a class="l" href="#2089">2089: </a>                <span class="php-var">$cache_dir</span> = <span class="php-var">$this</span>-&gt;cache_dir(); <span class="php-comment">// Current cache directory.</span>
-</span><span id="2090" class="l"><a class="l" href="#2090">2090: </a>
-</span><span id="2091" class="l"><a class="l" href="#2091">2091: </a>                <span class="php-keyword1">if</span>(!<span class="php-keyword2">is_file</span>(<span class="php-var">$cache_dir</span>.<span class="php-quote">'/qc-advanced-cache'</span>))
-</span><span id="2092" class="l"><a class="l" href="#2092">2092: </a>                    <span class="php-var">$this</span>-&gt;add_advanced_cache();
-</span><span id="2093" class="l"><a class="l" href="#2093">2093: </a>            }
-</span><span id="2094" class="l"><a class="l" href="#2094">2094: </a>
-</span><span id="2095" class="l"><a class="l" href="#2095">2095: </a>            <span class="php-comment">/**
-</span></span><span id="2096" class="l"><a class="l" href="#2096">2096: </a><span class="php-comment">             * Creates and adds the `advanced-cache.php` file.
-</span></span><span id="2097" class="l"><a class="l" href="#2097">2097: </a><span class="php-comment">             *
-</span></span><span id="2098" class="l"><a class="l" href="#2098">2098: </a><span class="php-comment">             * @since 140422 First documented version.
-</span></span><span id="2099" class="l"><a class="l" href="#2099">2099: </a><span class="php-comment">             *
-</span></span><span id="2100" class="l"><a class="l" href="#2100">2100: </a><span class="php-comment">             * @note Many of the Quick Cache option values become PHP Constants in the `advanced-cache.php` file.
-</span></span><span id="2101" class="l"><a class="l" href="#2101">2101: </a><span class="php-comment">             *    We take an option key (e.g. `version_salt`) and prefix it with `quick_cache_`.
-</span></span><span id="2102" class="l"><a class="l" href="#2102">2102: </a><span class="php-comment">             *    Then we convert it to uppercase (e.g. `QUICK_CACHE_VERSION_SALT`) and wrap
-</span></span><span id="2103" class="l"><a class="l" href="#2103">2103: </a><span class="php-comment">             *    it with double percent signs to form a replacement codes.
-</span></span><span id="2104" class="l"><a class="l" href="#2104">2104: </a><span class="php-comment">             *    ex: `%%QUICK_CACHE_VERSION_SALT%%`
-</span></span><span id="2105" class="l"><a class="l" href="#2105">2105: </a><span class="php-comment">             *
-</span></span><span id="2106" class="l"><a class="l" href="#2106">2106: </a><span class="php-comment">             * @note There are a few special options considered by this routine which actually
-</span></span><span id="2107" class="l"><a class="l" href="#2107">2107: </a><span class="php-comment">             *    get converted to regex patterns before they become replacement codes.
-</span></span><span id="2108" class="l"><a class="l" href="#2108">2108: </a><span class="php-comment">             *
-</span></span><span id="2109" class="l"><a class="l" href="#2109">2109: </a><span class="php-comment">             * @note In the case of a version salt, a PHP syntax is performed also.
-</span></span><span id="2110" class="l"><a class="l" href="#2110">2110: </a><span class="php-comment">             *
-</span></span><span id="2111" class="l"><a class="l" href="#2111">2111: </a><span class="php-comment">             * @return boolean|null `TRUE` on success. `FALSE` or `NULL` on failure.
-</span></span><span id="2112" class="l"><a class="l" href="#2112">2112: </a><span class="php-comment">             *    A special `NULL` return value indicates success with a single failure
-</span></span><span id="2113" class="l"><a class="l" href="#2113">2113: </a><span class="php-comment">             *    that is specifically related to the `qc-advanced-cache` file.
-</span></span><span id="2114" class="l"><a class="l" href="#2114">2114: </a><span class="php-comment">             */</span>
-</span><span id="2115" class="l"><a class="l" href="#2115">2115: </a>            <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_add_advanced_cache" href="#_add_advanced_cache">add_advanced_cache</a>()
-</span><span id="2116" class="l"><a class="l" href="#2116">2116: </a>            {
-</span><span id="2117" class="l"><a class="l" href="#2117">2117: </a>                <span class="php-keyword1">if</span>(!<span class="php-var">$this</span>-&gt;remove_advanced_cache())
-</span><span id="2118" class="l"><a class="l" href="#2118">2118: </a>                    <span class="php-keyword1">return</span> <span class="php-keyword1">FALSE</span>; <span class="php-comment">// Still exists.</span>
-</span><span id="2119" class="l"><a class="l" href="#2119">2119: </a>
-</span><span id="2120" class="l"><a class="l" href="#2120">2120: </a>                <span class="php-var">$cache_dir</span>               = <span class="php-var">$this</span>-&gt;cache_dir(); <span class="php-comment">// Current cache directory.</span>
-</span><span id="2121" class="l"><a class="l" href="#2121">2121: </a>                <span class="php-var">$advanced_cache_file</span>     = WP_CONTENT_DIR.<span class="php-quote">'/advanced-cache.php'</span>;
-</span><span id="2122" class="l"><a class="l" href="#2122">2122: </a>                <span class="php-var">$advanced_cache_template</span> = <span class="php-keyword2">dirname</span>(__FILE__).<span class="php-quote">'/includes/advanced-cache.tpl.php'</span>;
-</span><span id="2123" class="l"><a class="l" href="#2123">2123: </a>
-</span><span id="2124" class="l"><a class="l" href="#2124">2124: </a>                <span class="php-keyword1">if</span>(<span class="php-keyword2">is_file</span>(<span class="php-var">$advanced_cache_file</span>) &amp;&amp; !<span class="php-keyword2">is_writable</span>(<span class="php-var">$advanced_cache_file</span>))
-</span><span id="2125" class="l"><a class="l" href="#2125">2125: </a>                    <span class="php-keyword1">return</span> <span class="php-keyword1">FALSE</span>; <span class="php-comment">// Not possible to create.</span>
+</span><span id="1978" class="l"><a class="l" href="#1978">1978: </a>                <span class="php-keyword1">if</span>(!<span class="php-keyword2">is_readable</span>(<span class="php-var">$wp_config_file</span>)) <span class="php-keyword1">return</span> <span class="php-quote">''</span>; <span class="php-comment">// Not possible.</span>
+</span><span id="1979" class="l"><a class="l" href="#1979">1979: </a>                <span class="php-keyword1">if</span>(!(<span class="php-var">$wp_config_file_contents</span> = <span class="php-keyword2">file_get_contents</span>(<span class="php-var">$wp_config_file</span>)))
+</span><span id="1980" class="l"><a class="l" href="#1980">1980: </a>                    <span class="php-keyword1">return</span> <span class="php-quote">''</span>; <span class="php-comment">// Failure; could not read file.</span>
+</span><span id="1981" class="l"><a class="l" href="#1981">1981: </a>
+</span><span id="1982" class="l"><a class="l" href="#1982">1982: </a>                <span class="php-keyword1">if</span>(<span class="php-keyword2">preg_match</span>(<span class="php-quote">'/define\s*\(\s*([\'&quot;])WP_CACHE\\1\s*,\s*(?:\-?[1-9][0-9\.]*|TRUE|([\'&quot;])(?:[^0\'&quot;]|[^\'&quot;]{2,})\\2)\s*\)\s*;/i'</span>, <span class="php-var">$wp_config_file_contents</span>))
+</span><span id="1983" class="l"><a class="l" href="#1983">1983: </a>                    <span class="php-keyword1">return</span> <span class="php-var">$wp_config_file_contents</span>; <span class="php-comment">// It's already in there; no need to modify this file.</span>
+</span><span id="1984" class="l"><a class="l" href="#1984">1984: </a>
+</span><span id="1985" class="l"><a class="l" href="#1985">1985: </a>                <span class="php-keyword1">if</span>(!(<span class="php-var">$wp_config_file_contents</span> = <span class="php-var">$this</span>-&gt;remove_wp_cache_from_wp_config()))
+</span><span id="1986" class="l"><a class="l" href="#1986">1986: </a>                    <span class="php-keyword1">return</span> <span class="php-quote">''</span>; <span class="php-comment">// Unable to remove previous value.</span>
+</span><span id="1987" class="l"><a class="l" href="#1987">1987: </a>
+</span><span id="1988" class="l"><a class="l" href="#1988">1988: </a>                <span class="php-keyword1">if</span>(!(<span class="php-var">$wp_config_file_contents</span> = <span class="php-keyword2">preg_replace</span>(<span class="php-quote">'/^\s*(\&lt;\?php|\&lt;\?)\s+/i'</span>, <span class="php-quote">'${1}'</span>.<span class="php-quote">&quot;\n&quot;</span>.<span class="php-quote">&quot;define('WP_CACHE', TRUE);&quot;</span>.<span class="php-quote">&quot;\n&quot;</span>, <span class="php-var">$wp_config_file_contents</span>, <span class="php-num">1</span>)))
+</span><span id="1989" class="l"><a class="l" href="#1989">1989: </a>                    <span class="php-keyword1">return</span> <span class="php-quote">''</span>; <span class="php-comment">// Failure; something went terribly wrong here.</span>
+</span><span id="1990" class="l"><a class="l" href="#1990">1990: </a>
+</span><span id="1991" class="l"><a class="l" href="#1991">1991: </a>                <span class="php-keyword1">if</span>(<span class="php-keyword2">strpos</span>(<span class="php-var">$wp_config_file_contents</span>, <span class="php-quote">&quot;define('WP_CACHE', TRUE);&quot;</span>) === <span class="php-keyword1">FALSE</span>)
+</span><span id="1992" class="l"><a class="l" href="#1992">1992: </a>                    <span class="php-keyword1">return</span> <span class="php-quote">''</span>; <span class="php-comment">// Failure; unable to add; unexpected PHP code.</span>
+</span><span id="1993" class="l"><a class="l" href="#1993">1993: </a>
+</span><span id="1994" class="l"><a class="l" href="#1994">1994: </a>                <span class="php-keyword1">if</span>(<span class="php-keyword2">defined</span>(<span class="php-quote">'DISALLOW_FILE_MODS'</span>) &amp;&amp; DISALLOW_FILE_MODS)
+</span><span id="1995" class="l"><a class="l" href="#1995">1995: </a>                    <span class="php-keyword1">return</span> <span class="php-quote">''</span>; <span class="php-comment">// We may NOT edit any files.</span>
+</span><span id="1996" class="l"><a class="l" href="#1996">1996: </a>
+</span><span id="1997" class="l"><a class="l" href="#1997">1997: </a>                <span class="php-keyword1">if</span>(!<span class="php-keyword2">is_writable</span>(<span class="php-var">$wp_config_file</span>)) <span class="php-keyword1">return</span> <span class="php-quote">''</span>; <span class="php-comment">// Not possible.</span>
+</span><span id="1998" class="l"><a class="l" href="#1998">1998: </a>                <span class="php-keyword1">if</span>(!<span class="php-keyword2">file_put_contents</span>(<span class="php-var">$wp_config_file</span>, <span class="php-var">$wp_config_file_contents</span>))
+</span><span id="1999" class="l"><a class="l" href="#1999">1999: </a>                    <span class="php-keyword1">return</span> <span class="php-quote">''</span>; <span class="php-comment">// Failure; could not write changes.</span>
+</span><span id="2000" class="l"><a class="l" href="#2000">2000: </a>
+</span><span id="2001" class="l"><a class="l" href="#2001">2001: </a>                <span class="php-keyword1">return</span> apply_filters(__METHOD__, <span class="php-var">$wp_config_file_contents</span>, <span class="php-keyword2">get_defined_vars</span>());
+</span><span id="2002" class="l"><a class="l" href="#2002">2002: </a>            }
+</span><span id="2003" class="l"><a class="l" href="#2003">2003: </a>
+</span><span id="2004" class="l"><a class="l" href="#2004">2004: </a>            <span class="php-comment">/**
+</span></span><span id="2005" class="l"><a class="l" href="#2005">2005: </a><span class="php-comment">             * Removes `define('WP_CACHE', TRUE);` from the `/wp-config.php` file.
+</span></span><span id="2006" class="l"><a class="l" href="#2006">2006: </a><span class="php-comment">             *
+</span></span><span id="2007" class="l"><a class="l" href="#2007">2007: </a><span class="php-comment">             * @since 140422 First documented version.
+</span></span><span id="2008" class="l"><a class="l" href="#2008">2008: </a><span class="php-comment">             *
+</span></span><span id="2009" class="l"><a class="l" href="#2009">2009: </a><span class="php-comment">             * @return string The new contents of the updated `/wp-config.php` file;
+</span></span><span id="2010" class="l"><a class="l" href="#2010">2010: </a><span class="php-comment">             *    else an empty string if unable to remove the `WP_CACHE` constant.
+</span></span><span id="2011" class="l"><a class="l" href="#2011">2011: </a><span class="php-comment">             */</span>
+</span><span id="2012" class="l"><a class="l" href="#2012">2012: </a>            <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_remove_wp_cache_from_wp_config" href="#_remove_wp_cache_from_wp_config">remove_wp_cache_from_wp_config</a>()
+</span><span id="2013" class="l"><a class="l" href="#2013">2013: </a>            {
+</span><span id="2014" class="l"><a class="l" href="#2014">2014: </a>                <span class="php-keyword1">if</span>(!(<span class="php-var">$wp_config_file</span> = <span class="php-var">$this</span>-&gt;find_wp_config_file()))
+</span><span id="2015" class="l"><a class="l" href="#2015">2015: </a>                    <span class="php-keyword1">return</span> <span class="php-quote">''</span>; <span class="php-comment">// Unable to find `/wp-config.php`.</span>
+</span><span id="2016" class="l"><a class="l" href="#2016">2016: </a>
+</span><span id="2017" class="l"><a class="l" href="#2017">2017: </a>                <span class="php-keyword1">if</span>(!<span class="php-keyword2">is_readable</span>(<span class="php-var">$wp_config_file</span>)) <span class="php-keyword1">return</span> <span class="php-quote">''</span>; <span class="php-comment">// Not possible.</span>
+</span><span id="2018" class="l"><a class="l" href="#2018">2018: </a>                <span class="php-keyword1">if</span>(!(<span class="php-var">$wp_config_file_contents</span> = <span class="php-keyword2">file_get_contents</span>(<span class="php-var">$wp_config_file</span>)))
+</span><span id="2019" class="l"><a class="l" href="#2019">2019: </a>                    <span class="php-keyword1">return</span> <span class="php-quote">''</span>; <span class="php-comment">// Failure; could not read file.</span>
+</span><span id="2020" class="l"><a class="l" href="#2020">2020: </a>
+</span><span id="2021" class="l"><a class="l" href="#2021">2021: </a>                <span class="php-keyword1">if</span>(!<span class="php-keyword2">preg_match</span>(<span class="php-quote">'/([\'&quot;])WP_CACHE\\1/i'</span>, <span class="php-var">$wp_config_file_contents</span>))
+</span><span id="2022" class="l"><a class="l" href="#2022">2022: </a>                    <span class="php-keyword1">return</span> <span class="php-var">$wp_config_file_contents</span>; <span class="php-comment">// Already gone.</span>
+</span><span id="2023" class="l"><a class="l" href="#2023">2023: </a>
+</span><span id="2024" class="l"><a class="l" href="#2024">2024: </a>                <span class="php-keyword1">if</span>(<span class="php-keyword2">preg_match</span>(<span class="php-quote">'/define\s*\(\s*([\'&quot;])WP_CACHE\\1\s*,\s*(?:0|FALSE|NULL|([\'&quot;])0?\\2)\s*\)\s*;/i'</span>, <span class="php-var">$wp_config_file_contents</span>))
+</span><span id="2025" class="l"><a class="l" href="#2025">2025: </a>                    <span class="php-keyword1">return</span> <span class="php-var">$wp_config_file_contents</span>; <span class="php-comment">// It's already disabled; no need to modify this file.</span>
+</span><span id="2026" class="l"><a class="l" href="#2026">2026: </a>
+</span><span id="2027" class="l"><a class="l" href="#2027">2027: </a>                <span class="php-keyword1">if</span>(!(<span class="php-var">$wp_config_file_contents</span> = <span class="php-keyword2">preg_replace</span>(<span class="php-quote">'/define\s*\(\s*([\'&quot;])WP_CACHE\\1\s*,\s*(?:\-?[0-9\.]+|TRUE|FALSE|NULL|([\'&quot;])[^\'&quot;]*\\2)\s*\)\s*;/i'</span>, <span class="php-quote">''</span>, <span class="php-var">$wp_config_file_contents</span>)))
+</span><span id="2028" class="l"><a class="l" href="#2028">2028: </a>                    <span class="php-keyword1">return</span> <span class="php-quote">''</span>; <span class="php-comment">// Failure; something went terribly wrong here.</span>
+</span><span id="2029" class="l"><a class="l" href="#2029">2029: </a>
+</span><span id="2030" class="l"><a class="l" href="#2030">2030: </a>                <span class="php-keyword1">if</span>(<span class="php-keyword2">preg_match</span>(<span class="php-quote">'/([\'&quot;])WP_CACHE\\1/i'</span>, <span class="php-var">$wp_config_file_contents</span>))
+</span><span id="2031" class="l"><a class="l" href="#2031">2031: </a>                    <span class="php-keyword1">return</span> <span class="php-quote">''</span>; <span class="php-comment">// Failure; perhaps the `/wp-config.php` file contains syntax we cannot remove safely.</span>
+</span><span id="2032" class="l"><a class="l" href="#2032">2032: </a>
+</span><span id="2033" class="l"><a class="l" href="#2033">2033: </a>                <span class="php-keyword1">if</span>(<span class="php-keyword2">defined</span>(<span class="php-quote">'DISALLOW_FILE_MODS'</span>) &amp;&amp; DISALLOW_FILE_MODS)
+</span><span id="2034" class="l"><a class="l" href="#2034">2034: </a>                    <span class="php-keyword1">return</span> <span class="php-quote">''</span>; <span class="php-comment">// We may NOT edit any files.</span>
+</span><span id="2035" class="l"><a class="l" href="#2035">2035: </a>
+</span><span id="2036" class="l"><a class="l" href="#2036">2036: </a>                <span class="php-keyword1">if</span>(!<span class="php-keyword2">is_writable</span>(<span class="php-var">$wp_config_file</span>)) <span class="php-keyword1">return</span> <span class="php-quote">''</span>; <span class="php-comment">// Not possible.</span>
+</span><span id="2037" class="l"><a class="l" href="#2037">2037: </a>                <span class="php-keyword1">if</span>(!<span class="php-keyword2">file_put_contents</span>(<span class="php-var">$wp_config_file</span>, <span class="php-var">$wp_config_file_contents</span>))
+</span><span id="2038" class="l"><a class="l" href="#2038">2038: </a>                    <span class="php-keyword1">return</span> <span class="php-quote">''</span>; <span class="php-comment">// Failure; could not write changes.</span>
+</span><span id="2039" class="l"><a class="l" href="#2039">2039: </a>
+</span><span id="2040" class="l"><a class="l" href="#2040">2040: </a>                <span class="php-keyword1">return</span> apply_filters(__METHOD__, <span class="php-var">$wp_config_file_contents</span>, <span class="php-keyword2">get_defined_vars</span>());
+</span><span id="2041" class="l"><a class="l" href="#2041">2041: </a>            }
+</span><span id="2042" class="l"><a class="l" href="#2042">2042: </a>
+</span><span id="2043" class="l"><a class="l" href="#2043">2043: </a>            <span class="php-comment">/**
+</span></span><span id="2044" class="l"><a class="l" href="#2044">2044: </a><span class="php-comment">             * Checks to make sure the `qc-advanced-cache` file still exists;
+</span></span><span id="2045" class="l"><a class="l" href="#2045">2045: </a><span class="php-comment">             *    and if it doesn't, the `advanced-cache.php` is regenerated automatically.
+</span></span><span id="2046" class="l"><a class="l" href="#2046">2046: </a><span class="php-comment">             *
+</span></span><span id="2047" class="l"><a class="l" href="#2047">2047: </a><span class="php-comment">             * @since 140422 First documented version.
+</span></span><span id="2048" class="l"><a class="l" href="#2048">2048: </a><span class="php-comment">             *
+</span></span><span id="2049" class="l"><a class="l" href="#2049">2049: </a><span class="php-comment">             * @attaches-to `init` hook.
+</span></span><span id="2050" class="l"><a class="l" href="#2050">2050: </a><span class="php-comment">             *
+</span></span><span id="2051" class="l"><a class="l" href="#2051">2051: </a><span class="php-comment">             * @note This runs so that remote deployments which completely wipe out an
+</span></span><span id="2052" class="l"><a class="l" href="#2052">2052: </a><span class="php-comment">             *    existing set of website files (like the AWS Elastic Beanstalk does) will NOT cause Quick Cache
+</span></span><span id="2053" class="l"><a class="l" href="#2053">2053: </a><span class="php-comment">             *    to stop functioning due to the lack of an `advanced-cache.php` file, which is generated by Quick Cache.
+</span></span><span id="2054" class="l"><a class="l" href="#2054">2054: </a><span class="php-comment">             *
+</span></span><span id="2055" class="l"><a class="l" href="#2055">2055: </a><span class="php-comment">             *    For instance, if you have a Git repo with all of your site files; when you push those files
+</span></span><span id="2056" class="l"><a class="l" href="#2056">2056: </a><span class="php-comment">             *    to your website to deploy them, you most likely do NOT have the `advanced-cache.php` file.
+</span></span><span id="2057" class="l"><a class="l" href="#2057">2057: </a><span class="php-comment">             *    Quick Cache creates this file on its own. Thus, if it's missing (and QC is active)
+</span></span><span id="2058" class="l"><a class="l" href="#2058">2058: </a><span class="php-comment">             *    we simply regenerate the file automatically to keep Quick Cache running.
+</span></span><span id="2059" class="l"><a class="l" href="#2059">2059: </a><span class="php-comment">             */</span>
+</span><span id="2060" class="l"><a class="l" href="#2060">2060: </a>            <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_check_advanced_cache" href="#_check_advanced_cache">check_advanced_cache</a>()
+</span><span id="2061" class="l"><a class="l" href="#2061">2061: </a>            {
+</span><span id="2062" class="l"><a class="l" href="#2062">2062: </a>                <span class="php-keyword1">if</span>(!<span class="php-var">$this</span>-&gt;options[<span class="php-quote">'enable'</span>])
+</span><span id="2063" class="l"><a class="l" href="#2063">2063: </a>                    <span class="php-keyword1">return</span>; <span class="php-comment">// Nothing to do.</span>
+</span><span id="2064" class="l"><a class="l" href="#2064">2064: </a>
+</span><span id="2065" class="l"><a class="l" href="#2065">2065: </a>                <span class="php-keyword1">if</span>(!<span class="php-keyword1">empty</span>(<span class="php-var">$_REQUEST</span>[__NAMESPACE__]))
+</span><span id="2066" class="l"><a class="l" href="#2066">2066: </a>                    <span class="php-keyword1">return</span>; <span class="php-comment">// Skip on plugin actions.</span>
+</span><span id="2067" class="l"><a class="l" href="#2067">2067: </a>
+</span><span id="2068" class="l"><a class="l" href="#2068">2068: </a>                <span class="php-var">$cache_dir</span> = <span class="php-var">$this</span>-&gt;cache_dir(); <span class="php-comment">// Current cache directory.</span>
+</span><span id="2069" class="l"><a class="l" href="#2069">2069: </a>
+</span><span id="2070" class="l"><a class="l" href="#2070">2070: </a>                <span class="php-keyword1">if</span>(!<span class="php-keyword2">is_file</span>(<span class="php-var">$cache_dir</span>.<span class="php-quote">'/qc-advanced-cache'</span>))
+</span><span id="2071" class="l"><a class="l" href="#2071">2071: </a>                    <span class="php-var">$this</span>-&gt;add_advanced_cache();
+</span><span id="2072" class="l"><a class="l" href="#2072">2072: </a>            }
+</span><span id="2073" class="l"><a class="l" href="#2073">2073: </a>
+</span><span id="2074" class="l"><a class="l" href="#2074">2074: </a>            <span class="php-comment">/**
+</span></span><span id="2075" class="l"><a class="l" href="#2075">2075: </a><span class="php-comment">             * Creates and adds the `advanced-cache.php` file.
+</span></span><span id="2076" class="l"><a class="l" href="#2076">2076: </a><span class="php-comment">             *
+</span></span><span id="2077" class="l"><a class="l" href="#2077">2077: </a><span class="php-comment">             * @since 140422 First documented version.
+</span></span><span id="2078" class="l"><a class="l" href="#2078">2078: </a><span class="php-comment">             *
+</span></span><span id="2079" class="l"><a class="l" href="#2079">2079: </a><span class="php-comment">             * @note Many of the Quick Cache option values become PHP Constants in the `advanced-cache.php` file.
+</span></span><span id="2080" class="l"><a class="l" href="#2080">2080: </a><span class="php-comment">             *    We take an option key (e.g. `version_salt`) and prefix it with `quick_cache_`.
+</span></span><span id="2081" class="l"><a class="l" href="#2081">2081: </a><span class="php-comment">             *    Then we convert it to uppercase (e.g. `QUICK_CACHE_VERSION_SALT`) and wrap
+</span></span><span id="2082" class="l"><a class="l" href="#2082">2082: </a><span class="php-comment">             *    it with double percent signs to form a replacement codes.
+</span></span><span id="2083" class="l"><a class="l" href="#2083">2083: </a><span class="php-comment">             *    ex: `%%QUICK_CACHE_VERSION_SALT%%`
+</span></span><span id="2084" class="l"><a class="l" href="#2084">2084: </a><span class="php-comment">             *
+</span></span><span id="2085" class="l"><a class="l" href="#2085">2085: </a><span class="php-comment">             * @note There are a few special options considered by this routine which actually
+</span></span><span id="2086" class="l"><a class="l" href="#2086">2086: </a><span class="php-comment">             *    get converted to regex patterns before they become replacement codes.
+</span></span><span id="2087" class="l"><a class="l" href="#2087">2087: </a><span class="php-comment">             *
+</span></span><span id="2088" class="l"><a class="l" href="#2088">2088: </a><span class="php-comment">             * @note In the case of a version salt, a PHP syntax is performed also.
+</span></span><span id="2089" class="l"><a class="l" href="#2089">2089: </a><span class="php-comment">             *
+</span></span><span id="2090" class="l"><a class="l" href="#2090">2090: </a><span class="php-comment">             * @return boolean|null `TRUE` on success. `FALSE` or `NULL` on failure.
+</span></span><span id="2091" class="l"><a class="l" href="#2091">2091: </a><span class="php-comment">             *    A special `NULL` return value indicates success with a single failure
+</span></span><span id="2092" class="l"><a class="l" href="#2092">2092: </a><span class="php-comment">             *    that is specifically related to the `qc-advanced-cache` file.
+</span></span><span id="2093" class="l"><a class="l" href="#2093">2093: </a><span class="php-comment">             */</span>
+</span><span id="2094" class="l"><a class="l" href="#2094">2094: </a>            <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_add_advanced_cache" href="#_add_advanced_cache">add_advanced_cache</a>()
+</span><span id="2095" class="l"><a class="l" href="#2095">2095: </a>            {
+</span><span id="2096" class="l"><a class="l" href="#2096">2096: </a>                <span class="php-keyword1">if</span>(!<span class="php-var">$this</span>-&gt;remove_advanced_cache())
+</span><span id="2097" class="l"><a class="l" href="#2097">2097: </a>                    <span class="php-keyword1">return</span> <span class="php-keyword1">FALSE</span>; <span class="php-comment">// Still exists.</span>
+</span><span id="2098" class="l"><a class="l" href="#2098">2098: </a>
+</span><span id="2099" class="l"><a class="l" href="#2099">2099: </a>                <span class="php-var">$cache_dir</span>               = <span class="php-var">$this</span>-&gt;cache_dir();
+</span><span id="2100" class="l"><a class="l" href="#2100">2100: </a>                <span class="php-var">$advanced_cache_file</span>     = WP_CONTENT_DIR.<span class="php-quote">'/advanced-cache.php'</span>;
+</span><span id="2101" class="l"><a class="l" href="#2101">2101: </a>                <span class="php-var">$advanced_cache_template</span> = <span class="php-keyword2">dirname</span>(__FILE__).<span class="php-quote">'/includes/advanced-cache.tpl.php'</span>;
+</span><span id="2102" class="l"><a class="l" href="#2102">2102: </a>
+</span><span id="2103" class="l"><a class="l" href="#2103">2103: </a>                <span class="php-keyword1">if</span>(<span class="php-keyword2">is_file</span>(<span class="php-var">$advanced_cache_file</span>) &amp;&amp; !<span class="php-keyword2">is_writable</span>(<span class="php-var">$advanced_cache_file</span>))
+</span><span id="2104" class="l"><a class="l" href="#2104">2104: </a>                    <span class="php-keyword1">return</span> <span class="php-keyword1">FALSE</span>; <span class="php-comment">// Not possible to create.</span>
+</span><span id="2105" class="l"><a class="l" href="#2105">2105: </a>
+</span><span id="2106" class="l"><a class="l" href="#2106">2106: </a>                <span class="php-keyword1">if</span>(!<span class="php-keyword2">is_file</span>(<span class="php-var">$advanced_cache_file</span>) &amp;&amp; !<span class="php-keyword2">is_writable</span>(<span class="php-keyword2">dirname</span>(<span class="php-var">$advanced_cache_file</span>)))
+</span><span id="2107" class="l"><a class="l" href="#2107">2107: </a>                    <span class="php-keyword1">return</span> <span class="php-keyword1">FALSE</span>; <span class="php-comment">// Not possible to create.</span>
+</span><span id="2108" class="l"><a class="l" href="#2108">2108: </a>
+</span><span id="2109" class="l"><a class="l" href="#2109">2109: </a>                <span class="php-keyword1">if</span>(!<span class="php-keyword2">is_file</span>(<span class="php-var">$advanced_cache_template</span>) || !<span class="php-keyword2">is_readable</span>(<span class="php-var">$advanced_cache_template</span>))
+</span><span id="2110" class="l"><a class="l" href="#2110">2110: </a>                    <span class="php-keyword1">return</span> <span class="php-keyword1">FALSE</span>; <span class="php-comment">// Template file is missing; or not readable.</span>
+</span><span id="2111" class="l"><a class="l" href="#2111">2111: </a>
+</span><span id="2112" class="l"><a class="l" href="#2112">2112: </a>                <span class="php-keyword1">if</span>(!(<span class="php-var">$advanced_cache_contents</span> = <span class="php-keyword2">file_get_contents</span>(<span class="php-var">$advanced_cache_template</span>)))
+</span><span id="2113" class="l"><a class="l" href="#2113">2113: </a>                    <span class="php-keyword1">return</span> <span class="php-keyword1">FALSE</span>; <span class="php-comment">// Template file is missing; or is not readable.</span>
+</span><span id="2114" class="l"><a class="l" href="#2114">2114: </a>
+</span><span id="2115" class="l"><a class="l" href="#2115">2115: </a>                <span class="php-var">$possible_advanced_cache_constant_key_values</span> = <span class="php-keyword2">array_merge</span>(
+</span><span id="2116" class="l"><a class="l" href="#2116">2116: </a>                    <span class="php-var">$this</span>-&gt;options, <span class="php-comment">// The following additional keys are dynamic.</span>
+</span><span id="2117" class="l"><a class="l" href="#2117">2117: </a>                    <span class="php-keyword1">array</span>(<span class="php-quote">'cache_dir'</span> =&gt; <span class="php-var">$this</span>-&gt;base_path_to(<span class="php-var">$this</span>-&gt;cache_sub_dir)
+</span><span id="2118" class="l"><a class="l" href="#2118">2118: </a>                    ));
+</span><span id="2119" class="l"><a class="l" href="#2119">2119: </a>                <span class="php-keyword1">foreach</span>(<span class="php-var">$possible_advanced_cache_constant_key_values</span> <span class="php-keyword1">as</span> <span class="php-var">$_option</span> =&gt; <span class="php-var">$_value</span>)
+</span><span id="2120" class="l"><a class="l" href="#2120">2120: </a>                {
+</span><span id="2121" class="l"><a class="l" href="#2121">2121: </a>                    <span class="php-var">$_value</span> = (string)<span class="php-var">$_value</span>; <span class="php-comment">// Force string.</span>
+</span><span id="2122" class="l"><a class="l" href="#2122">2122: </a>
+</span><span id="2123" class="l"><a class="l" href="#2123">2123: </a>                    <span class="php-keyword1">switch</span>(<span class="php-var">$_option</span>) <span class="php-comment">// Some values need tranformations.</span>
+</span><span id="2124" class="l"><a class="l" href="#2124">2124: </a>                    {
+</span><span id="2125" class="l"><a class="l" href="#2125">2125: </a>                        <span class="php-keyword1">default</span>: <span class="php-comment">// Default case handler.</span>
 </span><span id="2126" class="l"><a class="l" href="#2126">2126: </a>
-</span><span id="2127" class="l"><a class="l" href="#2127">2127: </a>                <span class="php-keyword1">if</span>(!<span class="php-keyword2">is_file</span>(<span class="php-var">$advanced_cache_file</span>) &amp;&amp; !<span class="php-keyword2">is_writable</span>(<span class="php-keyword2">dirname</span>(<span class="php-var">$advanced_cache_file</span>)))
-</span><span id="2128" class="l"><a class="l" href="#2128">2128: </a>                    <span class="php-keyword1">return</span> <span class="php-keyword1">FALSE</span>; <span class="php-comment">// Not possible to create.</span>
-</span><span id="2129" class="l"><a class="l" href="#2129">2129: </a>
-</span><span id="2130" class="l"><a class="l" href="#2130">2130: </a>                <span class="php-keyword1">if</span>(!<span class="php-keyword2">is_file</span>(<span class="php-var">$advanced_cache_template</span>) || !<span class="php-keyword2">is_readable</span>(<span class="php-var">$advanced_cache_template</span>))
-</span><span id="2131" class="l"><a class="l" href="#2131">2131: </a>                    <span class="php-keyword1">return</span> <span class="php-keyword1">FALSE</span>; <span class="php-comment">// Template file is missing; or not readable.</span>
-</span><span id="2132" class="l"><a class="l" href="#2132">2132: </a>
-</span><span id="2133" class="l"><a class="l" href="#2133">2133: </a>                <span class="php-keyword1">if</span>(!(<span class="php-var">$advanced_cache_contents</span> = <span class="php-keyword2">file_get_contents</span>(<span class="php-var">$advanced_cache_template</span>)))
-</span><span id="2134" class="l"><a class="l" href="#2134">2134: </a>                    <span class="php-keyword1">return</span> <span class="php-keyword1">FALSE</span>; <span class="php-comment">// Template file is missing; or is not readable.</span>
-</span><span id="2135" class="l"><a class="l" href="#2135">2135: </a>
-</span><span id="2136" class="l"><a class="l" href="#2136">2136: </a>                <span class="php-var">$possible_advanced_cache_constant_key_values</span> = <span class="php-keyword2">array_merge</span>(
-</span><span id="2137" class="l"><a class="l" href="#2137">2137: </a>                    <span class="php-var">$this</span>-&gt;options, <span class="php-comment">// The following additional keys are dynamic.</span>
-</span><span id="2138" class="l"><a class="l" href="#2138">2138: </a>                    <span class="php-keyword1">array</span>(<span class="php-quote">'cache_dir'</span> =&gt; <span class="php-var">$this</span>-&gt;base_path_to(<span class="php-var">$this</span>-&gt;cache_sub_dir)
-</span><span id="2139" class="l"><a class="l" href="#2139">2139: </a>                    ));
-</span><span id="2140" class="l"><a class="l" href="#2140">2140: </a>                <span class="php-keyword1">foreach</span>(<span class="php-var">$possible_advanced_cache_constant_key_values</span> <span class="php-keyword1">as</span> <span class="php-var">$_option</span> =&gt; <span class="php-var">$_value</span>)
-</span><span id="2141" class="l"><a class="l" href="#2141">2141: </a>                {
-</span><span id="2142" class="l"><a class="l" href="#2142">2142: </a>                    <span class="php-var">$_value</span> = (string)<span class="php-var">$_value</span>; <span class="php-comment">// Force string.</span>
+</span><span id="2127" class="l"><a class="l" href="#2127">2127: </a>                            <span class="php-var">$_value</span> = <span class="php-quote">&quot;'&quot;</span>.<span class="php-var">$this</span>-&gt;esc_sq(<span class="php-var">$_value</span>).<span class="php-quote">&quot;'&quot;</span>;
+</span><span id="2128" class="l"><a class="l" href="#2128">2128: </a>
+</span><span id="2129" class="l"><a class="l" href="#2129">2129: </a>                            <span class="php-keyword1">break</span>; <span class="php-comment">// Break switch handler.</span>
+</span><span id="2130" class="l"><a class="l" href="#2130">2130: </a>                    }
+</span><span id="2131" class="l"><a class="l" href="#2131">2131: </a>                    <span class="php-var">$advanced_cache_contents</span> = <span class="php-comment">// Fill replacement codes.</span>
+</span><span id="2132" class="l"><a class="l" href="#2132">2132: </a>                        <span class="php-keyword2">str_ireplace</span>(<span class="php-keyword1">array</span>(<span class="php-quote">&quot;'%%&quot;</span>.__NAMESPACE__.<span class="php-quote">'_'</span>.<span class="php-var">$_option</span>.<span class="php-quote">&quot;%%'&quot;</span>,
+</span><span id="2133" class="l"><a class="l" href="#2133">2133: </a>                                           <span class="php-quote">&quot;'%%&quot;</span>.<span class="php-keyword2">str_ireplace</span>(<span class="php-quote">'_cache'</span>, <span class="php-quote">''</span>, __NAMESPACE__).<span class="php-quote">'_'</span>.<span class="php-var">$_option</span>.<span class="php-quote">&quot;%%'&quot;</span>),
+</span><span id="2134" class="l"><a class="l" href="#2134">2134: </a>                                     <span class="php-var">$_value</span>, <span class="php-var">$advanced_cache_contents</span>);
+</span><span id="2135" class="l"><a class="l" href="#2135">2135: </a>                }
+</span><span id="2136" class="l"><a class="l" href="#2136">2136: </a>                <span class="php-keyword1">unset</span>(<span class="php-var">$_option</span>, <span class="php-var">$_value</span>, <span class="php-var">$_values</span>, <span class="php-var">$_response</span>); <span class="php-comment">// Housekeeping.</span>
+</span><span id="2137" class="l"><a class="l" href="#2137">2137: </a>
+</span><span id="2138" class="l"><a class="l" href="#2138">2138: </a>                <span class="php-keyword1">if</span>(<span class="php-keyword2">strpos</span>(<span class="php-var">$this</span>-&gt;<span class="php-keyword2">file</span>, WP_CONTENT_DIR) === <span class="php-num">0</span>)
+</span><span id="2139" class="l"><a class="l" href="#2139">2139: </a>                    <span class="php-var">$plugin_file</span> = <span class="php-quote">&quot;WP_CONTENT_DIR.'&quot;</span>.<span class="php-var">$this</span>-&gt;esc_sq(<span class="php-keyword2">str_replace</span>(WP_CONTENT_DIR, <span class="php-quote">''</span>, <span class="php-var">$this</span>-&gt;<span class="php-keyword2">file</span>)).<span class="php-quote">&quot;'&quot;</span>;
+</span><span id="2140" class="l"><a class="l" href="#2140">2140: </a>                <span class="php-keyword1">else</span> <span class="php-var">$plugin_file</span> = <span class="php-quote">&quot;'&quot;</span>.<span class="php-var">$this</span>-&gt;esc_sq(<span class="php-var">$this</span>-&gt;<span class="php-keyword2">file</span>).<span class="php-quote">&quot;'&quot;</span>; <span class="php-comment">// Else use full absolute path.</span>
+</span><span id="2141" class="l"><a class="l" href="#2141">2141: </a>                <span class="php-comment">// Make it possible for the `advanced-cache.php` handler to find the plugin directory reliably.</span>
+</span><span id="2142" class="l"><a class="l" href="#2142">2142: </a>                <span class="php-var">$advanced_cache_contents</span> = <span class="php-keyword2">str_ireplace</span>(<span class="php-quote">&quot;'%%&quot;</span>.__NAMESPACE__.<span class="php-quote">&quot;_PLUGIN_FILE%%'&quot;</span>, <span class="php-var">$plugin_file</span>, <span class="php-var">$advanced_cache_contents</span>);
 </span><span id="2143" class="l"><a class="l" href="#2143">2143: </a>
-</span><span id="2144" class="l"><a class="l" href="#2144">2144: </a>                    <span class="php-keyword1">switch</span>(<span class="php-var">$_option</span>) <span class="php-comment">// Some values need tranformations.</span>
-</span><span id="2145" class="l"><a class="l" href="#2145">2145: </a>                    {
-</span><span id="2146" class="l"><a class="l" href="#2146">2146: </a>                        <span class="php-keyword1">default</span>: <span class="php-comment">// Default case handler.</span>
+</span><span id="2144" class="l"><a class="l" href="#2144">2144: </a>                <span class="php-comment">// Ignore; this is created by Quick Cache; and we don't need to obey in this case.</span>
+</span><span id="2145" class="l"><a class="l" href="#2145">2145: </a>                <span class="php-comment">#if(defined('DISALLOW_FILE_MODS') &amp;&amp; DISALLOW_FILE_MODS)</span>
+</span><span id="2146" class="l"><a class="l" href="#2146">2146: </a>                <span class="php-comment">#   return FALSE; // We may NOT edit any files.</span>
 </span><span id="2147" class="l"><a class="l" href="#2147">2147: </a>
-</span><span id="2148" class="l"><a class="l" href="#2148">2148: </a>                            <span class="php-var">$_value</span> = <span class="php-quote">&quot;'&quot;</span>.<span class="php-var">$this</span>-&gt;esc_sq(<span class="php-var">$_value</span>).<span class="php-quote">&quot;'&quot;</span>;
-</span><span id="2149" class="l"><a class="l" href="#2149">2149: </a>
-</span><span id="2150" class="l"><a class="l" href="#2150">2150: </a>                            <span class="php-keyword1">break</span>; <span class="php-comment">// Break switch handler.</span>
-</span><span id="2151" class="l"><a class="l" href="#2151">2151: </a>                    }
-</span><span id="2152" class="l"><a class="l" href="#2152">2152: </a>                    <span class="php-var">$advanced_cache_contents</span> = <span class="php-comment">// Fill replacement codes.</span>
-</span><span id="2153" class="l"><a class="l" href="#2153">2153: </a>                        <span class="php-keyword2">str_ireplace</span>(<span class="php-keyword1">array</span>(<span class="php-quote">&quot;'%%&quot;</span>.__NAMESPACE__.<span class="php-quote">'_'</span>.<span class="php-var">$_option</span>.<span class="php-quote">&quot;%%'&quot;</span>,
-</span><span id="2154" class="l"><a class="l" href="#2154">2154: </a>                                           <span class="php-quote">&quot;'%%&quot;</span>.<span class="php-keyword2">str_ireplace</span>(<span class="php-quote">'_cache'</span>, <span class="php-quote">''</span>, __NAMESPACE__).<span class="php-quote">'_'</span>.<span class="php-var">$_option</span>.<span class="php-quote">&quot;%%'&quot;</span>),
-</span><span id="2155" class="l"><a class="l" href="#2155">2155: </a>                                     <span class="php-var">$_value</span>, <span class="php-var">$advanced_cache_contents</span>);
-</span><span id="2156" class="l"><a class="l" href="#2156">2156: </a>                }
-</span><span id="2157" class="l"><a class="l" href="#2157">2157: </a>                <span class="php-keyword1">unset</span>(<span class="php-var">$_option</span>, <span class="php-var">$_value</span>, <span class="php-var">$_values</span>, <span class="php-var">$_response</span>); <span class="php-comment">// Housekeeping.</span>
-</span><span id="2158" class="l"><a class="l" href="#2158">2158: </a>
-</span><span id="2159" class="l"><a class="l" href="#2159">2159: </a>                <span class="php-keyword1">if</span>(<span class="php-keyword2">strpos</span>(<span class="php-var">$this</span>-&gt;<span class="php-keyword2">file</span>, WP_CONTENT_DIR) === <span class="php-num">0</span>)
-</span><span id="2160" class="l"><a class="l" href="#2160">2160: </a>                    <span class="php-var">$plugin_file</span> = <span class="php-quote">&quot;WP_CONTENT_DIR.'&quot;</span>.<span class="php-var">$this</span>-&gt;esc_sq(<span class="php-keyword2">str_replace</span>(WP_CONTENT_DIR, <span class="php-quote">''</span>, <span class="php-var">$this</span>-&gt;<span class="php-keyword2">file</span>)).<span class="php-quote">&quot;'&quot;</span>;
-</span><span id="2161" class="l"><a class="l" href="#2161">2161: </a>                <span class="php-keyword1">else</span> <span class="php-var">$plugin_file</span> = <span class="php-quote">&quot;'&quot;</span>.<span class="php-var">$this</span>-&gt;esc_sq(<span class="php-var">$this</span>-&gt;<span class="php-keyword2">file</span>).<span class="php-quote">&quot;'&quot;</span>; <span class="php-comment">// Else use full absolute path.</span>
-</span><span id="2162" class="l"><a class="l" href="#2162">2162: </a>                <span class="php-comment">// Make it possible for the `advanced-cache.php` handler to find the plugin directory reliably.</span>
-</span><span id="2163" class="l"><a class="l" href="#2163">2163: </a>                <span class="php-var">$advanced_cache_contents</span> = <span class="php-keyword2">str_ireplace</span>(<span class="php-quote">&quot;'%%&quot;</span>.__NAMESPACE__.<span class="php-quote">&quot;_PLUGIN_FILE%%'&quot;</span>, <span class="php-var">$plugin_file</span>, <span class="php-var">$advanced_cache_contents</span>);
+</span><span id="2148" class="l"><a class="l" href="#2148">2148: </a>                <span class="php-keyword1">if</span>(!<span class="php-keyword2">file_put_contents</span>(<span class="php-var">$advanced_cache_file</span>, <span class="php-var">$advanced_cache_contents</span>))
+</span><span id="2149" class="l"><a class="l" href="#2149">2149: </a>                    <span class="php-keyword1">return</span> <span class="php-keyword1">FALSE</span>; <span class="php-comment">// Failure; could not write file.</span>
+</span><span id="2150" class="l"><a class="l" href="#2150">2150: </a>
+</span><span id="2151" class="l"><a class="l" href="#2151">2151: </a>                <span class="php-var">$cache_lock</span> = <span class="php-var">$this</span>-&gt;cache_lock(); <span class="php-comment">// Lock cache.</span>
+</span><span id="2152" class="l"><a class="l" href="#2152">2152: </a>
+</span><span id="2153" class="l"><a class="l" href="#2153">2153: </a>                <span class="php-keyword1">if</span>(!<span class="php-keyword2">is_dir</span>(<span class="php-var">$cache_dir</span>)) <span class="php-keyword2">mkdir</span>(<span class="php-var">$cache_dir</span>, <span class="php-num">0775</span>, <span class="php-keyword1">TRUE</span>);
+</span><span id="2154" class="l"><a class="l" href="#2154">2154: </a>
+</span><span id="2155" class="l"><a class="l" href="#2155">2155: </a>                <span class="php-keyword1">if</span>(<span class="php-keyword2">is_writable</span>(<span class="php-var">$cache_dir</span>) &amp;&amp; !<span class="php-keyword2">is_file</span>(<span class="php-var">$cache_dir</span>.<span class="php-quote">'/.htaccess'</span>))
+</span><span id="2156" class="l"><a class="l" href="#2156">2156: </a>                    <span class="php-keyword2">file_put_contents</span>(<span class="php-var">$cache_dir</span>.<span class="php-quote">'/.htaccess'</span>, <span class="php-var">$this</span>-&gt;htaccess_deny);
+</span><span id="2157" class="l"><a class="l" href="#2157">2157: </a>
+</span><span id="2158" class="l"><a class="l" href="#2158">2158: </a>                <span class="php-keyword1">if</span>(!<span class="php-keyword2">is_dir</span>(<span class="php-var">$cache_dir</span>) || !<span class="php-keyword2">is_writable</span>(<span class="php-var">$cache_dir</span>) || !<span class="php-keyword2">is_file</span>(<span class="php-var">$cache_dir</span>.<span class="php-quote">'/.htaccess'</span>) || !<span class="php-keyword2">file_put_contents</span>(<span class="php-var">$cache_dir</span>.<span class="php-quote">'/qc-advanced-cache'</span>, <span class="php-keyword2">time</span>()))
+</span><span id="2159" class="l"><a class="l" href="#2159">2159: </a>                {
+</span><span id="2160" class="l"><a class="l" href="#2160">2160: </a>                    <span class="php-var">$this</span>-&gt;cache_unlock(<span class="php-var">$cache_lock</span>); <span class="php-comment">// Unlock cache.</span>
+</span><span id="2161" class="l"><a class="l" href="#2161">2161: </a>                    <span class="php-keyword1">return</span> <span class="php-keyword1">NULL</span>; <span class="php-comment">// Special return value (NULL) in this case.</span>
+</span><span id="2162" class="l"><a class="l" href="#2162">2162: </a>                }
+</span><span id="2163" class="l"><a class="l" href="#2163">2163: </a>                <span class="php-var">$this</span>-&gt;cache_unlock(<span class="php-var">$cache_lock</span>); <span class="php-comment">// Unlock cache.</span>
 </span><span id="2164" class="l"><a class="l" href="#2164">2164: </a>
-</span><span id="2165" class="l"><a class="l" href="#2165">2165: </a>                <span class="php-comment">// Ignore; this is created by Quick Cache; and we don't need to obey in this case.</span>
-</span><span id="2166" class="l"><a class="l" href="#2166">2166: </a>                <span class="php-comment">#if(defined('DISALLOW_FILE_MODS') &amp;&amp; DISALLOW_FILE_MODS)</span>
-</span><span id="2167" class="l"><a class="l" href="#2167">2167: </a>                <span class="php-comment">#   return FALSE; // We may NOT edit any files.</span>
-</span><span id="2168" class="l"><a class="l" href="#2168">2168: </a>
-</span><span id="2169" class="l"><a class="l" href="#2169">2169: </a>                <span class="php-keyword1">if</span>(!<span class="php-keyword2">file_put_contents</span>(<span class="php-var">$advanced_cache_file</span>, <span class="php-var">$advanced_cache_contents</span>))
-</span><span id="2170" class="l"><a class="l" href="#2170">2170: </a>                    <span class="php-keyword1">return</span> <span class="php-keyword1">FALSE</span>; <span class="php-comment">// Failure; could not write file.</span>
-</span><span id="2171" class="l"><a class="l" href="#2171">2171: </a>
-</span><span id="2172" class="l"><a class="l" href="#2172">2172: </a>                <span class="php-keyword1">if</span>(!<span class="php-keyword2">is_dir</span>(<span class="php-var">$cache_dir</span>))
-</span><span id="2173" class="l"><a class="l" href="#2173">2173: </a>                    <span class="php-keyword2">mkdir</span>(<span class="php-var">$cache_dir</span>, <span class="php-num">0775</span>, <span class="php-keyword1">TRUE</span>);
-</span><span id="2174" class="l"><a class="l" href="#2174">2174: </a>
-</span><span id="2175" class="l"><a class="l" href="#2175">2175: </a>                <span class="php-keyword1">if</span>(<span class="php-keyword2">is_writable</span>(<span class="php-var">$cache_dir</span>) &amp;&amp; !<span class="php-keyword2">is_file</span>(<span class="php-var">$cache_dir</span>.<span class="php-quote">'/.htaccess'</span>))
-</span><span id="2176" class="l"><a class="l" href="#2176">2176: </a>                    <span class="php-keyword2">file_put_contents</span>(<span class="php-var">$cache_dir</span>.<span class="php-quote">'/.htaccess'</span>, <span class="php-var">$this</span>-&gt;htaccess_deny);
-</span><span id="2177" class="l"><a class="l" href="#2177">2177: </a>
-</span><span id="2178" class="l"><a class="l" href="#2178">2178: </a>                <span class="php-keyword1">if</span>(!<span class="php-keyword2">is_file</span>(<span class="php-var">$cache_dir</span>.<span class="php-quote">'/.htaccess'</span>))
-</span><span id="2179" class="l"><a class="l" href="#2179">2179: </a>                    <span class="php-keyword1">return</span> <span class="php-keyword1">NULL</span>; <span class="php-comment">// Failure; could not write .htaccess file. Special return value (NULL) in this case.</span>
-</span><span id="2180" class="l"><a class="l" href="#2180">2180: </a>
-</span><span id="2181" class="l"><a class="l" href="#2181">2181: </a>                <span class="php-keyword1">if</span>(!<span class="php-keyword2">is_dir</span>(<span class="php-var">$cache_dir</span>) || !<span class="php-keyword2">is_writable</span>(<span class="php-var">$cache_dir</span>) || !<span class="php-keyword2">file_put_contents</span>(<span class="php-var">$cache_dir</span>.<span class="php-quote">'/qc-advanced-cache'</span>, <span class="php-keyword2">time</span>()))
-</span><span id="2182" class="l"><a class="l" href="#2182">2182: </a>                    <span class="php-keyword1">return</span> <span class="php-keyword1">NULL</span>; <span class="php-comment">// Failure; could not write cache entry. Special return value (NULL) in this case.</span>
-</span><span id="2183" class="l"><a class="l" href="#2183">2183: </a>
-</span><span id="2184" class="l"><a class="l" href="#2184">2184: </a>                <span class="php-keyword1">return</span> <span class="php-keyword1">TRUE</span>; <span class="php-comment">// All done :-)</span>
-</span><span id="2185" class="l"><a class="l" href="#2185">2185: </a>            }
-</span><span id="2186" class="l"><a class="l" href="#2186">2186: </a>
-</span><span id="2187" class="l"><a class="l" href="#2187">2187: </a>            <span class="php-comment">/**
-</span></span><span id="2188" class="l"><a class="l" href="#2188">2188: </a><span class="php-comment">             * Removes the `advanced-cache.php` file.
-</span></span><span id="2189" class="l"><a class="l" href="#2189">2189: </a><span class="php-comment">             *
-</span></span><span id="2190" class="l"><a class="l" href="#2190">2190: </a><span class="php-comment">             * @since 140422 First documented version.
-</span></span><span id="2191" class="l"><a class="l" href="#2191">2191: </a><span class="php-comment">             *
-</span></span><span id="2192" class="l"><a class="l" href="#2192">2192: </a><span class="php-comment">             * @return boolean `TRUE` on success. `FALSE` on failure.
-</span></span><span id="2193" class="l"><a class="l" href="#2193">2193: </a><span class="php-comment">             *
-</span></span><span id="2194" class="l"><a class="l" href="#2194">2194: </a><span class="php-comment">             * @note The `advanced-cache.php` file is NOT actually deleted by this routine.
-</span></span><span id="2195" class="l"><a class="l" href="#2195">2195: </a><span class="php-comment">             *    Instead of deleting the file, we simply empty it out so that it's `0` bytes in size.
-</span></span><span id="2196" class="l"><a class="l" href="#2196">2196: </a><span class="php-comment">             *
-</span></span><span id="2197" class="l"><a class="l" href="#2197">2197: </a><span class="php-comment">             *    The reason for this is to preserve any file permissions set by the site owner.
-</span></span><span id="2198" class="l"><a class="l" href="#2198">2198: </a><span class="php-comment">             *    If the site owner previously allowed this specific file to become writable, we don't want to
-</span></span><span id="2199" class="l"><a class="l" href="#2199">2199: </a><span class="php-comment">             *    lose that permission by deleting the file; forcing the site owner to do it all over again later.
-</span></span><span id="2200" class="l"><a class="l" href="#2200">2200: </a><span class="php-comment">             *
-</span></span><span id="2201" class="l"><a class="l" href="#2201">2201: </a><span class="php-comment">             *    An example of where this is useful is when a site owner deactivates the QC plugin,
-</span></span><span id="2202" class="l"><a class="l" href="#2202">2202: </a><span class="php-comment">             *    but later they decide that QC really is the most awesome plugin in the world and they turn it back on.
-</span></span><span id="2203" class="l"><a class="l" href="#2203">2203: </a><span class="php-comment">             *
-</span></span><span id="2204" class="l"><a class="l" href="#2204">2204: </a><span class="php-comment">             * @see delete_advanced_cache()
-</span></span><span id="2205" class="l"><a class="l" href="#2205">2205: </a><span class="php-comment">             */</span>
-</span><span id="2206" class="l"><a class="l" href="#2206">2206: </a>            <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_remove_advanced_cache" href="#_remove_advanced_cache">remove_advanced_cache</a>()
-</span><span id="2207" class="l"><a class="l" href="#2207">2207: </a>            {
-</span><span id="2208" class="l"><a class="l" href="#2208">2208: </a>                <span class="php-var">$advanced_cache_file</span> = WP_CONTENT_DIR.<span class="php-quote">'/advanced-cache.php'</span>;
+</span><span id="2165" class="l"><a class="l" href="#2165">2165: </a>                <span class="php-keyword1">return</span> <span class="php-keyword1">TRUE</span>; <span class="php-comment">// Success!</span>
+</span><span id="2166" class="l"><a class="l" href="#2166">2166: </a>            }
+</span><span id="2167" class="l"><a class="l" href="#2167">2167: </a>
+</span><span id="2168" class="l"><a class="l" href="#2168">2168: </a>            <span class="php-comment">/**
+</span></span><span id="2169" class="l"><a class="l" href="#2169">2169: </a><span class="php-comment">             * Removes the `advanced-cache.php` file.
+</span></span><span id="2170" class="l"><a class="l" href="#2170">2170: </a><span class="php-comment">             *
+</span></span><span id="2171" class="l"><a class="l" href="#2171">2171: </a><span class="php-comment">             * @since 140422 First documented version.
+</span></span><span id="2172" class="l"><a class="l" href="#2172">2172: </a><span class="php-comment">             *
+</span></span><span id="2173" class="l"><a class="l" href="#2173">2173: </a><span class="php-comment">             * @return boolean `TRUE` on success. `FALSE` on failure.
+</span></span><span id="2174" class="l"><a class="l" href="#2174">2174: </a><span class="php-comment">             *
+</span></span><span id="2175" class="l"><a class="l" href="#2175">2175: </a><span class="php-comment">             * @note The `advanced-cache.php` file is NOT actually deleted by this routine.
+</span></span><span id="2176" class="l"><a class="l" href="#2176">2176: </a><span class="php-comment">             *    Instead of deleting the file, we simply empty it out so that it's `0` bytes in size.
+</span></span><span id="2177" class="l"><a class="l" href="#2177">2177: </a><span class="php-comment">             *
+</span></span><span id="2178" class="l"><a class="l" href="#2178">2178: </a><span class="php-comment">             *    The reason for this is to preserve any file permissions set by the site owner.
+</span></span><span id="2179" class="l"><a class="l" href="#2179">2179: </a><span class="php-comment">             *    If the site owner previously allowed this specific file to become writable, we don't want to
+</span></span><span id="2180" class="l"><a class="l" href="#2180">2180: </a><span class="php-comment">             *    lose that permission by deleting the file; forcing the site owner to do it all over again later.
+</span></span><span id="2181" class="l"><a class="l" href="#2181">2181: </a><span class="php-comment">             *
+</span></span><span id="2182" class="l"><a class="l" href="#2182">2182: </a><span class="php-comment">             *    An example of where this is useful is when a site owner deactivates the QC plugin,
+</span></span><span id="2183" class="l"><a class="l" href="#2183">2183: </a><span class="php-comment">             *    but later they decide that QC really is the most awesome plugin in the world and they turn it back on.
+</span></span><span id="2184" class="l"><a class="l" href="#2184">2184: </a><span class="php-comment">             *
+</span></span><span id="2185" class="l"><a class="l" href="#2185">2185: </a><span class="php-comment">             * @see delete_advanced_cache()
+</span></span><span id="2186" class="l"><a class="l" href="#2186">2186: </a><span class="php-comment">             */</span>
+</span><span id="2187" class="l"><a class="l" href="#2187">2187: </a>            <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_remove_advanced_cache" href="#_remove_advanced_cache">remove_advanced_cache</a>()
+</span><span id="2188" class="l"><a class="l" href="#2188">2188: </a>            {
+</span><span id="2189" class="l"><a class="l" href="#2189">2189: </a>                <span class="php-var">$advanced_cache_file</span> = WP_CONTENT_DIR.<span class="php-quote">'/advanced-cache.php'</span>;
+</span><span id="2190" class="l"><a class="l" href="#2190">2190: </a>
+</span><span id="2191" class="l"><a class="l" href="#2191">2191: </a>                <span class="php-keyword1">if</span>(!<span class="php-keyword2">is_file</span>(<span class="php-var">$advanced_cache_file</span>)) <span class="php-keyword1">return</span> <span class="php-keyword1">TRUE</span>; <span class="php-comment">// Already gone.</span>
+</span><span id="2192" class="l"><a class="l" href="#2192">2192: </a>
+</span><span id="2193" class="l"><a class="l" href="#2193">2193: </a>                <span class="php-keyword1">if</span>(<span class="php-keyword2">is_readable</span>(<span class="php-var">$advanced_cache_file</span>) &amp;&amp; <span class="php-keyword2">filesize</span>(<span class="php-var">$advanced_cache_file</span>) === <span class="php-num">0</span>)
+</span><span id="2194" class="l"><a class="l" href="#2194">2194: </a>                    <span class="php-keyword1">return</span> <span class="php-keyword1">TRUE</span>; <span class="php-comment">// Already gone; i.e. it's empty already.</span>
+</span><span id="2195" class="l"><a class="l" href="#2195">2195: </a>
+</span><span id="2196" class="l"><a class="l" href="#2196">2196: </a>                <span class="php-keyword1">if</span>(!<span class="php-keyword2">is_writable</span>(<span class="php-var">$advanced_cache_file</span>)) <span class="php-keyword1">return</span> <span class="php-keyword1">FALSE</span>; <span class="php-comment">// Not possible.</span>
+</span><span id="2197" class="l"><a class="l" href="#2197">2197: </a>
+</span><span id="2198" class="l"><a class="l" href="#2198">2198: </a>                <span class="php-comment">// Ignore; this is created by Quick Cache; and we don't need to obey in this case.</span>
+</span><span id="2199" class="l"><a class="l" href="#2199">2199: </a>                <span class="php-comment">#if(defined('DISALLOW_FILE_MODS') &amp;&amp; DISALLOW_FILE_MODS)</span>
+</span><span id="2200" class="l"><a class="l" href="#2200">2200: </a>                <span class="php-comment">#   return FALSE; // We may NOT edit any files.</span>
+</span><span id="2201" class="l"><a class="l" href="#2201">2201: </a>
+</span><span id="2202" class="l"><a class="l" href="#2202">2202: </a>                <span class="php-comment">/* Empty the file only. This way permissions are NOT lost in cases where
+</span></span><span id="2203" class="l"><a class="l" href="#2203">2203: </a><span class="php-comment">                    a site owner makes this specific file writable for Quick Cache. */</span>
+</span><span id="2204" class="l"><a class="l" href="#2204">2204: </a>                <span class="php-keyword1">if</span>(<span class="php-keyword2">file_put_contents</span>(<span class="php-var">$advanced_cache_file</span>, <span class="php-quote">''</span>) !== <span class="php-num">0</span>)
+</span><span id="2205" class="l"><a class="l" href="#2205">2205: </a>                    <span class="php-keyword1">return</span> <span class="php-keyword1">FALSE</span>; <span class="php-comment">// Failure.</span>
+</span><span id="2206" class="l"><a class="l" href="#2206">2206: </a>
+</span><span id="2207" class="l"><a class="l" href="#2207">2207: </a>                <span class="php-keyword1">return</span> <span class="php-keyword1">TRUE</span>; <span class="php-comment">// Removal success.</span>
+</span><span id="2208" class="l"><a class="l" href="#2208">2208: </a>            }
 </span><span id="2209" class="l"><a class="l" href="#2209">2209: </a>
-</span><span id="2210" class="l"><a class="l" href="#2210">2210: </a>                <span class="php-keyword1">if</span>(!<span class="php-keyword2">is_file</span>(<span class="php-var">$advanced_cache_file</span>)) <span class="php-keyword1">return</span> <span class="php-keyword1">TRUE</span>; <span class="php-comment">// Already gone.</span>
-</span><span id="2211" class="l"><a class="l" href="#2211">2211: </a>
-</span><span id="2212" class="l"><a class="l" href="#2212">2212: </a>                <span class="php-keyword1">if</span>(<span class="php-keyword2">is_readable</span>(<span class="php-var">$advanced_cache_file</span>) &amp;&amp; <span class="php-keyword2">filesize</span>(<span class="php-var">$advanced_cache_file</span>) === <span class="php-num">0</span>)
-</span><span id="2213" class="l"><a class="l" href="#2213">2213: </a>                    <span class="php-keyword1">return</span> <span class="php-keyword1">TRUE</span>; <span class="php-comment">// Already gone; i.e. it's empty already.</span>
-</span><span id="2214" class="l"><a class="l" href="#2214">2214: </a>
-</span><span id="2215" class="l"><a class="l" href="#2215">2215: </a>                <span class="php-keyword1">if</span>(!<span class="php-keyword2">is_writable</span>(<span class="php-var">$advanced_cache_file</span>)) <span class="php-keyword1">return</span> <span class="php-keyword1">FALSE</span>; <span class="php-comment">// Not possible.</span>
-</span><span id="2216" class="l"><a class="l" href="#2216">2216: </a>
-</span><span id="2217" class="l"><a class="l" href="#2217">2217: </a>                <span class="php-comment">// Ignore; this is created by Quick Cache; and we don't need to obey in this case.</span>
-</span><span id="2218" class="l"><a class="l" href="#2218">2218: </a>                <span class="php-comment">#if(defined('DISALLOW_FILE_MODS') &amp;&amp; DISALLOW_FILE_MODS)</span>
-</span><span id="2219" class="l"><a class="l" href="#2219">2219: </a>                <span class="php-comment">#   return FALSE; // We may NOT edit any files.</span>
-</span><span id="2220" class="l"><a class="l" href="#2220">2220: </a>
-</span><span id="2221" class="l"><a class="l" href="#2221">2221: </a>                <span class="php-comment">/* Empty the file only. This way permissions are NOT lost in cases where
-</span></span><span id="2222" class="l"><a class="l" href="#2222">2222: </a><span class="php-comment">                    a site owner makes this specific file writable for Quick Cache. */</span>
-</span><span id="2223" class="l"><a class="l" href="#2223">2223: </a>                <span class="php-keyword1">if</span>(<span class="php-keyword2">file_put_contents</span>(<span class="php-var">$advanced_cache_file</span>, <span class="php-quote">''</span>) !== <span class="php-num">0</span>)
-</span><span id="2224" class="l"><a class="l" href="#2224">2224: </a>                    <span class="php-keyword1">return</span> <span class="php-keyword1">FALSE</span>; <span class="php-comment">// Failure.</span>
-</span><span id="2225" class="l"><a class="l" href="#2225">2225: </a>
-</span><span id="2226" class="l"><a class="l" href="#2226">2226: </a>                <span class="php-keyword1">return</span> <span class="php-keyword1">TRUE</span>; <span class="php-comment">// Removal success.</span>
-</span><span id="2227" class="l"><a class="l" href="#2227">2227: </a>            }
-</span><span id="2228" class="l"><a class="l" href="#2228">2228: </a>
-</span><span id="2229" class="l"><a class="l" href="#2229">2229: </a>            <span class="php-comment">/**
-</span></span><span id="2230" class="l"><a class="l" href="#2230">2230: </a><span class="php-comment">             * Deletes the `advanced-cache.php` file.
-</span></span><span id="2231" class="l"><a class="l" href="#2231">2231: </a><span class="php-comment">             *
-</span></span><span id="2232" class="l"><a class="l" href="#2232">2232: </a><span class="php-comment">             * @since 140422 First documented version.
-</span></span><span id="2233" class="l"><a class="l" href="#2233">2233: </a><span class="php-comment">             *
-</span></span><span id="2234" class="l"><a class="l" href="#2234">2234: </a><span class="php-comment">             * @return boolean `TRUE` on success. `FALSE` on failure.
-</span></span><span id="2235" class="l"><a class="l" href="#2235">2235: </a><span class="php-comment">             *
-</span></span><span id="2236" class="l"><a class="l" href="#2236">2236: </a><span class="php-comment">             * @note The `advanced-cache.php` file is deleted by this routine.
-</span></span><span id="2237" class="l"><a class="l" href="#2237">2237: </a><span class="php-comment">             *
-</span></span><span id="2238" class="l"><a class="l" href="#2238">2238: </a><span class="php-comment">             * @see remove_advanced_cache()
-</span></span><span id="2239" class="l"><a class="l" href="#2239">2239: </a><span class="php-comment">             */</span>
-</span><span id="2240" class="l"><a class="l" href="#2240">2240: </a>            <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_delete_advanced_cache" href="#_delete_advanced_cache">delete_advanced_cache</a>()
-</span><span id="2241" class="l"><a class="l" href="#2241">2241: </a>            {
-</span><span id="2242" class="l"><a class="l" href="#2242">2242: </a>                <span class="php-var">$advanced_cache_file</span> = WP_CONTENT_DIR.<span class="php-quote">'/advanced-cache.php'</span>;
-</span><span id="2243" class="l"><a class="l" href="#2243">2243: </a>
-</span><span id="2244" class="l"><a class="l" href="#2244">2244: </a>                <span class="php-keyword1">if</span>(!<span class="php-keyword2">is_file</span>(<span class="php-var">$advanced_cache_file</span>)) <span class="php-keyword1">return</span> <span class="php-keyword1">TRUE</span>; <span class="php-comment">// Already gone.</span>
-</span><span id="2245" class="l"><a class="l" href="#2245">2245: </a>
-</span><span id="2246" class="l"><a class="l" href="#2246">2246: </a>                <span class="php-comment">// Ignore; this is created by Quick Cache; and we don't need to obey in this case.</span>
-</span><span id="2247" class="l"><a class="l" href="#2247">2247: </a>                <span class="php-comment">#if(defined('DISALLOW_FILE_MODS') &amp;&amp; DISALLOW_FILE_MODS)</span>
-</span><span id="2248" class="l"><a class="l" href="#2248">2248: </a>                <span class="php-comment">#   return FALSE; // We may NOT edit any files.</span>
-</span><span id="2249" class="l"><a class="l" href="#2249">2249: </a>
-</span><span id="2250" class="l"><a class="l" href="#2250">2250: </a>                <span class="php-keyword1">if</span>(!<span class="php-keyword2">is_writable</span>(<span class="php-var">$advanced_cache_file</span>) || !<span class="php-keyword2">unlink</span>(<span class="php-var">$advanced_cache_file</span>))
-</span><span id="2251" class="l"><a class="l" href="#2251">2251: </a>                    <span class="php-keyword1">return</span> <span class="php-keyword1">FALSE</span>; <span class="php-comment">// Not possible; or outright failure.</span>
-</span><span id="2252" class="l"><a class="l" href="#2252">2252: </a>
-</span><span id="2253" class="l"><a class="l" href="#2253">2253: </a>                <span class="php-keyword1">return</span> <span class="php-keyword1">TRUE</span>; <span class="php-comment">// Deletion success.</span>
-</span><span id="2254" class="l"><a class="l" href="#2254">2254: </a>            }
-</span><span id="2255" class="l"><a class="l" href="#2255">2255: </a>
-</span><span id="2256" class="l"><a class="l" href="#2256">2256: </a>            <span class="php-comment">/**
-</span></span><span id="2257" class="l"><a class="l" href="#2257">2257: </a><span class="php-comment">             * Checks to make sure the `qc-blog-paths` file still exists;
-</span></span><span id="2258" class="l"><a class="l" href="#2258">2258: </a><span class="php-comment">             *    and if it doesn't, the `qc-blog-paths` file is regenerated automatically.
-</span></span><span id="2259" class="l"><a class="l" href="#2259">2259: </a><span class="php-comment">             *
-</span></span><span id="2260" class="l"><a class="l" href="#2260">2260: </a><span class="php-comment">             * @since 140422 First documented version.
-</span></span><span id="2261" class="l"><a class="l" href="#2261">2261: </a><span class="php-comment">             *
-</span></span><span id="2262" class="l"><a class="l" href="#2262">2262: </a><span class="php-comment">             * @attaches-to `init` hook.
-</span></span><span id="2263" class="l"><a class="l" href="#2263">2263: </a><span class="php-comment">             *
-</span></span><span id="2264" class="l"><a class="l" href="#2264">2264: </a><span class="php-comment">             * @note This runs so that remote deployments which completely wipe out an
-</span></span><span id="2265" class="l"><a class="l" href="#2265">2265: </a><span class="php-comment">             *    existing set of website files (like the AWS Elastic Beanstalk does) will NOT cause Quick Cache
-</span></span><span id="2266" class="l"><a class="l" href="#2266">2266: </a><span class="php-comment">             *    to stop functioning due to the lack of a `qc-blog-paths` file, which is generated by Quick Cache.
-</span></span><span id="2267" class="l"><a class="l" href="#2267">2267: </a><span class="php-comment">             *
-</span></span><span id="2268" class="l"><a class="l" href="#2268">2268: </a><span class="php-comment">             *    For instance, if you have a Git repo with all of your site files; when you push those files
-</span></span><span id="2269" class="l"><a class="l" href="#2269">2269: </a><span class="php-comment">             *    to your website to deploy them, you most likely do NOT have the `qc-blog-paths` file.
-</span></span><span id="2270" class="l"><a class="l" href="#2270">2270: </a><span class="php-comment">             *    Quick Cache creates this file on its own. Thus, if it's missing (and QC is active)
-</span></span><span id="2271" class="l"><a class="l" href="#2271">2271: </a><span class="php-comment">             *    we simply regenerate the file automatically to keep Quick Cache running.
-</span></span><span id="2272" class="l"><a class="l" href="#2272">2272: </a><span class="php-comment">             */</span>
-</span><span id="2273" class="l"><a class="l" href="#2273">2273: </a>            <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_check_blog_paths" href="#_check_blog_paths">check_blog_paths</a>()
-</span><span id="2274" class="l"><a class="l" href="#2274">2274: </a>            {
-</span><span id="2275" class="l"><a class="l" href="#2275">2275: </a>                <span class="php-keyword1">if</span>(!<span class="php-var">$this</span>-&gt;options[<span class="php-quote">'enable'</span>])
-</span><span id="2276" class="l"><a class="l" href="#2276">2276: </a>                    <span class="php-keyword1">return</span>; <span class="php-comment">// Nothing to do.</span>
-</span><span id="2277" class="l"><a class="l" href="#2277">2277: </a>
-</span><span id="2278" class="l"><a class="l" href="#2278">2278: </a>                <span class="php-keyword1">if</span>(!is_multisite()) <span class="php-keyword1">return</span>; <span class="php-comment">// N/A.</span>
-</span><span id="2279" class="l"><a class="l" href="#2279">2279: </a>
-</span><span id="2280" class="l"><a class="l" href="#2280">2280: </a>                <span class="php-keyword1">if</span>(!<span class="php-keyword1">empty</span>(<span class="php-var">$_REQUEST</span>[__NAMESPACE__]))
-</span><span id="2281" class="l"><a class="l" href="#2281">2281: </a>                    <span class="php-keyword1">return</span>; <span class="php-comment">// Skip on plugin actions.</span>
-</span><span id="2282" class="l"><a class="l" href="#2282">2282: </a>
-</span><span id="2283" class="l"><a class="l" href="#2283">2283: </a>                <span class="php-var">$cache_dir</span> = <span class="php-var">$this</span>-&gt;cache_dir(); <span class="php-comment">// Current cache directory.</span>
-</span><span id="2284" class="l"><a class="l" href="#2284">2284: </a>
-</span><span id="2285" class="l"><a class="l" href="#2285">2285: </a>                <span class="php-keyword1">if</span>(!<span class="php-keyword2">is_file</span>(<span class="php-var">$cache_dir</span>.<span class="php-quote">'/qc-blog-paths'</span>))
-</span><span id="2286" class="l"><a class="l" href="#2286">2286: </a>                    <span class="php-var">$this</span>-&gt;update_blog_paths();
-</span><span id="2287" class="l"><a class="l" href="#2287">2287: </a>            }
-</span><span id="2288" class="l"><a class="l" href="#2288">2288: </a>
-</span><span id="2289" class="l"><a class="l" href="#2289">2289: </a>            <span class="php-comment">/**
-</span></span><span id="2290" class="l"><a class="l" href="#2290">2290: </a><span class="php-comment">             * Creates and/or updates the `qc-blog-paths` file.
-</span></span><span id="2291" class="l"><a class="l" href="#2291">2291: </a><span class="php-comment">             *
-</span></span><span id="2292" class="l"><a class="l" href="#2292">2292: </a><span class="php-comment">             * @since 140422 First documented version.
-</span></span><span id="2293" class="l"><a class="l" href="#2293">2293: </a><span class="php-comment">             *
-</span></span><span id="2294" class="l"><a class="l" href="#2294">2294: </a><span class="php-comment">             * @attaches-to `enable_live_network_counts` filter.
-</span></span><span id="2295" class="l"><a class="l" href="#2295">2295: </a><span class="php-comment">             *
-</span></span><span id="2296" class="l"><a class="l" href="#2296">2296: </a><span class="php-comment">             * @param mixed $enable_live_network_counts Optional, defaults to a `NULL` value.
-</span></span><span id="2297" class="l"><a class="l" href="#2297">2297: </a><span class="php-comment">             *
-</span></span><span id="2298" class="l"><a class="l" href="#2298">2298: </a><span class="php-comment">             * @return mixed The value of `$enable_live_network_counts` (passes through).
-</span></span><span id="2299" class="l"><a class="l" href="#2299">2299: </a><span class="php-comment">             *
-</span></span><span id="2300" class="l"><a class="l" href="#2300">2300: </a><span class="php-comment">             * @note While this routine is attached to a WP filter, we also call upon it directly at times.
-</span></span><span id="2301" class="l"><a class="l" href="#2301">2301: </a><span class="php-comment">             */</span>
-</span><span id="2302" class="l"><a class="l" href="#2302">2302: </a>            <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_update_blog_paths" href="#_update_blog_paths">update_blog_paths</a>(<span class="php-var">$enable_live_network_counts</span> = <span class="php-keyword1">NULL</span>)
-</span><span id="2303" class="l"><a class="l" href="#2303">2303: </a>            {
-</span><span id="2304" class="l"><a class="l" href="#2304">2304: </a>                <span class="php-var">$value</span> = <span class="php-comment">// This hook actually rides on a filter.</span>
-</span><span id="2305" class="l"><a class="l" href="#2305">2305: </a>                    <span class="php-var">$enable_live_network_counts</span>; <span class="php-comment">// Filter value.</span>
-</span><span id="2306" class="l"><a class="l" href="#2306">2306: </a>
-</span><span id="2307" class="l"><a class="l" href="#2307">2307: </a>                <span class="php-keyword1">if</span>(!<span class="php-var">$this</span>-&gt;options[<span class="php-quote">'enable'</span>])
-</span><span id="2308" class="l"><a class="l" href="#2308">2308: </a>                    <span class="php-keyword1">return</span> <span class="php-var">$value</span>; <span class="php-comment">// Nothing to do.</span>
+</span><span id="2210" class="l"><a class="l" href="#2210">2210: </a>            <span class="php-comment">/**
+</span></span><span id="2211" class="l"><a class="l" href="#2211">2211: </a><span class="php-comment">             * Deletes the `advanced-cache.php` file.
+</span></span><span id="2212" class="l"><a class="l" href="#2212">2212: </a><span class="php-comment">             *
+</span></span><span id="2213" class="l"><a class="l" href="#2213">2213: </a><span class="php-comment">             * @since 140422 First documented version.
+</span></span><span id="2214" class="l"><a class="l" href="#2214">2214: </a><span class="php-comment">             *
+</span></span><span id="2215" class="l"><a class="l" href="#2215">2215: </a><span class="php-comment">             * @return boolean `TRUE` on success. `FALSE` on failure.
+</span></span><span id="2216" class="l"><a class="l" href="#2216">2216: </a><span class="php-comment">             *
+</span></span><span id="2217" class="l"><a class="l" href="#2217">2217: </a><span class="php-comment">             * @note The `advanced-cache.php` file is deleted by this routine.
+</span></span><span id="2218" class="l"><a class="l" href="#2218">2218: </a><span class="php-comment">             *
+</span></span><span id="2219" class="l"><a class="l" href="#2219">2219: </a><span class="php-comment">             * @see remove_advanced_cache()
+</span></span><span id="2220" class="l"><a class="l" href="#2220">2220: </a><span class="php-comment">             */</span>
+</span><span id="2221" class="l"><a class="l" href="#2221">2221: </a>            <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_delete_advanced_cache" href="#_delete_advanced_cache">delete_advanced_cache</a>()
+</span><span id="2222" class="l"><a class="l" href="#2222">2222: </a>            {
+</span><span id="2223" class="l"><a class="l" href="#2223">2223: </a>                <span class="php-var">$advanced_cache_file</span> = WP_CONTENT_DIR.<span class="php-quote">'/advanced-cache.php'</span>;
+</span><span id="2224" class="l"><a class="l" href="#2224">2224: </a>
+</span><span id="2225" class="l"><a class="l" href="#2225">2225: </a>                <span class="php-keyword1">if</span>(!<span class="php-keyword2">is_file</span>(<span class="php-var">$advanced_cache_file</span>)) <span class="php-keyword1">return</span> <span class="php-keyword1">TRUE</span>; <span class="php-comment">// Already gone.</span>
+</span><span id="2226" class="l"><a class="l" href="#2226">2226: </a>
+</span><span id="2227" class="l"><a class="l" href="#2227">2227: </a>                <span class="php-comment">// Ignore; this is created by Quick Cache; and we don't need to obey in this case.</span>
+</span><span id="2228" class="l"><a class="l" href="#2228">2228: </a>                <span class="php-comment">#if(defined('DISALLOW_FILE_MODS') &amp;&amp; DISALLOW_FILE_MODS)</span>
+</span><span id="2229" class="l"><a class="l" href="#2229">2229: </a>                <span class="php-comment">#   return FALSE; // We may NOT edit any files.</span>
+</span><span id="2230" class="l"><a class="l" href="#2230">2230: </a>
+</span><span id="2231" class="l"><a class="l" href="#2231">2231: </a>                <span class="php-keyword1">if</span>(!<span class="php-keyword2">is_writable</span>(<span class="php-var">$advanced_cache_file</span>) || !<span class="php-keyword2">unlink</span>(<span class="php-var">$advanced_cache_file</span>))
+</span><span id="2232" class="l"><a class="l" href="#2232">2232: </a>                    <span class="php-keyword1">return</span> <span class="php-keyword1">FALSE</span>; <span class="php-comment">// Not possible; or outright failure.</span>
+</span><span id="2233" class="l"><a class="l" href="#2233">2233: </a>
+</span><span id="2234" class="l"><a class="l" href="#2234">2234: </a>                <span class="php-keyword1">return</span> <span class="php-keyword1">TRUE</span>; <span class="php-comment">// Deletion success.</span>
+</span><span id="2235" class="l"><a class="l" href="#2235">2235: </a>            }
+</span><span id="2236" class="l"><a class="l" href="#2236">2236: </a>
+</span><span id="2237" class="l"><a class="l" href="#2237">2237: </a>            <span class="php-comment">/**
+</span></span><span id="2238" class="l"><a class="l" href="#2238">2238: </a><span class="php-comment">             * Checks to make sure the `qc-blog-paths` file still exists;
+</span></span><span id="2239" class="l"><a class="l" href="#2239">2239: </a><span class="php-comment">             *    and if it doesn't, the `qc-blog-paths` file is regenerated automatically.
+</span></span><span id="2240" class="l"><a class="l" href="#2240">2240: </a><span class="php-comment">             *
+</span></span><span id="2241" class="l"><a class="l" href="#2241">2241: </a><span class="php-comment">             * @since 140422 First documented version.
+</span></span><span id="2242" class="l"><a class="l" href="#2242">2242: </a><span class="php-comment">             *
+</span></span><span id="2243" class="l"><a class="l" href="#2243">2243: </a><span class="php-comment">             * @attaches-to `init` hook.
+</span></span><span id="2244" class="l"><a class="l" href="#2244">2244: </a><span class="php-comment">             *
+</span></span><span id="2245" class="l"><a class="l" href="#2245">2245: </a><span class="php-comment">             * @note This runs so that remote deployments which completely wipe out an
+</span></span><span id="2246" class="l"><a class="l" href="#2246">2246: </a><span class="php-comment">             *    existing set of website files (like the AWS Elastic Beanstalk does) will NOT cause Quick Cache
+</span></span><span id="2247" class="l"><a class="l" href="#2247">2247: </a><span class="php-comment">             *    to stop functioning due to the lack of a `qc-blog-paths` file, which is generated by Quick Cache.
+</span></span><span id="2248" class="l"><a class="l" href="#2248">2248: </a><span class="php-comment">             *
+</span></span><span id="2249" class="l"><a class="l" href="#2249">2249: </a><span class="php-comment">             *    For instance, if you have a Git repo with all of your site files; when you push those files
+</span></span><span id="2250" class="l"><a class="l" href="#2250">2250: </a><span class="php-comment">             *    to your website to deploy them, you most likely do NOT have the `qc-blog-paths` file.
+</span></span><span id="2251" class="l"><a class="l" href="#2251">2251: </a><span class="php-comment">             *    Quick Cache creates this file on its own. Thus, if it's missing (and QC is active)
+</span></span><span id="2252" class="l"><a class="l" href="#2252">2252: </a><span class="php-comment">             *    we simply regenerate the file automatically to keep Quick Cache running.
+</span></span><span id="2253" class="l"><a class="l" href="#2253">2253: </a><span class="php-comment">             */</span>
+</span><span id="2254" class="l"><a class="l" href="#2254">2254: </a>            <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_check_blog_paths" href="#_check_blog_paths">check_blog_paths</a>()
+</span><span id="2255" class="l"><a class="l" href="#2255">2255: </a>            {
+</span><span id="2256" class="l"><a class="l" href="#2256">2256: </a>                <span class="php-keyword1">if</span>(!<span class="php-var">$this</span>-&gt;options[<span class="php-quote">'enable'</span>])
+</span><span id="2257" class="l"><a class="l" href="#2257">2257: </a>                    <span class="php-keyword1">return</span>; <span class="php-comment">// Nothing to do.</span>
+</span><span id="2258" class="l"><a class="l" href="#2258">2258: </a>
+</span><span id="2259" class="l"><a class="l" href="#2259">2259: </a>                <span class="php-keyword1">if</span>(!is_multisite()) <span class="php-keyword1">return</span>; <span class="php-comment">// N/A.</span>
+</span><span id="2260" class="l"><a class="l" href="#2260">2260: </a>
+</span><span id="2261" class="l"><a class="l" href="#2261">2261: </a>                <span class="php-keyword1">if</span>(!<span class="php-keyword1">empty</span>(<span class="php-var">$_REQUEST</span>[__NAMESPACE__]))
+</span><span id="2262" class="l"><a class="l" href="#2262">2262: </a>                    <span class="php-keyword1">return</span>; <span class="php-comment">// Skip on plugin actions.</span>
+</span><span id="2263" class="l"><a class="l" href="#2263">2263: </a>
+</span><span id="2264" class="l"><a class="l" href="#2264">2264: </a>                <span class="php-var">$cache_dir</span> = <span class="php-var">$this</span>-&gt;cache_dir(); <span class="php-comment">// Current cache directory.</span>
+</span><span id="2265" class="l"><a class="l" href="#2265">2265: </a>
+</span><span id="2266" class="l"><a class="l" href="#2266">2266: </a>                <span class="php-keyword1">if</span>(!<span class="php-keyword2">is_file</span>(<span class="php-var">$cache_dir</span>.<span class="php-quote">'/qc-blog-paths'</span>))
+</span><span id="2267" class="l"><a class="l" href="#2267">2267: </a>                    <span class="php-var">$this</span>-&gt;update_blog_paths();
+</span><span id="2268" class="l"><a class="l" href="#2268">2268: </a>            }
+</span><span id="2269" class="l"><a class="l" href="#2269">2269: </a>
+</span><span id="2270" class="l"><a class="l" href="#2270">2270: </a>            <span class="php-comment">/**
+</span></span><span id="2271" class="l"><a class="l" href="#2271">2271: </a><span class="php-comment">             * Creates and/or updates the `qc-blog-paths` file.
+</span></span><span id="2272" class="l"><a class="l" href="#2272">2272: </a><span class="php-comment">             *
+</span></span><span id="2273" class="l"><a class="l" href="#2273">2273: </a><span class="php-comment">             * @since 140422 First documented version.
+</span></span><span id="2274" class="l"><a class="l" href="#2274">2274: </a><span class="php-comment">             *
+</span></span><span id="2275" class="l"><a class="l" href="#2275">2275: </a><span class="php-comment">             * @attaches-to `enable_live_network_counts` filter.
+</span></span><span id="2276" class="l"><a class="l" href="#2276">2276: </a><span class="php-comment">             *
+</span></span><span id="2277" class="l"><a class="l" href="#2277">2277: </a><span class="php-comment">             * @param mixed $enable_live_network_counts Optional, defaults to a `NULL` value.
+</span></span><span id="2278" class="l"><a class="l" href="#2278">2278: </a><span class="php-comment">             *
+</span></span><span id="2279" class="l"><a class="l" href="#2279">2279: </a><span class="php-comment">             * @return mixed The value of `$enable_live_network_counts` (passes through).
+</span></span><span id="2280" class="l"><a class="l" href="#2280">2280: </a><span class="php-comment">             *
+</span></span><span id="2281" class="l"><a class="l" href="#2281">2281: </a><span class="php-comment">             * @note While this routine is attached to a WP filter, we also call upon it directly at times.
+</span></span><span id="2282" class="l"><a class="l" href="#2282">2282: </a><span class="php-comment">             */</span>
+</span><span id="2283" class="l"><a class="l" href="#2283">2283: </a>            <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_update_blog_paths" href="#_update_blog_paths">update_blog_paths</a>(<span class="php-var">$enable_live_network_counts</span> = <span class="php-keyword1">NULL</span>)
+</span><span id="2284" class="l"><a class="l" href="#2284">2284: </a>            {
+</span><span id="2285" class="l"><a class="l" href="#2285">2285: </a>                <span class="php-var">$value</span> = <span class="php-comment">// This hook actually rides on a filter.</span>
+</span><span id="2286" class="l"><a class="l" href="#2286">2286: </a>                    <span class="php-var">$enable_live_network_counts</span>; <span class="php-comment">// Filter value.</span>
+</span><span id="2287" class="l"><a class="l" href="#2287">2287: </a>
+</span><span id="2288" class="l"><a class="l" href="#2288">2288: </a>                <span class="php-keyword1">if</span>(!<span class="php-var">$this</span>-&gt;options[<span class="php-quote">'enable'</span>])
+</span><span id="2289" class="l"><a class="l" href="#2289">2289: </a>                    <span class="php-keyword1">return</span> <span class="php-var">$value</span>; <span class="php-comment">// Nothing to do.</span>
+</span><span id="2290" class="l"><a class="l" href="#2290">2290: </a>
+</span><span id="2291" class="l"><a class="l" href="#2291">2291: </a>                <span class="php-keyword1">if</span>(!is_multisite()) <span class="php-keyword1">return</span> <span class="php-var">$value</span>; <span class="php-comment">// N/A.</span>
+</span><span id="2292" class="l"><a class="l" href="#2292">2292: </a>
+</span><span id="2293" class="l"><a class="l" href="#2293">2293: </a>                <span class="php-var">$cache_dir</span>  = <span class="php-var">$this</span>-&gt;cache_dir(); <span class="php-comment">// Cache dir.</span>
+</span><span id="2294" class="l"><a class="l" href="#2294">2294: </a>                <span class="php-var">$cache_lock</span> = <span class="php-var">$this</span>-&gt;cache_lock(); <span class="php-comment">// Lock.</span>
+</span><span id="2295" class="l"><a class="l" href="#2295">2295: </a>
+</span><span id="2296" class="l"><a class="l" href="#2296">2296: </a>                <span class="php-keyword1">if</span>(!<span class="php-keyword2">is_dir</span>(<span class="php-var">$cache_dir</span>)) <span class="php-keyword2">mkdir</span>(<span class="php-var">$cache_dir</span>, <span class="php-num">0775</span>, <span class="php-keyword1">TRUE</span>);
+</span><span id="2297" class="l"><a class="l" href="#2297">2297: </a>
+</span><span id="2298" class="l"><a class="l" href="#2298">2298: </a>                <span class="php-keyword1">if</span>(<span class="php-keyword2">is_writable</span>(<span class="php-var">$cache_dir</span>) &amp;&amp; !<span class="php-keyword2">is_file</span>(<span class="php-var">$cache_dir</span>.<span class="php-quote">'/.htaccess'</span>))
+</span><span id="2299" class="l"><a class="l" href="#2299">2299: </a>                    <span class="php-keyword2">file_put_contents</span>(<span class="php-var">$cache_dir</span>.<span class="php-quote">'/.htaccess'</span>, <span class="php-var">$this</span>-&gt;htaccess_deny);
+</span><span id="2300" class="l"><a class="l" href="#2300">2300: </a>
+</span><span id="2301" class="l"><a class="l" href="#2301">2301: </a>                <span class="php-keyword1">if</span>(<span class="php-keyword2">is_dir</span>(<span class="php-var">$cache_dir</span>) &amp;&amp; <span class="php-keyword2">is_writable</span>(<span class="php-var">$cache_dir</span>))
+</span><span id="2302" class="l"><a class="l" href="#2302">2302: </a>                {
+</span><span id="2303" class="l"><a class="l" href="#2303">2303: </a>                    <span class="php-var">$paths</span> = <span class="php-comment">// Collect child blog paths from the WordPress database.</span>
+</span><span id="2304" class="l"><a class="l" href="#2304">2304: </a>                        <span class="php-var">$this</span>-&gt;wpdb()-&gt;get_col(<span class="php-quote">&quot;SELECT `path` FROM `&quot;</span>.esc_sql(<span class="php-var">$this</span>-&gt;wpdb()-&gt;blogs).<span class="php-quote">&quot;` WHERE `deleted` &lt;= '0'&quot;</span>);
+</span><span id="2305" class="l"><a class="l" href="#2305">2305: </a>
+</span><span id="2306" class="l"><a class="l" href="#2306">2306: </a>                    <span class="php-keyword1">foreach</span>(<span class="php-var">$paths</span> <span class="php-keyword1">as</span> &amp;<span class="php-var">$_path</span>) <span class="php-comment">// Strip base; these need to match `$host_dir_token`.</span>
+</span><span id="2307" class="l"><a class="l" href="#2307">2307: </a>                        <span class="php-var">$_path</span> = <span class="php-quote">'/'</span>.<span class="php-keyword2">ltrim</span>(<span class="php-keyword2">preg_replace</span>(<span class="php-quote">'/^'</span>.<span class="php-keyword2">preg_quote</span>(<span class="php-var">$this</span>-&gt;host_base_token(), <span class="php-quote">'/'</span>).<span class="php-quote">'/'</span>, <span class="php-quote">''</span>, <span class="php-var">$_path</span>), <span class="php-quote">'/'</span>);
+</span><span id="2308" class="l"><a class="l" href="#2308">2308: </a>                    <span class="php-keyword1">unset</span>(<span class="php-var">$_path</span>); <span class="php-comment">// Housekeeping.</span>
 </span><span id="2309" class="l"><a class="l" href="#2309">2309: </a>
-</span><span id="2310" class="l"><a class="l" href="#2310">2310: </a>                <span class="php-keyword1">if</span>(!is_multisite()) <span class="php-keyword1">return</span> <span class="php-var">$value</span>; <span class="php-comment">// N/A.</span>
-</span><span id="2311" class="l"><a class="l" href="#2311">2311: </a>
-</span><span id="2312" class="l"><a class="l" href="#2312">2312: </a>                <span class="php-var">$cache_dir</span> = <span class="php-var">$this</span>-&gt;cache_dir(); <span class="php-comment">// cache dir.</span>
+</span><span id="2310" class="l"><a class="l" href="#2310">2310: </a>                    <span class="php-keyword2">file_put_contents</span>(<span class="php-var">$cache_dir</span>.<span class="php-quote">'/qc-blog-paths'</span>, <span class="php-keyword2">serialize</span>(<span class="php-var">$paths</span>));
+</span><span id="2311" class="l"><a class="l" href="#2311">2311: </a>                }
+</span><span id="2312" class="l"><a class="l" href="#2312">2312: </a>                <span class="php-var">$this</span>-&gt;cache_unlock(<span class="php-var">$cache_lock</span>); <span class="php-comment">// Unlock cache directory.</span>
 </span><span id="2313" class="l"><a class="l" href="#2313">2313: </a>
-</span><span id="2314" class="l"><a class="l" href="#2314">2314: </a>                <span class="php-keyword1">if</span>(!<span class="php-keyword2">is_dir</span>(<span class="php-var">$cache_dir</span>))
-</span><span id="2315" class="l"><a class="l" href="#2315">2315: </a>                    <span class="php-keyword2">mkdir</span>(<span class="php-var">$cache_dir</span>, <span class="php-num">0775</span>, <span class="php-keyword1">TRUE</span>);
+</span><span id="2314" class="l"><a class="l" href="#2314">2314: </a>                <span class="php-keyword1">return</span> <span class="php-var">$value</span>; <span class="php-comment">// Pass through untouched (always).</span>
+</span><span id="2315" class="l"><a class="l" href="#2315">2315: </a>            }
 </span><span id="2316" class="l"><a class="l" href="#2316">2316: </a>
-</span><span id="2317" class="l"><a class="l" href="#2317">2317: </a>                <span class="php-keyword1">if</span>(<span class="php-keyword2">is_writable</span>(<span class="php-var">$cache_dir</span>) &amp;&amp; !<span class="php-keyword2">is_file</span>(<span class="php-var">$cache_dir</span>.<span class="php-quote">'/.htaccess'</span>))
-</span><span id="2318" class="l"><a class="l" href="#2318">2318: </a>                    <span class="php-keyword2">file_put_contents</span>(<span class="php-var">$cache_dir</span>.<span class="php-quote">'/.htaccess'</span>, <span class="php-var">$this</span>-&gt;htaccess_deny);
-</span><span id="2319" class="l"><a class="l" href="#2319">2319: </a>
-</span><span id="2320" class="l"><a class="l" href="#2320">2320: </a>                <span class="php-keyword1">if</span>(<span class="php-keyword2">is_dir</span>(<span class="php-var">$cache_dir</span>) &amp;&amp; <span class="php-keyword2">is_writable</span>(<span class="php-var">$cache_dir</span>))
-</span><span id="2321" class="l"><a class="l" href="#2321">2321: </a>                {
-</span><span id="2322" class="l"><a class="l" href="#2322">2322: </a>                    <span class="php-var">$paths</span> = <span class="php-comment">// Collect child blog paths from the WordPress database.</span>
-</span><span id="2323" class="l"><a class="l" href="#2323">2323: </a>                        <span class="php-var">$this</span>-&gt;wpdb()-&gt;get_col(<span class="php-quote">&quot;SELECT `path` FROM `&quot;</span>.esc_sql(<span class="php-var">$this</span>-&gt;wpdb()-&gt;blogs).<span class="php-quote">&quot;` WHERE `deleted` &lt;= '0'&quot;</span>);
-</span><span id="2324" class="l"><a class="l" href="#2324">2324: </a>
-</span><span id="2325" class="l"><a class="l" href="#2325">2325: </a>                    <span class="php-keyword1">foreach</span>(<span class="php-var">$paths</span> <span class="php-keyword1">as</span> &amp;<span class="php-var">$_path</span>) <span class="php-comment">// Strip base; these need to match `$host_dir_token`.</span>
-</span><span id="2326" class="l"><a class="l" href="#2326">2326: </a>                        <span class="php-var">$_path</span> = <span class="php-quote">'/'</span>.<span class="php-keyword2">ltrim</span>(<span class="php-keyword2">preg_replace</span>(<span class="php-quote">'/^'</span>.<span class="php-keyword2">preg_quote</span>(<span class="php-var">$this</span>-&gt;host_base_token(), <span class="php-quote">'/'</span>).<span class="php-quote">'/'</span>, <span class="php-quote">''</span>, <span class="php-var">$_path</span>), <span class="php-quote">'/'</span>);
-</span><span id="2327" class="l"><a class="l" href="#2327">2327: </a>                    <span class="php-keyword1">unset</span>(<span class="php-var">$_path</span>); <span class="php-comment">// Housekeeping.</span>
-</span><span id="2328" class="l"><a class="l" href="#2328">2328: </a>
-</span><span id="2329" class="l"><a class="l" href="#2329">2329: </a>                    <span class="php-keyword2">file_put_contents</span>(<span class="php-var">$cache_dir</span>.<span class="php-quote">'/qc-blog-paths'</span>, <span class="php-keyword2">serialize</span>(<span class="php-var">$paths</span>));
-</span><span id="2330" class="l"><a class="l" href="#2330">2330: </a>                }
-</span><span id="2331" class="l"><a class="l" href="#2331">2331: </a>                <span class="php-keyword1">return</span> <span class="php-var">$value</span>; <span class="php-comment">// Pass through untouched (always).</span>
-</span><span id="2332" class="l"><a class="l" href="#2332">2332: </a>            }
+</span><span id="2317" class="l"><a class="l" href="#2317">2317: </a>            <span class="php-comment">/**
+</span></span><span id="2318" class="l"><a class="l" href="#2318">2318: </a><span class="php-comment">             * Removes the entire base directory.
+</span></span><span id="2319" class="l"><a class="l" href="#2319">2319: </a><span class="php-comment">             *
+</span></span><span id="2320" class="l"><a class="l" href="#2320">2320: </a><span class="php-comment">             * @since 140422 First documented version.
+</span></span><span id="2321" class="l"><a class="l" href="#2321">2321: </a><span class="php-comment">             *
+</span></span><span id="2322" class="l"><a class="l" href="#2322">2322: </a><span class="php-comment">             * @return integer Total files removed by this routine (if any).
+</span></span><span id="2323" class="l"><a class="l" href="#2323">2323: </a><span class="php-comment">             */</span>
+</span><span id="2324" class="l"><a class="l" href="#2324">2324: </a>            <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_remove_base_dir" href="#_remove_base_dir">remove_base_dir</a>()
+</span><span id="2325" class="l"><a class="l" href="#2325">2325: </a>            {
+</span><span id="2326" class="l"><a class="l" href="#2326">2326: </a>                <span class="php-var">$counter</span> = <span class="php-num">0</span>; <span class="php-comment">// Initialize.</span>
+</span><span id="2327" class="l"><a class="l" href="#2327">2327: </a>
+</span><span id="2328" class="l"><a class="l" href="#2328">2328: </a>                @<span class="php-keyword2">set_time_limit</span>(<span class="php-num">1800</span>); <span class="php-comment">// @TODO When disabled, display a warning.</span>
+</span><span id="2329" class="l"><a class="l" href="#2329">2329: </a>
+</span><span id="2330" class="l"><a class="l" href="#2330">2330: </a>                <span class="php-keyword1">return</span> (<span class="php-var">$counter</span> += <span class="php-var">$this</span>-&gt;delete_all_files_dirs_in(<span class="php-var">$this</span>-&gt;wp_content_base_dir_to(<span class="php-quote">''</span>), <span class="php-keyword1">TRUE</span>));
+</span><span id="2331" class="l"><a class="l" href="#2331">2331: </a>            }
+</span><span id="2332" class="l"><a class="l" href="#2332">2332: </a>        }
 </span><span id="2333" class="l"><a class="l" href="#2333">2333: </a>
-</span><span id="2334" class="l"><a class="l" href="#2334">2334: </a>            <span class="php-comment">/**
-</span></span><span id="2335" class="l"><a class="l" href="#2335">2335: </a><span class="php-comment">             * Removes the entire base directory.
-</span></span><span id="2336" class="l"><a class="l" href="#2336">2336: </a><span class="php-comment">             *
-</span></span><span id="2337" class="l"><a class="l" href="#2337">2337: </a><span class="php-comment">             * @since 140422 First documented version.
-</span></span><span id="2338" class="l"><a class="l" href="#2338">2338: </a><span class="php-comment">             *
-</span></span><span id="2339" class="l"><a class="l" href="#2339">2339: </a><span class="php-comment">             * @return integer Total files removed by this routine (if any).
-</span></span><span id="2340" class="l"><a class="l" href="#2340">2340: </a><span class="php-comment">             */</span>
-</span><span id="2341" class="l"><a class="l" href="#2341">2341: </a>            <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> <a id="_remove_base_dir" href="#_remove_base_dir">remove_base_dir</a>()
-</span><span id="2342" class="l"><a class="l" href="#2342">2342: </a>            {
-</span><span id="2343" class="l"><a class="l" href="#2343">2343: </a>                <span class="php-var">$counter</span> = <span class="php-num">0</span>; <span class="php-comment">// Initialize.</span>
-</span><span id="2344" class="l"><a class="l" href="#2344">2344: </a>
-</span><span id="2345" class="l"><a class="l" href="#2345">2345: </a>                @<span class="php-keyword2">set_time_limit</span>(<span class="php-num">1800</span>); <span class="php-comment">// @TODO When disabled, display a warning.</span>
+</span><span id="2334" class="l"><a class="l" href="#2334">2334: </a>        <span class="php-comment">/**
+</span></span><span id="2335" class="l"><a class="l" href="#2335">2335: </a><span class="php-comment">         * Used internally by other Quick Cache classes as an easy way to reference
+</span></span><span id="2336" class="l"><a class="l" href="#2336">2336: </a><span class="php-comment">         *    the core {@link plugin} class instance for Quick Cache.
+</span></span><span id="2337" class="l"><a class="l" href="#2337">2337: </a><span class="php-comment">         *
+</span></span><span id="2338" class="l"><a class="l" href="#2338">2338: </a><span class="php-comment">         * @since 140422 First documented version.
+</span></span><span id="2339" class="l"><a class="l" href="#2339">2339: </a><span class="php-comment">         *
+</span></span><span id="2340" class="l"><a class="l" href="#2340">2340: </a><span class="php-comment">         * @return plugin Class instance.
+</span></span><span id="2341" class="l"><a class="l" href="#2341">2341: </a><span class="php-comment">         */</span>
+</span><span id="2342" class="l"><a class="l" href="#2342">2342: </a>        <span class="php-keyword1">function</span> <a id="_plugin" href="#_plugin">plugin</a>() <span class="php-comment">// Easy reference.</span>
+</span><span id="2343" class="l"><a class="l" href="#2343">2343: </a>        {
+</span><span id="2344" class="l"><a class="l" href="#2344">2344: </a>            <span class="php-keyword1">return</span> <span class="php-var">$GLOBALS</span>[__NAMESPACE__];
+</span><span id="2345" class="l"><a class="l" href="#2345">2345: </a>        }
 </span><span id="2346" class="l"><a class="l" href="#2346">2346: </a>
-</span><span id="2347" class="l"><a class="l" href="#2347">2347: </a>                <span class="php-keyword1">return</span> (<span class="php-var">$counter</span> += <span class="php-var">$this</span>-&gt;delete_all_files_dirs_in(<span class="php-var">$this</span>-&gt;wp_content_base_dir_to(<span class="php-quote">''</span>), <span class="php-keyword1">TRUE</span>));
-</span><span id="2348" class="l"><a class="l" href="#2348">2348: </a>            }
-</span><span id="2349" class="l"><a class="l" href="#2349">2349: </a>        }
-</span><span id="2350" class="l"><a class="l" href="#2350">2350: </a>
-</span><span id="2351" class="l"><a class="l" href="#2351">2351: </a>        <span class="php-comment">/**
-</span></span><span id="2352" class="l"><a class="l" href="#2352">2352: </a><span class="php-comment">         * Used internally by other Quick Cache classes as an easy way to reference
-</span></span><span id="2353" class="l"><a class="l" href="#2353">2353: </a><span class="php-comment">         *    the core {@link plugin} class instance for Quick Cache.
-</span></span><span id="2354" class="l"><a class="l" href="#2354">2354: </a><span class="php-comment">         *
-</span></span><span id="2355" class="l"><a class="l" href="#2355">2355: </a><span class="php-comment">         * @since 140422 First documented version.
-</span></span><span id="2356" class="l"><a class="l" href="#2356">2356: </a><span class="php-comment">         *
-</span></span><span id="2357" class="l"><a class="l" href="#2357">2357: </a><span class="php-comment">         * @return plugin Class instance.
-</span></span><span id="2358" class="l"><a class="l" href="#2358">2358: </a><span class="php-comment">         */</span>
-</span><span id="2359" class="l"><a class="l" href="#2359">2359: </a>        <span class="php-keyword1">function</span> <a id="_plugin" href="#_plugin">plugin</a>() <span class="php-comment">// Easy reference.</span>
-</span><span id="2360" class="l"><a class="l" href="#2360">2360: </a>        {
-</span><span id="2361" class="l"><a class="l" href="#2361">2361: </a>            <span class="php-keyword1">return</span> <span class="php-var">$GLOBALS</span>[__NAMESPACE__];
-</span><span id="2362" class="l"><a class="l" href="#2362">2362: </a>        }
-</span><span id="2363" class="l"><a class="l" href="#2363">2363: </a>
-</span><span id="2364" class="l"><a class="l" href="#2364">2364: </a>        <span class="php-comment">/**
-</span></span><span id="2365" class="l"><a class="l" href="#2365">2365: </a><span class="php-comment">         * A global reference to the Quick Cache plugin.
-</span></span><span id="2366" class="l"><a class="l" href="#2366">2366: </a><span class="php-comment">         *
-</span></span><span id="2367" class="l"><a class="l" href="#2367">2367: </a><span class="php-comment">         * @since 140422 First documented version.
-</span></span><span id="2368" class="l"><a class="l" href="#2368">2368: </a><span class="php-comment">         *
-</span></span><span id="2369" class="l"><a class="l" href="#2369">2369: </a><span class="php-comment">         * @var plugin Main plugin class.
-</span></span><span id="2370" class="l"><a class="l" href="#2370">2370: </a><span class="php-comment">         */</span>
-</span><span id="2371" class="l"><a class="l" href="#2371">2371: </a>        <span class="php-keyword1">if</span>(!<span class="php-keyword1">isset</span>(<span class="php-var">$GLOBALS</span>[__NAMESPACE__.<span class="php-quote">'_autoload_plugin'</span>]) || <span class="php-var">$GLOBALS</span>[__NAMESPACE__.<span class="php-quote">'_autoload_plugin'</span>])
-</span><span id="2372" class="l"><a class="l" href="#2372">2372: </a>            <span class="php-var">$GLOBALS</span>[__NAMESPACE__] = <span class="php-keyword1">new</span> plugin(); <span class="php-comment">// Load the Quick Cache plugin automatically.</span>
-</span><span id="2373" class="l"><a class="l" href="#2373">2373: </a>        <span class="php-keyword1">require_once</span> <span class="php-keyword2">dirname</span>(__FILE__).<span class="php-quote">'/includes/api-class.php'</span>; <span class="php-comment">// API class.</span>
-</span><span id="2374" class="l"><a class="l" href="#2374">2374: </a>    }
-</span><span id="2375" class="l"><a class="l" href="#2375">2375: </a>    <span class="php-keyword1">else</span> <span class="php-keyword1">if</span>(<span class="php-keyword1">empty</span>(<span class="php-var">$GLOBALS</span>[__NAMESPACE__.<span class="php-quote">'_uninstalling'</span>])) add_action(<span class="php-quote">'all_admin_notices'</span>, <span class="php-keyword1">function</span> ()
-</span><span id="2376" class="l"><a class="l" href="#2376">2376: </a>    {
-</span><span id="2377" class="l"><a class="l" href="#2377">2377: </a>        <span class="php-keyword1">echo</span> <span class="php-quote">'&lt;div class=&quot;error&quot;&gt;'</span>.
-</span><span id="2378" class="l"><a class="l" href="#2378">2378: </a>             <span class="php-quote">'   &lt;p&gt;'</span>. <span class="php-comment">// Running multiple versions of this plugin at same time.</span>
-</span><span id="2379" class="l"><a class="l" href="#2379">2379: </a>             <span class="php-quote">'      '</span>.__(<span class="php-quote">'Please disable the LITE version of Quick Cache before you activate the PRO version.'</span>, <span class="php-keyword2">str_replace</span>(<span class="php-quote">'_'</span>, <span class="php-quote">'-'</span>, __NAMESPACE__)).
-</span><span id="2380" class="l"><a class="l" href="#2380">2380: </a>             <span class="php-quote">'   &lt;/p&gt;'</span>.
-</span><span id="2381" class="l"><a class="l" href="#2381">2381: </a>             <span class="php-quote">'&lt;/div&gt;'</span>;
-</span><span id="2382" class="l"><a class="l" href="#2382">2382: </a>    });
-</span><span id="2383" class="l"><a class="l" href="#2383">2383: </a></span>}</code></pre>
+</span><span id="2347" class="l"><a class="l" href="#2347">2347: </a>        <span class="php-comment">/**
+</span></span><span id="2348" class="l"><a class="l" href="#2348">2348: </a><span class="php-comment">         * A global reference to the Quick Cache plugin.
+</span></span><span id="2349" class="l"><a class="l" href="#2349">2349: </a><span class="php-comment">         *
+</span></span><span id="2350" class="l"><a class="l" href="#2350">2350: </a><span class="php-comment">         * @since 140422 First documented version.
+</span></span><span id="2351" class="l"><a class="l" href="#2351">2351: </a><span class="php-comment">         *
+</span></span><span id="2352" class="l"><a class="l" href="#2352">2352: </a><span class="php-comment">         * @var plugin Main plugin class.
+</span></span><span id="2353" class="l"><a class="l" href="#2353">2353: </a><span class="php-comment">         */</span>
+</span><span id="2354" class="l"><a class="l" href="#2354">2354: </a>        <span class="php-keyword1">if</span>(!<span class="php-keyword1">isset</span>(<span class="php-var">$GLOBALS</span>[__NAMESPACE__.<span class="php-quote">'_autoload_plugin'</span>]) || <span class="php-var">$GLOBALS</span>[__NAMESPACE__.<span class="php-quote">'_autoload_plugin'</span>])
+</span><span id="2355" class="l"><a class="l" href="#2355">2355: </a>            <span class="php-var">$GLOBALS</span>[__NAMESPACE__] = <span class="php-keyword1">new</span> plugin(); <span class="php-comment">// Load the Quick Cache plugin automatically.</span>
+</span><span id="2356" class="l"><a class="l" href="#2356">2356: </a>        <span class="php-keyword1">require_once</span> <span class="php-keyword2">dirname</span>(__FILE__).<span class="php-quote">'/includes/api-class.php'</span>; <span class="php-comment">// API class.</span>
+</span><span id="2357" class="l"><a class="l" href="#2357">2357: </a>    }
+</span><span id="2358" class="l"><a class="l" href="#2358">2358: </a>    <span class="php-keyword1">else</span> <span class="php-keyword1">if</span>(<span class="php-keyword1">empty</span>(<span class="php-var">$GLOBALS</span>[__NAMESPACE__.<span class="php-quote">'_uninstalling'</span>])) add_action(<span class="php-quote">'all_admin_notices'</span>, <span class="php-keyword1">function</span> ()
+</span><span id="2359" class="l"><a class="l" href="#2359">2359: </a>    {
+</span><span id="2360" class="l"><a class="l" href="#2360">2360: </a>        <span class="php-keyword1">echo</span> <span class="php-quote">'&lt;div class=&quot;error&quot;&gt;'</span>.
+</span><span id="2361" class="l"><a class="l" href="#2361">2361: </a>             <span class="php-quote">'   &lt;p&gt;'</span>. <span class="php-comment">// Running multiple versions of this plugin at same time.</span>
+</span><span id="2362" class="l"><a class="l" href="#2362">2362: </a>             <span class="php-quote">'      '</span>.__(<span class="php-quote">'Please disable the LITE version of Quick Cache before you activate the PRO version.'</span>, <span class="php-keyword2">str_replace</span>(<span class="php-quote">'_'</span>, <span class="php-quote">'-'</span>, __NAMESPACE__)).
+</span><span id="2363" class="l"><a class="l" href="#2363">2363: </a>             <span class="php-quote">'   &lt;/p&gt;'</span>.
+</span><span id="2364" class="l"><a class="l" href="#2364">2364: </a>             <span class="php-quote">'&lt;/div&gt;'</span>;
+</span><span id="2365" class="l"><a class="l" href="#2365">2365: </a>    });
+</span><span id="2366" class="l"><a class="l" href="#2366">2366: </a></span>}</code></pre>
 
 	<div id="footer">
 		Quick Cache Lite API documentation generated by <a href="http://apigen.org">ApiGen 2.8.0</a>
