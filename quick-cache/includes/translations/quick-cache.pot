@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the Quick Cache package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Quick Cache 141204\n"
+"Project-Id-Version: Quick Cache 141205\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/quick-cache\n"
-"POT-Creation-Date: 2014-12-05 02:46:25+00:00\n"
+"POT-Creation-Date: 2014-12-05 05:37:06+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1142,7 +1142,7 @@ msgstr ""
 msgid "<strong>Quick Cache:</strong> detected a new version of itself. Recompiling w/ latest version... wiping the cache... all done :-)"
 msgstr ""
 
-#. #-#-#-#-#  quick-cache.pot (Quick Cache 141204)  #-#-#-#-#
+#. #-#-#-#-#  quick-cache.pot (Quick Cache 141205)  #-#-#-#-#
 #. Plugin Name of the plugin/theme
 #: quick-cache.inc.php:551 quick-cache.inc.php:567
 msgid "Quick Cache"
