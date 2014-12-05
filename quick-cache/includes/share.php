@@ -52,7 +52,7 @@ namespace quick_cache // Root namespace.
 			 *
 			 * @var string Current version of the software.
 			 */
-			public $version = '141127';
+			public $version = '141204';
 
 			/**
 			 * Plugin slug; based on `__NAMESPACE__`.
@@ -1302,7 +1302,7 @@ namespace quick_cache // Root namespace.
 			/**
 			 * Acquires system tmp directory path.
 			 *
-			 * @since 14xxxx Refactoring cache clear/purge routines.
+			 * @since 141204 Refactoring cache clear/purge routines.
 			 *
 			 * @return string System tmp directory path; else an empty string.
 			 */
