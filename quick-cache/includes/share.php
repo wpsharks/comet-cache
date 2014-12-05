@@ -52,7 +52,7 @@ namespace quick_cache // Root namespace.
 			 *
 			 * @var string Current version of the software.
 			 */
-			public $version = '141110';
+			public $version = '141204';
 
 			/**
 			 * Plugin slug; based on `__NAMESPACE__`.
@@ -1299,6 +1299,77 @@ namespace quick_cache // Root namespace.
 				return (string)rtrim($dir_file, DIRECTORY_SEPARATOR.'\\/').'-'.str_replace('.', '', uniqid('', TRUE)).'-tmp';
 			}
 
+			/**
+			 * Acquires system tmp directory path.
+			 *
+			 * @since 141204 Refactoring cache clear/purge routines.
+			 *
+			 * @return string System tmp directory path; else an empty string.
+			 */
+			public function get_tmp_dir()
+			{
+				if(isset(static::$static[__FUNCTION__]))
+					return static::$static[__FUNCTION__];
+
+				static::$static[__FUNCTION__] = ''; // Initialize.
+				$tmp_dir                      = &static::$static[__FUNCTION__];
+
+				if(defined('WP_TEMP_DIR'))
+					$possible_tmp_dirs[] = WP_TEMP_DIR;
+
+				if($this->function_is_possible('sys_get_temp_dir'))
+					$possible_tmp_dirs[] = sys_get_temp_dir();
+
+				if($this->function_is_possible('ini_get'))
+					$possible_tmp_dirs[] = ini_get('upload_tmp_dir');
+
+				if(!empty($_SERVER['TEMP']))
+					$possible_tmp_dirs[] = $_SERVER['TEMP'];
+
+				if(!empty($_SERVER['TMPDIR']))
+					$possible_tmp_dirs[] = $_SERVER['TMPDIR'];
+
+				if(!empty($_SERVER['TMP']))
+					$possible_tmp_dirs[] = $_SERVER['TMP'];
+
+				if(stripos(PHP_OS, 'win') === 0)
+					$possible_tmp_dirs[] = 'C:/Temp';
+
+				if(stripos(PHP_OS, 'win') !== 0)
+					$possible_tmp_dirs[] = '/tmp';
+
+				if(defined('WP_CONTENT_DIR'))
+					$possible_tmp_dirs[] = WP_CONTENT_DIR;
+
+				if(!empty($possible_tmp_dirs)) foreach($possible_tmp_dirs as $_tmp_dir)
+					if(($_tmp_dir = trim((string)$_tmp_dir)) && is_dir($_tmp_dir) && is_writable($_tmp_dir))
+						return ($tmp_dir = $this->n_dir_seps($_tmp_dir));
+				unset($_tmp_dir); // Housekeeping.
+
+				return ($tmp_dir = ''); // Failed to locate.
+			}
+
+			/**
+			 * Finds absolute server path to `/wp-config.php` file.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @return string Absolute server path to `/wp-config.php` file;
+			 *    else an empty string if unable to locate the file.
+			 */
+			public function find_wp_config_file()
+			{
+				if(is_file($abspath_wp_config = ABSPATH.'wp-config.php'))
+					$wp_config_file = $abspath_wp_config;
+
+				else if(is_file($dirname_abspath_wp_config = dirname(ABSPATH).'/wp-config.php'))
+					$wp_config_file = $dirname_abspath_wp_config;
+
+				else $wp_config_file = ''; // Unable to find `/wp-config.php` file.
+
+				return $wp_config_file;
+			}
+
 			/* --------------------------------------------------------------------------------------
 			 * File/directory iteration utilities for Quick Cache.
 			 -------------------------------------------------------------------------------------- */
@@ -1438,11 +1509,20 @@ namespace quick_cache // Root namespace.
 				if($check_max_age && !($max_age = strtotime('-'.$this->options['cache_max_age'])))
 					return $counter; // Invalid cache expiration time.
 
+				/* ------- Begin lock state... ----------- */
+
+				$cache_lock = $this->cache_lock(); // Lock cache writes.
+
 				$cache_dir_tmp       = $this->add_tmp_suffix($cache_dir); // Temporary directory.
 				$cache_dir_tmp_regex = $regex; // Initialize host-specific regex pattern for the tmp directory.
+
 				$cache_dir_tmp_regex = '\\/'.ltrim($cache_dir_tmp_regex, '^\\/'); // Make sure it begins with an escaped `/`.
 				$cache_dir_tmp_regex = $this->str_ireplace_once(preg_quote($cache_dir.'/', '/'), '', $cache_dir_tmp_regex);
-				$cache_dir_tmp_regex = '/^'.preg_quote($cache_dir_tmp.'/', '/').ltrim($cache_dir_tmp_regex, '^\\/');
+
+				$cache_dir_tmp_regex = ltrim($cache_dir_tmp_regex, '^\\/');
+				if(strpos($cache_dir_tmp_regex, '(?:\/') === 0 || strpos($cache_dir_tmp_regex, '(\/') === 0)
+					$cache_dir_tmp_regex = '/^'.preg_quote($cache_dir_tmp, '/').$cache_dir_tmp_regex;
+				else $cache_dir_tmp_regex = '/^'.preg_quote($cache_dir_tmp.'/', '/').$cache_dir_tmp_regex;
 
 				# if(WP_DEBUG) file_put_contents(WP_CONTENT_DIR.'/qc-debug.log', print_r($regex, TRUE)."\n".print_r($cache_dir_tmp_regex, TRUE)."\n\n", FILE_APPEND);
 				// Uncomment the above line to debug regex pattern matching used by this routine; and others that call upon it.
@@ -1479,6 +1559,10 @@ namespace quick_cache // Root namespace.
 
 				if(!rename($cache_dir_tmp, $cache_dir)) // Deletions are atomic; restore original directory now.
 					throw new \exception(sprintf(__('Unable to delete files. Rename failure on tmp directory: `%1$s`.', $this->text_domain), $cache_dir_tmp));
+
+				/* ------- End lock state... ------------- */
+
+				$this->cache_unlock($cache_lock); // Unlock cache directory.
 
 				return $counter; // Total files deleted by this routine.
 			}
@@ -1534,6 +1618,10 @@ namespace quick_cache // Root namespace.
 				if($check_max_age && !($max_age = strtotime('-'.$this->options['cache_max_age'])))
 					return $counter; // Invalid cache expiration time.
 
+				/* ------- Begin lock state... ----------- */
+
+				$cache_lock = $this->cache_lock(); // Lock cache writes.
+
 				foreach(array('http', 'https') as $_host_scheme) // Consider `http|https` schemes.
 
 					/* This multi-scheme iteration could (alternatively) be accomplished via regex `\/https?\/`.
@@ -1554,10 +1642,15 @@ namespace quick_cache // Root namespace.
 
 					$_host_cache_dir_tmp       = $this->add_tmp_suffix($_host_cache_dir); // Temporary directory.
 					$_host_cache_dir_tmp_regex = $regex; // Initialize host-specific regex pattern for the tmp directory.
+
 					$_host_cache_dir_tmp_regex = '\\/'.ltrim($_host_cache_dir_tmp_regex, '^\\/'); // Make sure it begins with an escaped `/`.
 					$_host_cache_dir_tmp_regex = $this->str_ireplace_once(preg_quote($_host_cache_path.'/', '/'), '', $_host_cache_dir_tmp_regex);
 					$_host_cache_dir_tmp_regex = $this->str_ireplace_once(preg_quote($_host_cache_dir.'/', '/'), '', $_host_cache_dir_tmp_regex);
-					$_host_cache_dir_tmp_regex = '/^'.preg_quote($_host_cache_dir_tmp.'/', '/').ltrim($_host_cache_dir_tmp_regex, '^\\/');
+
+					$_host_cache_dir_tmp_regex = ltrim($_host_cache_dir_tmp_regex, '^\\/');
+					if(strpos($_host_cache_dir_tmp_regex, '(?:\/') === 0 || strpos($_host_cache_dir_tmp_regex, '(\/') === 0)
+						$_host_cache_dir_tmp_regex = '/^'.preg_quote($_host_cache_dir_tmp, '/').$_host_cache_dir_tmp_regex;
+					else $_host_cache_dir_tmp_regex = '/^'.preg_quote($_host_cache_dir_tmp.'/', '/').$_host_cache_dir_tmp_regex;
 
 					# if(WP_DEBUG) file_put_contents(WP_CONTENT_DIR.'/qc-debug.log', print_r($regex, TRUE)."\n".print_r($_host_cache_dir_tmp_regex, TRUE)."\n\n", FILE_APPEND);
 					// Uncomment the above line to debug regex pattern matching used by this routine; and others that call upon it.
@@ -1598,6 +1691,10 @@ namespace quick_cache // Root namespace.
 				unset($_host_scheme, $_host_url, $_host_cache_path_flags, $_host_cache_path,
 					$_host_cache_dir, $_host_cache_dir_tmp, $_host_cache_dir_tmp_regex); // Housekeeping.
 
+				/* ------- End lock state... ------------- */
+
+				$this->cache_unlock($cache_lock); // Unlock cache directory.
+
 				return $counter; // Total files deleted by this routine.
 			}
 
@@ -1636,6 +1733,10 @@ namespace quick_cache // Root namespace.
 				if(preg_match('/^'.$wp_content_dir_regex.'\/(?:mu\-plugins|themes|plugins)(?:\/|$)/i', $dir))
 					return $counter; // Security flag; do nothing in this case.
 
+				/* ------- Begin lock state... ----------- */
+
+				$cache_lock = $this->cache_lock(); // Lock cache writes.
+
 				if(!rename($dir, $dir_temp)) // Work from tmp directory so deletions are atomic.
 					throw new \exception(sprintf(__('Unable to delete all files/dirs. Rename failure on tmp directory: `%1$s`.', $this->text_domain), $dir));
 
@@ -1666,7 +1767,81 @@ namespace quick_cache // Root namespace.
 						throw new \exception(sprintf(__('Unable to delete directory: `%1$s`.', $this->text_domain), $dir));
 					$counter++; // Increment counter for each directory we delete.
 				}
+				/* ------- End lock state... ------------- */
+
+				$this->cache_unlock($cache_lock); // Unlock cache directory.
+
 				return $counter; // Total files deleted by this routine.
+			}
+
+			/* --------------------------------------------------------------------------------------
+			 * Cache locking utilities.
+			 -------------------------------------------------------------------------------------- */
+
+			/**
+			 * Get an exclusive lock on the cache directory.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @return array Lock type & resource handle needed to unlock later.
+			 *
+			 * @throws \exception If {@link \sem_get()} not available and there's
+			 *    no writable tmp directory for {@link \flock()} either.
+			 *
+			 * @throws \exception If unable to obtain an exclusive lock by any available means.
+			 *
+			 * @note This call is blocking; i.e. it will not return a lock until a lock becomes possible.
+			 *    In short, this will block the caller until such time as write access becomes possible.
+			 */
+			public function cache_lock()
+			{
+				if(!($wp_config_file = $this->find_wp_config_file()))
+					throw new \exception(__('Unable to find the wp-config.php file.', $this->text_domain));
+
+				if($this->function_is_possible('sem_get'))
+					if(($ipc_key = ftok($wp_config_file, 'w')))
+						if(($resource = sem_get($ipc_key, 1)) && sem_acquire($resource))
+							return array('type' => 'sem', 'resource' => $resource);
+
+				// Use `flock()` as a decent fallback when `sem_get()` is not possible.
+
+				if(!($tmp_dir = $this->get_tmp_dir()))
+					throw new \exception(__('No writable tmp directory.', $this->text_domain));
+
+				$inode_key = fileinode($wp_config_file);
+				$mutex = $tmp_dir.'/'.$this->slug.'-'.$inode_key.'.lock';
+				if(!($resource = fopen($mutex, 'w')) || !flock($resource, LOCK_EX))
+					throw new \exception(__('Unable to obtain an exclusive lock.', $this->text_domain));
+
+				return array('type' => 'flock', 'resource' => $resource);
+			}
+
+			/**
+			 * Release an exclusive lock on the cache directory.
+			 *
+			 * @since 140422 First documented version.
+			 *
+			 * @param array $lock Type & resource that we are unlocking.
+			 */
+			public function cache_unlock(array $lock)
+			{
+				if(!is_array($lock))
+					return; // Not possible.
+
+				if(empty($lock['type']) || empty($lock['resource']))
+					return; // Not possible.
+
+				if(!is_resource($lock['resource']))
+					return; // Not possible.
+
+				if($lock['type'] === 'sem')
+					sem_release($lock['resource']);
+
+				else if($lock['type'] === 'flock')
+				{
+					flock($lock['resource'], LOCK_UN);
+					fclose($lock['resource']);
+				}
 			}
 
 			/* --------------------------------------------------------------------------------------
