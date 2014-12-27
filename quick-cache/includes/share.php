@@ -1513,6 +1513,8 @@ namespace quick_cache // Root namespace.
 
 				$cache_lock = $this->cache_lock(); // Lock cache writes.
 
+				clearstatcache(); // Clear stat cache to be sure we have a fresh start below.
+
 				$cache_dir_tmp       = $this->add_tmp_suffix($cache_dir); // Temporary directory.
 				$cache_dir_tmp_regex = $regex; // Initialize host-specific regex pattern for the tmp directory.
 
@@ -1621,6 +1623,8 @@ namespace quick_cache // Root namespace.
 				/* ------- Begin lock state... ----------- */
 
 				$cache_lock = $this->cache_lock(); // Lock cache writes.
+
+				clearstatcache(); // Clear stat cache to be sure we have a fresh start below.
 
 				foreach(array('http', 'https') as $_host_scheme) // Consider `http|https` schemes.
 
@@ -1736,6 +1740,8 @@ namespace quick_cache // Root namespace.
 				/* ------- Begin lock state... ----------- */
 
 				$cache_lock = $this->cache_lock(); // Lock cache writes.
+
+				clearstatcache(); // Clear stat cache to be sure we have a fresh start below.
 
 				if(!rename($dir, $dir_temp)) // Work from tmp directory so deletions are atomic.
 					throw new \exception(sprintf(__('Unable to delete all files/dirs. Rename failure on tmp directory: `%1$s`.', $this->text_domain), $dir));
