@@ -1807,12 +1807,18 @@ namespace quick_cache // Root namespace.
 				if(!($wp_config_file = $this->find_wp_config_file()))
 					throw new \exception(__('Unable to find the wp-config.php file.', $this->text_domain));
 
-				if($this->function_is_possible('sem_get'))
-					if(($ipc_key = ftok($wp_config_file, 'w')))
-						if(($resource = sem_get($ipc_key, 1)) && sem_acquire($resource))
-							return array('type' => 'sem', 'resource' => $resource);
+				$locking_method = apply_filters('quick_cache_cache_locking_method', 'flock');
 
-				// Use `flock()` as a decent fallback when `sem_get()` is not possible.
+				if(!in_array($locking_method, array('flock', 'sem')))
+					$locking_method = 'flock';
+
+				if($locking_method === 'sem')
+					if($this->function_is_possible('sem_get'))
+						if(($ipc_key = ftok($wp_config_file, 'w')))
+							if(($resource = sem_get($ipc_key, 1)) && sem_acquire($resource))
+								return array('type' => 'sem', 'resource' => $resource);
+
+				// Use `flock()` as a decent fallback when `sem_get()` is not not forced or is not possible.
 
 				if(!($tmp_dir = $this->get_tmp_dir()))
 					throw new \exception(__('No writable tmp directory.', $this->text_domain));
