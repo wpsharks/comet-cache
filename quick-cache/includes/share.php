@@ -1789,7 +1789,7 @@ namespace quick_cache // Root namespace.
 			 *
 			 * @since 140422 First documented version.
 			 *
-			 * @return array Lock type & resource handle needed to unlock later.
+			 * @return array Lock type & resource handle needed to unlock later or FALSE if disabled by filter.
 			 *
 			 * @throws \exception If {@link \sem_get()} not available and there's
 			 *    no writable tmp directory for {@link \flock()} either.
@@ -1801,6 +1801,9 @@ namespace quick_cache // Root namespace.
 			 */
 			public function cache_lock()
 			{
+				if((boolean)apply_filters('quick_cache_disable_cache_locking', FALSE))
+					return false;
+
 				if(!($wp_config_file = $this->find_wp_config_file()))
 					throw new \exception(__('Unable to find the wp-config.php file.', $this->text_domain));
 
@@ -1831,6 +1834,9 @@ namespace quick_cache // Root namespace.
 			 */
 			public function cache_unlock(array $lock)
 			{
+				if((boolean)apply_filters('quick_cache_disable_cache_locking', FALSE))
+					return;
+
 				if(!is_array($lock))
 					return; // Not possible.
 
