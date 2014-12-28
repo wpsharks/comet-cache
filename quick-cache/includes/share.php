@@ -1801,13 +1801,13 @@ namespace quick_cache // Root namespace.
 			 */
 			public function cache_lock()
 			{
-				if((boolean)apply_filters('quick_cache_disable_cache_locking', FALSE))
+				if($this->apply_filters(__CLASS__.'_disable_cache_locking', FALSE))
 					return false;
 
 				if(!($wp_config_file = $this->find_wp_config_file()))
 					throw new \exception(__('Unable to find the wp-config.php file.', $this->text_domain));
 
-				$locking_method = apply_filters('quick_cache_cache_locking_method', 'flock');
+				$locking_method = $this->apply_filters(__METHOD__.'_lock_type', 'flock');
 
 				if(!in_array($locking_method, array('flock', 'sem')))
 					$locking_method = 'flock';
@@ -1840,7 +1840,7 @@ namespace quick_cache // Root namespace.
 			 */
 			public function cache_unlock(array $lock)
 			{
-				if((boolean)apply_filters('quick_cache_disable_cache_locking', FALSE))
+				if($this->apply_filters(__CLASS__.'_disable_cache_locking', FALSE))
 					return;
 
 				if(!is_array($lock))
