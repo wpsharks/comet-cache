@@ -1789,7 +1789,7 @@ namespace quick_cache // Root namespace.
 			 *
 			 * @since 140422 First documented version.
 			 *
-			 * @return array Lock type & resource handle needed to unlock later.
+			 * @return array Lock type & resource handle needed to unlock later or FALSE if disabled by filter.
 			 *
 			 * @throws \exception If {@link \sem_get()} not available and there's
 			 *    no writable tmp directory for {@link \flock()} either.
@@ -1801,15 +1801,24 @@ namespace quick_cache // Root namespace.
 			 */
 			public function cache_lock()
 			{
+				if($this->apply_filters(__CLASS__.'_disable_cache_locking', FALSE))
+					return false;
+
 				if(!($wp_config_file = $this->find_wp_config_file()))
 					throw new \exception(__('Unable to find the wp-config.php file.', $this->text_domain));
 
-				if($this->function_is_possible('sem_get'))
-					if(($ipc_key = ftok($wp_config_file, 'w')))
-						if(($resource = sem_get($ipc_key, 1)) && sem_acquire($resource))
-							return array('type' => 'sem', 'resource' => $resource);
+				$locking_method = $this->apply_filters(__METHOD__.'_lock_type', 'flock');
 
-				// Use `flock()` as a decent fallback when `sem_get()` is not possible.
+				if(!in_array($locking_method, array('flock', 'sem')))
+					$locking_method = 'flock';
+
+				if($locking_method === 'sem')
+					if($this->function_is_possible('sem_get'))
+						if(($ipc_key = ftok($wp_config_file, 'w')))
+							if(($resource = sem_get($ipc_key, 1)) && sem_acquire($resource))
+								return array('type' => 'sem', 'resource' => $resource);
+
+				// Use `flock()` as a decent fallback when `sem_get()` is not not forced or is not possible.
 
 				if(!($tmp_dir = $this->get_tmp_dir()))
 					throw new \exception(__('No writable tmp directory.', $this->text_domain));
@@ -1831,6 +1840,9 @@ namespace quick_cache // Root namespace.
 			 */
 			public function cache_unlock(array $lock)
 			{
+				if($this->apply_filters(__CLASS__.'_disable_cache_locking', FALSE))
+					return;
+
 				if(!is_array($lock))
 					return; // Not possible.
 
