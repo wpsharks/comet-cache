@@ -1,6 +1,6 @@
 === Quick Cache (Speed Without Compromise) ===
 
-Stable tag: 141205
+Stable tag: 141229
 Requires at least: 3.7
 Tested up to: 4.0.1
 Text Domain: quick-cache
