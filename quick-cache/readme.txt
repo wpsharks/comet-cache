@@ -1,8 +1,8 @@
 === Quick Cache (Speed Without Compromise) ===
 
-Stable tag: 141229
+Stable tag: 141231
 Requires at least: 3.7
-Tested up to: 4.0.1
+Tested up to: 4.1
 Text Domain: quick-cache
 
 License: GPLv2 or later
@@ -323,6 +323,13 @@ Requires PHP v5.3+. The latest version of Quick Cache is a complete rewrite (OOP
 - **Quick Cache is changing its name to ZenCache!** See [the blog post](http://www.websharks-inc.com/post/quick-cache-is-changing-its-name/) for full details.
 
 == Changelog ==
+
+= v141231 =
+
+- **Bug Fix**: Addressed another issue related to "Fatal Error: 'Unable to clear dir'" and tmp directories that don't get cleared by Quick Cache. This fix discards iteration references before renaming the tmp directories. Props @jaswsinc. See [#288](https://github.com/websharks/quick-cache/issues/288).
+- **Bug Fix**: We have had a few reports of getMTime Stat failing when clearing the cache. This fix clears the Stat Cache before iteration when deleting files from the cache directory. Props @jaswsinc. See [#385](https://github.com/websharks/quick-cache/issues/385).
+- **Enhancement**: Added a new filter (`quick_cache\\share_disable_cache_locking`) to allow disabling cache locking. Simply return boolean `TRUE` to this filter to disable cache locking. This may be useful for site owners who are experiencing issues with cache locking on web hosting platforms with filesystems that don't properly support locking. Note that this filter must be applied using an Advanced Cache Plugin (see **Dashboard → Quick Cache → Plugin Options → Theme/Plugin Developers**). See also [#387](https://github.com/websharks/quick-cache/issues/387).
+- **Enhancement**: Added a new filter that allows forcing Semaphore cache locking on hosting platforms where `sem_get()` is available and would result in improved performance. Return `sem` to the `quick_cache\\share::cache_lock_lock_type` filter to force Semaphore cache locking, or `flock` to use the default method that uses `flock()`. Note that this filter must be applied using an Advanced Cache Plugin (see **Dashboard → Quick Cache → Plugin Options → Theme/Plugin Developers**). See also [#387](https://github.com/websharks/quick-cache/issues/387).
 
 = v141205 =
 
