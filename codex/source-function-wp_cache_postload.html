@@ -230,7 +230,7 @@
 </span></span><span id="134" class="l"><a class="l" href="#134"> 134: </a><span class="php-comment">     */</span>
 </span><span id="135" class="l"><a class="l" href="#135"> 135: </a>    <span class="php-keyword1">if</span>(<span class="php-keyword2">defined</span>(<span class="php-quote">'WP_DEBUG'</span>) &amp;&amp; WP_DEBUG)
 </span><span id="136" class="l"><a class="l" href="#136"> 136: </a>        <span class="php-keyword1">require_once</span> <span class="php-keyword2">dirname</span>(QUICK_CACHE_PLUGIN_FILE).<span class="php-quote">'/includes/share.php'</span>;
-</span><span id="137" class="l"><a class="l" href="#137"> 137: </a>    <span class="php-keyword1">else</span> <span class="php-keyword1">if</span>(@<span class="php-keyword1">require_once</span>(<span class="php-keyword2">dirname</span>(QUICK_CACHE_PLUGIN_FILE).<span class="php-quote">'/includes/share.php'</span>) === <span class="php-keyword1">FALSE</span>)
+</span><span id="137" class="l"><a class="l" href="#137"> 137: </a>    <span class="php-keyword1">else</span> <span class="php-keyword1">if</span>((@<span class="php-keyword1">require_once</span>(<span class="php-keyword2">dirname</span>(QUICK_CACHE_PLUGIN_FILE).<span class="php-quote">'/includes/share.php'</span>)) === <span class="php-keyword1">FALSE</span>)
 </span><span id="138" class="l"><a class="l" href="#138"> 138: </a>        <span class="php-keyword1">return</span>; <span class="php-comment">// Unable to find class dependency. Fail softly.</span>
 </span><span id="139" class="l"><a class="l" href="#139"> 139: </a>
 </span><span id="140" class="l"><a class="l" href="#140"> 140: </a>    <span class="php-comment">/**
