@@ -1,6 +1,6 @@
 === Quick Cache (Speed Without Compromise) ===
 
-Stable tag: 141231
+Stable tag: 150129
 Requires at least: 3.7
 Tested up to: 4.1
 Text Domain: quick-cache
@@ -323,6 +323,12 @@ Requires PHP v5.3+. The latest version of Quick Cache is a complete rewrite (OOP
 - **Quick Cache is changing its name to ZenCache!** See [the blog post](http://www.websharks-inc.com/post/quick-cache-is-changing-its-name/) for full details.
 
 == Changelog ==
+
+= v150129 =
+
+- **Bug Fix** (Pro): Fixed a bug where the Pro Updater would fail when FTP or SFTP details via the WordPress Dashboard are required to perform updates. Props @jaswsinc. See [#389](https://github.com/websharks/quick-cache/issues/389).
+- **Bug Fix**: Several fixes for a stubborn bug related to "Fatal Error: 'Unable to clear dir'" error messages and errors referencing "SplFileInfo::getMTime(): stat failed". Props @jaswsinc. See [#397](https://github.com/websharks/quick-cache/issues/397).
+- **Bug Fix** (Pro): Fixed a bug where the `qcAC` variable (used to force-enable/disable GET Request caching) was not respected properly whenever a URL contained a query string and a user was currently logged into the site. Props @jaswsinc. See [#401](https://github.com/websharks/quick-cache/issues/401).
 
 = v141231 =
 
