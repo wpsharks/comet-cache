@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the Quick Cache package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Quick Cache 150129\n"
+"Project-Id-Version: Quick Cache 150129.1\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/quick-cache\n"
-"POT-Creation-Date: 2015-01-30 01:26:09+00:00\n"
+"POT-Creation-Date: 2015-02-28 19:02:52+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1036,97 +1036,97 @@ msgstr ""
 msgid "Unable to determine cache directory location."
 msgstr ""
 
-#: includes/share.php:1507 includes/share.php:1649
+#: includes/share.php:1525 includes/share.php:1667
 msgid "The `options` property w/ a `cache_max_age` key is not defined in this class."
 msgstr ""
 
-#: includes/share.php:1533
+#: includes/share.php:1551
 msgid "Unable to delete files. Rename failure on directory: `%1$s`."
 msgstr ""
 
-#: includes/share.php:1556 includes/share.php:1717 includes/share.php:1823
+#: includes/share.php:1574 includes/share.php:1735 includes/share.php:1841
 msgid "Unable to delete symlink: `%1$s`."
 msgstr ""
 
-#: includes/share.php:1568 includes/share.php:1729 includes/share.php:1831
+#: includes/share.php:1586 includes/share.php:1747 includes/share.php:1849
 msgid "Unable to delete file: `%1$s`."
 msgstr ""
 
-#: includes/share.php:1582 includes/share.php:1743 includes/share.php:1839
+#: includes/share.php:1600 includes/share.php:1761 includes/share.php:1857
 msgid "Unable to delete dir: `%1$s`."
 msgstr ""
 
-#: includes/share.php:1588 includes/share.php:1749 includes/share.php:1845
+#: includes/share.php:1606 includes/share.php:1767 includes/share.php:1863
 msgid "Unexpected resource type: `%1$s`."
 msgstr ""
 
-#: includes/share.php:1594 includes/share.php:1694 includes/share.php:1755
+#: includes/share.php:1612 includes/share.php:1712 includes/share.php:1773
 msgid "Unable to delete files. Rename failure on tmp directory: `%1$s`."
 msgstr ""
 
-#: includes/share.php:1809 includes/share.php:1851
+#: includes/share.php:1827 includes/share.php:1869
 msgid "Unable to delete all files/dirs. Rename failure on tmp directory: `%1$s`."
 msgstr ""
 
-#: includes/share.php:1856
+#: includes/share.php:1874
 msgid "Unable to delete directory: `%1$s`."
 msgstr ""
 
-#: includes/share.php:1891
+#: includes/share.php:1909
 msgid "Unable to find the wp-config.php file."
 msgstr ""
 
-#: includes/share.php:1907
+#: includes/share.php:1925
 msgid "No writable tmp directory."
 msgstr ""
 
-#: includes/share.php:1912
+#: includes/share.php:1930
 msgid "Unable to obtain an exclusive lock."
 msgstr ""
 
-#: includes/share.php:1965
+#: includes/share.php:1983
 msgid "%1$s file"
 msgid_plural "%1$s files"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/share.php:1981
+#: includes/share.php:1999
 msgid "%1$s directory"
 msgid_plural "%1$s directories"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/share.php:1997
+#: includes/share.php:2015
 msgid "%1$s file/directory"
 msgid_plural "%1$s files/directories"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/share.php:2030
+#: includes/share.php:2048
 msgid "Invalid hook."
 msgstr ""
 
-#: includes/version-specific-upgrade.php:68
+#: includes/version-specific-upgrade.php:69
 msgid "<strong>Quick Cache:</strong> this version is a <strong>complete rewrite</strong> :-) Please review your Quick Cache options carefully!"
 msgstr ""
 
-#: includes/version-specific-upgrade.php:78
+#: includes/version-specific-upgrade.php:79
 msgid "<strong>Quick Cache Feature Notice:</strong> This version of Quick Cache adds new options for Feed caching. Feed caching is now disabled by default. If you wish to enable feed caching, please visit the Quick Cache options panel."
 msgstr ""
 
-#: includes/version-specific-upgrade.php:108
+#: includes/version-specific-upgrade.php:109
 msgid "<strong>Quick Cache Feature Notice:</strong> This version of Quick Cache introduces a new <a href=\"http://www.websharks-inc.com/r/quick-cache-branched-cache-structure-wiki/\" target=\"_blank\">Branched Cache Structure</a> and several other <a href=\"http://www.websharks-inc.com/post/quick-cache-v140605-now-available/\" target=\"_blank\">new features</a>."
 msgstr ""
 
-#: includes/version-specific-upgrade.php:132
+#: includes/version-specific-upgrade.php:133
 msgid "<strong>Quick Cache Notice:</strong> This version of Quick Cache changes the default base directory that it uses, from <code>ABSPATH</code> to <code>WP_CONTENT_DIR</code>. This is for improved compatibility with installations that choose to use a custom <code>WP_CONTENT_DIR</code> location."
 msgstr ""
 
-#: includes/version-specific-upgrade.php:133
+#: includes/version-specific-upgrade.php:134
 msgid "Quick Cache has detected that your previously configured cache directory may have been in conflict with this change. As a result, your Quick Cache configuration has been updated to the new default value; just to keep things running smoothly for you :-). If you would like to review this change, please see: <code>Dashboard ⥱ Quick Cache ⥱ Directory &amp; Expiration Time</code>; where you may customize it further if necessary."
 msgstr ""
 
-#: includes/version-specific-upgrade.php:180
+#: includes/version-specific-upgrade.php:181
 msgid "<strong>Important Quick Cache Announcement:</strong> Quick Cache is changing its name to ZenCache! Read more about this change <a href=\"http://www.websharks-inc.com/post/quick-cache-is-changing-its-name/\" target=\"_blank\">here</a>."
 msgstr ""
 
@@ -1146,89 +1146,93 @@ msgstr ""
 msgid "To remove this message, please deactivate %1$s."
 msgstr ""
 
-#: quick-cache.inc.php:391
+#: quick-cache.inc.php:375
+msgid "<strong>NOTICE:</strong> <a href=\"http://zencache.com/announcing-zencache-formerly-quick-cache/\" target=\"_blank\">Quick Cache is now ZenCache</a>! No further updates will be made to Quick Cache after March 6th, 2015; see <a href=\"http://zencache.com/kb-article/how-to-migrate-from-quick-cache-lite-to-zencache-lite/\" target=\"_blank\">migration instructions</a>."
+msgstr ""
+
+#: quick-cache.inc.php:400
 msgid "<strong>Quick Cache:</strong> detected a new version of itself. Recompiling w/ latest version... wiping the cache... all done :-)"
 msgstr ""
 
-#. #-#-#-#-#  quick-cache.pot (Quick Cache 150129)  #-#-#-#-#
+#. #-#-#-#-#  quick-cache.pot (Quick Cache 150129.1)  #-#-#-#-#
 #. Plugin Name of the plugin/theme
-#: quick-cache.inc.php:551 quick-cache.inc.php:567
+#: quick-cache.inc.php:560 quick-cache.inc.php:576
 msgid "Quick Cache"
 msgstr ""
 
-#: quick-cache.inc.php:585
+#: quick-cache.inc.php:594
 msgid "Settings"
 msgstr ""
 
-#: quick-cache.inc.php:586
+#: quick-cache.inc.php:595
 msgid "Preview Pro Features"
 msgstr ""
 
-#: quick-cache.inc.php:587
+#: quick-cache.inc.php:596
 msgid "Upgrade"
 msgstr ""
 
-#: quick-cache.inc.php:633 quick-cache.inc.php:704
+#: quick-cache.inc.php:642 quick-cache.inc.php:719
 msgid "dismiss &times;"
 msgstr ""
 
-#: quick-cache.inc.php:762
+#: quick-cache.inc.php:777
 msgid "Every 15 Minutes"
 msgstr ""
 
-#: quick-cache.inc.php:889
+#: quick-cache.inc.php:904
 msgid "<strong>Quick Cache:</strong> detected significant changes. Found %1$s in the cache; auto-wiping."
 msgstr ""
 
-#: quick-cache.inc.php:933
+#: quick-cache.inc.php:948
 msgid "<strong>Quick Cache:</strong> detected important site changes. Found %1$s in the cache for this site; auto-clearing."
 msgstr ""
 
-#: quick-cache.inc.php:1012
+#: quick-cache.inc.php:1027
 msgid "Post"
 msgstr ""
 
-#: quick-cache.inc.php:1020
+#: quick-cache.inc.php:1035
 msgid "<strong>Quick Cache:</strong> detected changes. Found %1$s in the cache for %2$s ID: <code>%3$s</code>; auto-clearing."
 msgstr ""
 
-#: quick-cache.inc.php:1183
+#: quick-cache.inc.php:1198
 msgid "<strong>Quick Cache:</strong> detected changes. Found %1$s in the cache, for XML feeds of type: <code>%2$s</code>; auto-clearing."
 msgstr ""
 
-#: quick-cache.inc.php:1226
+#: quick-cache.inc.php:1241
 msgid "<strong>Quick Cache:</strong> detected changes. Found %1$s in the cache for XML sitemaps; auto-clearing."
 msgstr ""
 
-#: quick-cache.inc.php:1269
+#: quick-cache.inc.php:1284
 msgid "<strong>Quick Cache:</strong> detected changes. Found %1$s in the cache for the designated \"Home Page\"; auto-clearing."
 msgstr ""
 
-#: quick-cache.inc.php:1327
+#: quick-cache.inc.php:1342
 msgid "<strong>Quick Cache:</strong> detected changes. Found %1$s in the cache for the designated \"Posts Page\"; auto-clearing."
 msgstr ""
 
-#: quick-cache.inc.php:1382
+#: quick-cache.inc.php:1397
 msgid "Untitled"
 msgstr ""
 
-#: quick-cache.inc.php:1393
+#: quick-cache.inc.php:1408
 msgid "<strong>Quick Cache:</strong> detected changes. Found %1$s in the cache for Custom Post Type: <code>%2$s</code>; auto-clearing."
 msgstr ""
 
-#: quick-cache.inc.php:1483
+#: quick-cache.inc.php:1498
 msgid "<strong>Quick Cache:</strong> detected changes. Found %1$s in the cache for Author Page: <code>%2$s</code>; auto-clearing."
 msgstr ""
 
-#: quick-cache.inc.php:1635
+#: quick-cache.inc.php:1650
 msgid "<strong>Quick Cache:</strong> detected changes. Found %1$s in the cache for %2$s: <code>%3$s</code>; auto-clearing."
 msgstr ""
 
-#: quick-cache.inc.php:1924 quick-cache.inc.php:1952
+#: quick-cache.inc.php:1939 quick-cache.inc.php:1967
 msgid "Doing it wrong! Missing `base_dir` option value. MUST call this method after `setup()`."
 msgstr ""
 
-#: quick-cache.inc.php:2362
+#: quick-cache.inc.php:2377
 msgid "Please disable the LITE version of Quick Cache before you activate the PRO version."
 msgstr ""
 
