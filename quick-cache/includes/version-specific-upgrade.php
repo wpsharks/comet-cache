@@ -49,6 +49,7 @@ namespace quick_cache // Root namespace.
 				$this->from_lt_v140612();
 				$this->from_lt_v141009();
 				$this->from_lt_v141105();
+				$this->from_lt_v150129_1();
 			}
 
 			/*
@@ -178,6 +179,15 @@ namespace quick_cache // Root namespace.
 			{
 				if(version_compare($this->prev_version, '141105', '<'))
 					$this->plugin->enqueue_notice(__('<strong>Important Quick Cache Announcement:</strong> Quick Cache is changing its name to ZenCache! Read more about this change <a href="http://www.websharks-inc.com/post/quick-cache-is-changing-its-name/" target="_blank">here</a>.', $this->plugin->text_domain), 'persistent-quick-cache-to-zencache-notice1', TRUE);
+			}
+
+			/*
+			 * Upgrading from a version prior to the second announcement that Quick Cache is changing its name to ZenCache
+			 */
+			public function from_lt_v150129_1()
+			{
+				if(version_compare($this->prev_version, '150129.1', '<'))
+					$this->plugin->enqueue_notice(__('<strong>NOTICE:</strong> <a href="http://zencache.com/announcing-zencache-formerly-quick-cache/" target="_blank">Quick Cache is now ZenCache</a>! No further updates will be made to Quick Cache after March 6th, 2015; see <a href="http://zencache.com/kb-article/how-to-migrate-from-quick-cache-lite-to-zencache-lite/" target="_blank">migration instructions</a>.', $this->plugin->text_domain), 'persistent-class-update-nag-quick-cache-to-zencache-notice2', TRUE);
 			}
 		}
 	}
