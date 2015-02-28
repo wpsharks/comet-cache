@@ -52,7 +52,7 @@ namespace quick_cache // Root namespace.
 			 *
 			 * @var string Current version of the software.
 			 */
-			public $version = '150129';
+			public $version = '150129.1';
 
 			/**
 			 * Plugin slug; based on `__NAMESPACE__`.
