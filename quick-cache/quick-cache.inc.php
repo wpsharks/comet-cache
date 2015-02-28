@@ -162,6 +162,7 @@ namespace quick_cache
 
 					'version'                          => $this->version,
 					'crons_setup'                      => '0', // `0` or timestamp.
+				   'zencache_notice1_enqueued'        => '0', // `0` or `1` if already enqueued
 
 					/* Primary switch; enable? */
 
@@ -369,6 +370,14 @@ namespace quick_cache
 			 */
 			public function check_version()
 			{
+				if(!$this->options['zencache_notice1_enqueued'])
+				{
+					$this->enqueue_notice(__('<strong>NOTICE:</strong> <a href="http://zencache.com/announcing-zencache-formerly-quick-cache/" target="_blank">Quick Cache is now ZenCache</a>! No further updates will be made to Quick Cache after March 6th, 2015; see <a href="http://zencache.com/kb-article/how-to-migrate-from-quick-cache-lite-to-zencache-lite/" target="_blank">migration instructions</a>.', $this->text_domain), 'persistent-class-update-nag-zencache-notice1', TRUE);
+					$this->options['zencache_notice1_enqueued'] = '1';
+					update_option(__NAMESPACE__.'_options', $this->options);
+					if(is_multisite()) update_site_option(__NAMESPACE__.'_options', $this->options);
+				}
+
 				$current_version = $prev_version = $this->options['version'];
 				if(version_compare($current_version, $this->version, '>='))
 					return; // Nothing to do; we've already upgraded them.
