@@ -8,7 +8,7 @@ Text Domain: quick-cache
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Contributors: WebSharks, JasWSInc, raamdev, anguz
+Contributors: WebSharks, JasWSInc, raamdev
 Donate link: http://www.websharks-inc.com/r/wp-theme-plugin-donation/
 Tags: cache, quick cache, quick-cache, quickcache, speed, performance, loading, generation, execution, benchmark, benchmarking, debug, debugging, caching, cash, caching, cacheing, super cache, advanced cache, advanced-cache, wp-cache, wp cache, options panel included, websharks framework, w3c validated code, includes extensive documentation, highly extensible
 
