@@ -1,6 +1,6 @@
 === Quick Cache (Speed Without Compromise) ===
 
-Stable tag: 150129.1
+Stable tag: 150129.2
 Requires at least: 3.7
 Tested up to: 4.1.1
 Text Domain: quick-cache
@@ -324,11 +324,23 @@ Requires PHP v5.3+. The latest version of Quick Cache is a complete rewrite (OOP
 
 - **Quick Cache is changing its name to ZenCache!** See [the blog post](http://www.websharks-inc.com/post/quick-cache-is-changing-its-name/) for full details.
 
-= v150129.1 =
+= v150129.2 =
 
 - **NOTICE:** [Quick Cache is now ZenCache](http://zencache.com/announcing-zencache-formerly-quick-cache/)! No further updates will be made to Quick Cache after March 6th, 2015; see [migration instructions](http://zencache.com/kb-article/how-to-migrate-from-quick-cache-lite-to-zencache-lite/).
 
 == Changelog ==
+
+= v150129.2 =
+
+- **NOTICE:** [Quick Cache is now ZenCache](http://zencache.com/announcing-zencache-formerly-quick-cache/)! No further updates will be made to Quick Cache after March 6th, 2015; see [migration instructions](http://zencache.com/kb-article/how-to-migrate-from-quick-cache-lite-to-zencache-lite/).
+- **Enhancement**: Improved the handling of long cache filenames, where especially long URLs were generating cache filenames that were too long for some file systems to handle. Props @jaswsinc. See [#275](https://github.com/websharks/quick-cache/issues/275).
+- **Bug Fix**: Removed erroneous call to `from_lt_v150129_1()`.
+
+= v150129.1 =
+
+- **NOTICE:** [Quick Cache is now ZenCache](http://zencache.com/announcing-zencache-formerly-quick-cache/)! No further updates will be made to Quick Cache after March 6th, 2015; see [migration instructions](http://zencache.com/kb-article/how-to-migrate-from-quick-cache-lite-to-zencache-lite/).
+- **Enhancement**: Improved the handling of long cache filenames, where especially long URLs were generating cache filenames that were too long for some file systems to handle. Props @jaswsinc. See [#275](https://github.com/websharks/quick-cache/issues/275).
+- **Bug Fix**: Removed erroneous call to `from_lt_v150129_1()`.
 
 = v150129.1 =
 
