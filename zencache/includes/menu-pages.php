@@ -645,7 +645,7 @@ namespace zencache // Root namespace.
 				echo '         <hr />'."\n";
 				echo '         <h3>'.__('Whitelisted File Extensions (Optional; Comma-Delimited)', $this->plugin->text_domain).'</h3>'."\n";
 				echo '         <p><input type="text" name="'.esc_attr(__NAMESPACE__).'[save_options][cdn_whitelisted_extensions]" value="" /></p>'."\n";
-				echo '         <p>'.__('If you leave this empty a default set of extensions are taken from WordPress itself. The default set of whitelisted file extensions includes everything supported by the WordPress media library. This includes the following: <code style="white-space:normal; word-wrap:break-word;">'.esc_html(str_replace('|', ',', implode('|', array_keys(wp_get_mime_types())))).'</code>.', $this->plugin->text_domain).'</p>'."\n";
+				echo '         <p>'.__('If you leave this empty a default set of extensions are taken from WordPress itself. The default set of whitelisted file extensions includes everything supported by the WordPress media library.', $this->plugin->text_domain).'</p>'."\n";
 				echo '         <h3>'.__('Blacklisted File Extensions (Optional; Comma-Delimited)', $this->plugin->text_domain).'</h3>'."\n";
 				echo '         <p><input type="text" name="'.esc_attr(__NAMESPACE__).'[save_options][cdn_blacklisted_extensions]" value="" /></p>'."\n";
 				echo '         <p>'.__('With or without a whitelist, you can force exclusions by explicitly blacklisting certain file extensions of your choosing. Please note, the <code>php</code> extension will never be considered a static resource; i.e. it is automatically blacklisted at all times.', $this->plugin->text_domain).'</p>'."\n";

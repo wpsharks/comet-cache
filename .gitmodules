@@ -1,6 +1,6 @@
-[submodule "zencache/submodules/wp-php-rv"]
-	path = zencache/submodules/wp-php-rv
-	url = https://github.com/websharks/wp-php-rv
 [submodule "zencache/submodules/sharkicons"]
 	path = zencache/submodules/sharkicons
 	url = https://github.com/websharks/sharkicons
+[submodule "zencache/submodules/wp-php-rv"]
+	path = zencache/submodules/wp-php-rv
+	url = https://github.com/websharks/wp-php-rv
