@@ -1,7 +1,7 @@
 source: .
 destination: codex
 extensions: [php,phar]
-title: Quick Cache Lite
+title: ZenCache Lite
 exclude: [*/externals/*,*/unit-tests/*,*example.php]
 accessLevels: [public,protected,private]
 deprecated: yes
