@@ -2052,16 +2052,13 @@ namespace zencache
 					return; // Skip on plugin actions.
 
 				$cache_dir = $this->cache_dir(); // Current cache directory.
-
-				if(!is_file($cache_dir.'/zc-advanced-cache'))
-					$this->add_advanced_cache();
-
 				$advanced_cache_file = WP_CONTENT_DIR.'/advanced-cache.php';
 
 				// Fixes zero-byte advanced-cache.php bug related to migrating from Quick Cache
 				// See https://github.com/websharks/zencache/issues/432
-				if(!is_file($advanced_cache_file) || filesize($advanced_cache_file) === 0)
-					$this->add_advanced_cache();
+				if(!is_file($cache_dir.'/zc-advanced-cache')
+				   || !is_file($advanced_cache_file) || filesize($advanced_cache_file) === 0
+				) $this->add_advanced_cache();
 			}
 
 			/**
