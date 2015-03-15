@@ -620,7 +620,7 @@ namespace zencache
 						$_class = 'updated';
 					echo $this->apply_wp_filters(__METHOD__.'__notice', '<div class="'.$_class.'"><p>'.$_notice.$_dismiss.'</p></div>', get_defined_vars());
 				}
-				unset($_key, $_notice, $_dismiss_css, $_dismiss, $_class); // Housekeeping.
+				unset($_key, $_notice, $_dismiss_css, $_dismiss); // Housekeeping.
 			}
 
 			/**
