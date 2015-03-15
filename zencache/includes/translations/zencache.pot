@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the ZenCache package.
 msgid ""
 msgstr ""
-"Project-Id-Version: ZenCache 150218\n"
+"Project-Id-Version: ZenCache 150314\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/zencache\n"
-"POT-Creation-Date: 2015-02-18 04:42:57+00:00\n"
+"POT-Creation-Date: 2015-03-15 00:20:02+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1008,6 +1008,10 @@ msgstr ""
 msgid "Whitelisted File Extensions (Optional; Comma-Delimited)"
 msgstr ""
 
+#: includes/menu-pages.php:648
+msgid "If you leave this empty a default set of extensions are taken from WordPress itself. The default set of whitelisted file extensions includes everything supported by the WordPress media library."
+msgstr ""
+
 #: includes/menu-pages.php:649
 msgid "Blacklisted File Extensions (Optional; Comma-Delimited)"
 msgstr ""
@@ -1246,45 +1250,6 @@ msgstr ""
 msgid "<strong>Woohoo! %1$s activated.</strong> :-)"
 msgstr ""
 
-#: submodules/wp-php-rv/wp-php-rv.php:124
-msgid "extension"
-msgid_plural "extensions"
-msgstr[0] ""
-msgstr[1] ""
-
-#: submodules/wp-php-rv/wp-php-rv.php:132
-msgid "<strong>%1$s is NOT active. It requires PHP v%2$s+.</strong>"
-msgstr ""
-
-#: submodules/wp-php-rv/wp-php-rv.php:133
-msgid "&#8627; You're currently running an older copy of PHP v%1$s."
-msgstr ""
-
-#: submodules/wp-php-rv/wp-php-rv.php:136
-msgid "&#8627; You are also missing the following required PHP %1$s: %2$s."
-msgstr ""
-
-#: submodules/wp-php-rv/wp-php-rv.php:138
-#: submodules/wp-php-rv/wp-php-rv.php:146
-msgid "<em>A simple update is necessary. Please ask your hosting company to help resolve this quickly.</em>"
-msgstr ""
-
-#: submodules/wp-php-rv/wp-php-rv.php:139
-msgid "<em>To remove this message, please upgrade PHP. Or, remove %1$s from WordPress.</em>"
-msgstr ""
-
-#: submodules/wp-php-rv/wp-php-rv.php:144
-msgid "<strong>%1$s is NOT active. PHP %2$s missing.</strong>"
-msgstr ""
-
-#: submodules/wp-php-rv/wp-php-rv.php:145
-msgid "&#8627; You are missing the following required PHP %1$s: %2$s."
-msgstr ""
-
-#: submodules/wp-php-rv/wp-php-rv.php:147
-msgid "<em>To remove this message, please install the required PHP %1$s. Or, remove %2$s from WordPress.</em>"
-msgstr ""
-
 #: zencache.inc.php:369
 msgid "<strong>%1$s:</strong> detected a new version of itself. Recompiling w/ latest version... wiping the cache... all done :-)"
 msgstr ""
@@ -1301,75 +1266,75 @@ msgstr ""
 msgid "Upgrade"
 msgstr ""
 
-#: zencache.inc.php:613 zencache.inc.php:684
+#: zencache.inc.php:613 zencache.inc.php:690
 msgid "dismiss &times;"
 msgstr ""
 
-#: zencache.inc.php:742
+#: zencache.inc.php:748
 msgid "Every 15 Minutes"
 msgstr ""
 
-#: zencache.inc.php:869
+#: zencache.inc.php:875
 msgid "<strong>%1$s:</strong> detected significant changes. Found %2$s in the cache; auto-wiping."
 msgstr ""
 
-#: zencache.inc.php:913
+#: zencache.inc.php:919
 msgid "<strong>%1$s:</strong> detected important site changes. Found %2$s in the cache for this site; auto-clearing."
 msgstr ""
 
-#: zencache.inc.php:992
+#: zencache.inc.php:998
 msgid "Post"
 msgstr ""
 
-#: zencache.inc.php:1000
+#: zencache.inc.php:1006
 msgid "<strong>%1$s:</strong> detected changes. Found %2$s in the cache for %3$s ID: <code>%4$s</code>; auto-clearing."
 msgstr ""
 
-#: zencache.inc.php:1163
+#: zencache.inc.php:1169
 msgid "<strong>%1$s:</strong> detected changes. Found %2$s in the cache, for XML feeds of type: <code>%3$s</code>; auto-clearing."
 msgstr ""
 
-#: zencache.inc.php:1206
+#: zencache.inc.php:1212
 msgid "<strong>%1$s:</strong> detected changes. Found %2$s in the cache for XML sitemaps; auto-clearing."
 msgstr ""
 
-#: zencache.inc.php:1249
+#: zencache.inc.php:1255
 msgid "<strong>%1$s:</strong> detected changes. Found %2$s in the cache for the designated \"Home Page\"; auto-clearing."
 msgstr ""
 
-#: zencache.inc.php:1307
+#: zencache.inc.php:1313
 msgid "<strong>%1$s:</strong> detected changes. Found %2$s in the cache for the designated \"Posts Page\"; auto-clearing."
 msgstr ""
 
-#: zencache.inc.php:1362
+#: zencache.inc.php:1368
 msgid "Untitled"
 msgstr ""
 
-#: zencache.inc.php:1373
+#: zencache.inc.php:1379
 msgid "<strong>%1$s:</strong> detected changes. Found %2$s in the cache for Custom Post Type: <code>%3$s</code>; auto-clearing."
 msgstr ""
 
-#: zencache.inc.php:1463
+#: zencache.inc.php:1469
 msgid "<strong>%1$s:</strong> detected changes. Found %2$s in the cache for Author Page: <code>%3$s</code>; auto-clearing."
 msgstr ""
 
-#: zencache.inc.php:1615
+#: zencache.inc.php:1621
 msgid "<strong>%1$s:</strong> detected changes. Found %2$s in the cache for %3$s: <code>%4$s</code>; auto-clearing."
 msgstr ""
 
-#: zencache.inc.php:1904 zencache.inc.php:1932
+#: zencache.inc.php:1910 zencache.inc.php:1938
 msgid "Doing it wrong! Missing `base_dir` option value. MUST call this method after `setup()`."
 msgstr ""
 
-#: zencache.inc.php:2361
+#: zencache.inc.php:2371
 msgid "Lite"
 msgstr ""
 
-#: zencache.inc.php:2362
+#: zencache.inc.php:2372
 msgid "Pro"
 msgstr ""
 
-#: zencache.inc.php:2368
+#: zencache.inc.php:2378
 msgid "<strong>%1$s</strong> is NOT running. A conflicting plugin, <strong>%2$s</strong>, is currently active. Please deactivate the %2$s plugin to clear this message."
 msgstr ""
 

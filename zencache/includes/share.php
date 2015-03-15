@@ -61,7 +61,7 @@ namespace zencache // Root namespace.
 			 *
 			 * @var string Current version of the software.
 			 */
-			public $version = '150218';
+			public $version = '150314';
 
 			/**
 			 * Plugin slug; based on `__NAMESPACE__`.
@@ -2226,11 +2226,11 @@ namespace zencache // Root namespace.
 
 				if(stripos($hook, __NAMESPACE__) === 0) // Do Quick Cache back compat?
 				{
-					$quick_cache_filter = 'quick_cache'.substr($hook, strlen(__NAMESPACE__));
+					$quick_cache_filter  = 'quick_cache'.substr($hook, strlen(__NAMESPACE__));
+					$quick_cache_args    = $args; // Use a copy of the args.
+					$quick_cache_args[0] = $quick_cache_filter;
 
-					array_shift($args); // Shift `$hook` off.
-					array_unshift($args, $quick_cache_filter); // For Quick Cache.
-					call_user_func_array('do_action', $args);
+					call_user_func_array('do_action', $quick_cache_args);
 				}
 			}
 
@@ -2251,11 +2251,12 @@ namespace zencache // Root namespace.
 
 				if(stripos($hook, __NAMESPACE__) === 0) // Do Quick Cache back compat?
 				{
-					$quick_cache_hook = 'quick_cache'.substr($hook, strlen(__NAMESPACE__));
+					$quick_cache_hook    = 'quick_cache'.substr($hook, strlen(__NAMESPACE__));
+					$quick_cache_args    = $args; // Use a copy of the args.
+					$quick_cache_args[0] = $quick_cache_hook;
+					$quick_cache_args[1] = $value;
 
-					array_shift($args); // Shift `$hook` off.
-					array_unshift($args, $quick_cache_hook); // For Quick Cache.
-					$value = call_user_func_array('apply_filters', $args);
+					$value = call_user_func_array('apply_filters', $quick_cache_args);
 				}
 				return $value; // Filtered value.
 			}
