@@ -1,8 +1,8 @@
 === ZenCache ===
 
-Stable tag: 150218
+Stable tag: 150314
 Requires at least: 3.7
-Tested up to: 4.0
+Tested up to: 4.1.1
 Text Domain: zencache
 
 License: GPLv2 or later
@@ -327,6 +327,14 @@ Released under the terms of the [GNU General Public License](http://www.gnu.org/
 Requires PHP v5.3+. The latest version of ZenCache is a complete rewrite (OOP design). Faster! and even more dependable. NOTE: the free version of Quick Cache (this new LITE version); while it remains fully functional and is more-than-adequate for most sites; is now limited in some ways. The following advanced features from the previous release are no longer available in the lite version: a custom MD5 Version Salt, custom Exclusion Patterns, a Clear Cache button in admin bar. These, and other features; are now available only in the pro version of the plugin. For further details, please see: <http://zencache.com/>.
 
 == Changelog ==
+
+= v150314 =
+
+- **Bug Fix**: Fixed a bug in the Quick Cache back compat. method `\zencache\share\apply_wp_filters()`. It was not passing the ZenCache-filtered value through the Quick Cache back compat. routine. This bug affected sites that had disabled automatic cache clearing routines via a filter.
+- **Bug Fix** (Pro): Updated Static CDN Filters whitelist to include font file extensions `eot,ttf,otf,woff`, as site owners may wish to serve fonts with these extensions from the CDN (this would require a custom CORS configuration; see [this article](http://davidwalsh.name/cdn-fonts) for instructions). See [#427](https://github.com/websharks/zencache/issues/427).
+- **Bug Fix** (Pro): Updated Static CDN Filters blacklist to exclude font file extensions `eot,ttf,otf,woff` by default, as they require custom CORS configuration to display properly. See [#427](https://github.com/websharks/zencache/issues/427).
+- **Bug Fix** (Pro): The Static CDN Filters feature was calling a protected method that was requiring PHP v5.4+ but now the Static CDN Filters feature works with PHP v5.3+. See [#426](https://github.com/websharks/zencache/issues/426).
+- **Bug Fix**: Fixed a zero-byte `advanced-cache.php` bug related to migrating from Quick Cache. When you deleted/uninstalled Quick Cache after upgrading to ZenCache, the Quick Cache uninstallation process would empty the `advanced-cache.php` file, resulting in the site no longer being cached, despite ZenCache being active. ZenCache now continuously checks to make sure that `advanced-cache.php` is installed properly. See [#432](https://github.com/websharks/zencache/issues/432).
 
 = v150218 =
 
