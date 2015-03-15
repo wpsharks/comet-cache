@@ -5,13 +5,11 @@ Text Domain: zencache
 Plugin Name: ZenCache
 Network: true
 
-Author: s2Member® / WebSharks, Inc.
-Author URI: http://www.s2member.com
+Author: WebSharks, Inc.
+Author URI: http://www.websharks-inc.com/
 
-Plugin URI: http://www.websharks-inc.com/product/zencache/
-Description: WordPress advanced cache plugin; speed without compromise!
-
-Speed up your site (BIG time!) — ZenCache provides reliable page caching for WordPress. Easy-to-use (very simple installation).
+Plugin URI: http://zencache.com/
+Description: ZenCache is an advanced WordPress caching plugin inspired by simplicity. Speed up your site (BIG time!) with a reliable and fast WordPress cache.
 */
 if(!defined('WPINC')) // MUST have WordPress.
 	exit('Do NOT access this file directly: '.basename(__FILE__));
