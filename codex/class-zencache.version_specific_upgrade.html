@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="generator" content="ApiGen 2.8.0" />
+
+	<title>Class zencache\version_specific_upgrade | ZenCache Lite</title>
+
+	<script type="text/javascript" src="resources/combined.js?3172704083"></script>
+	<script type="text/javascript" src="elementlist.js?3293832236"></script>
+	<link rel="stylesheet" type="text/css" media="all" href="resources/style.css?3403148767" />
+
+</head>
+
+<body>
+<div id="left">
+	<div id="menu">
+		<a href="index.html" title="Overview"><span>Overview</span></a>
+
+
+		<div id="groups">
+			<h3>Namespaces</h3>
+			<ul>
+				<li><a href="namespace-None.html">None</a>
+						</li>
+				<li class="active"><a href="namespace-zencache.html">zencache</a>
+						</li>
+			</ul>
+		</div>
+
+		<hr />
+
+
+		<div id="elements">
+			<h3>Classes</h3>
+			<ul>
+				<li><a href="class-zencache.actions.html">actions</a></li>
+				<li><a href="class-zencache.advanced_cache.html">advanced_cache</a></li>
+				<li><a href="class-zencache.advanced_cache_back_compat.html">advanced_cache_back_compat</a></li>
+				<li><a href="class-zencache.menu_pages.html">menu_pages</a></li>
+				<li><a href="class-zencache.plugin.html">plugin</a></li>
+				<li><a href="class-zencache.share.html">share</a></li>
+				<li><a href="class-zencache.uninstall.html">uninstall</a></li>
+				<li><a href="class-zencache.utils_feed.html">utils_feed</a></li>
+				<li class="active"><a href="class-zencache.version_specific_upgrade.html">version_specific_upgrade</a></li>
+			</ul>
+
+
+
+
+
+			<h3>Functions</h3>
+			<ul>
+				<li><a href="function-zencache.__.html">__</a></li>
+				<li><a href="function-zencache.plugin.html">plugin</a></li>
+			</ul>
+		</div>
+	</div>
+</div>
+
+<div id="splitter"></div>
+
+<div id="right">
+<div id="rightInner">
+	<form id="search">
+		<input type="hidden" name="cx" value="" />
+		<input type="hidden" name="ie" value="UTF-8" />
+		<input type="text" name="q" class="text" />
+		<input type="submit" value="Search" />
+	</form>
+
+	<div id="navigation">
+		<ul>
+			<li>
+				<a href="index.html" title="Overview"><span>Overview</span></a>
+			</li>
+			<li>
+				<a href="namespace-zencache.html" title="Summary of zencache"><span>Namespace</span></a>
+			</li>
+			<li class="active">
+<span>Class</span>			</li>
+		</ul>
+		<ul>
+			<li>
+				<a href="tree.html" title="Tree view of classes, interfaces, traits and exceptions"><span>Tree</span></a>
+			</li>
+			<li>
+				<a href="deprecated.html" title="List of deprecated elements"><span>Deprecated</span></a>
+			</li>
+			<li>
+				<a href="todo.html" title="Todo list"><span>Todo</span></a>
+			</li>
+		</ul>
+		<ul>
+			<li>
+				<a href="zencache-lite-api-documentation.zip" title="Download documentation as ZIP archive"><span>Download</span></a>
+			</li>
+		</ul>
+	</div>
+
+<div id="content" class="class">
+	<h1>Class version_specific_upgrade</h1>
+
+
+	<div class="description">
+	<p>ZenCache (Upgrade Handlers)</p>
+
+	</div>
+
+
+
+
+
+
+
+
+
+	<div class="info">
+		
+		
+		<b>Namespace:</b> <a href="namespace-zencache.html">zencache</a><br />
+		<b>Package:</b> zencache\version\specific\upgrade<br />
+
+				<b>Since:</b>
+				<p>140725 Reorganizing class members.</p>
+<br />
+		<b>Located at</b> <a href="source-class-zencache.version_specific_upgrade.html#9-246" title="Go to source code">zencache/includes/version-specific-upgrade.php</a><br />
+	</div>
+
+
+
+	<table class="summary" id="methods">
+	<caption>Methods summary</caption>
+	<tr data-order="__construct" id="___construct">
+
+		<td class="attributes"><code>
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#___construct">#</a>
+		<code><a href="source-class-zencache.version_specific_upgrade.html#27-39" title="Go to source code">__construct</a>( <span>string <var>$prev_version</var></span> )</code>
+
+		<div class="description short">
+			<p>Class constructor.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Class constructor.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$prev_version</var></dt>
+					<dd><code>string</code><br><p>$prev_version Version they are upgrading from.</p>
+</dd>
+				</dl></div>
+
+
+
+				<h4>Since</h4>
+				<div class="list">
+						<p>140725 Reorganizing class members.</p>
+<br />
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="run_handlers" id="_run_handlers">
+
+		<td class="attributes"><code>
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_run_handlers">#</a>
+		<code><a href="source-class-zencache.version_specific_upgrade.html#41-52" title="Go to source code">run_handlers</a>( )</code>
+
+		<div class="description short">
+			<p>Runs upgrade handlers in the proper order.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Runs upgrade handlers in the proper order.</p>
+
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="from_lt_v110523" id="_from_lt_v110523">
+
+		<td class="attributes"><code>
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_from_lt_v110523">#</a>
+		<code><a href="source-class-zencache.version_specific_upgrade.html#57-70" title="Go to source code">from_lt_v110523</a>( )</code>
+
+		<div class="description short">
+			
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="from_lt_v140104" id="_from_lt_v140104">
+
+		<td class="attributes"><code>
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_from_lt_v140104">#</a>
+		<code><a href="source-class-zencache.version_specific_upgrade.html#75-79" title="Go to source code">from_lt_v140104</a>( )</code>
+
+		<div class="description short">
+			
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="from_lt_v140605" id="_from_lt_v140605">
+
+		<td class="attributes"><code>
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_from_lt_v140605">#</a>
+		<code><a href="source-class-zencache.version_specific_upgrade.html#86-120" title="Go to source code">from_lt_v140605</a>( )</code>
+
+		<div class="description short">
+			
+
+		</div>
+
+		<div class="description detailed hidden">
+			
+
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="from_lt_v140612" id="_from_lt_v140612">
+
+		<td class="attributes"><code>
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_from_lt_v140612">#</a>
+		<code><a href="source-class-zencache.version_specific_upgrade.html#122-156" title="Go to source code">from_lt_v140612</a>( )</code>
+
+		<div class="description short">
+			<p>Upgrading from a version before we changed base directory from <code>ABSPATH</code> to <code>WP_CONTENT_DIR</code>.
+   If so, we need to reset the cache location on sites
+   that have <code>wp-content</code> in their base directory.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Upgrading from a version before we changed base directory from <code>ABSPATH</code> to <code>WP_CONTENT_DIR</code>. If so, we need to reset the cache location on sites that have <code>wp-content</code> in their base directory.</p>
+
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="from_lt_v141009" id="_from_lt_v141009">
+
+		<td class="attributes"><code>
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_from_lt_v141009">#</a>
+		<code><a href="source-class-zencache.version_specific_upgrade.html#158-196" title="Go to source code">from_lt_v141009</a>( )</code>
+
+		<div class="description short">
+			<p>Upgrading from a version before we changed several <code>cache_purge_*</code> options to <code>cache_clear_*</code>.
+   If so, we need to use the existing options to fill the new keys.
+   And, of course, then we save the updated options.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Upgrading from a version before we changed several <code>cache_purge_*</code> options to <code>cache_clear_*</code>. If so, we need to use the existing options to fill the new keys. And, of course, then we save the updated options.</p>
+
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="from_quick_cache" id="_from_quick_cache">
+
+		<td class="attributes"><code>
+			 public 
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_from_quick_cache">#</a>
+		<code><a href="source-class-zencache.version_specific_upgrade.html#198-245" title="Go to source code">from_quick_cache</a>( )</code>
+
+		<div class="description short">
+			<p>Upgrading from a version before we changed the name to ZenCache.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Upgrading from a version before we changed the name to ZenCache.</p>
+
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	</table>
+
+
+
+
+
+
+
+
+
+
+
+
+	<table class="summary" id="properties">
+	<caption>Properties summary</caption>
+	<tr data-order="plugin" id="$plugin">
+		<td class="attributes"><code>
+			protected  
+			<code><a href="class-zencache.plugin.html">zencache\plugin</a></code>
+		</code></td>
+
+		<td class="name">
+				<a href="source-class-zencache.version_specific_upgrade.html#17-20" title="Go to source code"><var>$plugin</var></a>
+		</td>
+		<td class="value"><code></code></td>
+		<td class="description"><div>
+			<a href="#$plugin" class="anchor">#</a>
+
+			<div class="description short">
+				<p>Plugin reference.</p>
+
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Plugin reference.</p>
+
+
+			</div>
+		</div></td>
+	</tr>
+	<tr data-order="prev_version" id="$prev_version">
+		<td class="attributes"><code>
+			protected  
+			string
+		</code></td>
+
+		<td class="name">
+				<a href="source-class-zencache.version_specific_upgrade.html#22-25" title="Go to source code"><var>$prev_version</var></a>
+		</td>
+		<td class="value"><code><span class="php-quote">''</span></code></td>
+		<td class="description"><div>
+			<a href="#$prev_version" class="anchor">#</a>
+
+			<div class="description short">
+				<p>Version they are upgrading from.</p>
+
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Version they are upgrading from.</p>
+
+
+			</div>
+		</div></td>
+	</tr>
+	</table>
+
+
+
+
+
+
+</div>
+
+	<div id="footer">
+		ZenCache Lite API documentation generated by <a href="http://apigen.org">ApiGen 2.8.0</a>
+	</div>
+</div>
+</div>
+</body>
+</html>

@@ -4,7 +4,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="generator" content="ApiGen 2.8.0" />
 
-	<title>Function wp_cache_postload | ZenCache Lite</title>
+	<title>Function zencache\__ | ZenCache Lite</title>
 
 	<script type="text/javascript" src="resources/combined.js?3172704083"></script>
 	<script type="text/javascript" src="elementlist.js?3293832236"></script>
@@ -21,9 +21,9 @@
 		<div id="groups">
 			<h3>Namespaces</h3>
 			<ul>
-				<li class="active"><a href="namespace-None.html">None</a>
+				<li><a href="namespace-None.html">None</a>
 						</li>
-				<li><a href="namespace-zencache.html">zencache</a>
+				<li class="active"><a href="namespace-zencache.html">zencache</a>
 						</li>
 			</ul>
 		</div>
@@ -34,7 +34,15 @@
 		<div id="elements">
 			<h3>Classes</h3>
 			<ul>
-				<li><a href="class-zencache.html">zencache</a></li>
+				<li><a href="class-zencache.actions.html">actions</a></li>
+				<li><a href="class-zencache.advanced_cache.html">advanced_cache</a></li>
+				<li><a href="class-zencache.advanced_cache_back_compat.html">advanced_cache_back_compat</a></li>
+				<li><a href="class-zencache.menu_pages.html">menu_pages</a></li>
+				<li><a href="class-zencache.plugin.html">plugin</a></li>
+				<li><a href="class-zencache.share.html">share</a></li>
+				<li><a href="class-zencache.uninstall.html">uninstall</a></li>
+				<li><a href="class-zencache.utils_feed.html">utils_feed</a></li>
+				<li><a href="class-zencache.version_specific_upgrade.html">version_specific_upgrade</a></li>
 			</ul>
 
 
@@ -43,12 +51,8 @@
 
 			<h3>Functions</h3>
 			<ul>
-				<li><a href="function-___wp_php_rv_initialize.html">___wp_php_rv_initialize</a></li>
-				<li class="active"><a href="function-wp_cache_postload.html">wp_cache_postload</a></li>
-				<li><a href="function-wp_php_rv.html">wp_php_rv</a></li>
-				<li><a href="function-wp_php_rv_custom_notice.html">wp_php_rv_custom_notice</a></li>
-				<li><a href="function-wp_php_rv_missing.html">wp_php_rv_missing</a></li>
-				<li><a href="function-wp_php_rv_notice.html">wp_php_rv_notice</a></li>
+				<li class="active"><a href="function-zencache.__.html">__</a></li>
+				<li><a href="function-zencache.plugin.html">plugin</a></li>
 			</ul>
 		</div>
 	</div>
@@ -71,7 +75,7 @@
 				<a href="index.html" title="Overview"><span>Overview</span></a>
 			</li>
 			<li>
-				<a href="namespace-None.html" title="Summary of None"><span>Namespace</span></a>
+				<a href="namespace-zencache.html" title="Summary of zencache"><span>Namespace</span></a>
 			</li>
 			<li class="active">
 <span>Function</span>			</li>
@@ -95,28 +99,56 @@
 	</div>
 
 <div id="content" class="function">
-	<h1>Function wp_cache_postload</h1>
+	<h1>Function __</h1>
 
 
 	<div class="description">
-	<p>Postload event handler; overrides core WP function.</p>
+	<p>Polyfill for &#95;_().</p>
 
 	</div>
 
 	<div class="info">
-		
+		<b>Namespace:</b> <a href="namespace-zencache.html">zencache</a><br />
 		
 				<b>Since:</b>
 				<p>140422 First documented version.</p>
 <br />
-				<b>Note:</b>
-				<p>See <code>/wp-settings.php</code> around line #226.</p>
-<br />
-		<b>Located at</b> <a href="source-function-wp_cache_postload.html#1194-1215" title="Go to source code">zencache/includes/advanced-cache.tpl.php</a><br />
+		<b>Located at</b> <a href="source-function-zencache.__.html#2280-2298" title="Go to source code">zencache/includes/share.php</a><br />
 	</div>
 
 
+	<table class="summary" id="parameters">
+	<caption>Parameters summary</caption>
+	<tr id="$string">
+		<td class="name"><code>string</code></td>
+		<td class="value"><code><var>$string</var></code></td>
+		<td>
+			<p>String to translate.</p>
 
+		</td>
+	</tr>
+	<tr id="$text_domain">
+		<td class="name"><code>string</code></td>
+		<td class="value"><code><var>$text_domain</var></code></td>
+		<td>
+			<p>Plugin text domain.</p>
+
+		</td>
+	</tr>
+	</table>
+
+	<table class="summary" id="returns">
+	<caption>Return value summary</caption>
+	<tr>
+		<td class="name"><code>
+			string
+		</code></td>
+		<td>
+			<p>Possibly translated string.</p>
+
+		</td>
+	</tr>
+	</table>
 
 
 </div>
