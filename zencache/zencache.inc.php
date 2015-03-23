@@ -2056,9 +2056,15 @@ namespace zencache
 
 				// Fixes zero-byte advanced-cache.php bug related to migrating from Quick Cache
 				// See https://github.com/websharks/zencache/issues/432
+				// Also fixes a missing define('WP_CACHE', TRUE) bug related to migrating from Quick Cache
+				// See https://github.com/websharks/zencache/issues/450
 				if(!is_file($cache_dir.'/zc-advanced-cache')
 				   || !is_file($advanced_cache_file) || filesize($advanced_cache_file) === 0
-				) $this->add_advanced_cache();
+				)
+				{
+					$this->add_advanced_cache();
+					$this->add_wp_cache_to_wp_config();
+				}
 			}
 
 			/**
