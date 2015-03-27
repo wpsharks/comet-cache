@@ -1442,7 +1442,7 @@ namespace zencache // Root namespace.
 					$possible_tmp_dirs[] = WP_CONTENT_DIR;
 
 				if(!empty($possible_tmp_dirs)) foreach($possible_tmp_dirs as $_tmp_dir)
-					if(($_tmp_dir = trim((string)$_tmp_dir)) && is_dir($_tmp_dir) && is_writable($_tmp_dir))
+					if(($_tmp_dir = trim((string)$_tmp_dir)) && @is_dir($_tmp_dir) && @is_writable($_tmp_dir))
 						return ($tmp_dir = $this->n_dir_seps($_tmp_dir));
 				unset($_tmp_dir); // Housekeeping.
 
