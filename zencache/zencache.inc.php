@@ -526,8 +526,8 @@ namespace zencache
 			 */
 			public function add_network_menu_pages()
 			{
-				$icon = 'data:image/svg+xml;base64,'. // Base64-encoded inline SVG icon.
-				        base64_encode(file_get_contents(dirname(__FILE__).'/client-s/images/inline-icon.svg'));
+				$icon = file_get_contents(dirname(__FILE__).'/client-s/images/inline-icon.svg');
+				$icon = 'data:image/svg+xml;base64,'.base64_encode($this->color_svg_menu_icon($icon));
 
 				add_menu_page($this->name, $this->name, $this->network_cap, __NAMESPACE__, array($this, 'menu_page_options'), $icon);
 			}
@@ -543,8 +543,8 @@ namespace zencache
 			{
 				if(is_multisite()) return; // Multisite networks MUST use network admin area.
 
-				$icon = 'data:image/svg+xml;base64,'. // Base64-encoded inline SVG icon.
-				        base64_encode(file_get_contents(dirname(__FILE__).'/client-s/images/inline-icon.svg'));
+				$icon = file_get_contents(dirname(__FILE__).'/client-s/images/inline-icon.svg');
+				$icon = 'data:image/svg+xml;base64,'.base64_encode($this->color_svg_menu_icon($icon));
 
 				add_menu_page($this->name, $this->name, $this->cap, __NAMESPACE__, array($this, 'menu_page_options'), $icon);
 			}
@@ -568,6 +568,56 @@ namespace zencache
 
 				return $this->apply_wp_filters(__METHOD__, $links, get_defined_vars());
 			}
+
+			/**
+			 * Fills menu page inline SVG icon color.
+			 *
+			 * @since 15xxxx Fixing bug in SVG icons.
+			 *
+			 * @param string $svg Inline SVG icon markup.
+			 *
+			 * @return string Inline SVG icon markup.
+			 */
+			public function color_svg_menu_icon($svg)
+			{
+				if(!($color = get_user_option('admin_color')))
+					$color = 'fresh'; // Default color scheme.
+
+				if(empty($this->wp_admin_icon_colors[$color]))
+					return $svg; // Not possible.
+
+				$icon_colors         = $this->wp_admin_icon_colors[$color];
+				$use_icon_fill_color = $icon_colors['base']; // Default base.
+
+				$current_pagenow = !empty($GLOBALS['pagenow']) ? $GLOBALS['pagenow'] : '';
+				$current_page    = !empty($_REQUEST['page']) ? $_REQUEST['page'] : '';
+
+				if(strpos($current_pagenow, __NAMESPACE__) === 0 || strpos($current_page, __NAMESPACE__) === 0)
+					$use_icon_fill_color = $icon_colors['current'];
+
+				return str_replace(' fill="currentColor"', ' fill="'.esc_attr($use_icon_fill_color).'"', $svg);
+			}
+
+			/**
+			 * WordPress admin icon color schemes.
+			 *
+			 * @since 15xxxx Fixing bug in SVG icons.
+			 *
+			 * @var array WP admin icon colors.
+			 *
+			 * @note These must be hard-coded, because they don't become available
+			 *    in core until `admin_init`; i.e., too late for `admin_menu`.
+			 */
+			public $wp_admin_icon_colors = array(
+				'fresh'     => array('base' => '#999999', 'focus' => '#2EA2CC', 'current' => '#FFFFFF'),
+				'light'     => array('base' => '#999999', 'focus' => '#CCCCCC', 'current' => '#CCCCCC'),
+				'blue'      => array('base' => '#E5F8FF', 'focus' => '#FFFFFF', 'current' => '#FFFFFF'),
+				'midnight'  => array('base' => '#F1F2F3', 'focus' => '#FFFFFF', 'current' => '#FFFFFF'),
+				'sunrise'   => array('base' => '#F3F1F1', 'focus' => '#FFFFFF', 'current' => '#FFFFFF'),
+				'ectoplasm' => array('base' => '#ECE6F6', 'focus' => '#FFFFFF', 'current' => '#FFFFFF'),
+				'ocean'     => array('base' => '#F2FCFF', 'focus' => '#FFFFFF', 'current' => '#FFFFFF'),
+				'coffee'    => array('base' => '#F3F2F1', 'focus' => '#FFFFFF', 'current' => '#FFFFFF'),
+			);
 
 			/**
 			 * Loads the admin menu page options.
