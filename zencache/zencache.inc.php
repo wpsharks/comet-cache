@@ -103,6 +103,19 @@ namespace zencache
 			public $cache = array();
 
 			/**
+			 * Used for temporarily storing the permalink for posts transitioning from
+			 *    `publish` or `private` post status to `pending` or `draft` post status.
+			 *
+			 * @since 15xxxx
+			 *
+			 * @var array An associative array with the Post ID as the named key containing the post permalink before the post has been transitioned
+			 *
+			 * @see auto_clear_post_cache()
+			 * @see auto_clear_post_cache_transition()
+			 */
+			protected $pre_post_update_post_permalink = array();
+
+			/**
 			 * Used by the plugin's uninstall handler.
 			 *
 			 * @since 140829 Adding uninstall handler.
@@ -263,7 +276,7 @@ namespace zencache
 				add_action('delete_post', array($this, 'auto_clear_post_cache'));
 				add_action('clean_post_cache', array($this, 'auto_clear_post_cache'));
 				add_action('post_updated', array($this, 'auto_clear_author_page_cache'), 10, 3);
-				add_action('transition_post_status', array($this, 'auto_clear_post_cache_transition'), 10, 3);
+				add_action('pre_post_update', array($this, 'auto_clear_post_cache_transition'), 10, 2);
 
 				add_action('added_term_relationship', array($this, 'auto_clear_post_terms_cache'), 10, 1);
 				add_action('delete_term_relationships', array($this, 'auto_clear_post_terms_cache'), 10, 1);
@@ -1022,7 +1035,9 @@ namespace zencache
 				if(!is_dir($cache_dir = $this->cache_dir()))
 					return $counter; // Nothing to do.
 
-				if(!($permalink = get_permalink($post_id)))
+				if(!empty($this->pre_post_update_post_permalink[$post_id]) && ($permalink = $this->pre_post_update_post_permalink[$post_id]))
+					$this->pre_post_update_post_permalink[$post_id] = ''; // Reset; only used for post status transitions
+				elseif(!($permalink = get_permalink($post_id)))
 					return $counter; // Nothing we can do.
 
 				if(!($post_status = get_post_status($post_id)))
@@ -1075,13 +1090,12 @@ namespace zencache
 			 * Automatically clears cache files for a particular post when transitioning
 			 *    from `publish` or `private` post status to `draft`, `future`, `private`, or `trash`.
 			 *
-			 * @attaches-to `transition_post_status` hook.
+			 * @attaches-to `pre_post_update` hook.
 			 *
 			 * @since 140605 First documented version.
 			 *
-			 * @param string   $new_status New post status.
-			 * @param string   $old_status Old post status.
-			 * @param \WP_Post $post Post object.
+			 * @param int   $post_ID Post ID.
+			 * @param array $data    Array of unslashed post data.
 			 *
 			 * @return integer Total files cleared by this routine (if any).
 			 *
@@ -1092,16 +1106,28 @@ namespace zencache
 			 *
 			 * @see auto_clear_post_cache()
 			 */
-			public function auto_clear_post_cache_transition($new_status, $old_status, \WP_Post $post)
+			public function auto_clear_post_cache_transition($post_ID, $data)
 			{
-				$new_status = (string)$new_status;
-				$old_status = (string)$old_status;
+				$old_status = (string)get_post_status($post_ID);
+				$new_status = (string)$data['post_status'];
+
+				/*
+				 * When a post has a status of `pending` or `draft`, the `get_permalink()` function
+				 * does not return a friendly permalink and therefore `auto_clear_post_cache()` will
+				 * have no way of building a path to the cache file that should be cleared as part of
+				 * this post status transition. To get around this, we temporarily store the permalink
+				 * in $this->pre_post_update_post_permalink for `auto_clear_post_cache()` to use.
+				 *
+				 * See also: https://github.com/websharks/zencache/issues/441
+				 */
+				if($old_status === 'publish' && in_array($data['post_status'], array('pending', 'draft', TRUE)))
+					$this->pre_post_update_post_permalink[$post_ID] = get_permalink($post_ID);
 
 				$counter = 0; // Initialize.
 
-				if(isset($this->cache[__FUNCTION__][$new_status][$old_status][$post->ID]))
+				if(isset($this->cache[__FUNCTION__][$new_status][$old_status][$post_ID]))
 					return $counter; // Already did this.
-				$this->cache[__FUNCTION__][$new_status][$old_status][$post->ID] = -1;
+				$this->cache[__FUNCTION__][$new_status][$old_status][$post_ID] = -1;
 
 				if(!$this->options['enable'])
 					return $counter; // Nothing to do.
@@ -1109,8 +1135,8 @@ namespace zencache
 				if($old_status !== 'publish' && $old_status !== 'private')
 					return $counter; // Nothing to do. We MUST be transitioning FROM one of these statuses.
 
-				if($new_status === 'draft' || $new_status === 'future' || $new_status === 'private' || $new_status === 'trash')
-					$counter = $this->auto_clear_post_cache($post->ID, TRUE);
+				if(in_array($new_status, array('draft', 'future', 'pending', 'private', 'trash'), TRUE))
+					$counter = $this->auto_clear_post_cache($post_ID, TRUE);
 
 				return $this->apply_wp_filters(__METHOD__, $counter, get_defined_vars());
 			}
