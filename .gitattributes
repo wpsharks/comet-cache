@@ -22,6 +22,7 @@
 # Server config files.
 *.admins text
 *.cfg text
+*.cnf text
 *.conf text
 *.htaccess text
 *.htaccess-apache text
@@ -31,7 +32,13 @@
 # CSS/JavaScript files.
 *.css text
 *.js text
+*.css.map text
+*.js.map text
 *.json text
+
+# Applescript files.
+*.applescript text
+*.scpt binary
 
 # PHP scripts/files.
 *.inc text

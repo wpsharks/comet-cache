@@ -989,6 +989,7 @@ namespace zencache // Root namespace.
 			 * @return string Real IP address, else `unknown` on failure.
 			 *
 			 * @note This supports both IPv4 and IPv6 addresses.
+			 * @note See my tests against this here: http://3v4l.org/fVWUp
 			 */
 			public function current_ip()
 			{
@@ -998,11 +999,9 @@ namespace zencache // Root namespace.
 				static::$static[__FUNCTION__] = ''; // Initialize.
 				$ip                           = &static::$static[__FUNCTION__];
 
-				$_s = $_SERVER; // Copy of current `$_SERVER` vars.
-
-				if($this->apply_filters(__METHOD__.'_prioritize_remote_addr', FALSE))
-					if(($REMOTE_ADDR = $this->valid_public_ip($_s['REMOTE_ADDR'])))
-						return ($ip = $REMOTE_ADDR);
+				if(!empty($_SERVER['REMOTE_ADDR']) && $this->apply_filters(__METHOD__.'_prioritize_remote_addr', FALSE))
+					if(($_valid_public_ip = $this->valid_public_ip($_SERVER['REMOTE_ADDR'])))
+						return ($ip = $_valid_public_ip);
 
 				$sources = array(
 					'HTTP_CF_CONNECTING_IP',
@@ -1018,12 +1017,15 @@ namespace zencache // Root namespace.
 				$sources = $this->apply_filters(__METHOD__.'_sources', $sources);
 
 				foreach($sources as $_source) // Try each of these; in order.
-					if(!isset($$_source) && ($$_source = $this->valid_public_ip($_s[$_source])))
-						return ($ip = $$_source); // A valid, public IPv4 or IPv6 address.
-				unset($_source); // Housekeeping.
+				{
+					if(!empty($_SERVER[$_source])) // Does the source key exist at all?
+						if(($_valid_public_ip = $this->valid_public_ip($_SERVER[$_source])))
+							return ($ip = $_valid_public_ip); // A valid public IPv4 or IPv6 address.
+				}
+				unset($_source, $_valid_public_ip); // Housekeeping.
 
-				if(!empty($_s['REMOTE_ADDR']) && is_string($_s['REMOTE_ADDR']))
-					return ($ip = strtolower($_s['REMOTE_ADDR']));
+				if(!empty($_SERVER['REMOTE_ADDR']) && is_string($_SERVER['REMOTE_ADDR']))
+					return ($ip = strtolower($_SERVER['REMOTE_ADDR']));
 
 				return ($ip = 'unknown'); // Not possible.
 			}
@@ -1031,23 +1033,25 @@ namespace zencache // Root namespace.
 			/**
 			 * Gets a valid/public IP address.
 			 *
-			 * @param string $possible_ips A single IP, or a possible comma-delimited list of IPs.
-			 *    Pass by reference to avoid PHP notices while checking multiple sources.
+			 * @param string $list_of_possible_ips A single IP, or a comma-delimited list of IPs.
 			 *
 			 * @return string A valid/public IP address (if one is found), else an empty string.
 			 *
 			 * @note This supports both IPv4 and IPv6 addresses.
 			 * @note See my tests against this here: http://3v4l.org/fVWUp
 			 */
-			public function valid_public_ip(&$possible_ips)
+			public function valid_public_ip($list_of_possible_ips)
 			{
-				if(!$possible_ips || !is_string($possible_ips))
+				if(!$list_of_possible_ips || !is_string($list_of_possible_ips))
 					return ''; // Empty or invalid data.
 
-				foreach(preg_split('/[\s;,]+/', trim($possible_ips), NULL, PREG_SPLIT_NO_EMPTY) as $_possible_ip)
-					if(($_possible_ip = filter_var(strtolower($_possible_ip), FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)))
-						return $_possible_ip; // A valid, public IPv4 or IPv6 address.
-				unset($_possible_ip); // Housekeeping.
+				if(!($list_of_possible_ips = trim($list_of_possible_ips)))
+					return ''; // Not possible; i.e., empty string.
+
+				foreach(preg_split('/[\s;,]+/', $list_of_possible_ips, NULL, PREG_SPLIT_NO_EMPTY) as $_possible_ip)
+					if(($_valid_public_ip = filter_var(strtolower($_possible_ip), FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)))
+						return $_valid_public_ip; // A valid public IPv4 or IPv6 address.
+				unset($_possible_ip, $_valid_public_ip); // Housekeeping.
 
 				return ''; // Default return value.
 			}
