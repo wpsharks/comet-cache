@@ -106,7 +106,7 @@ namespace zencache
 			 * Used for temporarily storing the permalink for posts transitioning from
 			 *    `publish` or `private` post status to `pending` or `draft` post status.
 			 *
-			 * @since 15xxxx
+			 * @since 150409
 			 *
 			 * @var array An associative array with the Post ID as the named key containing the post permalink before the post has been transitioned
 			 *
@@ -585,7 +585,7 @@ namespace zencache
 			/**
 			 * Fills menu page inline SVG icon color.
 			 *
-			 * @since 15xxxx Fixing bug in SVG icons.
+			 * @since 150409 Fixing bug in SVG icons.
 			 *
 			 * @param string $svg Inline SVG icon markup.
 			 *
@@ -614,7 +614,7 @@ namespace zencache
 			/**
 			 * WordPress admin icon color schemes.
 			 *
-			 * @since 15xxxx Fixing bug in SVG icons.
+			 * @since 150409 Fixing bug in SVG icons.
 			 *
 			 * @var array WP admin icon colors.
 			 *

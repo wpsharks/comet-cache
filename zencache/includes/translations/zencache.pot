@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the ZenCache package.
 msgid ""
 msgstr ""
-"Project-Id-Version: ZenCache 150314\n"
+"Project-Id-Version: ZenCache 150409\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/zencache\n"
-"POT-Creation-Date: 2015-03-15 00:20:02+00:00\n"
+"POT-Creation-Date: 2015-04-09 23:12:44+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -14,139 +14,139 @@ msgstr ""
 
 #. translators: This string is actually NOT translatable because the `__()`
 #. function is not available at this point in the processing.
-#: includes/advanced-cache.tpl.php:725
+#: includes/advanced-cache.tpl.php:726
 msgid "%1$s fully functional :-) Cache file served for (%2$s) in %3$s seconds, on: %4$s."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:857
+#: includes/advanced-cache.tpl.php:858
 msgid "Unexpected OB phase: `%1$s`."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:929
+#: includes/advanced-cache.tpl.php:930
 msgid "Cache directory not writable. %1$s needs this directory please: `%2$s`. Set permissions to `755` or higher; `777` might be needed in some cases."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:936 includes/advanced-cache.tpl.php:959
+#: includes/advanced-cache.tpl.php:937 includes/advanced-cache.tpl.php:960
 msgid "Unable to create symlink: `%1$s` » `%2$s`. Possible permissions issue (or race condition), please check your cache directory: `%3$s`."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:947
+#: includes/advanced-cache.tpl.php:948
 msgid "%1$s file path: %2$s"
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:948
+#: includes/advanced-cache.tpl.php:949
 msgid "%1$s file built for (%2$s) in %3$s seconds, on: %4$s."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:950
+#: includes/advanced-cache.tpl.php:951
 msgid "This %1$s file will auto-expire (and be rebuilt) on: %2$s (based on your configured expiration time)."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:974
+#: includes/advanced-cache.tpl.php:975
 msgid "%1$s: failed to write cache file for: `%2$s`; possible permissions issue (or race condition), please check your cache directory: `%3$s`."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1020
+#: includes/advanced-cache.tpl.php:1021
 msgid "because `PHP_SAPI` reports that you are currently running from the command line."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1024
+#: includes/advanced-cache.tpl.php:1025
 msgid "because `$_GET['zcAC']` is set to a boolean-ish FALSE value."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1028
+#: includes/advanced-cache.tpl.php:1029
 msgid "because `$_SERVER['HTTP_HOST']` is missing from your server configuration."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1032
+#: includes/advanced-cache.tpl.php:1033
 msgid "because `$_SERVER['REQUEST_URI']` is missing from your server configuration."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1036
+#: includes/advanced-cache.tpl.php:1037
 msgid "because the PHP constant `ZENCACHE_ALLOWED` has been set to a boolean-ish `FALSE` value at runtime. Perhaps by WordPress itself, or by one of your themes/plugins. This usually means that you have a theme/plugin intentionally disabling the cache on this page; and it's usually for a very good reason."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1040
+#: includes/advanced-cache.tpl.php:1041
 msgid "because the environment variable `$_SERVER['ZENCACHE_ALLOWED']` has been set to a boolean-ish `FALSE` value at runtime. Perhaps by WordPress itself, or by one of your themes/plugins. This usually means that you have a theme/plugin intentionally disabling the cache on this page; and it's usually for a very good reason."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1044
+#: includes/advanced-cache.tpl.php:1045
 msgid "because the PHP constant `DONOTCACHEPAGE` has been set at runtime. Perhaps by WordPress itself, or by one of your themes/plugins. This usually means that you have a theme/plugin intentionally disabling the cache on this page; and it's usually for a very good reason."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1048
+#: includes/advanced-cache.tpl.php:1049
 msgid "because the environment variable `$_SERVER['DONOTCACHEPAGE']` has been set at runtime. Perhaps by WordPress itself, or by one of your themes/plugins. This usually means that you have a theme/plugin intentionally disabling the cache on this page; and it's usually for a very good reason."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1052
+#: includes/advanced-cache.tpl.php:1053
 msgid "because `$_SERVER['REQUEST_METHOD']` is `POST`, `PUT`, `DELETE`, `HEAD`, `OPTIONS`, `TRACE` or `CONNECT`. These request methods should never (ever) be cached in any way."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1056
-msgid "because `$_SERVER['REMOTE_ADDR']` === `$_SERVER['SERVER_ADDR']`; i.e. a self-serve request. DEVELOPER TIP: if you are testing on a localhost installation, please add `define('LOCALHOST', TRUE);` to your `/wp-config.php` file while you run tests :-) Remove it (or set it to a `FALSE` value) once you go live on the web."
+#: includes/advanced-cache.tpl.php:1057
+msgid "because `[current IP address]` === `$_SERVER['SERVER_ADDR']`; i.e. a self-serve request. DEVELOPER TIP: if you are testing on a localhost installation, please add `define('LOCALHOST', TRUE);` to your `/wp-config.php` file while you run tests :-) Remove it (or set it to a `FALSE` value) once you go live on the web."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1060
+#: includes/advanced-cache.tpl.php:1061
 msgid "because `$_SERVER['REQUEST_URI']` indicates this is a `/feed`; and the configuration of this site says not to cache XML-based feeds."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1064
+#: includes/advanced-cache.tpl.php:1065
 msgid "because `$_SERVER['REQUEST_URI']` indicates this is a `wp-` or `xmlrpc` file; i.e. a WordPress systematic file. WordPress systematics are never (ever) cached in any way."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1068
+#: includes/advanced-cache.tpl.php:1069
 msgid "because `$_SERVER['REQUEST_URI']` or the `is_admin()` function indicates this is an administrative area of the site."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1072
+#: includes/advanced-cache.tpl.php:1073
 msgid "because `$_SERVER['REQUEST_URI']` indicates this is a Multisite Network; and this was a request for `/files/*`, not a page."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1077
+#: includes/advanced-cache.tpl.php:1078
 msgid "because the current user visiting this page (usually YOU), appears to be logged-in. The current configuration says NOT to cache pages for logged-in visitors. This message may also appear if you have an active PHP session on this site, or if you've left (or replied to) a comment recently. If this message continues, please clear your cookies and try again."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1081
+#: includes/advanced-cache.tpl.php:1082
 msgid "because `$_GET` contains query string data. The current configuration says NOT to cache GET requests with a query string."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1085
+#: includes/advanced-cache.tpl.php:1086
 msgid "because the WordPress `is_404()` Conditional Tag says the current page is a 404 error. The current configuration says NOT to cache 404 errors."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1089
+#: includes/advanced-cache.tpl.php:1090
 msgid "because a plugin running on this installation says this page is in Maintenance Mode; i.e. is not available publicly at this time."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1093
+#: includes/advanced-cache.tpl.php:1094
 msgid "because %1$s is unable to cache already-compressed output. Please use `mod_deflate` w/ Apache; or use `zlib.output_compression` in your `php.ini` file. %1$s is NOT compatible with `ob_gzhandler()` and others like this."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1097
+#: includes/advanced-cache.tpl.php:1098
 msgid "because the contents of this document contain `<body id=\"error-page\">`, which indicates this is an auto-generated WordPress error message."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1101
+#: includes/advanced-cache.tpl.php:1102
 msgid "because a `Content-Type:` header was set via PHP at runtime. The header contains a MIME type which is NOT a variation of HTML or XML. This header might have been set by your hosting company, by WordPress itself; or by one of your themes/plugins."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1105
+#: includes/advanced-cache.tpl.php:1106
 msgid "because a `Status:` header (or an `HTTP/` header) was set via PHP at runtime. The header contains a non-`2xx` status code. This indicates the current page was not loaded successfully. This header might have been set by your hosting company, by WordPress itself; or by one of your themes/plugins."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1109
+#: includes/advanced-cache.tpl.php:1110
 msgid "because the WordPress `is_404()` Conditional Tag says the current page is a 404 error; and this is the first time it's happened on this page. Your current configuration says that 404 errors SHOULD be cached, so %1$s built a cached symlink which points future requests for this location to your already-cached 404 error document. If you reload this page (assuming you don't clear the cache before you do so); you should get a cached version of your 404 error document. This message occurs ONCE for each new/unique 404 error request."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1113
+#: includes/advanced-cache.tpl.php:1114
 msgid "because %1$s detected an early output buffer termination. This may happen when a theme/plugin ends, cleans, or flushes all output buffers before reaching the PHP shutdown phase. It's not always a bad thing. Sometimes it is necessary for a theme/plugin to do this. However, in this scenario it is NOT possible to cache the output; since %1$s is effectively disabled at runtime when this occurs."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1117
+#: includes/advanced-cache.tpl.php:1118
 msgid "due to an unexpected behavior in the application. Please report this as a bug!"
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1120
+#: includes/advanced-cache.tpl.php:1121
 msgid "%1$s is NOT caching this page, %2$s"
 msgstr ""
 
@@ -833,7 +833,7 @@ msgid "Yes, I want to compress HTML/CSS/JS for blazing fast speeds."
 msgstr ""
 
 #: includes/menu-pages.php:534
-msgid "<strong>Note:</strong> This is experimental. Please <a href=\"https://github.com/websharks/quick-cache/issues\" target=\"_blank\">report issues here</a>."
+msgid "<strong>Note:</strong> This is experimental. Please <a href=\"https://github.com/websharks/zencache/issues\" target=\"_blank\">report issues here</a>."
 msgstr ""
 
 #: includes/menu-pages.php:537
@@ -1156,73 +1156,73 @@ msgstr ""
 msgid "Unable to determine cache directory location."
 msgstr ""
 
-#: includes/share.php:1534 includes/share.php:1676
+#: includes/share.php:1611 includes/share.php:1753
 msgid "The `options` property w/ a `cache_max_age` key is not defined in this class."
 msgstr ""
 
-#: includes/share.php:1560
+#: includes/share.php:1637
 msgid "Unable to delete files. Rename failure on directory: `%1$s`."
 msgstr ""
 
-#: includes/share.php:1583 includes/share.php:1744 includes/share.php:1850
+#: includes/share.php:1660 includes/share.php:1821 includes/share.php:1927
 msgid "Unable to delete symlink: `%1$s`."
 msgstr ""
 
-#: includes/share.php:1595 includes/share.php:1756 includes/share.php:1858
+#: includes/share.php:1672 includes/share.php:1833 includes/share.php:1935
 msgid "Unable to delete file: `%1$s`."
 msgstr ""
 
-#: includes/share.php:1609 includes/share.php:1770 includes/share.php:1866
+#: includes/share.php:1686 includes/share.php:1847 includes/share.php:1943
 msgid "Unable to delete dir: `%1$s`."
 msgstr ""
 
-#: includes/share.php:1615 includes/share.php:1776 includes/share.php:1872
+#: includes/share.php:1692 includes/share.php:1853 includes/share.php:1949
 msgid "Unexpected resource type: `%1$s`."
 msgstr ""
 
-#: includes/share.php:1621 includes/share.php:1721 includes/share.php:1782
+#: includes/share.php:1698 includes/share.php:1798 includes/share.php:1859
 msgid "Unable to delete files. Rename failure on tmp directory: `%1$s`."
 msgstr ""
 
-#: includes/share.php:1836 includes/share.php:1878
+#: includes/share.php:1913 includes/share.php:1955
 msgid "Unable to delete all files/dirs. Rename failure on tmp directory: `%1$s`."
 msgstr ""
 
-#: includes/share.php:1883
+#: includes/share.php:1960
 msgid "Unable to delete directory: `%1$s`."
 msgstr ""
 
-#: includes/share.php:1918
+#: includes/share.php:1995
 msgid "Unable to find the wp-config.php file."
 msgstr ""
 
-#: includes/share.php:1934
+#: includes/share.php:2011
 msgid "No writable tmp directory."
 msgstr ""
 
-#: includes/share.php:1939
+#: includes/share.php:2016
 msgid "Unable to obtain an exclusive lock."
 msgstr ""
 
-#: includes/share.php:1992
+#: includes/share.php:2069
 msgid "%1$s file"
 msgid_plural "%1$s files"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/share.php:2008
+#: includes/share.php:2085
 msgid "%1$s directory"
 msgid_plural "%1$s directories"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/share.php:2024
+#: includes/share.php:2101
 msgid "%1$s file/directory"
 msgid_plural "%1$s files/directories"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/share.php:2057
+#: includes/share.php:2134
 msgid "Invalid hook."
 msgstr ""
 
@@ -1250,91 +1250,130 @@ msgstr ""
 msgid "<strong>Woohoo! %1$s activated.</strong> :-)"
 msgstr ""
 
-#: zencache.inc.php:369
+#: submodules/wp-php-rv/wp-php-rv.php:124
+msgid "extension"
+msgid_plural "extensions"
+msgstr[0] ""
+msgstr[1] ""
+
+#: submodules/wp-php-rv/wp-php-rv.php:132
+msgid "<strong>%1$s is NOT active. It requires PHP v%2$s+.</strong>"
+msgstr ""
+
+#: submodules/wp-php-rv/wp-php-rv.php:133
+msgid "&#8627; You're currently running an older copy of PHP v%1$s."
+msgstr ""
+
+#: submodules/wp-php-rv/wp-php-rv.php:136
+msgid "&#8627; You are also missing the following required PHP %1$s: %2$s."
+msgstr ""
+
+#: submodules/wp-php-rv/wp-php-rv.php:138
+#: submodules/wp-php-rv/wp-php-rv.php:146
+msgid "<em>A simple update is necessary. Please ask your hosting company to help resolve this quickly.</em>"
+msgstr ""
+
+#: submodules/wp-php-rv/wp-php-rv.php:139
+msgid "<em>To remove this message, please upgrade PHP. Or, remove %1$s from WordPress.</em>"
+msgstr ""
+
+#: submodules/wp-php-rv/wp-php-rv.php:144
+msgid "<strong>%1$s is NOT active. PHP %2$s missing.</strong>"
+msgstr ""
+
+#: submodules/wp-php-rv/wp-php-rv.php:145
+msgid "&#8627; You are missing the following required PHP %1$s: %2$s."
+msgstr ""
+
+#: submodules/wp-php-rv/wp-php-rv.php:147
+msgid "<em>To remove this message, please install the required PHP %1$s. Or, remove %2$s from WordPress.</em>"
+msgstr ""
+
+#: zencache.inc.php:382
 msgid "<strong>%1$s:</strong> detected a new version of itself. Recompiling w/ latest version... wiping the cache... all done :-)"
 msgstr ""
 
-#: zencache.inc.php:565
+#: zencache.inc.php:578
 msgid "Settings"
 msgstr ""
 
-#: zencache.inc.php:566
+#: zencache.inc.php:579
 msgid "Preview Pro Features"
 msgstr ""
 
-#: zencache.inc.php:567
+#: zencache.inc.php:580
 msgid "Upgrade"
 msgstr ""
 
-#: zencache.inc.php:613 zencache.inc.php:690
+#: zencache.inc.php:676 zencache.inc.php:753
 msgid "dismiss &times;"
 msgstr ""
 
-#: zencache.inc.php:748
+#: zencache.inc.php:811
 msgid "Every 15 Minutes"
 msgstr ""
 
-#: zencache.inc.php:875
+#: zencache.inc.php:938
 msgid "<strong>%1$s:</strong> detected significant changes. Found %2$s in the cache; auto-wiping."
 msgstr ""
 
-#: zencache.inc.php:919
+#: zencache.inc.php:982
 msgid "<strong>%1$s:</strong> detected important site changes. Found %2$s in the cache for this site; auto-clearing."
 msgstr ""
 
-#: zencache.inc.php:998
+#: zencache.inc.php:1063
 msgid "Post"
 msgstr ""
 
-#: zencache.inc.php:1006
+#: zencache.inc.php:1071
 msgid "<strong>%1$s:</strong> detected changes. Found %2$s in the cache for %3$s ID: <code>%4$s</code>; auto-clearing."
 msgstr ""
 
-#: zencache.inc.php:1169
+#: zencache.inc.php:1245
 msgid "<strong>%1$s:</strong> detected changes. Found %2$s in the cache, for XML feeds of type: <code>%3$s</code>; auto-clearing."
 msgstr ""
 
-#: zencache.inc.php:1212
+#: zencache.inc.php:1288
 msgid "<strong>%1$s:</strong> detected changes. Found %2$s in the cache for XML sitemaps; auto-clearing."
 msgstr ""
 
-#: zencache.inc.php:1255
+#: zencache.inc.php:1331
 msgid "<strong>%1$s:</strong> detected changes. Found %2$s in the cache for the designated \"Home Page\"; auto-clearing."
 msgstr ""
 
-#: zencache.inc.php:1313
+#: zencache.inc.php:1389
 msgid "<strong>%1$s:</strong> detected changes. Found %2$s in the cache for the designated \"Posts Page\"; auto-clearing."
 msgstr ""
 
-#: zencache.inc.php:1368
+#: zencache.inc.php:1444
 msgid "Untitled"
 msgstr ""
 
-#: zencache.inc.php:1379
+#: zencache.inc.php:1455
 msgid "<strong>%1$s:</strong> detected changes. Found %2$s in the cache for Custom Post Type: <code>%3$s</code>; auto-clearing."
 msgstr ""
 
-#: zencache.inc.php:1469
+#: zencache.inc.php:1545
 msgid "<strong>%1$s:</strong> detected changes. Found %2$s in the cache for Author Page: <code>%3$s</code>; auto-clearing."
 msgstr ""
 
-#: zencache.inc.php:1621
+#: zencache.inc.php:1697
 msgid "<strong>%1$s:</strong> detected changes. Found %2$s in the cache for %3$s: <code>%4$s</code>; auto-clearing."
 msgstr ""
 
-#: zencache.inc.php:1910 zencache.inc.php:1938
+#: zencache.inc.php:1986 zencache.inc.php:2014
 msgid "Doing it wrong! Missing `base_dir` option value. MUST call this method after `setup()`."
 msgstr ""
 
-#: zencache.inc.php:2371
+#: zencache.inc.php:2453
 msgid "Lite"
 msgstr ""
 
-#: zencache.inc.php:2372
+#: zencache.inc.php:2454
 msgid "Pro"
 msgstr ""
 
-#: zencache.inc.php:2378
+#: zencache.inc.php:2460
 msgid "<strong>%1$s</strong> is NOT running. A conflicting plugin, <strong>%2$s</strong>, is currently active. Please deactivate the %2$s plugin to clear this message."
 msgstr ""
 
@@ -1343,17 +1382,17 @@ msgid "ZenCache"
 msgstr ""
 
 #. Plugin URI of the plugin/theme
-msgid "http://www.websharks-inc.com/product/zencache/"
+msgid "http://zencache.com/"
 msgstr ""
 
 #. Description of the plugin/theme
-msgid "WordPress advanced cache plugin; speed without compromise!"
+msgid "ZenCache is an advanced WordPress caching plugin inspired by simplicity. Speed up your site (BIG time!) with a reliable and fast WordPress cache."
 msgstr ""
 
 #. Author of the plugin/theme
-msgid "s2Member® / WebSharks, Inc."
+msgid "WebSharks, Inc."
 msgstr ""
 
 #. Author URI of the plugin/theme
-msgid "http://www.s2member.com"
+msgid "http://www.websharks-inc.com/"
 msgstr ""
