@@ -8,9 +8,15 @@
 *~
 *.bak
 
+# Node
+node_modules/
+npm-debug.log
+
+# SASS
+.sass-cache/
+
 # IntelliJ
 .idea/
-*.iml
 *.ipr
 *.iws
 
@@ -49,10 +55,13 @@ Icon?
 # Amazon Web Services
 .elasticbeanstalk/
 
-# For shell glob patterns. This includes GIT files too. We simply maintain this list together with `.gitignore`.
-# .~*;*~;*.bak;.idea;*.iml;*.ipr;*.iws;*.sublime-workspace;*.sublime-project;.git;.gitignore;.gitattributes;CVS;.cvsignore;.svn;_svn;.bzr;.bzrignore;.hg;.hgignore;SCCS;RCS;$RECYCLE.BIN;Desktop.ini;Thumbs.db;ehthumbs.db;.Spotlight-V100;.AppleDouble;.LSOverride;.DS_Store;.Trashes;.elasticbeanstalk
+# Vagrant
+.vagrant/
+
+# For shell glob patterns. This includes Git files too. We simply maintain this list together with `.gitignore`.
+# .~*;*~;*.bak;node_modules;npm-debug.log;.idea;*.ipr;*.iws;*.sublime-workspace;*.sublime-project;.git;.gitignore;.gitattributes;CVS;.cvsignore;.svn;_svn;.bzr;.bzrignore;.hg;.hgignore;SCCS;RCS;$RECYCLE.BIN;Desktop.ini;Thumbs.db;ehthumbs.db;.Spotlight-V100;.AppleDouble;.LSOverride;.DS_Store;.Trashes;._*;.elasticbeanstalk;.vagrant
 
 # This list is for IntelliJ IDEA / PhpStorm `File Types` configuration. Some files we actually WANT to work with as part of a project.
-# .idea;*.iml;*.ipr;*.iws;*.sublime-workspace;*.sublime-project;.git;CVS;.svn;_svn;.bzr;.hg;SCCS;RCS;$RECYCLE.BIN;Desktop.ini;Thumbs.db;ehthumbs.db;.Spotlight-V100;.AppleDouble;.LSOverride;.DS_Store;.Trashes;._*
+# .sass-cache;.idea;*.ipr;*.iws;*.sublime-workspace;*.sublime-project;.git;CVS;.svn;_svn;.bzr;.hg;SCCS;RCS;$RECYCLE.BIN;Desktop.ini;Thumbs.db;ehthumbs.db;.Spotlight-V100;.AppleDouble;.LSOverride;.DS_Store;.Trashes;._*;.vagrant
 
 # We also need to update the WebSharks™ Core `dirs_files::ignore()` method if this changes.

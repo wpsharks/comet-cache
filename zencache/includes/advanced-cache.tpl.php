@@ -679,8 +679,9 @@ namespace zencache
 			if($this->is_uncacheable_request_method())
 				return $this->maybe_set_debug_info($this::NC_DEBUG_UNCACHEABLE_REQUEST);
 
-			if(isset($_SERVER['REMOTE_ADDR'], $_SERVER['SERVER_ADDR']) && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR'])
-				if(!$this->is_localhost()) return $this->maybe_set_debug_info($this::NC_DEBUG_SELF_SERVE_REQUEST);
+			if(isset($_SERVER['SERVER_ADDR']) && $this->current_ip() === $_SERVER['SERVER_ADDR'])
+				if(!$this->is_localhost()) // Allow for a localhost scenario; i.e., a developer testing.
+					return $this->maybe_set_debug_info($this::NC_DEBUG_SELF_SERVE_REQUEST);
 
 			if(!ZENCACHE_FEEDS_ENABLE && $this->is_feed())
 				return $this->maybe_set_debug_info($this::NC_DEBUG_FEED_REQUEST);
@@ -1053,7 +1054,7 @@ namespace zencache
 					break; // Break switch handler.
 
 				case $this::NC_DEBUG_SELF_SERVE_REQUEST:
-					$reason = __('because `$_SERVER[\'REMOTE_ADDR\']` === `$_SERVER[\'SERVER_ADDR\']`; i.e. a self-serve request. DEVELOPER TIP: if you are testing on a localhost installation, please add `define(\'LOCALHOST\', TRUE);` to your `/wp-config.php` file while you run tests :-) Remove it (or set it to a `FALSE` value) once you go live on the web.', $this->text_domain);
+					$reason = __('because `[current IP address]` === `$_SERVER[\'SERVER_ADDR\']`; i.e. a self-serve request. DEVELOPER TIP: if you are testing on a localhost installation, please add `define(\'LOCALHOST\', TRUE);` to your `/wp-config.php` file while you run tests :-) Remove it (or set it to a `FALSE` value) once you go live on the web.', $this->text_domain);
 					break; // Break switch handler.
 
 				case $this::NC_DEBUG_FEED_REQUEST:

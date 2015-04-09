@@ -61,7 +61,7 @@ namespace zencache // Root namespace.
 			 *
 			 * @var string Current version of the software.
 			 */
-			public $version = '150314';
+			public $version = '150409';
 
 			/**
 			 * Plugin slug; based on `__NAMESPACE__`.
@@ -980,6 +980,83 @@ namespace zencache // Root namespace.
 			}
 
 			/* --------------------------------------------------------------------------------------
+			 * IP address utilities.
+			 -------------------------------------------------------------------------------------- */
+
+			/**
+			 * Get the current visitor's real IP address.
+			 *
+			 * @return string Real IP address, else `unknown` on failure.
+			 *
+			 * @note This supports both IPv4 and IPv6 addresses.
+			 * @note See my tests against this here: http://3v4l.org/fVWUp
+			 */
+			public function current_ip()
+			{
+				if(isset(static::$static[__FUNCTION__]))
+					return static::$static[__FUNCTION__];
+
+				static::$static[__FUNCTION__] = ''; // Initialize.
+				$ip                           = &static::$static[__FUNCTION__];
+
+				if(!empty($_SERVER['REMOTE_ADDR']) && $this->apply_filters(__METHOD__.'_prioritize_remote_addr', FALSE))
+					if(($_valid_public_ip = $this->valid_public_ip($_SERVER['REMOTE_ADDR'])))
+						return ($ip = $_valid_public_ip);
+
+				$sources = array(
+					'HTTP_CF_CONNECTING_IP',
+					'HTTP_CLIENT_IP',
+					'HTTP_X_FORWARDED_FOR',
+					'HTTP_X_FORWARDED',
+					'HTTP_X_CLUSTER_CLIENT_IP',
+					'HTTP_FORWARDED_FOR',
+					'HTTP_FORWARDED',
+					'HTTP_VIA',
+					'REMOTE_ADDR',
+				);
+				$sources = $this->apply_filters(__METHOD__.'_sources', $sources);
+
+				foreach($sources as $_source) // Try each of these; in order.
+				{
+					if(!empty($_SERVER[$_source])) // Does the source key exist at all?
+						if(($_valid_public_ip = $this->valid_public_ip($_SERVER[$_source])))
+							return ($ip = $_valid_public_ip); // A valid public IPv4 or IPv6 address.
+				}
+				unset($_source, $_valid_public_ip); // Housekeeping.
+
+				if(!empty($_SERVER['REMOTE_ADDR']) && is_string($_SERVER['REMOTE_ADDR']))
+					return ($ip = strtolower($_SERVER['REMOTE_ADDR']));
+
+				return ($ip = 'unknown'); // Not possible.
+			}
+
+			/**
+			 * Gets a valid/public IP address.
+			 *
+			 * @param string $list_of_possible_ips A single IP, or a comma-delimited list of IPs.
+			 *
+			 * @return string A valid/public IP address (if one is found), else an empty string.
+			 *
+			 * @note This supports both IPv4 and IPv6 addresses.
+			 * @note See my tests against this here: http://3v4l.org/fVWUp
+			 */
+			public function valid_public_ip($list_of_possible_ips)
+			{
+				if(!$list_of_possible_ips || !is_string($list_of_possible_ips))
+					return ''; // Empty or invalid data.
+
+				if(!($list_of_possible_ips = trim($list_of_possible_ips)))
+					return ''; // Not possible; i.e., empty string.
+
+				foreach(preg_split('/[\s;,]+/', $list_of_possible_ips, NULL, PREG_SPLIT_NO_EMPTY) as $_possible_ip)
+					if(($_valid_public_ip = filter_var(strtolower($_possible_ip), FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)))
+						return $_valid_public_ip; // A valid public IPv4 or IPv6 address.
+				unset($_possible_ip, $_valid_public_ip); // Housekeeping.
+
+				return ''; // Default return value.
+			}
+
+			/* --------------------------------------------------------------------------------------
 			 * Function/extension utilities.
 			 -------------------------------------------------------------------------------------- */
 
@@ -1369,7 +1446,7 @@ namespace zencache // Root namespace.
 					$possible_tmp_dirs[] = WP_CONTENT_DIR;
 
 				if(!empty($possible_tmp_dirs)) foreach($possible_tmp_dirs as $_tmp_dir)
-					if(($_tmp_dir = trim((string)$_tmp_dir)) && is_dir($_tmp_dir) && is_writable($_tmp_dir))
+					if(($_tmp_dir = trim((string)$_tmp_dir)) && @is_dir($_tmp_dir) && @is_writable($_tmp_dir))
 						return ($tmp_dir = $this->n_dir_seps($_tmp_dir));
 				unset($_tmp_dir); // Housekeeping.
 
