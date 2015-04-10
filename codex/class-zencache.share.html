@@ -129,7 +129,7 @@
 				<b>Since:</b>
 				<p>140725 Reorganizing class members.</p>
 <br />
-		<b>Located at</b> <a href="source-class-zencache.share.html#9-2276" title="Go to source code">zencache/includes/share.php</a><br />
+		<b>Located at</b> <a href="source-class-zencache.share.html#9-2353" title="Go to source code">zencache/includes/share.php</a><br />
 	</div>
 
 
@@ -1298,6 +1298,98 @@
 		</div>
 		</div></td>
 	</tr>
+	<tr data-order="current_ip" id="_current_ip">
+
+		<td class="attributes"><code>
+			 public 
+			string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_current_ip">#</a>
+		<code><a href="source-class-zencache.share.html#986-1031" title="Go to source code">current_ip</a>( )</code>
+
+		<div class="description short">
+			<p>Get the current visitor's real IP address.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Get the current visitor's real IP address.</p>
+
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>string</code><br><p>Real IP address, else <code>unknown</code> on failure.</p>
+<br />
+				</div>
+
+
+				<h4>Note</h4>
+				<div class="list">
+						<p>This supports both IPv4 and IPv6 addresses.</p>
+<br />
+						<p>See my tests against this here: http://3v4l.org/fVWUp</p>
+<br />
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="valid_public_ip" id="_valid_public_ip">
+
+		<td class="attributes"><code>
+			 public 
+			string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_valid_public_ip">#</a>
+		<code><a href="source-class-zencache.share.html#1033-1057" title="Go to source code">valid_public_ip</a>( <span>string <var>$list_of_possible_ips</var></span> )</code>
+
+		<div class="description short">
+			<p>Gets a valid/public IP address.</p>
+
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Gets a valid/public IP address.</p>
+
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$list_of_possible_ips</var></dt>
+					<dd><code>string</code><br><p>$list_of_possible_ips A single IP, or a comma-delimited list of IPs.</p>
+</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code>string</code><br><p>A valid/public IP address (if one is found), else an empty string.</p>
+<br />
+				</div>
+
+
+				<h4>Note</h4>
+				<div class="list">
+						<p>This supports both IPv4 and IPv6 addresses.</p>
+<br />
+						<p>See my tests against this here: http://3v4l.org/fVWUp</p>
+<br />
+				</div>
+
+
+		</div>
+		</div></td>
+	</tr>
 	<tr data-order="is_extension_loaded" id="_is_extension_loaded">
 
 		<td class="attributes"><code>
@@ -1309,7 +1401,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_is_extension_loaded">#</a>
-		<code><a href="source-class-zencache.share.html#986-1002" title="Go to source code">is_extension_loaded</a>( <span>string <var>$extension</var></span> )</code>
+		<code><a href="source-class-zencache.share.html#1063-1079" title="Go to source code">is_extension_loaded</a>( <span>string <var>$extension</var></span> )</code>
 
 		<div class="description short">
 			<p>Checks if a PHP extension is loaded up.</p>
@@ -1361,7 +1453,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_function_is_possible">#</a>
-		<code><a href="source-class-zencache.share.html#1004-1045" title="Go to source code">function_is_possible</a>( <span>string <var>$function</var></span> )</code>
+		<code><a href="source-class-zencache.share.html#1081-1122" title="Go to source code">function_is_possible</a>( <span>string <var>$function</var></span> )</code>
 
 		<div class="description short">
 			<p>Is a particular function possible in every way?</p>
@@ -1414,7 +1506,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_http_protocol">#</a>
-		<code><a href="source-class-zencache.share.html#1051-1070" title="Go to source code">http_protocol</a>( )</code>
+		<code><a href="source-class-zencache.share.html#1128-1147" title="Go to source code">http_protocol</a>( )</code>
 
 		<div class="description short">
 			<p>Current HTTP protocol; i.e. <code>HTTP/1.0</code> or <code>HTTP/1.1</code>.</p>
@@ -1455,7 +1547,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_headers_list">#</a>
-		<code><a href="source-class-zencache.share.html#1072-1093" title="Go to source code">headers_list</a>( )</code>
+		<code><a href="source-class-zencache.share.html#1149-1170" title="Go to source code">headers_list</a>( )</code>
 
 		<div class="description short">
 			<p>An array of all headers sent via PHP; and the current HTTP status header too.</p>
@@ -1502,7 +1594,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_cacheable_headers_list">#</a>
-		<code><a href="source-class-zencache.share.html#1095-1174" title="Go to source code">cacheable_headers_list</a>( )</code>
+		<code><a href="source-class-zencache.share.html#1172-1251" title="Go to source code">cacheable_headers_list</a>( )</code>
 
 		<div class="description short">
 			<p>An array of all cacheable/safe headers sent via PHP; and the current HTTP status header too.</p>
@@ -1554,7 +1646,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_http_status">#</a>
-		<code><a href="source-class-zencache.share.html#1176-1214" title="Go to source code">http_status</a>( )</code>
+		<code><a href="source-class-zencache.share.html#1253-1291" title="Go to source code">http_status</a>( )</code>
 
 		<div class="description short">
 			<p>HTTP status code if at all possible.</p>
@@ -1600,7 +1692,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_esc_sq">#</a>
-		<code><a href="source-class-zencache.share.html#1220-1234" title="Go to source code">esc_sq</a>( <span>string <var>$string</var></span>, <span>integer <var>$times</var> = <span class="php-num">1</span></span> )</code>
+		<code><a href="source-class-zencache.share.html#1297-1311" title="Go to source code">esc_sq</a>( <span>string <var>$string</var></span>, <span>integer <var>$times</var> = <span class="php-num">1</span></span> )</code>
 
 		<div class="description short">
 			<p>Escape single quotes.</p>
@@ -1651,7 +1743,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_str_replace_once">#</a>
-		<code><a href="source-class-zencache.share.html#1236-1261" title="Go to source code">str_replace_once</a>( <span>string <var>$needle</var></span>, <span>string <var>$replace</var></span>, <span>string <var>$haystack</var></span>, <span>boolean <var>$caSe_insensitive</var> = <span class="php-keyword1">FALSE</span></span> )</code>
+		<code><a href="source-class-zencache.share.html#1313-1338" title="Go to source code">str_replace_once</a>( <span>string <var>$needle</var></span>, <span>string <var>$replace</var></span>, <span>string <var>$haystack</var></span>, <span>boolean <var>$caSe_insensitive</var> = <span class="php-keyword1">FALSE</span></span> )</code>
 
 		<div class="description short">
 			<p>String replace ONE time.</p>
@@ -1708,7 +1800,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_str_ireplace_once">#</a>
-		<code><a href="source-class-zencache.share.html#1263-1277" title="Go to source code">str_ireplace_once</a>( <span>string <var>$needle</var></span>, <span>string <var>$replace</var></span>, <span>string <var>$haystack</var></span> )</code>
+		<code><a href="source-class-zencache.share.html#1340-1354" title="Go to source code">str_ireplace_once</a>( <span>string <var>$needle</var></span>, <span>string <var>$replace</var></span>, <span>string <var>$haystack</var></span> )</code>
 
 		<div class="description short">
 			<p>String replace ONE time (caSe-insensitive).</p>
@@ -1761,7 +1853,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_n_dir_seps">#</a>
-		<code><a href="source-class-zencache.share.html#1279-1313" title="Go to source code">n_dir_seps</a>( <span>string <var>$dir_file</var></span>, <span>boolean <var>$allow_trailing_slash</var> = <span class="php-keyword1">FALSE</span></span> )</code>
+		<code><a href="source-class-zencache.share.html#1356-1390" title="Go to source code">n_dir_seps</a>( <span>string <var>$dir_file</var></span>, <span>boolean <var>$allow_trailing_slash</var> = <span class="php-keyword1">FALSE</span></span> )</code>
 
 		<div class="description short">
 			<p>Normalizes directory/file separators.</p>
@@ -1812,7 +1904,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_add_tmp_suffix">#</a>
-		<code><a href="source-class-zencache.share.html#1315-1327" title="Go to source code">add_tmp_suffix</a>( <span>string <var>$dir_file</var></span> )</code>
+		<code><a href="source-class-zencache.share.html#1392-1404" title="Go to source code">add_tmp_suffix</a>( <span>string <var>$dir_file</var></span> )</code>
 
 		<div class="description short">
 			<p>Adds a tmp name suffix to a directory/file path.</p>
@@ -1859,7 +1951,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_get_tmp_dir">#</a>
-		<code><a href="source-class-zencache.share.html#1329-1377" title="Go to source code">get_tmp_dir</a>( )</code>
+		<code><a href="source-class-zencache.share.html#1406-1454" title="Go to source code">get_tmp_dir</a>( )</code>
 
 		<div class="description short">
 			<p>Acquires system tmp directory path.</p>
@@ -1900,7 +1992,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_find_wp_config_file">#</a>
-		<code><a href="source-class-zencache.share.html#1379-1398" title="Go to source code">find_wp_config_file</a>( )</code>
+		<code><a href="source-class-zencache.share.html#1456-1475" title="Go to source code">find_wp_config_file</a>( )</code>
 
 		<div class="description short">
 			<p>Finds absolute server path to <code>/wp-config.php</code> file.</p>
@@ -1942,7 +2034,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_dir_regex_iteration">#</a>
-		<code><a href="source-class-zencache.share.html#1404-1422" title="Go to source code">dir_regex_iteration</a>( <span>string <var>$dir</var></span>, <span>string <var>$regex</var></span> )</code>
+		<code><a href="source-class-zencache.share.html#1481-1499" title="Go to source code">dir_regex_iteration</a>( <span>string <var>$dir</var></span>, <span>string <var>$regex</var></span> )</code>
 
 		<div class="description short">
 			<p>Recursive directory iterator based on a regex pattern.</p>
@@ -1993,7 +2085,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_clear_files_from_cache_dir">#</a>
-		<code><a href="source-class-zencache.share.html#1424-1439" title="Go to source code">clear_files_from_cache_dir</a>( <span>string <var>$regex</var></span> )</code>
+		<code><a href="source-class-zencache.share.html#1501-1516" title="Go to source code">clear_files_from_cache_dir</a>( <span>string <var>$regex</var></span> )</code>
 
 		<div class="description short">
 			<p>Clear files from the cache directory (for all hosts/blogs);
@@ -2045,7 +2137,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_clear_files_from_host_cache_dir">#</a>
-		<code><a href="source-class-zencache.share.html#1441-1456" title="Go to source code">clear_files_from_host_cache_dir</a>( <span>string <var>$regex</var></span> )</code>
+		<code><a href="source-class-zencache.share.html#1518-1533" title="Go to source code">clear_files_from_host_cache_dir</a>( <span>string <var>$regex</var></span> )</code>
 
 		<div class="description short">
 			<p>Clear files from the cache directory (for the current host);
@@ -2097,7 +2189,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_purge_files_from_cache_dir">#</a>
-		<code><a href="source-class-zencache.share.html#1458-1473" title="Go to source code">purge_files_from_cache_dir</a>( <span>string <var>$regex</var></span> )</code>
+		<code><a href="source-class-zencache.share.html#1535-1550" title="Go to source code">purge_files_from_cache_dir</a>( <span>string <var>$regex</var></span> )</code>
 
 		<div class="description short">
 			<p>Purge files from the cache directory (for all hosts/blogs);
@@ -2149,7 +2241,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_purge_files_from_host_cache_dir">#</a>
-		<code><a href="source-class-zencache.share.html#1475-1490" title="Go to source code">purge_files_from_host_cache_dir</a>( <span>string <var>$regex</var></span> )</code>
+		<code><a href="source-class-zencache.share.html#1552-1567" title="Go to source code">purge_files_from_host_cache_dir</a>( <span>string <var>$regex</var></span> )</code>
 
 		<div class="description short">
 			<p>Purge files from the cache directory (for the current host);
@@ -2201,7 +2293,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_delete_files_from_cache_dir">#</a>
-		<code><a href="source-class-zencache.share.html#1492-1628" title="Go to source code">delete_files_from_cache_dir</a>( <span>string <var>$regex</var></span>, <span>boolean <var>$check_max_age</var> = <span class="php-keyword1">FALSE</span></span> )</code>
+		<code><a href="source-class-zencache.share.html#1569-1705" title="Go to source code">delete_files_from_cache_dir</a>( <span>string <var>$regex</var></span>, <span>boolean <var>$check_max_age</var> = <span class="php-keyword1">FALSE</span></span> )</code>
 
 		<div class="description short">
 			<p>Delete files from the cache directory (for all hosts/blogs);
@@ -2273,7 +2365,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_delete_files_from_host_cache_dir">#</a>
-		<code><a href="source-class-zencache.share.html#1630-1792" title="Go to source code">delete_files_from_host_cache_dir</a>( <span>string <var>$regex</var></span>, <span>boolean <var>$check_max_age</var> = <span class="php-keyword1">FALSE</span></span> )</code>
+		<code><a href="source-class-zencache.share.html#1707-1869" title="Go to source code">delete_files_from_host_cache_dir</a>( <span>string <var>$regex</var></span>, <span>boolean <var>$check_max_age</var> = <span class="php-keyword1">FALSE</span></span> )</code>
 
 		<div class="description short">
 			<p>Delete files from the cache directory (for the current host);
@@ -2347,7 +2439,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_delete_all_files_dirs_in">#</a>
-		<code><a href="source-class-zencache.share.html#1794-1891" title="Go to source code">delete_all_files_dirs_in</a>( <span>string <var>$dir</var></span>, <span>boolean <var>$delete_dir_too</var> = <span class="php-keyword1">FALSE</span></span> )</code>
+		<code><a href="source-class-zencache.share.html#1871-1968" title="Go to source code">delete_all_files_dirs_in</a>( <span>string <var>$dir</var></span>, <span>boolean <var>$delete_dir_too</var> = <span class="php-keyword1">FALSE</span></span> )</code>
 
 		<div class="description short">
 			<p>Delete all files/dirs from a directory (for all schemes/hosts);
@@ -2407,7 +2499,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_cache_lock">#</a>
-		<code><a href="source-class-zencache.share.html#1897-1942" title="Go to source code">cache_lock</a>( )</code>
+		<code><a href="source-class-zencache.share.html#1974-2019" title="Go to source code">cache_lock</a>( )</code>
 
 		<div class="description short">
 			<p>Get an exclusive lock on the cache directory.</p>
@@ -2462,7 +2554,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_cache_unlock">#</a>
-		<code><a href="source-class-zencache.share.html#1944-1973" title="Go to source code">cache_unlock</a>( <span>array <var>$lock</var></span> )</code>
+		<code><a href="source-class-zencache.share.html#2021-2050" title="Go to source code">cache_unlock</a>( <span>array <var>$lock</var></span> )</code>
 
 		<div class="description short">
 			<p>Release an exclusive lock on the cache directory.</p>
@@ -2504,7 +2596,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_i18n_files">#</a>
-		<code><a href="source-class-zencache.share.html#1979-1993" title="Go to source code">i18n_files</a>( <span>integer <var>$counter</var></span> )</code>
+		<code><a href="source-class-zencache.share.html#2056-2070" title="Go to source code">i18n_files</a>( <span>integer <var>$counter</var></span> )</code>
 
 		<div class="description short">
 			<p><code>X file</code> or <code>X files</code>, translated w/ singlular/plural context.</p>
@@ -2551,7 +2643,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_i18n_dirs">#</a>
-		<code><a href="source-class-zencache.share.html#1995-2009" title="Go to source code">i18n_dirs</a>( <span>integer <var>$counter</var></span> )</code>
+		<code><a href="source-class-zencache.share.html#2072-2086" title="Go to source code">i18n_dirs</a>( <span>integer <var>$counter</var></span> )</code>
 
 		<div class="description short">
 			<p><code>X directory</code> or <code>X directories</code>, translated w/ singlular/plural context.</p>
@@ -2598,7 +2690,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_i18n_files_dirs">#</a>
-		<code><a href="source-class-zencache.share.html#2011-2025" title="Go to source code">i18n_files_dirs</a>( <span>integer <var>$counter</var></span> )</code>
+		<code><a href="source-class-zencache.share.html#2088-2102" title="Go to source code">i18n_files_dirs</a>( <span>integer <var>$counter</var></span> )</code>
 
 		<div class="description short">
 			<p><code>X file/directory</code> or <code>X files/directories</code>, translated w/ singlular/plural context.</p>
@@ -2645,7 +2737,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_hook_id">#</a>
-		<code><a href="source-class-zencache.share.html#2031-2058" title="Go to source code">hook_id</a>( <span>string|callable|mixed <var>$function</var></span> )</code>
+		<code><a href="source-class-zencache.share.html#2108-2135" title="Go to source code">hook_id</a>( <span>string|callable|mixed <var>$function</var></span> )</code>
 
 		<div class="description short">
 			<p>Assigns an ID to each callable attached to a hook/filter.</p>
@@ -2697,7 +2789,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_add_hook">#</a>
-		<code><a href="source-class-zencache.share.html#2060-2077" title="Go to source code">add_hook</a>( <span>string <var>$hook</var></span>, <span>string|callable|mixed <var>$function</var></span>, <span>integer <var>$priority</var> = <span class="php-num">10</span></span>, <span>integer <var>$accepted_args</var> = <span class="php-num">1</span></span> )</code>
+		<code><a href="source-class-zencache.share.html#2137-2154" title="Go to source code">add_hook</a>( <span>string <var>$hook</var></span>, <span>string|callable|mixed <var>$function</var></span>, <span>integer <var>$priority</var> = <span class="php-num">10</span></span>, <span>integer <var>$accepted_args</var> = <span class="php-num">1</span></span> )</code>
 
 		<div class="description short">
 			<p>Adds a new hook (works with both actions &amp; filters).</p>
@@ -2753,7 +2845,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_add_action">#</a>
-		<code><a href="source-class-zencache.share.html#2079-2091" title="Go to source code">add_action</a>( )</code>
+		<code><a href="source-class-zencache.share.html#2156-2168" title="Go to source code">add_action</a>( )</code>
 
 		<div class="description short">
 			<p>Adds a new action hook.</p>
@@ -2798,7 +2890,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_add_filter">#</a>
-		<code><a href="source-class-zencache.share.html#2093-2105" title="Go to source code">add_filter</a>( )</code>
+		<code><a href="source-class-zencache.share.html#2170-2182" title="Go to source code">add_filter</a>( )</code>
 
 		<div class="description short">
 			<p>Adds a new filter.</p>
@@ -2843,7 +2935,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_remove_hook">#</a>
-		<code><a href="source-class-zencache.share.html#2107-2126" title="Go to source code">remove_hook</a>( <span>string <var>$hook</var></span>, <span>string|callable|mixed <var>$function</var></span>, <span>integer <var>$priority</var> = <span class="php-num">10</span></span> )</code>
+		<code><a href="source-class-zencache.share.html#2184-2203" title="Go to source code">remove_hook</a>( <span>string <var>$hook</var></span>, <span>string|callable|mixed <var>$function</var></span>, <span>integer <var>$priority</var> = <span class="php-num">10</span></span> )</code>
 
 		<div class="description short">
 			<p>Removes a hook (works with both actions &amp; filters).</p>
@@ -2896,7 +2988,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_remove_action">#</a>
-		<code><a href="source-class-zencache.share.html#2128-2140" title="Go to source code">remove_action</a>( )</code>
+		<code><a href="source-class-zencache.share.html#2205-2217" title="Go to source code">remove_action</a>( )</code>
 
 		<div class="description short">
 			<p>Removes an action.</p>
@@ -2941,7 +3033,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_remove_filter">#</a>
-		<code><a href="source-class-zencache.share.html#2142-2154" title="Go to source code">remove_filter</a>( )</code>
+		<code><a href="source-class-zencache.share.html#2219-2231" title="Go to source code">remove_filter</a>( )</code>
 
 		<div class="description short">
 			<p>Removes a filter.</p>
@@ -2986,7 +3078,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_do_action">#</a>
-		<code><a href="source-class-zencache.share.html#2156-2180" title="Go to source code">do_action</a>( <span>string <var>$hook</var></span> )</code>
+		<code><a href="source-class-zencache.share.html#2233-2257" title="Go to source code">do_action</a>( <span>string <var>$hook</var></span> )</code>
 
 		<div class="description short">
 			<p>Runs any callables attached to an action.</p>
@@ -3028,7 +3120,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_apply_filters">#</a>
-		<code><a href="source-class-zencache.share.html#2182-2212" title="Go to source code">apply_filters</a>( <span>string <var>$hook</var></span>, <span>mixed <var>$value</var></span> )</code>
+		<code><a href="source-class-zencache.share.html#2259-2289" title="Go to source code">apply_filters</a>( <span>string <var>$hook</var></span>, <span>mixed <var>$value</var></span> )</code>
 
 		<div class="description short">
 			<p>Runs any callables attached to a filter.</p>
@@ -3078,7 +3170,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_do_wp_action">#</a>
-		<code><a href="source-class-zencache.share.html#2214-2235" title="Go to source code">do_wp_action</a>( <span>string <var>$hook</var></span> )</code>
+		<code><a href="source-class-zencache.share.html#2291-2312" title="Go to source code">do_wp_action</a>( <span>string <var>$hook</var></span> )</code>
 
 		<div class="description short">
 			<p>Does an action w/ back compat. for Quick Cache.</p>
@@ -3120,7 +3212,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_apply_wp_filters">#</a>
-		<code><a href="source-class-zencache.share.html#2237-2262" title="Go to source code">apply_wp_filters</a>( <span>string <var>$hook</var></span> )</code>
+		<code><a href="source-class-zencache.share.html#2314-2339" title="Go to source code">apply_wp_filters</a>( <span>string <var>$hook</var></span> )</code>
 
 		<div class="description short">
 			<p>Applies filters w/ back compat. for Quick Cache.</p>
@@ -3600,7 +3692,7 @@
 		<td class="name">
 				<a href="source-class-zencache.share.html#57-64" title="Go to source code"><var>$version</var></a>
 		</td>
-		<td class="value"><code><span class="php-quote">'150314'</span></code></td>
+		<td class="value"><code><span class="php-quote">'150409'</span></code></td>
 		<td class="description"><div>
 			<a href="#$version" class="anchor">#</a>
 
@@ -3808,7 +3900,7 @@
 		</code></td>
 
 		<td class="name">
-				<a href="source-class-zencache.share.html#2268-2275" title="Go to source code"><var>$htaccess_deny</var></a>
+				<a href="source-class-zencache.share.html#2345-2352" title="Go to source code"><var>$htaccess_deny</var></a>
 		</td>
 		<td class="value"><code><span class="php-quote">&quot;&lt;IfModule authz_core_module&gt;\n\tRequire all denied\n&lt;/IfModule&gt;\n&lt;IfModule !authz_core_module&gt;\n\tdeny from all\n&lt;/IfModule&gt;&quot;</span></code></td>
 		<td class="description"><div>
