@@ -1,0 +1,54 @@
+{
+    "name": "websharks/zencache",
+    "homepage": "https://github.com/websharks/zencache",
+    "description": "A popular caching plugin for WordPress.",
+    "keywords": [
+        "websharks",
+        "zencache",
+        "wordpress",
+        "caching",
+        "cache"
+    ],
+    "type": "library",
+    "license": "GPL-3.0+",
+    "authors": [{
+        "name": "websharks",
+        "homepage": "http://websharks-inc.com/",
+        "role": "company"
+    }, {
+        "name": "jaswsinc",
+        "homepage": "http://jaswsinc.com/",
+        "role": "developer"
+    }, {
+        "name": "raamdev",
+        "homepage": "http://raam.org/",
+        "role": "developer"
+    }],
+    "support": {
+        "source": "https://github.com/websharks/zencache",
+        "issues": "https://github.com/websharks/zencache/issues"
+    },
+
+    "require": {
+        "php": ">=5.3",
+        "websharks/wp-php-rv": "dev-master",
+        "websharks/html-compressor": "dev-master",
+        "websharks/sharkicons": "dev-master"
+    },
+    "require-dev": {
+        "websharks/wp-i18n-tools": "dev-master"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+
+    "autoload": {
+        "psr-4": {
+            "WebSharks\\ZenCache\\": "src/includes/classes/"
+        }
+    },
+
+    "config": {
+        "vendor-dir": "src/vendor",
+        "preferred-install": "dist"
+    }
+}
