@@ -1,17 +1,17 @@
-= v150605 =
+= v150626 =
 
-**RELEASE CANDIDATE**
-
+- **Restructured Codebase**: The entire ZenCache codebase has been restructured to improve performance, enhance flexibility, and make it easier to build in new features!
 - **New Feature!** The free version of ZenCache now supports several new options that were previously only available in the Pro version. You can now toggle the Auto-Clear Cache routines for the Home Page, Posts Page, Author Page, Category Archives, Tag Archives, Custom Term Archives, RSS/RDF/Atom Feeds, and XML Sitemaps. This gives you more control over exactly when ZenCache purges the cache for these parts of your site. See _ZenCache → Plugin Options → Clearing the Cache_ for further details.
 - **New Feature!** URI Exclusion Patterns are now available in ZenCache Lite! This previously Pro-only feature is now available in the free version of ZenCache and allows you to exclude a list of URIs from being cached by ZenCache. See _ZenCache → Plugin Options → URI Exclusion Patterns_ for further details.
 - **New Feature!** HTTP Referrer Exclusion Patterns are now available in ZenCache Lite! This previously Pro-only feature is now available in the free version of ZenCache and allows you to define a list of referring URLs or domains that send you traffic. When ZenCache sees a request coming from one of those URLs or domains, it will not cache that particular request. See _ZenCache → Plugin Options → HTTP Referrer Exclusion Patterns_ for further details.
 - **New Pro Feature!**: HTML Compression now supports compressing JSON (in addition to the already supported HTML, JavaScript, and CSS compression). Props @jaswsinc. See [Issue #469](https://github.com/websharks/zencache/issues/469).
 - **New Pro Feature!**: Static CDN Filters now supports multiple CDN hostnames. This allows you to configure more than one CDN hostname, also referred to as Domain Sharding. This makes it possible for site owners to work around web browser concurrency limits, allowing the browser to download many resources simultaneously, which increases overall speed. Props to @isaumya and @jaswsinc. See [Issue #468](https://github.com/websharks/zencache/issues/468).
+- **Enhancement** (Pro): Static CDN Filters now includes proper support for WordPress Multisite Networks, including support for subdomains (full support for Domain Mapping coming in the next release). If you're running a WordPress Multisite Network and want to configure a CDN, see [this KB Article](http://zencache.com/kb-article/static-cdn-filters-for-wordpress-multisite-networks/) for further details.
 - **Enhancement** (Pro): Static CDN Filters now also apply to any static files that are referenced inside CSS files. Props @jaswsinc. See [Issue #461](https://github.com/websharks/zencache/issues/461).
 - **Enhancement**: Completed a major restructure of the entire codebase to improve modularity and dependency management. Props @jaswsinc.
-- **Enhancement** (Pro): Static CDN Filters now supports the ability to configure separate CDN hostname(s) for each domain (or sub-domain) that you run in a WordPress Multisite Network. Props @jaswsinc. See [Issue #475](https://github.com/websharks/zencache/issues/475).
-- **Enhancement** (Pro): Static CDN Filters now support sub-domains when ZenCache is running inside a WordPress Multisite Network. Props @jaswsinc. See [Issue #439](https://github.com/websharks/zencache/issues/439).
-- **Bug Fix** (Pro): Static CDN Filters were not being applied to the primary site on WP Multisite installations that used subdomains. (While subdomains are not currently supported by Static CDN Filters, the primary site can still use this feature.) Props to @isaumya for discovering this bug. See [Issue #470](https://github.com/websharks/zencache/issues/470).
+- **Enhancement** (Pro): Static CDN Filters now supports the ability to configure separate CDN hostname(s) for each domain (or subdomain) that you run in a WordPress Multisite Network. Props @jaswsinc. See [Issue #475](https://github.com/websharks/zencache/issues/475).
+- **Enhancement** (Pro): Static CDN Filters now support subdomains when ZenCache is running inside a WordPress Multisite Network. Props @jaswsinc. See [Issue #439](https://github.com/websharks/zencache/issues/439).
+- **Bug Fix** (Pro): Static CDN Filters were not being applied to the primary site on WP Multisite installations that used subdomains. Props to @isaumya for discovering this bug. See [Issue #470](https://github.com/websharks/zencache/issues/470).
 
 = v140829 =
 

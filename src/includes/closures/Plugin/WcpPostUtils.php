@@ -95,6 +95,7 @@ $self->autoClearPostCache = function ($post_id, $force = false) use ($self) {
 
     return $counter;
 };
+$self->auto_clear_post_cache = $self->autoClearPostCache; // Back compat.
 
 /*
  * Automatically clears cache files for a particular post when transitioning

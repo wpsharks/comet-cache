@@ -75,6 +75,22 @@ class ApiBase
     }
 
     /**
+     * This erases the cache for a specific post ID.
+     *
+     * @since 150626 Adding support for new API methods.
+     *
+     * @param int $post_id Post ID.
+     *
+     * @return int Total files cleared (if any).
+     */
+    public static function clearPost($post_id)
+    {
+        return $GLOBALS[GLOBAL_NS]->autoClearPostCache($post_id);
+    }
+
+    
+
+    /**
      * This wipes out the entire cache.
      *
      * @since 150422 Rewrite.

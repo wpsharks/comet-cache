@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the ZenCache Pro package.
 msgid ""
 msgstr ""
-"Project-Id-Version: ZenCache Pro 150605\n"
+"Project-Id-Version: ZenCache Pro 150626\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/zencache-pro\n"
-"POT-Creation-Date: 2015-06-05 18:07:46+00:00\n"
+"POT-Creation-Date: 2015-06-26 23:35:21+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -806,7 +806,7 @@ msgstr ""
 #: src/includes/classes/MenuPageOptions.php:513
 #: src/includes/classes/MenuPageOptions.php:617
 #: src/includes/classes/MenuPageOptions.php:621
-#: src/includes/classes/MenuPageOptions.php:731
+#: src/includes/classes/MenuPageOptions.php:732
 msgid "<strong>Note:</strong> please remember that your entries here should be formatted as a line-delimited list; e.g. one exclusion pattern per line."
 msgstr ""
 
@@ -1070,191 +1070,191 @@ msgstr ""
 msgid "CDN Host Name (Required)"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:679
-msgid "This field is really all that's necessary to get Static CDN Filters working! However, it does requires a little bit of work on your part. You need to setup and configure a CDN before you can fill in this field. Once you configure a CDN, you'll receive a host name (provided by your CDN), which you'll enter here; e.g. <code>js9dgjsl4llqpp.cloudfront.net</code>. We recommend <a href=\"https://www.maxcdn.com/websharks/\" target=\"_blank\">MaxCDN</a> and/or <a href=\"http://aws.amazon.com/cloudfront/\" target=\"_blank\">Amazon CloudFront</a>, but this should work with many of the most popular CDNs. Please read <a href=\"http://zencache.com/r/static-cdn-filters-general-instructions/\" target=\"_blank\">this article</a> for a general set of instructions. We also have a <a href=\"http://zencache.com/r/static-cdn-filters-cloudfront/\" target=\"_blank\">CloudFront tutorial video</a> that walks you through the process."
-msgstr ""
-
-#: src/includes/classes/MenuPageOptions.php:684
-msgid "Or, Configure Multiple CDN Host Names (for Domain Sharding and Multisite Networks)"
+#: src/includes/classes/MenuPageOptions.php:680
+msgid "This field is really all that's necessary to get Static CDN Filters working! However, it does requires a little bit of work on your part. You need to setup and configure a CDN before you can fill in this field. Once you configure a CDN, you'll receive a host name (provided by your CDN), which you'll enter here; e.g. <code>js9dgjsl4llqpp.cloudfront.net</code>. We recommend <a href=\"http://zencache.com/r/maxcdn/\" target=\"_blank\">MaxCDN</a>, <a href=\"http://zencache.com/r/amazon-cloudfront/\" target=\"_blank\">Amazon CloudFront</a>, <a href=\"http://zencache.com/r/keycdn/\" target=\"_blank\">KeyCDN</a>, and/or <a href=\"http://zencache.com/r/cdn77/\" target=\"_blank\">CDN77</a> but this should work with many of the most popular CDNs. Please read <a href=\"http://zencache.com/r/static-cdn-filters-general-instructions/\" target=\"_blank\">this article</a> for a general set of instructions. We also have a <a href=\"http://zencache.com/r/static-cdn-filters-maxcdn/\" target=\"_blank\">MaxCDN tutorial</a>, <a href=\"http://zencache.com/r/static-cdn-filters-cloudfront/\" target=\"_blank\">CloudFront tutorial</a>, <a href=\"http://zencache.com/r/static-cdn-filters-keycdn/\" target=\"_blank\">KeyCDN tutorial</a>, and a <a href=\"http://zencache.com/r/static-cdn-filters-cdn77/\" target=\"_blank\">CDN77 tutorial</a> to walk you through the process."
 msgstr ""
 
 #: src/includes/classes/MenuPageOptions.php:685
-msgid "%1$s also supports multiple CDN Host Names for any given domain. Using multiple CDN Host Names (instead of just one, as seen above) is referred to as <strong><a href=\"http://zencache.com/r/domain-sharding/\" target=\"_blank\">Domain Sharding</a></strong> (<a href=\"http://zencache.com/r/domain-sharding/\" target=\"_blank\">click here to learn more</a>). If you configure multiple CDN Host Names (i.e., if you implement Domain Sharding), %1$s will use the first one that you list for static resources loaded in the HTML <code>&lt;head&gt;</code> section, the last one for static resources loaded in the footer, and it will choose one at random for all other static resource locations. Configuring multiple CDN Host Names can improve speed! This is a way for advanced site owners to work around concurrency limits in popular browsers; i.e., making it possible for browsers to download many more resources simultaneously, resulting in a faster overall completion time. In short, this tells the browser that your website will not be overloaded by concurrent requests, because static resources are in fact being served by a content-delivery network (i.e., multiple CDN host names). If you use this functionality for Domain Sharding, we suggest that you setup one CDN Distribution (aka: Pull Zone), and then create multiple CNAME records pointing to that distribution. You can enter each of your CNAMES in the field below, as instructed."
+msgid "Multiple CDN Host Names for Domain Sharding and Multisite Networks (Optional)"
 msgstr ""
 
 #: src/includes/classes/MenuPageOptions.php:686
-msgid "<strong>On WordPress Multisite Network installations</strong>, this field also allows you to configure different CDN Host Names for each domain (or sub-domain) that you run from a single installation of WordPress."
+msgid "%1$s also supports multiple CDN Host Names for any given domain. Using multiple CDN Host Names (instead of just one, as seen above) is referred to as <strong><a href=\"http://zencache.com/r/domain-sharding/\" target=\"_blank\">Domain Sharding</a></strong> (<a href=\"http://zencache.com/r/domain-sharding/\" target=\"_blank\">click here to learn more</a>). If you configure multiple CDN Host Names (i.e., if you implement Domain Sharding), %1$s will use the first one that you list for static resources loaded in the HTML <code>&lt;head&gt;</code> section, the last one for static resources loaded in the footer, and it will choose one at random for all other static resource locations. Configuring multiple CDN Host Names can improve speed! This is a way for advanced site owners to work around concurrency limits in popular browsers; i.e., making it possible for browsers to download many more resources simultaneously, resulting in a faster overall completion time. In short, this tells the browser that your website will not be overloaded by concurrent requests, because static resources are in fact being served by a content-delivery network (i.e., multiple CDN host names). If you use this functionality for Domain Sharding, we suggest that you setup one CDN Distribution (aka: Pull Zone), and then create multiple CNAME records pointing to that distribution. You can enter each of your CNAMES in the field below, as instructed."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:688
+#: src/includes/classes/MenuPageOptions.php:687
+msgid "<strong>On WordPress Multisite Network installations</strong>, this field also allows you to configure different CDN Host Names for each domain (or sub-domain) that you run from a single installation of WordPress. For more information about configuring Static CDN Filters on a WordPress Multisite Network, see this tutorial: <a href=\"http://zencache.com/r/static-cdn-filters-for-wordpress-multisite-networks/\" target=\"_blank\">Static CDN Filters for WordPress Multisite Networks</a>."
+msgstr ""
+
+#: src/includes/classes/MenuPageOptions.php:689
 msgid "<strong>↑ Syntax:</strong> This is a line-delimited list of domain mappings. Each line should start with your WordPress domain name (e.g., <code>%1$s</code>), followed by an <code>=</code> sign, followed by a comma-delimited list of CDN Host Names associated with the domain in that line. If you're running a Multisite Network installation of WordPress, you might have multiple configuration lines. Otherwise, you should only need one line to configure multiple CDN Host Names for a standard WordPress installation."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:692
+#: src/includes/classes/MenuPageOptions.php:693
 msgid "CDN Supports HTTPS Connections?"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:694
+#: src/includes/classes/MenuPageOptions.php:695
 msgid "No, I don't serve content over https://; or I haven't configured my CDN w/ an SSL certificate."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:695
+#: src/includes/classes/MenuPageOptions.php:696
 msgid "Yes, I've configured my CDN w/ an SSL certificate; I need https:// enabled."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:702
+#: src/includes/classes/MenuPageOptions.php:703
 msgid "Additional Options (For Advanced Users)"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:708
+#: src/includes/classes/MenuPageOptions.php:709
 msgid "Everything else below is 100% completely optional; i.e. not required to enjoy the benefits of Static CDN Filters."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:712
+#: src/includes/classes/MenuPageOptions.php:713
 msgid "Whitelisted File Extensions (Optional; Comma-Delimited)"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:714
+#: src/includes/classes/MenuPageOptions.php:715
 msgid "If you leave this empty a default set of extensions are taken from WordPress itself. The default set of whitelisted file extensions includes everything supported by the WordPress media library."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:716
+#: src/includes/classes/MenuPageOptions.php:717
 msgid "Blacklisted File Extensions (Optional; Comma-Delimited)"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:718
+#: src/includes/classes/MenuPageOptions.php:719
 msgid "With or without a whitelist, you can force exclusions by explicitly blacklisting certain file extensions of your choosing. Please note, the <code>php</code> extension will never be considered a static resource; i.e. it is automatically blacklisted at all times."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:722
+#: src/includes/classes/MenuPageOptions.php:723
 msgid "Whitelisted URI Inclusion Patterns (Optional; One Per Line)"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:724
+#: src/includes/classes/MenuPageOptions.php:725
 msgid "<strong>Note:</strong> please remember that your entries here should be formatted as a line-delimited list; e.g. one inclusion pattern per line."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:725
+#: src/includes/classes/MenuPageOptions.php:726
 msgid "If provided, only local URIs matching one of the patterns you list here will be served from your CDN Host Name. URI patterns are caSe-insensitive. A wildcard <code>*</code> will match zero or more characters in any of your patterns. A caret <code>^</code> symbol will match zero or more characters that are NOT the <code>/</code> character. For instance, <code>*/wp-content/*</code> here would indicate that you only want to filter URLs that lead to files located inside the <code>wp-content</code> directory. Adding an additional line with <code>*/wp-includes/*</code> would filter URLs in the <code>wp-includes</code> directory also. <strong>If you leave this empty</strong>, ALL files matching a static file extension will be served from your CDN; i.e. the default behavior."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:726
+#: src/includes/classes/MenuPageOptions.php:727
 msgid "Please note that URI patterns are tested against a file's path (i.e. a file's URI, and NOT its full URL). A URI always starts with a leading <code>/</code>. To clarify, a URI is the portion of the URL which comes after the host name. For instance, given the following URL: <code>http://example.com/path/to/style.css?ver=3</code>, the URI you are matching against would be: <code>/path/to/style.css?ver=3</code>. To whitelist this URI, you could use a line that contains something like this: <code>/path/to/*.css*</code>"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:728
+#: src/includes/classes/MenuPageOptions.php:729
 msgid "Blacklisted URI Exclusion Patterns (Optional; One Per Line)"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:730
+#: src/includes/classes/MenuPageOptions.php:731
 msgid "With or without a whitelist, you can force exclusions by explicitly blacklisting certain URI patterns. URI patterns are caSe-insensitive. A wildcard <code>*</code> will match zero or more characters in any of your patterns. A caret <code>^</code> symbol will match zero or more characters that are NOT the <code>/</code> character. For instance, <code>*/wp-content/*/dynamic.pdf*</code> would exclude a file with the name <code>dynamic.pdf</code> located anywhere inside a sub-directory of <code>wp-content</code>."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:735
+#: src/includes/classes/MenuPageOptions.php:736
 msgid "Query String Invalidation Variable Name"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:737
+#: src/includes/classes/MenuPageOptions.php:738
 msgid "Each filtered URL (which then leads to your CDN) will include this query string variable as an easy way to invalidate the CDN cache at any time. Invalidating the CDN cache is simply a matter of changing the global invalidation counter (i.e. the value assigned to this query string variable). %1$s manages invalidations automatically; i.e. %1$s will automatically bump an internal counter each time you upgrade a WordPress component (e.g. a plugin, theme, or WP itself). Or, if you ask %1$s to invalidate the CDN cache (e.g. a manual clearing of the CDN cache); the internal counter is bumped then too. In short, %1$s handles cache invalidations for you reliably. This option simply allows you to customize the query string variable name which makes cache invalidations possible. <strong>Please note, the default value is adequate for most sites. You can change this if you like, but it's not necessary.</strong>"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:738
+#: src/includes/classes/MenuPageOptions.php:739
 msgid "<strong>Note:</strong> If you empty this field, it will effectively disable the %1$s invalidation system for Static CDN Filters; i.e. the query string variable will NOT be included if you do not supply a variable name."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:753
+#: src/includes/classes/MenuPageOptions.php:754
 msgid "Dynamic Version Salt"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:758
+#: src/includes/classes/MenuPageOptions.php:759
 msgid "<i class=\"fa fa-flask\"></i> <span style=\"display:inline-block; padding:5px; border-radius:3px; background:#FFFFFF; color:#354913;\"><span style=\"font-weight:bold; font-size:80%;\">GEEK ALERT</span></span> This is for VERY advanced users only..."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:759
+#: src/includes/classes/MenuPageOptions.php:760
 msgid "<em>Note: Understanding the %1$s <a href=\"http://zencache.com/r/kb-branched-cache-structure/\" target=\"_blank\">Branched Cache Structure</a> is a prerequisite to understanding how Dynamic Version Salts are added to the mix.</em>"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:760
+#: src/includes/classes/MenuPageOptions.php:761
 msgid "A Version Salt gives you the ability to dynamically create multiple variations of the cache, and those dynamic variations will be served on subsequent visits; e.g. if a visitor has a specific cookie (of a certain value) they will see pages which were cached with that version (i.e. w/ that Version Salt: the value of the cookie). A Version Salt can really be anything."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:761
+#: src/includes/classes/MenuPageOptions.php:762
 msgid "A Version Salt can be a single variable like <code>$_COOKIE['my_cookie']</code>, or it can be a combination of multiple variables, like <code>$_COOKIE['my_cookie'].$_COOKIE['my_other_cookie']</code>. (When using multiple variables, please separate them with a dot, as shown in the example.)"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:762
+#: src/includes/classes/MenuPageOptions.php:763
 msgid "Experts could even use PHP ternary expressions that evaluate into something. For example: <code>((preg_match('/iPhone/i', $_SERVER['HTTP_USER_AGENT'])) ? 'iPhones' : '')</code>. This would force a separate version of the cache to be created for iPhones (e.g., <code>/cache/PROTOCOL/HOST/REQUEST-URI.v/iPhones.html</code>)."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:763
+#: src/includes/classes/MenuPageOptions.php:764
 msgid "For more documentation, please see <a href=\"http://zencache.com/r/kb-dynamic-version-salts/\" target=\"_blank\">Dynamic Version Salts</a>."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:765
+#: src/includes/classes/MenuPageOptions.php:766
 msgid "Create a Dynamic Version Salt For %1$s? &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style=\"font-size:90%%; opacity:0.5;\">150%% OPTIONAL</span>"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:767
+#: src/includes/classes/MenuPageOptions.php:768
 msgid "<a href=\"http://php.net/manual/en/language.variables.superglobals.php\" target=\"_blank\">Super Globals</a> work here; <a href=\"http://codex.wordpress.org/Editing_wp-config.php#table_prefix\" target=\"_blank\"><code>$GLOBALS['table_prefix']</code></a> is a popular one.<br />Or, perhaps a PHP Constant defined in <code>/wp-config.php</code>; such as <code>WPLANG</code> or <code>DB_HOST</code>."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:768
+#: src/includes/classes/MenuPageOptions.php:769
 msgid "<strong>Important:</strong> your Version Salt is scanned for PHP syntax errors via <a href=\"http://phpcodechecker.com/\" target=\"_blank\"><code>phpCodeChecker.com</code></a>. If errors are found, you'll receive a notice in the Dashboard."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:769
+#: src/includes/classes/MenuPageOptions.php:770
 msgid "If you've enabled a separate cache for each user (optional) that's perfectly OK. A Version Salt works with user caching too."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:779
+#: src/includes/classes/MenuPageOptions.php:780
 msgid "Theme/Plugin Developers"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:784
+#: src/includes/classes/MenuPageOptions.php:785
 msgid "Developing a Theme or Plugin for WordPress?"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:785
+#: src/includes/classes/MenuPageOptions.php:786
 msgid "<strong>Tip:</strong> %1$s can be disabled temporarily. If you're a theme/plugin developer, you can set a flag within your PHP code to disable the cache engine at runtime. Perhaps on a specific page, or in a specific scenario. In your PHP script, set: <code>$_SERVER['ZENCACHE_ALLOWED'] = FALSE;</code> or <code>define('ZENCACHE_ALLOWED', FALSE)</code>. %1$s is also compatible with: <code>define('DONOTCACHEPAGE', TRUE)</code>. It does't matter where or when you define one of these, because %1$s is the last thing to run before script execution ends."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:787
+#: src/includes/classes/MenuPageOptions.php:788
 msgid "Writing \"Advanced Cache\" Plugins Specifically for %1$s"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:788
+#: src/includes/classes/MenuPageOptions.php:789
 msgid "Theme/plugin developers can take advantage of the %1$s plugin architecture by creating PHP files inside this special directory: <code>/wp-content/ac-plugins/</code>. There is an <a href=\"http://zencache.com/r/ac-plugin-example/\" target=\"_blank\">example plugin file @ GitHub</a> (please review it carefully and ask questions). If you develop a plugin for %1$s, please share it with the community by publishing it in the plugins respository at WordPress.org."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:789
+#: src/includes/classes/MenuPageOptions.php:790
 msgid "<strong>Why does %1$s have it's own plugin architecture?</strong> WordPress loads the <code>advanced-cache.php</code> drop-in file (for caching purposes) very early-on; before any other plugins or a theme. For this reason, %1$s implements it's own watered-down version of functions like <code>add_action()</code>, <code>do_action()</code>, <code>add_filter()</code>, <code>apply_filters()</code>."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:800
+#: src/includes/classes/MenuPageOptions.php:801
 msgid "Import/Export Options"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:805
+#: src/includes/classes/MenuPageOptions.php:806
 msgid "Import Options from Another %1$s Installation?"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:806
+#: src/includes/classes/MenuPageOptions.php:807
 msgid "Upload your <code>%1$s-options.json</code> file and click \"Save All Changes\" below. The options provided by your import file will override any that exist currently."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:809
+#: src/includes/classes/MenuPageOptions.php:810
 msgid "Export Existing Options from this %1$s Installation?"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:812
+#: src/includes/classes/MenuPageOptions.php:813
 msgid "%1$s-options.json"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:813
+#: src/includes/classes/MenuPageOptions.php:814
 msgid "Download your existing options and import them all into another %1$s installation; saves time on future installs."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:821
+#: src/includes/classes/MenuPageOptions.php:822
 msgid "Save All Changes"
 msgstr ""
 
@@ -1595,19 +1595,19 @@ msgstr ""
 msgid "<strong>%1$s:</strong> detected changes. Found %2$s in the cache for user ID: <code>%3$s</code>; auto-clearing."
 msgstr ""
 
-#: src/includes/closures/Plugin/WcpUtils.php:140
+#: src/includes/closures/Plugin/WcpUtils.php:143
 msgid "<strong>%1$s:</strong> detected significant changes. Found %2$s in the cache; auto-wiping."
 msgstr ""
 
-#: src/includes/closures/Plugin/WcpUtils.php:186
+#: src/includes/closures/Plugin/WcpUtils.php:189
 msgid "<strong>%1$s:</strong> detected important site changes. Found %2$s in the cache for this site; auto-clearing."
 msgstr ""
 
-#: src/includes/closures/Plugin/WcpUtils.php:206
+#: src/includes/closures/Plugin/WcpUtils.php:209
 msgid "<strong>%1$s:</strong> detected significant changes that would normally trigger a wipe cache routine, however wipe cache routines have been disabled by a site administrator. [<a href=\"http://zencache.com/r/kb-clear-and-wipe-cache-routines/\" target=\"_blank\">?</a>]"
 msgstr ""
 
-#: src/includes/closures/Plugin/WcpUtils.php:226
+#: src/includes/closures/Plugin/WcpUtils.php:229
 msgid "<strong>%1$s:</strong> detected important site changes that would normally trigger a clear cache routine. However, clear cache routines have been disabled by a site administrator. [<a href=\"http://zencache.com/r/kb-clear-and-wipe-cache-routines/\" target=\"_blank\">?</a>]"
 msgstr ""
 
