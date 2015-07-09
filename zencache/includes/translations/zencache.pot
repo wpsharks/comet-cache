@@ -1,0 +1,1398 @@
+# Copyright (C) 2015 ZenCache
+# This file is distributed under the same license as the ZenCache package.
+msgid ""
+msgstr ""
+"Project-Id-Version: ZenCache 150409\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/zencache\n"
+"POT-Creation-Date: 2015-04-09 23:12:44+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2015-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+
+#. translators: This string is actually NOT translatable because the `__()`
+#. function is not available at this point in the processing.
+#: includes/advanced-cache.tpl.php:726
+msgid "%1$s fully functional :-) Cache file served for (%2$s) in %3$s seconds, on: %4$s."
+msgstr ""
+
+#: includes/advanced-cache.tpl.php:858
+msgid "Unexpected OB phase: `%1$s`."
+msgstr ""
+
+#: includes/advanced-cache.tpl.php:930
+msgid "Cache directory not writable. %1$s needs this directory please: `%2$s`. Set permissions to `755` or higher; `777` might be needed in some cases."
+msgstr ""
+
+#: includes/advanced-cache.tpl.php:937 includes/advanced-cache.tpl.php:960
+msgid "Unable to create symlink: `%1$s` » `%2$s`. Possible permissions issue (or race condition), please check your cache directory: `%3$s`."
+msgstr ""
+
+#: includes/advanced-cache.tpl.php:948
+msgid "%1$s file path: %2$s"
+msgstr ""
+
+#: includes/advanced-cache.tpl.php:949
+msgid "%1$s file built for (%2$s) in %3$s seconds, on: %4$s."
+msgstr ""
+
+#: includes/advanced-cache.tpl.php:951
+msgid "This %1$s file will auto-expire (and be rebuilt) on: %2$s (based on your configured expiration time)."
+msgstr ""
+
+#: includes/advanced-cache.tpl.php:975
+msgid "%1$s: failed to write cache file for: `%2$s`; possible permissions issue (or race condition), please check your cache directory: `%3$s`."
+msgstr ""
+
+#: includes/advanced-cache.tpl.php:1021
+msgid "because `PHP_SAPI` reports that you are currently running from the command line."
+msgstr ""
+
+#: includes/advanced-cache.tpl.php:1025
+msgid "because `$_GET['zcAC']` is set to a boolean-ish FALSE value."
+msgstr ""
+
+#: includes/advanced-cache.tpl.php:1029
+msgid "because `$_SERVER['HTTP_HOST']` is missing from your server configuration."
+msgstr ""
+
+#: includes/advanced-cache.tpl.php:1033
+msgid "because `$_SERVER['REQUEST_URI']` is missing from your server configuration."
+msgstr ""
+
+#: includes/advanced-cache.tpl.php:1037
+msgid "because the PHP constant `ZENCACHE_ALLOWED` has been set to a boolean-ish `FALSE` value at runtime. Perhaps by WordPress itself, or by one of your themes/plugins. This usually means that you have a theme/plugin intentionally disabling the cache on this page; and it's usually for a very good reason."
+msgstr ""
+
+#: includes/advanced-cache.tpl.php:1041
+msgid "because the environment variable `$_SERVER['ZENCACHE_ALLOWED']` has been set to a boolean-ish `FALSE` value at runtime. Perhaps by WordPress itself, or by one of your themes/plugins. This usually means that you have a theme/plugin intentionally disabling the cache on this page; and it's usually for a very good reason."
+msgstr ""
+
+#: includes/advanced-cache.tpl.php:1045
+msgid "because the PHP constant `DONOTCACHEPAGE` has been set at runtime. Perhaps by WordPress itself, or by one of your themes/plugins. This usually means that you have a theme/plugin intentionally disabling the cache on this page; and it's usually for a very good reason."
+msgstr ""
+
+#: includes/advanced-cache.tpl.php:1049
+msgid "because the environment variable `$_SERVER['DONOTCACHEPAGE']` has been set at runtime. Perhaps by WordPress itself, or by one of your themes/plugins. This usually means that you have a theme/plugin intentionally disabling the cache on this page; and it's usually for a very good reason."
+msgstr ""
+
+#: includes/advanced-cache.tpl.php:1053
+msgid "because `$_SERVER['REQUEST_METHOD']` is `POST`, `PUT`, `DELETE`, `HEAD`, `OPTIONS`, `TRACE` or `CONNECT`. These request methods should never (ever) be cached in any way."
+msgstr ""
+
+#: includes/advanced-cache.tpl.php:1057
+msgid "because `[current IP address]` === `$_SERVER['SERVER_ADDR']`; i.e. a self-serve request. DEVELOPER TIP: if you are testing on a localhost installation, please add `define('LOCALHOST', TRUE);` to your `/wp-config.php` file while you run tests :-) Remove it (or set it to a `FALSE` value) once you go live on the web."
+msgstr ""
+
+#: includes/advanced-cache.tpl.php:1061
+msgid "because `$_SERVER['REQUEST_URI']` indicates this is a `/feed`; and the configuration of this site says not to cache XML-based feeds."
+msgstr ""
+
+#: includes/advanced-cache.tpl.php:1065
+msgid "because `$_SERVER['REQUEST_URI']` indicates this is a `wp-` or `xmlrpc` file; i.e. a WordPress systematic file. WordPress systematics are never (ever) cached in any way."
+msgstr ""
+
+#: includes/advanced-cache.tpl.php:1069
+msgid "because `$_SERVER['REQUEST_URI']` or the `is_admin()` function indicates this is an administrative area of the site."
+msgstr ""
+
+#: includes/advanced-cache.tpl.php:1073
+msgid "because `$_SERVER['REQUEST_URI']` indicates this is a Multisite Network; and this was a request for `/files/*`, not a page."
+msgstr ""
+
+#: includes/advanced-cache.tpl.php:1078
+msgid "because the current user visiting this page (usually YOU), appears to be logged-in. The current configuration says NOT to cache pages for logged-in visitors. This message may also appear if you have an active PHP session on this site, or if you've left (or replied to) a comment recently. If this message continues, please clear your cookies and try again."
+msgstr ""
+
+#: includes/advanced-cache.tpl.php:1082
+msgid "because `$_GET` contains query string data. The current configuration says NOT to cache GET requests with a query string."
+msgstr ""
+
+#: includes/advanced-cache.tpl.php:1086
+msgid "because the WordPress `is_404()` Conditional Tag says the current page is a 404 error. The current configuration says NOT to cache 404 errors."
+msgstr ""
+
+#: includes/advanced-cache.tpl.php:1090
+msgid "because a plugin running on this installation says this page is in Maintenance Mode; i.e. is not available publicly at this time."
+msgstr ""
+
+#: includes/advanced-cache.tpl.php:1094
+msgid "because %1$s is unable to cache already-compressed output. Please use `mod_deflate` w/ Apache; or use `zlib.output_compression` in your `php.ini` file. %1$s is NOT compatible with `ob_gzhandler()` and others like this."
+msgstr ""
+
+#: includes/advanced-cache.tpl.php:1098
+msgid "because the contents of this document contain `<body id=\"error-page\">`, which indicates this is an auto-generated WordPress error message."
+msgstr ""
+
+#: includes/advanced-cache.tpl.php:1102
+msgid "because a `Content-Type:` header was set via PHP at runtime. The header contains a MIME type which is NOT a variation of HTML or XML. This header might have been set by your hosting company, by WordPress itself; or by one of your themes/plugins."
+msgstr ""
+
+#: includes/advanced-cache.tpl.php:1106
+msgid "because a `Status:` header (or an `HTTP/` header) was set via PHP at runtime. The header contains a non-`2xx` status code. This indicates the current page was not loaded successfully. This header might have been set by your hosting company, by WordPress itself; or by one of your themes/plugins."
+msgstr ""
+
+#: includes/advanced-cache.tpl.php:1110
+msgid "because the WordPress `is_404()` Conditional Tag says the current page is a 404 error; and this is the first time it's happened on this page. Your current configuration says that 404 errors SHOULD be cached, so %1$s built a cached symlink which points future requests for this location to your already-cached 404 error document. If you reload this page (assuming you don't clear the cache before you do so); you should get a cached version of your 404 error document. This message occurs ONCE for each new/unique 404 error request."
+msgstr ""
+
+#: includes/advanced-cache.tpl.php:1114
+msgid "because %1$s detected an early output buffer termination. This may happen when a theme/plugin ends, cleans, or flushes all output buffers before reaching the PHP shutdown phase. It's not always a bad thing. Sometimes it is necessary for a theme/plugin to do this. However, in this scenario it is NOT possible to cache the output; since %1$s is effectively disabled at runtime when this occurs."
+msgstr ""
+
+#: includes/advanced-cache.tpl.php:1118
+msgid "due to an unexpected behavior in the application. Please report this as a bug!"
+msgstr ""
+
+#: includes/advanced-cache.tpl.php:1121
+msgid "%1$s is NOT caching this page, %2$s"
+msgstr ""
+
+#: includes/menu-pages.php:26
+msgid "Wipe Cache (Start Fresh); clears the cache for all sites in this network at once!"
+msgstr ""
+
+#: includes/menu-pages.php:28
+msgid "Wipe"
+msgstr ""
+
+#: includes/menu-pages.php:30
+msgid "Clear Cache (Start Fresh)"
+msgstr ""
+
+#: includes/menu-pages.php:30
+msgid "; affects the current site only."
+msgstr ""
+
+#: includes/menu-pages.php:32
+msgid "Clear"
+msgstr ""
+
+#: includes/menu-pages.php:35
+msgid "Restore default plugin options? You will lose all of your current settings! Are you absolutely sure about this?"
+msgstr ""
+
+#: includes/menu-pages.php:37
+msgid "Restore"
+msgstr ""
+
+#: includes/menu-pages.php:39
+msgid "All Panels"
+msgstr ""
+
+#: includes/menu-pages.php:46
+msgid "Pro Upgrade"
+msgstr ""
+
+#: includes/menu-pages.php:47
+msgid "Newsletter (Subscribe)"
+msgstr ""
+
+#: includes/menu-pages.php:48
+msgid "Beta Testers (Signup)"
+msgstr ""
+
+#: includes/menu-pages.php:51
+msgid "Plugin Options"
+msgstr ""
+
+#: includes/menu-pages.php:64
+msgid "Options updated successfully."
+msgstr ""
+
+#: includes/menu-pages.php:70
+msgid "Default options successfully restored."
+msgstr ""
+
+#: includes/menu-pages.php:76
+msgid "Cache wiped across all sites; recreation will occur automatically over time."
+msgstr ""
+
+#: includes/menu-pages.php:82
+msgid "Cache cleared for this site; recreation will occur automatically over time."
+msgstr ""
+
+#: includes/menu-pages.php:88
+msgid "Failed to update your <code>/wp-config.php</code> file automatically. Please add the following line to your <code>/wp-config.php</code> file (right after the opening <code>&lt;?php</code> tag; on it's own line). <pre class=\"code\"><code>&lt;?php<br />define('WP_CACHE', TRUE);</code></pre>"
+msgstr ""
+
+#: includes/menu-pages.php:94
+msgid "Failed to update your <code>/wp-config.php</code> file automatically. Please remove the following line from your <code>/wp-config.php</code> file, or set <code>WP_CACHE</code> to a <code>FALSE</code> value. <pre class=\"code\"><code>define('WP_CACHE', TRUE);</code></pre>"
+msgstr ""
+
+#: includes/menu-pages.php:101
+msgid "Failed to update your <code>/wp-content/advanced-cache.php</code> file. Cannot write stat file: <code>%1$s/zc-advanced-cache</code>. Please be sure this directory exists (and that it's writable): <code>%1$s</code>. Please use directory permissions <code>755</code> or higher (perhaps <code>777</code>). Once you've done this, please try again."
+msgstr ""
+
+#: includes/menu-pages.php:102
+msgid "Failed to update your <code>/wp-content/advanced-cache.php</code> file. Most likely a permissions error. Please create an empty file here: <code>/wp-content/advanced-cache.php</code> (just an empty PHP file, with nothing in it); give it permissions <code>644</code> or higher (perhaps <code>666</code>). Once you've done this, please try again."
+msgstr ""
+
+#: includes/menu-pages.php:108
+msgid "Failed to remove your <code>/wp-content/advanced-cache.php</code> file. Most likely a permissions error. Please delete (or empty the contents of) this file: <code>/wp-content/advanced-cache.php</code>."
+msgstr ""
+
+#: includes/menu-pages.php:114
+msgid "close"
+msgstr ""
+
+#: includes/menu-pages.php:115
+msgid "<strong>Pro Features (Preview)</strong> ~ New option panels below. Please explore before <a href=\"http://www.websharks-inc.com/product/zencache/\" target=\"_blank\">upgrading <i class=\"fa fa-heart-o\"></i></a>.<br /><small>NOTE: the free version of %1$s (this LITE version); is more-than-adequate for most sites. Please upgrade only if you desire advanced features or would like to support the developer.</small>"
+msgstr ""
+
+#: includes/menu-pages.php:121
+msgid "%1$s is currently disabled; please review options below."
+msgstr ""
+
+#: includes/menu-pages.php:131
+msgid "Basic Configuration (Required)"
+msgstr ""
+
+#: includes/menu-pages.php:132
+msgid "Review these basic options and %1$s&trade; will be ready-to-go!"
+msgstr ""
+
+#: includes/menu-pages.php:140
+msgid "Enable/Disable"
+msgstr ""
+
+#: includes/menu-pages.php:145
+msgid "%1$s&trade; = SPEED<em>!!</em>"
+msgstr ""
+
+#: includes/menu-pages.php:146
+msgid "Yes, enable %1$s&trade;"
+msgstr ""
+
+#: includes/menu-pages.php:146
+msgid "No, disable."
+msgstr ""
+
+#: includes/menu-pages.php:147
+msgid "<strong>HUGE Time-Saver:</strong> Approx. 95%% of all WordPress sites running %1$s, simply enable it here; and that's it :-) <strong>No further configuration is necessary (really).</strong> All of the other options (down below) are already tuned for the BEST performance on a typical WordPress installation. Simply enable %1$s here and click \"Save All Changes\". If you get any warnings please follow the instructions given. Otherwise, you're good <i class=\"fa fa-smile-o\"></i>. This plugin is designed to run just fine like it is. Take it for a spin right away; you can always fine-tune things later if you deem necessary."
+msgstr ""
+
+#: includes/menu-pages.php:150
+msgid "How Can I Tell %1$s is Working?"
+msgstr ""
+
+#: includes/menu-pages.php:151
+msgid "First of all, please make sure that you've enabled %1$s here; then scroll down to the bottom of this page and click \"Save All Changes\". All of the other options (below) are already pre-configured for typical usage. Feel free to skip them all for now. You can go back through all of these later and fine-tune things the way you like them."
+msgstr ""
+
+#: includes/menu-pages.php:152
+msgid "Once %1$s has been enabled, <strong>you'll need to log out (and/or clear browser cookies)</strong>. By default, cache files are NOT served to visitors who are logged-in, and that includes you too ;-) Cache files are NOT served to recent comment authors either. If you've commented (or replied to a comment lately); please clear your browser cookies before testing."
+msgstr ""
+
+#: includes/menu-pages.php:153
+msgid "<strong>To verify that %1$s is working</strong>, navigate your site like a normal visitor would. Right-click on any page (choose View Source), then scroll to the very bottom of the document. At the bottom, you'll find comments that show %1$s stats and information. You should also notice that page-to-page navigation is <i class=\"fa fa-flash\"></i> <strong>lightning fast</strong> now that %1$s is running; and it gets faster over time!"
+msgstr ""
+
+#: includes/menu-pages.php:155
+msgid "Yes, enable notes in the source code so I can see it's working (recommended)."
+msgstr ""
+
+#: includes/menu-pages.php:156
+msgid "Yes, enable notes in the source code AND show debugging details (not recommended for production)."
+msgstr ""
+
+#: includes/menu-pages.php:157
+msgid "No, I don't want my source code to contain any of these notes."
+msgstr ""
+
+#: includes/menu-pages.php:168
+msgid "Plugin Deletion Safeguards"
+msgstr ""
+
+#: includes/menu-pages.php:173
+msgid "Uninstall on Plugin Deletion; or Safeguard Options?"
+msgstr ""
+
+#: includes/menu-pages.php:174
+msgid "<strong>Tip:</strong> By default, if you delete %1$s using the plugins menu in WordPress, nothing is lost. However, if you want to completely uninstall %1$s you should set this to <code>Yes</code> and <strong>THEN</strong> deactivate &amp; delete %1$s from the plugins menu in WordPress. This way %1$s will erase your options for the plugin, erase directories/files created by the plugin, remove the <code>advanced-cache.php</code> file, terminate CRON jobs, etc. It erases itself from existence completely."
+msgstr ""
+
+#: includes/menu-pages.php:176
+msgid "Safeguard my options and the cache (recommended)."
+msgstr ""
+
+#: includes/menu-pages.php:177
+msgid "Yes, uninstall (completely erase) %1$s on plugin deletion."
+msgstr ""
+
+#: includes/menu-pages.php:186
+msgid "Advanced Configuration (All Optional)"
+msgstr ""
+
+#: includes/menu-pages.php:187
+msgid "Recommended for advanced site owners only; already pre-configured for most WP installs."
+msgstr ""
+
+#: includes/menu-pages.php:197
+msgid "Clearing the Cache"
+msgstr ""
+
+#: includes/menu-pages.php:201
+msgid "Clearing the Cache Manually"
+msgstr ""
+
+#: includes/menu-pages.php:203
+msgid "Once %1$s is enabled, you will find this new option in your WordPress Admin Bar (see screenshot on right). Clicking this button will clear the cache and you can start fresh at anytime (e.g. you can do this manually; and as often as you wish)."
+msgstr ""
+
+#: includes/menu-pages.php:204
+msgid "Depending on the structure of your site, there could be many reasons to clear the cache. However, the most common reasons are related to Post/Page edits or deletions, Category/Tag edits or deletions, and Theme changes. %1$s handles most scenarios all by itself. However, many site owners like to clear the cache manually; for a variety of reasons (just to force a refresh)."
+msgstr ""
+
+#: includes/menu-pages.php:206
+msgid "Yes, enable the &quot;Clear Cache&quot; button in the WordPress admin bar."
+msgstr ""
+
+#: includes/menu-pages.php:207
+msgid "No, I don't intend to clear the cache manually; exclude from admin bar."
+msgstr ""
+
+#: includes/menu-pages.php:210
+msgid "Running the <a href=\"http://www.websharks-inc.com/product/s2clean/\" target=\"_blank\">s2Clean Theme</a> by WebSharks?"
+msgstr ""
+
+#: includes/menu-pages.php:211
+msgid "If s2Clean is installed, %1$s can be configured to clear the Markdown cache too (if you've enabled Markdown processing with s2Clean). The s2Clean Markdown cache is only cleared when you manually clear the cache (with %1$s); and only if you enable this option here. Note: s2Clean's Markdown cache is extremely dynamic. Just like the rest of your site, s2Clean caches do NOT need to be cleared away at all, as this happens automatically when your content changes. However, some developers find this feature useful while developing their site; just to force a refresh."
+msgstr ""
+
+#: includes/menu-pages.php:213
+msgid "Yes, if the s2Clean theme is installed; also clear s2Clean-related caches."
+msgstr ""
+
+#: includes/menu-pages.php:214
+msgid "No, I don't use s2Clean; or, I don't want s2Clean-related caches cleared."
+msgstr ""
+
+#: includes/menu-pages.php:216
+msgid "Process Other Custom PHP Code?"
+msgstr ""
+
+#: includes/menu-pages.php:217
+msgid "If you have other custom routines you'd like to process when the cache is cleared manually, please type your custom PHP code here. The PHP code that you provide is only evaluated when you manually clear the cache (with %1$s); and only if the field below contains PHP code. Note: if your PHP code outputs a message (e.g. if you have <code>echo '&lt;p&gt;My message&lt;/p&gt;';</code>); your message will be displayed along with any other notes from %1$s itself. This could be useful to developers that need to clear server caches too (such as <a href=\"http://www.php.net/manual/en/function.apc-clear-cache.php\" target=\"_blank\">APC</a> or <a href=\"http://www.php.net/manual/en/memcache.flush.php\" target=\"_blank\">memcache</a>)."
+msgstr ""
+
+#: includes/menu-pages.php:219
+msgid "<strong>Example:</strong> <code>&lt;?php apc_clear_cache(); echo '&lt;p&gt;Also cleared APC cache.&lt;/p&gt;'; ?&gt;</code>"
+msgstr ""
+
+#: includes/menu-pages.php:221
+msgid "Clearing the Cache Automatically"
+msgstr ""
+
+#: includes/menu-pages.php:223
+msgid "This is built into the %1$s plugin; e.g. this functionality is \"always on\". If you edit a Post/Page (or delete one), %1$s will automatically clear the cache file(s) associated with that content. This way a new updated version of the cache will be created automatically the next time this content is accessed. Simple updates like this occur each time you make changes in the Dashboard, and %1$s will notify you of these as they occur. %1$s monitors changes to Posts (of any kind, including Pages), Categories, Tags, Links, Themes (even Users); and more. Notifications in the Dashboard regarding these detections can be enabled/disabled below."
+msgstr ""
+
+#: includes/menu-pages.php:225
+msgid "Yes, enable %1$s notifications in the Dashboard when changes are detected &amp; one or more cache files are cleared automatically."
+msgstr ""
+
+#: includes/menu-pages.php:226
+msgid "No, I don't want to know (don't really care) what %1$s is doing behind-the-scene."
+msgstr ""
+
+#: includes/menu-pages.php:228
+msgid "Auto-Clear Designated \"Home Page\" Too?"
+msgstr ""
+
+#: includes/menu-pages.php:229
+msgid "On many sites, the Home Page (aka: the Front Page) offers an archive view of all Posts (or even Pages). Therefore, if a single Post/Page is changed in some way; and %1$s clears/resets the cache for a single Post/Page, would you like %1$s to also clear any existing cache files for the \"Home Page\"?"
+msgstr ""
+
+#: includes/menu-pages.php:231
+msgid "Yes, if any single Post/Page is cleared/reset; also purge the \"Home Page\"."
+msgstr ""
+
+#: includes/menu-pages.php:232
+msgid "No, my Home Page does not provide a list of Posts/Pages; e.g. this is not necessary."
+msgstr ""
+
+#: includes/menu-pages.php:234
+msgid "Auto-Clear Designated \"Posts Page\" Too?"
+msgstr ""
+
+#: includes/menu-pages.php:235
+msgid "On many sites, the Posts Page (aka: the Blog Page) offers an archive view of all Posts (or even Pages). Therefore, if a single Post/Page is changed in some way; and %1$s clears/resets the cache for a single Post/Page, would you like %1$s to also clear any existing cache files for the \"Posts Page\"?"
+msgstr ""
+
+#: includes/menu-pages.php:237
+msgid "Yes, if any single Post/Page is cleared/reset; also purge the \"Posts Page\"."
+msgstr ""
+
+#: includes/menu-pages.php:238
+msgid "No, I don't use a separate Posts Page; e.g. my Home Page IS my Posts Page."
+msgstr ""
+
+#: includes/menu-pages.php:240
+msgid "Auto-Clear \"Author Page\" Too?"
+msgstr ""
+
+#: includes/menu-pages.php:241
+msgid "On many sites, each author has a related \"Author Page\" that offers an archive view of all posts associated with that author. Therefore, if a single Post/Page is changed in some way; and %1$s clears/resets the cache for a single Post/Page, would you like %1$s to also clear any existing cache files for the related \"Author Page\"?"
+msgstr ""
+
+#: includes/menu-pages.php:243
+msgid "Yes, if any single Post/Page is cleared/reset; also purge the \"Author Page\"."
+msgstr ""
+
+#: includes/menu-pages.php:244
+msgid "No, my site doesn't use multiple authors and/or I don't have any \"Author Page\" archive views."
+msgstr ""
+
+#: includes/menu-pages.php:246
+msgid "Auto-Clear \"Category Archives\" Too?"
+msgstr ""
+
+#: includes/menu-pages.php:247
+msgid "On many sites, each post is associated with at least one Category. Each category then has an archive view that contains all the posts within that category. Therefore, if a single Post/Page is changed in some way; and %1$s clears/resets the cache for a single Post/Page, would you like %1$s to also clear any existing cache files for the associated Category archive views?"
+msgstr ""
+
+#: includes/menu-pages.php:249
+msgid "Yes, if any single Post/Page is cleared/reset; also clear the associated Category archive views."
+msgstr ""
+
+#: includes/menu-pages.php:250
+msgid "No, my site doesn't use Categories and/or I don't have any Category archive views."
+msgstr ""
+
+#: includes/menu-pages.php:252
+msgid "Auto-Clear \"Tag Archives\" Too?"
+msgstr ""
+
+#: includes/menu-pages.php:253
+msgid "On many sites, each post may be associated with at least one Tag. Each tag then has an archive view that contains all the posts assigned that tag. Therefore, if a single Post/Page is changed in some way; and %1$s clears/resets the cache for a single Post/Page, would you like %1$s to also clear any existing cache files for the associated Tag archive views?"
+msgstr ""
+
+#: includes/menu-pages.php:255
+msgid "Yes, if any single Post/Page is cleared/reset; also clear the associated Tag archive views."
+msgstr ""
+
+#: includes/menu-pages.php:256
+msgid "No, my site doesn't use Tags and/or I don't have any Tag archive views."
+msgstr ""
+
+#: includes/menu-pages.php:258
+msgid "Auto-Clear \"Custom Term Archives\" Too?"
+msgstr ""
+
+#: includes/menu-pages.php:259
+msgid "Most sites do not use any custom Terms so it should be safe to leave this disabled. However, if your site uses custom Terms and they have their own Term archive views, you may want to clear those when the associated post is cleared. Therefore, if a single Post/Page is changed in some way; and %1$s clears/resets the cache for a single Post/Page, would you like %1$s to also clear any existing cache files for the associated Tag archive views?"
+msgstr ""
+
+#: includes/menu-pages.php:261
+msgid "Yes, if any single Post/Page is cleared/reset; also purge any associated custom Term archive views."
+msgstr ""
+
+#: includes/menu-pages.php:262
+msgid "No, my site doesn't use any custom Terms and/or I don't have any custom Term archive views."
+msgstr ""
+
+#: includes/menu-pages.php:264
+msgid "Auto-Clear \"Custom Post Type Archives\" Too?"
+msgstr ""
+
+#: includes/menu-pages.php:265
+msgid "Most sites do not use any Custom Post Types so it should be safe to disable this option. However, if your site uses Custom Post Types and they have their own Custom Post Type archive views, you may want to clear those when any associated post is cleared. Therefore, if a single Post with a Custom Post Type is changed in some way; and %1$s clears/resets the cache for that post, would you like %1$s to also clear any existing cache files for the associated Custom Post Type archive views?"
+msgstr ""
+
+#: includes/menu-pages.php:267
+msgid "Yes, if any single Post with a Custom Post Type is cleared/reset; also clear any associated Custom Post Type archive views."
+msgstr ""
+
+#: includes/menu-pages.php:268
+msgid "No, my site doesn't use any Custom Post Types and/or I don't have any Custom Post Type archive views."
+msgstr ""
+
+#: includes/menu-pages.php:279
+msgid "Directory / Expiration Time"
+msgstr ""
+
+#: includes/menu-pages.php:283
+msgid "Base Cache Directory (Must be Writable; e.g. <a href=\"http://codex.wordpress.org/Changing_File_Permissions\" target=\"_blank\">Permissions</a> <code>755</code> or Higher)"
+msgstr ""
+
+#: includes/menu-pages.php:284
+msgid "This is where %1$s will store the cached version of your site. If you're not sure how to deal with directory permissions, don't worry too much about this. If there is a problem, %1$s will let you know about it. By default, this directory is created by %1$s and the permissions are setup automatically. In most cases there is nothing more you need to do."
+msgstr ""
+
+#: includes/menu-pages.php:288
+msgid "Automatic Expiration Time (Max Age)"
+msgstr ""
+
+#: includes/menu-pages.php:289
+msgid "If you don't update your site much, you could set this to <code>6 months</code> and optimize everything even further. The longer the Cache Expiration Time is, the greater your performance gain. Alternatively, the shorter the Expiration Time, the fresher everything will remain on your site. A default value of <code>7 days</code> (recommended); is a good conservative middle-ground."
+msgstr ""
+
+#: includes/menu-pages.php:290
+msgid "Keep in mind that your Expiration Time is only one part of the big picture. %1$s will also clear the cache automatically as changes are made to the site (i.e. you edit a post, someone comments on a post, you change your theme, you add a new navigation menu item, etc., etc.). Thus, your Expiration Time is really just a fallback; e.g. the maximum amount of time that a cache file could ever possibly live."
+msgstr ""
+
+#: includes/menu-pages.php:291
+msgid "All of that being said, you could set this to just <code>60 seconds</code> and you would still see huge differences in speed and performance. If you're just starting out with %1$s (perhaps a bit nervous about old cache files being served to your visitors); you could set this to something like <code>30 minutes</code>, and experiment with it while you build confidence in %1$s. It's not necessary to do so, but many site owners have reported this makes them feel like they're more-in-control when the cache has a short expiration time. All-in-all, it's a matter of preference <i class=\"fa fa-smile-o\"></i>."
+msgstr ""
+
+#: includes/menu-pages.php:293
+msgid "<strong>Tip:</strong> the value that you specify here MUST be compatible with PHP's <a href=\"http://php.net/manual/en/function.strtotime.php\" target=\"_blank\" style=\"text-decoration:none;\"><code>strtotime()</code></a> function. Examples: <code>30 seconds</code>, <code>2 hours</code>, <code>7 days</code>, <code>6 months</code>, <code>1 year</code>."
+msgstr ""
+
+#: includes/menu-pages.php:294
+msgid "<strong>Note:</strong> %1$s will never serve a cache file that is older than what you specify here (even if one exists in your cache directory; stale cache files are never used). In addition, a WP Cron job will automatically cleanup your cache directory (once daily); purging expired cache files periodically. This prevents a HUGE cache from building up over time, creating a potential storage issue."
+msgstr ""
+
+#: includes/menu-pages.php:304
+msgid "Client-Side Cache"
+msgstr ""
+
+#: includes/menu-pages.php:309
+msgid "Allow Double-Caching In The Client-Side Browser?"
+msgstr ""
+
+#: includes/menu-pages.php:310
+msgid "Recommended setting: <code>No</code> (for membership sites, very important). Otherwise, <code>Yes</code> would be better (if users do NOT log in/out of your site)."
+msgstr ""
+
+#: includes/menu-pages.php:311
+msgid "%1$s handles content delivery through its ability to communicate with a browser using PHP. If you allow a browser to (cache) the caching system itself, you are momentarily losing some control; and this can have a negative impact on users that see more than one version of your site; e.g. one version while logged-in, and another while NOT logged-in. For instance, a user may log out of your site, but upon logging out they report seeing pages on the site which indicate they are STILL logged in (even though they're not — that's bad). This can happen if you allow a client-side cache, because their browser may cache web pages they visited while logged into your site which persist even after logging out. Sending no-cache headers will work to prevent this issue."
+msgstr ""
+
+#: includes/menu-pages.php:312
+msgid "All of that being said, if all you care about is blazing fast speed and users don't log in/out of your site (only you do); you can safely set this to <code>Yes</code> (recommended in this case). Allowing a client-side browser cache will improve speed and reduce outgoing bandwidth when this option is feasible."
+msgstr ""
+
+#: includes/menu-pages.php:314
+msgid "No, prevent a client-side browser cache (safest option)."
+msgstr ""
+
+#: includes/menu-pages.php:315
+msgid "Yes, I will allow a client-side browser cache of pages on the site."
+msgstr ""
+
+#: includes/menu-pages.php:317
+msgid "<strong>Tip:</strong> Setting this to <code>No</code> is highly recommended when running a membership plugin like <a href=\"http://wordpress.org/plugins/s2member/\" target=\"_blank\">s2Member</a> (as one example). In fact, many plugins like s2Member will send <a href=\"http://codex.wordpress.org/Function_Reference/nocache_headers\" target=\"_blank\">nocache_headers()</a> on their own, so your configuration here will likely be overwritten when you run such plugins (which is better anyway). In short, if you run a membership plugin, you should NOT allow a client-side browser cache."
+msgstr ""
+
+#: includes/menu-pages.php:318
+msgid "<strong>Tip:</strong> Setting this to <code>No</code> will NOT impact static content; e.g. CSS, JS, images, or other media. This setting pertains only to dynamic PHP scripts which produce content generated by WordPress."
+msgstr ""
+
+#: includes/menu-pages.php:319
+msgid "<strong>Advanced Tip:</strong> if you have this set to <code>No</code>, but you DO want to allow a few special URLs to be cached by the browser; you can add this parameter to your URL <code>?zcABC=1</code>. This tells %1$s that it's OK for the browser to cache that particular URL. In other words, the <code>zcABC=1</code> parameter tells %1$s NOT to send no-cache headers to the browser."
+msgstr ""
+
+#: includes/menu-pages.php:331
+msgid "Logged-In Users"
+msgstr ""
+
+#: includes/menu-pages.php:336
+msgid "Caching Enabled for Logged-In Users &amp; Comment Authors?"
+msgstr ""
+
+#: includes/menu-pages.php:337
+msgid "This should almost ALWAYS be set to <code>No</code>. Most sites will NOT want to cache content generated while a user is logged-in. Doing so could result in a cache of dynamic content generated specifically for a particular user, where the content being cached may contain details that pertain only to the user that was logged-in when the cache was generated. Imagine visiting a website that says you're logged-in as Billy Bob (but you're not Billy Bob; NOT good). In short, do NOT turn this on unless you know what you're doing."
+msgstr ""
+
+#: includes/menu-pages.php:339
+msgid "<strong>Exception (Membership Sites):</strong> If you run a site with many users and the majority of your traffic comes from users who ARE logged-in, please choose: <code>Yes (maintain separate cache)</code>. %1$s will operate normally; but when a user is logged-in, the cache is user-specific. %1$s will intelligently refresh the cache when/if a user submits a form on your site with the GET or POST method. Or, if you make changes to their account (or another plugin makes changes to their account); including user <a href=\"http://codex.wordpress.org/Function_Reference/update_user_option\" target=\"_blank\">option</a>|<a href=\"http://codex.wordpress.org/Function_Reference/update_user_meta\" target=\"_blank\">meta</a> additions, updates &amp; deletions too. However, please note that enabling this feature (e.g. user-specific cache entries); will eat up MUCH more disk space. That being said, the benefits of this feature for most sites will outweigh the disk overhead (e.g. it's NOT an issue in most cases). Unless you are short on disk space (or you have MANY thousands of users), the disk overhead is neglible."
+msgstr ""
+
+#: includes/menu-pages.php:341
+msgid "No, do NOT cache; or serve a cache file when a user is logged-in (safest option)."
+msgstr ""
+
+#: includes/menu-pages.php:342
+msgid "Yes, and maintain a separate cache for each user (recommended for membership sites)."
+msgstr ""
+
+#: includes/menu-pages.php:343
+msgid "Yes, but DON'T maintain a separate cache for each user (I know what I'm doing)."
+msgstr ""
+
+#: includes/menu-pages.php:345
+msgid "<strong>Note:</strong> For most sites, the majority of their traffic (if not all of their traffic) comes from visitors who are not logged in, so disabling the cache for logged-in users is NOT ordinarily a performance issue. When a user IS logged-in, disabling the cache is considered ideal, because a logged-in user has a session open with your site; and the content they view should remain very dynamic in this scenario."
+msgstr ""
+
+#: includes/menu-pages.php:346
+msgid "<strong>Note:</strong> This setting includes some users who AREN'T actually logged into the system, but who HAVE authored comments recently. %1$s includes comment authors as part of it's logged-in user check. This way comment authors will be able to see updates to the comment thread immediately; and, so that any dynamically-generated messages displayed by your theme will work as intended. In short, %1$s thinks of a comment author as a logged-in user, even though technically they are not. ~ Users who gain access to password-protected Posts/Pages are also included."
+msgstr ""
+
+#: includes/menu-pages.php:356
+msgid "GET Requests"
+msgstr ""
+
+#: includes/menu-pages.php:361
+msgid "Caching Enabled for GET (Query String) Requests?"
+msgstr ""
+
+#: includes/menu-pages.php:362
+msgid "This should almost ALWAYS be set to <code>No</code>. UNLESS, you're using unfriendly Permalinks. In other words, if all of your URLs contain a query string (e.g. <code>/?key=value</code>); you're using unfriendly Permalinks. Ideally, you would refrain from doing this; and instead, update your Permalink options immediately; which also optimizes your site for search engines. That being said, if you really want to use unfriendly Permalinks, and ONLY if you're using unfriendly Permalinks, you should set this to <code>Yes</code>; and don't worry too much, the sky won't fall on your head :-)"
+msgstr ""
+
+#: includes/menu-pages.php:364
+msgid "No, do NOT cache (or serve a cache file) when a query string is present."
+msgstr ""
+
+#: includes/menu-pages.php:365
+msgid "Yes, I would like to cache URLs that contain a query string."
+msgstr ""
+
+#: includes/menu-pages.php:367
+msgid "<strong>Note:</strong> POST requests (i.e. forms with <code>method=&quot;post&quot;</code>) are always excluded from the cache, which is the way it should be. Any <a href=\"http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html\" target=\"_blank\">POST/PUT/DELETE</a> request should NEVER (ever) be cached. CLI (and self-serve) requests are also excluded from the cache (always). A CLI request is one that comes from the command line; commonly used by CRON jobs and other automated routines. A self-serve request is an HTTP connection established from your site -› to your site. For instance, a WP Cron job, or any other HTTP request that is spawned not by a user, but by the server itself."
+msgstr ""
+
+#: includes/menu-pages.php:368
+msgid "<strong>Advanced Tip:</strong> If you are NOT caching GET requests (recommended), but you DO want to allow some special URLs that include query string parameters to be cached; you can add this special parameter to any URL <code>?zcAC=1</code>. This tells %1$s that it's OK to cache that particular URL, even though it contains query string arguments. If you ARE caching GET requests and you want to force %1$s to NOT cache a specific request, you can add this special parameter to any URL <code>?zcAC=0</code>."
+msgstr ""
+
+#: includes/menu-pages.php:378
+msgid "404 Requests"
+msgstr ""
+
+#: includes/menu-pages.php:383
+msgid "Caching Enabled for 404 Requests?"
+msgstr ""
+
+#: includes/menu-pages.php:384
+msgid "When this is set to <code>No</code>, %1$s will ignore all 404 requests and no cache file will be served. While this is fine for most site owners, caching the 404 page on a high-traffic site may further reduce server load. When this is set to <code>Yes</code>, %1$s will cache the 404 page (see <a href=\"https://codex.wordpress.org/Creating_an_Error_404_Page\" target=\"_blank\">Creating an Error 404 Page</a>) and then serve that single cache file to all future 404 requests."
+msgstr ""
+
+#: includes/menu-pages.php:386
+msgid "No, do NOT cache (or serve a cache file) for 404 requests."
+msgstr ""
+
+#: includes/menu-pages.php:387
+msgid "Yes, I would like to cache the 404 page and serve the cached file for 404 requests."
+msgstr ""
+
+#: includes/menu-pages.php:389
+msgid "<strong>How does %1$s cache 404 requests?</strong> %1$s will create a special cache file (<code>----404----.html</code>, see Advanced Tip below) for the first 404 request and then <a href=\"http://www.php.net/manual/en/function.symlink.php\" target=\"_blank\">symlink</a> future 404 requests to this special cache file. That way you don't end up with lots of 404 cache files that all contain the same thing (the contents of the 404 page). Instead, you'll have one 404 cache file and then several symlinks (i.e., references) to that 404 cache file."
+msgstr ""
+
+#: includes/menu-pages.php:390
+msgid "<strong>Advanced Tip:</strong> The default 404 cache filename (<code>----404----.html</code>) is designed to minimize the chance of a collision with a cache file for a real page with the same name. However, if you want to override this default and define your own 404 cache filename, you can do so by adding <code>define('ZENCACHE_404_CACHE_FILENAME', 'your-404-cache-filename');</code> to your <code>wp-config.php</code> file (note that the <code>.html</code> extension should be excluded when defining a new filename)."
+msgstr ""
+
+#: includes/menu-pages.php:400
+msgid "RSS, RDF, and Atom Feeds"
+msgstr ""
+
+#: includes/menu-pages.php:405
+msgid "Caching Enabled for RSS, RDF, Atom Feeds?"
+msgstr ""
+
+#: includes/menu-pages.php:406
+msgid "This should almost ALWAYS be set to <code>No</code>. UNLESS, you're sure that you want to cache your feeds. If you use a web feed management provider like Google® Feedburner and you set this option to <code>Yes</code>, you may experience delays in the detection of new posts. <strong>NOTE:</strong> If you do enable this, it is highly recommended that you also enable automatic Feed Clearing too. Please see the section above: \"Clearing the Cache\". Find the sub-section titled: \"Auto-Clear RSS/RDF/ATOM Feeds\" (available only in the pro version)."
+msgstr ""
+
+#: includes/menu-pages.php:408
+msgid "No, do NOT cache (or serve a cache file) when displaying a feed."
+msgstr ""
+
+#: includes/menu-pages.php:409
+msgid "Yes, I would like to cache feed URLs."
+msgstr ""
+
+#: includes/menu-pages.php:411
+msgid "<strong>Note:</strong> This option affects all feeds served by WordPress, including the site feed, the site comment feed, post-specific comment feeds, author feeds, search feeds, and category and tag feeds. See also: <a href=\"http://codex.wordpress.org/WordPress_Feeds\" target=\"_blank\">WordPress Feeds</a>."
+msgstr ""
+
+#: includes/menu-pages.php:423
+msgid "URI Exclusion Patterns"
+msgstr ""
+
+#: includes/menu-pages.php:427
+msgid "Don't Cache These Special URI Exclusion Patterns?"
+msgstr ""
+
+#: includes/menu-pages.php:428
+msgid "Sometimes there are certain cases where a particular file, or a particular group of files, should never be cached. This is where you will enter those if you need to (one per line). Searches are performed against the <a href=\"https://gist.github.com/jaswsinc/338b6eb03a36c048c26f\" target=\"_blank\" style=\"text-decoration:none;\"><code>REQUEST_URI</code></a>; i.e. <code>/path/?query</code> (caSe insensitive). So, don't put in full URLs here, just word fragments found in the file path (or query string) is all you need, excluding the http:// and domain name. A wildcard <code>*</code> character can also be used when necessary; e.g. <code>/category/abc-followed-by-*</code>; (where <code>*</code> = anything, 0 or more characters in length)."
+msgstr ""
+
+#: includes/menu-pages.php:430
+msgid "<strong>Tip:</strong> let's use this example URL: <code>http://www.example.com/post/example-post-123</code>. To exclude this URL, you would put this line into the field above: <code>/post/example-post-123</code>. Or, you could also just put in a small fragment, like: <code>example</code> or <code>example-*-123</code> and that would exclude any URI containing that word fragment."
+msgstr ""
+
+#: includes/menu-pages.php:431 includes/menu-pages.php:451
+#: includes/menu-pages.php:471 includes/menu-pages.php:575
+#: includes/menu-pages.php:579 includes/menu-pages.php:661
+msgid "<strong>Note:</strong> please remember that your entries here should be formatted as a line-delimited list; e.g. one exclusion pattern per line."
+msgstr ""
+
+#: includes/menu-pages.php:443
+msgid "HTTP Referrer Exclusion Patterns"
+msgstr ""
+
+#: includes/menu-pages.php:447
+msgid "Don't Cache These Special HTTP Referrer Exclusion Patterns?"
+msgstr ""
+
+#: includes/menu-pages.php:448
+msgid "Sometimes there are special cases where a particular referring URL (or referring domain) that sends you traffic; or even a particular group of referring URLs or domains that send you traffic; should result in a page being loaded on your site that is NOT from the cache (and that resulting page should never be cached). This is where you will enter those if you need to (one per line). Searches are performed against the <a href=\"http://www.php.net//manual/en/reserved.variables.server.php\" target=\"_blank\" style=\"text-decoration:none;\"><code>HTTP_REFERER</code></a> (caSe insensitive). A wildcard <code>*</code> character can also be used when necessary; e.g. <code>*.domain.com</code>; (where <code>*</code> = anything, 0 or more characters in length)."
+msgstr ""
+
+#: includes/menu-pages.php:450
+msgid "<strong>Tip:</strong> let's use this example URL: <code>http://www.referring-domain.com/search/?q=search+terms</code>. To exclude this referring URL, you could put this line into the field above: <code>www.referring-domain.com</code>. Or, you could also just put in a small fragment, like: <code>/search/</code> or <code>q=*</code>; and that would exclude any referrer containing that word fragment."
+msgstr ""
+
+#: includes/menu-pages.php:463
+msgid "User-Agent Exclusion Patterns"
+msgstr ""
+
+#: includes/menu-pages.php:467
+msgid "Don't Cache These Special User-Agent Exclusion Patterns?"
+msgstr ""
+
+#: includes/menu-pages.php:468
+msgid "Sometimes there are special cases when a particular user-agent (e.g. a specific browser or a specific type of device); should be shown a page on your site that is NOT from the cache (and that resulting page should never be cached). This is where you will enter those if you need to (one per line). Searches are performed against the <a href=\"http://www.php.net//manual/en/reserved.variables.server.php\" target=\"_blank\" style=\"text-decoration:none;\"><code>HTTP_USER_AGENT</code></a> (caSe insensitive). A wildcard <code>*</code> character can also be used when necessary; e.g. <code>Android *; Chrome/* Mobile</code>; (where <code>*</code> = anything, 0 or more characters in length)."
+msgstr ""
+
+#: includes/menu-pages.php:470
+msgid "<strong>Tip:</strong> if you wanted to exclude iPhones put this line into the field above: <code>iPhone;*AppleWebKit</code>. Or, you could also just put in a small fragment, like: <code>iphone</code>; and that would exclude any user-agent containing that word fragment. Note, this is just an example. With a default installation of %1$s, there is no compelling reason to exclude iOS devices (or any mobile device for that matter)."
+msgstr ""
+
+#: includes/menu-pages.php:483
+msgid "Auto-Cache Engine"
+msgstr ""
+
+#: includes/menu-pages.php:488
+msgid "Enable the Auto-Cache Engine?"
+msgstr ""
+
+#: includes/menu-pages.php:489
+msgid "After using %1$s for awhile (or any other page caching plugin, for that matter); it becomes obvious that at some point (based on your configured Expiration Time) %1$s has to refresh itself. It does this by ditching its cached version of a page, reloading the database-driven content, and then recreating the cache with the latest data. This is a never ending regeneration cycle that is based entirely on your configured Expiration Time."
+msgstr ""
+
+#: includes/menu-pages.php:490
+msgid "Understanding this, you can see that 99% of your visitors are going to receive a lightning fast response from your server. However, there will always be around 1% of your visitors that land on a page for the very first time (before it's been cached), or land on a page that needs to have its cache regenerated, because the existing cache has become outdated. We refer to this as a <em>First-Come Slow-Load Issue</em>. Not a huge problem, but if you're optimizing your site for every ounce of speed possible, the Auto-Cache Engine can help with this. The Auto-Cache Engine has been designed to combat this issue by taking on the responsibility of being that first visitor to a page that has not yet been cached, or has an expired cache. The Auto-Cache Engine is powered, in part, by <a href=\"http://codex.wordpress.org/Category:WP-Cron_Functions\" target=\"_blank\">WP-Cron</a> (already built into WordPress). The Auto-Cache Engine runs at 15-minute intervals via WP-Cron. It also uses the <a href=\"http://core.trac.wordpress.org/browser/trunk/wp-includes/http.php\" target=\"_blank\">WP_Http</a> class, which is also built into WordPress already."
+msgstr ""
+
+#: includes/menu-pages.php:491
+msgid "The Auto-Cache Engine obtains its list of URLs to auto-cache, from two different sources. It can read an <a href=\"http://wordpress.org/extend/plugins/google-sitemap-generator/\" target=\"_blank\">XML Sitemap</a> and/or a list of specific URLs that you supply. If you supply both sources, it will use both sources collectively. The Auto-Cache Engine takes ALL of your other configuration options into consideration too, including your Expiration Time, as well as any cache exclusion rules."
+msgstr ""
+
+#: includes/menu-pages.php:493
+msgid "No, leave the Auto-Cache Engine disabled please."
+msgstr ""
+
+#: includes/menu-pages.php:494
+msgid "Yes, I want the Auto-Cache Engine to keep pages cached automatically."
+msgstr ""
+
+#: includes/menu-pages.php:498
+msgid "XML Sitemap URL (or an XML Sitemap Index)"
+msgstr ""
+
+#: includes/menu-pages.php:500
+msgid "In a Multisite Network, each child blog will be auto-cached too. %1$s will dynamically change the leading <code>%2$s</code> as necessary; for each child blog in the network. %1$s supports both sub-directory &amp; sub-domain networks; including domain mapping plugins."
+msgstr ""
+
+#: includes/menu-pages.php:501
+msgid "A List of URLs to Auto-Cache (One Per Line)"
+msgstr ""
+
+#: includes/menu-pages.php:504
+msgid "Auto-Cache Delay Timer (in Milliseconds)"
+msgstr ""
+
+#: includes/menu-pages.php:505
+msgid "As the Auto-Cache Engine runs through each URL, you can tell it to wait X number of milliseconds between each connection that it makes. It is strongly suggested that you DO have some small delay here. Otherwise, you run the risk of hammering your own web server with multiple repeated connections whenever the Auto-Cache Engine is running. This is especially true on very large sites; where there is the potential for hundreds of repeated connections as the Auto-Cache Engine goes through a long list of URLs. Adding a delay between each connection will prevent the Auto-Cache Engine from placing a heavy load on the processor that powers your web server. A value of <code>500</code> milliseconds is suggested here (half a second). If you experience problems, you can bump this up a little at a time, in increments of <code>500</code> milliseconds; until you find a happy place for your server. <em>Please note that <code>1000</code> milliseconds = <code>1</code> full second.</em>"
+msgstr ""
+
+#: includes/menu-pages.php:508
+msgid "Auto-Cache User-Agent String"
+msgstr ""
+
+#: includes/menu-pages.php:510
+msgid "This is how the Auto-Cache Engine identifies itself when connecting to URLs. See <a href=\"http://en.wikipedia.org/wiki/User_agent\" target=\"_blank\">User Agent</a> in the Wikipedia."
+msgstr ""
+
+#: includes/menu-pages.php:523
+msgid "HTML Compression"
+msgstr ""
+
+#: includes/menu-pages.php:528
+msgid "Enable WebSharks™ HTML Compression?"
+msgstr ""
+
+#: includes/menu-pages.php:529
+msgid "This is an experimental feature, however it offers a potentially HUGE speed boost. You can <a href=\"https://github.com/websharks/html-compressor\" target=\"_blank\">learn more here</a>. Please use with caution."
+msgstr ""
+
+#: includes/menu-pages.php:531
+msgid "No, do NOT compress HTML/CSS/JS code at runtime."
+msgstr ""
+
+#: includes/menu-pages.php:532
+msgid "Yes, I want to compress HTML/CSS/JS for blazing fast speeds."
+msgstr ""
+
+#: includes/menu-pages.php:534
+msgid "<strong>Note:</strong> This is experimental. Please <a href=\"https://github.com/websharks/zencache/issues\" target=\"_blank\">report issues here</a>."
+msgstr ""
+
+#: includes/menu-pages.php:537
+msgid "HTML Compression Options"
+msgstr ""
+
+#: includes/menu-pages.php:538
+msgid "You can <a href=\"https://github.com/websharks/html-compressor\" target=\"_blank\">learn more about all of these options here</a>."
+msgstr ""
+
+#: includes/menu-pages.php:540
+msgid "Yes, combine CSS from &lt;head&gt; and &lt;body&gt; into fewer files."
+msgstr ""
+
+#: includes/menu-pages.php:541
+msgid "No, do not combine CSS from &lt;head&gt; and &lt;body&gt; into fewer files."
+msgstr ""
+
+#: includes/menu-pages.php:544
+msgid "Yes, compress the code in any unified CSS files."
+msgstr ""
+
+#: includes/menu-pages.php:545
+msgid "No, do not compress the code in any unified CSS files."
+msgstr ""
+
+#: includes/menu-pages.php:548
+msgid "Yes, combine JS from &lt;head&gt; into fewer files."
+msgstr ""
+
+#: includes/menu-pages.php:549
+msgid "No, do not combine JS from &lt;head&gt; into fewer files."
+msgstr ""
+
+#: includes/menu-pages.php:552
+msgid "Yes, combine JS footer scripts into fewer files."
+msgstr ""
+
+#: includes/menu-pages.php:553
+msgid "No, do not combine JS footer scripts into fewer files."
+msgstr ""
+
+#: includes/menu-pages.php:556
+msgid "Yes, combine CSS/JS from remote resources too."
+msgstr ""
+
+#: includes/menu-pages.php:557
+msgid "No, do not combine CSS/JS from remote resources."
+msgstr ""
+
+#: includes/menu-pages.php:560
+msgid "Yes, compress the code in any unified JS files."
+msgstr ""
+
+#: includes/menu-pages.php:561
+msgid "No, do not compress the code in any unified JS files."
+msgstr ""
+
+#: includes/menu-pages.php:564
+msgid "Yes, compress inline JavaScript snippets."
+msgstr ""
+
+#: includes/menu-pages.php:565
+msgid "No, do not compress inline JavaScript snippets."
+msgstr ""
+
+#: includes/menu-pages.php:568
+msgid "Yes, compress (remove extra whitespace) in the final HTML code too."
+msgstr ""
+
+#: includes/menu-pages.php:569
+msgid "No, do not compress the final HTML code."
+msgstr ""
+
+#: includes/menu-pages.php:572
+msgid "CSS Exclusion Patterns?"
+msgstr ""
+
+#: includes/menu-pages.php:573
+msgid "Sometimes there are special cases when a particular CSS file should NOT be consolidated or compressed in any way. This is where you will enter those if you need to (one per line). Searches are performed against the <code>&lt;link href=&quot;&quot;&gt;</code> value, and also against the contents of any inline <code>&lt;style&gt;</code> tags (caSe insensitive). A wildcard <code>*</code> character can also be used when necessary; e.g. <code>xy*-framework</code>; (where <code>*</code> = anything, 0 or more characters in length)."
+msgstr ""
+
+#: includes/menu-pages.php:576
+msgid "JavaScript Exclusion Patterns?"
+msgstr ""
+
+#: includes/menu-pages.php:577
+msgid "Sometimes there are special cases when a particular JS file should NOT be consolidated or compressed in any way. This is where you will enter those if you need to (one per line). Searches are performed against the <code>&lt;script src=&quot;&quot;&gt;</code> value, and also against the contents of any inline <code>&lt;script&gt;</code> tags (caSe insensitive). A wildcard <code>*</code> character can also be used when necessary; e.g. <code>xy*-framework</code>; (where <code>*</code> = anything, 0 or more characters in length)."
+msgstr ""
+
+#: includes/menu-pages.php:581
+msgid "HTML Compression Cache Expiration"
+msgstr ""
+
+#: includes/menu-pages.php:583
+msgid "<strong>Tip:</strong> the value that you specify here MUST be compatible with PHP's <a href=\"http://php.net/manual/en/function.strtotime.php\" target=\"_blank\" style=\"text-decoration:none;\"><code>strtotime()</code></a> function. Examples: <code>2 hours</code>, <code>7 days</code>, <code>6 months</code>, <code>1 year</code>."
+msgstr ""
+
+#: includes/menu-pages.php:584
+msgid "<strong>Note:</strong> This does NOT impact the overall cache expiration time that you configure with %1$s. It only impacts the sub-routines provided by the HTML Compressor. In fact, this expiration time is mostly irrelevant. The HTML Compressor uses an internal checksum, and it also checks <code>filemtime()</code> before using an existing cache file. The HTML Compressor class also handles the automatic cleanup of your cache directories to keep it from growing too large over time. Therefore, unless you have VERY little disk space there is no reason to set this to a lower value (even if your site changes dynamically quite often). If anything, you might like to increase this value which could help to further reduce server load. You can <a href=\"https://github.com/websharks/HTML-Compressor\" target=\"_blank\">learn more here</a>. We recommend setting this value to at least double that of your overall %1$s expiration time."
+msgstr ""
+
+#: includes/menu-pages.php:595
+msgid "GZIP Compression"
+msgstr ""
+
+#: includes/menu-pages.php:600
+msgid "<a href=\"https://developers.google.com/speed/articles/gzip\" target=\"_blank\">GZIP Compression</a> (Optional; Highly Recommended)"
+msgstr ""
+
+#: includes/menu-pages.php:601
+msgid "You don't have to use an <code>.htaccess</code> file to enjoy the performance enhancements provided by this plugin; caching is handled automatically by WordPress/PHP alone. That being said, if you want to take advantage of the additional speed enhancements associated w/ GZIP compression (and we do recommend this), then you WILL need an <code>.htaccess</code> file to accomplish that part."
+msgstr ""
+
+#: includes/menu-pages.php:602
+msgid "%1$s fully supports GZIP compression on its output. However, it does not handle GZIP compression directly. We purposely left GZIP compression out of this plugin, because GZIP compression is something that should really be enabled at the Apache level or inside your <code>php.ini</code> file. GZIP compression can be used for things like JavaScript and CSS files as well, so why bother turning it on for only WordPress-generated pages when you can enable GZIP at the server level and cover all the bases!"
+msgstr ""
+
+#: includes/menu-pages.php:603
+msgid "If you want to enable GZIP, create an <code>.htaccess</code> file in your WordPress® installation directory, and put the following few lines in it. Alternatively, if you already have an <code>.htaccess</code> file, just add these lines to it, and that is all there is to it. GZIP is now enabled in the recommended way! See also: <a href=\"https://developers.google.com/speed/articles/gzip\" target=\"_blank\"><i class=\"fa fa-youtube-play\"></i> video about GZIP Compression</a>."
+msgstr ""
+
+#: includes/menu-pages.php:618
+msgid "Static CDN Filters"
+msgstr ""
+
+#: includes/menu-pages.php:623
+msgid "Enable Static CDN Filters (e.g. MaxCDN/CloudFront)?"
+msgstr ""
+
+#: includes/menu-pages.php:624
+msgid "This feature allows you to serve some and/or ALL static files on your site from a CDN of your choosing. This is made possible through content/URL filters exposed by WordPress and implemented by %1$s. All it requires is that you setup a CDN host name sourced by your WordPress installation domain. You enter that CDN host name below and %1$s will do the rest! Super easy, and it doesn't require any DNS changes either. :-) Please <a href=\"http://zencache.com/r/static-cdn-filters-general-instructions/\" target=\"_blank\">click here</a> for a general set of instructions."
+msgstr ""
+
+#: includes/menu-pages.php:625
+msgid "<strong>What's a CDN?</strong> It's a Content Delivery Network (i.e. a network of optimized servers) designed to cache static resources served from your site (e.g. JS/CSS/images and other static files) onto it's own servers, which are located strategically in various geographic areas around the world. Integrating a CDN for static files can dramatically improve the speed and performance of your site, lower the burden on your own server, and reduce latency associated with visitors attempting to access your site from geographic areas of the world that might be very far away from the primary location of your own web servers."
+msgstr ""
+
+#: includes/menu-pages.php:627
+msgid "No, I do NOT want CDN filters applied at runtime."
+msgstr ""
+
+#: includes/menu-pages.php:628
+msgid "Yes, I want CDN filters applied w/ my configuration below."
+msgstr ""
+
+#: includes/menu-pages.php:632
+msgid "CDN Host Name (Absolutely Required)"
+msgstr ""
+
+#: includes/menu-pages.php:636
+msgid "This one field is really all that's necessary to get Static CDN Filters working! However, it does requires a little bit of work on your part. You need to setup and configure a CDN before you can fill in this field. One you configure a CDN, you'll receive a host name (provided by your CDN), which you'll enter here; e.g. <code>js9dgjsl4llqpp.cloudfront.net</code>. We recommend <a href=\"https://www.maxcdn.com/websharks/\" target=\"_blank\">MaxCDN</a> and/or <a href=\"http://aws.amazon.com/cloudfront/\" target=\"_blank\">Amazon CloudFront</a>, but this should work with many of the most popular CDNs. Please read <a href=\"http://zencache.com/r/static-cdn-filters-general-instructions/\" target=\"_blank\">this article</a> for a general set of instructions. We also have a <a href=\"http://zencache.com/r/static-cdn-filters-cloudfront/\" target=\"_blank\">CloudFront tutorial video</a> that walks you through the process."
+msgstr ""
+
+#: includes/menu-pages.php:638
+msgid "CDN Host Supports HTTPS Connections?"
+msgstr ""
+
+#: includes/menu-pages.php:640
+msgid "No, I don't serve content over https://; or I haven't configured my CDN w/ an SSL certificate."
+msgstr ""
+
+#: includes/menu-pages.php:641
+msgid "Yes, I've configured my CDN w/ an SSL certificate; I need https:// enabled."
+msgstr ""
+
+#: includes/menu-pages.php:644
+msgid "Everything else below is 100% completely optional; i.e. not required to enjoy the benefits of Static CDN Filters."
+msgstr ""
+
+#: includes/menu-pages.php:646
+msgid "Whitelisted File Extensions (Optional; Comma-Delimited)"
+msgstr ""
+
+#: includes/menu-pages.php:648
+msgid "If you leave this empty a default set of extensions are taken from WordPress itself. The default set of whitelisted file extensions includes everything supported by the WordPress media library."
+msgstr ""
+
+#: includes/menu-pages.php:649
+msgid "Blacklisted File Extensions (Optional; Comma-Delimited)"
+msgstr ""
+
+#: includes/menu-pages.php:651
+msgid "With or without a whitelist, you can force exclusions by explicitly blacklisting certain file extensions of your choosing. Please note, the <code>php</code> extension will never be considered a static resource; i.e. it is automatically blacklisted at all times."
+msgstr ""
+
+#: includes/menu-pages.php:653
+msgid "Whitelisted URI Inclusion Patterns (Optional; One Per Line)"
+msgstr ""
+
+#: includes/menu-pages.php:655
+msgid "<strong>Note:</strong> please remember that your entries here should be formatted as a line-delimited list; e.g. one inclusion pattern per line."
+msgstr ""
+
+#: includes/menu-pages.php:656
+msgid "If provided, only local URIs matching one of the patterns you list here will be served from your CDN Host Name. URI patterns are caSe-insensitive. A wildcard <code>*</code> will match zero or more characters in any of your patterns. A caret <code>^</code> symbol will match zero or more characters that are NOT the <code>/</code> character. For instance, <code>*/wp-content/*</code> here would indicate that you only want to filter URLs that lead to files located inside the <code>wp-content</code> directory. Adding an additional line with <code>*/wp-includes/*</code> would filter URLs in the <code>wp-includes</code> directory also. <strong>If you leave this empty</strong>, ALL files matching a static file extension will be served from your CDN; i.e. the default behavior."
+msgstr ""
+
+#: includes/menu-pages.php:657
+msgid "Please note that URI patterns are tested against a file's path (i.e. a file's URI, and NOT its full URL). A URI always starts with a leading <code>/</code>. To clarify, a URI is the portion of the URL which comes after the host name. For instance, given the following URL: <code>http://example.com/path/to/style.css?ver=3</code>, the URI you are matching against would be: <code>/path/to/style.css?ver=3</code>. To whitelist this URI, you could use a line that contains something like this: <code>/path/to/*.css*</code>"
+msgstr ""
+
+#: includes/menu-pages.php:658
+msgid "Blacklisted URI Exclusion Patterns (Optional; One Per Line)"
+msgstr ""
+
+#: includes/menu-pages.php:660
+msgid "With or without a whitelist, you can force exclusions by explicitly blacklisting certain URI patterns. URI patterns are caSe-insensitive. A wildcard <code>*</code> will match zero or more characters in any of your patterns. A caret <code>^</code> symbol will match zero or more characters that are NOT the <code>/</code> character. For instance, <code>*/wp-content/*/dynamic.pdf*</code> would exclude a file with the name <code>dynamic.pdf</code> located anywhere inside a sub-directory of <code>wp-content</code>."
+msgstr ""
+
+#: includes/menu-pages.php:663
+msgid "Query String Invalidation Variable Name"
+msgstr ""
+
+#: includes/menu-pages.php:665
+msgid "Each filtered URL (which then leads to your CDN) will include this query string variable as an easy way to invalidate the CDN cache at any time. Invalidating the CDN cache is simply a matter of changing the global invalidation counter (i.e. the value assigned to this query string variable). %1$s manages invalidations automatically; i.e. %1$s will automatically bump an internal counter each time you upgrade a WordPress component (e.g. a plugin, theme, or WP itself). Or, if you ask %1$s to invalidate the CDN cache (e.g. a manual clearing of the CDN cache); the internal counter is bumped then too. In short, %1$s handles cache invalidations for you reliably. This option simply allows you to customize the query string variable name which makes cache invalidations possible. <strong>Please note, the default value is adequate for most sites. You can change this if you like, but it's not necessary.</strong>"
+msgstr ""
+
+#: includes/menu-pages.php:666
+msgid "<strong>Note:</strong> If you empty this field, it will effectively disable the %1$s invalidation system for Static CDN Filters; i.e. the query string variable will NOT be included if you do not supply a variable name."
+msgstr ""
+
+#: includes/menu-pages.php:679
+msgid "Dynamic Version Salt"
+msgstr ""
+
+#: includes/menu-pages.php:684
+msgid "<i class=\"fa fa-flask\"></i> <span style=\"display:inline-block; padding:5px; border-radius:3px; background:#FFFFFF; color:#354913;\"><span style=\"font-weight:bold; font-size:80%;\">GEEK ALERT</span></span> This is for VERY advanced users only..."
+msgstr ""
+
+#: includes/menu-pages.php:685
+msgid "<em>Note: Understanding the %1$s <a href=\"http://zencache.com/r/kb-branched-cache-structure/\" target=\"_blank\">Branched Cache Structure</a> is a prerequisite to understanding how Dynamic Version Salts are added to the mix.</em>"
+msgstr ""
+
+#: includes/menu-pages.php:686
+msgid "A Version Salt gives you the ability to dynamically create multiple variations of the cache, and those dynamic variations will be served on subsequent visits; e.g. if a visitor has a specific cookie (of a certain value) they will see pages which were cached with that version (i.e. w/ that Version Salt: the value of the cookie). A Version Salt can really be anything."
+msgstr ""
+
+#: includes/menu-pages.php:687
+msgid "A Version Salt can be a single variable like <code>$_COOKIE['my_cookie']</code>, or it can be a combination of multiple variables, like <code>$_COOKIE['my_cookie'].$_COOKIE['my_other_cookie']</code>. (When using multiple variables, please separate them with a dot, as shown in the example.)"
+msgstr ""
+
+#: includes/menu-pages.php:688
+msgid "Experts could even use PHP ternary expressions that evaluate into something. For example: <code>((preg_match('/iPhone/i', $_SERVER['HTTP_USER_AGENT'])) ? 'iPhones' : '')</code>. This would force a separate version of the cache to be created for iPhones (e.g., <code>/cache/PROTOCOL/HOST/REQUEST-URI.v/iPhones.html</code>)."
+msgstr ""
+
+#: includes/menu-pages.php:689
+msgid "For more documentation, please see <a href=\"http://zencache.com/r/kb-dynamic-version-salts/\" target=\"_blank\">Dynamic Version Salts</a>."
+msgstr ""
+
+#: includes/menu-pages.php:691
+msgid "Create a Dynamic Version Salt For %1$s? &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style=\"font-size:90%%; opacity:0.5;\">150%% OPTIONAL</span>"
+msgstr ""
+
+#: includes/menu-pages.php:693
+msgid "<a href=\"http://php.net/manual/en/language.variables.superglobals.php\" target=\"_blank\">Super Globals</a> work here; <a href=\"http://codex.wordpress.org/Editing_wp-config.php#table_prefix\" target=\"_blank\"><code>$GLOBALS['table_prefix']</code></a> is a popular one. Or, perhaps a PHP Constant defined in <code>/wp-config.php</code>; such as <code>WPLANG</code> or <code>DB_HOST</code>."
+msgstr ""
+
+#: includes/menu-pages.php:694
+msgid "<strong>Important:</strong> your Version Salt is scanned for PHP syntax errors via <a href=\"http://phpcodechecker.com/\" target=\"_blank\"><code>phpCodeChecker.com</code></a>. If errors are found, you'll receive a notice in the Dashboard."
+msgstr ""
+
+#: includes/menu-pages.php:695
+msgid "If you've enabled a separate cache for each user (optional) that's perfectly OK. A Version Salt works with user caching too."
+msgstr ""
+
+#: includes/menu-pages.php:705
+msgid "Theme/Plugin Developers"
+msgstr ""
+
+#: includes/menu-pages.php:710
+msgid "Developing a Theme or Plugin for WordPress?"
+msgstr ""
+
+#: includes/menu-pages.php:711
+msgid "<strong>Tip:</strong> %1$s can be disabled temporarily. If you're a theme/plugin developer, you can set a flag within your PHP code to disable the cache engine at runtime. Perhaps on a specific page, or in a specific scenario. In your PHP script, set: <code>$_SERVER['ZENCACHE_ALLOWED'] = FALSE;</code> or <code>define('ZENCACHE_ALLOWED', FALSE)</code>. %1$s is also compatible with: <code>define('DONOTCACHEPAGE', TRUE)</code>. It does't matter where or when you define one of these, because %1$s is the last thing to run before script execution ends."
+msgstr ""
+
+#: includes/menu-pages.php:713
+msgid "Writing \"Advanced Cache\" Plugins Specifically for %1$s"
+msgstr ""
+
+#: includes/menu-pages.php:714
+msgid "Theme/plugin developers can take advantage of the %1$s plugin architecture by creating PHP files inside this special directory: <code>/wp-content/ac-plugins/</code>. There is an <a href=\"https://github.com/websharks/zencache/blob/000000-dev/zencache/includes/ac-plugin.example.php\" target=\"_blank\">example plugin file @ GitHub</a> (please review it carefully and ask questions). If you develop a plugin for %1$s, please share it with the community by publishing it in the plugins respository at WordPress.org."
+msgstr ""
+
+#: includes/menu-pages.php:715
+msgid "<strong>Why does %1$s have it's own plugin architecture?</strong> WordPress loads the <code>advanced-cache.php</code> drop-in file (for caching purposes) very early-on; before any other plugins or a theme. For this reason, %1$s implements it's own watered-down version of functions like <code>add_action()</code>, <code>do_action()</code>, <code>add_filter()</code>, <code>apply_filters()</code>."
+msgstr ""
+
+#: includes/menu-pages.php:727
+msgid "Import/Export Options"
+msgstr ""
+
+#: includes/menu-pages.php:732
+msgid "Import Options from Another %1$s Installation?"
+msgstr ""
+
+#: includes/menu-pages.php:733
+msgid "Upload your <code>%1$s-options.json</code> file and click \"Save All Changes\" below. The options provided by your import file will override any that exist currently."
+msgstr ""
+
+#: includes/menu-pages.php:736
+msgid "Export Existing Options from this %1$s Installation?"
+msgstr ""
+
+#: includes/menu-pages.php:738
+msgid "%1$s-options.json"
+msgstr ""
+
+#: includes/menu-pages.php:739
+msgid "Download your existing options and import them all into another %1$s installation; saves time on future installs."
+msgstr ""
+
+#: includes/menu-pages.php:747
+msgid "Save All Changes"
+msgstr ""
+
+#: includes/share.php:265
+msgid "Unable to determine cache directory location."
+msgstr ""
+
+#: includes/share.php:1611 includes/share.php:1753
+msgid "The `options` property w/ a `cache_max_age` key is not defined in this class."
+msgstr ""
+
+#: includes/share.php:1637
+msgid "Unable to delete files. Rename failure on directory: `%1$s`."
+msgstr ""
+
+#: includes/share.php:1660 includes/share.php:1821 includes/share.php:1927
+msgid "Unable to delete symlink: `%1$s`."
+msgstr ""
+
+#: includes/share.php:1672 includes/share.php:1833 includes/share.php:1935
+msgid "Unable to delete file: `%1$s`."
+msgstr ""
+
+#: includes/share.php:1686 includes/share.php:1847 includes/share.php:1943
+msgid "Unable to delete dir: `%1$s`."
+msgstr ""
+
+#: includes/share.php:1692 includes/share.php:1853 includes/share.php:1949
+msgid "Unexpected resource type: `%1$s`."
+msgstr ""
+
+#: includes/share.php:1698 includes/share.php:1798 includes/share.php:1859
+msgid "Unable to delete files. Rename failure on tmp directory: `%1$s`."
+msgstr ""
+
+#: includes/share.php:1913 includes/share.php:1955
+msgid "Unable to delete all files/dirs. Rename failure on tmp directory: `%1$s`."
+msgstr ""
+
+#: includes/share.php:1960
+msgid "Unable to delete directory: `%1$s`."
+msgstr ""
+
+#: includes/share.php:1995
+msgid "Unable to find the wp-config.php file."
+msgstr ""
+
+#: includes/share.php:2011
+msgid "No writable tmp directory."
+msgstr ""
+
+#: includes/share.php:2016
+msgid "Unable to obtain an exclusive lock."
+msgstr ""
+
+#: includes/share.php:2069
+msgid "%1$s file"
+msgid_plural "%1$s files"
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/share.php:2085
+msgid "%1$s directory"
+msgid_plural "%1$s directories"
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/share.php:2101
+msgid "%1$s file/directory"
+msgid_plural "%1$s files/directories"
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/share.php:2134
+msgid "Invalid hook."
+msgstr ""
+
+#: includes/version-specific-upgrade.php:68
+msgid "<strong>%1$s:</strong> this version is a <strong>complete rewrite</strong> of Quick Cache :-) Please review your %1$s options carefully!"
+msgstr ""
+
+#: includes/version-specific-upgrade.php:78
+msgid "<strong>%1$s Feature Notice:</strong> This version of %1$s adds new options for Feed caching. Feed caching is now disabled by default. If you wish to enable feed caching, please visit the %1$s options panel."
+msgstr ""
+
+#: includes/version-specific-upgrade.php:117
+msgid "<strong>%1$s Feature Notice:</strong> This version of %1$s introduces a new <a href=\"http://zencache.com/r/kb-branched-cache-structure/\" target=\"_blank\">Branched Cache Structure</a> and several other <a href=\"http://www.websharks-inc.com/post/quick-cache-v140605-now-available/\" target=\"_blank\">new features</a>."
+msgstr ""
+
+#: includes/version-specific-upgrade.php:150
+msgid "<strong>%1$s Notice:</strong> This version of %1$s changes the default base directory that it uses, from <code>ABSPATH</code> to <code>WP_CONTENT_DIR</code>. This is for improved compatibility with installations that choose to use a custom <code>WP_CONTENT_DIR</code> location."
+msgstr ""
+
+#: includes/version-specific-upgrade.php:151
+msgid "%1$s has detected that your previously configured cache directory may have been in conflict with this change. As a result, your %1$s configuration has been updated to the new default value; just to keep things running smoothly for you :-). If you would like to review this change, please see: <code>Dashboard ⥱ %1$s ⥱ Directory &amp; Expiration Time</code>; where you may customize it further if necessary."
+msgstr ""
+
+#: includes/version-specific-upgrade.php:240
+msgid "<strong>Woohoo! %1$s activated.</strong> :-)"
+msgstr ""
+
+#: submodules/wp-php-rv/wp-php-rv.php:124
+msgid "extension"
+msgid_plural "extensions"
+msgstr[0] ""
+msgstr[1] ""
+
+#: submodules/wp-php-rv/wp-php-rv.php:132
+msgid "<strong>%1$s is NOT active. It requires PHP v%2$s+.</strong>"
+msgstr ""
+
+#: submodules/wp-php-rv/wp-php-rv.php:133
+msgid "&#8627; You're currently running an older copy of PHP v%1$s."
+msgstr ""
+
+#: submodules/wp-php-rv/wp-php-rv.php:136
+msgid "&#8627; You are also missing the following required PHP %1$s: %2$s."
+msgstr ""
+
+#: submodules/wp-php-rv/wp-php-rv.php:138
+#: submodules/wp-php-rv/wp-php-rv.php:146
+msgid "<em>A simple update is necessary. Please ask your hosting company to help resolve this quickly.</em>"
+msgstr ""
+
+#: submodules/wp-php-rv/wp-php-rv.php:139
+msgid "<em>To remove this message, please upgrade PHP. Or, remove %1$s from WordPress.</em>"
+msgstr ""
+
+#: submodules/wp-php-rv/wp-php-rv.php:144
+msgid "<strong>%1$s is NOT active. PHP %2$s missing.</strong>"
+msgstr ""
+
+#: submodules/wp-php-rv/wp-php-rv.php:145
+msgid "&#8627; You are missing the following required PHP %1$s: %2$s."
+msgstr ""
+
+#: submodules/wp-php-rv/wp-php-rv.php:147
+msgid "<em>To remove this message, please install the required PHP %1$s. Or, remove %2$s from WordPress.</em>"
+msgstr ""
+
+#: zencache.inc.php:382
+msgid "<strong>%1$s:</strong> detected a new version of itself. Recompiling w/ latest version... wiping the cache... all done :-)"
+msgstr ""
+
+#: zencache.inc.php:578
+msgid "Settings"
+msgstr ""
+
+#: zencache.inc.php:579
+msgid "Preview Pro Features"
+msgstr ""
+
+#: zencache.inc.php:580
+msgid "Upgrade"
+msgstr ""
+
+#: zencache.inc.php:676 zencache.inc.php:753
+msgid "dismiss &times;"
+msgstr ""
+
+#: zencache.inc.php:811
+msgid "Every 15 Minutes"
+msgstr ""
+
+#: zencache.inc.php:938
+msgid "<strong>%1$s:</strong> detected significant changes. Found %2$s in the cache; auto-wiping."
+msgstr ""
+
+#: zencache.inc.php:982
+msgid "<strong>%1$s:</strong> detected important site changes. Found %2$s in the cache for this site; auto-clearing."
+msgstr ""
+
+#: zencache.inc.php:1063
+msgid "Post"
+msgstr ""
+
+#: zencache.inc.php:1071
+msgid "<strong>%1$s:</strong> detected changes. Found %2$s in the cache for %3$s ID: <code>%4$s</code>; auto-clearing."
+msgstr ""
+
+#: zencache.inc.php:1245
+msgid "<strong>%1$s:</strong> detected changes. Found %2$s in the cache, for XML feeds of type: <code>%3$s</code>; auto-clearing."
+msgstr ""
+
+#: zencache.inc.php:1288
+msgid "<strong>%1$s:</strong> detected changes. Found %2$s in the cache for XML sitemaps; auto-clearing."
+msgstr ""
+
+#: zencache.inc.php:1331
+msgid "<strong>%1$s:</strong> detected changes. Found %2$s in the cache for the designated \"Home Page\"; auto-clearing."
+msgstr ""
+
+#: zencache.inc.php:1389
+msgid "<strong>%1$s:</strong> detected changes. Found %2$s in the cache for the designated \"Posts Page\"; auto-clearing."
+msgstr ""
+
+#: zencache.inc.php:1444
+msgid "Untitled"
+msgstr ""
+
+#: zencache.inc.php:1455
+msgid "<strong>%1$s:</strong> detected changes. Found %2$s in the cache for Custom Post Type: <code>%3$s</code>; auto-clearing."
+msgstr ""
+
+#: zencache.inc.php:1545
+msgid "<strong>%1$s:</strong> detected changes. Found %2$s in the cache for Author Page: <code>%3$s</code>; auto-clearing."
+msgstr ""
+
+#: zencache.inc.php:1697
+msgid "<strong>%1$s:</strong> detected changes. Found %2$s in the cache for %3$s: <code>%4$s</code>; auto-clearing."
+msgstr ""
+
+#: zencache.inc.php:1986 zencache.inc.php:2014
+msgid "Doing it wrong! Missing `base_dir` option value. MUST call this method after `setup()`."
+msgstr ""
+
+#: zencache.inc.php:2453
+msgid "Lite"
+msgstr ""
+
+#: zencache.inc.php:2454
+msgid "Pro"
+msgstr ""
+
+#: zencache.inc.php:2460
+msgid "<strong>%1$s</strong> is NOT running. A conflicting plugin, <strong>%2$s</strong>, is currently active. Please deactivate the %2$s plugin to clear this message."
+msgstr ""
+
+#. Plugin Name of the plugin/theme
+msgid "ZenCache"
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+msgid "http://zencache.com/"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid "ZenCache is an advanced WordPress caching plugin inspired by simplicity. Speed up your site (BIG time!) with a reliable and fast WordPress cache."
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "WebSharks, Inc."
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "http://www.websharks-inc.com/"
+msgstr ""
