@@ -193,9 +193,16 @@ namespace zencache
 
 					/* Related to automatic cache clearing. */
 
+					'cache_clear_xml_feeds_enable'         => '1', // `0|1`.
+
+					'cache_clear_xml_sitemaps_enable'      => '1', // `0|1`.
+					'cache_clear_xml_sitemap_patterns'     => '/sitemap*.xml',
+					// Empty string or line-delimited patterns.
+
 					'cache_clear_home_page_enable'     => '1', // `0|1`.
 					'cache_clear_posts_page_enable'    => '1', // `0|1`.
 
+					'cache_clear_custom_post_type_enable'  => '1', // `0|1`.
 					'cache_clear_author_page_enable'   => '1', // `0|1`.
 
 					'cache_clear_term_category_enable' => '1', // `0|1`.
@@ -209,7 +216,13 @@ namespace zencache
 					'feeds_enable'                     => '0', // `0|1`.
 					'cache_404_requests'               => '0', // `0|1`.
 
-					/* Related to uninstallation routines. */
+                    /* Related to exclusions. */
+
+                    'exclude_uris'                         => '', // Empty string or line-delimited patterns.
+                    'exclude_refs'                         => '', // Empty string or line-delimited patterns.
+                    'exclude_agents'                       => 'w3c_validator', // Empty string or line-delimited patterns.
+
+                    /* Related to uninstallation routines. */
 
 					'uninstall_on_deletion'            => '0', // `0|1`.
 
@@ -577,7 +590,7 @@ namespace zencache
 			{
 				$links[] = '<a href="'.esc_attr(add_query_arg(urlencode_deep(array('page' => __NAMESPACE__)), self_admin_url('/admin.php'))).'">'.__('Settings', $this->text_domain).'</a>';
 				$links[] = '<br/><a href="'.esc_attr(add_query_arg(urlencode_deep(array('page' => __NAMESPACE__, __NAMESPACE__.'_pro_preview' => '1')), self_admin_url('/admin.php'))).'">'.__('Preview Pro Features', $this->text_domain).'</a>';
-				$links[] = '<a href="'.esc_attr('http://www.websharks-inc.com/product/'.str_replace('_', '-', __NAMESPACE__).'/').'" target="_blank">'.__('Upgrade', $this->text_domain).'</a>';
+				$links[] = '<a href="'.esc_attr('https://zencache.com/').'" target="_blank">'.__('Upgrade', $this->text_domain).'</a>';
 
 				return $this->apply_wp_filters(__METHOD__, $links, get_defined_vars());
 			}
@@ -1174,6 +1187,9 @@ namespace zencache
 				if(!$this->options['feeds_enable'])
 					return $counter; // Nothing to do.
 
+				if(!$this->options['cache_clear_xml_feeds_enable'])
+					return $counter; // Nothing to do.
+
 				if(!is_dir($cache_dir = $this->cache_dir()))
 					return $counter; // Nothing to do.
 
@@ -1273,10 +1289,16 @@ namespace zencache
 				if(!$this->options['enable'])
 					return $counter; // Nothing to do.
 
+				if(!$this->options['cache_clear_xml_sitemaps_enable'])
+					return $counter; // Nothing to do.
+
+				if(!$this->options['cache_clear_xml_sitemap_patterns'])
+					return $counter; // Nothing to do.
+
 				if(!is_dir($cache_dir = $this->cache_dir()))
 					return $counter; // Nothing to do.
 
-				if(!($regex_frags = $this->build_host_cache_path_regex_frags_from_wc_uris('/sitemap*.xml', '')))
+				if(!($regex_frags = $this->build_host_cache_path_regex_frags_from_wc_uris($this->options['cache_clear_xml_sitemap_patterns'], '')))
 					return $counter; // There are no patterns to look for.
 
 				$regex = $this->build_host_cache_path_regex('', '\/'.$regex_frags.'\.');
@@ -1422,6 +1444,9 @@ namespace zencache
 				$this->cache[__FUNCTION__][$post_id] = -1;
 
 				if(!$this->options['enable'])
+					return $counter; // Nothing to do.
+
+				if(!$this->options['cache_clear_custom_post_type_enable'])
 					return $counter; // Nothing to do.
 
 				if(!is_dir($cache_dir = $this->cache_dir()))
@@ -2194,6 +2219,23 @@ namespace zencache
 
 					switch($_option) // Some values need tranformations.
 					{
+						case 'exclude_uris': // Converts to regex (caSe insensitive).
+						case 'exclude_refs': // Converts to regex (caSe insensitive).
+						case 'exclude_agents': // Converts to regex (caSe insensitive).
+
+							if(($_values = preg_split('/['."\r\n".']+/', $_value, NULL, PREG_SPLIT_NO_EMPTY)))
+							{
+								$_value = '/(?:'.implode('|', array_map(function ($string)
+									{
+										$string = preg_quote($string, '/'); // Escape.
+										return preg_replace('/\\\\\*/', '.*?', $string); // Wildcards.
+
+									}, $_values)).')/i';
+							}
+							$_value = "'".$this->esc_sq($_value)."'";
+
+							break; // Break switch handler.
+
 						default: // Default case handler.
 
 							$_value = "'".$this->esc_sq($_value)."'";

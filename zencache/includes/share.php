@@ -1258,6 +1258,8 @@ namespace zencache // Root namespace.
 			 * @return integer HTTP status code if at all possible; else `0`.
 			 *
 			 * @warning Do NOT call upon this method until the end of a script execution.
+			 *
+			 * @note Calling this method will automatically update HTTP status-related flags.
 			 */
 			public function http_status()
 			{

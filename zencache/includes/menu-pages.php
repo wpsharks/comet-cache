@@ -189,88 +189,127 @@ namespace zencache // Root namespace.
 
 			/* --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
 
-			if($this->plugin->is_pro_preview())
-			{
-				echo '<div class="plugin-menu-page-panel pro-preview">'."\n";
+			echo '<div class="plugin-menu-page-panel">'."\n";
 
-				echo '   <a href="#" class="plugin-menu-page-panel-heading">'."\n";
-				echo '      <i class="fa fa-info-circle"></i> '.__('Clearing the Cache', $this->plugin->text_domain)."\n";
-				echo '   </a>'."\n";
+            echo '   <a href="#" class="plugin-menu-page-panel-heading'.($this->plugin->is_pro_preview() ? ' pro-preview' : '').'">'."\n";
+            echo '      <i class="fa fa-info-circle"></i> '.__('Clearing the Cache', $this->plugin->text_domain)."\n";
+            echo '   </a>'."\n";
 
-				echo '   <div class="plugin-menu-page-panel-body clearfix">'."\n";
-				echo '      <h2 style="margin-top:0; font-weight:bold;">'.__('Clearing the Cache Manually', $this->plugin->text_domain).'</h2>'."\n";
-				echo '      <img src="'.esc_attr($this->plugin->url('/client-s/images/clear-cache-ss.png')).'" class="screenshot" />'."\n";
-				echo '      <p>'.sprintf(__('Once %1$s is enabled, you will find this new option in your WordPress Admin Bar (see screenshot on right). Clicking this button will clear the cache and you can start fresh at anytime (e.g. you can do this manually; and as often as you wish).', $this->plugin->text_domain), esc_html($this->plugin->name)).'</p>'."\n";
-				echo '      <p>'.sprintf(__('Depending on the structure of your site, there could be many reasons to clear the cache. However, the most common reasons are related to Post/Page edits or deletions, Category/Tag edits or deletions, and Theme changes. %1$s handles most scenarios all by itself. However, many site owners like to clear the cache manually; for a variety of reasons (just to force a refresh).', $this->plugin->text_domain), esc_html($this->plugin->name)).'</p>'."\n";
-				echo '      <p><select name="'.esc_attr(__NAMESPACE__).'[save_options][admin_bar_enable]" style="width:auto;">'."\n";
-				echo '            <option value="1" selected="selected">'.__('Yes, enable the &quot;Clear Cache&quot; button in the WordPress admin bar.', $this->plugin->text_domain).'</option>'."\n";
-				echo '            <option value="0">'.__('No, I don\'t intend to clear the cache manually; exclude from admin bar.', $this->plugin->text_domain).'</option>'."\n";
-				echo '         </select></p>'."\n";
-				echo '      <hr />'."\n";
-				echo '      <h3>'.__('Running the <a href="http://www.websharks-inc.com/product/s2clean/" target="_blank">s2Clean Theme</a> by WebSharks?', $this->plugin->text_domain).'</h3>'."\n";
-				echo '      <p>'.sprintf(__('If s2Clean is installed, %1$s can be configured to clear the Markdown cache too (if you\'ve enabled Markdown processing with s2Clean). The s2Clean Markdown cache is only cleared when you manually clear the cache (with %1$s); and only if you enable this option here. Note: s2Clean\'s Markdown cache is extremely dynamic. Just like the rest of your site, s2Clean caches do NOT need to be cleared away at all, as this happens automatically when your content changes. However, some developers find this feature useful while developing their site; just to force a refresh.', $this->plugin->text_domain), esc_html($this->plugin->name)).'</p>'."\n";
-				echo '      <p><select name="'.esc_attr(__NAMESPACE__).'[save_options][cache_clear_s2clean_enable]">'."\n";
-				echo '            <option value="1">'.__('Yes, if the s2Clean theme is installed; also clear s2Clean-related caches.', $this->plugin->text_domain).'</option>'."\n";
-				echo '            <option value="0" selected="selected">'.__('No, I don\'t use s2Clean; or, I don\'t want s2Clean-related caches cleared.', $this->plugin->text_domain).'</option>'."\n";
-				echo '         </select></p>'."\n";
-				echo '      <h3>'.__('Process Other Custom PHP Code?', $this->plugin->text_domain).'</h3>'."\n";
-				echo '      <p>'.sprintf(__('If you have other custom routines you\'d like to process when the cache is cleared manually, please type your custom PHP code here. The PHP code that you provide is only evaluated when you manually clear the cache (with %1$s); and only if the field below contains PHP code. Note: if your PHP code outputs a message (e.g. if you have <code>echo \'&lt;p&gt;My message&lt;/p&gt;\';</code>); your message will be displayed along with any other notes from %1$s itself. This could be useful to developers that need to clear server caches too (such as <a href="http://www.php.net/manual/en/function.apc-clear-cache.php" target="_blank">APC</a> or <a href="http://www.php.net/manual/en/memcache.flush.php" target="_blank">memcache</a>).', $this->plugin->text_domain), esc_html($this->plugin->name)).'</p>'."\n";
-				echo '      <p style="margin-bottom:0;"><textarea name="'.esc_attr(__NAMESPACE__).'[save_options][cache_clear_eval_code]" rows="5" spellcheck="false" class="monospace"></textarea></p>'."\n";
-				echo '      <p class="info" style="margin-top:0;">'.__('<strong>Example:</strong> <code>&lt;?php apc_clear_cache(); echo \'&lt;p&gt;Also cleared APC cache.&lt;/p&gt;\'; ?&gt;</code>', $this->plugin->text_domain).'</p>'."\n";
-				echo '      <hr />'."\n";
-				echo '      <h2 style="font-weight:bold;">'.__('Clearing the Cache Automatically', $this->plugin->text_domain).'</h2>'."\n";
-				echo '      <img src="'.esc_attr($this->plugin->url('/client-s/images/auto-clear-ss.png')).'" class="screenshot" />'."\n";
-				echo '      <p>'.sprintf(__('This is built into the %1$s plugin; e.g. this functionality is "always on". If you edit a Post/Page (or delete one), %1$s will automatically clear the cache file(s) associated with that content. This way a new updated version of the cache will be created automatically the next time this content is accessed. Simple updates like this occur each time you make changes in the Dashboard, and %1$s will notify you of these as they occur. %1$s monitors changes to Posts (of any kind, including Pages), Categories, Tags, Links, Themes (even Users); and more. Notifications in the Dashboard regarding these detections can be enabled/disabled below.', $this->plugin->text_domain), esc_html($this->plugin->name)).'</p>'."\n";
-				echo '      <p><select name="'.esc_attr(__NAMESPACE__).'[save_options][change_notifications_enable]" style="width:auto;">'."\n";
-				echo '            <option value="1" selected="selected">'.sprintf(__('Yes, enable %1$s notifications in the Dashboard when changes are detected &amp; one or more cache files are cleared automatically.', $this->plugin->text_domain), esc_html($this->plugin->name)).'</option>'."\n";
-				echo '            <option value="0">'.sprintf(__('No, I don\'t want to know (don\'t really care) what %1$s is doing behind-the-scene.', $this->plugin->text_domain), esc_html($this->plugin->name)).'</option>'."\n";
-				echo '         </select></p>'."\n";
-				echo '      <h3>'.__('Auto-Clear Designated "Home Page" Too?', $this->plugin->text_domain).'</h3>'."\n";
-				echo '      <p>'.sprintf(__('On many sites, the Home Page (aka: the Front Page) offers an archive view of all Posts (or even Pages). Therefore, if a single Post/Page is changed in some way; and %1$s clears/resets the cache for a single Post/Page, would you like %1$s to also clear any existing cache files for the "Home Page"?', $this->plugin->text_domain), esc_html($this->plugin->name)).'</p>'."\n";
-				echo '      <p><select name="'.esc_attr(__NAMESPACE__).'[save_options][cache_clear_home_page_enable]">'."\n";
-				echo '            <option value="1" selected="selected">'.__('Yes, if any single Post/Page is cleared/reset; also purge the "Home Page".', $this->plugin->text_domain).'</option>'."\n";
-				echo '            <option value="0">'.__('No, my Home Page does not provide a list of Posts/Pages; e.g. this is not necessary.', $this->plugin->text_domain).'</option>'."\n";
-				echo '         </select></p>'."\n";
-				echo '      <h3>'.__('Auto-Clear Designated "Posts Page" Too?', $this->plugin->text_domain).'</h3>'."\n";
-				echo '      <p>'.sprintf(__('On many sites, the Posts Page (aka: the Blog Page) offers an archive view of all Posts (or even Pages). Therefore, if a single Post/Page is changed in some way; and %1$s clears/resets the cache for a single Post/Page, would you like %1$s to also clear any existing cache files for the "Posts Page"?', $this->plugin->text_domain), esc_html($this->plugin->name)).'</p>'."\n";
-				echo '      <p><select name="'.esc_attr(__NAMESPACE__).'[save_options][cache_clear_posts_page_enable]">'."\n";
-				echo '            <option value="1" selected="selected">'.__('Yes, if any single Post/Page is cleared/reset; also purge the "Posts Page".', $this->plugin->text_domain).'</option>'."\n";
-				echo '            <option value="0">'.__('No, I don\'t use a separate Posts Page; e.g. my Home Page IS my Posts Page.', $this->plugin->text_domain).'</option>'."\n";
-				echo '         </select></p>'."\n";
-				echo '      <h3>'.__('Auto-Clear "Author Page" Too?', $this->plugin->text_domain).'</h3>'."\n";
-				echo '      <p>'.sprintf(__('On many sites, each author has a related "Author Page" that offers an archive view of all posts associated with that author. Therefore, if a single Post/Page is changed in some way; and %1$s clears/resets the cache for a single Post/Page, would you like %1$s to also clear any existing cache files for the related "Author Page"?', $this->plugin->text_domain), esc_html($this->plugin->name)).'</p>'."\n";
-				echo '      <p><select name="'.esc_attr(__NAMESPACE__).'[save_options][cache_clear_author_page_enable]">'."\n";
-				echo '            <option value="1" selected="selected">'.__('Yes, if any single Post/Page is cleared/reset; also purge the "Author Page".', $this->plugin->text_domain).'</option>'."\n";
-				echo '            <option value="0">'.__('No, my site doesn\'t use multiple authors and/or I don\'t have any "Author Page" archive views.', $this->plugin->text_domain).'</option>'."\n";
-				echo '         </select></p>'."\n";
-				echo '      <h3>'.__('Auto-Clear "Category Archives" Too?', $this->plugin->text_domain).'</h3>'."\n";
-				echo '      <p>'.sprintf(__('On many sites, each post is associated with at least one Category. Each category then has an archive view that contains all the posts within that category. Therefore, if a single Post/Page is changed in some way; and %1$s clears/resets the cache for a single Post/Page, would you like %1$s to also clear any existing cache files for the associated Category archive views?', $this->plugin->text_domain), esc_html($this->plugin->name)).'</p>'."\n";
-				echo '      <p><select name="'.esc_attr(__NAMESPACE__).'[save_options][cache_clear_term_category_enable]">'."\n";
-				echo '            <option value="1" selected="selected">'.__('Yes, if any single Post/Page is cleared/reset; also clear the associated Category archive views.', $this->plugin->text_domain).'</option>'."\n";
-				echo '            <option value="0">'.__('No, my site doesn\'t use Categories and/or I don\'t have any Category archive views.', $this->plugin->text_domain).'</option>'."\n";
-				echo '         </select></p>'."\n";
-				echo '      <h3>'.__('Auto-Clear "Tag Archives" Too?', $this->plugin->text_domain).'</h3>'."\n";
-				echo '      <p>'.sprintf(__('On many sites, each post may be associated with at least one Tag. Each tag then has an archive view that contains all the posts assigned that tag. Therefore, if a single Post/Page is changed in some way; and %1$s clears/resets the cache for a single Post/Page, would you like %1$s to also clear any existing cache files for the associated Tag archive views?', $this->plugin->text_domain), esc_html($this->plugin->name)).'</p>'."\n";
-				echo '      <p><select name="'.esc_attr(__NAMESPACE__).'[save_options][cache_clear_term_post_tag_enable]">'."\n";
-				echo '            <option value="1" selected="selected">'.__('Yes, if any single Post/Page is cleared/reset; also clear the associated Tag archive views.', $this->plugin->text_domain).'</option>'."\n";
-				echo '            <option value="0">'.__('No, my site doesn\'t use Tags and/or I don\'t have any Tag archive views.', $this->plugin->text_domain).'</option>'."\n";
-				echo '         </select></p>'."\n";
-				echo '      <h3>'.__('Auto-Clear "Custom Term Archives" Too?', $this->plugin->text_domain).'</h3>'."\n";
-				echo '      <p>'.sprintf(__('Most sites do not use any custom Terms so it should be safe to leave this disabled. However, if your site uses custom Terms and they have their own Term archive views, you may want to clear those when the associated post is cleared. Therefore, if a single Post/Page is changed in some way; and %1$s clears/resets the cache for a single Post/Page, would you like %1$s to also clear any existing cache files for the associated Tag archive views?', $this->plugin->text_domain), esc_html($this->plugin->name)).'</p>'."\n";
-				echo '      <p><select name="'.esc_attr(__NAMESPACE__).'[save_options][cache_clear_term_other_enable]">'."\n";
-				echo '            <option value="1">'.__('Yes, if any single Post/Page is cleared/reset; also purge any associated custom Term archive views.', $this->plugin->text_domain).'</option>'."\n";
-				echo '            <option value="0" selected="selected">'.__('No, my site doesn\'t use any custom Terms and/or I don\'t have any custom Term archive views.', $this->plugin->text_domain).'</option>'."\n";
-				echo '         </select></p>'."\n";
-				echo '      <h3>'.__('Auto-Clear "Custom Post Type Archives" Too?', $this->plugin->text_domain).'</h3>'."\n";
-				echo '      <p>'.sprintf(__('Most sites do not use any Custom Post Types so it should be safe to disable this option. However, if your site uses Custom Post Types and they have their own Custom Post Type archive views, you may want to clear those when any associated post is cleared. Therefore, if a single Post with a Custom Post Type is changed in some way; and %1$s clears/resets the cache for that post, would you like %1$s to also clear any existing cache files for the associated Custom Post Type archive views?', $this->plugin->text_domain), esc_html($this->plugin->name)).'</p>'."\n";
-				echo '      <p><select name="'.esc_attr(__NAMESPACE__).'[save_options][cache_clear_custom_post_type_enable]">'."\n";
-				echo '            <option value="1" selected="selected">'.__('Yes, if any single Post with a Custom Post Type is cleared/reset; also clear any associated Custom Post Type archive views.', $this->plugin->text_domain).'</option>'."\n";
-				echo '            <option value="0">'.__('No, my site doesn\'t use any Custom Post Types and/or I don\'t have any Custom Post Type archive views.', $this->plugin->text_domain).'</option>'."\n";
-				echo '         </select></p>'."\n";
-				echo '   </div>'."\n";
+            echo '   <div class="plugin-menu-page-panel-body clearfix">'."\n";
 
-				echo '</div>'."\n";
-			}
+            if ($this->plugin->is_pro_preview()) {
+                echo '  <div class="pro-preview">'."\n";
+                echo '      <h2 style="margin-top:0; font-weight:bold;">'.__('Clearing the Cache Manually', $this->plugin->text_domain).'</h2>'."\n";
+                echo '      <img src="'.esc_attr($this->plugin->url('/client-s/images/clear-cache-ss.png')).'" class="screenshot" />'."\n";
+                echo '      <p>'.sprintf(__('Once %1$s is enabled, you will find this new option in your WordPress Admin Bar (see screenshot on right). Clicking this button will clear the cache and you can start fresh at anytime (e.g. you can do this manually; and as often as you wish).', $this->plugin->text_domain), esc_html($this->plugin->name)).'</p>'."\n";
+                echo '      <p>'.sprintf(__('Depending on the structure of your site, there could be many reasons to clear the cache. However, the most common reasons are related to Post/Page edits or deletions, Category/Tag edits or deletions, and Theme changes. %1$s handles most scenarios all by itself. However, many site owners like to clear the cache manually; for a variety of reasons (just to force a refresh).', $this->plugin->text_domain), esc_html($this->plugin->name)).'</p>'."\n";
+                echo '      <p><select name="'.esc_attr(__NAMESPACE__).'[save_options][admin_bar_enable]" style="width:auto;">'."\n";
+                echo '            <option value="1" selected="selected">'.__('Yes, enable the &quot;Clear Cache&quot; button in the WordPress admin bar.', $this->plugin->text_domain).'</option>'."\n";
+                echo '            <option value="0">'.__('No, I don\'t intend to clear the cache manually; exclude from admin bar.', $this->plugin->text_domain).'</option>'."\n";
+                echo '         </select></p>'."\n";
+                echo '  </div>'."\n";
+                echo '  <hr />'."\n";
+            }
+
+            if ($this->plugin->is_pro_preview()) {
+                echo '  <div class="pro-preview">'."\n";
+                echo '      <h3>'.__('Running the <a href="http://www.websharks-inc.com/product/s2clean/" target="_blank">s2Clean Theme</a> by WebSharks?', $this->plugin->text_domain).'</h3>'."\n";
+                echo '      <p>'.sprintf(__('If s2Clean is installed, %1$s can be configured to clear the Markdown cache too (if you\'ve enabled Markdown processing with s2Clean). The s2Clean Markdown cache is only cleared when you manually clear the cache (with %1$s); and only if you enable this option here. Note: s2Clean\'s Markdown cache is extremely dynamic. Just like the rest of your site, s2Clean caches do NOT need to be cleared away at all, as this happens automatically when your content changes. However, some developers find this feature useful while developing their site; just to force a refresh.', $this->plugin->text_domain), esc_html($this->plugin->name)).'</p>'."\n";
+                echo '      <p><select name="'.esc_attr(__NAMESPACE__).'[save_options][cache_clear_s2clean_enable]">'."\n";
+                echo '            <option value="1">'.__('Yes, if the s2Clean theme is installed; also clear s2Clean-related caches.', $this->plugin->text_domain).'</option>'."\n";
+                echo '            <option value="0" selected="selected">'.__('No, I don\'t use s2Clean; or, I don\'t want s2Clean-related caches cleared.', $this->plugin->text_domain).'</option>'."\n";
+                echo '         </select></p>'."\n";
+                echo '  </div>'."\n";
+                echo '  <hr />'."\n";
+            }
+
+            if ($this->plugin->is_pro_preview()) {
+                echo '  <div class="pro-preview">'."\n";
+                echo '      <h3>'.__('Process Other Custom PHP Code?', $this->plugin->text_domain).'</h3>'."\n";
+                echo '      <p>'.sprintf(__('If you have other custom routines you\'d like to process when the cache is cleared manually, please type your custom PHP code here. The PHP code that you provide is only evaluated when you manually clear the cache (with %1$s); and only if the field below contains PHP code. Note: if your PHP code outputs a message (e.g. if you have <code>echo \'&lt;p&gt;My message&lt;/p&gt;\';</code>); your message will be displayed along with any other notes from %1$s itself. This could be useful to developers that need to clear server caches too (such as <a href="http://www.php.net/manual/en/function.apc-clear-cache.php" target="_blank">APC</a> or <a href="http://www.php.net/manual/en/memcache.flush.php" target="_blank">memcache</a>).', $this->plugin->text_domain), esc_html($this->plugin->name)).'</p>'."\n";
+                echo '      <p style="margin-bottom:0;"><textarea name="'.esc_attr(__NAMESPACE__).'[save_options][cache_clear_eval_code]" rows="5" spellcheck="false" class="monospace"></textarea></p>'."\n";
+                echo '      <p class="info" style="margin-top:0;">'.__('<strong>Example:</strong> <code>&lt;?php apc_clear_cache(); echo \'&lt;p&gt;Also cleared APC cache.&lt;/p&gt;\'; ?&gt;</code>', $this->plugin->text_domain).'</p>'."\n";
+                echo '  </div>'."\n";
+                echo '  <hr />'."\n";
+            }
+
+            echo '      <h2 style="font-weight:bold;">'.__('Clearing the Cache Automatically', $this->plugin->text_domain).'</h2>'."\n";
+            echo '      <img src="'.esc_attr($this->plugin->url('/client-s/images/auto-clear-ss.png')).'" class="screenshot" />'."\n";
+            echo '      <p>'.sprintf(__('This is built into the %1$s plugin; e.g. this functionality is "always on". If you edit a Post/Page (or delete one), %1$s will automatically clear the cache file(s) associated with that content. This way a new updated version of the cache will be created automatically the next time this content is accessed. Simple updates like this occur each time you make changes in the Dashboard, and %1$s will notify you of these as they occur. %1$s monitors changes to Posts (of any kind, including Pages), Categories, Tags, Links, Themes (even Users); and more. Notifications in the Dashboard regarding these detections can be enabled/disabled below.', $this->plugin->text_domain), esc_html($this->plugin->name)).'</p>'."\n";
+            if ($this->plugin->is_pro_preview()) {
+                echo '  <div class="pro-preview">'."\n";
+                echo '      <p><select name="'.esc_attr(__NAMESPACE__).'[save_options][change_notifications_enable]" style="width:auto;">'."\n";
+                echo '            <option value="1" selected="selected">'.sprintf(__('Yes, enable %1$s notifications in the Dashboard when changes are detected &amp; one or more cache files are cleared automatically.', $this->plugin->text_domain), esc_html($this->plugin->name)).'</option>'."\n";
+                echo '            <option value="0">'.sprintf(__('No, I don\'t want to know (don\'t really care) what %1$s is doing behind-the-scene.', $this->plugin->text_domain), esc_html($this->plugin->name)).'</option>'."\n";
+                echo '         </select></p>'."\n";
+                echo '  </div>'."\n";
+            }
+            echo '  <hr />'."\n";
+
+            echo '      <h3>'.__('Auto-Clear Designated "Home Page" Too?', $this->plugin->text_domain).'</h3>'."\n";
+            echo '      <p>'.sprintf(__('On many sites, the Home Page (aka: the Front Page) offers an archive view of all Posts (or even Pages). Therefore, if a single Post/Page is changed in some way; and %1$s clears/resets the cache for a single Post/Page, would you like %1$s to also clear any existing cache files for the "Home Page"?', $this->plugin->text_domain), esc_html($this->plugin->name)).'</p>'."\n";
+            echo '      <p><select name="'.esc_attr(__NAMESPACE__).'[save_options][cache_clear_home_page_enable]">'."\n";
+			echo '            <option value="1"'.selected($this->plugin->options['cache_clear_home_page_enable'], '1', FALSE).'>'.__('Yes, if any single Post/Page is cleared/reset; also clear the "Home Page".', $this->plugin->text_domain).'</option>'."\n";
+			echo '            <option value="0"'.selected($this->plugin->options['cache_clear_home_page_enable'], '0', FALSE).'>'.__('No, my Home Page does not provide a list of Posts/Pages; e.g. this is not necessary.', $this->plugin->text_domain).'</option>'."\n";
+            echo '         </select></p>'."\n";
+            echo '      <h3>'.__('Auto-Clear Designated "Posts Page" Too?', $this->plugin->text_domain).'</h3>'."\n";
+            echo '      <p>'.sprintf(__('On many sites, the Posts Page (aka: the Blog Page) offers an archive view of all Posts (or even Pages). Therefore, if a single Post/Page is changed in some way; and %1$s clears/resets the cache for a single Post/Page, would you like %1$s to also clear any existing cache files for the "Posts Page"?', $this->plugin->text_domain), esc_html($this->plugin->name)).'</p>'."\n";
+            echo '      <p><select name="'.esc_attr(__NAMESPACE__).'[save_options][cache_clear_posts_page_enable]">'."\n";
+			echo '            <option value="1"'.selected($this->plugin->options['cache_clear_posts_page_enable'], '1', FALSE).'>'.__('Yes, if any single Post/Page is cleared/reset; also clear the "Posts Page".', $this->plugin->text_domain).'</option>'."\n";
+			echo '            <option value="0"'.selected($this->plugin->options['cache_clear_posts_page_enable'], '0', FALSE).'>'.__('No, I don\'t use a separate Posts Page; e.g. my Home Page IS my Posts Page.', $this->plugin->text_domain).'</option>'."\n";
+            echo '         </select></p>'."\n";
+			echo '      <hr />'."\n";
+            echo '      <h3>'.__('Auto-Clear "Author Page" Too?', $this->plugin->text_domain).'</h3>'."\n";
+            echo '      <p>'.sprintf(__('On many sites, each author has a related "Author Page" that offers an archive view of all posts associated with that author. Therefore, if a single Post/Page is changed in some way; and %1$s clears/resets the cache for a single Post/Page, would you like %1$s to also clear any existing cache files for the related "Author Page"?', $this->plugin->text_domain), esc_html($this->plugin->name)).'</p>'."\n";
+            echo '      <p><select name="'.esc_attr(__NAMESPACE__).'[save_options][cache_clear_author_page_enable]">'."\n";
+			echo '            <option value="1"'.selected($this->plugin->options['cache_clear_author_page_enable'], '1', FALSE).'>'.__('Yes, if any single Post/Page is cleared/reset; also clear the "Author Page".', $this->plugin->text_domain).'</option>'."\n";
+			echo '            <option value="0"'.selected($this->plugin->options['cache_clear_author_page_enable'], '0', FALSE).'>'.__('No, my site doesn\'t use multiple authors and/or I don\'t have any "Author Page" archive views.', $this->plugin->text_domain).'</option>'."\n";
+            echo '         </select></p>'."\n";
+            echo '      <h3>'.__('Auto-Clear "Category Archives" Too?', $this->plugin->text_domain).'</h3>'."\n";
+            echo '      <p>'.sprintf(__('On many sites, each post is associated with at least one Category. Each category then has an archive view that contains all the posts within that category. Therefore, if a single Post/Page is changed in some way; and %1$s clears/resets the cache for a single Post/Page, would you like %1$s to also clear any existing cache files for the associated Category archive views?', $this->plugin->text_domain), esc_html($this->plugin->name)).'</p>'."\n";
+            echo '      <p><select name="'.esc_attr(__NAMESPACE__).'[save_options][cache_clear_term_category_enable]">'."\n";
+			echo '            <option value="1"'.selected($this->plugin->options['cache_clear_term_category_enable'], '1', FALSE).'>'.__('Yes, if any single Post/Page is cleared/reset; also clear the associated Category archive views.', $this->plugin->text_domain).'</option>'."\n";
+			echo '            <option value="0"'.selected($this->plugin->options['cache_clear_term_category_enable'], '0', FALSE).'>'.__('No, my site doesn\'t use Categories and/or I don\'t have any Category archive views.', $this->plugin->text_domain).'</option>'."\n";
+            echo '         </select></p>'."\n";
+            echo '      <h3>'.__('Auto-Clear "Tag Archives" Too?', $this->plugin->text_domain).'</h3>'."\n";
+            echo '      <p>'.sprintf(__('On many sites, each post may be associated with at least one Tag. Each tag then has an archive view that contains all the posts assigned that tag. Therefore, if a single Post/Page is changed in some way; and %1$s clears/resets the cache for a single Post/Page, would you like %1$s to also clear any existing cache files for the associated Tag archive views?', $this->plugin->text_domain), esc_html($this->plugin->name)).'</p>'."\n";
+            echo '      <p><select name="'.esc_attr(__NAMESPACE__).'[save_options][cache_clear_term_post_tag_enable]">'."\n";
+			echo '            <option value="1"'.selected($this->plugin->options['cache_clear_term_post_tag_enable'], '1', FALSE).'>'.__('Yes, if any single Post/Page is cleared/reset; also clear the associated Tag archive views.', $this->plugin->text_domain).'</option>'."\n";
+			echo '            <option value="0"'.selected($this->plugin->options['cache_clear_term_post_tag_enable'], '0', FALSE).'>'.__('No, my site doesn\'t use Tags and/or I don\'t have any Tag archive views.', $this->plugin->text_domain).'</option>'."\n";
+            echo '         </select></p>'."\n";
+            echo '      <h3>'.__('Auto-Clear "Custom Term Archives" Too?', $this->plugin->text_domain).'</h3>'."\n";
+            echo '      <p>'.sprintf(__('Most sites do not use any custom Terms so it should be safe to leave this disabled. However, if your site uses custom Terms and they have their own Term archive views, you may want to clear those when the associated post is cleared. Therefore, if a single Post/Page is changed in some way; and %1$s clears/resets the cache for a single Post/Page, would you like %1$s to also clear any existing cache files for the associated Tag archive views?', $this->plugin->text_domain), esc_html($this->plugin->name)).'</p>'."\n";
+            echo '      <p><select name="'.esc_attr(__NAMESPACE__).'[save_options][cache_clear_term_other_enable]">'."\n";
+			echo '            <option value="1"'.selected($this->plugin->options['cache_clear_term_other_enable'], '1', FALSE).'>'.__('Yes, if any single Post/Page is cleared/reset; also clear any associated custom Term archive views.', $this->plugin->text_domain).'</option>'."\n";
+			echo '            <option value="0"'.selected($this->plugin->options['cache_clear_term_other_enable'], '0', FALSE).'>'.__('No, my site doesn\'t use any custom Terms and/or I don\'t have any custom Term archive views.', $this->plugin->text_domain).'</option>'."\n";
+            echo '         </select></p>'."\n";
+            echo '      <h3>'.__('Auto-Clear "Custom Post Type Archives" Too?', $this->plugin->text_domain).'</h3>'."\n";
+            echo '      <p>'.sprintf(__('Most sites do not use any Custom Post Types so it should be safe to disable this option. However, if your site uses Custom Post Types and they have their own Custom Post Type archive views, you may want to clear those when any associated post is cleared. Therefore, if a single Post with a Custom Post Type is changed in some way; and %1$s clears/resets the cache for that post, would you like %1$s to also clear any existing cache files for the associated Custom Post Type archive views?', $this->plugin->text_domain), esc_html($this->plugin->name)).'</p>'."\n";
+            echo '      <p><select name="'.esc_attr(__NAMESPACE__).'[save_options][cache_clear_custom_post_type_enable]">'."\n";
+			echo '            <option value="1"'.selected($this->plugin->options['cache_clear_custom_post_type_enable'], '1', FALSE).'>'.__('Yes, if any single Post with a Custom Post Type is cleared/reset; also clear any associated Custom Post Type archive views.', $this->plugin->text_domain).'</option>'."\n";
+			echo '            <option value="0"'.selected($this->plugin->options['cache_clear_custom_post_type_enable'], '0', FALSE).'>'.__('No, my site doesn\'t use any Custom Post Types and/or I don\'t have any Custom Post Type archive views.', $this->plugin->text_domain).'</option>'."\n";
+            echo '         </select></p>'."\n";
+			echo '      <hr />'."\n";
+			echo '      <h3>'.__('Auto-Clear "RSS/RDF/ATOM Feeds" Too?', $this->plugin->text_domain).'</h3>'."\n";
+			echo '      <p>'.sprintf(__('If you enable Feed Caching (below), this can be quite handy. If enabled, when you update a Post/Page, approve a Comment, or make other changes where %1$s can detect that certain types of Feeds should be cleared to keep your site up-to-date, then %1$s will do this for you automatically. For instance, the blog\'s master feed, the blog\'s master comments feed, feeds associated with comments on a Post/Page, term-related feeds (including mixed term-related feeds), author-related feeds, etc. Under various circumstances (i.e. as you work in the Dashboard) these can be cleared automatically to keep your site up-to-date.', $this->plugin->text_domain), esc_html($this->plugin->name)).'</p>'."\n";
+			echo '      <p><select name="'.esc_attr(__NAMESPACE__).'[save_options][cache_clear_xml_feeds_enable]">'."\n";
+			echo '            <option value="1"'.selected($this->plugin->options['cache_clear_xml_feeds_enable'], '1', FALSE).'>'.__('Yes, automatically clear RSS/RDF/ATOM Feeds from the cache when certain changes occur.', $this->plugin->text_domain).'</option>'."\n";
+			echo '            <option value="0"'.selected($this->plugin->options['cache_clear_xml_feeds_enable'], '0', FALSE).'>'.__('No, I don\'t have Feed Caching enabled, or I prefer not to automatically clear Feeds.', $this->plugin->text_domain).'</option>'."\n";
+			echo '         </select></p>'."\n";
+			echo '      <hr />'."\n";
+			echo '      <h3>'.__('Auto-Clear "XML Sitemaps" Too?', $this->plugin->text_domain).'</h3>'."\n";
+			echo '      <p>'.sprintf(__('If you\'re generating XML Sitemaps with a plugin like <a href="http://wordpress.org/plugins/google-sitemap-generator/" target="_blank">Google XML Sitemaps</a>, you can tell %1$s to automatically clear the cache of any XML Sitemaps whenever it clears a Post/Page. Note; this does NOT clear the XML Sitemap itself of course, only the cache. The point being, to clear the cache and allow changes to a Post/Page to be reflected by a fresh copy of your XML Sitemap; sooner rather than later.', $this->plugin->text_domain), esc_html($this->plugin->name)).'</p>'."\n";
+			echo '      <p><select name="'.esc_attr(__NAMESPACE__).'[save_options][cache_clear_xml_sitemaps_enable]">'."\n";
+			echo '            <option value="1"'.selected($this->plugin->options['cache_clear_xml_sitemaps_enable'], '1', FALSE).'>'.__('Yes, if any single Post/Page is cleared/reset; also clear the cache for any XML Sitemaps.', $this->plugin->text_domain).'</option>'."\n";
+			echo '            <option value="0"'.selected($this->plugin->options['cache_clear_xml_sitemaps_enable'], '0', FALSE).'>'.__('No, my site doesn\'t use any XML Sitemaps and/or I prefer NOT to clear the cache for XML Sitemaps.', $this->plugin->text_domain).'</option>'."\n";
+			echo '         </select></p>'."\n";
+			echo '      <p><i class="fa fa-level-up fa-rotate-90"></i>&nbsp;&nbsp;&nbsp;'.__('<strong style="font-size:110%;">XML Sitemap Patterns...</strong> A default value of <code>/sitemap*.xml</code> covers all XML Sitemaps for most installations. However, you may customize this further if you deem necessary. One pattern per line please. A wildcard <code>*</code> matches zero or more characters. Searches are performed against the <a href="https://gist.github.com/jaswsinc/338b6eb03a36c048c26f" target="_blank">REQUEST_URI</a>; e.g. a request for <code>/sitemap.xml</code> and/or <code>/sitemap-xyz.xml</code> are both matched by the pattern: <code>/sitemap*.xml</code>. If your XML Sitemap was located inside a sub-directory; e.g. <code>/my/sitemaps/xyz.xml</code>; you might add the following pattern on a new line: <code>/my/sitemaps/*.xml</code>', $this->plugin->text_domain).'</p>'."\n";
+			echo '      <p><textarea name="'.esc_attr(__NAMESPACE__).'[save_options][cache_clear_xml_sitemap_patterns]" rows="5" spellcheck="false" class="monospace">'.format_to_edit($this->plugin->options['cache_clear_xml_sitemap_patterns']).'</textarea></p>'."\n";
+			if(is_multisite()) echo '<p class="info" style="display:block; margin-top:-15px;">'.__('In a Multisite Network, each child blog (whether it be a sub-domain, a sub-directory, or a mapped domain); will automatically change the leading <code>http://[sub.]domain/[sub-directory]</code> used in pattern matching. In short, there is no need to add sub-domains or sub-directories for each child blog in these patterns. Please include only the <a href="https://gist.github.com/jaswsinc/338b6eb03a36c048c26f" target="_blank">REQUEST_URI</a> (i.e. the path) which leads to the XML Sitemap on all child blogs in the network.', $this->plugin->text_domain).'</p>'."\n";
+            echo '   </div>'."\n";
+
+            echo '</div>'."\n";
+
 			/* ----------------------------------------------------------------------------------------- */
 
 			echo '<div class="plugin-menu-page-panel">'."\n";
@@ -403,7 +442,7 @@ namespace zencache // Root namespace.
 			echo '   <div class="plugin-menu-page-panel-body clearfix">'."\n";
 			echo '      <i class="fa fa-question-circle fa-4x" style="float:right; margin: 0 0 0 25px;"></i>'."\n";
 			echo '      <h3>'.__('Caching Enabled for RSS, RDF, Atom Feeds?', $this->plugin->text_domain).'</h3>'."\n";
-			echo '      <p>'.__('This should almost ALWAYS be set to <code>No</code>. UNLESS, you\'re sure that you want to cache your feeds. If you use a web feed management provider like Google® Feedburner and you set this option to <code>Yes</code>, you may experience delays in the detection of new posts. <strong>NOTE:</strong> If you do enable this, it is highly recommended that you also enable automatic Feed Clearing too. Please see the section above: "Clearing the Cache". Find the sub-section titled: "Auto-Clear RSS/RDF/ATOM Feeds" (available only in the pro version).', $this->plugin->text_domain).'</p>'."\n";
+			echo '      <p>'.__('This should almost ALWAYS be set to <code>No</code>. UNLESS, you\'re sure that you want to cache your feeds. If you use a web feed management provider like Google® Feedburner and you set this option to <code>Yes</code>, you may experience delays in the detection of new posts. <strong>NOTE:</strong> If you do enable this, it is highly recommended that you also enable automatic Feed Clearing too. Please see the section above: "Clearing the Cache". Find the sub-section titled: "Auto-Clear RSS/RDF/ATOM Feeds".', $this->plugin->text_domain).'</p>'."\n";
 			echo '      <p><select name="'.esc_attr(__NAMESPACE__).'[save_options][feeds_enable]">'."\n";
 			echo '            <option value="0"'.selected($this->plugin->options['feeds_enable'], '0', FALSE).'>'.__('No, do NOT cache (or serve a cache file) when displaying a feed.', $this->plugin->text_domain).'</option>'."\n";
 			echo '            <option value="1"'.selected($this->plugin->options['feeds_enable'], '1', FALSE).'>'.__('Yes, I would like to cache feed URLs.', $this->plugin->text_domain).'</option>'."\n";
@@ -415,64 +454,58 @@ namespace zencache // Root namespace.
 
 			/* ----------------------------------------------------------------------------------------- */
 
-			if($this->plugin->is_pro_preview())
-			{
-				echo '<div class="plugin-menu-page-panel pro-preview">'."\n";
+			echo '<div class="plugin-menu-page-panel">'."\n";
 
-				echo '   <a href="#" class="plugin-menu-page-panel-heading">'."\n";
-				echo '      <i class="fa fa-gears"></i> '.__('URI Exclusion Patterns', $this->plugin->text_domain)."\n";
-				echo '   </a>'."\n";
+            echo '   <a href="#" class="plugin-menu-page-panel-heading">'."\n";
+            echo '      <i class="fa fa-gears"></i> '.__('URI Exclusion Patterns', $this->plugin->text_domain)."\n";
+            echo '   </a>'."\n";
 
-				echo '   <div class="plugin-menu-page-panel-body clearfix">'."\n";
-				echo '      <h3>'.__('Don\'t Cache These Special URI Exclusion Patterns?', $this->plugin->text_domain).'</h3>'."\n";
-				echo '      <p>'.__('Sometimes there are certain cases where a particular file, or a particular group of files, should never be cached. This is where you will enter those if you need to (one per line). Searches are performed against the <a href="https://gist.github.com/jaswsinc/338b6eb03a36c048c26f" target="_blank" style="text-decoration:none;"><code>REQUEST_URI</code></a>; i.e. <code>/path/?query</code> (caSe insensitive). So, don\'t put in full URLs here, just word fragments found in the file path (or query string) is all you need, excluding the http:// and domain name. A wildcard <code>*</code> character can also be used when necessary; e.g. <code>/category/abc-followed-by-*</code>; (where <code>*</code> = anything, 0 or more characters in length).', $this->plugin->text_domain).'</p>'."\n";
-				echo '      <p><textarea name="'.esc_attr(__NAMESPACE__).'[save_options][exclude_uris]" rows="5" spellcheck="false" class="monospace"></textarea></p>'."\n";
-				echo '      <p class="info">'.__('<strong>Tip:</strong> let\'s use this example URL: <code>http://www.example.com/post/example-post-123</code>. To exclude this URL, you would put this line into the field above: <code>/post/example-post-123</code>. Or, you could also just put in a small fragment, like: <code>example</code> or <code>example-*-123</code> and that would exclude any URI containing that word fragment.', $this->plugin->text_domain).'</p>'."\n";
-				echo '      <p class="info">'.__('<strong>Note:</strong> please remember that your entries here should be formatted as a line-delimited list; e.g. one exclusion pattern per line.', $this->plugin->text_domain).'</p>'."\n";
-				echo '   </div>'."\n";
+            echo '   <div class="plugin-menu-page-panel-body clearfix">'."\n";
+            echo '      <h3>'.__('Don\'t Cache These Special URI Exclusion Patterns?', $this->plugin->text_domain).'</h3>'."\n";
+            echo '      <p>'.__('Sometimes there are certain cases where a particular file, or a particular group of files, should never be cached. This is where you will enter those if you need to (one per line). Searches are performed against the <a href="https://gist.github.com/jaswsinc/338b6eb03a36c048c26f" target="_blank" style="text-decoration:none;"><code>REQUEST_URI</code></a>; i.e. <code>/path/?query</code> (caSe insensitive). So, don\'t put in full URLs here, just word fragments found in the file path (or query string) is all you need, excluding the http:// and domain name. A wildcard <code>*</code> character can also be used when necessary; e.g. <code>/category/abc-followed-by-*</code>; (where <code>*</code> = anything, 0 or more characters in length).', $this->plugin->text_domain).'</p>'."\n";
+			echo '      <p><textarea name="'.esc_attr(__NAMESPACE__).'[save_options][exclude_uris]" rows="5" spellcheck="false" class="monospace">'.format_to_edit($this->plugin->options['exclude_uris']).'</textarea></p>'."\n";
+            echo '      <p class="info">'.__('<strong>Tip:</strong> let\'s use this example URL: <code>http://www.example.com/post/example-post-123</code>. To exclude this URL, you would put this line into the field above: <code>/post/example-post-123</code>. Or, you could also just put in a small fragment, like: <code>example</code> or <code>example-*-123</code> and that would exclude any URI containing that word fragment.', $this->plugin->text_domain).'</p>'."\n";
+            echo '      <p class="info">'.__('<strong>Note:</strong> please remember that your entries here should be formatted as a line-delimited list; e.g. one exclusion pattern per line.', $this->plugin->text_domain).'</p>'."\n";
+            echo '   </div>'."\n";
 
-				echo '</div>'."\n";
-			}
+            echo '</div>'."\n";
+
 			/* ----------------------------------------------------------------------------------------- */
 
-			if($this->plugin->is_pro_preview())
-			{
-				echo '<div class="plugin-menu-page-panel pro-preview">'."\n";
+			echo '<div class="plugin-menu-page-panel">'."\n";
 
-				echo '   <a href="#" class="plugin-menu-page-panel-heading">'."\n";
-				echo '      <i class="fa fa-gears"></i> '.__('HTTP Referrer Exclusion Patterns', $this->plugin->text_domain)."\n";
-				echo '   </a>'."\n";
+            echo '   <a href="#" class="plugin-menu-page-panel-heading">'."\n";
+            echo '      <i class="fa fa-gears"></i> '.__('HTTP Referrer Exclusion Patterns', $this->plugin->text_domain)."\n";
+            echo '   </a>'."\n";
 
-				echo '   <div class="plugin-menu-page-panel-body clearfix">'."\n";
-				echo '      <h3>'.__('Don\'t Cache These Special HTTP Referrer Exclusion Patterns?', $this->plugin->text_domain).'</h3>'."\n";
-				echo '      <p>'.__('Sometimes there are special cases where a particular referring URL (or referring domain) that sends you traffic; or even a particular group of referring URLs or domains that send you traffic; should result in a page being loaded on your site that is NOT from the cache (and that resulting page should never be cached). This is where you will enter those if you need to (one per line). Searches are performed against the <a href="http://www.php.net//manual/en/reserved.variables.server.php" target="_blank" style="text-decoration:none;"><code>HTTP_REFERER</code></a> (caSe insensitive). A wildcard <code>*</code> character can also be used when necessary; e.g. <code>*.domain.com</code>; (where <code>*</code> = anything, 0 or more characters in length).', $this->plugin->text_domain).'</p>'."\n";
-				echo '      <p><textarea name="'.esc_attr(__NAMESPACE__).'[save_options][exclude_refs]" rows="5" spellcheck="false" class="monospace"></textarea></p>'."\n";
-				echo '      <p class="info">'.__('<strong>Tip:</strong> let\'s use this example URL: <code>http://www.referring-domain.com/search/?q=search+terms</code>. To exclude this referring URL, you could put this line into the field above: <code>www.referring-domain.com</code>. Or, you could also just put in a small fragment, like: <code>/search/</code> or <code>q=*</code>; and that would exclude any referrer containing that word fragment.', $this->plugin->text_domain).'</p>'."\n";
-				echo '      <p class="info">'.__('<strong>Note:</strong> please remember that your entries here should be formatted as a line-delimited list; e.g. one exclusion pattern per line.', $this->plugin->text_domain).'</p>'."\n";
-				echo '   </div>'."\n";
+            echo '   <div class="plugin-menu-page-panel-body clearfix">'."\n";
+            echo '      <h3>'.__('Don\'t Cache These Special HTTP Referrer Exclusion Patterns?', $this->plugin->text_domain).'</h3>'."\n";
+            echo '      <p>'.__('Sometimes there are special cases where a particular referring URL (or referring domain) that sends you traffic; or even a particular group of referring URLs or domains that send you traffic; should result in a page being loaded on your site that is NOT from the cache (and that resulting page should never be cached). This is where you will enter those if you need to (one per line). Searches are performed against the <a href="http://www.php.net//manual/en/reserved.variables.server.php" target="_blank" style="text-decoration:none;"><code>HTTP_REFERER</code></a> (caSe insensitive). A wildcard <code>*</code> character can also be used when necessary; e.g. <code>*.domain.com</code>; (where <code>*</code> = anything, 0 or more characters in length).', $this->plugin->text_domain).'</p>'."\n";
+            echo '      <p><textarea name="'.esc_attr(__NAMESPACE__).'[save_options][exclude_refs]" rows="5" spellcheck="false" class="monospace">'.format_to_edit($this->plugin->options['exclude_refs']).'</textarea></p>'."\n";
+            echo '      <p class="info">'.__('<strong>Tip:</strong> let\'s use this example URL: <code>http://www.referring-domain.com/search/?q=search+terms</code>. To exclude this referring URL, you could put this line into the field above: <code>www.referring-domain.com</code>. Or, you could also just put in a small fragment, like: <code>/search/</code> or <code>q=*</code>; and that would exclude any referrer containing that word fragment.', $this->plugin->text_domain).'</p>'."\n";
+            echo '      <p class="info">'.__('<strong>Note:</strong> please remember that your entries here should be formatted as a line-delimited list; e.g. one exclusion pattern per line.', $this->plugin->text_domain).'</p>'."\n";
+            echo '   </div>'."\n";
 
-				echo '</div>'."\n";
-			}
+            echo '</div>'."\n";
+
 			/* ----------------------------------------------------------------------------------------- */
 
-			if($this->plugin->is_pro_preview())
-			{
-				echo '<div class="plugin-menu-page-panel pro-preview">'."\n";
+			echo '<div class="plugin-menu-page-panel">'."\n";
 
-				echo '   <a href="#" class="plugin-menu-page-panel-heading">'."\n";
-				echo '      <i class="fa fa-gears"></i> '.__('User-Agent Exclusion Patterns', $this->plugin->text_domain)."\n";
-				echo '   </a>'."\n";
+            echo '   <a href="#" class="plugin-menu-page-panel-heading">'."\n";
+            echo '      <i class="fa fa-gears"></i> '.__('User-Agent Exclusion Patterns', $this->plugin->text_domain)."\n";
+            echo '   </a>'."\n";
 
-				echo '   <div class="plugin-menu-page-panel-body clearfix">'."\n";
-				echo '      <h3>'.__('Don\'t Cache These Special User-Agent Exclusion Patterns?', $this->plugin->text_domain).'</h3>'."\n";
-				echo '      <p>'.__('Sometimes there are special cases when a particular user-agent (e.g. a specific browser or a specific type of device); should be shown a page on your site that is NOT from the cache (and that resulting page should never be cached). This is where you will enter those if you need to (one per line). Searches are performed against the <a href="http://www.php.net//manual/en/reserved.variables.server.php" target="_blank" style="text-decoration:none;"><code>HTTP_USER_AGENT</code></a> (caSe insensitive). A wildcard <code>*</code> character can also be used when necessary; e.g. <code>Android *; Chrome/* Mobile</code>; (where <code>*</code> = anything, 0 or more characters in length).', $this->plugin->text_domain).'</p>'."\n";
-				echo '      <p><textarea name="'.esc_attr(__NAMESPACE__).'[save_options][exclude_agents]" rows="5" spellcheck="false" class="monospace"></textarea></p>'."\n";
-				echo '      <p class="info">'.sprintf(__('<strong>Tip:</strong> if you wanted to exclude iPhones put this line into the field above: <code>iPhone;*AppleWebKit</code>. Or, you could also just put in a small fragment, like: <code>iphone</code>; and that would exclude any user-agent containing that word fragment. Note, this is just an example. With a default installation of %1$s, there is no compelling reason to exclude iOS devices (or any mobile device for that matter).', $this->plugin->text_domain), esc_html($this->plugin->name)).'</p>'."\n";
-				echo '      <p class="info">'.__('<strong>Note:</strong> please remember that your entries here should be formatted as a line-delimited list; e.g. one exclusion pattern per line.', $this->plugin->text_domain).'</p>'."\n";
-				echo '   </div>'."\n";
+            echo '   <div class="plugin-menu-page-panel-body clearfix">'."\n";
+            echo '      <h3>'.__('Don\'t Cache These Special User-Agent Exclusion Patterns?', $this->plugin->text_domain).'</h3>'."\n";
+            echo '      <p>'.__('Sometimes there are special cases when a particular user-agent (e.g. a specific browser or a specific type of device); should be shown a page on your site that is NOT from the cache (and that resulting page should never be cached). This is where you will enter those if you need to (one per line). Searches are performed against the <a href="http://www.php.net//manual/en/reserved.variables.server.php" target="_blank" style="text-decoration:none;"><code>HTTP_USER_AGENT</code></a> (caSe insensitive). A wildcard <code>*</code> character can also be used when necessary; e.g. <code>Android *; Chrome/* Mobile</code>; (where <code>*</code> = anything, 0 or more characters in length).', $this->plugin->text_domain).'</p>'."\n";
+            echo '      <p><textarea name="'.esc_attr(__NAMESPACE__).'[save_options][exclude_agents]" rows="5" spellcheck="false" class="monospace">'.format_to_edit($this->plugin->options['exclude_agents']).'</textarea></p>'."\n";
+            echo '      <p class="info">'.sprintf(__('<strong>Tip:</strong> if you wanted to exclude iPhones put this line into the field above: <code>iPhone;*AppleWebKit</code>. Or, you could also just put in a small fragment, like: <code>iphone</code>; and that would exclude any user-agent containing that word fragment. Note, this is just an example. With a default installation of %1$s, there is no compelling reason to exclude iOS devices (or any mobile device for that matter).', $this->plugin->text_domain), esc_html($this->plugin->name)).'</p>'."\n";
+            echo '      <p class="info">'.__('<strong>Note:</strong> please remember that your entries here should be formatted as a line-delimited list; e.g. one exclusion pattern per line.', $this->plugin->text_domain).'</p>'."\n";
+            echo '   </div>'."\n";
 
-				echo '</div>'."\n";
-			}
+            echo '</div>'."\n";
+
 			/* ----------------------------------------------------------------------------------------- */
 
 			if($this->plugin->is_pro_preview())

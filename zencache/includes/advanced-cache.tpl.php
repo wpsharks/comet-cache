@@ -112,6 +112,36 @@ namespace zencache
 		 */
 		define('ZENCACHE_MAX_AGE', '%%ZENCACHE_MAX_AGE%%');
 
+	if(!defined('ZENCACHE_EXCLUDE_URIS'))
+		/**
+		 * URI exclusions.
+		 *
+		 * @since 140422 First documented version.
+		 *
+		 * @var string A regular expression; else an empty string.
+		 */
+		define('ZENCACHE_EXCLUDE_URIS', '%%ZENCACHE_EXCLUDE_URIS%%');
+
+	if(!defined('ZENCACHE_EXCLUDE_REFS'))
+		/**
+		 * HTTP referrer exclusions.
+		 *
+		 * @since 140422 First documented version.
+		 *
+		 * @var string A regular expression; else an empty string.
+		 */
+		define('ZENCACHE_EXCLUDE_REFS', '%%ZENCACHE_EXCLUDE_REFS%%');
+
+	if(!defined('ZENCACHE_EXCLUDE_AGENTS'))
+		/**
+		 * HTTP user-agent exclusions.
+		 *
+		 * @since 140422 First documented version.
+		 *
+		 * @var string A regular expression; else an empty string.
+		 */
+		define('ZENCACHE_EXCLUDE_AGENTS', '%%ZENCACHE_EXCLUDE_AGENTS%%');
+
 	if(!defined('ZENCACHE_404_CACHE_FILENAME'))
 		/**
 		 * 404 file name (if applicable).
@@ -489,6 +519,33 @@ namespace zencache
 		const NC_DEBUG_GET_REQUEST_QUERIES = 'nc_debug_get_request_queries';
 
 		/**
+		 * No-cache because the current request excluded by its URI.
+		 *
+		 * @since 140422 First documented version.
+		 *
+		 * @var string A unique string identifier in the set of `NC_DEBUG_` constants.
+		 */
+		const NC_DEBUG_EXCLUDED_URIS = 'nc_debug_excluded_uris';
+
+		/**
+		 * No-cache because the current user-agent is excluded.
+		 *
+		 * @since 140422 First documented version.
+		 *
+		 * @var string A unique string identifier in the set of `NC_DEBUG_` constants.
+		 */
+		const NC_DEBUG_EXCLUDED_AGENTS = 'nc_debug_excluded_agents';
+
+		/**
+		 * No-cache because the current HTTP referrer is excluded.
+		 *
+		 * @since 140422 First documented version.
+		 *
+		 * @var string A unique string identifier in the set of `NC_DEBUG_` constants.
+		 */
+		const NC_DEBUG_EXCLUDED_REFS = 'nc_debug_excluded_refs';
+
+		/**
 		 * No-cache because the current request is a 404 error.
 		 *
 		 * @since 140422 First documented version.
@@ -700,6 +757,21 @@ namespace zencache
 
 			if(!ZENCACHE_GET_REQUESTS && $this->is_get_request_w_query() && (!isset($_GET['zcAC']) || !filter_var($_GET['zcAC'], FILTER_VALIDATE_BOOLEAN)))
 				return $this->maybe_set_debug_info($this::NC_DEBUG_GET_REQUEST_QUERIES);
+
+			if(ZENCACHE_EXCLUDE_URIS && preg_match(ZENCACHE_EXCLUDE_URIS, $_SERVER['REQUEST_URI']))
+				return $this->maybe_set_debug_info($this::NC_DEBUG_EXCLUDED_URIS);
+
+			if(ZENCACHE_EXCLUDE_AGENTS && !empty($_SERVER['HTTP_USER_AGENT']) && !$this->is_auto_cache_engine())
+				if(preg_match(ZENCACHE_EXCLUDE_AGENTS, $_SERVER['HTTP_USER_AGENT']))
+					return $this->maybe_set_debug_info($this::NC_DEBUG_EXCLUDED_AGENTS);
+
+			if(ZENCACHE_EXCLUDE_REFS && !empty($_REQUEST['_wp_http_referer']))
+				if(preg_match(ZENCACHE_EXCLUDE_REFS, stripslashes($_REQUEST['_wp_http_referer'])))
+					return $this->maybe_set_debug_info($this::NC_DEBUG_EXCLUDED_REFS);
+
+			if(ZENCACHE_EXCLUDE_REFS && !empty($_SERVER['HTTP_REFERER']))
+				if(preg_match(ZENCACHE_EXCLUDE_REFS, $_SERVER['HTTP_REFERER']))
+					return $this->maybe_set_debug_info($this::NC_DEBUG_EXCLUDED_REFS);
 
 			$this->protocol       = $this->is_ssl() ? 'https://' : 'http://';
 			$this->version_salt   = $this->apply_filters(__CLASS__.'__version_salt', '');
@@ -1080,6 +1152,18 @@ namespace zencache
 
 				case $this::NC_DEBUG_GET_REQUEST_QUERIES:
 					$reason = __('because `$_GET` contains query string data. The current configuration says NOT to cache GET requests with a query string.', $this->text_domain);
+					break; // Break switch handler.
+
+				case $this::NC_DEBUG_EXCLUDED_URIS:
+					$reason = __('because `$_SERVER[\'REQUEST_URI\']` matches a configured URI Exclusion Pattern on this installation.', $this->text_domain);
+					break; // Break switch handler.
+
+				case $this::NC_DEBUG_EXCLUDED_AGENTS:
+					$reason = __('because `$_SERVER[\'HTTP_USER_AGENT\']` matches a configured User-Agent Exclusion Pattern on this installation.', $this->text_domain);
+					break; // Break switch handler.
+
+				case $this::NC_DEBUG_EXCLUDED_REFS:
+					$reason = __('because `$_SERVER[\'HTTP_REFERER\']` and/or `$_GET[\'_wp_http_referer\']` matches a configured HTTP Referrer Exclusion Pattern on this installation.', $this->text_domain);
 					break; // Break switch handler.
 
 				case $this::NC_DEBUG_404_REQUEST:
