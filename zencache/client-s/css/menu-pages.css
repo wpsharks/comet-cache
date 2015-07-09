@@ -236,9 +236,8 @@ Menu page styles.
 	-webkit-transform : scale(0.98, 0.98);
 	transform         : scale(0.98, 0.98);
 }
-.plugin-menu-page .pro-preview
-{
-	opacity : 0.5;
+.pro-preview .plugin-menu-page-panel-heading {
+    background: #216095;
 }
 .plugin-menu-page .info,
 .plugin-menu-page .notice,
