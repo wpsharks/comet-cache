@@ -440,6 +440,10 @@ Panel styles.
 {
 	color: #000000;
 }
+.plugin-menu-page-panel-body h2
+{
+    margin : 0 0 .5em 0;
+}
 .plugin-menu-page-panel-body h3
 {
 	margin : 0 0 .5em 0;
