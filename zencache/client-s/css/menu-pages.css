@@ -236,8 +236,26 @@ Menu page styles.
 	-webkit-transform : scale(0.98, 0.98);
 	transform         : scale(0.98, 0.98);
 }
-.pro-preview .plugin-menu-page-panel-heading {
+.pro-preview .plugin-menu-page-panel-heading
+{
     background: #216095;
+}
+.pro-preview.pro-additional-features .plugin-menu-page-panel-heading:after
+{
+    font-variant : small-caps !important;
+    font-family  : sans-serif !important;
+    content      : 'additional pro version only features' !important
+}
+.pro-preview .pro-preview-feature:after
+{
+    font-variant : small-caps !important;
+    font-family  : sans-serif !important;
+    content      : 'pro version only' !important;
+    margin-left  : 15px;
+    background   : #216095;
+    color        : #FFFFFF;
+    padding      : 0 5px 2px 5px;
+    font-weight  : normal;
 }
 .plugin-menu-page .info,
 .plugin-menu-page .notice,

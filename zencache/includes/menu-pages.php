@@ -189,9 +189,9 @@ namespace zencache // Root namespace.
 
 			/* --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
 
-			echo '<div class="plugin-menu-page-panel">'."\n";
+			echo '<div class="plugin-menu-page-panel'.($this->plugin->is_pro_preview() ? ' pro-preview pro-additional-features' : '').'">'."\n";
 
-            echo '   <a href="#" class="plugin-menu-page-panel-heading'.($this->plugin->is_pro_preview() ? ' pro-preview' : '').'">'."\n";
+            echo '   <a href="#" class="plugin-menu-page-panel-heading">'."\n";
             echo '      <i class="fa fa-info-circle"></i> '.__('Clearing the Cache', $this->plugin->text_domain)."\n";
             echo '   </a>'."\n";
 
@@ -199,7 +199,7 @@ namespace zencache // Root namespace.
 
             if ($this->plugin->is_pro_preview()) {
                 echo '  <div class="pro-preview">'."\n";
-                echo '      <h2 style="margin-top:0; font-weight:bold;">'.__('Clearing the Cache Manually', $this->plugin->text_domain).'</h2>'."\n";
+                echo '      <h2 class="pro-preview-feature" style="margin-top:0; font-weight:bold;">'.__('Clearing the Cache Manually', $this->plugin->text_domain).'</h2>'."\n";
                 echo '      <img src="'.esc_attr($this->plugin->url('/client-s/images/clear-cache-ss.png')).'" class="screenshot" />'."\n";
                 echo '      <p>'.sprintf(__('Once %1$s is enabled, you will find this new option in your WordPress Admin Bar (see screenshot on right). Clicking this button will clear the cache and you can start fresh at anytime (e.g. you can do this manually; and as often as you wish).', $this->plugin->text_domain), esc_html($this->plugin->name)).'</p>'."\n";
                 echo '      <p>'.sprintf(__('Depending on the structure of your site, there could be many reasons to clear the cache. However, the most common reasons are related to Post/Page edits or deletions, Category/Tag edits or deletions, and Theme changes. %1$s handles most scenarios all by itself. However, many site owners like to clear the cache manually; for a variety of reasons (just to force a refresh).', $this->plugin->text_domain), esc_html($this->plugin->name)).'</p>'."\n";
@@ -213,7 +213,7 @@ namespace zencache // Root namespace.
 
             if ($this->plugin->is_pro_preview()) {
                 echo '  <div class="pro-preview">'."\n";
-                echo '      <h3>'.__('Running the <a href="http://www.websharks-inc.com/product/s2clean/" target="_blank">s2Clean Theme</a> by WebSharks?', $this->plugin->text_domain).'</h3>'."\n";
+                echo '      <h3 class="pro-preview-feature">'.__('Running the <a href="http://www.websharks-inc.com/product/s2clean/" target="_blank">s2Clean Theme</a> by WebSharks?', $this->plugin->text_domain).'</h3>'."\n";
                 echo '      <p>'.sprintf(__('If s2Clean is installed, %1$s can be configured to clear the Markdown cache too (if you\'ve enabled Markdown processing with s2Clean). The s2Clean Markdown cache is only cleared when you manually clear the cache (with %1$s); and only if you enable this option here. Note: s2Clean\'s Markdown cache is extremely dynamic. Just like the rest of your site, s2Clean caches do NOT need to be cleared away at all, as this happens automatically when your content changes. However, some developers find this feature useful while developing their site; just to force a refresh.', $this->plugin->text_domain), esc_html($this->plugin->name)).'</p>'."\n";
                 echo '      <p><select name="'.esc_attr(__NAMESPACE__).'[save_options][cache_clear_s2clean_enable]">'."\n";
                 echo '            <option value="1">'.__('Yes, if the s2Clean theme is installed; also clear s2Clean-related caches.', $this->plugin->text_domain).'</option>'."\n";
@@ -225,7 +225,7 @@ namespace zencache // Root namespace.
 
             if ($this->plugin->is_pro_preview()) {
                 echo '  <div class="pro-preview">'."\n";
-                echo '      <h3>'.__('Process Other Custom PHP Code?', $this->plugin->text_domain).'</h3>'."\n";
+                echo '      <h3 class="pro-preview-feature">'.__('Process Other Custom PHP Code?', $this->plugin->text_domain).'</h3>'."\n";
                 echo '      <p>'.sprintf(__('If you have other custom routines you\'d like to process when the cache is cleared manually, please type your custom PHP code here. The PHP code that you provide is only evaluated when you manually clear the cache (with %1$s); and only if the field below contains PHP code. Note: if your PHP code outputs a message (e.g. if you have <code>echo \'&lt;p&gt;My message&lt;/p&gt;\';</code>); your message will be displayed along with any other notes from %1$s itself. This could be useful to developers that need to clear server caches too (such as <a href="http://www.php.net/manual/en/function.apc-clear-cache.php" target="_blank">APC</a> or <a href="http://www.php.net/manual/en/memcache.flush.php" target="_blank">memcache</a>).', $this->plugin->text_domain), esc_html($this->plugin->name)).'</p>'."\n";
                 echo '      <p style="margin-bottom:0;"><textarea name="'.esc_attr(__NAMESPACE__).'[save_options][cache_clear_eval_code]" rows="5" spellcheck="false" class="monospace"></textarea></p>'."\n";
                 echo '      <p class="info" style="margin-top:0;">'.__('<strong>Example:</strong> <code>&lt;?php apc_clear_cache(); echo \'&lt;p&gt;Also cleared APC cache.&lt;/p&gt;\'; ?&gt;</code>', $this->plugin->text_domain).'</p>'."\n";
