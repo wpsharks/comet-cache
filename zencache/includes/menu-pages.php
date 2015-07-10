@@ -688,10 +688,8 @@ namespace zencache // Root namespace.
 				echo '            </select></p>'."\n";
 				echo '         <hr />'."\n";
 
-                echo '         <h3 style="margin-bottom:0;">'.
-                                    '<a href="#" class="dotted" data-toggle-target="'.esc_attr(__NAMESPACE__.'-static-cdn-filters--more-options').'">'.
-                                        __('Additional Options (For Advanced Users)', $this->plugin->text_domain) .
-                                    '</a>'.
+                echo '         <h2 style="margin-bottom:0;font-weight:bold;">'.
+                                        __('Additional Options (For Advanced Users)', $this->plugin->text_domain).
                                 '</h3>'."\n";
 
                 echo '         <div class="'.esc_attr(__NAMESPACE__.'-static-cdn-filters--more-options').'" style="margin-top:1em;">'."\n";
