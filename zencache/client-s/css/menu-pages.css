@@ -1,0 +1,470 @@
+@import url('//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css');
+@import url('../../submodules/sharkicons/styles.min.css');
+
+/*
+Wrap background.
+*/
+#wpwrap
+{
+	position  : relative;
+}
+#wpwrap::after
+{
+	top        : 0;
+	left       : 0;
+	bottom     : 0;
+	right      : 0;
+	z-index    : -1;
+	position   : absolute;
+
+	content    : '';
+	background : url('../images/bg.png');
+	opacity    : 0.25;
+}
+/*
+Align these with menu page.
+*/
+div.updated, div.error
+{
+	margin : 1.25em 1.25em 1.25em .25em;
+}
+/*
+Menu page styles.
+*/
+.plugin-menu-page
+{
+	min-width : 800px;
+	margin    : 1.25em 1.25em 1.25em .25em;
+}
+.plugin-menu-page,
+.plugin-menu-page p
+{
+	font-size : 14px;
+}
+.plugin-menu-page a
+{
+	color : #23263E;
+}
+.plugin-menu-page a:hover,
+.plugin-menu-page a:active
+{
+	color : #467629;
+}
+.plugin-menu-page p:first-child,
+.plugin-menu-page pre:first-child
+{
+	margin-top : 0;
+}
+.plugin-menu-page p:last-child,
+.plugin-menu-page pre:last-child
+{
+	margin-bottom : 0;
+}
+.plugin-menu-page code
+{
+	border-radius : 3px;
+	padding       : .1em .25em .1em .25em;
+	background    : rgba(178, 178, 178, 0.25);
+	font-family   : 'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace;
+}
+.plugin-menu-page pre.code
+{
+	padding    : 0;
+	background : none;
+}
+.plugin-menu-page pre.code > code
+{
+	font-size     : 90%;
+	color         : #EEEEEE;
+	background    : #222222;
+	overflow-x    : auto;
+	max-width     : 100%;
+
+	border-radius : 4px;
+	padding       : 1em;
+	display       : block;
+	box-shadow    : 0 0 5px 1px #000000 inset;
+}
+.plugin-menu-page img
+{
+	border : 0;
+}
+.plugin-menu-page img.screenshot
+{
+	float         : right;
+	margin        : 0 0 2em 2em;
+
+	border-radius : 4px;
+	border        : 1px solid #AFAFAF;
+
+	box-shadow    : 0 0 5px 0 rgba(0, 0, 0, 0.2) inset;
+	background    : #FFFFFF;
+	padding       : .5em;
+}
+.plugin-menu-page hr
+{
+	border     : 0;
+	padding    : 0;
+	height     : 1px;
+	margin     : 1em 0 1em 0;
+	background : linear-gradient(to left, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+}
+.plugin-menu-page label
+{
+	-webkit-user-select : none;
+	-moz-user-select    : none;
+	user-select         : none;
+}
+.plugin-menu-page label.switch-primary
+{
+	display       : inline;
+	font-size     : 130%;
+	color         : #000000;
+
+	margin        : 0;
+	padding       : .5em;
+
+	border-radius : 4px;
+	background    : #F1E982;
+	border        : 1px solid rgba(0, 0, 0, 0.07);
+	box-shadow    : -1px -1px 0 0 rgba(0, 0, 0, 0.25) inset, 1px 1px 0 0 #FFFFFF inset;
+}
+.plugin-menu-page input:not([type='radio']):not([type='checkbox']),
+.plugin-menu-page input:not([type='radio']):not([type='checkbox']):focus,
+.plugin-menu-page select, .plugin-menu-page select:focus,
+.plugin-menu-page textarea, .plugin-menu-page textarea:focus
+{
+	width         : 100%;
+
+	margin        : 0;
+	padding       : .25em .5em .25em .5em;
+
+	line-height   : 1.3em;
+	border-radius : 4px;
+	box-sizing    : border-box;
+	border        : 1px solid #848484;
+
+	color         : #333333;
+	background    : #E8E8E8;
+	box-shadow    : 0 0 2px 0 rgba(132, 132, 132, 0.5) inset;
+}
+.plugin-menu-page select, .plugin-menu-page select:focus
+{
+	box-shadow    : 0 1px 0 0 #FFFFFF inset, 0 -2px 3px 0 rgba(132, 132, 132, 0.25) inset;
+}
+.plugin-menu-page input:not([type='radio']):not([type='checkbox']),
+.plugin-menu-page input:not([type='radio']):not([type='checkbox']):focus,
+.plugin-menu-page select, .plugin-menu-page select:focus
+{
+	height : 2em;
+}
+.plugin-menu-page input:not([type='radio']):not([type='checkbox']):focus,
+.plugin-menu-page select:focus, .plugin-menu-page textarea:focus
+{
+	color      : #000000;
+	background : #e2e2e2;
+}
+.plugin-menu-page input::-webkit-input-placeholder
+{
+	font-style : italic;
+	color      : rgba(0, 0, 0, 0.2);
+}
+.plugin-menu-page input::-moz-placeholder
+{
+	font-style : italic;
+	color      : rgba(0, 0, 0, 0.2);
+}
+.plugin-menu-page input:-moz-placeholder
+{
+	font-style : italic;
+	color      : rgba(0, 0, 0, 0.2);
+}
+.plugin-menu-page input:-ms-input-placeholder
+{
+	font-style : italic;
+	color      : rgba(0, 0, 0, 0.2);
+}
+.plugin-menu-page input[disabled],
+.plugin-menu-page select[disabled],
+.plugin-menu-page textarea[disabled]
+{
+	opacity : 0.5;
+}
+.plugin-menu-page table
+{
+	margin : 1em 0 1em 0;
+}
+.plugin-menu-page button
+{
+	line-height         : 1em;
+	font-size           : 150%;
+	font-weight         : bold;
+	color               : #FFFFFF;
+	background          : #23263E;
+
+	border-radius       : 4px;
+	border              : 1px solid rgba(0, 0, 0, 0.5);
+	box-shadow          : 0 1px 1px 0 rgba(0, 0, 0, 0.25),
+	-1px -1px 0 0 rgba(0, 0, 0, 0.2) inset,
+	1px 1px 0 0 rgba(255, 255, 255, 0.1) inset;
+
+	margin              : 0;
+	box-sizing          : border-box;
+	padding             : .25em .5em .25em .5em;
+
+	outline             : none;
+
+	cursor              : pointer;
+	-webkit-user-select : none;
+	-moz-user-select    : none;
+	user-select         : none;
+}
+.plugin-menu-page button:hover
+{
+	background : #467629;
+}
+.plugin-menu-page button[type='submit']
+{
+	background : #467629;
+}
+.plugin-menu-page button[type='submit']:hover
+{
+	background : #23263E;
+}
+.plugin-menu-page button:active
+{
+	-webkit-transform : scale(0.98, 0.98);
+	transform         : scale(0.98, 0.98);
+}
+.pro-preview .plugin-menu-page-panel-heading
+{
+    background: #216095;
+}
+.pro-preview.pro-additional-features .plugin-menu-page-panel-heading:after
+{
+    font-variant : small-caps !important;
+    font-family  : sans-serif !important;
+    content      : 'additional pro version only features' !important
+}
+.pro-preview .pro-preview-feature:after
+{
+    font-variant : small-caps !important;
+    font-family  : sans-serif !important;
+    content      : 'pro version only' !important;
+    margin-left  : 15px;
+    background   : #216095;
+    color        : #FFFFFF;
+    padding      : 0 5px 2px 5px;
+    font-weight  : normal;
+}
+.plugin-menu-page .info,
+.plugin-menu-page .notice,
+.plugin-menu-page .warning,
+.plugin-menu-page .error
+{
+	border-radius : 4px;
+	padding       : .5em;
+	margin        : 1em 0 1em 0;
+}
+.plugin-menu-page .info
+{
+	background : #CADFED;
+	border     : 1px solid #216095;
+}
+.plugin-menu-page .notice
+{
+	background : #FFFDE8;
+	border     : 1px solid #E6DB55;
+}
+.plugin-menu-page .warning
+{
+	background : #FFEFD3;
+	border     : 1px solid #D29A04;
+}
+.plugin-menu-page .error
+{
+	background : #FFC0CB;
+	border     : 1px solid #711E1E;
+}
+.plugin-menu-page .monospace
+{
+	font-family : 'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace;
+}
+.plugin-menu-page textarea.monospace
+{
+	white-space : pre;
+}
+.plugin-menu-page .clearfix:before,
+.plugin-menu-page .clearfix:after
+{
+	display : table;
+	content : ' ';
+}
+.plugin-menu-page .clearfix:after
+{
+	clear : both;
+}
+/*
+Heading styles.
+*/
+.plugin-menu-page-heading .plugin-menu-page-restore-defaults,
+.plugin-menu-page-heading .plugin-menu-page-panel-togglers
+{
+	float  : right;
+	margin : 0 1em 0 0;
+}
+.plugin-menu-page-heading .plugin-menu-page-panel-togglers button
+{
+	background : #23263E !important;
+}
+.plugin-menu-page-heading .plugin-menu-page-upsells
+{
+	float      : right;
+	clear      : right;
+
+	max-width  : 350px;
+	margin     : 1em 0 0 0;
+
+	text-align : center;
+}
+.plugin-menu-page-heading .plugin-menu-page-upsells a
+{
+	line-height     : 1.5em;
+	text-decoration : none;
+	margin          : 0 .5em 0 .5em;
+	display         : inline-block;
+}
+/*
+Section heading styles.
+*/
+.plugin-menu-page-section-heading
+{
+	margin : 1em 0 1em 0;
+}
+.plugin-menu-page-section-heading > small
+{
+	font-size  : 65%;
+	opacity    : 0.5;
+	font-style : italic;
+	display    : block;
+	margin     : .25em 0 0 0 !important;
+}
+/*
+Panel styles.
+*/
+.plugin-menu-page-panel
+{
+	margin : 1em 0 1em 0;
+}
+.plugin-menu-page-panel:first-child
+{
+	margin-top : 0;
+}
+.plugin-menu-page-panel-heading
+{
+	display             : block;
+	text-decoration     : none;
+
+	padding             : 10px;
+	font-size           : 150%;
+	font-weight         : bold;
+	background          : #23263E;
+	color               : #DDDDDD !important;
+
+	border-radius       : 4px;
+	box-shadow          : 0 2px 2px 0 rgba(0, 0, 0, 0.25);
+
+	cursor              : pointer;
+	-webkit-user-select : none;
+	-moz-user-select    : none;
+	user-select         : none;
+}
+.plugin-menu-page-panel-heading:hover,
+.plugin-menu-page-panel-heading.open
+{
+	color : #FFFFFF !important;
+}
+.plugin-menu-page-panel-heading:after
+{
+	font-size   : 80%;
+	content     : '\f078';
+	font-weight : normal;
+	font-family : 'FontAwesome';
+
+	float       : right;
+	margin      : 0 0 0 5px;
+	display     : inline-block;
+}
+.plugin-menu-page-panel-heading.open:after
+{
+	content : '\f077';
+}
+.pro-preview .plugin-menu-page-panel-heading:after
+{
+	font-variant : small-caps !important;
+	font-family  : sans-serif !important;
+	content      : 'pro version only' !important;
+}
+.plugin-menu-page-panel-body
+{
+	width                      : 99%;
+	margin                     : 0 auto 0 auto;
+	box-sizing                 : border-box;
+
+	display                    : none;
+
+	padding                    : 1.2em;
+	color                      : #222222;
+
+	border                     : 1px solid #848484;
+	background                 : #FFFFFF;
+
+	border-bottom-left-radius  : 4px;
+	border-bottom-right-radius : 4px;
+
+	box-shadow                 : 0 1px 1px 0 rgba(0, 0, 0, 0.25),0 3px 1px -1px rgba(0, 0, 0, 0.25) inset;
+}
+.plugin-menu-page-panel-body.open
+{
+	display : block;
+}
+.plugin-menu-page-panel-body p
+{
+	color: #666666;
+	font-size : 90%;
+}
+.plugin-menu-page-panel-body p.notice,
+.plugin-menu-page-panel-body p.info,
+.plugin-menu-page-panel-body p.warning,
+.plugin-menu-page-panel-body p.error
+{
+	color: #000000;
+}
+.plugin-menu-page-panel-body h2
+{
+    margin : 0 0 .5em 0;
+}
+.plugin-menu-page-panel-body h3
+{
+	margin : 0 0 .5em 0;
+}
+.plugin-menu-page-panel-body h3:first-child
+{
+	margin-top : 0;
+}
+.plugin-menu-page-panel-body h3 + p
+{
+	margin-top : 0;
+}
+/*
+Save button styles.
+*/
+.plugin-menu-page-save
+{
+	margin-top : 2em;
+}
+.plugin-menu-page-save button[type='submit']
+{
+	width       : 100%;
+	line-height : 1.3em;
+}
