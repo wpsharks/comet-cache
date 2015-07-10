@@ -1,6 +1,6 @@
 === ZenCache ===
 
-Stable tag: 150409
+Stable tag: 150709
 Requires at least: 3.7
 Tested up to: 4.3-beta
 Text Domain: zencache
@@ -327,6 +327,11 @@ Released under the terms of the [GNU General Public License](http://www.gnu.org/
 Requires PHP v5.3.2+. The latest version of ZenCache is a complete rewrite (OOP design). Faster! and even more dependable. NOTE: the free version of Quick Cache (this new LITE version); while it remains fully functional and is more-than-adequate for most sites; is now limited in some ways. The following advanced features from the previous release are no longer available in the lite version: a custom MD5 Version Salt, custom Exclusion Patterns, a Clear Cache button in admin bar. These, and other features; are now available only in the pro version of the plugin. For further details, please see: <http://zencache.com/>.
 
 == Changelog ==
+
+= v150709 =
+
+- **Bug Fix**: This update reverts the codebase restructure released in the previous version (v150626). That release received several reports of Fatal Errors, however those issues only affected a small subset of ZenCache users. After extensive research, we discovered that this issue was related to a bug in PHP's APC Extension (which is commonly used on systems running PHP 5.3 and PHP 5.4). The restructured codebase in the previous release utilized a newer PHP feature (Closures) and that increased the likelihood of exposing that existing PHP bug. Since we can't fix the PHP bug directly and we want to continue supporting PHP 5.3.2+ and PHP 5.4 for now, we're reverting the ZenCache Lite codebase restructure to the previous version (v150409). The new ZenCache Lite features that were included in the previous release are still available in this release--only the structure of the codebase itself has changed. To read more about the PHP APC bug, see [Issue #511](https://github.com/websharks/zencache/issues/511).
+- **Enhancement**: The Pro Preview feature has been enhanced to improve usability. We also updated the Static CDN Filters section of the Pro Preview to include several new Static CDN Filter features.
 
 = v150626 =
 
