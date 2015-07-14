@@ -163,13 +163,14 @@ namespace zencache
 		 */
 		define('ZENCACHE_PLUGIN_FILE', '%%ZENCACHE_PLUGIN_FILE%%');
 
-	/*
-	 * Include shared methods between {@link advanced_cache} and {@link plugin}.
-	 */
-	if(defined('WP_DEBUG') && WP_DEBUG) {
-        if ((include_once(dirname(ZENCACHE_PLUGIN_FILE).'/includes/share.php')) === false)
-            return; // Unable to find class dependency. Fail softly.
-    } else if((@include_once(dirname(ZENCACHE_PLUGIN_FILE).'/includes/share.php')) === FALSE) {
+    /*
+     * Include shared methods between {@link advanced_cache} and {@link plugin}.
+     */
+    if (defined('WP_DEBUG') && WP_DEBUG) {
+        if ((include_once(dirname(ZENCACHE_PLUGIN_FILE).'/includes/share.php')) === false) {
+            return;
+        } // Unable to find class dependency. Fail softly.
+    } else if ((@include_once(dirname(ZENCACHE_PLUGIN_FILE).'/includes/share.php')) === false) {
         return; // Unable to find class dependency. Fail softly.
     }
 
