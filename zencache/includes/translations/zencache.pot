@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ZenCache 150709\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/zencache\n"
-"POT-Creation-Date: 2015-07-09 23:41:41+00:00\n"
+"POT-Creation-Date: 2015-07-18 15:37:13+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -14,151 +14,151 @@ msgstr ""
 
 #. translators: This string is actually NOT translatable because the `__()`
 #. function is not available at this point in the processing.
-#: includes/advanced-cache.tpl.php:798
+#: includes/advanced-cache.tpl.php:801
 msgid "%1$s fully functional :-) Cache file served for (%2$s) in %3$s seconds, on: %4$s."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:930
+#: includes/advanced-cache.tpl.php:933
 msgid "Unexpected OB phase: `%1$s`."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1002
+#: includes/advanced-cache.tpl.php:1005
 msgid "Cache directory not writable. %1$s needs this directory please: `%2$s`. Set permissions to `755` or higher; `777` might be needed in some cases."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1009 includes/advanced-cache.tpl.php:1032
+#: includes/advanced-cache.tpl.php:1012 includes/advanced-cache.tpl.php:1035
 msgid "Unable to create symlink: `%1$s` » `%2$s`. Possible permissions issue (or race condition), please check your cache directory: `%3$s`."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1020
+#: includes/advanced-cache.tpl.php:1023
 msgid "%1$s file path: %2$s"
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1021
+#: includes/advanced-cache.tpl.php:1024
 msgid "%1$s file built for (%2$s) in %3$s seconds, on: %4$s."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1023
+#: includes/advanced-cache.tpl.php:1026
 msgid "This %1$s file will auto-expire (and be rebuilt) on: %2$s (based on your configured expiration time)."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1047
+#: includes/advanced-cache.tpl.php:1050
 msgid "%1$s: failed to write cache file for: `%2$s`; possible permissions issue (or race condition), please check your cache directory: `%3$s`."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1093
+#: includes/advanced-cache.tpl.php:1096
 msgid "because `PHP_SAPI` reports that you are currently running from the command line."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1097
+#: includes/advanced-cache.tpl.php:1100
 msgid "because `$_GET['zcAC']` is set to a boolean-ish FALSE value."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1101
+#: includes/advanced-cache.tpl.php:1104
 msgid "because `$_SERVER['HTTP_HOST']` is missing from your server configuration."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1105
+#: includes/advanced-cache.tpl.php:1108
 msgid "because `$_SERVER['REQUEST_URI']` is missing from your server configuration."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1109
+#: includes/advanced-cache.tpl.php:1112
 msgid "because the PHP constant `ZENCACHE_ALLOWED` has been set to a boolean-ish `FALSE` value at runtime. Perhaps by WordPress itself, or by one of your themes/plugins. This usually means that you have a theme/plugin intentionally disabling the cache on this page; and it's usually for a very good reason."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1113
+#: includes/advanced-cache.tpl.php:1116
 msgid "because the environment variable `$_SERVER['ZENCACHE_ALLOWED']` has been set to a boolean-ish `FALSE` value at runtime. Perhaps by WordPress itself, or by one of your themes/plugins. This usually means that you have a theme/plugin intentionally disabling the cache on this page; and it's usually for a very good reason."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1117
+#: includes/advanced-cache.tpl.php:1120
 msgid "because the PHP constant `DONOTCACHEPAGE` has been set at runtime. Perhaps by WordPress itself, or by one of your themes/plugins. This usually means that you have a theme/plugin intentionally disabling the cache on this page; and it's usually for a very good reason."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1121
+#: includes/advanced-cache.tpl.php:1124
 msgid "because the environment variable `$_SERVER['DONOTCACHEPAGE']` has been set at runtime. Perhaps by WordPress itself, or by one of your themes/plugins. This usually means that you have a theme/plugin intentionally disabling the cache on this page; and it's usually for a very good reason."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1125
+#: includes/advanced-cache.tpl.php:1128
 msgid "because `$_SERVER['REQUEST_METHOD']` is `POST`, `PUT`, `DELETE`, `HEAD`, `OPTIONS`, `TRACE` or `CONNECT`. These request methods should never (ever) be cached in any way."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1129
+#: includes/advanced-cache.tpl.php:1132
 msgid "because `[current IP address]` === `$_SERVER['SERVER_ADDR']`; i.e. a self-serve request. DEVELOPER TIP: if you are testing on a localhost installation, please add `define('LOCALHOST', TRUE);` to your `/wp-config.php` file while you run tests :-) Remove it (or set it to a `FALSE` value) once you go live on the web."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1133
+#: includes/advanced-cache.tpl.php:1136
 msgid "because `$_SERVER['REQUEST_URI']` indicates this is a `/feed`; and the configuration of this site says not to cache XML-based feeds."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1137
+#: includes/advanced-cache.tpl.php:1140
 msgid "because `$_SERVER['REQUEST_URI']` indicates this is a `wp-` or `xmlrpc` file; i.e. a WordPress systematic file. WordPress systematics are never (ever) cached in any way."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1141
+#: includes/advanced-cache.tpl.php:1144
 msgid "because `$_SERVER['REQUEST_URI']` or the `is_admin()` function indicates this is an administrative area of the site."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1145
+#: includes/advanced-cache.tpl.php:1148
 msgid "because `$_SERVER['REQUEST_URI']` indicates this is a Multisite Network; and this was a request for `/files/*`, not a page."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1150
+#: includes/advanced-cache.tpl.php:1153
 msgid "because the current user visiting this page (usually YOU), appears to be logged-in. The current configuration says NOT to cache pages for logged-in visitors. This message may also appear if you have an active PHP session on this site, or if you've left (or replied to) a comment recently. If this message continues, please clear your cookies and try again."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1154
+#: includes/advanced-cache.tpl.php:1157
 msgid "because `$_GET` contains query string data. The current configuration says NOT to cache GET requests with a query string."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1158
+#: includes/advanced-cache.tpl.php:1161
 msgid "because `$_SERVER['REQUEST_URI']` matches a configured URI Exclusion Pattern on this installation."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1162
+#: includes/advanced-cache.tpl.php:1165
 msgid "because `$_SERVER['HTTP_USER_AGENT']` matches a configured User-Agent Exclusion Pattern on this installation."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1166
+#: includes/advanced-cache.tpl.php:1169
 msgid "because `$_SERVER['HTTP_REFERER']` and/or `$_GET['_wp_http_referer']` matches a configured HTTP Referrer Exclusion Pattern on this installation."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1170
+#: includes/advanced-cache.tpl.php:1173
 msgid "because the WordPress `is_404()` Conditional Tag says the current page is a 404 error. The current configuration says NOT to cache 404 errors."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1174
+#: includes/advanced-cache.tpl.php:1177
 msgid "because a plugin running on this installation says this page is in Maintenance Mode; i.e. is not available publicly at this time."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1178
+#: includes/advanced-cache.tpl.php:1181
 msgid "because %1$s is unable to cache already-compressed output. Please use `mod_deflate` w/ Apache; or use `zlib.output_compression` in your `php.ini` file. %1$s is NOT compatible with `ob_gzhandler()` and others like this."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1182
+#: includes/advanced-cache.tpl.php:1185
 msgid "because the contents of this document contain `<body id=\"error-page\">`, which indicates this is an auto-generated WordPress error message."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1186
+#: includes/advanced-cache.tpl.php:1189
 msgid "because a `Content-Type:` header was set via PHP at runtime. The header contains a MIME type which is NOT a variation of HTML or XML. This header might have been set by your hosting company, by WordPress itself; or by one of your themes/plugins."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1190
+#: includes/advanced-cache.tpl.php:1193
 msgid "because a `Status:` header (or an `HTTP/` header) was set via PHP at runtime. The header contains a non-`2xx` status code. This indicates the current page was not loaded successfully. This header might have been set by your hosting company, by WordPress itself; or by one of your themes/plugins."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1194
+#: includes/advanced-cache.tpl.php:1197
 msgid "because the WordPress `is_404()` Conditional Tag says the current page is a 404 error; and this is the first time it's happened on this page. Your current configuration says that 404 errors SHOULD be cached, so %1$s built a cached symlink which points future requests for this location to your already-cached 404 error document. If you reload this page (assuming you don't clear the cache before you do so); you should get a cached version of your 404 error document. This message occurs ONCE for each new/unique 404 error request."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1198
+#: includes/advanced-cache.tpl.php:1201
 msgid "because %1$s detected an early output buffer termination. This may happen when a theme/plugin ends, cleans, or flushes all output buffers before reaching the PHP shutdown phase. It's not always a bad thing. Sometimes it is necessary for a theme/plugin to do this. However, in this scenario it is NOT possible to cache the output; since %1$s is effectively disabled at runtime when this occurs."
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1202
+#: includes/advanced-cache.tpl.php:1205
 msgid "due to an unexpected behavior in the application. Please report this as a bug!"
 msgstr ""
 
-#: includes/advanced-cache.tpl.php:1205
+#: includes/advanced-cache.tpl.php:1208
 msgid "%1$s is NOT caching this page, %2$s"
 msgstr ""
 
@@ -772,7 +772,7 @@ msgstr ""
 
 #: includes/menu-pages.php:468 includes/menu-pages.php:486
 #: includes/menu-pages.php:504 includes/menu-pages.php:608
-#: includes/menu-pages.php:612 includes/menu-pages.php:717
+#: includes/menu-pages.php:612 includes/menu-pages.php:715
 msgid "<strong>Note:</strong> please remember that your entries here should be formatted as a line-delimited list; e.g. one exclusion pattern per line."
 msgstr ""
 
@@ -1068,159 +1068,159 @@ msgstr ""
 msgid "Yes, I've configured my CDN w/ an SSL certificate; I need https:// enabled."
 msgstr ""
 
-#: includes/menu-pages.php:693
+#: includes/menu-pages.php:692
 msgid "Additional Options (For Advanced Users)"
 msgstr ""
 
-#: includes/menu-pages.php:699
+#: includes/menu-pages.php:697
 msgid "Everything else below is 100% completely optional; i.e. not required to enjoy the benefits of Static CDN Filters."
 msgstr ""
 
-#: includes/menu-pages.php:702
+#: includes/menu-pages.php:700
 msgid "Whitelisted File Extensions (Optional; Comma-Delimited)"
 msgstr ""
 
-#: includes/menu-pages.php:704
+#: includes/menu-pages.php:702
 msgid "If you leave this empty a default set of extensions are taken from WordPress itself. The default set of whitelisted file extensions includes everything supported by the WordPress media library."
 msgstr ""
 
-#: includes/menu-pages.php:705
+#: includes/menu-pages.php:703
 msgid "Blacklisted File Extensions (Optional; Comma-Delimited)"
 msgstr ""
 
-#: includes/menu-pages.php:707
+#: includes/menu-pages.php:705
 msgid "With or without a whitelist, you can force exclusions by explicitly blacklisting certain file extensions of your choosing. Please note, the <code>php</code> extension will never be considered a static resource; i.e. it is automatically blacklisted at all times."
 msgstr ""
 
-#: includes/menu-pages.php:709
+#: includes/menu-pages.php:707
 msgid "Whitelisted URI Inclusion Patterns (Optional; One Per Line)"
 msgstr ""
 
-#: includes/menu-pages.php:711
+#: includes/menu-pages.php:709
 msgid "<strong>Note:</strong> please remember that your entries here should be formatted as a line-delimited list; e.g. one inclusion pattern per line."
 msgstr ""
 
-#: includes/menu-pages.php:712
+#: includes/menu-pages.php:710
 msgid "If provided, only local URIs matching one of the patterns you list here will be served from your CDN Host Name. URI patterns are caSe-insensitive. A wildcard <code>*</code> will match zero or more characters in any of your patterns. A caret <code>^</code> symbol will match zero or more characters that are NOT the <code>/</code> character. For instance, <code>*/wp-content/*</code> here would indicate that you only want to filter URLs that lead to files located inside the <code>wp-content</code> directory. Adding an additional line with <code>*/wp-includes/*</code> would filter URLs in the <code>wp-includes</code> directory also. <strong>If you leave this empty</strong>, ALL files matching a static file extension will be served from your CDN; i.e. the default behavior."
 msgstr ""
 
-#: includes/menu-pages.php:713
+#: includes/menu-pages.php:711
 msgid "Please note that URI patterns are tested against a file's path (i.e. a file's URI, and NOT its full URL). A URI always starts with a leading <code>/</code>. To clarify, a URI is the portion of the URL which comes after the host name. For instance, given the following URL: <code>http://example.com/path/to/style.css?ver=3</code>, the URI you are matching against would be: <code>/path/to/style.css?ver=3</code>. To whitelist this URI, you could use a line that contains something like this: <code>/path/to/*.css*</code>"
 msgstr ""
 
-#: includes/menu-pages.php:714
+#: includes/menu-pages.php:712
 msgid "Blacklisted URI Exclusion Patterns (Optional; One Per Line)"
 msgstr ""
 
-#: includes/menu-pages.php:716
+#: includes/menu-pages.php:714
 msgid "With or without a whitelist, you can force exclusions by explicitly blacklisting certain URI patterns. URI patterns are caSe-insensitive. A wildcard <code>*</code> will match zero or more characters in any of your patterns. A caret <code>^</code> symbol will match zero or more characters that are NOT the <code>/</code> character. For instance, <code>*/wp-content/*/dynamic.pdf*</code> would exclude a file with the name <code>dynamic.pdf</code> located anywhere inside a sub-directory of <code>wp-content</code>."
 msgstr ""
 
-#: includes/menu-pages.php:719
+#: includes/menu-pages.php:717
 msgid "Query String Invalidation Variable Name"
 msgstr ""
 
-#: includes/menu-pages.php:721
+#: includes/menu-pages.php:719
 msgid "Each filtered URL (which then leads to your CDN) will include this query string variable as an easy way to invalidate the CDN cache at any time. Invalidating the CDN cache is simply a matter of changing the global invalidation counter (i.e. the value assigned to this query string variable). %1$s manages invalidations automatically; i.e. %1$s will automatically bump an internal counter each time you upgrade a WordPress component (e.g. a plugin, theme, or WP itself). Or, if you ask %1$s to invalidate the CDN cache (e.g. a manual clearing of the CDN cache); the internal counter is bumped then too. In short, %1$s handles cache invalidations for you reliably. This option simply allows you to customize the query string variable name which makes cache invalidations possible. <strong>Please note, the default value is adequate for most sites. You can change this if you like, but it's not necessary.</strong>"
 msgstr ""
 
-#: includes/menu-pages.php:722
+#: includes/menu-pages.php:720
 msgid "<strong>Note:</strong> If you empty this field, it will effectively disable the %1$s invalidation system for Static CDN Filters; i.e. the query string variable will NOT be included if you do not supply a variable name."
 msgstr ""
 
-#: includes/menu-pages.php:736
+#: includes/menu-pages.php:734
 msgid "Dynamic Version Salt"
 msgstr ""
 
-#: includes/menu-pages.php:741
+#: includes/menu-pages.php:739
 msgid "<i class=\"fa fa-flask\"></i> <span style=\"display:inline-block; padding:5px; border-radius:3px; background:#FFFFFF; color:#354913;\"><span style=\"font-weight:bold; font-size:80%;\">GEEK ALERT</span></span> This is for VERY advanced users only..."
 msgstr ""
 
-#: includes/menu-pages.php:742
+#: includes/menu-pages.php:740
 msgid "<em>Note: Understanding the %1$s <a href=\"http://zencache.com/r/kb-branched-cache-structure/\" target=\"_blank\">Branched Cache Structure</a> is a prerequisite to understanding how Dynamic Version Salts are added to the mix.</em>"
 msgstr ""
 
-#: includes/menu-pages.php:743
+#: includes/menu-pages.php:741
 msgid "A Version Salt gives you the ability to dynamically create multiple variations of the cache, and those dynamic variations will be served on subsequent visits; e.g. if a visitor has a specific cookie (of a certain value) they will see pages which were cached with that version (i.e. w/ that Version Salt: the value of the cookie). A Version Salt can really be anything."
 msgstr ""
 
-#: includes/menu-pages.php:744
+#: includes/menu-pages.php:742
 msgid "A Version Salt can be a single variable like <code>$_COOKIE['my_cookie']</code>, or it can be a combination of multiple variables, like <code>$_COOKIE['my_cookie'].$_COOKIE['my_other_cookie']</code>. (When using multiple variables, please separate them with a dot, as shown in the example.)"
 msgstr ""
 
-#: includes/menu-pages.php:745
+#: includes/menu-pages.php:743
 msgid "Experts could even use PHP ternary expressions that evaluate into something. For example: <code>((preg_match('/iPhone/i', $_SERVER['HTTP_USER_AGENT'])) ? 'iPhones' : '')</code>. This would force a separate version of the cache to be created for iPhones (e.g., <code>/cache/PROTOCOL/HOST/REQUEST-URI.v/iPhones.html</code>)."
 msgstr ""
 
-#: includes/menu-pages.php:746
+#: includes/menu-pages.php:744
 msgid "For more documentation, please see <a href=\"http://zencache.com/r/kb-dynamic-version-salts/\" target=\"_blank\">Dynamic Version Salts</a>."
 msgstr ""
 
-#: includes/menu-pages.php:748
+#: includes/menu-pages.php:746
 msgid "Create a Dynamic Version Salt For %1$s? &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style=\"font-size:90%%; opacity:0.5;\">150%% OPTIONAL</span>"
 msgstr ""
 
-#: includes/menu-pages.php:750
+#: includes/menu-pages.php:748
 msgid "<a href=\"http://php.net/manual/en/language.variables.superglobals.php\" target=\"_blank\">Super Globals</a> work here; <a href=\"http://codex.wordpress.org/Editing_wp-config.php#table_prefix\" target=\"_blank\"><code>$GLOBALS['table_prefix']</code></a> is a popular one. Or, perhaps a PHP Constant defined in <code>/wp-config.php</code>; such as <code>WPLANG</code> or <code>DB_HOST</code>."
 msgstr ""
 
-#: includes/menu-pages.php:751
+#: includes/menu-pages.php:749
 msgid "<strong>Important:</strong> your Version Salt is scanned for PHP syntax errors via <a href=\"http://phpcodechecker.com/\" target=\"_blank\"><code>phpCodeChecker.com</code></a>. If errors are found, you'll receive a notice in the Dashboard."
 msgstr ""
 
-#: includes/menu-pages.php:752
+#: includes/menu-pages.php:750
 msgid "If you've enabled a separate cache for each user (optional) that's perfectly OK. A Version Salt works with user caching too."
 msgstr ""
 
-#: includes/menu-pages.php:762
+#: includes/menu-pages.php:760
 msgid "Theme/Plugin Developers"
 msgstr ""
 
-#: includes/menu-pages.php:767
+#: includes/menu-pages.php:765
 msgid "Developing a Theme or Plugin for WordPress?"
 msgstr ""
 
-#: includes/menu-pages.php:768
+#: includes/menu-pages.php:766
 msgid "<strong>Tip:</strong> %1$s can be disabled temporarily. If you're a theme/plugin developer, you can set a flag within your PHP code to disable the cache engine at runtime. Perhaps on a specific page, or in a specific scenario. In your PHP script, set: <code>$_SERVER['ZENCACHE_ALLOWED'] = FALSE;</code> or <code>define('ZENCACHE_ALLOWED', FALSE)</code>. %1$s is also compatible with: <code>define('DONOTCACHEPAGE', TRUE)</code>. It does't matter where or when you define one of these, because %1$s is the last thing to run before script execution ends."
 msgstr ""
 
-#: includes/menu-pages.php:770
+#: includes/menu-pages.php:768
 msgid "Writing \"Advanced Cache\" Plugins Specifically for %1$s"
 msgstr ""
 
-#: includes/menu-pages.php:771
+#: includes/menu-pages.php:769
 msgid "Theme/plugin developers can take advantage of the %1$s plugin architecture by creating PHP files inside this special directory: <code>/wp-content/ac-plugins/</code>. There is an <a href=\"https://github.com/websharks/zencache/blob/000000-dev/zencache/includes/ac-plugin.example.php\" target=\"_blank\">example plugin file @ GitHub</a> (please review it carefully and ask questions). If you develop a plugin for %1$s, please share it with the community by publishing it in the plugins respository at WordPress.org."
 msgstr ""
 
-#: includes/menu-pages.php:772
+#: includes/menu-pages.php:770
 msgid "<strong>Why does %1$s have it's own plugin architecture?</strong> WordPress loads the <code>advanced-cache.php</code> drop-in file (for caching purposes) very early-on; before any other plugins or a theme. For this reason, %1$s implements it's own watered-down version of functions like <code>add_action()</code>, <code>do_action()</code>, <code>add_filter()</code>, <code>apply_filters()</code>."
 msgstr ""
 
-#: includes/menu-pages.php:784
+#: includes/menu-pages.php:782
 msgid "Import/Export Options"
 msgstr ""
 
-#: includes/menu-pages.php:789
+#: includes/menu-pages.php:787
 msgid "Import Options from Another %1$s Installation?"
 msgstr ""
 
-#: includes/menu-pages.php:790
+#: includes/menu-pages.php:788
 msgid "Upload your <code>%1$s-options.json</code> file and click \"Save All Changes\" below. The options provided by your import file will override any that exist currently."
 msgstr ""
 
-#: includes/menu-pages.php:793
+#: includes/menu-pages.php:791
 msgid "Export Existing Options from this %1$s Installation?"
 msgstr ""
 
-#: includes/menu-pages.php:795
+#: includes/menu-pages.php:793
 msgid "%1$s-options.json"
 msgstr ""
 
-#: includes/menu-pages.php:796
+#: includes/menu-pages.php:794
 msgid "Download your existing options and import them all into another %1$s installation; saves time on future installs."
 msgstr ""
 
-#: includes/menu-pages.php:804
+#: includes/menu-pages.php:802
 msgid "Save All Changes"
 msgstr ""
 

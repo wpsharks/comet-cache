@@ -1,6 +1,6 @@
 === ZenCache ===
 
-Stable tag: 150709
+Stable tag: 150718
 Requires at least: 3.7
 Tested up to: 4.3-beta
 Text Domain: zencache
@@ -53,16 +53,21 @@ TIP: you can preview Pro features in the free version by clicking the "Preview P
 
 == Screenshots ==
 
-1. ZenCache Screenshot #1
-2. ZenCache Screenshot #2
-3. ZenCache Screenshot #3
-4. ZenCache Screenshot #4
-5. ZenCache Screenshot #5
-6. ZenCache Screenshot #6
-7. ZenCache Screenshot #7
-8. ZenCache Screenshot #8
-9. ZenCache Screenshot #9
-10. ZenCache Screenshot #10
+1. Step 1: Enable ZenCache #1
+2. Step 2: Save All Changes; that's it! #2
+3. One-click Clear Cache button #3
+4. Intelligent and automatic cache clearing #4
+5. Directory / Expiration Time #5
+6. Client-Side Cache #6
+7. GET Requests #7
+8. 404 Requests #8
+9. RSS, RDF, and Atom Feeds #9
+10. URI Exclusion Patterns #10
+11. HTTP Referrer Exclusion Patterns #11
+12. User-Agent Exclusion Patterns #12
+13. GZIP Compression #13
+14. Theme/Plugin Developers #14
+
 
 == Installation ==
 
@@ -327,6 +332,10 @@ Released under the terms of the [GNU General Public License](http://www.gnu.org/
 Requires PHP v5.3.2+. The latest version of ZenCache is a complete rewrite (OOP design). Faster! and even more dependable. NOTE: the free version of Quick Cache (this new LITE version); while it remains fully functional and is more-than-adequate for most sites; is now limited in some ways. The following advanced features from the previous release are no longer available in the lite version: a custom MD5 Version Salt, custom Exclusion Patterns, a Clear Cache button in admin bar. These, and other features; are now available only in the pro version of the plugin. For further details, please see: <http://zencache.com/>.
 
 == Changelog ==
+
+= v150718 =
+
+- **Bug Fix**: Fixed a Fatal Error when upgrading from v150629 to the latest version of ZenCache. This fatal error only occurred on sites that had `WP_DEBUG` enabled, at which point ZenCache failed to properly update `advanced-cache.php`. When `WP_DEBUG` was disabled, the new version of ZenCache was able to properly update `advanced-cache.php` and therefore the temporary failure was silent and inconsequential. This bug fix ensures that no fatal error will be produced when upgrading from v150629, even if `WP_DEBUG` is enabled. See [Issue #524](https://github.com/websharks/zencache/issues/524).
 
 = v150709 =
 
