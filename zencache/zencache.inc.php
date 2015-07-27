@@ -2108,8 +2108,8 @@ namespace zencache
 				if(!preg_match('/([\'"])WP_CACHE\\1/i', $wp_config_file_contents))
 					return $wp_config_file_contents; // Already gone.
 
-				if(preg_match('/define\s*\(\s*([\'"])WP_CACHE\\1\s*,\s*(?:0|FALSE|NULL|([\'"])0?\\2)\s*\)\s*;/i', $wp_config_file_contents))
-					return $wp_config_file_contents; // It's already disabled; no need to modify this file.
+				if(preg_match('/define\s*\(\s*([\'"])WP_CACHE\\1\s*,\s*(?:0|FALSE|NULL|([\'"])0?\\2)\s*\)\s*;/i', $wp_config_file_contents) && !is_writable($wp_config_file))
+					return $wp_config_file_contents; // It's already disabled, and since we can't write to this file let's let this slide.
 
 				if(!($wp_config_file_contents = preg_replace('/define\s*\(\s*([\'"])WP_CACHE\\1\s*,\s*(?:\-?[0-9\.]+|TRUE|FALSE|NULL|([\'"])[^\'"]*\\2)\s*\)\s*;/i', '', $wp_config_file_contents)))
 					return ''; // Failure; something went terribly wrong here.
