@@ -1,14 +1,14 @@
-=== ZenCache ===
+=== Zen Cache ===
 
-Stable tag: 150718
+Stable tag: 150930
 Requires at least: 3.7
-Tested up to: 4.3-beta
+Tested up to: 4.4-alpha
 Text Domain: zencache
 
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Contributors: WebSharks, JasWSInc, raamdev
+Contributors: WebSharks, JasWSInc, raamdev, renzms, kristineds, sitegeek
 Donate link: http://www.websharks-inc.com/r/wp-theme-plugin-donation/
 Tags: cache, quick cache, zencache, zen cache, quickcache, speed, performance, fast, loading, generation, execution, benchmark, benchmarking, debug, debugging, caching, cash, caching, cacheing, super cache, advanced cache, advanced-cache, wp-cache, wp cache, rocket, static, client-side cache, rss cache, feed cache, gzip compression, query string, get request, page cache, options panel included, w3c validated code, highly extensible
 
@@ -332,6 +332,11 @@ Released under the terms of the [GNU General Public License](http://www.gnu.org/
 Requires PHP v5.3.2+. The latest version of ZenCache is a complete rewrite (OOP design). Faster! and even more dependable. NOTE: the free version of Quick Cache (this new LITE version); while it remains fully functional and is more-than-adequate for most sites; is now limited in some ways. The following advanced features from the previous release are no longer available in the lite version: a custom MD5 Version Salt, custom Exclusion Patterns, a Clear Cache button in admin bar. These, and other features; are now available only in the pro version of the plugin. For further details, please see: <http://zencache.com/>.
 
 == Changelog ==
+
+= v150930 =
+
+- **Bug Fix**: Fixed a bug where, in some rare cases, `wp-config.php` would end up with two `WP_CACHE` definitions. See [Issue #509](https://github.com/websharks/zencache/issues/509).
+- **Enhancement**: Updated Text Domain throughout codebase in preparation for plugin import to translate.wordpress.org. See [Issue #576](https://github.com/websharks/zencache/issues/576).
 
 = v150718 =
 

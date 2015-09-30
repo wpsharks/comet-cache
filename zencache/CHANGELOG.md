@@ -1,3 +1,8 @@
+= v150930 =
+
+- **Bug Fix**: Fixed a bug where, in some rare cases, `wp-config.php` would end up with two `WP_CACHE` definitions. See [Issue #509](https://github.com/websharks/zencache/issues/509).
+- **Enhancement**: Updated Text Domain throughout codebase in preparation for plugin import to translate.wordpress.org. See [Issue #576](https://github.com/websharks/zencache/issues/576).
+
 = v150718 =
 
 - **Bug Fix**: Fixed a Fatal Error when upgrading from v150629 to the latest version of ZenCache. This fatal error only occurred on sites that had `WP_DEBUG` enabled, at which point ZenCache failed to properly update `advanced-cache.php`. When `WP_DEBUG` was disabled, the new version of ZenCache was able to properly update `advanced-cache.php` and therefore the temporary failure was silent and inconsequential. This bug fix ensures that no fatal error will be produced when upgrading from v150629, even if `WP_DEBUG` is enabled. See [Issue #524](https://github.com/websharks/zencache/issues/524).
