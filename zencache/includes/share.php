@@ -235,7 +235,7 @@ namespace zencache // Root namespace.
 				if(strpos(__NAMESPACE__, '\\') !== FALSE) // Sanity check.
 					throw new \exception('Not a root namespace: `'.__NAMESPACE__.'`.');
 
-				$this->slug = $this->text_domain = str_replace('_', '-', __NAMESPACE__);
+				$this->slug = 'zencache' = str_replace('_', '-', __NAMESPACE__);
 			}
 
 			/* --------------------------------------------------------------------------------------
@@ -262,7 +262,7 @@ namespace zencache // Root namespace.
 					$cache_dir = ZENCACHE_DIR; // Global constant.
 
 				if(empty($cache_dir)) // No cache directory?
-					throw new \exception(__('Unable to determine cache directory location.', $this->text_domain));
+					throw new \exception(__('Unable to determine cache directory location.', 'zencache'));
 
 				return $cache_dir.($rel_path ? '/'.ltrim((string)$rel_path) : '');
 			}
@@ -1610,7 +1610,7 @@ namespace zencache // Root namespace.
 				$cache_dir = $this->n_dir_seps($cache_dir);
 
 				if($check_max_age && (empty($this->options) || !is_array($this->options) || !isset($this->options['cache_max_age'])))
-					throw new \exception(__('The `options` property w/ a `cache_max_age` key is not defined in this class.', $this->text_domain));
+					throw new \exception(__('The `options` property w/ a `cache_max_age` key is not defined in this class.', 'zencache'));
 
 				if($check_max_age && !($max_age = strtotime('-'.$this->options['cache_max_age'])))
 					return $counter; // Invalid cache expiration time.
@@ -1636,7 +1636,7 @@ namespace zencache // Root namespace.
 				// Uncomment the above line to debug regex pattern matching used by this routine; and others that call upon it.
 
 				if(!rename($cache_dir, $cache_dir_tmp)) // Work from tmp directory so deletions are atomic.
-					throw new \exception(sprintf(__('Unable to delete files. Rename failure on directory: `%1$s`.', $this->text_domain), $cache_dir));
+					throw new \exception(sprintf(__('Unable to delete files. Rename failure on directory: `%1$s`.', 'zencache'), $cache_dir));
 
 				/** @var $_resource \RecursiveDirectoryIterator Regex iterator reference for IDEs. */
 				foreach(($_dir_regex_iteration = $this->dir_regex_iteration($cache_dir_tmp, $cache_dir_tmp_regex)) as $_resource)
@@ -1659,7 +1659,7 @@ namespace zencache // Root namespace.
 										break; // Break switch handler.
 
 							if(!unlink($_path_name)) // Throw exception if unable to delete.
-								throw new \exception(sprintf(__('Unable to delete symlink: `%1$s`.', $this->text_domain), $_path_name));
+								throw new \exception(sprintf(__('Unable to delete symlink: `%1$s`.', 'zencache'), $_path_name));
 							$counter++; // Increment counter for each link we delete.
 
 							break; // Break switch handler.
@@ -1671,7 +1671,7 @@ namespace zencache // Root namespace.
 									break; // Break switch handler.
 
 							if(!unlink($_path_name)) // Throw exception if unable to delete.
-								throw new \exception(sprintf(__('Unable to delete file: `%1$s`.', $this->text_domain), $_path_name));
+								throw new \exception(sprintf(__('Unable to delete file: `%1$s`.', 'zencache'), $_path_name));
 							$counter++; // Increment counter for each file we delete.
 
 							break; // Break switch handler.
@@ -1685,19 +1685,19 @@ namespace zencache // Root namespace.
 								break; // Break switch handler. Not deleting everything in this case.
 
 							if(!rmdir($_path_name)) // Throw exception if unable to delete the directory itself.
-								throw new \exception(sprintf(__('Unable to delete dir: `%1$s`.', $this->text_domain), $_path_name));
+								throw new \exception(sprintf(__('Unable to delete dir: `%1$s`.', 'zencache'), $_path_name));
 							# $counter++; // Increment counter for each directory we delete. ~ NO don't do that here.
 
 							break; // Break switch handler.
 
 						default: // Something else that is totally unexpected here.
-							throw new \exception(sprintf(__('Unexpected resource type: `%1$s`.', $this->text_domain), $_resource_type));
+							throw new \exception(sprintf(__('Unexpected resource type: `%1$s`.', 'zencache'), $_resource_type));
 					}
 				}
 				unset($_dir_regex_iteration, $_resource, $_resource_type, $_sub_path_name, $_path_name, $_lstat); // Housekeeping.
 
 				if(!rename($cache_dir_tmp, $cache_dir)) // Deletions are atomic; restore original directory now.
-					throw new \exception(sprintf(__('Unable to delete files. Rename failure on tmp directory: `%1$s`.', $this->text_domain), $cache_dir_tmp));
+					throw new \exception(sprintf(__('Unable to delete files. Rename failure on tmp directory: `%1$s`.', 'zencache'), $cache_dir_tmp));
 
 				/* ------- End lock state... ------------- */
 
@@ -1752,7 +1752,7 @@ namespace zencache // Root namespace.
 				$cache_dir            = $this->n_dir_seps($cache_dir);
 
 				if($check_max_age && (empty($this->options) || !is_array($this->options) || !isset($this->options['cache_max_age'])))
-					throw new \exception(__('The `options` property w/ a `cache_max_age` key is not defined in this class.', $this->text_domain));
+					throw new \exception(__('The `options` property w/ a `cache_max_age` key is not defined in this class.', 'zencache'));
 
 				if($check_max_age && !($max_age = strtotime('-'.$this->options['cache_max_age'])))
 					return $counter; // Invalid cache expiration time.
@@ -1797,7 +1797,7 @@ namespace zencache // Root namespace.
 					// Uncomment the above line to debug regex pattern matching used by this routine; and others that call upon it.
 
 					if(!rename($_host_cache_dir, $_host_cache_dir_tmp)) // Work from tmp directory so deletions are atomic.
-						throw new \exception(sprintf(__('Unable to delete files. Rename failure on tmp directory: `%1$s`.', $this->text_domain), $_host_cache_dir));
+						throw new \exception(sprintf(__('Unable to delete files. Rename failure on tmp directory: `%1$s`.', 'zencache'), $_host_cache_dir));
 
 					/** @var $_file_dir \RecursiveDirectoryIterator Regex iterator reference for IDEs. */
 					foreach(($_dir_regex_iteration = $this->dir_regex_iteration($_host_cache_dir_tmp, $_host_cache_dir_tmp_regex)) as $_resource)
@@ -1820,7 +1820,7 @@ namespace zencache // Root namespace.
 											break; // Break switch handler.
 
 								if(!unlink($_path_name)) // Throw exception if unable to delete.
-									throw new \exception(sprintf(__('Unable to delete symlink: `%1$s`.', $this->text_domain), $_path_name));
+									throw new \exception(sprintf(__('Unable to delete symlink: `%1$s`.', 'zencache'), $_path_name));
 								$counter++; // Increment counter for each link we delete.
 
 								break; // Break switch handler.
@@ -1832,7 +1832,7 @@ namespace zencache // Root namespace.
 										break; // Break switch handler.
 
 								if(!unlink($_path_name)) // Throw exception if unable to delete.
-									throw new \exception(sprintf(__('Unable to delete file: `%1$s`.', $this->text_domain), $_path_name));
+									throw new \exception(sprintf(__('Unable to delete file: `%1$s`.', 'zencache'), $_path_name));
 								$counter++; // Increment counter for each file we delete.
 
 								break; // Break switch handler.
@@ -1846,19 +1846,19 @@ namespace zencache // Root namespace.
 									break; // Break switch handler. Not deleting everything in this case.
 
 								if(!rmdir($_path_name)) // Throw exception if unable to delete the directory itself.
-									throw new \exception(sprintf(__('Unable to delete dir: `%1$s`.', $this->text_domain), $_path_name));
+									throw new \exception(sprintf(__('Unable to delete dir: `%1$s`.', 'zencache'), $_path_name));
 								# $counter++; // Increment counter for each directory we delete. ~ NO don't do that here.
 
 								break; // Break switch handler.
 
 							default: // Something else that is totally unexpected here.
-								throw new \exception(sprintf(__('Unexpected resource type: `%1$s`.', $this->text_domain), $_resource_type));
+								throw new \exception(sprintf(__('Unexpected resource type: `%1$s`.', 'zencache'), $_resource_type));
 						}
 					}
 					unset($_dir_regex_iteration, $_resource, $_resource_type, $_sub_path_name, $_path_name, $_lstat); // Housekeeping.
 
 					if(!rename($_host_cache_dir_tmp, $_host_cache_dir)) // Deletions are atomic; restore original directory now.
-						throw new \exception(sprintf(__('Unable to delete files. Rename failure on tmp directory: `%1$s`.', $this->text_domain), $_host_cache_dir_tmp));
+						throw new \exception(sprintf(__('Unable to delete files. Rename failure on tmp directory: `%1$s`.', 'zencache'), $_host_cache_dir_tmp));
 				}
 				unset($_host_scheme, $_host_url, $_host_cache_path_flags, $_host_cache_path,
 					$_host_cache_dir, $_host_cache_dir_tmp, $_host_cache_dir_tmp_regex); // Housekeeping.
@@ -1912,7 +1912,7 @@ namespace zencache // Root namespace.
 				clearstatcache(); // Clear stat cache to be sure we have a fresh start below.
 
 				if(!rename($dir, $dir_temp)) // Work from tmp directory so deletions are atomic.
-					throw new \exception(sprintf(__('Unable to delete all files/dirs. Rename failure on tmp directory: `%1$s`.', $this->text_domain), $dir));
+					throw new \exception(sprintf(__('Unable to delete all files/dirs. Rename failure on tmp directory: `%1$s`.', 'zencache'), $dir));
 
 				/** @var $_file_dir \RecursiveDirectoryIterator for IDEs. */
 				foreach(($_dir_regex_iteration = $this->dir_regex_iteration($dir_temp, '/.+/')) as $_resource)
@@ -1926,7 +1926,7 @@ namespace zencache // Root namespace.
 						case 'link': // Symbolic links; i.e. 404 errors.
 
 							if(!unlink($_path_name)) // Throw exception if unable to delete.
-								throw new \exception(sprintf(__('Unable to delete symlink: `%1$s`.', $this->text_domain), $_path_name));
+								throw new \exception(sprintf(__('Unable to delete symlink: `%1$s`.', 'zencache'), $_path_name));
 							$counter++; // Increment counter for each link we delete.
 
 							break; // Break switch handler.
@@ -1934,7 +1934,7 @@ namespace zencache // Root namespace.
 						case 'file': // Regular files; i.e. not symlinks.
 
 							if(!unlink($_path_name)) // Throw exception if unable to delete.
-								throw new \exception(sprintf(__('Unable to delete file: `%1$s`.', $this->text_domain), $_path_name));
+								throw new \exception(sprintf(__('Unable to delete file: `%1$s`.', 'zencache'), $_path_name));
 							$counter++; // Increment counter for each file we delete.
 
 							break; // Break switch handler.
@@ -1942,24 +1942,24 @@ namespace zencache // Root namespace.
 						case 'dir': // A regular directory; i.e. not a symlink.
 
 							if(!rmdir($_path_name)) // Throw exception if unable to delete the directory itself.
-								throw new \exception(sprintf(__('Unable to delete dir: `%1$s`.', $this->text_domain), $_path_name));
+								throw new \exception(sprintf(__('Unable to delete dir: `%1$s`.', 'zencache'), $_path_name));
 							$counter++; // Increment counter for each directory we delete.
 
 							break; // Break switch handler.
 
 						default: // Something else that is totally unexpected here.
-							throw new \exception(sprintf(__('Unexpected resource type: `%1$s`.', $this->text_domain), $_resource_type));
+							throw new \exception(sprintf(__('Unexpected resource type: `%1$s`.', 'zencache'), $_resource_type));
 					}
 				}
 				unset($_dir_regex_iteration, $_resource, $_resource_type, $_sub_path_name, $_path_name); // Housekeeping.
 
 				if(!rename($dir_temp, $dir)) // Deletions are atomic; restore original directory now.
-					throw new \exception(sprintf(__('Unable to delete all files/dirs. Rename failure on tmp directory: `%1$s`.', $this->text_domain), $dir_temp));
+					throw new \exception(sprintf(__('Unable to delete all files/dirs. Rename failure on tmp directory: `%1$s`.', 'zencache'), $dir_temp));
 
 				if($delete_dir_too) // Delete parent? i.e. delete the `$dir` itself also?
 				{
 					if(!rmdir($dir)) // Throw exception if unable to delete.
-						throw new \exception(sprintf(__('Unable to delete directory: `%1$s`.', $this->text_domain), $dir));
+						throw new \exception(sprintf(__('Unable to delete directory: `%1$s`.', 'zencache'), $dir));
 					$counter++; // Increment counter for each directory we delete.
 				}
 				/* ------- End lock state... ------------- */
@@ -1994,7 +1994,7 @@ namespace zencache // Root namespace.
 					return FALSE;
 
 				if(!($wp_config_file = $this->find_wp_config_file()))
-					throw new \exception(__('Unable to find the wp-config.php file.', $this->text_domain));
+					throw new \exception(__('Unable to find the wp-config.php file.', 'zencache'));
 
 				$locking_method = $this->apply_wp_filters(__METHOD__.'_lock_type', 'flock');
 
@@ -2010,12 +2010,12 @@ namespace zencache // Root namespace.
 				// Use `flock()` as a decent fallback when `sem_get()` is not not forced or is not possible.
 
 				if(!($tmp_dir = $this->get_tmp_dir()))
-					throw new \exception(__('No writable tmp directory.', $this->text_domain));
+					throw new \exception(__('No writable tmp directory.', 'zencache'));
 
 				$inode_key = fileinode($wp_config_file);
 				$mutex     = $tmp_dir.'/'.$this->slug.'-'.$inode_key.'.lock';
 				if(!($resource = fopen($mutex, 'w')) || !flock($resource, LOCK_EX))
-					throw new \exception(__('Unable to obtain an exclusive lock.', $this->text_domain));
+					throw new \exception(__('Unable to obtain an exclusive lock.', 'zencache'));
 
 				return array('type' => 'flock', 'resource' => $resource);
 			}
@@ -2068,7 +2068,7 @@ namespace zencache // Root namespace.
 			{
 				$counter = (integer)$counter; // Force integer.
 
-				return sprintf(_n('%1$s file', '%1$s files', $counter, $this->text_domain), $counter);
+				return sprintf(_n('%1$s file', '%1$s files', $counter, 'zencache'), $counter);
 			}
 
 			/**
@@ -2084,7 +2084,7 @@ namespace zencache // Root namespace.
 			{
 				$counter = (integer)$counter; // Force integer.
 
-				return sprintf(_n('%1$s directory', '%1$s directories', $counter, $this->text_domain), $counter);
+				return sprintf(_n('%1$s directory', '%1$s directories', $counter, 'zencache'), $counter);
 			}
 
 			/**
@@ -2100,7 +2100,7 @@ namespace zencache // Root namespace.
 			{
 				$counter = (integer)$counter; // Force integer.
 
-				return sprintf(_n('%1$s file/directory', '%1$s files/directories', $counter, $this->text_domain), $counter);
+				return sprintf(_n('%1$s file/directory', '%1$s files/directories', $counter, 'zencache'), $counter);
 			}
 
 			/* --------------------------------------------------------------------------------------
@@ -2133,7 +2133,7 @@ namespace zencache // Root namespace.
 				else if(is_string($function[0]))
 					return $function[0].'::'.$function[1];
 
-				throw new \exception(__('Invalid hook.', $this->text_domain));
+				throw new \exception(__('Invalid hook.', 'zencache'));
 			}
 
 			/**

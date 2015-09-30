@@ -65,7 +65,7 @@ namespace zencache // Root namespace.
 					wp_clear_scheduled_hook('ws_plugin__qcache_garbage_collector__schedule'); // Ditch old CRON job.
 					wp_clear_scheduled_hook('ws_plugin__qcache_auto_cache_engine__schedule'); // Ditch old CRON job.
 
-					$this->plugin->enqueue_notice(sprintf(__('<strong>%1$s:</strong> this version is a <strong>complete rewrite</strong> of Quick Cache :-) Please review your %1$s options carefully!', $this->plugin->text_domain), esc_html($this->plugin->name)));
+					$this->plugin->enqueue_notice(sprintf(__('<strong>%1$s:</strong> this version is a <strong>complete rewrite</strong> of Quick Cache :-) Please review your %1$s options carefully!', 'zencache'), esc_html($this->plugin->name)));
 				}
 			}
 
@@ -75,7 +75,7 @@ namespace zencache // Root namespace.
 			public function from_lt_v140104()
 			{
 				if(version_compare($this->prev_version, '140104', '<')) // When this sort of update occurs, we issue a notice about this new feature.
-					$this->plugin->enqueue_notice(sprintf(__('<strong>%1$s Feature Notice:</strong> This version of %1$s adds new options for Feed caching. Feed caching is now disabled by default. If you wish to enable feed caching, please visit the %1$s options panel.', $this->plugin->text_domain), esc_html($this->plugin->name)));
+					$this->plugin->enqueue_notice(sprintf(__('<strong>%1$s Feature Notice:</strong> This version of %1$s adds new options for Feed caching. Feed caching is now disabled by default. If you wish to enable feed caching, please visit the %1$s options panel.', 'zencache'), esc_html($this->plugin->name)));
 			}
 
 			/*
@@ -114,7 +114,7 @@ namespace zencache // Root namespace.
 
 							$this->plugin->activate(); // Reactivate plugin w/ new options.
 						}
-						$this->plugin->enqueue_notice(sprintf(__('<strong>%1$s Feature Notice:</strong> This version of %1$s introduces a new <a href="http://zencache.com/r/kb-branched-cache-structure/" target="_blank">Branched Cache Structure</a> and several other <a href="http://www.websharks-inc.com/post/quick-cache-v140605-now-available/" target="_blank">new features</a>.', $this->plugin->text_domain), esc_html($this->plugin->name)));
+						$this->plugin->enqueue_notice(sprintf(__('<strong>%1$s Feature Notice:</strong> This version of %1$s introduces a new <a href="http://zencache.com/r/kb-branched-cache-structure/" target="_blank">Branched Cache Structure</a> and several other <a href="http://www.websharks-inc.com/post/quick-cache-v140605-now-available/" target="_blank">new features</a>.', 'zencache'), esc_html($this->plugin->name)));
 					}
 				}
 			}
@@ -147,8 +147,8 @@ namespace zencache // Root namespace.
 							$this->plugin->activate(); // Reactivate plugin w/ new options.
 
 							$this->plugin->enqueue_notice( // Give site owners a quick heads up about this.
-								'<p>'.sprintf(__('<strong>%1$s Notice:</strong> This version of %1$s changes the default base directory that it uses, from <code>ABSPATH</code> to <code>WP_CONTENT_DIR</code>. This is for improved compatibility with installations that choose to use a custom <code>WP_CONTENT_DIR</code> location.', $this->plugin->text_domain), esc_html($this->plugin->name)).
-								' '.sprintf(__('%1$s has detected that your previously configured cache directory may have been in conflict with this change. As a result, your %1$s configuration has been updated to the new default value; just to keep things running smoothly for you :-). If you would like to review this change, please see: <code>Dashboard ⥱ %1$s ⥱ Directory &amp; Expiration Time</code>; where you may customize it further if necessary.', $this->plugin->text_domain), esc_html($this->plugin->name)).'</p>'
+								'<p>'.sprintf(__('<strong>%1$s Notice:</strong> This version of %1$s changes the default base directory that it uses, from <code>ABSPATH</code> to <code>WP_CONTENT_DIR</code>. This is for improved compatibility with installations that choose to use a custom <code>WP_CONTENT_DIR</code> location.', 'zencache'), esc_html($this->plugin->name)).
+								' '.sprintf(__('%1$s has detected that your previously configured cache directory may have been in conflict with this change. As a result, your %1$s configuration has been updated to the new default value; just to keep things running smoothly for you :-). If you would like to review this change, please see: <code>Dashboard ⥱ %1$s ⥱ Directory &amp; Expiration Time</code>; where you may customize it further if necessary.', 'zencache'), esc_html($this->plugin->name)).'</p>'
 							);
 						}
 					}
@@ -237,9 +237,9 @@ namespace zencache // Root namespace.
 					$this->plugin->activate(); // Reactivate plugin w/ new options.
 
 					$this->plugin->enqueue_notice( // Give site owners a quick heads up about this.
-						'<p>'.sprintf(__('<strong>Woohoo! %1$s activated.</strong> :-)', $this->plugin->text_domain), esc_html($this->plugin->name)).'</p>'.
-						'<p>'.sprintf(__('NOTE: Your Quick Cache options were preserved by %1$s (for more details, visit the <a href="http://zencache.com/r/quick-cache-lite-migration-faq/" target="_blank">Migration FAQ</a>).'.'', $this->plugin->text_domain), esc_html($this->plugin->name)).'</p>'.
-						'<p>'.sprintf(__('To review your configuration, please see: <a href="%2$s">%1$s ⥱ Plugin Options</a>.'.'', $this->plugin->text_domain), esc_html($this->plugin->name), esc_attr(add_query_arg(urlencode_deep(array('page' => __NAMESPACE__)), self_admin_url('/admin.php')))).'</p>'
+						'<p>'.sprintf(__('<strong>Woohoo! %1$s activated.</strong> :-)', 'zencache'), esc_html($this->plugin->name)).'</p>'.
+						'<p>'.sprintf(__('NOTE: Your Quick Cache options were preserved by %1$s (for more details, visit the <a href="http://zencache.com/r/quick-cache-lite-migration-faq/" target="_blank">Migration FAQ</a>).'.'', 'zencache'), esc_html($this->plugin->name)).'</p>'.
+						'<p>'.sprintf(__('To review your configuration, please see: <a href="%2$s">%1$s ⥱ Plugin Options</a>.'.'', 'zencache'), esc_html($this->plugin->name), esc_attr(add_query_arg(urlencode_deep(array('page' => __NAMESPACE__)), self_admin_url('/admin.php')))).'</p>'
 					);
 				}
 			}
