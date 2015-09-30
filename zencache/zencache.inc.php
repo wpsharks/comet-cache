@@ -2486,14 +2486,13 @@ namespace zencache
 
 			return $name; // e.g. `x-cache` becomes `X Cache`.
 		};
-		$text_domain             = str_replace('_', '-', __NAMESPACE__);
 		$conflicting_plugin_name = $construct_name($GLOBALS[__NAMESPACE__.'_conflicting_plugin']);
 		$plugin_name             = $construct_name(__NAMESPACE__); // e.g. `zencache` becomes `ZenCache`.
 
 		if(strcasecmp($conflicting_plugin_name, $plugin_name) === 0) // Conflict between lite/pro editions?
 		{
-			$conflicting_plugin_name = $plugin_name.' '.__('Lite', $text_domain);
-			$plugin_name             = $plugin_name.' '.__('Pro', $text_domain);
+			$conflicting_plugin_name = $plugin_name.' '.__('Lite', 'zencache');
+			$plugin_name             = $plugin_name.' '.__('Pro', 'zencache');
 
 			$GLOBALS[__NAMESPACE__.'_conflicting_plugin_lite_pro'] = TRUE;
 		}

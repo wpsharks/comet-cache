@@ -235,7 +235,7 @@ namespace zencache // Root namespace.
 				if(strpos(__NAMESPACE__, '\\') !== FALSE) // Sanity check.
 					throw new \exception('Not a root namespace: `'.__NAMESPACE__.'`.');
 
-				$this->slug = 'zencache' = str_replace('_', '-', __NAMESPACE__);
+				$this->slug = $this->text_domain = str_replace('_', '-', __NAMESPACE__);
 			}
 
 			/* --------------------------------------------------------------------------------------
