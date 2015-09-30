@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the ZenCache package.
 msgid ""
 msgstr ""
-"Project-Id-Version: ZenCache 150709\n"
+"Project-Id-Version: ZenCache 150930\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/zencache\n"
-"POT-Creation-Date: 2015-07-18 15:37:13+00:00\n"
+"POT-Creation-Date: 2015-09-30 02:31:30+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -251,7 +251,7 @@ msgid "close"
 msgstr ""
 
 #: includes/menu-pages.php:115
-msgid "<strong>Pro Features (Preview)</strong> ~ New option panels below. Please explore before <a href=\"http://www.websharks-inc.com/product/zencache/\" target=\"_blank\">upgrading <i class=\"fa fa-heart-o\"></i></a>.<br /><small>NOTE: the free version of %1$s (this LITE version); is more-than-adequate for most sites. Please upgrade only if you desire advanced features or would like to support the developer.</small>"
+msgid "<strong>Pro Features (Preview)</strong> ~ New option panels below. Please explore before <a href=\"https://zencache.com/\" target=\"_blank\">upgrading <i class=\"fa fa-heart-o\"></i></a>.<br /><small>NOTE: the free version of %1$s (this LITE version); is more-than-adequate for most sites. Please upgrade only if you desire advanced features or would like to support the developer.</small>"
 msgstr ""
 
 #: includes/menu-pages.php:121
@@ -1437,15 +1437,15 @@ msgstr ""
 msgid "Doing it wrong! Missing `base_dir` option value. MUST call this method after `setup()`."
 msgstr ""
 
-#: zencache.inc.php:2495
+#: zencache.inc.php:2494
 msgid "Lite"
 msgstr ""
 
-#: zencache.inc.php:2496
+#: zencache.inc.php:2495
 msgid "Pro"
 msgstr ""
 
-#: zencache.inc.php:2502
+#: zencache.inc.php:2501
 msgid "<strong>%1$s</strong> is NOT running. A conflicting plugin, <strong>%2$s</strong>, is currently active. Please deactivate the %2$s plugin to clear this message."
 msgstr ""
 
@@ -1462,9 +1462,9 @@ msgid "ZenCache is an advanced WordPress caching plugin inspired by simplicity. 
 msgstr ""
 
 #. Author of the plugin/theme
-msgid "WebSharks, Inc."
+msgid "ZenCache / WebSharks, Inc."
 msgstr ""
 
 #. Author URI of the plugin/theme
-msgid "http://www.websharks-inc.com/"
+msgid "https://zencache.com/"
 msgstr ""
