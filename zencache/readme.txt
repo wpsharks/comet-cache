@@ -8,7 +8,7 @@ Text Domain: zencache
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Contributors: WebSharks, JasWSInc, raamdev
+Contributors: WebSharks, JasWSInc, raamdev, renzms, kristineds, sitegeek
 Donate link: http://www.websharks-inc.com/r/wp-theme-plugin-donation/
 Tags: cache, quick cache, zencache, zen cache, quickcache, speed, performance, fast, loading, generation, execution, benchmark, benchmarking, debug, debugging, caching, cash, caching, cacheing, super cache, advanced cache, advanced-cache, wp-cache, wp cache, rocket, static, client-side cache, rss cache, feed cache, gzip compression, query string, get request, page cache, options panel included, w3c validated code, highly extensible
 
