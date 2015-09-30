@@ -169,7 +169,7 @@ namespace zencache
 
 				/* -------------------------------------------------------------- */
 
-				load_plugin_textdomain($this->text_domain);
+				load_plugin_textdomain('zencache');
 
 				$this->default_options = array(
 					/* Core/systematic plugin options. */
@@ -392,7 +392,7 @@ namespace zencache
 				}
 				$this->wipe_cache(); // Always wipe the cache; no exceptions.
 
-				$this->enqueue_notice(sprintf(__('<strong>%1$s:</strong> detected a new version of itself. Recompiling w/ latest version... wiping the cache... all done :-)', $this->text_domain), esc_html($this->name)), '', TRUE);
+				$this->enqueue_notice(sprintf(__('<strong>%1$s:</strong> detected a new version of itself. Recompiling w/ latest version... wiping the cache... all done :-)', 'zencache'), esc_html($this->name)), '', TRUE);
 			}
 
 			/**
@@ -588,9 +588,9 @@ namespace zencache
 			 */
 			public function add_settings_link($links)
 			{
-				$links[] = '<a href="'.esc_attr(add_query_arg(urlencode_deep(array('page' => __NAMESPACE__)), self_admin_url('/admin.php'))).'">'.__('Settings', $this->text_domain).'</a>';
-				$links[] = '<br/><a href="'.esc_attr(add_query_arg(urlencode_deep(array('page' => __NAMESPACE__, __NAMESPACE__.'_pro_preview' => '1')), self_admin_url('/admin.php'))).'">'.__('Preview Pro Features', $this->text_domain).'</a>';
-				$links[] = '<a href="'.esc_attr('https://zencache.com/').'" target="_blank">'.__('Upgrade', $this->text_domain).'</a>';
+				$links[] = '<a href="'.esc_attr(add_query_arg(urlencode_deep(array('page' => __NAMESPACE__)), self_admin_url('/admin.php'))).'">'.__('Settings', 'zencache').'</a>';
+				$links[] = '<br/><a href="'.esc_attr(add_query_arg(urlencode_deep(array('page' => __NAMESPACE__, __NAMESPACE__.'_pro_preview' => '1')), self_admin_url('/admin.php'))).'">'.__('Preview Pro Features', 'zencache').'</a>';
+				$links[] = '<a href="'.esc_attr('https://zencache.com/').'" target="_blank">'.__('Upgrade', 'zencache').'</a>';
 
 				return $this->apply_wp_filters(__METHOD__, $links, get_defined_vars());
 			}
@@ -686,7 +686,7 @@ namespace zencache
 					{
 						$_dismiss_css = 'display:inline-block; float:right; margin:0 0 0 15px; text-decoration:none; font-weight:bold;';
 						$_dismiss     = add_query_arg(urlencode_deep(array(__NAMESPACE__ => array('dismiss_notice' => array('key' => $_key)), '_wpnonce' => wp_create_nonce())));
-						$_dismiss     = '<a style="'.esc_attr($_dismiss_css).'" href="'.esc_attr($_dismiss).'">'.__('dismiss &times;', $this->text_domain).'</a>';
+						$_dismiss     = '<a style="'.esc_attr($_dismiss_css).'" href="'.esc_attr($_dismiss).'">'.__('dismiss &times;', 'zencache').'</a>';
 					}
 					if(strpos($_key, 'class-update-nag') !== FALSE)
 						$_class = 'update-nag';
@@ -763,7 +763,7 @@ namespace zencache
 					{
 						$_dismiss_css = 'display:inline-block; float:right; margin:0 0 0 15px; text-decoration:none; font-weight:bold;';
 						$_dismiss     = add_query_arg(urlencode_deep(array(__NAMESPACE__ => array('dismiss_error' => array('key' => $_key)), '_wpnonce' => wp_create_nonce())));
-						$_dismiss     = '<a style="'.esc_attr($_dismiss_css).'" href="'.esc_attr($_dismiss).'">'.__('dismiss &times;', $this->text_domain).'</a>';
+						$_dismiss     = '<a style="'.esc_attr($_dismiss_css).'" href="'.esc_attr($_dismiss).'">'.__('dismiss &times;', 'zencache').'</a>';
 					}
 					echo $this->apply_wp_filters(__METHOD__.'__error', '<div class="error"><p>'.$_error.$_dismiss.'</p></div>', get_defined_vars());
 				}
@@ -821,7 +821,7 @@ namespace zencache
 			 */
 			public function extend_cron_schedules($schedules)
 			{
-				$schedules['every15m'] = array('interval' => 900, 'display' => __('Every 15 Minutes', $this->text_domain));
+				$schedules['every15m'] = array('interval' => 900, 'display' => __('Every 15 Minutes', 'zencache'));
 
 				return $this->apply_wp_filters(__METHOD__, $schedules, get_defined_vars());
 			}
@@ -948,7 +948,7 @@ namespace zencache
 				if($counter && is_admin() /* && $this->options['change_notifications_enable'] */)
 				{
 					$this->enqueue_notice('<img src="'.esc_attr($this->url('/client-s/images/wipe.png')).'" style="float:left; margin:0 10px 0 0; border:0;" />'.
-					                      sprintf(__('<strong>%1$s:</strong> detected significant changes. Found %2$s in the cache; auto-wiping.', $this->text_domain),
+					                      sprintf(__('<strong>%1$s:</strong> detected significant changes. Found %2$s in the cache; auto-wiping.', 'zencache'),
 					                              esc_html($this->name), esc_html($this->i18n_files($counter))));
 				}
 				return $this->apply_wp_filters(__METHOD__, $counter, get_defined_vars());
@@ -992,7 +992,7 @@ namespace zencache
 
 				if($counter && is_admin() /* && $this->options['change_notifications_enable'] */)
 					$this->enqueue_notice('<img src="'.esc_attr($this->url('/client-s/images/clear.png')).'" style="float:left; margin:0 10px 0 0; border:0;" />'.
-					                      sprintf(__('<strong>%1$s:</strong> detected important site changes. Found %2$s in the cache for this site; auto-clearing.', $this->text_domain),
+					                      sprintf(__('<strong>%1$s:</strong> detected important site changes. Found %2$s in the cache for this site; auto-clearing.', 'zencache'),
 					                              esc_html($this->name), esc_html($this->i18n_files($counter))));
 
 				return $this->apply_wp_filters(__METHOD__, $counter, get_defined_vars());
@@ -1073,7 +1073,7 @@ namespace zencache
 
 				if(($type = get_post_type($post_id)) && ($type = get_post_type_object($type)) && !empty($type->labels->singular_name))
 					$type_singular_name = $type->labels->singular_name; // Singular name for the post type.
-				else $type_singular_name = __('Post', $this->text_domain); // Default value.
+				else $type_singular_name = __('Post', 'zencache'); // Default value.
 
 				$regex = $this->build_host_cache_path_regex($permalink);
 				$counter += $this->clear_files_from_host_cache_dir($regex);
@@ -1081,7 +1081,7 @@ namespace zencache
 				if($counter && is_admin() /* && $this->options['change_notifications_enable'] */)
 				{
 					$this->enqueue_notice('<img src="'.esc_attr($this->url('/client-s/images/clear.png')).'" style="float:left; margin:0 10px 0 0; border:0;" />'.
-					                      sprintf(__('<strong>%1$s:</strong> detected changes. Found %2$s in the cache for %3$s ID: <code>%4$s</code>; auto-clearing.', $this->text_domain),
+					                      sprintf(__('<strong>%1$s:</strong> detected changes. Found %2$s in the cache for %3$s ID: <code>%4$s</code>; auto-clearing.', 'zencache'),
 					                              esc_html($this->name), esc_html($this->i18n_files($counter)), esc_html($type_singular_name), esc_html($post_id)));
 				}
 				$counter += $this->auto_clear_xml_feeds_cache('blog');
@@ -1258,7 +1258,7 @@ namespace zencache
 				if($counter && is_admin() /* && $this->options['change_notifications_enable'] */)
 				{
 					$this->enqueue_notice('<img src="'.esc_attr($this->url('/client-s/images/clear.png')).'" style="float:left; margin:0 10px 0 0; border:0;" />'.
-					                      sprintf(__('<strong>%1$s:</strong> detected changes. Found %2$s in the cache, for XML feeds of type: <code>%3$s</code>; auto-clearing.', $this->text_domain),
+					                      sprintf(__('<strong>%1$s:</strong> detected changes. Found %2$s in the cache, for XML feeds of type: <code>%3$s</code>; auto-clearing.', 'zencache'),
 					                              esc_html($this->name), esc_html($this->i18n_files($counter)), esc_html($type)));
 				}
 				return $this->apply_wp_filters(__METHOD__, $counter, get_defined_vars());
@@ -1307,7 +1307,7 @@ namespace zencache
 				if($counter && is_admin() /* && $this->options['change_notifications_enable'] */)
 				{
 					$this->enqueue_notice('<img src="'.esc_attr($this->url('/client-s/images/clear.png')).'" style="float:left; margin:0 10px 0 0; border:0;" />'.
-					                      sprintf(__('<strong>%1$s:</strong> detected changes. Found %2$s in the cache for XML sitemaps; auto-clearing.', $this->text_domain),
+					                      sprintf(__('<strong>%1$s:</strong> detected changes. Found %2$s in the cache for XML sitemaps; auto-clearing.', 'zencache'),
 					                              esc_html($this->name), esc_html($this->i18n_files($counter))));
 				}
 				return $this->apply_wp_filters(__METHOD__, $counter, get_defined_vars());
@@ -1350,7 +1350,7 @@ namespace zencache
 				if($counter && is_admin() /* && $this->options['change_notifications_enable'] */)
 				{
 					$this->enqueue_notice('<img src="'.esc_attr($this->url('/client-s/images/clear.png')).'" style="float:left; margin:0 10px 0 0; border:0;" />'.
-					                      sprintf(__('<strong>%1$s:</strong> detected changes. Found %2$s in the cache for the designated "Home Page"; auto-clearing.', $this->text_domain),
+					                      sprintf(__('<strong>%1$s:</strong> detected changes. Found %2$s in the cache for the designated "Home Page"; auto-clearing.', 'zencache'),
 					                              esc_html($this->name), esc_html($this->i18n_files($counter))));
 				}
 				$counter += $this->auto_clear_xml_feeds_cache('blog');
@@ -1408,7 +1408,7 @@ namespace zencache
 				if($counter && is_admin() /* && $this->options['change_notifications_enable'] */)
 				{
 					$this->enqueue_notice('<img src="'.esc_attr($this->url('/client-s/images/clear.png')).'" style="float:left; margin:0 10px 0 0; border:0;" />'.
-					                      sprintf(__('<strong>%1$s:</strong> detected changes. Found %2$s in the cache for the designated "Posts Page"; auto-clearing.', $this->text_domain),
+					                      sprintf(__('<strong>%1$s:</strong> detected changes. Found %2$s in the cache for the designated "Posts Page"; auto-clearing.', 'zencache'),
 					                              esc_html($this->name), esc_html($this->i18n_files($counter))));
 				}
 				$counter += $this->auto_clear_xml_feeds_cache('blog');
@@ -1466,7 +1466,7 @@ namespace zencache
 
 				if(empty($custom_post_type->labels->name)
 				   || !($custom_post_type_name = $custom_post_type->labels->name)
-				) $custom_post_type_name = __('Untitled', $this->text_domain);
+				) $custom_post_type_name = __('Untitled', 'zencache');
 
 				if(!($custom_post_type_archive_link = get_post_type_archive_link($post_type)))
 					return $counter; // Nothing to do; no link to work from in this case.
@@ -1477,7 +1477,7 @@ namespace zencache
 				if($counter && is_admin() /* && $this->options['change_notifications_enable'] */)
 				{
 					$this->enqueue_notice('<img src="'.esc_attr($this->url('/client-s/images/clear.png')).'" style="float:left; margin:0 10px 0 0; border:0;" />'.
-					                      sprintf(__('<strong>%1$s:</strong> detected changes. Found %2$s in the cache for Custom Post Type: <code>%3$s</code>; auto-clearing.', $this->text_domain),
+					                      sprintf(__('<strong>%1$s:</strong> detected changes. Found %2$s in the cache for Custom Post Type: <code>%3$s</code>; auto-clearing.', 'zencache'),
 					                              esc_html($this->name), esc_html($this->i18n_files($counter)), esc_html($custom_post_type_name)));
 				}
 				$counter += $this->auto_clear_xml_feeds_cache('custom-post-type', $post_id);
@@ -1567,7 +1567,7 @@ namespace zencache
 					if($_author_counter && $enqueued_notices < 100 && is_admin() /* && $this->options['change_notifications_enable'] */)
 					{
 						$this->enqueue_notice('<img src="'.esc_attr($this->url('/client-s/images/clear.png')).'" style="float:left; margin:0 10px 0 0; border:0;" />'.
-						                      sprintf(__('<strong>%1$s:</strong> detected changes. Found %2$s in the cache for Author Page: <code>%3$s</code>; auto-clearing.', $this->text_domain),
+						                      sprintf(__('<strong>%1$s:</strong> detected changes. Found %2$s in the cache for Author Page: <code>%3$s</code>; auto-clearing.', 'zencache'),
 						                              esc_html($this->name), esc_html($this->i18n_files($_author_counter)), esc_html($_author['display_name'])));
 						$enqueued_notices++; // Increment enqueued notices counter.
 					}
@@ -1719,7 +1719,7 @@ namespace zencache
 					if($_term_counter && $enqueued_notices < 100 && is_admin() /* && $this->options['change_notifications_enable'] */)
 					{
 						$this->enqueue_notice('<img src="'.esc_attr($this->url('/client-s/images/clear.png')).'" style="float:left; margin:0 10px 0 0; border:0;" />'.
-						                      sprintf(__('<strong>%1$s:</strong> detected changes. Found %2$s in the cache for %3$s: <code>%4$s</code>; auto-clearing.', $this->text_domain),
+						                      sprintf(__('<strong>%1$s:</strong> detected changes. Found %2$s in the cache for %3$s: <code>%4$s</code>; auto-clearing.', 'zencache'),
 						                              esc_html($this->name), esc_html($this->i18n_files($_term_counter)), esc_html($_term['taxonomy_label']), esc_html($_term['term_name'])));
 						$enqueued_notices++; // Increment enqueued notices counter.
 					}
@@ -2008,7 +2008,7 @@ namespace zencache
 				$rel_dir_file = trim((string)$rel_dir_file, '\\/'." \t\n\r\0\x0B");
 
 				if(empty($this->options) || !is_array($this->options) || empty($this->options['base_dir']))
-					throw new \exception(__('Doing it wrong! Missing `base_dir` option value. MUST call this method after `setup()`.', $this->text_domain));
+					throw new \exception(__('Doing it wrong! Missing `base_dir` option value. MUST call this method after `setup()`.', 'zencache'));
 
 				$wp_content_base_dir_to = WP_CONTENT_DIR.'/'.$this->options['base_dir'];
 
@@ -2036,7 +2036,7 @@ namespace zencache
 				$rel_dir_file = trim((string)$rel_dir_file, '\\/'." \t\n\r\0\x0B");
 
 				if(empty($this->options) || !is_array($this->options) || empty($this->options['base_dir']))
-					throw new \exception(__('Doing it wrong! Missing `base_dir` option value. MUST call this method after `setup()`.', $this->text_domain));
+					throw new \exception(__('Doing it wrong! Missing `base_dir` option value. MUST call this method after `setup()`.', 'zencache'));
 
 				$base_path_to = $this->options['base_dir'];
 
@@ -2486,20 +2486,19 @@ namespace zencache
 
 			return $name; // e.g. `x-cache` becomes `X Cache`.
 		};
-		$text_domain             = str_replace('_', '-', __NAMESPACE__);
 		$conflicting_plugin_name = $construct_name($GLOBALS[__NAMESPACE__.'_conflicting_plugin']);
 		$plugin_name             = $construct_name(__NAMESPACE__); // e.g. `zencache` becomes `ZenCache`.
 
 		if(strcasecmp($conflicting_plugin_name, $plugin_name) === 0) // Conflict between lite/pro editions?
 		{
-			$conflicting_plugin_name = $plugin_name.' '.__('Lite', $text_domain);
-			$plugin_name             = $plugin_name.' '.__('Pro', $text_domain);
+			$conflicting_plugin_name = $plugin_name.' '.__('Lite', 'zencache');
+			$plugin_name             = $plugin_name.' '.__('Pro', 'zencache');
 
 			$GLOBALS[__NAMESPACE__.'_conflicting_plugin_lite_pro'] = TRUE;
 		}
 		echo '<div class="error">'.
 		     '   <p>'. // Running multiple versions of this plugin at same time.
-		     '      '.sprintf(__('<strong>%1$s</strong> is NOT running. A conflicting plugin, <strong>%2$s</strong>, is currently active. Please deactivate the %2$s plugin to clear this message.', $text_domain), esc_html($plugin_name), esc_html($conflicting_plugin_name)).
+		     '      '.sprintf(__('<strong>%1$s</strong> is NOT running. A conflicting plugin, <strong>%2$s</strong>, is currently active. Please deactivate the %2$s plugin to clear this message.', 'zencache'), esc_html($plugin_name), esc_html($conflicting_plugin_name)).
 		     '   </p>'.
 		     '</div>';
 	});
