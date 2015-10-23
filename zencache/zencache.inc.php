@@ -2062,9 +2062,9 @@ namespace zencache
 				if(!($wp_config_file = $this->find_wp_config_file()))
 					return ''; // Unable to find `/wp-config.php`.
 
-                if (!($wp_config_file_contents_no_whitespace = php_strip_whitespace($wp_config_file))) {
-                    return ''; // Failure; file empty
-                }
+				if (!($wp_config_file_contents_no_whitespace = php_strip_whitespace($wp_config_file))) {
+				    return ''; // Failure; file empty
+				}
 				if(!is_readable($wp_config_file)) return ''; // Not possible.
 				if(!($wp_config_file_contents = file_get_contents($wp_config_file)))
 					return ''; // Failure; could not read file.
@@ -2104,9 +2104,9 @@ namespace zencache
 				if(!($wp_config_file = $this->find_wp_config_file()))
 					return ''; // Unable to find `/wp-config.php`.
 
-                if (!($wp_config_file_contents_no_whitespace = php_strip_whitespace($wp_config_file))) {
-                    return ''; // Failure; file empty
-                }
+				if (!($wp_config_file_contents_no_whitespace = php_strip_whitespace($wp_config_file))) {
+				    return ''; // Failure; file empty
+				}
 				if(!is_readable($wp_config_file)) return ''; // Not possible.
 				if(!($wp_config_file_contents = file_get_contents($wp_config_file)))
 					return ''; // Failure; could not read file.
