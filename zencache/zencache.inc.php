@@ -445,8 +445,13 @@ namespace zencache
 				$this->remove_base_dir();
 
 				delete_option(__NAMESPACE__.'_options');
-				if(is_multisite()) // Delete network options too.
-					delete_site_option(__NAMESPACE__.'_options');
+                delete_option(__NAMESPACE__.'_min_php54_warning_bypass');
+                delete_option(__NAMESPACE__.'_apc_deprecated_warning_bypass');
+				if(is_multisite()) { // Delete network options too.
+                    delete_site_option(__NAMESPACE__.'_options');
+                    delete_site_option(__NAMESPACE__.'_min_php54_warning_bypass');
+                    delete_site_option(__NAMESPACE__.'_apc_deprecated_warning_bypass');
+                }
 
 				delete_option(__NAMESPACE__.'_notices');
 				delete_option(__NAMESPACE__.'_errors');
