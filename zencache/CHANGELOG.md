@@ -1,3 +1,9 @@
+= v151107 =
+
+- **Announcement: The next version of ZenCache will require PHP 5.4+.** As of December 1st, 2015, the minimum PHP version required to run ZenCache will change to PHP 5.4+. This release of ZenCache will be the last version to support PHP 5.3. Please see announcement with further details: [New Minimum PHP Version: PHP 5.4](http://zencache.com/r/new-minimum-php-version-php-5-4/)
+- **Announcement: The next version of ZenCache will not support the PHP APC Extension**. As of December 1st, 2015, ZenCache will no longer run with the PHP APC extension enabled. Please see announcement with further details: [PHP APC Extension No Longer Supported](http://zencache.com/r/php-apc-extension-no-longer-supported/)
+- **Bug Fix**: Fixed a bug where a commented-out `WP_CACHE` definition in `wp-config.php` (such as what WP Super Cache leaves behind) was being incorrectly ignored and resulted in caching being silently disabled. Props @davidfavor. See [Issue #591](https://github.com/websharks/zencache/issues/591).
+
 = v150930 =
 
 - **Bug Fix**: Fixed a bug where, in some rare cases, `wp-config.php` would end up with two `WP_CACHE` definitions. See [Issue #509](https://github.com/websharks/zencache/issues/509).
