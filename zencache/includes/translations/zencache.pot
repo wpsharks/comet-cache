@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the ZenCache package.
 msgid ""
 msgstr ""
-"Project-Id-Version: ZenCache 150930\n"
+"Project-Id-Version: ZenCache 151107\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/zencache\n"
-"POT-Creation-Date: 2015-09-30 02:31:30+00:00\n"
+"POT-Creation-Date: 2015-11-07 02:30:49+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1437,16 +1437,56 @@ msgstr ""
 msgid "Doing it wrong! Missing `base_dir` option value. MUST call this method after `setup()`."
 msgstr ""
 
-#: zencache.inc.php:2494
+#: zencache.inc.php:2500
 msgid "Lite"
 msgstr ""
 
-#: zencache.inc.php:2495
+#: zencache.inc.php:2501
 msgid "Pro"
 msgstr ""
 
-#: zencache.inc.php:2501
+#: zencache.inc.php:2507
 msgid "<strong>%1$s</strong> is NOT running. A conflicting plugin, <strong>%2$s</strong>, is currently active. Please deactivate the %2$s plugin to clear this message."
+msgstr ""
+
+#: zencache.php:29
+msgid "<strong>NOTICE: ZenCache Minimum PHP Version</strong></h3>"
+msgstr ""
+
+#: zencache.php:30
+msgid "<strong>As of December 1st, 2015 ZenCache will require PHP 5.4 or higher.</strong> Your server is currently running PHP v%1$s. You will need to upgrade to PHP 5.4 or higher to run the next version of ZenCache."
+msgstr ""
+
+#: zencache.php:31
+msgid "Learn more about this upcoming change here: <a href=\"http://zencache.com/r/new-minimum-php-version-php-5-4/\" target=\"_blank\">New Minimum PHP Version: PHP 5.4</a>"
+msgstr ""
+
+#: zencache.php:33
+msgid "Your server is also running the <strong>outdated PHP APC extension</strong>. Please see: <a href=\"http://zencache.com/r/php-apc-extension-no-longer-supported/\" target=\"_blank\">PHP APC Extension No Longer Supported</a>"
+msgstr ""
+
+#: zencache.php:55
+msgid "<strong>NOTICE: ZenCache + PHP APC Extension</strong></h3>"
+msgstr ""
+
+#: zencache.php:56
+msgid "<strong>As of December 1st, 2015 ZenCache will no longer run with the outdated PHP APC extension.</strong> It appears that you're currently running PHP v%1$s with APC enabled. You will need to follow one of the actions below to run the next version of ZenCache."
+msgstr ""
+
+#: zencache.php:57
+msgid "<h4 style=\"margin:0 0 .5em 0; font-size:1.25em;\"><span class=\"dashicons dashicons-lightbulb\"></span> Options Available (Action Required):</h4>"
+msgstr ""
+
+#: zencache.php:59
+msgid "Please add <code>ini_set('apc.cache_by_default', false);</code> to the top of your <code>/wp-config.php</code> file. That will get rid of this message and allow ZenCache to run without issue."
+msgstr ""
+
+#: zencache.php:60
+msgid "Or, contact your web hosting provider and ask about upgrading to PHP v5.5+; which includes the new <a href=\"http://zencache.com/r/php-opcache-extension/\" target=\"_blank\">OPcache extension for PHP</a>. The new OPcache extension replaces APC in modern versions of PHP."
+msgstr ""
+
+#: zencache.php:62
+msgid "To learn more about this upcoming change, please see the announcement: <a href=\"http://zencache.com/r/php-apc-extension-no-longer-supported/\" target=\"_blank\">PHP APC Extension No Longer Supported</a>"
 msgstr ""
 
 #. Plugin Name of the plugin/theme
