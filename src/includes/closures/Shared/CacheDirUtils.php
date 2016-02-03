@@ -143,10 +143,15 @@ $self->deleteFilesFromCacheDir = function ($regex, $check_max_age = false) use (
     }
     # if(WP_DEBUG) file_put_contents(WP_CONTENT_DIR.'/'.strtolower(SHORT_NAME).'-debug.log', print_r($regex, TRUE)."\n".print_r($cache_dir_tmp_regex, TRUE)."\n\n", FILE_APPEND);
     // Uncomment the above line to debug regex pattern matching used by this routine; and others that call upon it.
-
+    
     if (!rename($cache_dir, $cache_dir_tmp)) {
-        throw new \Exception(sprintf(__('Unable to delete files. Rename failure on directory: `%1$s`.', 'zencache'), $cache_dir));
+        if (copy ($cache_dir, $cache_dir_tmp)) {
+            unlink($cache_dir);
+        } else {
+            throw new \Exception(sprintf(__('Unable to delete files. Rename failure on directory: `%1$s`.', SLUG_TD), $cache_dir));
+        }
     }
+
     foreach (($_dir_regex_iteration = $self->dirRegexIteration($cache_dir_tmp, $cache_dir_tmp_regex)) as $_resource) {
         $_resource_type = $_resource->getType();
         $_sub_path_name = $_resource->getSubpathname();
