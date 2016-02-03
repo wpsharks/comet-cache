@@ -52,7 +52,7 @@ $self->getTmpDir = function () use ($self) {
     $possible_dirs = array(); // Initialize.
 
     if (defined('WP_TEMP_DIR')) {
-        $possible_dirs[] = (string) WP_TEMP_DIR;
+        return (string) WP_TEMP_DIR;
     }
     if ($self->functionIsPossible('sys_get_temp_dir')) {
         $possible_dirs[] = (string) sys_get_temp_dir();
