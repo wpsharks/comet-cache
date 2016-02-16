@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the ZenCache package.
 msgid ""
 msgstr ""
-"Project-Id-Version: ZenCache 160120-RC\n"
+"Project-Id-Version: ZenCache 160216-RC\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/zencache\n"
-"POT-Creation-Date: 2016-01-20 01:52:45+00:00\n"
+"POT-Creation-Date: 2016-02-16 18:23:43+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -249,1277 +249,1292 @@ msgstr ""
 msgid "Plugin Options"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:93
+#: src/includes/classes/MenuPageOptions.php:85
+#: src/includes/closures/Plugin/InstallUtils.php:40
+msgid "<strong>Important %1$s Announcement:</strong> %1$s is changing its name to <a href=\"https://cometcache.com/r/announcing-comet-cache-formerly-zencache/\" target=\"_blank\"><strong>Comet Cache</a></strong>! Learn more about this upcoming change <a href=\"https://cometcache.com/r/announcing-comet-cache-formerly-zencache/\" target=\"_blank\">here</a>."
+msgstr ""
+
+#: src/includes/classes/MenuPageOptions.php:95
 msgid "Options updated successfully."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:98
+#: src/includes/classes/MenuPageOptions.php:100
 msgid "Default options successfully restored."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:103
+#: src/includes/classes/MenuPageOptions.php:105
 msgid "Cache wiped across all sites; recreation will occur automatically over time."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:109
+#: src/includes/classes/MenuPageOptions.php:111
 msgid "Cache cleared for main site; recreation will occur automatically over time."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:111
+#: src/includes/classes/MenuPageOptions.php:113
 msgid "Cache cleared for this site; recreation will occur automatically over time."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:117
-#: src/includes/classes/MenuPageOptions.php:122
+#: src/includes/classes/MenuPageOptions.php:119
+#: src/includes/classes/MenuPageOptions.php:124
 msgid "Failed to update your <code>/.htaccess</code> file automatically. Most likely a permissions error. Please make sure it has permissions <code>644</code> or higher (perhaps <code>666</code>). Once you've done this, please try saving the %1$s options again."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:127
+#: src/includes/classes/MenuPageOptions.php:129
 msgid "It appears that your server is running NGINX and does not support <code>.htaccess</code> rules. Please <a href=\"http://zencache.com/r/kb-article-recommended-nginx-server-configuration/\" target=\"_new\">update your server configuration manually</a>. If you've already updated your NGINX configuration, you can safely <a href=\"http://zencache.com/r/kb-article-how-do-i-disable-the-nginx-htaccess-notice/\" target=\"_new\">ignore this message</a>."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:132
+#: src/includes/classes/MenuPageOptions.php:134
 msgid "Failed to update your <code>/wp-config.php</code> file automatically. Please add the following line to your <code>/wp-config.php</code> file (right after the opening <code>&lt;?php</code> tag; on it's own line). <pre class=\"code\"><code>&lt;?php<br />define('WP_CACHE', TRUE);</code></pre>"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:137
+#: src/includes/classes/MenuPageOptions.php:139
 msgid "Failed to update your <code>/wp-config.php</code> file automatically. Please remove the following line from your <code>/wp-config.php</code> file, or set <code>WP_CACHE</code> to a <code>FALSE</code> value. <pre class=\"code\"><code>define('WP_CACHE', TRUE);</code></pre>"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:143
+#: src/includes/classes/MenuPageOptions.php:145
 msgid "Failed to update your <code>/wp-content/advanced-cache.php</code> file. Cannot write stat file: <code>%1$s/%2$s-advanced-cache</code>. Please be sure this directory exists (and that it's writable): <code>%1$s</code>. Please use directory permissions <code>755</code> or higher (perhaps <code>777</code>). Once you've done this, please try again."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:145
+#: src/includes/classes/MenuPageOptions.php:147
 msgid "Failed to update your <code>/wp-content/advanced-cache.php</code> file. Most likely a permissions error. Please create an empty file here: <code>/wp-content/advanced-cache.php</code> (just an empty PHP file, with nothing in it); give it permissions <code>644</code> or higher (perhaps <code>666</code>). Once you've done this, please try again."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:151
+#: src/includes/classes/MenuPageOptions.php:153
 msgid "Failed to remove your <code>/wp-content/advanced-cache.php</code> file. Most likely a permissions error. Please delete (or empty the contents of) this file: <code>/wp-content/advanced-cache.php</code>."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:156
+#: src/includes/classes/MenuPageOptions.php:158
 msgid "close"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:157
+#: src/includes/classes/MenuPageOptions.php:159
 msgid "<strong>Pro Features (Preview)</strong> ~ New option panels below. Please explore before <a href=\"http://zencache.com/prices/\" target=\"_blank\">upgrading <i class=\"si si-heart-o\"></i></a>.<br /><small>NOTE: the free version of %1$s (this lite version) is more-than-adequate for most sites. Please upgrade only if you desire advanced features or would like to support the developer.</small>"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:162
+#: src/includes/classes/MenuPageOptions.php:164
 msgid "%1$s is currently disabled; please review options below."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:172
+#: src/includes/classes/MenuPageOptions.php:174
 msgid "Basic Configuration (Required)"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:173
+#: src/includes/classes/MenuPageOptions.php:175
 msgid "Review these basic options and %1$s&trade; will be ready-to-go!"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:181
+#: src/includes/classes/MenuPageOptions.php:183
 msgid "Enable/Disable"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:186
+#: src/includes/classes/MenuPageOptions.php:188
 msgid "%1$s&trade; = SPEED<em>!!</em>"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:187
+#: src/includes/classes/MenuPageOptions.php:189
 msgid "Yes, enable %1$s&trade;"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:187
+#: src/includes/classes/MenuPageOptions.php:189
 msgid "No, disable."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:188
+#: src/includes/classes/MenuPageOptions.php:190
 msgid "<strong>HUGE Time-Saver:</strong> Approx. 95%% of all WordPress sites running %1$s, simply enable it here; and that's it :-) <strong>No further configuration is necessary (really).</strong> All of the other options (down below) are already tuned for the BEST performance on a typical WordPress installation. Simply enable %1$s here and click \"Save All Changes\". If you get any warnings please follow the instructions given. Otherwise, you're good <i class=\"si si-smile-o\"></i>. This plugin is designed to run just fine like it is. Take it for a spin right away; you can always fine-tune things later if you deem necessary."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:191
+#: src/includes/classes/MenuPageOptions.php:193
 msgid "How Can I Tell %1$s is Working?"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:192
+#: src/includes/classes/MenuPageOptions.php:194
 msgid "First of all, please make sure that you've enabled %1$s here; then scroll down to the bottom of this page and click \"Save All Changes\". All of the other options (below) are already pre-configured for typical usage. Feel free to skip them all for now. You can go back through all of these later and fine-tune things the way you like them."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:193
+#: src/includes/classes/MenuPageOptions.php:195
 msgid "Once %1$s has been enabled, <strong>you'll need to log out (and/or clear browser cookies)</strong>. By default, cache files are NOT served to visitors who are logged-in, and that includes you too ;-) Cache files are NOT served to recent comment authors either. If you've commented (or replied to a comment lately); please clear your browser cookies before testing."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:194
+#: src/includes/classes/MenuPageOptions.php:196
 msgid "<strong>To verify that %1$s is working</strong>, navigate your site like a normal visitor would. Right-click on any page (choose View Source), then scroll to the very bottom of the document. At the bottom, you'll find comments that show %1$s stats and information. You should also notice that page-to-page navigation is <i class=\"si si-flash\"></i> <strong>lightning fast</strong> now that %1$s is running; and it gets faster over time!"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:196
+#: src/includes/classes/MenuPageOptions.php:198
 msgid "Yes, enable notes in the source code so I can see it's working (recommended)."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:197
+#: src/includes/classes/MenuPageOptions.php:199
 msgid "Yes, enable notes in the source code AND show debugging details (not recommended for production)."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:198
+#: src/includes/classes/MenuPageOptions.php:200
 msgid "No, I don't want my source code to contain any of these notes."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:209
+#: src/includes/classes/MenuPageOptions.php:211
 msgid "Plugin Deletion Safeguards"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:214
+#: src/includes/classes/MenuPageOptions.php:216
 msgid "Uninstall on Plugin Deletion; or Safeguard Options?"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:215
+#: src/includes/classes/MenuPageOptions.php:217
 msgid "<strong>Tip:</strong> By default, if you delete %1$s using the plugins menu in WordPress, nothing is lost. However, if you want to completely uninstall %1$s you should set this to <code>Yes</code> and <strong>THEN</strong> deactivate &amp; delete %1$s from the plugins menu in WordPress. This way %1$s will erase your options for the plugin, erase directories/files created by the plugin, remove the <code>advanced-cache.php</code> file, terminate CRON jobs, etc. It erases itself from existence completely."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:217
+#: src/includes/classes/MenuPageOptions.php:219
 msgid "Safeguard my options and the cache (recommended)."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:218
+#: src/includes/classes/MenuPageOptions.php:220
 msgid "Yes, uninstall (completely erase) %1$s on plugin deletion."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:227
+#: src/includes/classes/MenuPageOptions.php:229
 msgid "Advanced Configuration (All Optional)"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:228
+#: src/includes/classes/MenuPageOptions.php:230
 msgid "Recommended for advanced site owners only; already pre-configured for most WP installs."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:237
+#: src/includes/classes/MenuPageOptions.php:239
 msgid "Manual Cache Clearing"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:241
+#: src/includes/classes/MenuPageOptions.php:243
 msgid "Clearing the Cache Manually"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:243
+#: src/includes/classes/MenuPageOptions.php:245
 msgid "Once %1$s is enabled, you will find this new option in your WordPress Admin Bar (screenshot on right). Clicking this button will clear the cache and you can start fresh at anytime (e.g., you can do this manually; and as often as you wish)."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:244
+#: src/includes/classes/MenuPageOptions.php:246
 msgid "Depending on the structure of your site, there could be many reasons to clear the cache. However, the most common reasons are related to Post/Page edits or deletions, Category/Tag edits or deletions, and Theme changes. %1$s handles most scenarios all by itself. However, many site owners like to clear the cache manually; for a variety of reasons (just to force a refresh)."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:246
+#: src/includes/classes/MenuPageOptions.php:248
 msgid "Yes, enable &quot;Clear Cache&quot; button in admin bar"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:247
+#: src/includes/classes/MenuPageOptions.php:249
 msgid "No, I don't intend to clear the cache manually."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:250
+#: src/includes/classes/MenuPageOptions.php:252
 msgid "w/ dropdown options."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:251
+#: src/includes/classes/MenuPageOptions.php:253
 msgid "w/ dropdown options in split menu."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:252
+#: src/includes/classes/MenuPageOptions.php:254
 msgid "w/o dropdown options."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:257
+#: src/includes/classes/MenuPageOptions.php:259
 msgid "Also allow Child Sites in a Network to clear the cache from their Admin Bar?"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:258
+#: src/includes/classes/MenuPageOptions.php:260
 msgid "In a Multisite Network, each child site can clear its own cache. If you want child sites to see the \"Clear Cache\" button in their WordPress Admin Bar, you can specify a comma-delimited list of <a href=\"http://zencache.com/r/wp-roles-caps/\" target=\"_blank\">Roles and/or Capabilities</a> that are allowed. For example, if I want Administrators to be capable of clearing the cache from their Admin Bar, I could enter <code>administrator</code> here. If I also want to allow Editors, I can use a comma-delimited list: <code>administrator,editor</code>. Or, I could use a single Capability of: <code>edit_others_posts</code>; which covers both Administrators &amp; Editors at the same time."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:260
-#: src/includes/classes/MenuPageOptions.php:451
+#: src/includes/classes/MenuPageOptions.php:262
+#: src/includes/classes/MenuPageOptions.php:453
 msgid "<strong>Note:</strong> As a security measure, in addition to the Role(s) and/or Capabilities that you list here, each child site owner must also have the ability to <code>%1$s</code>."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:265
+#: src/includes/classes/MenuPageOptions.php:267
 msgid "Also allow others to clear the cache from their Admin Bar?"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:266
+#: src/includes/classes/MenuPageOptions.php:268
 msgid "If you want others to see the \"Clear Cache\" button in their WordPress Admin Bar, you can specify a comma-delimited list of <a href=\"http://zencache.com/r/wp-roles-caps/\" target=\"_blank\">Roles and/or Capabilities</a> that are allowed. For example, if I want Editors to be capable of clearing the cache from their Admin Bar, I could enter <code>editor</code> here. If I also want to allow Authors, I can use a comma-delimited list: <code>editor,author</code>. Or, I could use a single Capability of: <code>publish_posts</code>; which covers both Editors &amp; Authors at the same time."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:268
-#: src/includes/classes/MenuPageOptions.php:459
+#: src/includes/classes/MenuPageOptions.php:270
+#: src/includes/classes/MenuPageOptions.php:461
 msgid "<strong>Note:</strong> As a security measure, in addition to the Role(s) and/or Capabilities that you list here, each user must also have the ability to <code>%1$s</code>."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:274
+#: src/includes/classes/MenuPageOptions.php:276
 msgid "Clear the <a href=\"http://zencache.com/r/php-opcache/\" target=\"_blank\">PHP OPcache</a> Too?"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:275
+#: src/includes/classes/MenuPageOptions.php:277
 msgid "If you clear the cache manually, do you want %1$s to clear the PHP OPcache too? This is not necessary, but if you want a truly clean start, this will clear all PHP files in the server's opcode cache also. Note: If you don't already know what the PHP OPcache is, it is suggested that you leave this disabled. It really is not necessary. This is just an added feature for advanced users."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:277
+#: src/includes/classes/MenuPageOptions.php:279
 msgid "No, I don't use the PHP OPcache extension; or, I don't want the opcode cache cleared."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:278
+#: src/includes/classes/MenuPageOptions.php:280
 msgid "Yes, if the PHP OPcache extension is enabled, also clear the entire PHP opcode cache."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:283
+#: src/includes/classes/MenuPageOptions.php:285
 msgid "Clear the <a href=\"http://websharks-inc.com/product/s2clean/\" target=\"_blank\">s2Clean</a> Cache Too?"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:284
+#: src/includes/classes/MenuPageOptions.php:286
 msgid "If the s2Clean theme is installed, and you clear the cache manually, %1$s can clear the s2Clean Markdown cache too (if you've enabled Markdown processing with s2Clean)."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:286
+#: src/includes/classes/MenuPageOptions.php:288
 msgid "Yes, if the s2Clean theme is installed, also clear s2Clean-related caches."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:287
+#: src/includes/classes/MenuPageOptions.php:289
 msgid "No, I don't use s2Clean; or, I don't want s2Clean-related caches cleared."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:291
+#: src/includes/classes/MenuPageOptions.php:293
 msgid "Evaluate Custom PHP Code when Clearing the Cache?"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:292
+#: src/includes/classes/MenuPageOptions.php:294
 msgid "If you have any custom routines you'd like to process when the cache is cleared manually, please enter PHP code here. If your PHP code outputs a message, it will be displayed along with any other notes from %1$s itself. This feature is intended for developers, and it may come in handy if you need to clear any system caches not already covered by %1$s configuration options."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:294
+#: src/includes/classes/MenuPageOptions.php:296
 msgid "<strong>Example:</strong> <code>&lt;?php apc_clear_cache(); echo '&lt;p&gt;Also cleared APC cache.&lt;/p&gt;'; ?&gt;</code>"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:297
+#: src/includes/classes/MenuPageOptions.php:299
 msgid "Clear the CDN Cache Too?"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:298
+#: src/includes/classes/MenuPageOptions.php:300
 msgid "If you clear the cache manually, do you want %1$s to automatically bump the CDN invalidation counter too? i.e., automatically increment the <code>?%2$s=[counter]</code> in all static CDN URLs?"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:300
+#: src/includes/classes/MenuPageOptions.php:302
 msgid "No, I don't use Static CDN Filters; or, I don't want the CDN cache cleared."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:301
+#: src/includes/classes/MenuPageOptions.php:303
 msgid "Yes, if Static CDN Filters are enabled, also clear the CDN cache."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:312
+#: src/includes/classes/MenuPageOptions.php:314
 msgid "Automatic Cache Clearing"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:317
+#: src/includes/classes/MenuPageOptions.php:319
 msgid "Clearing the Cache Automatically"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:319
+#: src/includes/classes/MenuPageOptions.php:321
 msgid "This is built into the %1$s plugin; i.e., this functionality is \"always on\". If you edit a Post/Page (or delete one), %1$s will automatically clear the cache file(s) associated with that content. This way a new updated version of the cache will be created automatically the next time this content is accessed. Simple updates like this occur each time you make changes in the Dashboard, and %1$s will notify you of these as they occur. %1$s monitors changes to Posts (of any kind, including Pages), Categories, Tags, Links, Themes (even Users), and more."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:323
+#: src/includes/classes/MenuPageOptions.php:325
 msgid "Yes, enable %1$s notifications in the Dashboard when changes are detected &amp; one or more cache files are cleared automatically."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:324
+#: src/includes/classes/MenuPageOptions.php:326
 msgid "No, I don't want to know (don't really care) what %1$s is doing behind-the-scene."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:329
+#: src/includes/classes/MenuPageOptions.php:331
 msgid "Primary Page Options"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:331
+#: src/includes/classes/MenuPageOptions.php:333
 msgid "Auto-Clear Designated \"Home Page\" Too?"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:332
+#: src/includes/classes/MenuPageOptions.php:334
 msgid "On many sites, the Home Page (aka: the Front Page) offers an archive view of all Posts (or even Pages). Therefore, if a single Post/Page is changed in some way; and %1$s clears/resets the cache for a single Post/Page, would you like %1$s to also clear any existing cache files for the \"Home Page\"?"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:334
+#: src/includes/classes/MenuPageOptions.php:336
 msgid "Yes, if any single Post/Page is cleared/reset; also clear the \"Home Page\"."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:335
+#: src/includes/classes/MenuPageOptions.php:337
 msgid "No, my Home Page does not provide a list of Posts/Pages; e.g., this is not necessary."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:337
+#: src/includes/classes/MenuPageOptions.php:339
 msgid "Auto-Clear Designated \"Posts Page\" Too?"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:338
+#: src/includes/classes/MenuPageOptions.php:340
 msgid "On many sites, the Posts Page (aka: the Blog Page) offers an archive view of all Posts (or even Pages). Therefore, if a single Post/Page is changed in some way; and %1$s clears/resets the cache for a single Post/Page, would you like %1$s to also clear any existing cache files for the \"Posts Page\"?"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:340
+#: src/includes/classes/MenuPageOptions.php:342
 msgid "Yes, if any single Post/Page is cleared/reset; also clear the \"Posts Page\"."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:341
+#: src/includes/classes/MenuPageOptions.php:343
 msgid "No, I don't use a separate Posts Page; e.g., my Home Page IS my Posts Page."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:345
+#: src/includes/classes/MenuPageOptions.php:347
 msgid "Author, Archive, and Tag/Term Options"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:347
+#: src/includes/classes/MenuPageOptions.php:349
 msgid "Auto-Clear \"Author Page\" Too?"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:348
+#: src/includes/classes/MenuPageOptions.php:350
 msgid "On many sites, each author has a related \"Author Page\" that offers an archive view of all posts associated with that author. Therefore, if a single Post/Page is changed in some way; and %1$s clears/resets the cache for a single Post/Page, would you like %1$s to also clear any existing cache files for the related \"Author Page\"?"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:350
+#: src/includes/classes/MenuPageOptions.php:352
 msgid "Yes, if any single Post/Page is cleared/reset; also clear the \"Author Page\"."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:351
+#: src/includes/classes/MenuPageOptions.php:353
 msgid "No, my site doesn't use multiple authors and/or I don't have any \"Author Page\" archive views."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:354
+#: src/includes/classes/MenuPageOptions.php:356
 msgid "Auto-Clear \"Category Archives\" Too?"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:355
+#: src/includes/classes/MenuPageOptions.php:357
 msgid "On many sites, each post is associated with at least one Category. Each category then has an archive view that contains all the posts within that category. Therefore, if a single Post/Page is changed in some way; and %1$s clears/resets the cache for a single Post/Page, would you like %1$s to also clear any existing cache files for the associated Category archive views?"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:357
+#: src/includes/classes/MenuPageOptions.php:359
 msgid "Yes, if any single Post/Page is cleared/reset; also clear the associated Category archive views."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:358
+#: src/includes/classes/MenuPageOptions.php:360
 msgid "No, my site doesn't use Categories and/or I don't have any Category archive views."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:361
+#: src/includes/classes/MenuPageOptions.php:363
 msgid "Auto-Clear \"Tag Archives\" Too?"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:362
+#: src/includes/classes/MenuPageOptions.php:364
 msgid "On many sites, each post may be associated with at least one Tag. Each tag then has an archive view that contains all the posts assigned that tag. Therefore, if a single Post/Page is changed in some way; and %1$s clears/resets the cache for a single Post/Page, would you like %1$s to also clear any existing cache files for the associated Tag archive views?"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:364
+#: src/includes/classes/MenuPageOptions.php:366
 msgid "Yes, if any single Post/Page is cleared/reset; also clear the associated Tag archive views."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:365
+#: src/includes/classes/MenuPageOptions.php:367
 msgid "No, my site doesn't use Tags and/or I don't have any Tag archive views."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:368
+#: src/includes/classes/MenuPageOptions.php:370
 msgid "Auto-Clear \"Custom Term Archives\" Too?"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:369
+#: src/includes/classes/MenuPageOptions.php:371
 msgid "Most sites do not use any custom Terms so it should be safe to leave this disabled. However, if your site uses custom Terms and they have their own Term archive views, you may want to clear those when the associated post is cleared. Therefore, if a single Post/Page is changed in some way; and %1$s clears/resets the cache for a single Post/Page, would you like %1$s to also clear any existing cache files for the associated Tag archive views?"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:371
+#: src/includes/classes/MenuPageOptions.php:373
 msgid "Yes, if any single Post/Page is cleared/reset; also clear any associated custom Term archive views."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:372
+#: src/includes/classes/MenuPageOptions.php:374
 msgid "No, my site doesn't use any custom Terms and/or I don't have any custom Term archive views."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:375
+#: src/includes/classes/MenuPageOptions.php:377
 msgid "Auto-Clear \"Custom Post Type Archives\" Too?"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:376
+#: src/includes/classes/MenuPageOptions.php:378
 msgid "Most sites do not use any Custom Post Types so it should be safe to disable this option. However, if your site uses Custom Post Types and they have their own Custom Post Type archive views, you may want to clear those when any associated post is cleared. Therefore, if a single Post with a Custom Post Type is changed in some way; and %1$s clears/resets the cache for that post, would you like %1$s to also clear any existing cache files for the associated Custom Post Type archive views?"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:378
+#: src/includes/classes/MenuPageOptions.php:380
 msgid "Yes, if any single Post with a Custom Post Type is cleared/reset; also clear any associated Custom Post Type archive views."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:379
+#: src/includes/classes/MenuPageOptions.php:381
 msgid "No, my site doesn't use any Custom Post Types and/or I don't have any Custom Post Type archive views."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:383
+#: src/includes/classes/MenuPageOptions.php:385
 msgid "Feed-Related Options"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:385
+#: src/includes/classes/MenuPageOptions.php:387
 msgid "Auto-Clear \"RSS/RDF/ATOM Feeds\" Too?"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:386
+#: src/includes/classes/MenuPageOptions.php:388
 msgid "If you enable Feed Caching (below), this can be quite handy. If enabled, when you update a Post/Page, approve a Comment, or make other changes where %1$s can detect that certain types of Feeds should be cleared to keep your site up-to-date, then %1$s will do this for you automatically. For instance, the blog's master feed, the blog's master comments feed, feeds associated with comments on a Post/Page, term-related feeds (including mixed term-related feeds), author-related feeds, etc. Under various circumstances (i.e., as you work in the Dashboard) these can be cleared automatically to keep your site up-to-date."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:388
+#: src/includes/classes/MenuPageOptions.php:390
 msgid "Yes, automatically clear RSS/RDF/ATOM Feeds from the cache when certain changes occur."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:389
+#: src/includes/classes/MenuPageOptions.php:391
 msgid "No, I don't have Feed Caching enabled, or I prefer not to automatically clear Feeds."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:393
+#: src/includes/classes/MenuPageOptions.php:395
 msgid "Sitemap-Related Options"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:395
+#: src/includes/classes/MenuPageOptions.php:397
 msgid "Auto-Clear \"XML Sitemaps\" Too?"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:396
+#: src/includes/classes/MenuPageOptions.php:398
 msgid "If you're generating XML Sitemaps with a plugin like <a href=\"http://wordpress.org/plugins/google-sitemap-generator/\" target=\"_blank\">Google XML Sitemaps</a>, you can tell %1$s to automatically clear the cache of any XML Sitemaps whenever it clears a Post/Page. Note: This does NOT clear the XML Sitemap itself of course, only the cache. The point being, to clear the cache and allow changes to a Post/Page to be reflected by a fresh copy of your XML Sitemap; sooner rather than later."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:398
+#: src/includes/classes/MenuPageOptions.php:400
 msgid "Yes, if any single Post/Page is cleared/reset; also clear the cache for any XML Sitemaps."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:399
+#: src/includes/classes/MenuPageOptions.php:401
 msgid "No, my site doesn't use any XML Sitemaps and/or I prefer NOT to clear the cache for XML Sitemaps."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:402
+#: src/includes/classes/MenuPageOptions.php:404
 msgid "<strong style=\"font-size:110%;\">XML Sitemap Patterns...</strong> A default value of <code>/sitemap**.xml</code> covers all XML Sitemaps for most installations. However, you may customize this further if you deem necessary. <strong>Please list one pattern per line.</strong> These XML Sitemap Pattern searches are performed against the <a href=\"https://gist.github.com/jaswsinc/338b6eb03a36c048c26f\" target=\"_blank\">REQUEST_URI</a>. A wildcard <code>**</code> character can also be used when necessary; e.g., <code>/sitemap**.xml</code> (where <code>**</code> = 0 or more characters of any kind, including <code>/</code> slashes). Other special characters include: <code>*</code> = 0 or more characters that are NOT a slash <code>/</code>; <code>^</code> = beginning of the string; <code>$</code> = end of the string. To learn more about this syntax, please see <a href=\"http://zencache.com/r/watered-down-regex-syntax/\" target=\"_blank\">this KB article</a>."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:405
+#: src/includes/classes/MenuPageOptions.php:407
 msgid "In a Multisite Network, each child blog (whether it be a sub-domain, a sub-directory, or a mapped domain); will automatically change the leading <code>http://[sub.]domain/[sub-directory]</code> used in pattern matching. In short, there is no need to add sub-domains or sub-directories for each child blog in these patterns. Please include only the <a href=\"https://gist.github.com/jaswsinc/338b6eb03a36c048c26f\" target=\"_blank\">REQUEST_URI</a> (i.e., the path) which leads to the XML Sitemap on all child blogs in the network."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:411
+#: src/includes/classes/MenuPageOptions.php:413
 msgid "Misc. Auto-Clear Options"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:412
+#: src/includes/classes/MenuPageOptions.php:414
 msgid "Auto-Clear a List of Custom URLs Too?"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:413
+#: src/includes/classes/MenuPageOptions.php:415
 msgid "When you update a Post/Page, approve a Comment, or make other changes where %1$s can detect that a Post/Page cache should be cleared to keep your site up-to-date; then %1$s will also clear a list of custom URLs that you list here. <strong>Please list one URL per line.</strong> A wildcard <code>*</code> character can also be used when necessary; e.g., <code>/category/abc-followed-by-*</code> (where <code>*</code> = 0 or more characters that are NOT a slash <code>/</code>). Other special characters include: <code>**</code> = 0 or more characters of any kind, including <code>/</code> slashes; <code>^</code> = beginning of the string; <code>$</code> = end of the string. To learn more about this syntax, please see <a href =\"http://zencache.com/r/watered-down-regex-syntax/\" target=\"_blank\">this KB article</a>."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:426
+#: src/includes/classes/MenuPageOptions.php:428
 msgid "Cache-Related Statistics"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:431
+#: src/includes/classes/MenuPageOptions.php:433
 msgid "Enable Cache-Related Stats &amp; Charts?"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:432
+#: src/includes/classes/MenuPageOptions.php:434
 msgid "%1$s can collect and display cache-related statistics (including charts). Stats are displayed in the WordPress Admin Bar, and also in your Dashboard under: <strong>%1$s → Stats/Charts</strong>. Cache-related stats provide you with a quick look at what's happening behind-the-scenes. Your site grows faster and faster as the cache grows larger in size."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:434
+#: src/includes/classes/MenuPageOptions.php:436
 msgid "Yes, enable stats collection &amp; the menu page in WordPress for viewing stats."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:435
+#: src/includes/classes/MenuPageOptions.php:437
 msgid "No, I have a VERY large site and I want to avoid any unnecessary directory scans."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:437
+#: src/includes/classes/MenuPageOptions.php:439
 msgid "<strong>Note:</strong> %1$s does a great job of collecting stats, in ways that don't cause a performance issue. In addition, as your cache grows larger than several hundred files in total size, statistics are collected less often and at longer intervals. All of that being said, if you run a VERY large site (e.g., more than 20K posts), you might want to disable stats collection in favor of blazing fast speeds not impeded by any directory scans needed to collect stats."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:441
+#: src/includes/classes/MenuPageOptions.php:443
 msgid "Show Stats in the WordPress Admin Bar?"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:443
+#: src/includes/classes/MenuPageOptions.php:445
 msgid "Yes, enable stats in the WordPress admin bar."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:444
+#: src/includes/classes/MenuPageOptions.php:446
 msgid "No, I'll review stats from the menu page in WordPress if I need to."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:448
+#: src/includes/classes/MenuPageOptions.php:450
 msgid "Allow Child Sites in a Network to See Stats in Admin Bar?"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:449
+#: src/includes/classes/MenuPageOptions.php:451
 msgid "In a Multisite Network, each child site has stats of its own. If you want child sites to see cache-related stats in their WordPress Admin Bar, you can specify a comma-delimited list of <a href=\"http://zencache.com/r/wp-roles-caps/\" target=\"_blank\">Roles and/or Capabilities</a> that are allowed to see stats. For example, if I want the Administrator to see stats in their Admin Bar, I could enter <code>administrator</code> here. If I also want to show stats to Editors, I can use a comma-delimited list: <code>administrator,editor</code>. Or, I could use a single Capability of: <code>edit_others_posts</code>; which covers both Administrators &amp; Editors at the same time."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:456
+#: src/includes/classes/MenuPageOptions.php:458
 msgid "Allow Others to See Stats in Admin Bar?"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:457
+#: src/includes/classes/MenuPageOptions.php:459
 msgid "If you want others to see cache-related stats in their WordPress Admin Bar, you can specify a comma-delimited list of <a href=\"http://zencache.com/r/wp-roles-caps/\" target=\"_blank\">Roles and/or Capabilities</a> that are allowed to see stats. For example, if I want Editors to see stats in their Admin Bar, I could enter <code>editor</code> here. If I also want to show stats to Authors, I can use a comma-delimited list: <code>editor,author</code>. Or, I could use a single Capability of: <code>publish_posts</code>; which covers both Editors &amp; Authors at the same time."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:473
+#: src/includes/classes/MenuPageOptions.php:475
 msgid "Cache Directory"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:477
+#: src/includes/classes/MenuPageOptions.php:479
 msgid "Base Cache Directory (Must be Writable; i.e., <a href=\"http://zencache.com/r/wp-file-permissions/\" target=\"_blank\">Permissions</a> <code>755</code> or Higher)"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:478
+#: src/includes/classes/MenuPageOptions.php:480
 msgid "This is where %1$s will store the cached version of your site. If you're not sure how to deal with directory permissions, don't worry too much about this. If there is a problem, %1$s will let you know about it. By default, this directory is created by %1$s and the permissions are setup automatically. In most cases there is nothing more you need to do."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:489
+#: src/includes/classes/MenuPageOptions.php:491
 msgid "Cache Expiration Time"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:494
+#: src/includes/classes/MenuPageOptions.php:496
 msgid "Automatic Expiration Time (Max Age)"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:495
+#: src/includes/classes/MenuPageOptions.php:497
 msgid "If you don't update your site much, you could set this to <code>6 months</code> and optimize everything even further. The longer the Cache Expiration Time is, the greater your performance gain. Alternatively, the shorter the Expiration Time, the fresher everything will remain on your site. A default value of <code>7 days</code> (recommended); is a good conservative middle-ground."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:496
+#: src/includes/classes/MenuPageOptions.php:498
 msgid "Keep in mind that your Expiration Time is only one part of the big picture. %1$s will also clear the cache automatically as changes are made to the site (i.e., you edit a post, someone comments on a post, you change your theme, you add a new navigation menu item, etc., etc.). Thus, your Expiration Time is really just a fallback; e.g., the maximum amount of time that a cache file could ever possibly live."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:497
+#: src/includes/classes/MenuPageOptions.php:499
 msgid "All of that being said, you could set this to just <code>60 seconds</code> and you would still see huge differences in speed and performance. If you're just starting out with %1$s (perhaps a bit nervous about old cache files being served to your visitors); you could set this to something like <code>30 minutes</code> and experiment with it while you build confidence in %1$s. It's not necessary to do so, but many site owners have reported this makes them feel like they're more-in-control when the cache has a short expiration time. All-in-all, it's a matter of preference <i class=\"si si-smile-o\"></i>."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:499
+#: src/includes/classes/MenuPageOptions.php:501
 msgid "<strong>Tip:</strong> the value that you specify here MUST be compatible with PHP's <a href=\"http://php.net/manual/en/function.strtotime.php\" target=\"_blank\" style=\"text-decoration:none;\"><code>strtotime()</code></a> function. Examples: <code>30 seconds</code>, <code>2 hours</code>, <code>7 days</code>, <code>6 months</code>, <code>1 year</code>."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:500
+#: src/includes/classes/MenuPageOptions.php:502
 msgid "<strong>Note:</strong> %1$s will never serve a cache file that is older than what you specify here (even if one exists in your cache directory; stale cache files are never used). In addition, a WP Cron job will automatically cleanup your cache directory (once per hour); purging expired cache files periodically. This prevents a HUGE cache from building up over time, creating a potential storage issue."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:504
+#: src/includes/classes/MenuPageOptions.php:506
 msgid "Cache Cleanup Schedule"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:505
+#: src/includes/classes/MenuPageOptions.php:507
 msgid "If you have an extremely large site and you lower the default Cache Expiration Time of <code>7 days</code>, expired cache files can build up more quickly. By default, %1$s cleans up expired cache files via <a href=\"http://zencache.com/r/wp_cron-functions/\" target=\"_blank\">WP Cron</a> at an <code>hourly</code> interval, but you can tell %1$s to use a custom Cache Cleanup Schedule below to run the cleanup process more or less frequently, depending on your specific needs."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:517
+#: src/includes/classes/MenuPageOptions.php:519
 msgid "Disable Cache Expiration If Server Load Average is High?"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:518
+#: src/includes/classes/MenuPageOptions.php:520
 msgid "If you have high traffic at certain times of the day, %1$s can be told to check the current load average via <a href=\"http://zencache.com/r/system-load-average-via-php/\" target=\"_blank\"><code>sys_getloadavg()</code></a>. If your server's load average has been high in the last 15 minutes or so, cache expiration is disabled automatically to help reduce stress on the server; i.e., to avoid generating a new version of the cache while the server is very busy."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:519
+#: src/includes/classes/MenuPageOptions.php:521
 msgid "To enable this functionality you should first determine what a high load average is for your server. If you log into your machine via SSH you can run the <code>top</code> command to get a feel for what a high load average looks like. Once you know the number, you can enter it in the field below; e.g., <code>1.05</code> might be a high load average for a server with one CPU. See also: <a href=\"http://zencache.com/r/understanding-load-average/\" target=\"_blank\">Understanding Load Average</a>"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:522
+#: src/includes/classes/MenuPageOptions.php:524
 msgid "<strong>Note:</strong> It appears that your server is running Windows. The <code>sys_getloadavg()</code> function has not been implemented in PHP for Windows servers yet."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:524
+#: src/includes/classes/MenuPageOptions.php:526
 msgid "<strong>Note:</strong> <code>sys_getloadavg()</code> has been disabled by your web hosting company or is not available on your server."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:537
+#: src/includes/classes/MenuPageOptions.php:539
 msgid "Client-Side Cache"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:542
+#: src/includes/classes/MenuPageOptions.php:544
 msgid "Allow Double-Caching In The Client-Side Browser?"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:543
+#: src/includes/classes/MenuPageOptions.php:545
 msgid "Recommended setting: <code>No</code> (for membership sites, very important). Otherwise, <code>Yes</code> would be better (if users do NOT log in/out of your site)."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:544
+#: src/includes/classes/MenuPageOptions.php:546
 msgid "%1$s handles content delivery through its ability to communicate with a browser using PHP. If you allow a browser to (cache) the caching system itself, you are momentarily losing some control; and this can have a negative impact on users that see more than one version of your site; e.g., one version while logged-in, and another while NOT logged-in. For instance, a user may log out of your site, but upon logging out they report seeing pages on the site which indicate they are STILL logged in (even though they're not — that's bad). This can happen if you allow a client-side cache, because their browser may cache web pages they visited while logged into your site which persist even after logging out. Sending no-cache headers will work to prevent this issue."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:545
+#: src/includes/classes/MenuPageOptions.php:547
 msgid "All of that being said, if all you care about is blazing fast speed and users don't log in/out of your site (only you do); you can safely set this to <code>Yes</code> (recommended in this case). Allowing a client-side browser cache will improve speed and reduce outgoing bandwidth when this option is feasible."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:547
+#: src/includes/classes/MenuPageOptions.php:549
 msgid "No, prevent a client-side browser cache (safest option)."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:548
+#: src/includes/classes/MenuPageOptions.php:550
 msgid "Yes, I will allow a client-side browser cache of pages on the site."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:550
+#: src/includes/classes/MenuPageOptions.php:552
 msgid "<strong>Tip:</strong> Setting this to <code>No</code> is highly recommended when running a membership plugin like <a href=\"http://wordpress.org/plugins/s2member/\" target=\"_blank\">s2Member</a> (as one example). In fact, many plugins like s2Member will send <a href=\"http://codex.wordpress.org/Function_Reference/nocache_headers\" target=\"_blank\">nocache_headers()</a> on their own, so your configuration here will likely be overwritten when you run such plugins (which is better anyway). In short, if you run a membership plugin, you should NOT allow a client-side browser cache."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:551
+#: src/includes/classes/MenuPageOptions.php:553
 msgid "<strong>Tip:</strong> Setting this to <code>No</code> will NOT impact static content; e.g., CSS, JS, images, or other media. This setting pertains only to dynamic PHP scripts which produce content generated by WordPress."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:552
+#: src/includes/classes/MenuPageOptions.php:554
 msgid "<strong>Advanced Tip:</strong> if you have this set to <code>No</code>, but you DO want to allow a few special URLs to be cached by the browser; you can add this parameter to your URL <code>?%2$sABC=1</code>. This tells %1$s that it's OK for the browser to cache that particular URL. In other words, the <code>%2$sABC=1</code> parameter tells %1$s NOT to send no-cache headers to the browser."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:553
+#: src/includes/classes/MenuPageOptions.php:555
 msgid "Exclusion Patterns for Client-Side Caching"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:554
+#: src/includes/classes/MenuPageOptions.php:556
 msgid "When you enable Client-Side Caching above, you may want to prevent certain pages on your site from being cached by a client-side browser. This is where you will enter those if you need to (one per line). Searches are performed against the <a href=\"https://gist.github.com/jaswsinc/338b6eb03a36c048c26f\" target=\"_blank\" style=\"text-decoration:none;\"><code>REQUEST_URI</code></a>; i.e., <code>/path/?query</code> (caSe insensitive). So, don't put in full URLs here, just word fragments found in the file path (or query string) is all you need, excluding the http:// and domain name. A wildcard <code>*</code> character can also be used when necessary; e.g., <code>/category/abc-followed-by-*</code> (where <code>*</code> = 0 or more characters that are NOT a slash <code>/</code>). Other special characters include: <code>**</code> = 0 or more characters of any kind, including <code>/</code> slashes; <code>^</code> = beginning of the string; <code>$</code> = end of the string. To learn more about this syntax, please see <a href =\"http://zencache.com/r/watered-down-regex-syntax/\" target=\"_blank\">this KB article</a>."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:556
-#: src/includes/classes/MenuPageOptions.php:680
+#: src/includes/classes/MenuPageOptions.php:558
+#: src/includes/classes/MenuPageOptions.php:682
+#: src/includes/classes/MenuPageOptions.php:843
 msgid "<strong>Tip:</strong> let's use this example URL: <code>http://www.example.com/post/example-post-123</code>. To exclude this URL, you would put this line into the field above: <code>/post/example-post-123</code>. Or, you could also just put in a small fragment, like: <code>example</code> or <code>example-*-123</code> and that would exclude any URI containing that word fragment."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:557
-#: src/includes/classes/MenuPageOptions.php:681
-#: src/includes/classes/MenuPageOptions.php:699
-#: src/includes/classes/MenuPageOptions.php:717
-#: src/includes/classes/MenuPageOptions.php:833
-#: src/includes/classes/MenuPageOptions.php:837
-#: src/includes/classes/MenuPageOptions.php:954
+#: src/includes/classes/MenuPageOptions.php:559
+#: src/includes/classes/MenuPageOptions.php:683
+#: src/includes/classes/MenuPageOptions.php:701
+#: src/includes/classes/MenuPageOptions.php:719
+#: src/includes/classes/MenuPageOptions.php:835
+#: src/includes/classes/MenuPageOptions.php:839
+#: src/includes/classes/MenuPageOptions.php:844
+#: src/includes/classes/MenuPageOptions.php:961
 msgid "<strong>Note:</strong> please remember that your entries here should be formatted as a line-delimited list; e.g., one exclusion pattern per line."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:568
+#: src/includes/classes/MenuPageOptions.php:570
 msgid "Logged-In Users"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:573
+#: src/includes/classes/MenuPageOptions.php:575
 msgid "Caching Enabled for Logged-In Users &amp; Comment Authors?"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:574
+#: src/includes/classes/MenuPageOptions.php:576
 msgid "This should almost ALWAYS be set to <code>No</code>. Most sites will NOT want to cache content generated while a user is logged-in. Doing so could result in a cache of dynamic content generated specifically for a particular user, where the content being cached may contain details that pertain only to the user that was logged-in when the cache was generated. Imagine visiting a website that says you're logged-in as Billy Bob (but you're not Billy Bob; NOT good). In short, do NOT turn this on unless you know what you're doing."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:576
+#: src/includes/classes/MenuPageOptions.php:578
 msgid "<strong>Exception (Membership Sites):</strong> If you run a site with many users and the majority of your traffic comes from users who ARE logged-in, please choose: <code>Yes (maintain separate cache)</code>. %1$s will operate normally; but when a user is logged-in, the cache is user-specific. %1$s will intelligently refresh the cache when/if a user submits a form on your site with the GET or POST method. Or, if you make changes to their account (or another plugin makes changes to their account); including user <a href=\"http://codex.wordpress.org/Function_Reference/update_user_option\" target=\"_blank\">option</a>|<a href=\"http://codex.wordpress.org/Function_Reference/update_user_meta\" target=\"_blank\">meta</a> additions, updates &amp; deletions too. However, please note that enabling this feature (e.g., user-specific cache entries); will eat up MUCH more disk space. That being said, the benefits of this feature for most sites will outweigh the disk overhead (e.g., it's NOT an issue in most cases). Unless you are short on disk space (or you have MANY thousands of users), the disk overhead is neglible."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:578
+#: src/includes/classes/MenuPageOptions.php:580
 msgid "No, do NOT cache; or serve a cache file when a user is logged-in (safest option)."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:579
+#: src/includes/classes/MenuPageOptions.php:581
 msgid "Yes, and maintain a separate cache for each user (recommended for membership sites)."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:582
+#: src/includes/classes/MenuPageOptions.php:584
 msgid "Yes, but DON'T maintain a separate cache for each user (I know what I'm doing)."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:586
+#: src/includes/classes/MenuPageOptions.php:588
 msgid "<strong>Warning:</strong> Whenever you enable caching for logged-in users (without a separate cache for each user), the WordPress Admin Bar <em>must</em> be disabled to prevent one user from seeing another user's details in the Admin Bar. <strong>Given your current configuration, %1$s will automatically hide the WordPress Admin Bar on the front-end of your site.</strong>"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:588
+#: src/includes/classes/MenuPageOptions.php:590
 msgid "<strong>Note:</strong> For most sites, the majority of their traffic (if not all of their traffic) comes from visitors who are not logged in, so disabling the cache for logged-in users is NOT ordinarily a performance issue. When a user IS logged-in, disabling the cache is considered ideal, because a logged-in user has a session open with your site; and the content they view should remain very dynamic in this scenario."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:589
+#: src/includes/classes/MenuPageOptions.php:591
 msgid "<strong>Note:</strong> This setting includes some users who AREN'T actually logged into the system, but who HAVE authored comments recently. %1$s includes comment authors as part of it's logged-in user check. This way comment authors will be able to see updates to the comment thread immediately; and, so that any dynamically-generated messages displayed by your theme will work as intended. In short, %1$s thinks of a comment author as a logged-in user, even though technically they are not. ~ Users who gain access to password-protected Posts/Pages are also included."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:591
+#: src/includes/classes/MenuPageOptions.php:593
 msgid "Static CDN Filters Enabled for Logged-In Users &amp; Comment Authors?"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:592
+#: src/includes/classes/MenuPageOptions.php:594
 msgid "While this defaults to a value of <code>No</code>, it should almost always be set to <code>Yes</code>. This value defaults to <code>No</code> only because Logged-In User caching (see above) defaults to <code>No</code> and setting this value to <code>Yes</code> by default can cause confusion for some users. Once you understand that Static CDN Filters can be applied safely for all visitors (logged-in or not logged-in), please choose <code>Yes</code> in the dropdown below. If you are not using Static CDN Filters, the value below is ignored."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:594
+#: src/includes/classes/MenuPageOptions.php:596
 msgid "No, disable Static CDN Filters when a user is logged-in."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:595
+#: src/includes/classes/MenuPageOptions.php:597
 msgid "Yes, enable Static CDN Filters for logged-in users (recommended) ."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:597
+#: src/includes/classes/MenuPageOptions.php:599
 msgid "<strong>Note:</strong> Static CDN Filters serve <em>static</em> resources. Static resources, are, simply put, static. Thus, it is not a problem to cache these resources for any visitor (logged-in or not logged-in). To avoid confusion, this defaults to a value of <code>No</code>, and we ask that you set it to <code>Yes</code> on your own so that you'll know to expect this behavior; i.e., that static resources will always be served from the CDN (logged-in or not logged-in) even though Logged-In User caching may be disabled above."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:607
+#: src/includes/classes/MenuPageOptions.php:609
 msgid "GET Requests"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:612
+#: src/includes/classes/MenuPageOptions.php:614
 msgid "Caching Enabled for GET (Query String) Requests?"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:613
+#: src/includes/classes/MenuPageOptions.php:615
 msgid "This should almost ALWAYS be set to <code>No</code>. UNLESS, you're using unfriendly Permalinks. In other words, if all of your URLs contain a query string (e.g., <code>/?key=value</code>); you're using unfriendly Permalinks. Ideally, you would refrain from doing this; and instead, update your Permalink options immediately; which also optimizes your site for search engines. That being said, if you really want to use unfriendly Permalinks, and ONLY if you're using unfriendly Permalinks, you should set this to <code>Yes</code>; and don't worry too much, the sky won't fall on your head :-)"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:615
+#: src/includes/classes/MenuPageOptions.php:617
 msgid "No, do NOT cache (or serve a cache file) when a query string is present."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:616
+#: src/includes/classes/MenuPageOptions.php:618
 msgid "Yes, I would like to cache URLs that contain a query string."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:618
+#: src/includes/classes/MenuPageOptions.php:620
 msgid "<strong>Note:</strong> POST requests (i.e., forms with <code>method=&quot;post&quot;</code>) are always excluded from the cache, which is the way it should be. Any <a href=\"http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html\" target=\"_blank\">POST/PUT/DELETE</a> request should NEVER (ever) be cached. CLI (and self-serve) requests are also excluded from the cache (always). A CLI request is one that comes from the command line; commonly used by CRON jobs and other automated routines. A self-serve request is an HTTP connection established from your site -› to your site. For instance, a WP Cron job, or any other HTTP request that is spawned not by a user, but by the server itself."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:619
+#: src/includes/classes/MenuPageOptions.php:621
 msgid "<strong>Advanced Tip:</strong> If you are NOT caching GET requests (recommended), but you DO want to allow some special URLs that include query string parameters to be cached; you can add this special parameter to any URL <code>?%2$sAC=1</code>. This tells %1$s that it's OK to cache that particular URL, even though it contains query string arguments. If you ARE caching GET requests and you want to force %1$s to NOT cache a specific request, you can add this special parameter to any URL <code>?%2$sAC=0</code>."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:629
+#: src/includes/classes/MenuPageOptions.php:631
 msgid "404 Requests"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:634
+#: src/includes/classes/MenuPageOptions.php:636
 msgid "Caching Enabled for 404 Requests?"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:635
+#: src/includes/classes/MenuPageOptions.php:637
 msgid "When this is set to <code>No</code>, %1$s will ignore all 404 requests and no cache file will be served. While this is fine for most site owners, caching the 404 page on a high-traffic site may further reduce server load. When this is set to <code>Yes</code>, %1$s will cache the 404 page (see <a href=\"https://codex.wordpress.org/Creating_an_Error_404_Page\" target=\"_blank\">Creating an Error 404 Page</a>) and then serve that single cache file to all future 404 requests."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:637
+#: src/includes/classes/MenuPageOptions.php:639
 msgid "No, do NOT cache (or serve a cache file) for 404 requests."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:638
+#: src/includes/classes/MenuPageOptions.php:640
 msgid "Yes, I would like to cache the 404 page and serve the cached file for 404 requests."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:640
+#: src/includes/classes/MenuPageOptions.php:642
 msgid "<strong>How does %1$s cache 404 requests?</strong> %1$s will create a special cache file (<code>----404----.html</code>, see Advanced Tip below) for the first 404 request and then <a href=\"http://www.php.net/manual/en/function.symlink.php\" target=\"_blank\">symlink</a> future 404 requests to this special cache file. That way you don't end up with lots of 404 cache files that all contain the same thing (the contents of the 404 page). Instead, you'll have one 404 cache file and then several symlinks (i.e., references) to that 404 cache file."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:641
+#: src/includes/classes/MenuPageOptions.php:643
 msgid "<strong>Advanced Tip:</strong> The default 404 cache filename (<code>----404----.html</code>) is designed to minimize the chance of a collision with a cache file for a real page with the same name. However, if you want to override this default and define your own 404 cache filename, you can do so by adding <code>define('ZENCACHE_404_CACHE_FILENAME', 'your-404-cache-filename');</code> to your <code>wp-config.php</code> file (note that the <code>.html</code> extension should be excluded when defining a new filename)."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:651
+#: src/includes/classes/MenuPageOptions.php:653
 msgid "RSS, RDF, and Atom Feeds"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:656
+#: src/includes/classes/MenuPageOptions.php:658
 msgid "Caching Enabled for RSS, RDF, Atom Feeds?"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:657
+#: src/includes/classes/MenuPageOptions.php:659
 msgid "This should almost ALWAYS be set to <code>No</code>. UNLESS, you're sure that you want to cache your feeds. If you use a web feed management provider like Google® Feedburner and you set this option to <code>Yes</code>, you may experience delays in the detection of new posts. <strong>NOTE:</strong> If you do enable this, it is highly recommended that you also enable automatic Feed Clearing too. Please see the section above: \"Automatic Cache Clearing\". Find the sub-section titled: \"Auto-Clear RSS/RDF/ATOM Feeds\"."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:659
+#: src/includes/classes/MenuPageOptions.php:661
 msgid "No, do NOT cache (or serve a cache file) when displaying a feed."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:660
+#: src/includes/classes/MenuPageOptions.php:662
 msgid "Yes, I would like to cache feed URLs."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:662
+#: src/includes/classes/MenuPageOptions.php:664
 msgid "<strong>Note:</strong> This option affects all feeds served by WordPress, including the site feed, the site comment feed, post-specific comment feeds, author feeds, search feeds, and category and tag feeds. See also: <a href=\"http://codex.wordpress.org/WordPress_Feeds\" target=\"_blank\">WordPress Feeds</a>."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:672
+#: src/includes/classes/MenuPageOptions.php:674
 msgid "URI Exclusion Patterns"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:676
+#: src/includes/classes/MenuPageOptions.php:678
 msgid "Don't Cache These Special URI Exclusion Patterns?"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:677
+#: src/includes/classes/MenuPageOptions.php:679
 msgid "Sometimes there are certain cases where a particular file, or a particular group of files, should never be cached. This is where you will enter those if you need to (one per line). Searches are performed against the <a href=\"https://gist.github.com/jaswsinc/338b6eb03a36c048c26f\" target=\"_blank\" style=\"text-decoration:none;\"><code>REQUEST_URI</code></a>; i.e., <code>/path/?query</code> (caSe insensitive). So, don't put in full URLs here, just word fragments found in the file path (or query string) is all you need, excluding the http:// and domain name. A wildcard <code>*</code> character can also be used when necessary; e.g., <code>/category/abc-followed-by-*</code> (where <code>*</code> = 0 or more characters that are NOT a slash <code>/</code>). Other special characters include: <code>**</code> = 0 or more characters of any kind, including <code>/</code> slashes; <code>^</code> = beginning of the string; <code>$</code> = end of the string. To learn more about this syntax, please see <a href =\"http://zencache.com/r/watered-down-regex-syntax/\" target=\"_blank\">this KB article</a>."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:691
+#: src/includes/classes/MenuPageOptions.php:693
 msgid "HTTP Referrer Exclusion Patterns"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:695
+#: src/includes/classes/MenuPageOptions.php:697
 msgid "Don't Cache These Special HTTP Referrer Exclusion Patterns?"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:696
+#: src/includes/classes/MenuPageOptions.php:698
 msgid "Sometimes there are special cases where a particular referring URL (or referring domain) that sends you traffic; or even a particular group of referring URLs or domains that send you traffic; should result in a page being loaded on your site that is NOT from the cache (and that resulting page should never be cached). This is where you will enter those if you need to (one per line). Searches are performed against the <a href=\"http://www.php.net//manual/en/reserved.variables.server.php\" target=\"_blank\" style=\"text-decoration:none;\"><code>HTTP_REFERER</code></a> (caSe insensitive). A wildcard <code>*</code> character can also be used when necessary; e.g., <code>*.domain.com</code> (where <code>*</code> = 0 or more characters that are NOT a slash <code>/</code>). Other special characters include: <code>**</code> = 0 or more characters of any kind, including <code>/</code> slashes; <code>^</code> = beginning of the string; <code>$</code> = end of the string. To learn more about this syntax, please see <a href =\"http://zencache.com/r/watered-down-regex-syntax/\" target=\"_blank\">this KB article</a>."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:698
+#: src/includes/classes/MenuPageOptions.php:700
 msgid "<strong>Tip:</strong> let's use this example URL: <code>http://www.referring-domain.com/search/?q=search+terms</code>. To exclude this referring URL, you could put this line into the field above: <code>www.referring-domain.com</code>. Or, you could also just put in a small fragment, like: <code>/search/</code> or <code>q=*</code>; and that would exclude any referrer containing that word fragment."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:709
+#: src/includes/classes/MenuPageOptions.php:711
 msgid "User-Agent Exclusion Patterns"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:713
+#: src/includes/classes/MenuPageOptions.php:715
 msgid "Don't Cache These Special User-Agent Exclusion Patterns?"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:714
+#: src/includes/classes/MenuPageOptions.php:716
 msgid "Sometimes there are special cases when a particular user-agent (e.g., a specific browser or a specific type of device); should be shown a page on your site that is NOT from the cache (and that resulting page should never be cached). This is where you will enter those if you need to (one per line). Searches are performed against the <a href=\"http://www.php.net//manual/en/reserved.variables.server.php\" target=\"_blank\" style=\"text-decoration:none;\"><code>HTTP_USER_AGENT</code></a> (caSe insensitive). A wildcard <code>*</code> character can also be used when necessary; e.g., <code>Android *; Chrome/* Mobile</code> (where <code>*</code> = 0 or more characters that are NOT a slash <code>/</code>). Other special characters include: <code>**</code> = 0 or more characters of any kind, including <code>/</code> slashes; <code>^</code> = beginning of the string; <code>$</code> = end of the string. To learn more about this syntax, please see <a href =\"http://zencache.com/r/watered-down-regex-syntax/\" target=\"_blank\">this KB article</a>."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:716
+#: src/includes/classes/MenuPageOptions.php:718
 msgid "<strong>Tip:</strong> if you wanted to exclude iPhones put this line into the field above: <code>iPhone;*AppleWebKit</code>. Or, you could also just put in a small fragment, like: <code>iphone</code>; and that would exclude any user-agent containing that word fragment. Note, this is just an example. With a default installation of %1$s, there is no compelling reason to exclude iOS devices (or any mobile device for that matter)."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:728
+#: src/includes/classes/MenuPageOptions.php:730
 msgid "Auto-Cache Engine"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:733
+#: src/includes/classes/MenuPageOptions.php:735
 msgid "Enable the Auto-Cache Engine?"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:734
+#: src/includes/classes/MenuPageOptions.php:736
 msgid "After using %1$s for awhile (or any other page caching plugin, for that matter); it becomes obvious that at some point (based on your configured Expiration Time) %1$s has to refresh itself. It does this by ditching its cached version of a page, reloading the database-driven content, and then recreating the cache with the latest data. This is a never ending regeneration cycle that is based entirely on your configured Expiration Time."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:735
+#: src/includes/classes/MenuPageOptions.php:737
 msgid "Understanding this, you can see that 99% of your visitors are going to receive a lightning fast response from your server. However, there will always be around 1% of your visitors that land on a page for the very first time (before it's been cached), or land on a page that needs to have its cache regenerated, because the existing cache has become outdated. We refer to this as a <em>First-Come Slow-Load Issue</em>. Not a huge problem, but if you're optimizing your site for every ounce of speed possible, the Auto-Cache Engine can help with this. The Auto-Cache Engine has been designed to combat this issue by taking on the responsibility of being that first visitor to a page that has not yet been cached, or has an expired cache. The Auto-Cache Engine is powered, in part, by <a href=\"http://codex.wordpress.org/Category:WP-Cron_Functions\" target=\"_blank\">WP-Cron</a> (already built into WordPress). The Auto-Cache Engine runs at 15-minute intervals via WP-Cron. It also uses the <a href=\"http://core.trac.wordpress.org/browser/trunk/wp-includes/http.php\" target=\"_blank\">WP_Http</a> class, which is also built into WordPress already."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:736
+#: src/includes/classes/MenuPageOptions.php:738
 msgid "The Auto-Cache Engine obtains its list of URLs to auto-cache, from two different sources. It can read an <a href=\"http://wordpress.org/extend/plugins/google-sitemap-generator/\" target=\"_blank\">XML Sitemap</a> and/or a list of specific URLs that you supply. If you supply both sources, it will use both sources collectively. The Auto-Cache Engine takes ALL of your other configuration options into consideration too, including your Expiration Time, as well as any cache exclusion rules."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:738
+#: src/includes/classes/MenuPageOptions.php:740
 msgid "No, leave the Auto-Cache Engine disabled please."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:739
+#: src/includes/classes/MenuPageOptions.php:741
 msgid "Yes, I want the Auto-Cache Engine to keep pages cached automatically."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:745
+#: src/includes/classes/MenuPageOptions.php:747
 msgid "XML Sitemap URL (or an XML Sitemap Index)"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:749
+#: src/includes/classes/MenuPageOptions.php:751
 msgid "All URLs in this network are in the sitemap for the main site."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:750
+#: src/includes/classes/MenuPageOptions.php:752
 msgid "Using the path I've given, look for blog-specific sitemaps in each child blog also."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:752
+#: src/includes/classes/MenuPageOptions.php:754
 msgid "<strong>↑</strong> If enabled here, each child blog can be auto-cached too. %1$s will dynamically change the leading <code>%2$s</code> as necessary; for each child blog in the network. %1$s supports both sub-directory &amp; sub-domain networks, including domain mapping plugins. For more information about how the Auto-Cache Engine caches child blogs, see <a href=\"http://zencache.com/r/kb-article-how-does-the-auto-cache-engine-cache-child-blogs-in-a-multisite-network/\" target=\"_blank\">this article</a>."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:756
+#: src/includes/classes/MenuPageOptions.php:758
 msgid "And/Or; a List of URLs to Auto-Cache (One Per Line)"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:758
+#: src/includes/classes/MenuPageOptions.php:760
 msgid "<strong>Note:</strong> Wildcards are NOT supported here. If you are going to supply a list of URLs above, each line must contain one full URL for the Auto-Cache Engine to auto-cache. If you have many URLs, we recommend using an <a href=\"https://en.wikipedia.org/wiki/Sitemaps\" target=\"_blank\">XML Sitemap</a>."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:762
+#: src/includes/classes/MenuPageOptions.php:764
 msgid "Auto-Cache Delay Timer (in Milliseconds)"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:763
+#: src/includes/classes/MenuPageOptions.php:765
 msgid "As the Auto-Cache Engine runs through each URL, you can tell it to wait X number of milliseconds between each connection that it makes. It is strongly suggested that you DO have some small delay here. Otherwise, you run the risk of hammering your own web server with multiple repeated connections whenever the Auto-Cache Engine is running. This is especially true on very large sites; where there is the potential for hundreds of repeated connections as the Auto-Cache Engine goes through a long list of URLs. Adding a delay between each connection will prevent the Auto-Cache Engine from placing a heavy load on the processor that powers your web server. A value of <code>500</code> milliseconds is suggested here (half a second). If you experience problems, you can bump this up a little at a time, in increments of <code>500</code> milliseconds; until you find a happy place for your server. <em>Please note that <code>1000</code> milliseconds = <code>1</code> full second.</em>"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:768
+#: src/includes/classes/MenuPageOptions.php:770
 msgid "Auto-Cache User-Agent String"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:770
+#: src/includes/classes/MenuPageOptions.php:772
 msgid "This is how the Auto-Cache Engine identifies itself when connecting to URLs. See <a href=\"http://en.wikipedia.org/wiki/User_agent\" target=\"_blank\">User Agent</a> in the Wikipedia."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:782
+#: src/includes/classes/MenuPageOptions.php:784
 msgid "HTML Compression"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:787
+#: src/includes/classes/MenuPageOptions.php:789
 msgid "Enable WebSharks™ HTML Compression?"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:789
+#: src/includes/classes/MenuPageOptions.php:791
 msgid "No, do NOT compress HTML/CSS/JS code at runtime."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:790
+#: src/includes/classes/MenuPageOptions.php:792
 msgid "Yes, I want to compress HTML/CSS/JS for blazing fast speeds."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:792
+#: src/includes/classes/MenuPageOptions.php:794
 msgid "<strong>Note:</strong> This is experimental. Please <a href=\"https://github.com/websharks/zencache/issues\" target=\"_blank\">report issues here</a>."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:795
+#: src/includes/classes/MenuPageOptions.php:797
 msgid "HTML Compression Options"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:796
+#: src/includes/classes/MenuPageOptions.php:798
 msgid "You can <a href=\"https://github.com/websharks/html-compressor\" target=\"_blank\">learn more about all of these options here</a>."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:798
+#: src/includes/classes/MenuPageOptions.php:800
 msgid "Yes, combine CSS from &lt;head&gt; and &lt;body&gt; into fewer files."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:799
+#: src/includes/classes/MenuPageOptions.php:801
 msgid "No, do not combine CSS from &lt;head&gt; and &lt;body&gt; into fewer files."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:802
+#: src/includes/classes/MenuPageOptions.php:804
 msgid "Yes, compress the code in any unified CSS files."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:803
+#: src/includes/classes/MenuPageOptions.php:805
 msgid "No, do not compress the code in any unified CSS files."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:806
+#: src/includes/classes/MenuPageOptions.php:808
 msgid "Yes, combine JS from &lt;head&gt; into fewer files."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:807
+#: src/includes/classes/MenuPageOptions.php:809
 msgid "No, do not combine JS from &lt;head&gt; into fewer files."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:810
+#: src/includes/classes/MenuPageOptions.php:812
 msgid "Yes, combine JS footer scripts into fewer files."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:811
+#: src/includes/classes/MenuPageOptions.php:813
 msgid "No, do not combine JS footer scripts into fewer files."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:814
+#: src/includes/classes/MenuPageOptions.php:816
 msgid "Yes, combine CSS/JS from remote resources too."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:815
+#: src/includes/classes/MenuPageOptions.php:817
 msgid "No, do not combine CSS/JS from remote resources."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:818
+#: src/includes/classes/MenuPageOptions.php:820
 msgid "Yes, compress the code in any unified JS files."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:819
+#: src/includes/classes/MenuPageOptions.php:821
 msgid "No, do not compress the code in any unified JS files."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:822
+#: src/includes/classes/MenuPageOptions.php:824
 msgid "Yes, compress inline JavaScript snippets."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:823
+#: src/includes/classes/MenuPageOptions.php:825
 msgid "No, do not compress inline JavaScript snippets."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:826
+#: src/includes/classes/MenuPageOptions.php:828
 msgid "Yes, compress (remove extra whitespace) in the final HTML code too."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:827
+#: src/includes/classes/MenuPageOptions.php:829
 msgid "No, do not compress the final HTML code."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:830
+#: src/includes/classes/MenuPageOptions.php:832
 msgid "CSS Exclusion Patterns?"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:831
+#: src/includes/classes/MenuPageOptions.php:833
 msgid "Sometimes there are special cases when a particular CSS file should NOT be consolidated or compressed in any way. This is where you will enter those if you need to (one per line). Searches are performed against the <code>&lt;link href=&quot;&quot;&gt;</code> value, and also against the contents of any inline <code>&lt;style&gt;</code> tags (caSe insensitive). A wildcard <code>*</code> character can also be used when necessary; e.g., <code>xy*-framework</code> (where <code>*</code> = 0 or more characters that are NOT a slash <code>/</code>). Other special characters include: <code>**</code> = 0 or more characters of any kind, including <code>/</code> slashes; <code>^</code> = beginning of the string; <code>$</code> = end of the string. To learn more about this syntax, please see <a href =\"http://zencache.com/r/watered-down-regex-syntax/\" target=\"_blank\">this KB article</a>."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:834
+#: src/includes/classes/MenuPageOptions.php:836
 msgid "JavaScript Exclusion Patterns?"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:835
+#: src/includes/classes/MenuPageOptions.php:837
 msgid "Sometimes there are special cases when a particular JS file should NOT be consolidated or compressed in any way. This is where you will enter those if you need to (one per line). Searches are performed against the <code>&lt;script src=&quot;&quot;&gt;</code> value, and also against the contents of any inline <code>&lt;script&gt;</code> tags (caSe insensitive). A wildcard <code>*</code> character can also be used when necessary; e.g., <code>xy*-framework</code> (where <code>*</code> = 0 or more characters that are NOT a slash <code>/</code>). Other special characters include: <code>**</code> = 0 or more characters of any kind, including <code>/</code> slashes; <code>^</code> = beginning of the string; <code>$</code> = end of the string. To learn more about this syntax, please see <a href =\"http://zencache.com/r/watered-down-regex-syntax/\" target=\"_blank\">this KB article</a>."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:839
-msgid "HTML Compression Cache Expiration"
+#: src/includes/classes/MenuPageOptions.php:840
+msgid "URI Exclusions for HTML Compressor?"
 msgstr ""
 
 #: src/includes/classes/MenuPageOptions.php:841
+msgid "When you enable HTML Compression above, you may want to prevent certain pages on your site from being cached by the HTML Compressor. This is where you will enter those if you need to (one per line). Searches are performed against the <a href=\"https://gist.github.com/jaswsinc/338b6eb03a36c048c26f\" target=\"_blank\" style=\"text-decoration:none;\"><code>REQUEST_URI</code></a>; i.e., <code>/path/?query</code> (caSe insensitive). So, don't put in full URLs here, just word fragments found in the file path (or query string) is all you need, excluding the http:// and domain name. A wildcard <code>*</code> character can also be used when necessary; e.g., <code>/category/abc-followed-by-*</code> (where <code>*</code> = 0 or more characters that are NOT a slash <code>/</code>). Other special characters include: <code>**</code> = 0 or more characters of any kind, including <code>/</code> slashes; <code>^</code> = beginning of the string; <code>$</code> = end of the string. To learn more about this syntax, please see <a href =\"http://zencache.com/r/watered-down-regex-syntax/\" target=\"_blank\">this KB article</a>."
+msgstr ""
+
+#: src/includes/classes/MenuPageOptions.php:846
+msgid "HTML Compression Cache Expiration"
+msgstr ""
+
+#: src/includes/classes/MenuPageOptions.php:848
 msgid "<strong>Tip:</strong> the value that you specify here MUST be compatible with PHP's <a href=\"http://php.net/manual/en/function.strtotime.php\" target=\"_blank\" style=\"text-decoration:none;\"><code>strtotime()</code></a> function. Examples: <code>2 hours</code>, <code>7 days</code>, <code>6 months</code>, <code>1 year</code>."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:842
+#: src/includes/classes/MenuPageOptions.php:849
 msgid "<strong>Note:</strong> This does NOT impact the overall cache expiration time that you configure with %1$s. It only impacts the sub-routines provided by the HTML Compressor. In fact, this expiration time is mostly irrelevant. The HTML Compressor uses an internal checksum, and it also checks <code>filemtime()</code> before using an existing cache file. The HTML Compressor class also handles the automatic cleanup of your cache directories to keep it from growing too large over time. Therefore, unless you have VERY little disk space there is no reason to set this to a lower value (even if your site changes dynamically quite often). If anything, you might like to increase this value which could help to further reduce server load. You can <a href=\"https://github.com/websharks/HTML-Compressor\" target=\"_blank\">learn more here</a>. We recommend setting this value to at least double that of your overall %1$s expiration time."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:853
+#: src/includes/classes/MenuPageOptions.php:860
 msgid "GZIP Compression"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:858
+#: src/includes/classes/MenuPageOptions.php:865
 msgid "<a href=\"https://developers.google.com/speed/articles/gzip\" target=\"_blank\">GZIP Compression</a> (Optional; Highly Recommended)"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:859
+#: src/includes/classes/MenuPageOptions.php:866
 msgid "You don't have to use an <code>.htaccess</code> file to enjoy the performance enhancements provided by this plugin; caching is handled automatically by WordPress/PHP alone. That being said, if you want to take advantage of the additional speed enhancements associated w/ GZIP compression (and we do recommend this), then you WILL need an <code>.htaccess</code> file to accomplish that part."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:860
+#: src/includes/classes/MenuPageOptions.php:867
 msgid "%1$s fully supports GZIP compression on its output. However, it does not handle GZIP compression directly. We purposely left GZIP compression out of this plugin, because GZIP compression is something that should really be enabled at the Apache level or inside your <code>php.ini</code> file. GZIP compression can be used for things like JavaScript and CSS files as well, so why bother turning it on for only WordPress-generated pages when you can enable GZIP at the server level and cover all the bases!"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:861
+#: src/includes/classes/MenuPageOptions.php:868
 msgid "If you want to enable GZIP, create an <code>.htaccess</code> file in your WordPress® installation directory, and put the following few lines in it. Alternatively, if you already have an <code>.htaccess</code> file, just add these lines to it, and that is all there is to it. GZIP is now enabled in the recommended way! See also: <a href=\"https://developers.google.com/speed/articles/gzip\" target=\"_blank\"><i class=\"si si-youtube-play\"></i> video about GZIP Compression</a>."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:875
+#: src/includes/classes/MenuPageOptions.php:882
 msgid "Static CDN Filters"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:879
+#: src/includes/classes/MenuPageOptions.php:886
 msgid "Clear CDN Cache (Bump CDN Invalidation Counter)"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:879
+#: src/includes/classes/MenuPageOptions.php:886
 msgid "Clear CDN Cache"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:880
+#: src/includes/classes/MenuPageOptions.php:887
 msgid "Enable Static CDN Filters (e.g., MaxCDN/CloudFront)?"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:881
+#: src/includes/classes/MenuPageOptions.php:888
 msgid "This feature allows you to serve some and/or ALL static files on your site from a CDN of your choosing. This is made possible through content/URL filters exposed by WordPress and implemented by %1$s. All it requires is that you setup a CDN host name sourced by your WordPress installation domain. You enter that CDN host name below and %1$s will do the rest! Super easy, and it doesn't require any DNS changes either. :-) Please <a href=\"http://zencache.com/r/static-cdn-filters-general-instructions/\" target=\"_blank\">click here</a> for a general set of instructions."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:882
+#: src/includes/classes/MenuPageOptions.php:889
 msgid "<strong>What's a CDN?</strong> It's a Content Delivery Network (i.e., a network of optimized servers) designed to cache static resources served from your site (e.g., JS/CSS/images and other static files) onto it's own servers, which are located strategically in various geographic areas around the world. Integrating a CDN for static files can dramatically improve the speed and performance of your site, lower the burden on your own server, and reduce latency associated with visitors attempting to access your site from geographic areas of the world that might be very far away from the primary location of your own web servers."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:885
+#: src/includes/classes/MenuPageOptions.php:892
 msgid "It appears that your server is running NGINX and does not support <code>.htaccess</code> rules. Please <a href=\"http://zencache.com/r/kb-article-recommended-nginx-server-configuration/\" target=\"_new\">update your server configuration manually</a>. Note that updating your NGINX server configuration <em>before</em> enabling Static CDN Filters is recommended to prevent any <a href=\"http://zencache.com/r/kb-article-what-are-cross-origin-request-blocked-cors-errors/\" target=\"_new\">CORS errors</a> with your CDN. If you've already updated your NGINX configuration, you can safely <a href=\"http://zencache.com/r/kb-article-how-do-i-disable-the-nginx-htaccess-notice/\" target=\"_new\">ignore this message</a>."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:889
+#: src/includes/classes/MenuPageOptions.php:896
 msgid "No, I do NOT want CDN filters applied at runtime."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:890
+#: src/includes/classes/MenuPageOptions.php:897
 msgid "Yes, I want CDN filters applied w/ my configuration below."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:897
+#: src/includes/classes/MenuPageOptions.php:904
 msgid "CDN Host Name (Required)"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:903
+#: src/includes/classes/MenuPageOptions.php:910
 msgid "This field is really all that's necessary to get Static CDN Filters working! However, it does requires a little bit of work on your part. You need to setup and configure a CDN before you can fill in this field. Once you configure a CDN, you'll receive a host name (provided by your CDN), which you'll enter here; e.g., <code>js9dgjsl4llqpp.cloudfront.net</code>. We recommend <a href=\"http://zencache.com/r/maxcdn/\" target=\"_blank\">MaxCDN</a>, <a href=\"http://zencache.com/r/amazon-cloudfront/\" target=\"_blank\">Amazon CloudFront</a>, <a href=\"http://zencache.com/r/keycdn/\" target=\"_blank\">KeyCDN</a>, and/or <a href=\"http://zencache.com/r/cdn77/\" target=\"_blank\">CDN77</a> but this should work with many of the most popular CDNs. Please read <a href=\"http://zencache.com/r/static-cdn-filters-general-instructions/\" target=\"_blank\">this article</a> for a general set of instructions. We also have a <a href=\"http://zencache.com/r/static-cdn-filters-maxcdn/\" target=\"_blank\">MaxCDN tutorial</a>, <a href=\"http://zencache.com/r/static-cdn-filters-cloudfront/\" target=\"_blank\">CloudFront tutorial</a>, <a href=\"http://zencache.com/r/static-cdn-filters-keycdn/\" target=\"_blank\">KeyCDN tutorial</a>, and a <a href=\"http://zencache.com/r/static-cdn-filters-cdn77/\" target=\"_blank\">CDN77 tutorial</a> to walk you through the process."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:908
+#: src/includes/classes/MenuPageOptions.php:915
 msgid "Multiple CDN Host Names for Domain Sharding and Multisite Networks (Optional)"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:909
+#: src/includes/classes/MenuPageOptions.php:916
 msgid "%1$s also supports multiple CDN Host Names for any given domain. Using multiple CDN Host Names (instead of just one, as seen above) is referred to as <strong><a href=\"http://zencache.com/r/domain-sharding/\" target=\"_blank\">Domain Sharding</a></strong> (<a href=\"http://zencache.com/r/domain-sharding/\" target=\"_blank\">click here to learn more</a>). If you configure multiple CDN Host Names (i.e., if you implement Domain Sharding), %1$s will use the first one that you list for static resources loaded in the HTML <code>&lt;head&gt;</code> section, the last one for static resources loaded in the footer, and it will choose one at random for all other static resource locations. Configuring multiple CDN Host Names can improve speed! This is a way for advanced site owners to work around concurrency limits in popular browsers; i.e., making it possible for browsers to download many more resources simultaneously, resulting in a faster overall completion time. In short, this tells the browser that your website will not be overloaded by concurrent requests, because static resources are in fact being served by a content-delivery network (i.e., multiple CDN host names). If you use this functionality for Domain Sharding, we suggest that you setup one CDN Distribution (aka: Pull Zone), and then create multiple CNAME records pointing to that distribution. You can enter each of your CNAMES in the field below, as instructed."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:910
+#: src/includes/classes/MenuPageOptions.php:917
 msgid "<strong>On WordPress Multisite Network installations</strong>, this field also allows you to configure different CDN Host Names for each domain (or sub-domain) that you run from a single installation of WordPress. For more information about configuring Static CDN Filters on a WordPress Multisite Network, see this tutorial: <a href=\"http://zencache.com/r/static-cdn-filters-for-wordpress-multisite-networks/\" target=\"_blank\">Static CDN Filters for WordPress Multisite Networks</a>."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:912
+#: src/includes/classes/MenuPageOptions.php:919
 msgid "<strong>↑ Syntax:</strong> This is a line-delimited list of domain mappings. Each line should start with your WordPress domain name (e.g., <code>%1$s</code>), followed by an <code>=</code> sign, followed by a comma-delimited list of CDN Host Names associated with the domain in that line. If you're running a Multisite Network installation of WordPress, you might have multiple configuration lines. Otherwise, you should only need one line to configure multiple CDN Host Names for a standard WordPress installation."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:916
+#: src/includes/classes/MenuPageOptions.php:923
 msgid "CDN Supports HTTPS Connections?"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:918
+#: src/includes/classes/MenuPageOptions.php:925
 msgid "No, I don't serve content over https://; or I haven't configured my CDN w/ an SSL certificate."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:919
+#: src/includes/classes/MenuPageOptions.php:926
 msgid "Yes, I've configured my CDN w/ an SSL certificate; I need https:// enabled."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:926
+#: src/includes/classes/MenuPageOptions.php:933
 msgid "Additional Options (For Advanced Users)"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:931
+#: src/includes/classes/MenuPageOptions.php:938
 msgid "Everything else below is 100% completely optional; i.e., not required to enjoy the benefits of Static CDN Filters."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:935
+#: src/includes/classes/MenuPageOptions.php:942
 msgid "Whitelisted File Extensions (Optional; Comma-Delimited)"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:937
+#: src/includes/classes/MenuPageOptions.php:944
 msgid "If you leave this empty a default set of extensions are taken from WordPress itself. The default set of whitelisted file extensions includes everything supported by the WordPress media library."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:939
+#: src/includes/classes/MenuPageOptions.php:946
 msgid "Blacklisted File Extensions (Optional; Comma-Delimited)"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:941
+#: src/includes/classes/MenuPageOptions.php:948
 msgid "With or without a whitelist, you can force exclusions by explicitly blacklisting certain file extensions of your choosing. Please note, the <code>php</code> extension will never be considered a static resource; i.e., it is automatically blacklisted at all times."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:945
+#: src/includes/classes/MenuPageOptions.php:952
 msgid "Whitelisted URI Inclusion Patterns (Optional; One Per Line)"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:947
+#: src/includes/classes/MenuPageOptions.php:954
 msgid "<strong>Note:</strong> please remember that your entries here should be formatted as a line-delimited list; e.g., one inclusion pattern per line."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:948
+#: src/includes/classes/MenuPageOptions.php:955
 msgid "If provided, only local URIs matching one of the patterns you list here will be served from your CDN Host Name. URI patterns are caSe-insensitive. A wildcard <code>*</code> will match zero or more characters in any of your patterns. A caret <code>^</code> symbol will match zero or more characters that are NOT the <code>/</code> character. For instance, <code>*/wp-content/*</code> here would indicate that you only want to filter URLs that lead to files located inside the <code>wp-content</code> directory. Adding an additional line with <code>*/wp-includes/*</code> would filter URLs in the <code>wp-includes</code> directory also. <strong>If you leave this empty</strong>, ALL files matching a static file extension will be served from your CDN; i.e., the default behavior."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:949
+#: src/includes/classes/MenuPageOptions.php:956
 msgid "Please note that URI patterns are tested against a file's path (i.e., a file's URI, and NOT its full URL). A URI always starts with a leading <code>/</code>. To clarify, a URI is the portion of the URL which comes after the host name. For instance, given the following URL: <code>http://example.com/path/to/style.css?ver=3</code>, the URI you are matching against would be: <code>/path/to/style.css?ver=3</code>. To whitelist this URI, you could use a line that contains something like this: <code>/path/to/*.css*</code>"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:951
+#: src/includes/classes/MenuPageOptions.php:958
 msgid "Blacklisted URI Exclusion Patterns (Optional; One Per Line)"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:953
+#: src/includes/classes/MenuPageOptions.php:960
 msgid "With or without a whitelist, you can force exclusions by explicitly blacklisting certain URI patterns. URI patterns are caSe-insensitive. A wildcard <code>*</code> will match zero or more characters in any of your patterns. A caret <code>^</code> symbol will match zero or more characters that are NOT the <code>/</code> character. For instance, <code>*/wp-content/*/dynamic.pdf*</code> would exclude a file with the name <code>dynamic.pdf</code> located anywhere inside a sub-directory of <code>wp-content</code>."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:958
+#: src/includes/classes/MenuPageOptions.php:965
 msgid "Query String Invalidation Variable Name"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:960
+#: src/includes/classes/MenuPageOptions.php:967
 msgid "Each filtered URL (which then leads to your CDN) will include this query string variable as an easy way to invalidate the CDN cache at any time. Invalidating the CDN cache is simply a matter of changing the global invalidation counter (i.e., the value assigned to this query string variable). %1$s manages invalidations automatically; i.e., %1$s will automatically bump an internal counter each time you upgrade a WordPress component (e.g., a plugin, theme, or WP itself). Or, if you ask %1$s to invalidate the CDN cache (e.g., a manual clearing of the CDN cache); the internal counter is bumped then too. In short, %1$s handles cache invalidations for you reliably. This option simply allows you to customize the query string variable name which makes cache invalidations possible. <strong>Please note, the default value is adequate for most sites. You can change this if you like, but it's not necessary.</strong>"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:961
+#: src/includes/classes/MenuPageOptions.php:968
 msgid "<strong>Tip:</strong> You can also tell %1$s to automatically bump the CDN Invalidation Counter whenever you clear the cache manually. See: <strong>%1$s → Manual Cache Clearing → Clear the CDN Cache Too?</strong>"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:962
+#: src/includes/classes/MenuPageOptions.php:969
 msgid "<strong>Note:</strong> If you empty this field, it will effectively disable the %1$s invalidation system for Static CDN Filters; i.e., the query string variable will NOT be included if you do not supply a variable name."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:975
+#: src/includes/classes/MenuPageOptions.php:982
 msgid "Dynamic Version Salt"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:980
+#: src/includes/classes/MenuPageOptions.php:987
 msgid "<i class=\"si si-flask\"></i> <span style=\"display:inline-block; padding:5px; border-radius:3px; background:#FFFFFF; color:#354913;\"><span style=\"font-weight:bold; font-size:80%;\">GEEK ALERT</span></span> This is for VERY advanced users only..."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:981
+#: src/includes/classes/MenuPageOptions.php:988
 msgid "<em>Note: Understanding the %1$s <a href=\"http://zencache.com/r/kb-branched-cache-structure/\" target=\"_blank\">Branched Cache Structure</a> is a prerequisite to understanding how Dynamic Version Salts are added to the mix.</em>"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:982
+#: src/includes/classes/MenuPageOptions.php:989
 msgid "A Version Salt gives you the ability to dynamically create multiple variations of the cache, and those dynamic variations will be served on subsequent visits; e.g., if a visitor has a specific cookie (of a certain value) they will see pages which were cached with that version (i.e., w/ that Version Salt: the value of the cookie). A Version Salt can really be anything."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:983
+#: src/includes/classes/MenuPageOptions.php:990
 msgid "A Version Salt can be a single variable like <code>$_COOKIE['my_cookie']</code>, or it can be a combination of multiple variables, like <code>$_COOKIE['my_cookie'].$_COOKIE['my_other_cookie']</code>. (When using multiple variables, please separate them with a dot, as shown in the example.)"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:984
+#: src/includes/classes/MenuPageOptions.php:991
 msgid "Experts could even use PHP ternary expressions that evaluate into something. For example: <code>((preg_match('/iPhone/i', $_SERVER['HTTP_USER_AGENT'])) ? 'iPhones' : '')</code>. This would force a separate version of the cache to be created for iPhones (e.g., <code>/cache/PROTOCOL/HOST/REQUEST-URI.v/iPhones.html</code>)."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:985
+#: src/includes/classes/MenuPageOptions.php:992
 msgid "For more documentation, please see <a href=\"http://zencache.com/r/kb-dynamic-version-salts/\" target=\"_blank\">Dynamic Version Salts</a>."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:987
+#: src/includes/classes/MenuPageOptions.php:994
 msgid "Create a Dynamic Version Salt For %1$s? &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style=\"font-size:90%%; opacity:0.5;\">150%% OPTIONAL</span>"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:989
+#: src/includes/classes/MenuPageOptions.php:996
 msgid "<a href=\"http://php.net/manual/en/language.variables.superglobals.php\" target=\"_blank\">Super Globals</a> work here; <a href=\"http://codex.wordpress.org/Editing_wp-config.php#table_prefix\" target=\"_blank\"><code>$GLOBALS['table_prefix']</code></a> is a popular one.<br />Or, perhaps a PHP Constant defined in <code>/wp-config.php</code>; such as <code>WPLANG</code> or <code>DB_HOST</code>."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:990
+#: src/includes/classes/MenuPageOptions.php:997
 msgid "<strong>Important:</strong> your Version Salt is scanned for PHP syntax errors via <a href=\"http://phpcodechecker.com/\" target=\"_blank\"><code>phpCodeChecker.com</code></a>. If errors are found, you'll receive a notice in the Dashboard."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:991
+#: src/includes/classes/MenuPageOptions.php:998
 msgid "If you've enabled a separate cache for each user (optional) that's perfectly OK. A Version Salt works with user caching too."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:1001
+#: src/includes/classes/MenuPageOptions.php:1008
 msgid "Theme/Plugin Developers"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:1006
+#: src/includes/classes/MenuPageOptions.php:1013
 msgid "Developing a Theme or Plugin for WordPress?"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:1007
+#: src/includes/classes/MenuPageOptions.php:1014
 msgid "<strong>Tip:</strong> %1$s can be disabled temporarily. If you're a theme/plugin developer, you can set a flag within your PHP code to disable the cache engine at runtime. Perhaps on a specific page, or in a specific scenario. In your PHP script, set: <code>$_SERVER['ZENCACHE_ALLOWED'] = FALSE;</code> or <code>define('ZENCACHE_ALLOWED', FALSE)</code>. %1$s is also compatible with: <code>define('DONOTCACHEPAGE', TRUE)</code>. It does't matter where or when you define one of these, because %1$s is the last thing to run before script execution ends."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:1009
+#: src/includes/classes/MenuPageOptions.php:1016
 msgid "Writing \"Advanced Cache\" Plugins Specifically for %1$s"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:1010
+#: src/includes/classes/MenuPageOptions.php:1017
 msgid "Theme/plugin developers can take advantage of the %1$s plugin architecture by creating PHP files inside this special directory: <code>/wp-content/ac-plugins/</code>. There is an <a href=\"http://zencache.com/r/ac-plugin-example/\" target=\"_blank\">example plugin file @ GitHub</a> (please review it carefully and ask questions). If you develop a plugin for %1$s, please share it with the community by publishing it in the plugins respository at WordPress.org."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:1011
+#: src/includes/classes/MenuPageOptions.php:1018
 msgid "<strong>Why does %1$s have it's own plugin architecture?</strong> WordPress loads the <code>advanced-cache.php</code> drop-in file (for caching purposes) very early-on; before any other plugins or a theme. For this reason, %1$s implements it's own watered-down version of functions like <code>add_action()</code>, <code>do_action()</code>, <code>add_filter()</code>, <code>apply_filters()</code>."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:1022
+#: src/includes/classes/MenuPageOptions.php:1029
 msgid "Import/Export Options"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:1027
+#: src/includes/classes/MenuPageOptions.php:1034
 msgid "Import Options from Another %1$s Installation?"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:1028
+#: src/includes/classes/MenuPageOptions.php:1035
 msgid "Upload your <code>%1$s-options.json</code> file and click \"Save All Changes\" below. The options provided by your import file will override any that exist currently."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:1031
+#: src/includes/classes/MenuPageOptions.php:1038
 msgid "Export Existing Options from this %1$s Installation?"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:1034
+#: src/includes/classes/MenuPageOptions.php:1041
 msgid "%1$s-options.json"
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:1035
+#: src/includes/classes/MenuPageOptions.php:1042
 msgid "Download your existing options and import them all into another %1$s installation; saves time on future installs."
 msgstr ""
 
-#: src/includes/classes/MenuPageOptions.php:1043
+#: src/includes/classes/MenuPageOptions.php:1050
 msgid "Save All Changes"
 msgstr ""
 
@@ -1735,7 +1750,7 @@ msgstr ""
 msgid "<strong>%1$s</strong> successfully installed! :-) <strong>Please <a href=\"%2$s\">enable caching and review options</a>.</strong>"
 msgstr ""
 
-#: src/includes/closures/Plugin/InstallUtils.php:55
+#: src/includes/closures/Plugin/InstallUtils.php:60
 msgid "<strong>%1$s:</strong> detected a new version of itself. Recompiling w/ latest version... wiping the cache... all done :-)"
 msgstr ""
 

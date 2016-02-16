@@ -13,7 +13,7 @@ $self->activate = function () use ($self) {
 
     if (!$self->options['welcomed'] && !$self->options['enable']) {
         $settings_url = add_query_arg(urlencode_deep(array('page' => GLOBAL_NS)), network_admin_url('/admin.php'));
-        $self->enqueueMainNotice(sprintf(__('<strong>%1$s</strong> successfully installed! :-) <strong>Please <a href="%2$s">enable caching and review options</a>.</strong>', 'zencache'), esc_html(NAME), esc_attr($settings_url), array('push_to_top' => true)));
+        $self->enqueueMainNotice(sprintf(__('<strong>%1$s</strong> successfully installed! :-) <strong>Please <a href="%2$s">enable caching and review options</a>.</strong>', 'zencache'), esc_html(NAME), esc_attr($settings_url)), array('push_to_top' => true));
         $self->updateOptions(array('welcomed' => '1'));
     }
 
@@ -36,6 +36,11 @@ $self->activate = function () use ($self) {
  * @attaches-to `admin_init` hook.
  */
 $self->checkVersion = function () use ($self) {
+    if (!$self->options['comet_cache_notice1_enqueued']) {
+        $self->enqueueMainNotice(sprintf(__('<strong>Important %1$s Announcement:</strong> %1$s is changing its name to <a href="https://cometcache.com/r/announcing-comet-cache-formerly-zencache/" target="_blank"><strong>Comet Cache</a></strong>! Learn more about this upcoming change <a href="https://cometcache.com/r/announcing-comet-cache-formerly-zencache/" target="_blank">here</a>.', 'zencache'), esc_html(NAME)), array('push_to_top' => true, 'class'=>'notice notice-warning', 'persistent_key'=>'comet_cache_notice1'));
+        $self->updateOptions(array('comet_cache_notice1_enqueued' => '1'));
+    } // This notice MUST go above the version check to show up on new installs.
+
     $prev_version = $self->options['version'];
     if (version_compare($prev_version, VERSION, '>=')) {
         return; // Nothing to do; up-to-date.

@@ -308,7 +308,7 @@ $self->buildHostCachePathRegexFragsFromWcUris = function ($uris, $regex_suffix_f
     $host            = 'doesnt-matter.foo.bar';
     $host_url        = rtrim('http://'.$host, '/');
     $host_cache_path = $self->buildCachePath($host_url, '', '', $flags);
-    $uri_patterns    = array_unique(preg_split('/['."\r\n".']+/', $uris, null, PREG_SPLIT_NO_EMPTY));
+    $uri_patterns    = array_unique(preg_split('/['."\r\n".']+/', $uris, -1, PREG_SPLIT_NO_EMPTY));
 
     foreach ($uri_patterns as $_key => &$_uri_pattern) {
         if (($_uri_pattern = trim($_uri_pattern, '^$'))) {
