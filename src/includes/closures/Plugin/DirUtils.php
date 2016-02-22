@@ -1,5 +1,5 @@
 <?php
-namespace WebSharks\ZenCache;
+namespace WebSharks\CometCache;
 
 /*
  * This constructs an absolute server directory path (no trailing slashes);
@@ -18,7 +18,7 @@ $self->wpContentBaseDirTo = function ($rel_dir_file) use ($self) {
     $rel_dir_file = trim((string) $rel_dir_file, '\\/'." \t\n\r\0\x0B");
 
     if (empty($self->options['base_dir'])) {
-        throw new \Exception(__('Missing `base_dir` option value.', 'zencache'));
+        throw new \Exception(__('Missing `base_dir` option value.', 'comet-cache'));
     }
     $wp_content_base_dir_to = WP_CONTENT_DIR.'/'.$self->options['base_dir'];
 
@@ -45,7 +45,7 @@ $self->basePathTo = function ($rel_dir_file) use ($self) {
     $rel_dir_file = trim((string) $rel_dir_file, '\\/'." \t\n\r\0\x0B");
 
     if (empty($self->options['base_dir'])) {
-        throw new \Exception(__('Missing `base_dir` option value.', 'zencache'));
+        throw new \Exception(__('Missing `base_dir` option value.', 'comet-cache'));
     }
     $base_path_to = $self->options['base_dir'];
 

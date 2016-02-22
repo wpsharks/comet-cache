@@ -1,5 +1,5 @@
 <?php
-namespace WebSharks\ZenCache;
+namespace WebSharks\CometCache;
 
 /*
  * Get an exclusive lock on the cache directory.
@@ -22,7 +22,7 @@ $self->cacheLock = function () use ($self) {
         return false; // Disabled cache locking.
     }
     if (!($wp_config_file = $self->findWpConfigFile())) {
-        throw new \Exception(__('Unable to find the wp-config.php file.', 'zencache'));
+        throw new \Exception(__('Unable to find the wp-config.php file.', 'comet-cache'));
     }
     $lock_type = 'flock'; // Default lock type.
     $lock_type = $self->applyWpFilters(GLOBAL_NS.'\\share::cache_lock_lock_type', $lock_type);
@@ -39,13 +39,13 @@ $self->cacheLock = function () use ($self) {
         }
     }
     if (!($tmp_dir = $self->getTmpDir())) {
-        throw new \Exception(__('No writable tmp directory.', 'zencache'));
+        throw new \Exception(__('No writable tmp directory.', 'comet-cache'));
     }
     $inode_key = fileinode($wp_config_file);
     $mutex     = $tmp_dir.'/'.SLUG_TD.'-'.$inode_key.'.lock';
 
     if (!($resource = fopen($mutex, 'w')) || !flock($resource, LOCK_EX)) {
-        throw new \Exception(__('Unable to obtain an exclusive lock.', 'zencache'));
+        throw new \Exception(__('Unable to obtain an exclusive lock.', 'comet-cache'));
     }
     return array('type' => 'flock', 'resource' => $resource);
 };

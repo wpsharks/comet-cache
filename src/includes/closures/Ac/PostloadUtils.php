@@ -1,5 +1,5 @@
 <?php
-namespace WebSharks\ZenCache;
+namespace WebSharks\CometCache;
 
 /*
  * Have we caught the main WP loaded being loaded yet?
@@ -89,7 +89,7 @@ $self->postload = array(
     
     'filter_status_header' => true,
     'wp_main_query'        => true,
-    'set_debug_info'       => ZENCACHE_DEBUGGING_ENABLE,
+    'set_debug_info'       => COMET_CACHE_DEBUGGING_ENABLE,
 );
 
 
@@ -130,7 +130,7 @@ $self->maybeFilterStatusHeaderPostload = function () use ($self) {
  * @since 150422 Rewrite.
  */
 $self->maybeSetDebugInfoPostload = function () use ($self) {
-    if (!ZENCACHE_DEBUGGING_ENABLE) {
+    if (!COMET_CACHE_DEBUGGING_ENABLE) {
         return; // Nothing to do.
     }
     if (empty($self->postload['set_debug_info'])) {
@@ -146,10 +146,10 @@ $self->maybeSetDebugInfoPostload = function () use ($self) {
 };
 
 /*
- * Grab details from WP and the ZenCache plugin itself,
+ * Grab details from WP and the Comet Cache plugin itself,
  *    after the main query is loaded (if at all possible).
  *
- * This is where we have a chance to grab any values we need from WordPress; or from the QC plugin.
+ * This is where we have a chance to grab any values we need from WordPress; or from the CC plugin.
  *    It is EXTREMEMLY important that we NOT attempt to grab any object references here.
  *    Anything acquired in this phase should be stored as a scalar value.
  *    See {@link outputBufferCallbackHandler()} for further details.

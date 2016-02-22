@@ -1,5 +1,5 @@
 <?php
-namespace WebSharks\ZenCache;
+namespace WebSharks\CometCache;
 
 /*
  * Extends WP-Cron schedules.
@@ -15,7 +15,7 @@ namespace WebSharks\ZenCache;
 $self->extendCronSchedules = function ($schedules) use ($self) {
     $schedules['every15m'] = array(
         'interval' => 900,
-        'display'  => __('Every 15 Minutes', 'zencache'),
+        'display'  => __('Every 15 Minutes', 'comet-cache'),
     );
     return $schedules;
 };

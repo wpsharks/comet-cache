@@ -1,5 +1,5 @@
 <?php
-namespace WebSharks\ZenCache;
+namespace WebSharks\CometCache;
 
 /*
  * Automatically clears cache files related to XML sitemaps.
@@ -41,7 +41,7 @@ $self->autoClearXmlSitemapsCache = function () use ($self) {
 
     if ($counter && is_admin() && (!IS_PRO || $self->options['change_notifications_enable'])) {
         $self->enqueueNotice('<img src="'.esc_attr($self->url('/src/client-s/images/clear.png')).'" style="float:left; margin:0 10px 0 0; border:0;" />'.
-                              sprintf(__('<strong>%1$s:</strong> detected changes. Found %2$s in the cache for XML sitemaps; auto-clearing.', 'zencache'), esc_html(NAME), esc_html($self->i18nFiles($counter))));
+                              sprintf(__('<strong>%1$s:</strong> detected changes. Found %2$s in the cache for XML sitemaps; auto-clearing.', 'comet-cache'), esc_html(NAME), esc_html($self->i18nFiles($counter))));
     }
     return $counter;
 };

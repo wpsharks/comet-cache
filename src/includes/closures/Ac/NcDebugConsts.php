@@ -1,5 +1,5 @@
 <?php
-namespace WebSharks\ZenCache;
+namespace WebSharks\CometCache;
 
 if (defined(__NAMESPACE__.'\\NC_DEBUG_PHP_SAPI_CLI')) {
     return; // Already defined these.
@@ -32,22 +32,22 @@ const NC_DEBUG_NO_SERVER_HTTP_HOST = 'nc_debug_no_server_http_host';
 const NC_DEBUG_NO_SERVER_REQUEST_URI = 'nc_debug_no_server_request_uri';
 
 /**
- * No-cache because the {@link \ZENCACHE_ALLOWED} constant says not to.
+ * No-cache because the {@link \COMET_CACHE_ALLOWED} constant says not to.
  *
  * @since 140422 First documented version.
  *
  * @type string A unique string identifier in the set of `NC_DEBUG_` constants.
  */
-const NC_DEBUG_ZENCACHE_ALLOWED_CONSTANT = 'nc_debug_zencache_allowed_constant';
+const NC_DEBUG_COMET_CACHE_ALLOWED_CONSTANT = 'nc_debug_comet_cache_allowed_constant';
 
 /**
- * No-cache because the `$_SERVER['ZENCACHE_ALLOWED']` environment variable says not to.
+ * No-cache because the `$_SERVER['COMET_CACHE_ALLOWED']` environment variable says not to.
  *
  * @since 140422 First documented version.
  *
  * @type string A unique string identifier in the set of `NC_DEBUG_` constants.
  */
-const NC_DEBUG_ZENCACHE_ALLOWED_SERVER_VAR = 'nc_debug_zencache_allowed_server_var';
+const NC_DEBUG_COMET_CACHE_ALLOWED_SERVER_VAR = 'nc_debug_comet_cache_allowed_server_var';
 
 /**
  * No-cache because the {@link \DONOTCACHEPAGE} constant says not to.

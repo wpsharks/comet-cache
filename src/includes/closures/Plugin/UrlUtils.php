@@ -1,8 +1,8 @@
 <?php
-namespace WebSharks\ZenCache;
+namespace WebSharks\CometCache;
 
 /*
- * URL to a ZenCache plugin file.
+ * URL to a Comet Cache plugin file.
  *
  * @since 150422 Rewrite.
  *

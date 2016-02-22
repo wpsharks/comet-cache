@@ -1,5 +1,5 @@
 <?php
-namespace WebSharks\ZenCache;
+namespace WebSharks\CometCache;
 
 /**
  * API Base Class.
@@ -9,11 +9,11 @@ namespace WebSharks\ZenCache;
 class ApiBase
 {
     /**
-     * Current QC plugin instance.
+     * Current CC plugin instance.
      *
      * @since 150422 Rewrite.
      *
-     * @return \zencache\plugin instance.
+     * @return \comet_cache\plugin instance.
      */
     public static function plugin()
     {
@@ -110,7 +110,7 @@ class ApiBase
      *
      * @since 150422 Rewrite.
      *
-     * @note On a standard WP installation this is the same as zencache::clear();
+     * @note On a standard WP installation this is the same as comet_cache::clear();
      *    but on a multisite installation it impacts the entire network
      *    (i.e. wipes the cache for all blogs in the network).
      *

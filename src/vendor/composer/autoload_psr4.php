@@ -6,8 +6,8 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname(dirname($vendorDir));
 
 return array(
-    'WebSharks\\ZenCache\\' => array($baseDir . '/src/includes/classes'),
     'WebSharks\\JsMinifier\\' => array($vendorDir . '/websharks/js-minifier/src/includes/classes'),
     'WebSharks\\HtmlCompressor\\' => array($vendorDir . '/websharks/html-compressor/src/includes/classes'),
     'WebSharks\\CssMinifier\\' => array($vendorDir . '/websharks/css-minifier/src/includes/classes'),
+    'WebSharks\\CometCache\\' => array($baseDir . '/src/includes/classes'),
 );

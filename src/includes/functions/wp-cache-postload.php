@@ -1,5 +1,5 @@
 <?php
-use WebSharks\ZenCache as Plugin;
+use WebSharks\CometCache as Plugin;
 
 /**
  * Postload event handler; overrides core WP function.

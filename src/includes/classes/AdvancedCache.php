@@ -1,5 +1,5 @@
 <?php
-namespace WebSharks\ZenCache;
+namespace WebSharks\CometCache;
 
 /**
  * Advanced cache.
@@ -45,7 +45,7 @@ class AdvancedCache extends AbsBaseAp
         }
         unset($_closure); // Housekeeping.
 
-        if (!defined('WP_CACHE') || !WP_CACHE || !ZENCACHE_ENABLE) {
+        if (!defined('WP_CACHE') || !WP_CACHE || !COMET_CACHE_ENABLE) {
             return; // Not enabled.
         }
         if (defined('WP_INSTALLING') || defined('RELOCATE')) {

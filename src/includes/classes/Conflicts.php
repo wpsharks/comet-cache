@@ -1,5 +1,5 @@
 <?php
-namespace WebSharks\ZenCache;
+namespace WebSharks\CometCache;
 
 /**
  * Conflicts.
@@ -32,7 +32,7 @@ class Conflicts
             return $GLOBALS[GLOBAL_NS.'_conflicting_plugin'];
         }
         $conflicting_plugin_slugs = array(
-            'quick-cache', 'quick-cache-pro',
+            'zencache', 'zencache-pro', 'quick-cache', 'quick-cache-pro',
             str_replace('_', '-', GLOBAL_NS).(IS_PRO ? '' : '-pro'),
             'wp-super-cache', 'w3-total-cache', 'hyper-cache', 'wp-rocket',
         );
@@ -45,12 +45,10 @@ class Conflicts
                 continue; // Nothing to check in this case.
             }
             if (in_array($_active_plugin_slug, $conflicting_plugin_slugs, true)) {
-                if (in_array($_active_plugin_slug, array('quick-cache', 'quick-cache-pro'), true)) {
+                if (empty($GLOBALS[GLOBAL_NS.'_uninstalling']) && is_admin() && in_array($_active_plugin_slug, array('comet-cache', 'comet-cache-pro', 'zencache', 'zencache-pro', 'quick-cache', 'quick-cache-pro'), true)) {
                     add_action('admin_init', function () use ($_active_plugin_basename) {
-                        if (function_exists('deactivate_plugins')) { // Can deactivate?
-                            deactivate_plugins($_active_plugin_basename, true);
-                        }
-                    }, -1000);
+                        deactivate_plugins($_active_plugin_basename, true);
+                     }, -1000);
                 } else {
                     return ($GLOBALS[GLOBAL_NS.'_conflicting_plugin'] = $_active_plugin_slug);
                 }
@@ -88,13 +86,13 @@ class Conflicts
             $conflicting_plugin_name = $construct_name($GLOBALS[GLOBAL_NS.'_conflicting_plugin']);
 
             if (strcasecmp($this_plugin_name, $conflicting_plugin_name) === 0) {
-                $this_plugin_name = $this_plugin_name.' '.__('Pro', 'zencache');
-                $conflicting_plugin_name = $conflicting_plugin_name.' '.__('Lite', 'zencache');
+                $this_plugin_name = $this_plugin_name.' '.__('Pro', 'comet-cache');
+                $conflicting_plugin_name = $conflicting_plugin_name.' '.__('Lite', 'comet-cache');
                 $GLOBALS[GLOBAL_NS.'_conflicting_plugin_lite_pro'] = true;
             }
             echo '<div class="error">'.// Error notice.
                  '   <p>'.// Running one or more conflicting plugins at the same time.
-                 '      '.sprintf(__('<strong>%1$s</strong> is NOT running. A conflicting plugin, <strong>%2$s</strong>, is currently active. Please deactivate the %2$s plugin to clear this message.', 'zencache'), esc_html($this_plugin_name), esc_html($conflicting_plugin_name)).
+                 '      '.sprintf(__('<strong>%1$s</strong> is NOT running. A conflicting plugin, <strong>%2$s</strong>, is currently active. Please deactivate the %2$s plugin to clear this message.', 'comet-cache'), esc_html($this_plugin_name), esc_html($conflicting_plugin_name)).
                  '   </p>'.
                  '</div>';
         });

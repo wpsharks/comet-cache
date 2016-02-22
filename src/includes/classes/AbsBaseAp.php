@@ -1,5 +1,5 @@
 <?php
-namespace WebSharks\ZenCache;
+namespace WebSharks\CometCache;
 
 /**
  * Abstract Base for Advanced Cache and Plugin.
@@ -54,6 +54,6 @@ abstract class AbsBaseAp extends AbsBase
         if (isset($this->{$closure}) && is_callable($this->{$closure})) {
             return call_user_func_array($this->{$closure}, $args);
         }
-        throw new \Exception(sprintf(__('Undefined method/closure: `%1$s`.', 'zencache'), $closure));
+        throw new \Exception(sprintf(__('Undefined method/closure: `%1$s`.', 'comet-cache'), $closure));
     }
 }

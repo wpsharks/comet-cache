@@ -1,5 +1,5 @@
 <?php
-namespace WebSharks\ZenCache;
+namespace WebSharks\CometCache;
 
 /*
  * Automatically clears cache files for a particular post.
@@ -79,14 +79,14 @@ $self->autoClearPostCache = function ($post_id, $force = false) use ($self) {
     if (($post_type_obj = get_post_type_object($post_type)) && !empty($post_type_obj->labels->singular_name)) {
         $post_type_singular_name = $post_type_obj->labels->singular_name; // Singular name for the post type.
     } else {
-        $post_type_singular_name = __('Post', 'zencache'); // Default value.
+        $post_type_singular_name = __('Post', 'comet-cache'); // Default value.
     }
     $regex = $self->buildHostCachePathRegex($permalink);
     $counter += $self->clearFilesFromHostCacheDir($regex);
 
     if ($counter && is_admin() && (!IS_PRO || $self->options['change_notifications_enable'])) {
         $self->enqueueNotice('<img src="'.esc_attr($self->url('/src/client-s/images/clear.png')).'" style="float:left; margin:0 10px 0 0; border:0;" />'.
-                              sprintf(__('<strong>%1$s:</strong> detected changes. Found %2$s in the cache for %3$s ID: <code>%4$s</code>; auto-clearing.', 'zencache'), esc_html(NAME), esc_html($self->i18nFiles($counter)), esc_html($post_type_singular_name), esc_html($post_id)));
+                              sprintf(__('<strong>%1$s:</strong> detected changes. Found %2$s in the cache for %3$s ID: <code>%4$s</code>; auto-clearing.', 'comet-cache'), esc_html(NAME), esc_html($self->i18nFiles($counter)), esc_html($post_type_singular_name), esc_html($post_id)));
     }
     $counter += $self->autoClearXmlFeedsCache('blog');
     $counter += $self->autoClearXmlFeedsCache('post-terms', $post_id);
