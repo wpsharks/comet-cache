@@ -35,7 +35,7 @@ class Core // Heart of the HTML Compressor.
      *
      * @type string Dated version string: `YYMMDD`.
      */
-    protected $version = '150923'; //version//
+    protected $version = '160118'; //version//
 
     /**
      * An array of class options.
@@ -191,6 +191,47 @@ class Core // Heart of the HTML Compressor.
     );
 
     /**
+     * URI exclusions (regex).
+     *
+     * @since 160117 Adding URI exclusion support.
+     *
+     * @type string Set dynamically by class constructor.
+     */
+    protected $regex_uri_exclusions = '';
+
+    /**
+     * Default set of URI exclusions (array).
+     *
+     * @since 160117 Adding URI exclusion support.
+     *
+     * @type array These are used if no option value is supplied to override them.
+     */
+    protected $default_uri_exclusions = array();
+
+    /**
+     * Built-in URI exclusions (regex).
+     *
+     * @since 160117 Adding URI exclusion support.
+     *
+     * @type string Set dynamically by class constructor.
+     */
+    protected $built_in_regex_uri_exclusions = '';
+
+    /**
+     * A set of built-in URI exclusions (regex patterns).
+     *
+     * @since 160117 Adding URI exclusion support.
+     *
+     * @type array These are on at all times; UNLESS options dictate otherwise.
+     *            To disable these built-in URI exclusions pass the option
+     *            `disable_built_in_uri_exclusions` as TRUE.
+     *
+     * @note These get converted to a regex pattern by the class constructor.
+     *  Reference {@link $built_in_regex_uri_exclusions}.
+     */
+    protected $built_in_regex_uri_exclusion_patterns = array();
+
+    /**
      * Current base HREF value.
      *
      * @since 140417 Initial release.
@@ -316,6 +357,21 @@ class Core // Heart of the HTML Compressor.
         if ($this->built_in_regex_js_exclusion_patterns && empty($this->options['disable_built_in_js_exclusions'])) {
             $this->built_in_regex_js_exclusions = '/'.implode('|', $this->built_in_regex_js_exclusion_patterns).'/i';
         }
+
+        # URI Exclusions; i.e., Exclude from Everything (If Applicable)
+
+        if (isset($this->options['regex_uri_exclusions']) && is_string($this->options['regex_uri_exclusions'])) {
+            $this->regex_uri_exclusions = $this->options['regex_uri_exclusions'];
+        } elseif (isset($this->options['uri_exclusions']) && is_array($this->options['uri_exclusions'])) {
+            if ($this->options['uri_exclusions']) {
+                $this->regex_uri_exclusions = '/'.implode('|', $this->pregQuoteDeep($this->options['uri_exclusions'], '/')).'/i';
+            }
+        } elseif ($this->default_uri_exclusions) {
+            $this->regex_uri_exclusions = '/'.implode('|', $this->pregQuoteDeep($this->default_uri_exclusions, '/')).'/i';
+        }
+        if ($this->built_in_regex_uri_exclusion_patterns && empty($this->options['disable_built_in_uri_exclusions'])) {
+            $this->built_in_regex_uri_exclusions = '/'.implode('|', $this->built_in_regex_uri_exclusion_patterns).'/i';
+        }
     }
 
     /********************************************************************************************************/
@@ -347,6 +403,9 @@ class Core // Heart of the HTML Compressor.
         }
         if (stripos($input, '</html>') === false) {
             return $input; // Not an HTML doc.
+        }
+        if ($this->isCurrentUrlUriExcluded()) {
+            return $input; // Nothing to do.
         }
         if (($benchmark = !empty($this->options['benchmark']))) {
             $time = microtime(true);
@@ -2727,7 +2786,7 @@ class Core // Heart of the HTML Compressor.
         if (!is_readable($dir) || !is_writable($dir)) {
             throw new \Exception(sprintf('Cache directory not readable/writable: `%1$s`. Failed on `%2$s`.', $basedir, $dir));
         }
-        return ($this->cache[__FUNCTION__.'_'.$cache_key] = $dir);
+        return $this->cache[__FUNCTION__.'_'.$cache_key] = $dir;
     }
 
     /**
@@ -2784,7 +2843,7 @@ class Core // Heart of the HTML Compressor.
             $url .= '/'.trim(preg_replace('/[^a-z0-9]/i', '-', $this->currentUrlHost()), '-');
             $url .= $checksum ? '/'.implode('/', str_split($checksum)) : '';
         }
-        return ($this->cache[__FUNCTION__.'_'.$cache_key] = $url);
+        return $this->cache[__FUNCTION__.'_'.$cache_key] = $url;
     }
 
     /**
@@ -3013,20 +3072,20 @@ class Core // Heart of the HTML Compressor.
         }
         if (!empty($_SERVER['SERVER_PORT'])) {
             if ((integer) $_SERVER['SERVER_PORT'] === 443) {
-                return (static::$static[__FUNCTION__] = true);
+                return static::$static[__FUNCTION__] = true;
             }
         }
         if (!empty($_SERVER['HTTPS'])) {
             if (filter_var($_SERVER['HTTPS'], FILTER_VALIDATE_BOOLEAN)) {
-                return (static::$static[__FUNCTION__] = true);
+                return static::$static[__FUNCTION__] = true;
             }
         }
         if (!empty($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
             if (strcasecmp($_SERVER['HTTP_X_FORWARDED_PROTO'], 'https') === 0) {
-                return (static::$static[__FUNCTION__] = true);
+                return static::$static[__FUNCTION__] = true;
             }
         }
-        return (static::$static[__FUNCTION__] = false);
+        return static::$static[__FUNCTION__] = false;
     }
 
     /**
@@ -3044,12 +3103,12 @@ class Core // Heart of the HTML Compressor.
             return static::$static[__FUNCTION__];
         }
         if (!empty($this->options['current_url_scheme'])) {
-            return (static::$static[__FUNCTION__] = $this->nUrlScheme($this->options['current_url_scheme']));
+            return static::$static[__FUNCTION__] = $this->nUrlScheme($this->options['current_url_scheme']);
         }/* See https://github.com/websharks/html-compressor/issues/73
         if (!empty($_SERVER['REQUEST_SCHEME'])) {
             return (static::$static[__FUNCTION__] = $this->nUrlScheme($_SERVER['REQUEST_SCHEME']));
         }*/
-        return (static::$static[__FUNCTION__] = ($this->currentUrlSsl()) ? 'https' : 'http');
+        return static::$static[__FUNCTION__] = ($this->currentUrlSsl()) ? 'https' : 'http';
     }
 
     /**
@@ -3067,12 +3126,12 @@ class Core // Heart of the HTML Compressor.
             return static::$static[__FUNCTION__];
         }
         if (!empty($this->options['current_url_host'])) {
-            return (static::$static[__FUNCTION__] = $this->nUrlHost($this->options['current_url_host']));
+            return static::$static[__FUNCTION__] = $this->nUrlHost($this->options['current_url_host']);
         }
         if (empty($_SERVER['HTTP_HOST'])) {
             throw new \Exception('Missing required `$_SERVER[\'HTTP_HOST\']`.');
         }
-        return (static::$static[__FUNCTION__] = $this->nUrlHost($_SERVER['HTTP_HOST']));
+        return static::$static[__FUNCTION__] = $this->nUrlHost($_SERVER['HTTP_HOST']);
     }
 
     /**
@@ -3090,12 +3149,29 @@ class Core // Heart of the HTML Compressor.
             return static::$static[__FUNCTION__];
         }
         if (!empty($this->options['current_url_uri'])) {
-            return (static::$static[__FUNCTION__] = $this->mustParseUri($this->options['current_url_uri']));
+            return static::$static[__FUNCTION__] = $this->mustParseUri($this->options['current_url_uri']);
         }
         if (empty($_SERVER['REQUEST_URI'])) {
             throw new \Exception('Missing required `$_SERVER[\'REQUEST_URI\']`.');
         }
-        return (static::$static[__FUNCTION__] = $this->mustParseUri($_SERVER['REQUEST_URI']));
+        return static::$static[__FUNCTION__] = $this->mustParseUri($_SERVER['REQUEST_URI']);
+    }
+
+    /**
+     * Current URI is excluded?
+     *
+     * @since 160117 Adding support for URI exclusions.
+     *
+     * @return bool Returns `TRUE` if current URI matches an exclusion rule.
+     */
+    protected function isCurrentUrlUriExcluded()
+    {
+        if ($this->regex_uri_exclusions && preg_match($this->regex_uri_exclusions, $this->currentUrlUri())) {
+            return true;
+        } elseif ($this->built_in_regex_uri_exclusions && preg_match($this->built_in_regex_uri_exclusions, $this->currentUrlUri())) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -3114,7 +3190,7 @@ class Core // Heart of the HTML Compressor.
         $url .= $this->currentUrlHost();
         $url .= $this->currentUrlUri();
 
-        return (static::$static[__FUNCTION__] = $url);
+        return static::$static[__FUNCTION__] = $url;
     }
 
     /**

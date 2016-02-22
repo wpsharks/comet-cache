@@ -111,6 +111,10 @@ $self->addMenuPages = function () use ($self) {
  * @return array Revised array of links.
  */
 $self->addSettingsLink = function ($links) use ($self) {
+    if (is_multisite() && !is_network_admin()) {
+        return $links;
+    }
+
     $links[] = '<a href="'.esc_attr(add_query_arg(urlencode_deep(array('page' => GLOBAL_NS)), self_admin_url('/admin.php'))).'">'.__('Settings', 'zencache').'</a>';
     if (!IS_PRO) {
         $links[] = '<br/><a href="'.esc_attr(add_query_arg(urlencode_deep(array('page' => GLOBAL_NS, GLOBAL_NS.'_pro_preview' => '1')), self_admin_url('/admin.php'))).'">'.__('Preview Pro Features', 'zencache').'</a>';

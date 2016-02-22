@@ -14,7 +14,7 @@ $self->lineDelimitedPatternsToRegex = function ($patterns) use ($self) {
     $regex    = ''; // Initialize list of regex patterns.
     $patterns = (string) $patterns;
 
-    if (($patterns = preg_split('/['."\r\n".']+/', $patterns, null, PREG_SPLIT_NO_EMPTY))) {
+    if (($patterns = preg_split('/['."\r\n".']+/', $patterns, -1, PREG_SPLIT_NO_EMPTY))) {
         $regex = '/(?:'.implode('|', array_map($self->wdRegexToActualRegexFrag, $patterns)).')/i';
     }
     return $regex;

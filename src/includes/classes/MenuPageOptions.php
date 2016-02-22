@@ -48,14 +48,32 @@ class MenuPageOptions extends MenuPage
         echo '   <div class="plugin-menu-page-upsells">'."\n";
         if (IS_PRO && current_user_can($this->plugin->update_cap)) {
             echo '<a href="'.esc_attr(add_query_arg(urlencode_deep(array('page' => GLOBAL_NS.'-pro-updater')), self_admin_url('/admin.php'))).'"><i class="si si-magic"></i> '.__('Pro Updater', 'zencache').'</a>'."\n";
+            echo '<a href="'.esc_attr('http://zencache.com/r/zencache-subscribe/').'" target="_blank"><i class="si si-envelope"></i> '.__('Newsletter', 'zencache').'</a>'."\n";
+            echo '<a href="'.esc_attr('http://zencache.com/r/zencache-beta-testers-list/').'" target="_blank"><i class="si si-envelope"></i> '.__('Beta Testers', 'zencache').'</a>'."\n";
         }
         if (!IS_PRO) {
             echo '  <a href="'.esc_attr(add_query_arg(urlencode_deep(array('page' => GLOBAL_NS, GLOBAL_NS.'_pro_preview' => '1')), self_admin_url('/admin.php'))).'"><i class="si si-eye"></i> '.__('Preview Pro Features', 'zencache').'</a>'."\n";
             echo '  <a href="'.esc_attr('http://zencache.com/prices/').'" target="_blank"><i class="si si-heart-o"></i> '.__('Pro Upgrade', 'zencache').'</a>'."\n";
         }
-        echo '      <a href="'.esc_attr('http://zencache.com/r/zencache-subscribe/').'" target="_blank"><i class="si si-envelope"></i> '.__('Newsletter', 'zencache').'</a>'."\n";
-        echo '      <a href="'.esc_attr('http://zencache.com/r/zencache-beta-testers-list/').'" target="_blank"><i class="si si-envelope"></i> '.__('Beta Testers', 'zencache').'</a>'."\n";
         echo '   </div>'."\n";
+
+        echo '  <div class="plugin-menu-page-support-links">'."\n";
+        if (IS_PRO) {
+            echo '  <a href="'.esc_attr('http://zencache.com/support/').'" target="_blank"><i class="si si-life-bouy"></i> '.__('Support', 'zencache').'</a>'."\n";
+        }
+        if (!IS_PRO) {
+            echo '  <a href="'.esc_attr('https://wordpress.org/support/plugin/zencache').'" target="_blank"><i class="si si-comment"></i> '.__('Community Forum', 'zencache').'</a>'."\n";
+        }
+        echo '      <a href="'.esc_attr('http://zencache.com/kb/').'" target="_blank"><i class="si si-book"></i> '.__('Knowledge Base', 'zencache').'</a>'."\n";
+        echo '      <a href="'.esc_attr('http://zencache.com/blog/').'" target="_blank"><i class="si si-rss-square"></i> '.__('Blog', 'zencache').'</a>'."\n";
+        echo '   </div>'."\n";
+
+        if (!IS_PRO) { // We show these with the Pro Updater above in the Pro version
+            echo '   <div class="plugin-menu-page-mailing-list-links">'."\n";
+            echo '      <a href="'.esc_attr('http://zencache.com/r/zencache-subscribe/').'" target="_blank"><i class="si si-envelope"></i> '.__('Newsletter', 'zencache').'</a>'."\n";
+            echo '      <a href="'.esc_attr('http://zencache.com/r/zencache-beta-testers-list/').'" target="_blank"><i class="si si-envelope"></i> '.__('Beta Testers', 'zencache').'</a>'."\n";
+            echo '   </div>'."\n";
+        }
 
         if (IS_PRO) {
             echo '<div class="plugin-menu-page-version">'."\n";
@@ -79,8 +97,10 @@ class MenuPageOptions extends MenuPage
             echo '</div>'."\n";
         }
         echo '   <img src="'.$this->plugin->url('/src/client-s/images/options-'.(IS_PRO ? 'pro' : 'lite').'.png').'" alt="'.esc_attr(__('Plugin Options', 'zencache')).'" />'."\n";
-
+        echo '<div style="clear:both;"></div>'."\n";
         echo '</div>'."\n";
+
+        echo '<div class="plugin-menu-page-notice warning"><p>'.sprintf(__('<strong>Important %1$s Announcement:</strong> %1$s is changing its name to <a href="https://cometcache.com/r/announcing-comet-cache-formerly-zencache/" target="_blank"><strong>Comet Cache</a></strong>! Learn more about this upcoming change <a href="https://cometcache.com/r/announcing-comet-cache-formerly-zencache/" target="_blank">here</a>.', 'zencache'), esc_html(NAME)).'</p></div>'."\n";
 
         /* ----------------------------------------------------------------------------------------- */
 
@@ -835,6 +855,11 @@ class MenuPageOptions extends MenuPage
             echo '         <p>'.__('Sometimes there are special cases when a particular JS file should NOT be consolidated or compressed in any way. This is where you will enter those if you need to (one per line). Searches are performed against the <code>&lt;script src=&quot;&quot;&gt;</code> value, and also against the contents of any inline <code>&lt;script&gt;</code> tags (caSe insensitive). A wildcard <code>*</code> character can also be used when necessary; e.g., <code>xy*-framework</code> (where <code>*</code> = 0 or more characters that are NOT a slash <code>/</code>). Other special characters include: <code>**</code> = 0 or more characters of any kind, including <code>/</code> slashes; <code>^</code> = beginning of the string; <code>$</code> = end of the string. To learn more about this syntax, please see <a href ="http://zencache.com/r/watered-down-regex-syntax/" target="_blank">this KB article</a>.', 'zencache').'</p>'."\n";
             echo '         <p><textarea name="'.esc_attr(GLOBAL_NS).'[saveOptions][htmlc_js_exclusions]" rows="5" spellcheck="false" class="monospace">'.format_to_edit($this->plugin->options['htmlc_js_exclusions']).'</textarea></p>'."\n";
             echo '         <p class="info" style="display:block;">'.__('<strong>Note:</strong> please remember that your entries here should be formatted as a line-delimited list; e.g., one exclusion pattern per line.', 'zencache').'</p>'."\n";
+            echo '         <h3>'.__('URI Exclusions for HTML Compressor?', 'zencache').'</h3>'."\n";
+            echo '         <p>'.__('When you enable HTML Compression above, you may want to prevent certain pages on your site from being cached by the HTML Compressor. This is where you will enter those if you need to (one per line). Searches are performed against the <a href="https://gist.github.com/jaswsinc/338b6eb03a36c048c26f" target="_blank" style="text-decoration:none;"><code>REQUEST_URI</code></a>; i.e., <code>/path/?query</code> (caSe insensitive). So, don\'t put in full URLs here, just word fragments found in the file path (or query string) is all you need, excluding the http:// and domain name. A wildcard <code>*</code> character can also be used when necessary; e.g., <code>/category/abc-followed-by-*</code> (where <code>*</code> = 0 or more characters that are NOT a slash <code>/</code>). Other special characters include: <code>**</code> = 0 or more characters of any kind, including <code>/</code> slashes; <code>^</code> = beginning of the string; <code>$</code> = end of the string. To learn more about this syntax, please see <a href ="http://zencache.com/r/watered-down-regex-syntax/" target="_blank">this KB article</a>.', 'zencache').'</p>'."\n";
+            echo '         <p><textarea name="'.esc_attr(GLOBAL_NS).'[saveOptions][htmlc_uri_exclusions]" rows="5" spellcheck="false" class="monospace">'.format_to_edit($this->plugin->options['htmlc_uri_exclusions']).'</textarea></p>'."\n";
+            echo '         <p class="info">'.__('<strong>Tip:</strong> let\'s use this example URL: <code>http://www.example.com/post/example-post-123</code>. To exclude this URL, you would put this line into the field above: <code>/post/example-post-123</code>. Or, you could also just put in a small fragment, like: <code>example</code> or <code>example-*-123</code> and that would exclude any URI containing that word fragment.', 'zencache').'</p>'."\n";
+            echo '         <p class="info">'.__('<strong>Note:</strong> please remember that your entries here should be formatted as a line-delimited list; e.g., one exclusion pattern per line.', 'zencache').'</p>'."\n";
             echo '         <hr />'."\n";
             echo '         <h3>'.__('HTML Compression Cache Expiration', 'zencache').'</h3>'."\n";
             echo '         <p><input type="text" name="'.esc_attr(GLOBAL_NS).'[saveOptions][htmlc_cache_expiration_time]" value="'.esc_attr($this->plugin->options['htmlc_cache_expiration_time']).'" /></p>'."\n";
