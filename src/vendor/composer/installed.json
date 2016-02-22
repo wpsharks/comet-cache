@@ -164,17 +164,17 @@
     },
     {
         "name": "websharks/html-compressor",
-        "version": "150923",
-        "version_normalized": "150923",
+        "version": "160118",
+        "version_normalized": "160118",
         "source": {
             "type": "git",
             "url": "https://github.com/websharks/html-compressor.git",
-            "reference": "4169e43ff96cbca4cfacc4e054e5e87054c458d1"
+            "reference": "bd1ba2407b9c2c067549600a6ef1faa726c3c2d2"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/websharks/html-compressor/zipball/4169e43ff96cbca4cfacc4e054e5e87054c458d1",
-            "reference": "4169e43ff96cbca4cfacc4e054e5e87054c458d1",
+            "url": "https://api.github.com/repos/websharks/html-compressor/zipball/bd1ba2407b9c2c067549600a6ef1faa726c3c2d2",
+            "reference": "bd1ba2407b9c2c067549600a6ef1faa726c3c2d2",
             "shasum": ""
         },
         "require": {
@@ -185,7 +185,7 @@
             "websharks/css-minifier": "dev-master",
             "websharks/js-minifier": "dev-master"
         },
-        "time": "2015-09-23 23:22:11",
+        "time": "2016-01-18 03:17:20",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -224,23 +224,23 @@
     },
     {
         "name": "websharks/sharkicons",
-        "version": "150820",
-        "version_normalized": "150820",
+        "version": "160221",
+        "version_normalized": "160221",
         "source": {
             "type": "git",
             "url": "https://github.com/websharks/sharkicons.git",
-            "reference": "b9ed1f30c66617768c82596cb54b7507c235b047"
+            "reference": "2e6d6663c050f343fe944b424dea1759aa67cd05"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/websharks/sharkicons/zipball/b9ed1f30c66617768c82596cb54b7507c235b047",
-            "reference": "b9ed1f30c66617768c82596cb54b7507c235b047",
+            "url": "https://api.github.com/repos/websharks/sharkicons/zipball/2e6d6663c050f343fe944b424dea1759aa67cd05",
+            "reference": "2e6d6663c050f343fe944b424dea1759aa67cd05",
             "shasum": ""
         },
         "require-dev": {
             "package/bourbon": "4.2.3"
         },
-        "time": "2015-08-15 02:47:56",
+        "time": "2016-02-21 15:16:12",
         "type": "library",
         "installation-source": "dist",
         "autoload": {

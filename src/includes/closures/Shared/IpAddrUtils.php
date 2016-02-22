@@ -72,7 +72,7 @@ $self->validPublicIp = function ($list_of_possible_ips) use ($self) {
     if (!($list_of_possible_ips = trim($list_of_possible_ips))) {
         return ''; // Not possible; i.e., empty string.
     }
-    foreach (preg_split('/[\s;,]+/', $list_of_possible_ips, null, PREG_SPLIT_NO_EMPTY) as $_key => $_possible_ip) {
+    foreach (preg_split('/[\s;,]+/', $list_of_possible_ips, -1, PREG_SPLIT_NO_EMPTY) as $_key => $_possible_ip) {
         if (($_valid_public_ip = filter_var(strtolower($_possible_ip), FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE))) {
             return $_valid_public_ip; // A valid public IPv4 or IPv6 address.
         }

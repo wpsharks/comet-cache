@@ -1,4 +1,4 @@
-# HTML-Compressor (Beta)
+# HTML-Compressor
 
 <img src="assets/html-compressor-logo.png" width="300px" align="right" />
 
@@ -157,6 +157,7 @@ $html_compressor_options = array(
 
     'css_exclusions' => array(),
     'js_exclusions' => array('.php?'),
+    'uri_exclusions' => array(),
 
     'cache_expiration_time' => '14 days',
     'cache_dir_public' => '/var/www/public_html/htmlc/cache/public',
@@ -189,6 +190,7 @@ $html_compressor_options = array(
 
     'css_exclusions' => array(),
     'js_exclusions' => array('.php?'),
+    'uri_exclusions' => array(),
 
     'cache_expiration_time' => '14 days',
     'cache_dir_public' => '/var/www/public_html/htmlc/cache/public',
@@ -228,32 +230,23 @@ e.g., `new WebSharks\HtmlCompressor\Core($options);`
 
 ##### The following options allow you to exclude certain CSS/JS files and/or inline snippets.
 
- *NOTE: these options only apply if compression is enabled for CSS/JS files.*
+  **NOTE:** these options only apply if compression is enabled for CSS/JS files.*
 
-- (array)`css_exclusions` Defaults to `array()`. If you have some CSS files (or inline styles) that should NOT be included by compression routines,
- please specify an array of search tokens to exclude. Search tokens are compared to external CSS file `href` values (i.e., URLs or paths).
- Search tokens are also compared to the contents of any inline `<style></style>` tags.
+- (array)`css_exclusions` Defaults to `array()`. If you have some CSS files (or inline styles) that should NOT be included by compression routines, please specify an array of search tokens to exclude. Search tokens are compared to external CSS file `href` values (i.e., URLs or paths). Search tokens are also compared to the contents of any inline `<style></style>` tags.
 
-- (array)`js_exclusions` Defaults to `array()`. If you have some JS files (or inline scripts) that should NOT be included by compression routines,
- please specify an array of search tokens to exclude. Search tokens are compared to external JS file `src` values (i.e., URLs or paths).
- Search tokens are also compared to the contents of any inline `<script></script>` tags in cases where compression is possible.
+- (array)`js_exclusions` Defaults to `array()`. If you have some JS files (or inline scripts) that should NOT be included by compression routines, please specify an array of search tokens to exclude. Search tokens are compared to external JS file `src` values (i.e., URLs or paths). Search tokens are also compared to the contents of any inline `<script></script>` tags in cases where compression is possible.
 
-  *NOTE: Search tokens should be string literals. The HTML Compressor currently does NOT support wildcards or regex in search tokens.
- If you need to use regex patterns instead of search tokens, please use a `regex_` prefix when you define the option key; e.g., `'regex_js_exclusions' => '/\special\-script\.js/i'`. This works for `regex_css_exclusions` too.*
+- (array)`uri_exclusions` Defaults to `array()`. If you have some URLs that should NOT be included by compression routines, please specify an array of search tokens to exclude. Search tokens are compared to the current URI (i.e., everything after the domain name).
+
+  **NOTE:** Search tokens should be string literals. The HTML Compressor currently does NOT support wildcards or regex in search tokens. If you need to use regex patterns instead of search tokens, please use a `regex_` prefix when you define the option key; e.g., `'regex_js_exclusions' => '/\special\-script\.js/i'`. This works for `regex_css_exclusions` and `regex_uri_exclusions` too.
 
 ----
 
-- (boolean)`disable_built_in_css_exclusions` Defaults to `FALSE`. There are a few built-in exclusion patterns that are updated (improved) with each new release of the HTML Compressor. It is recommended that you leave these enabled at all times.
- However, if you prefer to turn them off (i.e., to *only* exclude the patterns you specify), you can set this to a `TRUE` value to disable all of those which are built-in.
- Built-in exclusions deal with things that should almost always be excluded; for any site. If you'd like to see the list of built-in patterns
- you can read the `$built_in_regex_css_exclusion_patterns` class property. It's an array of regular expressions that are compared to external CSS file
- `href` values (i.e., URLs or paths); and they are also compared to the contents of any inline `<style></style>` tags.
+- (boolean)`disable_built_in_css_exclusions` Defaults to `FALSE`. There are a few built-in exclusion patterns that are updated (improved) with each new release of the HTML Compressor. It is recommended that you leave these enabled at all times. However, if you prefer to turn them off (i.e., to *only* exclude the patterns you specify), you can set this to a `TRUE` value to disable all of those which are built-in. Built-in exclusions deal with things that should almost always be excluded; for any site. If you'd like to see the list of built-in patterns you can read the `$built_in_regex_css_exclusion_patterns` class property. It's an array of regular expressions that are compared to external CSS file `href` values (i.e., URLs or paths); and they are also compared to the contents of any inline `<style></style>` tags.
 
-- (boolean)`disable_built_in_js_exclusions` Defaults to `FALSE`. There are a few built-in exclusion patterns that are updated (improved) with each new release of the HTML Compressor. It is recommended that you leave these enabled at all times.
- However, if you prefer to turn them off (i.e., to *only* exclude the patterns you specify), you can set this to a `TRUE` value to disable all of those which are built-in.
- Built-in exclusions deal with things that should almost always be excluded; for any site. If you'd like to see the list of built-in patterns
- you can read the `$built_in_regex_js_exclusion_patterns` class property. It's an array of regular expressions that are compared to external JS file
- `src` values (i.e., URLs or paths); and they are also compared to the contents of any inline `<script></script>` tags.
+- (boolean)`disable_built_in_js_exclusions` Defaults to `FALSE`. There are a few built-in exclusion patterns that are updated (improved) with each new release of the HTML Compressor. It is recommended that you leave these enabled at all times. However, if you prefer to turn them off (i.e., to *only* exclude the patterns you specify), you can set this to a `TRUE` value to disable all of those which are built-in. Built-in exclusions deal with things that should almost always be excluded; for any site. If you'd like to see the list of built-in patterns you can read the `$built_in_regex_js_exclusion_patterns` class property. It's an array of regular expressions that are compared to external JS file `src` values (i.e., URLs or paths); and they are also compared to the contents of any inline `<script></script>` tags.
+
+- (boolean)`disable_built_in_uri_exclusions` Defaults to `FALSE`. There are a few built-in exclusion patterns that are updated (improved) with each new release of the HTML Compressor. It is recommended that you leave these enabled at all times. However, if you prefer to turn them off (i.e., to *only* exclude the patterns you specify), you can set this to a `TRUE` value to disable all of those which are built-in. Built-in exclusions deal with things that should almost always be excluded; for any site. If you'd like to see the list of built-in patterns you can read the `$built_in_regex_uri_exclusion_patterns` class property. It's an array of regular expressions that are compared to URIs (i.e., everything after the domain).
 
 ----
 

@@ -1,6 +1,32 @@
 <?php
 namespace WebSharks\ZenCache;
 
+/**
+ * PHP's language constructs.
+ *
+ * @type array PHP's language constructs.
+ *            Keys are currently unimportant. Subject to change.
+ *
+ * @since 160222 First documented version.
+ */
+$self->php_constructs = [
+    'die'             => 'die',
+    'echo'            => 'echo',
+    'empty'           => 'empty',
+    'exit'            => 'exit',
+    'eval'            => 'eval',
+    'include'         => 'include',
+    'include_once'    => 'include_once',
+    'isset'           => 'isset',
+    'list'            => 'list',
+    'require'         => 'require',
+    'require_once'    => 'require_once',
+    'return'          => 'return',
+    'print'           => 'print',
+    'unset'           => 'unset',
+    '__halt_compiler' => '__halt_compiler',
+];
+
 /*
  * Is AdvancedCache class?
  *
@@ -311,14 +337,19 @@ $self->functionIsPossible = function ($function) use ($self) {
         $disabled_functions = array(); // Initialize disabled/blacklisted functions.
 
         if (($disable_functions = trim(ini_get('disable_functions')))) {
-            $disabled_functions = array_merge($disabled_functions, preg_split('/[\s;,]+/', strtolower($disable_functions), null, PREG_SPLIT_NO_EMPTY));
+            $disabled_functions = array_merge($disabled_functions, preg_split('/[\s;,]+/', strtolower($disable_functions), -1, PREG_SPLIT_NO_EMPTY));
         }
         if (($blacklist_functions = trim(ini_get('suhosin.executor.func.blacklist')))) {
-            $disabled_functions = array_merge($disabled_functions, preg_split('/[\s;,]+/', strtolower($blacklist_functions), null, PREG_SPLIT_NO_EMPTY));
+            $disabled_functions = array_merge($disabled_functions, preg_split('/[\s;,]+/', strtolower($blacklist_functions), -1, PREG_SPLIT_NO_EMPTY));
+        }
+        if(filter_var(ini_get('suhosin.executor.disable_eval'), FILTER_VALIDATE_BOOLEAN)) {
+            $disabled_functions = array_merge($disabled_functions, array('eval'));
         }
     }
     if (!function_exists($function) || !is_callable($function)) {
-        return ($is = false); // Not possible.
+        if(!in_array($function, $self->php_constructs, true)) { // A language construct
+            return ($is = false); // Not possible.
+        }
     }
     if ($disabled_functions && in_array(strtolower($function), $disabled_functions, true)) {
         return ($is = false); // Not possible.
