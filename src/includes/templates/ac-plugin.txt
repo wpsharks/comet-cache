@@ -10,8 +10,8 @@ if (!defined('WPINC')) {
 }
 function my_ac_plugin() // Example plugin.
 {
-    $ac = $GLOBALS['zencache_advanced_cache']; // ZenCache instance.
-    $ac->addFilter('zencache_version_salt', 'my_ac_version_salt_shaker');
+    $ac = $GLOBALS['comet_cache_advanced_cache']; // Comet Cache instance.
+    $ac->addFilter('comet_cache_version_salt', 'my_ac_version_salt_shaker');
 }
 function my_ac_version_salt_shaker($version_salt)
 {

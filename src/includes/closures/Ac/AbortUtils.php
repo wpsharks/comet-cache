@@ -1,5 +1,5 @@
 <?php
-namespace WebSharks\ZenCache;
+namespace WebSharks\CometCache;
 
 /*
  * Ignores user aborts; when/if the Auto-Cache Engine is running.

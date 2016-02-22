@@ -1,5 +1,5 @@
 <?php
-namespace WebSharks\ZenCache;
+namespace WebSharks\CometCache;
 
 /*
  * Automatically clears all cache files for current blog when WordPress core, or an active component, is upgraded.

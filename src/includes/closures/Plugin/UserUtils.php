@@ -1,5 +1,5 @@
 <?php
-namespace WebSharks\ZenCache;
+namespace WebSharks\CometCache;
 
 /*
  * Current user can clear the cache?

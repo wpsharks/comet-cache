@@ -1,5 +1,5 @@
 <?php
-namespace WebSharks\ZenCache;
+namespace WebSharks\CometCache;
 
 /*
  * Automatically clears all cache files for current blog when JetPack Custom CSS is saved.

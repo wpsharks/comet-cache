@@ -1,5 +1,5 @@
 <?php
-namespace WebSharks\ZenCache;
+namespace WebSharks\CometCache;
 
 /*
  * Cache directory path.
@@ -16,12 +16,12 @@ $self->cacheDir = function ($rel_path = '') use ($self) {
     $rel_path = (string) $rel_path;
 
     if ($self->isAdvancedCache()) {
-        $cache_dir = defined('ZENCACHE_DIR') ? ZENCACHE_DIR : '';
+        $cache_dir = defined('COMET_CACHE_DIR') ? COMET_CACHE_DIR : '';
     } elseif (!empty($self->cache_sub_dir)) {
         $cache_dir = $self->wpContentBaseDirTo($self->cache_sub_dir);
     }
     if (empty($cache_dir)) {
-        throw new \Exception(__('Unable to determine cache directory location.', 'zencache'));
+        throw new \Exception(__('Unable to determine cache directory location.', 'comet-cache'));
     }
     return rtrim($cache_dir, '/').($rel_path ? '/'.ltrim($rel_path) : '');
 };
@@ -118,7 +118,7 @@ $self->deleteFilesFromCacheDir = function ($regex, $check_max_age = false) use (
     $cache_dir = $self->nDirSeps($cache_dir);
 
     if ($check_max_age && $self->isAdvancedCache()) {
-        throw new \Exception(__('Invalid argument; isAdvancedCache!', 'zencache'));
+        throw new \Exception(__('Invalid argument; isAdvancedCache!', 'comet-cache'));
     }
     if ($check_max_age && !($max_age = strtotime('-'.$self->options['cache_max_age']))) {
         return $counter; // Invalid cache expiration time.
@@ -145,7 +145,7 @@ $self->deleteFilesFromCacheDir = function ($regex, $check_max_age = false) use (
     // Uncomment the above line to debug regex pattern matching used by this routine; and others that call upon it.
 
     if (!rename($cache_dir, $cache_dir_tmp)) {
-        throw new \Exception(sprintf(__('Unable to delete files. Rename failure on directory: `%1$s`.', 'zencache'), $cache_dir));
+        throw new \Exception(sprintf(__('Unable to delete files. Rename failure on directory: `%1$s`.', 'comet-cache'), $cache_dir));
     }
     foreach (($_dir_regex_iteration = $self->dirRegexIteration($cache_dir_tmp, $cache_dir_tmp_regex)) as $_resource) {
         $_resource_type = $_resource->getType();
@@ -169,7 +169,7 @@ $self->deleteFilesFromCacheDir = function ($regex, $check_max_age = false) use (
                 }
                 if (!unlink($_path_name)) {
                     $self->tryErasingAllFilesDirsIn($cache_dir_tmp, true); // Cleanup if possible.
-                    throw new \Exception(sprintf(__('Unable to delete symlink: `%1$s`.', 'zencache'), $_path_name));
+                    throw new \Exception(sprintf(__('Unable to delete symlink: `%1$s`.', 'comet-cache'), $_path_name));
                 }
                 ++$counter; // Increment counter for each link we delete.
 
@@ -184,7 +184,7 @@ $self->deleteFilesFromCacheDir = function ($regex, $check_max_age = false) use (
                 }
                 if (!unlink($_path_name)) {
                     $self->tryErasingAllFilesDirsIn($cache_dir_tmp, true); // Cleanup if possible.
-                    throw new \Exception(sprintf(__('Unable to delete file: `%1$s`.', 'zencache'), $_path_name));
+                    throw new \Exception(sprintf(__('Unable to delete file: `%1$s`.', 'comet-cache'), $_path_name));
                 }
                 ++$counter; // Increment counter for each file we delete.
 
@@ -200,7 +200,7 @@ $self->deleteFilesFromCacheDir = function ($regex, $check_max_age = false) use (
                 }
                 if (!rmdir($_path_name)) {
                     $self->tryErasingAllFilesDirsIn($cache_dir_tmp, true); // Cleanup if possible.
-                    throw new \Exception(sprintf(__('Unable to delete dir: `%1$s`.', 'zencache'), $_path_name));
+                    throw new \Exception(sprintf(__('Unable to delete dir: `%1$s`.', 'comet-cache'), $_path_name));
                 }
                 # $counter++; // Increment counter for each directory we delete. ~ NO don't do that here.
 
@@ -208,14 +208,14 @@ $self->deleteFilesFromCacheDir = function ($regex, $check_max_age = false) use (
 
             default: // Something else that is totally unexpected here.
                 $self->tryErasingAllFilesDirsIn($cache_dir_tmp, true); // Cleanup if possible.
-                throw new \Exception(sprintf(__('Unexpected resource type: `%1$s`.', 'zencache'), $_resource_type));
+                throw new \Exception(sprintf(__('Unexpected resource type: `%1$s`.', 'comet-cache'), $_resource_type));
         }
     }
     unset($_dir_regex_iteration, $_resource, $_resource_type, $_sub_path_name, $_path_name, $_lstat); // Housekeeping.
 
     if (!rename($cache_dir_tmp, $cache_dir)) {
         $self->tryErasingAllFilesDirsIn($cache_dir_tmp, true); // Cleanup if possible.
-        throw new \Exception(sprintf(__('Unable to delete files. Rename failure on tmp directory: `%1$s`.', 'zencache'), $cache_dir_tmp));
+        throw new \Exception(sprintf(__('Unable to delete files. Rename failure on tmp directory: `%1$s`.', 'comet-cache'), $cache_dir_tmp));
     }
     /* ------- End lock state... ------------- */
 
@@ -271,10 +271,10 @@ $self->deleteFilesFromHostCacheDir = function (
         $host_base_dir_tokens = (string) $___consider_domain_mapping_host_base_dir_tokens;
     }
     if (!$host_token) { // Must have a host in the sub-routine below.
-        throw new \Exception(__('Invalid argument; host token empty!', 'zencache'));
+        throw new \Exception(__('Invalid argument; host token empty!', 'comet-cache'));
     }
     if ($check_max_age && $self->isAdvancedCache()) {
-        throw new \Exception(__('Invalid argument; isAdvancedCache!', 'zencache'));
+        throw new \Exception(__('Invalid argument; isAdvancedCache!', 'comet-cache'));
     }
     if ($check_max_age && !($max_age = strtotime('-'.$self->options['cache_max_age']))) {
         return $counter; // Invalid cache expiration time.
@@ -313,7 +313,7 @@ $self->deleteFilesFromHostCacheDir = function (
         // Uncomment the above line to debug regex pattern matching used by this routine; and others that call upon it.
 
         if (!rename($_host_cache_dir, $_host_cache_dir_tmp)) {
-            throw new \Exception(sprintf(__('Unable to delete files. Rename failure on tmp directory: `%1$s`.', 'zencache'), $_host_cache_dir));
+            throw new \Exception(sprintf(__('Unable to delete files. Rename failure on tmp directory: `%1$s`.', 'comet-cache'), $_host_cache_dir));
         }
         foreach (($_dir_regex_iteration = $self->dirRegexIteration($_host_cache_dir_tmp, $_host_cache_dir_tmp_regex)) as $_resource) {
             $_resource_type = $_resource->getType();
@@ -337,7 +337,7 @@ $self->deleteFilesFromHostCacheDir = function (
                     }
                     if (!unlink($_path_name)) {
                         $self->tryErasingAllFilesDirsIn($_host_cache_dir_tmp, true); // Cleanup if possible.
-                        throw new \Exception(sprintf(__('Unable to delete symlink: `%1$s`.', 'zencache'), $_path_name));
+                        throw new \Exception(sprintf(__('Unable to delete symlink: `%1$s`.', 'comet-cache'), $_path_name));
                     }
                     ++$counter; // Increment counter for each link we delete.
 
@@ -352,7 +352,7 @@ $self->deleteFilesFromHostCacheDir = function (
                     }
                     if (!unlink($_path_name)) {
                         $self->tryErasingAllFilesDirsIn($_host_cache_dir_tmp, true); // Cleanup if possible.
-                        throw new \Exception(sprintf(__('Unable to delete file: `%1$s`.', 'zencache'), $_path_name));
+                        throw new \Exception(sprintf(__('Unable to delete file: `%1$s`.', 'comet-cache'), $_path_name));
                     }
                     ++$counter; // Increment counter for each file we delete.
 
@@ -368,7 +368,7 @@ $self->deleteFilesFromHostCacheDir = function (
                     }
                     if (!rmdir($_path_name)) {
                         $self->tryErasingAllFilesDirsIn($_host_cache_dir_tmp, true); // Cleanup if possible.
-                        throw new \Exception(sprintf(__('Unable to delete dir: `%1$s`.', 'zencache'), $_path_name));
+                        throw new \Exception(sprintf(__('Unable to delete dir: `%1$s`.', 'comet-cache'), $_path_name));
                     }
                     # $counter++; // Increment counter for each directory we delete. ~ NO don't do that here.
 
@@ -376,14 +376,14 @@ $self->deleteFilesFromHostCacheDir = function (
 
                 default: // Something else that is totally unexpected here.
                     $self->tryErasingAllFilesDirsIn($_host_cache_dir_tmp, true); // Cleanup if possible.
-                    throw new \Exception(sprintf(__('Unexpected resource type: `%1$s`.', 'zencache'), $_resource_type));
+                    throw new \Exception(sprintf(__('Unexpected resource type: `%1$s`.', 'comet-cache'), $_resource_type));
             }
         }
         unset($_dir_regex_iteration, $_resource, $_resource_type, $_sub_path_name, $_path_name, $_lstat); // Housekeeping.
 
         if (!rename($_host_cache_dir_tmp, $_host_cache_dir)) {
             $self->tryErasingAllFilesDirsIn($_host_cache_dir_tmp, true); // Cleanup if possible.
-            throw new \Exception(sprintf(__('Unable to delete files. Rename failure on tmp directory: `%1$s`.', 'zencache'), $_host_cache_dir_tmp));
+            throw new \Exception(sprintf(__('Unable to delete files. Rename failure on tmp directory: `%1$s`.', 'comet-cache'), $_host_cache_dir_tmp));
         }
     }
     unset($_host_scheme, $_host_url, $_host_cache_path_flags, $_host_cache_path, $_host_cache_dir, $_host_cache_dir_tmp, $_host_cache_dir_tmp_regex);
@@ -464,7 +464,7 @@ $self->deleteAllFilesDirsIn = function ($dir, $delete_dir_too = false) use ($sel
     clearstatcache(); // Clear stat cache to be sure we have a fresh start below.
 
     if (!rename($dir, $dir_temp)) {
-        throw new \Exception(sprintf(__('Unable to delete all files/dirs. Rename failure on tmp directory: `%1$s`.', 'zencache'), $dir));
+        throw new \Exception(sprintf(__('Unable to delete all files/dirs. Rename failure on tmp directory: `%1$s`.', 'comet-cache'), $dir));
     }
     foreach (($_dir_regex_iteration = $self->dirRegexIteration($dir_temp, '/.+/')) as $_resource) {
         $_resource_type = $_resource->getType();
@@ -477,7 +477,7 @@ $self->deleteAllFilesDirsIn = function ($dir, $delete_dir_too = false) use ($sel
 
                 if (!unlink($_path_name)) {
                     $self->tryErasingAllFilesDirsIn($dir_temp, true); // Cleanup if possible.
-                    throw new \Exception(sprintf(__('Unable to delete symlink: `%1$s`.', 'zencache'), $_path_name));
+                    throw new \Exception(sprintf(__('Unable to delete symlink: `%1$s`.', 'comet-cache'), $_path_name));
                 }
                 ++$counter; // Increment counter for each link we delete.
 
@@ -487,7 +487,7 @@ $self->deleteAllFilesDirsIn = function ($dir, $delete_dir_too = false) use ($sel
 
                 if (!unlink($_path_name)) {
                     $self->tryErasingAllFilesDirsIn($dir_temp, true); // Cleanup if possible.
-                    throw new \Exception(sprintf(__('Unable to delete file: `%1$s`.', 'zencache'), $_path_name));
+                    throw new \Exception(sprintf(__('Unable to delete file: `%1$s`.', 'comet-cache'), $_path_name));
                 }
                 ++$counter; // Increment counter for each file we delete.
 
@@ -497,7 +497,7 @@ $self->deleteAllFilesDirsIn = function ($dir, $delete_dir_too = false) use ($sel
 
                 if (!rmdir($_path_name)) {
                     $self->tryErasingAllFilesDirsIn($dir_temp, true); // Cleanup if possible.
-                    throw new \Exception(sprintf(__('Unable to delete dir: `%1$s`.', 'zencache'), $_path_name));
+                    throw new \Exception(sprintf(__('Unable to delete dir: `%1$s`.', 'comet-cache'), $_path_name));
                 }
                 # ++$counter; // Increment counter for each directory we delete. ~ NO don't do that here.
 
@@ -505,18 +505,18 @@ $self->deleteAllFilesDirsIn = function ($dir, $delete_dir_too = false) use ($sel
 
             default: // Something else that is totally unexpected here.
                 $self->tryErasingAllFilesDirsIn($dir_temp, true); // Cleanup if possible.
-                throw new \Exception(sprintf(__('Unexpected resource type: `%1$s`.', 'zencache'), $_resource_type));
+                throw new \Exception(sprintf(__('Unexpected resource type: `%1$s`.', 'comet-cache'), $_resource_type));
         }
     }
     unset($_dir_regex_iteration, $_resource, $_resource_type, $_sub_path_name, $_path_name); // Housekeeping.
 
     if (!rename($dir_temp, $dir)) {
         $self->tryErasingAllFilesDirsIn($dir_temp, true); // Cleanup if possible.
-        throw new \Exception(sprintf(__('Unable to delete all files/dirs. Rename failure on tmp directory: `%1$s`.', 'zencache'), $dir_temp));
+        throw new \Exception(sprintf(__('Unable to delete all files/dirs. Rename failure on tmp directory: `%1$s`.', 'comet-cache'), $dir_temp));
     }
     if ($delete_dir_too) {
         if (!rmdir($dir)) {
-            throw new \Exception(sprintf(__('Unable to delete directory: `%1$s`.', 'zencache'), $dir));
+            throw new \Exception(sprintf(__('Unable to delete directory: `%1$s`.', 'comet-cache'), $dir));
         }
         ++$counter; // Increment counter for each directory we delete.
     }
@@ -575,7 +575,7 @@ $self->eraseAllFilesDirsIn = function ($dir, $erase_dir_too = false) use ($self)
             case 'link': // Symbolic links; i.e., 404 errors.
 
                 if (!unlink($_path_name)) {
-                    throw new \Exception(sprintf(__('Unable to erase symlink: `%1$s`.', 'zencache'), $_path_name));
+                    throw new \Exception(sprintf(__('Unable to erase symlink: `%1$s`.', 'comet-cache'), $_path_name));
                 }
                 ++$counter; // Increment counter for each link we erase.
 
@@ -584,7 +584,7 @@ $self->eraseAllFilesDirsIn = function ($dir, $erase_dir_too = false) use ($self)
             case 'file': // Regular files; i.e., not symlinks.
 
                 if (!unlink($_path_name)) {
-                    throw new \Exception(sprintf(__('Unable to erase file: `%1$s`.', 'zencache'), $_path_name));
+                    throw new \Exception(sprintf(__('Unable to erase file: `%1$s`.', 'comet-cache'), $_path_name));
                 }
                 ++$counter; // Increment counter for each file we erase.
 
@@ -593,21 +593,21 @@ $self->eraseAllFilesDirsIn = function ($dir, $erase_dir_too = false) use ($self)
             case 'dir': // A regular directory; i.e., not a symlink.
 
                 if (!rmdir($_path_name)) {
-                    throw new \Exception(sprintf(__('Unable to erase dir: `%1$s`.', 'zencache'), $_path_name));
+                    throw new \Exception(sprintf(__('Unable to erase dir: `%1$s`.', 'comet-cache'), $_path_name));
                 }
                 # ++$counter; // Increment counter for each directory we erase. ~ NO don't do that here.
 
                 break; // Break switch handler.
 
             default: // Something else that is totally unexpected here.
-                throw new \Exception(sprintf(__('Unexpected resource type: `%1$s`.', 'zencache'), $_resource_type));
+                throw new \Exception(sprintf(__('Unexpected resource type: `%1$s`.', 'comet-cache'), $_resource_type));
         }
     }
     unset($_dir_regex_iteration, $_resource, $_resource_type, $_sub_path_name, $_path_name); // Housekeeping.
 
     if ($erase_dir_too) {
         if (!rmdir($dir)) {
-            throw new \Exception(sprintf(__('Unable to erase directory: `%1$s`.', 'zencache'), $dir));
+            throw new \Exception(sprintf(__('Unable to erase directory: `%1$s`.', 'comet-cache'), $dir));
         }
         ++$counter; // Increment counter for each directory we erase.
     }

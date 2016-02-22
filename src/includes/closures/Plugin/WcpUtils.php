@@ -1,5 +1,5 @@
 <?php
-namespace WebSharks\ZenCache;
+namespace WebSharks\CometCache;
 
 /*
  * Used for temporarily storing the permalink for posts transitioning from
@@ -161,7 +161,7 @@ $self->autoWipeCache = function () use ($self) {
 
     if ($counter && is_admin() && (!IS_PRO || $self->options['change_notifications_enable'])) {
         $self->enqueueNotice('<img src="'.esc_attr($self->url('/src/client-s/images/wipe.png')).'" style="float:left; margin:0 10px 0 0; border:0;" />'.
-                              sprintf(__('<strong>%1$s:</strong> detected significant changes. Found %2$s in the cache; auto-wiping.', 'zencache'), esc_html(NAME), esc_html($self->i18nFiles($counter))));
+                              sprintf(__('<strong>%1$s:</strong> detected significant changes. Found %2$s in the cache; auto-wiping.', 'comet-cache'), esc_html(NAME), esc_html($self->i18nFiles($counter))));
     }
     return $counter;
 };
@@ -207,7 +207,7 @@ $self->autoClearCache = function () use ($self) {
 
     if ($counter && is_admin() && (!IS_PRO || $self->options['change_notifications_enable'])) {
         $self->enqueueNotice('<img src="'.esc_attr($self->url('/src/client-s/images/clear.png')).'" style="float:left; margin:0 10px 0 0; border:0;" />'.
-                              sprintf(__('<strong>%1$s:</strong> detected important site changes. Found %2$s in the cache for this site; auto-clearing.', 'zencache'), esc_html(NAME), esc_html($self->i18nFiles($counter))));
+                              sprintf(__('<strong>%1$s:</strong> detected important site changes. Found %2$s in the cache for this site; auto-clearing.', 'comet-cache'), esc_html(NAME), esc_html($self->i18nFiles($counter))));
     }
     return $counter;
 };
@@ -241,7 +241,7 @@ $self->autoPurgeCache = function () use ($self) {
 
     if ($counter && is_admin() && (!IS_PRO || $self->options['change_notifications_enable'])) {
         $self->enqueueNotice('<img src="'.esc_attr($self->url('/src/client-s/images/clear.png')).'" style="float:left; margin:0 10px 0 0; border:0;" />'.
-                              sprintf(__('<strong>%1$s:</strong> detected important site changes. Found %2$s in the cache for this site that were expired; auto-purging.', 'zencache'), esc_html(NAME), esc_html($self->i18nFiles($counter))));
+                              sprintf(__('<strong>%1$s:</strong> detected important site changes. Found %2$s in the cache for this site that were expired; auto-purging.', 'comet-cache'), esc_html(NAME), esc_html($self->i18nFiles($counter))));
     }
     return $counter;
 };
@@ -275,7 +275,7 @@ $self->autoWurgeCache = function () use ($self) {
 
     if ($counter && is_admin() && (!IS_PRO || $self->options['change_notifications_enable'])) {
         $self->enqueueNotice('<img src="'.esc_attr($self->url('/src/client-s/images/clear.png')).'" style="float:left; margin:0 10px 0 0; border:0;" />'.
-                              sprintf(__('<strong>%1$s:</strong> detected important site changes. Found %2$s in the cache that were expired; auto-purging.', 'zencache'), esc_html(NAME), esc_html($self->i18nFiles($counter))));
+                              sprintf(__('<strong>%1$s:</strong> detected important site changes. Found %2$s in the cache that were expired; auto-purging.', 'comet-cache'), esc_html(NAME), esc_html($self->i18nFiles($counter))));
     }
     return $counter;
 };
@@ -295,7 +295,7 @@ $self->disableAutoWipeCacheRoutines = function () use ($self) {
 
     if ($is_disabled && is_admin() && (!IS_PRO || $self->options['change_notifications_enable'])) {
         $self->enqueueMainNotice('<img src="'.esc_attr($self->url('/src/client-s/images/clear.png')).'" style="float:left; margin:0 10px 0 0; border:0;" />'.
-                              sprintf(__('<strong>%1$s:</strong> detected significant changes that would normally trigger cache wiping routines. However, cache wiping routines have been disabled by a site administrator. [<a href="http://zencache.com/r/kb-clear-and-wipe-cache-routines/" target="_blank">?</a>]', 'zencache'), esc_html(NAME)));
+                              sprintf(__('<strong>%1$s:</strong> detected significant changes that would normally trigger cache wiping routines. However, cache wiping routines have been disabled by a site administrator. [<a href="http://cometcache.com/r/kb-clear-and-wipe-cache-routines/" target="_blank">?</a>]', 'comet-cache'), esc_html(NAME)));
     }
     return $is_disabled;
 };
@@ -315,7 +315,7 @@ $self->disableAutoClearCacheRoutines = function () use ($self) {
 
     if ($is_disabled && is_admin() && (!IS_PRO || $self->options['change_notifications_enable'])) {
         $self->enqueueMainNotice('<img src="'.esc_attr($self->url('/src/client-s/images/clear.png')).'" style="float:left; margin:0 10px 0 0; border:0;" />'.
-                              sprintf(__('<strong>%1$s:</strong> detected important site changes that would normally trigger cache clearing routines. However, cache clearing routines have been disabled by a site administrator. [<a href="http://zencache.com/r/kb-clear-and-wipe-cache-routines/" target="_blank">?</a>]', 'zencache'), esc_html(NAME)));
+                              sprintf(__('<strong>%1$s:</strong> detected important site changes that would normally trigger cache clearing routines. However, cache clearing routines have been disabled by a site administrator. [<a href="http://cometcache.com/r/kb-clear-and-wipe-cache-routines/" target="_blank">?</a>]', 'comet-cache'), esc_html(NAME)));
     }
     return $is_disabled;
 };
@@ -335,7 +335,7 @@ $self->disableAutoPurgeCacheRoutines = function () use ($self) {
 
     if ($is_disabled && is_admin() && (!IS_PRO || $self->options['change_notifications_enable'])) {
         $self->enqueueMainNotice('<img src="'.esc_attr($self->url('/src/client-s/images/clear.png')).'" style="float:left; margin:0 10px 0 0; border:0;" />'.
-                              sprintf(__('<strong>%1$s:</strong> detected important site changes that would normally trigger cache purging routines. However, cache purging routines have been disabled by a site administrator. [<a href="http://zencache.com/r/kb-clear-and-wipe-cache-routines/" target="_blank">?</a>]', 'zencache'), esc_html(NAME)));
+                              sprintf(__('<strong>%1$s:</strong> detected important site changes that would normally trigger cache purging routines. However, cache purging routines have been disabled by a site administrator. [<a href="http://cometcache.com/r/kb-clear-and-wipe-cache-routines/" target="_blank">?</a>]', 'comet-cache'), esc_html(NAME)));
     }
     return $is_disabled;
 };

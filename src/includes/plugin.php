@@ -4,7 +4,7 @@
  *
  * @since 150422 Rewrite.
  */
-namespace WebSharks\ZenCache;
+namespace WebSharks\CometCache;
 
 if (!defined('WPINC')) {
     exit('Do NOT access this file directly: '.basename(__FILE__));
@@ -13,5 +13,7 @@ require_once dirname(__FILE__).'/stub.php';
 
 if (!Conflicts::check()) {
     $GLOBALS[GLOBAL_NS] = new Plugin();
-    require_once dirname(__FILE__).'/api.php';
+    add_action('plugins_loaded', function() {
+        require_once dirname(__FILE__).'/api.php';
+    });
 }

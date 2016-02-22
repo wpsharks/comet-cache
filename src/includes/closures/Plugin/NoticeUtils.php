@@ -1,5 +1,5 @@
 <?php
-namespace WebSharks\ZenCache;
+namespace WebSharks\CometCache;
 
 /*
  * Notice queue handlers.
@@ -148,7 +148,7 @@ $self->allAdminNotices = function () use ($self) {
         $_dismiss = ''; // Reset this to its default state.
         if ($_notice['persistent_key'] && $_notice['dismissable']) { // See above. The `dismissNotice()` action requires `$self->cap` always.
             $_dismiss = add_query_arg(urlencode_deep(array(GLOBAL_NS => array('dismissNotice' => array('key' => $_key)), '_wpnonce' => wp_create_nonce())));
-            $_dismiss = '<a style="display:inline-block; float:right; margin:0 0 0 15px; text-decoration:none; font-weight:bold;" href="'.esc_attr($_dismiss).'">'.__('dismiss &times;', 'zencache').'</a>';
+            $_dismiss = '<a style="display:inline-block; float:right; margin:0 0 0 15px; text-decoration:none; font-weight:bold;" href="'.esc_attr($_dismiss).'">'.__('dismiss &times;', 'comet-cache').'</a>';
         }
         # Display this notice. If not persistent, we can dismiss it too.
 

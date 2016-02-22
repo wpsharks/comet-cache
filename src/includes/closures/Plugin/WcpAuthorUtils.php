@@ -1,5 +1,5 @@
 <?php
-namespace WebSharks\ZenCache;
+namespace WebSharks\CometCache;
 
 /*
  * Automatically clears cache files for the author page(s).
@@ -79,7 +79,7 @@ $self->autoClearAuthorPageCache = function ($post_id, \WP_Post $post_after, \WP_
 
         if ($_author_counter && $enqueued_notices < 100 && is_admin() && (!IS_PRO || $self->options['change_notifications_enable'])) {
             $self->enqueueNotice('<img src="'.esc_attr($self->url('/src/client-s/images/clear.png')).'" style="float:left; margin:0 10px 0 0; border:0;" />'.
-                                  sprintf(__('<strong>%1$s:</strong> detected changes. Found %2$s in the cache for Author Page: <code>%3$s</code>; auto-clearing.', 'zencache'), esc_html(NAME), esc_html($self->i18nFiles($_author_counter)), esc_html($_author['display_name'])));
+                                  sprintf(__('<strong>%1$s:</strong> detected changes. Found %2$s in the cache for Author Page: <code>%3$s</code>; auto-clearing.', 'comet-cache'), esc_html(NAME), esc_html($self->i18nFiles($_author_counter)), esc_html($_author['display_name'])));
             $enqueued_notices++; // Increment enqueued notices counter.
         }
     }

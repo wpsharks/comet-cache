@@ -1,5 +1,5 @@
 <?php
-namespace WebSharks\ZenCache;
+namespace WebSharks\CometCache;
 
 /*
  * Automatically clears cache files for the home page.
@@ -35,7 +35,7 @@ $self->autoClearHomePageCache = function () use ($self) {
 
     if ($counter && is_admin() && (!IS_PRO || $self->options['change_notifications_enable'])) {
         $self->enqueueNotice('<img src="'.esc_attr($self->url('/src/client-s/images/clear.png')).'" style="float:left; margin:0 10px 0 0; border:0;" />'.
-                              sprintf(__('<strong>%1$s:</strong> detected changes. Found %2$s in the cache for the designated "Home Page"; auto-clearing.', 'zencache'), esc_html(NAME), esc_html($self->i18nFiles($counter))));
+                              sprintf(__('<strong>%1$s:</strong> detected changes. Found %2$s in the cache for the designated "Home Page"; auto-clearing.', 'comet-cache'), esc_html(NAME), esc_html($self->i18nFiles($counter))));
     }
     $counter += $self->autoClearXmlFeedsCache('blog');
 
@@ -93,7 +93,7 @@ $self->autoClearPostsPageCache = function () use ($self) {
 
     if ($counter && is_admin() && (!IS_PRO || $self->options['change_notifications_enable'])) {
         $self->enqueueNotice('<img src="'.esc_attr($self->url('/src/client-s/images/clear.png')).'" style="float:left; margin:0 10px 0 0; border:0;" />'.
-                              sprintf(__('<strong>%1$s:</strong> detected changes. Found %2$s in the cache for the designated "Posts Page"; auto-clearing.', 'zencache'), esc_html(NAME), esc_html($self->i18nFiles($counter))));
+                              sprintf(__('<strong>%1$s:</strong> detected changes. Found %2$s in the cache for the designated "Posts Page"; auto-clearing.', 'comet-cache'), esc_html(NAME), esc_html($self->i18nFiles($counter))));
     }
     $counter += $self->autoClearXmlFeedsCache('blog');
 

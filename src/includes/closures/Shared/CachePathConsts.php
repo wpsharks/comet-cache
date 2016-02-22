@@ -1,5 +1,5 @@
 <?php
-namespace WebSharks\ZenCache;
+namespace WebSharks\CometCache;
 
 if (defined(__NAMESPACE__.'\\CACHE_PATH_DEFAULT')) {
     return; // Already defined these.

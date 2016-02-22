@@ -1,5 +1,5 @@
 <?php
-namespace WebSharks\ZenCache;
+namespace WebSharks\CometCache;
 
 /*
  * System load averages.
@@ -62,7 +62,7 @@ $self->sysMemoryStatus = function () use ($self) {
     }
     $used       = (integer) $memory[2];
     $percent    = $used / $total * 100;
-    $percentage = sprintf(__('%s%%', 'zencache'), number_format($percent, 2, '.', ''));
+    $percentage = sprintf(__('%s%%', 'comet-cache'), number_format($percent, 2, '.', ''));
     $status     = (object) compact('total', 'used', 'percent', 'percentage');
 
     return $status;

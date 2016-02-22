@@ -1,5 +1,5 @@
 <?php
-namespace WebSharks\ZenCache;
+namespace WebSharks\CometCache;
 
 /*
  * `X file` or `X files`, translated w/ singlular/plural context.
@@ -12,7 +12,7 @@ namespace WebSharks\ZenCache;
  */
 $self->i18nFiles = function ($counter) use ($self) {
     $counter = (integer) $counter;
-    return sprintf(_n('%1$s file', '%1$s files', $counter, 'zencache'), $counter);
+    return sprintf(_n('%1$s file', '%1$s files', $counter, 'comet-cache'), $counter);
 };
 
 /*
@@ -26,7 +26,7 @@ $self->i18nFiles = function ($counter) use ($self) {
  */
 $self->i18nDirs = function ($counter) use ($self) {
     $counter = (integer) $counter;
-    return sprintf(_n('%1$s directory', '%1$s directories', $counter, 'zencache'), $counter);
+    return sprintf(_n('%1$s directory', '%1$s directories', $counter, 'comet-cache'), $counter);
 };
 
 /*
@@ -40,5 +40,5 @@ $self->i18nDirs = function ($counter) use ($self) {
  */
 $self->i18nFilesDirs = function ($counter) use ($self) {
     $counter = (integer) $counter;
-    return sprintf(_n('%1$s file/directory', '%1$s files/directories', $counter, 'zencache'), $counter);
+    return sprintf(_n('%1$s file/directory', '%1$s files/directories', $counter, 'comet-cache'), $counter);
 };

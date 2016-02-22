@@ -1,5 +1,5 @@
 <?php
-namespace WebSharks\ZenCache;
+namespace WebSharks\CometCache;
 
 /*
  * Checks for a new lite release.
@@ -39,7 +39,7 @@ $self->maybeCheckLatestLiteVersion = function () use ($self) {
     #if ($self->options['latest_lite_version'] && version_compare(VERSION, $self->options['latest_lite_version'], '<')) {
     #    $self->dismissMainNotice('new-lite-version-available'); // Dismiss any existing notices like this.
     #    $lite_updater_page = network_admin_url('/plugins.php'); // In a network this points to the master plugins list.
-    #    $self->enqueueMainNotice(sprintf(__('<strong>%1$s:</strong> a new version is now available. Please <a href="%2$s">upgrade to v%3$s</a>.', 'zencache'), esc_html(NAME), esc_attr($lite_updater_page), esc_html($self->options['latest_lite_version'])), array('persistent_key' => 'new-lite-version-available'));
+    #    $self->enqueueMainNotice(sprintf(__('<strong>%1$s:</strong> a new version is now available. Please <a href="%2$s">upgrade to v%3$s</a>.', 'comet-cache'), esc_html(NAME), esc_attr($lite_updater_page), esc_html($self->options['latest_lite_version'])), array('persistent_key' => 'new-lite-version-available'));
     #}
 };
 

@@ -1,5 +1,5 @@
 <?php
-namespace WebSharks\ZenCache;
+namespace WebSharks\CometCache;
 
 /*
  * Loads any advanced cache plugin files found inside `/wp-content/ac-plugins`.
@@ -12,8 +12,9 @@ $self->loadAcPlugins = function () use ($self) {
     }
     $GLOBALS[GLOBAL_NS.'_advanced_cache']  = $self; // Self reference.
     $GLOBALS[GLOBAL_NS.'__advanced_cache'] = &$GLOBALS[GLOBAL_NS.'_advanced_cache'];
-    if (!isset($GLOBALS['quick_cache__advanced_cache'])) {
-        $GLOBALS['quick_cache__advanced_cache'] = &$GLOBALS[GLOBAL_NS.'_advanced_cache'];
+    if (!isset($GLOBALS['zencache__advanced_cache'])) {
+        $GLOBALS['zencache_advanced_cache'] = &$GLOBALS[GLOBAL_NS.'_advanced_cache'];
+        $GLOBALS['zencache__advanced_cache'] = &$GLOBALS[GLOBAL_NS.'_advanced_cache'];
     }
     foreach ((array) glob(WP_CONTENT_DIR.'/ac-plugins/*.php') as $_ac_plugin) {
         if (is_file($_ac_plugin)) {

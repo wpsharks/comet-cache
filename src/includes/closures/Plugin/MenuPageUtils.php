@@ -1,5 +1,5 @@
 <?php
-namespace WebSharks\ZenCache;
+namespace WebSharks\CometCache;
 
 /*
  * Adds CSS for administrative menu pages.
@@ -43,14 +43,14 @@ $self->enqueueAdminScripts = function () use ($self) {
         'emptyStatsFilesImageUrl' => $self->url('/src/client-s/images/stats-fs-empty.png'),
         'i18n'                     => array(
             'name'           => NAME,
-            'perSymbol'      => __('%', 'zencache'),
-            'file'           => __('file', 'zencache'),
-            'files'          => __('files', 'zencache'),
-            'pageCache'      => __('Page Cache', 'zencache'),
-            'htmlCompressor' => __('HTML Compressor', 'zencache'),
-            'currentTotal'   => __('Current Total', 'zencache'),
-            'currentSite'    => __('Current Site', 'zencache'),
-            'xDayHigh'       => __('%s Day High', 'zencache'),
+            'perSymbol'      => __('%', 'comet-cache'),
+            'file'           => __('file', 'comet-cache'),
+            'files'          => __('files', 'comet-cache'),
+            'pageCache'      => __('Page Cache', 'comet-cache'),
+            'htmlCompressor' => __('HTML Compressor', 'comet-cache'),
+            'currentTotal'   => __('Current Total', 'comet-cache'),
+            'currentSite'    => __('Current Site', 'comet-cache'),
+            'xDayHigh'       => __('%s Day High', 'comet-cache'),
         ),
     ));
 };
@@ -69,8 +69,8 @@ $self->addNetworkMenuPages = function () use ($self) {
     $icon = file_get_contents(dirname(dirname(dirname(dirname(__FILE__)))).'/client-s/images/inline-icon.svg');
     $icon = 'data:image/svg+xml;base64,'.base64_encode($self->colorSvgMenuIcon($icon));
 
-    add_menu_page(NAME, NAME, $self->network_cap, GLOBAL_NS, array($self, 'menuPageOptions'), $icon);
-    add_submenu_page(GLOBAL_NS, __('Plugin Options', 'zencache'), __('Plugin Options', 'zencache'), $self->network_cap, GLOBAL_NS, array($self, 'menuPageOptions'));
+    add_menu_page(NAME . (IS_PRO ? ' Pro' : ''), NAME . (IS_PRO ? ' Pro' : ''), $self->network_cap, GLOBAL_NS, array($self, 'menuPageOptions'), $icon);
+    add_submenu_page(GLOBAL_NS, __('Plugin Options', 'comet-cache'), __('Plugin Options', 'comet-cache'), $self->network_cap, GLOBAL_NS, array($self, 'menuPageOptions'));
 
     
 
@@ -91,8 +91,8 @@ $self->addMenuPages = function () use ($self) {
     $icon = file_get_contents(dirname(dirname(dirname(dirname(__FILE__)))).'/client-s/images/inline-icon.svg');
     $icon = 'data:image/svg+xml;base64,'.base64_encode($self->colorSvgMenuIcon($icon));
 
-    add_menu_page(NAME, NAME, $self->cap, GLOBAL_NS, array($self, 'menuPageOptions'), $icon);
-    add_submenu_page(GLOBAL_NS, __('Plugin Options', 'zencache'), __('Plugin Options', 'zencache'), $self->cap, GLOBAL_NS, array($self, 'menuPageOptions'));
+    add_menu_page(NAME . (IS_PRO ? ' Pro' : ''), NAME . (IS_PRO ? ' Pro' : ''), $self->cap, GLOBAL_NS, array($self, 'menuPageOptions'), $icon);
+    add_submenu_page(GLOBAL_NS, __('Plugin Options', 'comet-cache'), __('Plugin Options', 'comet-cache'), $self->cap, GLOBAL_NS, array($self, 'menuPageOptions'));
 
     
 
@@ -100,7 +100,7 @@ $self->addMenuPages = function () use ($self) {
 };
 
 /*
- * Adds link(s) to ZenCache row on the WP plugins page.
+ * Adds link(s) to Comet Cache row on the WP plugins page.
  *
  * @since 150422 Rewrite.
  *
@@ -115,10 +115,10 @@ $self->addSettingsLink = function ($links) use ($self) {
         return $links;
     }
 
-    $links[] = '<a href="'.esc_attr(add_query_arg(urlencode_deep(array('page' => GLOBAL_NS)), self_admin_url('/admin.php'))).'">'.__('Settings', 'zencache').'</a>';
+    $links[] = '<a href="'.esc_attr(add_query_arg(urlencode_deep(array('page' => GLOBAL_NS)), self_admin_url('/admin.php'))).'">'.__('Settings', 'comet-cache').'</a>';
     if (!IS_PRO) {
-        $links[] = '<br/><a href="'.esc_attr(add_query_arg(urlencode_deep(array('page' => GLOBAL_NS, GLOBAL_NS.'_pro_preview' => '1')), self_admin_url('/admin.php'))).'">'.__('Preview Pro Features', 'zencache').'</a>';
-        $links[] = '<a href="'.esc_attr('http://zencache.com/prices/').'" target="_blank">'.__('Upgrade', 'zencache').'</a>';
+        $links[] = '<br/><a href="'.esc_attr(add_query_arg(urlencode_deep(array('page' => GLOBAL_NS, GLOBAL_NS.'_pro_preview' => '1')), self_admin_url('/admin.php'))).'">'.__('Preview Pro Features', 'comet-cache').'</a>';
+        $links[] = '<a href="'.esc_attr('http://cometcache.com/prices/').'" target="_blank">'.__('Upgrade', 'comet-cache').'</a>';
     }
     return $links;
 };

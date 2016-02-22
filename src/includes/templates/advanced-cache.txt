@@ -4,69 +4,69 @@
  *
  * @since 150422 Rewrite.
  */
-namespace WebSharks\ZenCache;
+namespace WebSharks\CometCache;
 
 if (!defined('WPINC')) {
     exit('Do NOT access this file directly: '.basename(__FILE__));
 }
-if (!defined('ZENCACHE_PLUGIN_FILE')) {
+if (!defined('COMET_CACHE_PLUGIN_FILE')) {
     /**
      * Plugin file path.
      *
      * @since 140725 Reorganizing class members.
      *
-     * @var string Absolute server path to QC plugin file.
+     * @var string Absolute server path to CC plugin file.
      */
-    define('ZENCACHE_PLUGIN_FILE', '%%ZENCACHE_PLUGIN_FILE%%');
+    define('COMET_CACHE_PLUGIN_FILE', '%%COMET_CACHE_PLUGIN_FILE%%');
 }
 if (defined('WP_DEBUG') && WP_DEBUG) {
-    if ((include_once(dirname(ZENCACHE_PLUGIN_FILE).'/src/includes/stub.php')) === false) {
+    if ((include_once(dirname(COMET_CACHE_PLUGIN_FILE).'/src/includes/stub.php')) === false) {
       return; // Unable to find stub. Fail softly w/ PHP warning.
     }
-} elseif ((@include_once(dirname(ZENCACHE_PLUGIN_FILE).'/src/includes/stub.php')) === false) {
+} elseif ((@include_once(dirname(COMET_CACHE_PLUGIN_FILE).'/src/includes/stub.php')) === false) {
     return; // Unable to find stub. Fail softly.
 }
 if (defined('WP_DEBUG') && WP_DEBUG) {
-    if ((@include_once(dirname(ZENCACHE_PLUGIN_FILE).'/src/includes/functions/wp-cache-postload.php')) === false) {
+    if ((@include_once(dirname(COMET_CACHE_PLUGIN_FILE).'/src/includes/functions/wp-cache-postload.php')) === false) {
       return; // Unable to find postload function(s). Fail softly w/ PHP warning.
     }
-} elseif ((@include_once(dirname(ZENCACHE_PLUGIN_FILE).'/src/includes/functions/wp-cache-postload.php')) === false) {
+} elseif ((@include_once(dirname(COMET_CACHE_PLUGIN_FILE).'/src/includes/functions/wp-cache-postload.php')) === false) {
     return; // Unable to find postload function(s). Fail softly.
 }
-AdvCacheBackCompat::quickCacheConstants();
-AdvCacheBackCompat::qcRequestVars();
+AdvCacheBackCompat::zenCacheConstants();
+AdvCacheBackCompat::zcRequestVars();
 
-if (!defined('ZENCACHE_PRO')) {
+if (!defined('COMET_CACHE_PRO')) {
     /**
-     * ZenCache Pro flag.
+     * Comet Cache Pro flag.
      *
      * @since 140422 First documented version.
      *
      * @var string|integer|boolean A boolean-ish value; e.g. `1` or `0`.
      */
-    define('ZENCACHE_PRO', IS_PRO);
+    define('COMET_CACHE_PRO', IS_PRO);
 }
-if (!defined('ZENCACHE_ENABLE')) {
+if (!defined('COMET_CACHE_ENABLE')) {
     /**
-     * Is ZenCache enabled?
+     * Is Comet Cache enabled?
      *
      * @since 140422 First documented version.
      *
      * @var string|integer|boolean A boolean-ish value; e.g. `1` or `0`.
      */
-    define('ZENCACHE_ENABLE', '%%ZENCACHE_ENABLE%%');
+    define('COMET_CACHE_ENABLE', '%%COMET_CACHE_ENABLE%%');
 }
-if (!defined('ZENCACHE_DEBUGGING_ENABLE')) {
+if (!defined('COMET_CACHE_DEBUGGING_ENABLE')) {
     /**
-     * Is ZenCache debugging enabled?
+     * Is Comet Cache debugging enabled?
      *
      * @since 140422 First documented version.
      *
      * @var string|integer|boolean A boolean-ish value; e.g. `1` or `0`.
      */
-    define('ZENCACHE_DEBUGGING_ENABLE', '%%ZENCACHE_DEBUGGING_ENABLE%%');
+    define('COMET_CACHE_DEBUGGING_ENABLE', '%%COMET_CACHE_DEBUGGING_ENABLE%%');
 }
-if (!defined('ZENCACHE_ALLOW_BROWSER_CACHE')) {
+if (!defined('COMET_CACHE_ALLOW_BROWSER_CACHE')) {
     /**
      * Allow browsers to cache each document?
      *
@@ -74,12 +74,12 @@ if (!defined('ZENCACHE_ALLOW_BROWSER_CACHE')) {
      *
      * @var string|integer|boolean A boolean-ish value; e.g. `1` or `0`.
      *
-     * @note If this is a `FALSE` (or an empty) value; ZenCache will send no-cache headers.
-     *    If `TRUE`, ZenCache will NOT send no-cache headers.
+     * @note If this is a `FALSE` (or an empty) value; Comet Cache will send no-cache headers.
+     *    If `TRUE`, Comet Cache will NOT send no-cache headers.
      */
-    define('ZENCACHE_ALLOW_BROWSER_CACHE', '%%ZENCACHE_ALLOW_BROWSER_CACHE%%');
+    define('COMET_CACHE_ALLOW_BROWSER_CACHE', '%%COMET_CACHE_ALLOW_BROWSER_CACHE%%');
 }
-if (!defined('ZENCACHE_GET_REQUESTS')) {
+if (!defined('COMET_CACHE_GET_REQUESTS')) {
     /**
      * Cache `$_GET` requests w/ a query string?
      *
@@ -87,9 +87,9 @@ if (!defined('ZENCACHE_GET_REQUESTS')) {
      *
      * @var string|integer|boolean A boolean-ish value; e.g. `1` or `0`.
      */
-    define('ZENCACHE_GET_REQUESTS', '%%ZENCACHE_GET_REQUESTS%%');
+    define('COMET_CACHE_GET_REQUESTS', '%%COMET_CACHE_GET_REQUESTS%%');
 }
-if (!defined('ZENCACHE_CACHE_404_REQUESTS')) {
+if (!defined('COMET_CACHE_CACHE_404_REQUESTS')) {
     /**
      * Cache 404 errors?
      *
@@ -97,9 +97,9 @@ if (!defined('ZENCACHE_CACHE_404_REQUESTS')) {
      *
      * @var string|integer|boolean A boolean-ish value; e.g. `1` or `0`.
      */
-    define('ZENCACHE_CACHE_404_REQUESTS', '%%ZENCACHE_CACHE_404_REQUESTS%%');
+    define('COMET_CACHE_CACHE_404_REQUESTS', '%%COMET_CACHE_CACHE_404_REQUESTS%%');
 }
-if (!defined('ZENCACHE_CACHE_NONCE_VALUES')) {
+if (!defined('COMET_CACHE_CACHE_NONCE_VALUES')) {
     /**
      * Cache HTML containing nonce values?
      *
@@ -107,9 +107,9 @@ if (!defined('ZENCACHE_CACHE_NONCE_VALUES')) {
      *
      * @var string|integer|boolean A boolean-ish value; e.g. `1` or `0`.
      */
-    define('ZENCACHE_CACHE_NONCE_VALUES', '%%ZENCACHE_CACHE_NONCE_VALUES%%');
+    define('COMET_CACHE_CACHE_NONCE_VALUES', '%%COMET_CACHE_CACHE_NONCE_VALUES%%');
 }
-if (!defined('ZENCACHE_CACHE_NONCE_VALUES_WHEN_LOGGED_IN')) {
+if (!defined('COMET_CACHE_CACHE_NONCE_VALUES_WHEN_LOGGED_IN')) {
     /**
      * Cache HTML containing nonce values for Logged-In Users?
      *
@@ -117,9 +117,9 @@ if (!defined('ZENCACHE_CACHE_NONCE_VALUES_WHEN_LOGGED_IN')) {
      *
      * @var string|integer|boolean A boolean-ish value; e.g. `1` or `0`.
      */
-    define('ZENCACHE_CACHE_NONCE_VALUES_WHEN_LOGGED_IN', '%%ZENCACHE_CACHE_NONCE_VALUES_WHEN_LOGGED_IN%%');
+    define('COMET_CACHE_CACHE_NONCE_VALUES_WHEN_LOGGED_IN', '%%COMET_CACHE_CACHE_NONCE_VALUES_WHEN_LOGGED_IN%%');
 }
-if (!defined('ZENCACHE_FEEDS_ENABLE')) {
+if (!defined('COMET_CACHE_FEEDS_ENABLE')) {
     /**
      * Cache XML/RSS/Atom feeds?
      *
@@ -127,10 +127,10 @@ if (!defined('ZENCACHE_FEEDS_ENABLE')) {
      *
      * @var string|integer|boolean A boolean-ish value; e.g. `1` or `0`.
      */
-    define('ZENCACHE_FEEDS_ENABLE', '%%ZENCACHE_FEEDS_ENABLE%%');
+    define('COMET_CACHE_FEEDS_ENABLE', '%%COMET_CACHE_FEEDS_ENABLE%%');
 }
 
-if (!defined('ZENCACHE_DIR')) {
+if (!defined('COMET_CACHE_DIR')) {
     /**
      * Directory used to store cache files; relative to `WP_CONTENT_DIR`.
      *
@@ -138,9 +138,9 @@ if (!defined('ZENCACHE_DIR')) {
      *
      * @var string Absolute server directory path.
      */
-    define('ZENCACHE_DIR', WP_CONTENT_DIR.'/'.'%%ZENCACHE_DIR%%');
+    define('COMET_CACHE_DIR', WP_CONTENT_DIR.'/'.'%%COMET_CACHE_DIR%%');
 }
-if (!defined('ZENCACHE_MAX_AGE')) {
+if (!defined('COMET_CACHE_MAX_AGE')) {
     /**
      * Cache expiration time.
      *
@@ -148,10 +148,10 @@ if (!defined('ZENCACHE_MAX_AGE')) {
      *
      * @var string Anything compatible with PHP's {@link \strtotime()}.
      */
-    define('ZENCACHE_MAX_AGE', '%%ZENCACHE_MAX_AGE%%');
+    define('COMET_CACHE_MAX_AGE', '%%COMET_CACHE_MAX_AGE%%');
 }
 
-if (!defined('ZENCACHE_EXCLUDE_URIS')) {
+if (!defined('COMET_CACHE_EXCLUDE_URIS')) {
     /**
      * URI exclusions.
      *
@@ -159,9 +159,9 @@ if (!defined('ZENCACHE_EXCLUDE_URIS')) {
      *
      * @var string A regular expression; else an empty string.
      */
-    define('ZENCACHE_EXCLUDE_URIS', '%%ZENCACHE_EXCLUDE_URIS%%');
+    define('COMET_CACHE_EXCLUDE_URIS', '%%COMET_CACHE_EXCLUDE_URIS%%');
 }
-if (!defined('ZENCACHE_EXCLUDE_CLIENT_SIDE_URIS')) {
+if (!defined('COMET_CACHE_EXCLUDE_CLIENT_SIDE_URIS')) {
     /**
      * Client-side URI exclusions.
      *
@@ -169,9 +169,9 @@ if (!defined('ZENCACHE_EXCLUDE_CLIENT_SIDE_URIS')) {
      *
      * @var string A regular expression; else an empty string.
      */
-    define('ZENCACHE_EXCLUDE_CLIENT_SIDE_URIS', '%%ZENCACHE_EXCLUDE_CLIENT_SIDE_URIS%%');
+    define('COMET_CACHE_EXCLUDE_CLIENT_SIDE_URIS', '%%COMET_CACHE_EXCLUDE_CLIENT_SIDE_URIS%%');
 }
-if (!defined('ZENCACHE_EXCLUDE_REFS')) {
+if (!defined('COMET_CACHE_EXCLUDE_REFS')) {
     /**
      * HTTP referrer exclusions.
      *
@@ -179,9 +179,9 @@ if (!defined('ZENCACHE_EXCLUDE_REFS')) {
      *
      * @var string A regular expression; else an empty string.
      */
-    define('ZENCACHE_EXCLUDE_REFS', '%%ZENCACHE_EXCLUDE_REFS%%');
+    define('COMET_CACHE_EXCLUDE_REFS', '%%COMET_CACHE_EXCLUDE_REFS%%');
 }
-if (!defined('ZENCACHE_EXCLUDE_AGENTS')) {
+if (!defined('COMET_CACHE_EXCLUDE_AGENTS')) {
     /**
      * HTTP user-agent exclusions.
      *
@@ -189,9 +189,9 @@ if (!defined('ZENCACHE_EXCLUDE_AGENTS')) {
      *
      * @var string A regular expression; else an empty string.
      */
-    define('ZENCACHE_EXCLUDE_AGENTS', '%%ZENCACHE_EXCLUDE_AGENTS%%');
+    define('COMET_CACHE_EXCLUDE_AGENTS', '%%COMET_CACHE_EXCLUDE_AGENTS%%');
 }
-if (!defined('ZENCACHE_404_CACHE_FILENAME')) {
+if (!defined('COMET_CACHE_404_CACHE_FILENAME')) {
     /**
      * 404 file name (if applicable).
      *
@@ -200,7 +200,7 @@ if (!defined('ZENCACHE_404_CACHE_FILENAME')) {
      * @var string A unique file name that will not conflict with real paths.
      *    This should NOT include the extension; basename only please.
      */
-    define('ZENCACHE_404_CACHE_FILENAME', '----404----');
+    define('COMET_CACHE_404_CACHE_FILENAME', '----404----');
 }
 
 
@@ -219,6 +219,7 @@ if (!defined('ZENCACHE_404_CACHE_FILENAME')) {
 
 $GLOBALS[GLOBAL_NS.'_advanced_cache']  = new AdvancedCache();
 $GLOBALS[GLOBAL_NS.'__advanced_cache'] = &$GLOBALS[GLOBAL_NS.'_advanced_cache'];
-if (!isset($GLOBALS['quick_cache__advanced_cache'])) {
-    $GLOBALS['quick_cache__advanced_cache'] = &$GLOBALS[GLOBAL_NS.'_advanced_cache'];
+if (!isset($GLOBALS['zencache__advanced_cache'])) {
+    $GLOBALS['zencache_advanced_cache'] = &$GLOBALS[GLOBAL_NS.'_advanced_cache'];
+    $GLOBALS['zencache__advanced_cache'] = &$GLOBALS[GLOBAL_NS.'_advanced_cache'];
 }

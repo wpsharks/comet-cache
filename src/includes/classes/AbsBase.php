@@ -1,5 +1,5 @@
 <?php
-namespace WebSharks\ZenCache;
+namespace WebSharks\CometCache;
 
 /**
  * Abstract Base.
@@ -113,7 +113,7 @@ abstract class AbsBase
         if (property_exists($this->overload, $property)) {
             return $this->overload->{$property};
         }
-        throw new \Exception(sprintf(__('Undefined overload property: `%1$s`.', 'zencache'), $property));
+        throw new \Exception(sprintf(__('Undefined overload property: `%1$s`.', 'comet-cache'), $property));
     }
 
     /**
@@ -131,7 +131,7 @@ abstract class AbsBase
     {
         $property = (string) $property; // Force string.
 
-        throw new \Exception(sprintf(__('Refused to set overload property: `%1$s`.', 'zencache'), $property));
+        throw new \Exception(sprintf(__('Refused to set overload property: `%1$s`.', 'comet-cache'), $property));
     }
 
     /**
@@ -148,7 +148,7 @@ abstract class AbsBase
     {
         $property = (string) $property; // Force string.
 
-        throw new \Exception(sprintf(__('Refused to unset overload property: `%1$s`.', 'zencache'), $property));
+        throw new \Exception(sprintf(__('Refused to unset overload property: `%1$s`.', 'comet-cache'), $property));
     }
 
     /*

@@ -1,5 +1,5 @@
 <?php
-namespace WebSharks\ZenCache;
+namespace WebSharks\CometCache;
 
 /*
  * Get plugin options.
@@ -13,8 +13,8 @@ $self->getOptions = function () use ($self) {
         if (!is_array($options = get_site_option(GLOBAL_NS.'_options'))) {
             $options = array(); // Force array.
         }
-        if (!$options && is_array($quick_cache_options = get_site_option('quick_cache_options'))) {
-            $options                = $quick_cache_options; // Old Quick Cache options.
+        if (!$options && is_array($zencache_options = get_site_option('zencache_options'))) {
+            $options                = $zencache_options; // Old ZenCache options.
             $options['crons_setup'] = $this->default_options['crons_setup'];
         }
     }
