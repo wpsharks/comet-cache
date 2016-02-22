@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the Comet Cache package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Comet Cache 160223\n"
+"Project-Id-Version: Comet Cache 160223.1\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/comet-cache\n"
-"POT-Creation-Date: 2016-02-22 16:41:37+00:00\n"
+"POT-Creation-Date: 2016-02-22 18:08:10+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
