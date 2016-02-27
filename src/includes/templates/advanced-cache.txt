@@ -217,6 +217,7 @@ if (!defined('COMET_CACHE_404_CACHE_FILENAME')) {
 
 
 
+
 $GLOBALS[GLOBAL_NS.'_advanced_cache']  = new AdvancedCache();
 $GLOBALS[GLOBAL_NS.'__advanced_cache'] = &$GLOBALS[GLOBAL_NS.'_advanced_cache'];
 if (!isset($GLOBALS['zencache__advanced_cache'])) {

@@ -1,3 +1,17 @@
+= v160227 =
+
+- **Bug Fix**: Fixed a ZenCache Backwards Compatibility bug that was preventing calls to `$GLOBALS['zencache']` from working properly with Comet Cache. See [Issue #689](https://github.com/websharks/comet-cache/issues/689)
+- **Bug Fix**: Fixed a ZenCache Backwards Compatibility bug that was preventing `ZENCACHE_ALLOWED` from working properly with Comet Cache. See [Issue #683](https://github.com/websharks/comet-cache/issues/683).
+- **Bug Fix**: Fixed a Quick Cache Backwards Compatibility bug that was preventing calls to `$GLOBALS['quick_cache']` from working properly with Comet Cache. Props to @Kedakai for reporting. See [Issue #691](https://github.com/websharks/comet-cache/issues/691).
+- **Bug Fix** (Pro): Fixed an Auto-Cache Engine bug that was preventing the Auto-Cache Engine from generating cached pages. Props @digitalhexcode for reporting. See [Issue #679](https://github.com/websharks/comet-cache/issues/679).
+- **Enhancement**: Improved the way Comet Cache handles file locking in an effort to improve compatibility with various environments. There were reports of issues with PHP FPM/FastCGI and this release attempts to address those. See [Issue #671](https://github.com/websharks/comet-cache/issues/671)
+- **Enhancement** (Pro): A new HTML Compression option allows you to define whether or not HTML Compression should be enabled for Logged-In users (when Logged-In User caching is enabled). See **Comet Cache → Plugin Options → HTML Compression → Enable HTML Compression for Logged-In Users?**. Props @renzms. See [Issue #650](https://github.com/websharks/comet-cache/issues/650).
+- **Accelerated Mobile Pages (AMP) Compatibility**: Added full support for Accelerated Mobile Pages via the [AMP plugin](https://wordpress.org/plugins/amp/). Comet Cache now works great alongside the AMP plugin. AMP-generated pages will be cached and those cache files will be intelligently cleared when necessary to keep things up-to-date. See [Issue #688](https://github.com/websharks/comet-cache/issues/688).
+
+= v160223.1 =
+
+- **Bug Fix**: Fixes PHP Fatal Error when upgrading from Comet Cache v160211.
+
 = v160223 =
 
 - **Announcement: After March 1st, 2016 Comet Cache will require PHP Multibyte String support.** The `mbstring` extension provides Multibyte String support to PHP and is required to properly handle UTF-8 characters, which many sites now use. Without Multibyte String support, caching will be unstable. For that reason we are requiring the `mbstring` extension to improve reliability when caching and to prevent your site from experiencing unforeseen issues in the future..
