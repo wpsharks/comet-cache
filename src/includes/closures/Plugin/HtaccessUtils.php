@@ -13,7 +13,7 @@ $self->htaccess_marker = 'WmVuQ2FjaGU';
 /*
 * Plugin options that have associated htaccess rules.
 *
-* @since 15xxxx Improving `.htaccess` tweaks.
+* @since 160103 Improving `.htaccess` tweaks.
 *
 * @return array Plugin options that have associated htaccess rules
 *
@@ -134,7 +134,7 @@ $self->findHtaccessFile = function () use ($self) {
 /*
  * Determines if there are any plugin options enabled that require htaccess rules to be added.
  *
- * @since 15xxxx Improving `.htaccess` tweaks.
+ * @since 160103 Improving `.htaccess` tweaks.
  *
  * @return bool True when an option is enabled that requires htaccess rules, false otherwise.
  */

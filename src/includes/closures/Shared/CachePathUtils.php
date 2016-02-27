@@ -23,14 +23,16 @@ $self->cachePathRegexSuffixFrag = function ($regex_suffix_frag = CACHE_PATH_REGE
 * @since 151220 Enhancing translation support.
 *
 * @return string Default cache-path suffix frag (regex).
+*
+* @TODO Use conditional to detect the AMP plugin (e.g., `isAmpInstalled()`) to avoid edge cases with the `|\/amp` regex here
 */
 $self->cachePathRegexDefaultSuffixFrag = function () use ($self) {
     if ($self->isPlugin() && !empty($GLOBALS['wp_rewrite'])){
         $pagination_base          = $GLOBALS['wp_rewrite']->pagination_base;
         $comments_pagination_base = $GLOBALS['wp_rewrite']->comments_pagination_base;
-        return '(?:\/index)?(?:\.|\/(?:'.preg_quote($pagination_base, '/').'\/[0-9]+|'.preg_quote($comments_pagination_base, '/').'\-[0-9]+)[.\/])';
+        return '(?:\/index|\/amp)?(?:\.|\/(?:'.preg_quote($pagination_base, '/').'\/[0-9]+|'.preg_quote($comments_pagination_base, '/').'\-[0-9]+)[.\/])';
     } else {
-        return '(?:\/index)?(?:\.|\/(?:page\/[0-9]+|comment\-page\-[0-9]+)[.\/])';
+        return '(?:\/index|\/amp)?(?:\.|\/(?:page\/[0-9]+|comment\-page\-[0-9]+)[.\/])';
     }
 };
 
