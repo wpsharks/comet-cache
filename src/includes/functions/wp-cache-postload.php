@@ -26,7 +26,7 @@ function wp_cache_postload()
         $advanced_cache->maybeSetDebugInfoPostload();
     }
     if (!empty($advanced_cache->postload['wp_main_query'])) {
-        add_action('wp', array($advanced_cache, 'wpMainQueryPostload'), PHP_INT_MAX);
+        add_action('wp', [$advanced_cache, 'wpMainQueryPostload'], PHP_INT_MAX);
     }
     $advanced_cache->doWpAction('after_'.$GLOBAL_NS.'_'.__FUNCTION__, get_defined_vars());
     $advanced_cache->doWpAction($GLOBAL_NS.'_'.__FUNCTION__.'_complete', get_defined_vars());

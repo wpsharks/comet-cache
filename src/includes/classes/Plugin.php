@@ -1,5 +1,8 @@
 <?php
-namespace WebSharks\CometCache;
+namespace WebSharks\CometCache\Classes;
+
+use WebSharks\CometCache\Classes;
+use WebSharks\CometCache\Traits;
 
 /**
  * Comet Cache Plugin.
@@ -8,6 +11,40 @@ namespace WebSharks\CometCache;
  */
 class Plugin extends AbsBaseAp
 {
+    /*[.build.php-auto-generate-use-Traits]*/
+    use Traits\Plugin\ActionUtils;
+    use Traits\Plugin\BbPressUtils;
+    use Traits\Plugin\CleanupUtils;
+    use Traits\Plugin\CondUtils;
+    use Traits\Plugin\CronUtils;
+    use Traits\Plugin\DbUtils;
+    use Traits\Plugin\DirUtils;
+    use Traits\Plugin\HtaccessUtils;
+    use Traits\Plugin\InstallUtils;
+    use Traits\Plugin\MenuPageUtils;
+    use Traits\Plugin\NoticeUtils;
+    use Traits\Plugin\OptionUtils;
+    use Traits\Plugin\PostUtils;
+    use Traits\Plugin\UpdateUtils;
+    use Traits\Plugin\UrlUtils;
+    use Traits\Plugin\UserUtils;
+    use Traits\Plugin\WcpAuthorUtils;
+    use Traits\Plugin\WcpCommentUtils;
+    use Traits\Plugin\WcpFeedUtils;
+    use Traits\Plugin\WcpHomeBlogUtils;
+    use Traits\Plugin\WcpJetpackUtils;
+    use Traits\Plugin\WcpOpcacheUtils;
+    use Traits\Plugin\WcpPluginUtils;
+    use Traits\Plugin\WcpPostTypeUtils;
+    use Traits\Plugin\WcpPostUtils;
+    use Traits\Plugin\WcpSettingUtils;
+    use Traits\Plugin\WcpSitemapUtils;
+    use Traits\Plugin\WcpTermUtils;
+    use Traits\Plugin\WcpUpdaterUtils;
+    use Traits\Plugin\WcpUtils;
+    use Traits\Plugin\WcpWooCommerceUtils;
+    /*[/.build.php-auto-generate-use-Traits]*/
+
     /**
      * Enable plugin hooks?
      *
@@ -24,7 +61,7 @@ class Plugin extends AbsBaseAp
      *
      * @type array Pro-only option keys.
      */
-    public $pro_only_option_keys = array();
+    public $pro_only_option_keys = [];
 
     /**
      * Default options.
@@ -33,7 +70,7 @@ class Plugin extends AbsBaseAp
      *
      * @type array Default options.
      */
-    public $default_options = array();
+    public $default_options = [];
 
     /**
      * Configured options.
@@ -42,7 +79,7 @@ class Plugin extends AbsBaseAp
      *
      * @type array Configured options.
      */
-    public $options = array();
+    public $options = [];
 
     /**
      * WordPress capability.
@@ -108,25 +145,15 @@ class Plugin extends AbsBaseAp
     {
         parent::__construct();
 
-        $closures_dir = dirname(dirname(__FILE__)).'/closures/Plugin';
-        $self         = $this; // Reference for closures.
-
-        foreach (scandir($closures_dir) as $_closure) {
-            if (substr($_closure, -4) === '.php') {
-                require $closures_dir.'/'.$_closure;
-            }
-        }
-        unset($_closure); // Housekeeping.
         /* -------------------------------------------------------------- */
-
         if (!($this->enable_hooks = (boolean) $enable_hooks)) {
             return; // Stop here; construct without hooks.
         }
         /* -------------------------------------------------------------- */
 
-        add_action('after_setup_theme', array($this, 'setup'));
-        register_activation_hook(PLUGIN_FILE, array($this, 'activate'));
-        register_deactivation_hook(PLUGIN_FILE, array($this, 'deactivate'));
+        add_action('plugins_loaded', [$this, 'setup']);
+        register_activation_hook(PLUGIN_FILE, [$this, 'activate']);
+        register_deactivation_hook(PLUGIN_FILE, [$this, 'deactivate']);
     }
 
     /**
@@ -148,7 +175,7 @@ class Plugin extends AbsBaseAp
 
         load_plugin_textdomain(SLUG_TD); // Text domain.
 
-        $this->pro_only_option_keys = array(
+        $this->pro_only_option_keys = [
             'cache_max_age_disable_if_load_average_is_gte',
 
             'change_notifications_enable',
@@ -216,13 +243,12 @@ class Plugin extends AbsBaseAp
             'pro_update_username',
             'pro_update_password',
             'last_pro_stats_log',
-        );
-        $this->default_options = array(
+        ];
+        $this->default_options = [
             /* Core/systematic plugin options. */
 
-            'version'                       => VERSION,
-            'welcomed'                      => '0', // `0|1` welcomed yet?
-            'comet_cache_notice1_enqueued'  => '0', // `0|1` announced Comet Cache yet?
+            'version'  => VERSION,
+            'welcomed' => '0', // `0|1` welcomed yet?
 
             'crons_setup'                             => '0', // A timestamp when last set up.
             'crons_setup_on_namespace'                => '', // The namespace on which they were set up.
@@ -382,7 +408,7 @@ class Plugin extends AbsBaseAp
             /* Related to uninstallation routines. */
 
             'uninstall_on_deletion' => '0', // `0|1`.
-        );
+        ];
         $this->default_options = $this->applyWpFilters(GLOBAL_NS.'_default_options', $this->default_options);
         $this->options         = $this->getOptions(); // Filters, validates, and returns plugin options.
 
@@ -398,15 +424,13 @@ class Plugin extends AbsBaseAp
         }
         /* -------------------------------------------------------------- */
 
-        add_action('init', array($this, 'checkAdvancedCache'));
-        add_action('init', array($this, 'checkBlogPaths'));
-        add_action('init', array($this, 'checkCronSetup'), PHP_INT_MAX);
-        add_action('wp_loaded', array($this, 'actions'));
+        add_action('init', [$this, 'checkAdvancedCache']);
+        add_action('init', [$this, 'checkBlogPaths']);
+        add_action('init', [$this, 'checkCronSetup'], PHP_INT_MAX);
+        add_action('wp_loaded', [$this, 'actions']);
 
-        add_action('admin_init', array($this, 'checkVersion'));
-        add_action('admin_init', array($this, 'maybeCheckLatestLiteVersion'));
-
-        
+        add_action('admin_init', [$this, 'checkVersion']);
+        add_action('admin_init', [$this, 'maybeCheckLatestLiteVersion']);
 
         
 
@@ -414,56 +438,58 @@ class Plugin extends AbsBaseAp
 
         
 
-        add_action('admin_enqueue_scripts', array($this, 'enqueueAdminStyles'));
-        add_action('admin_enqueue_scripts', array($this, 'enqueueAdminScripts'));
+        
 
-        add_action('admin_menu', array($this, 'addMenuPages'));
-        add_action('network_admin_menu', array($this, 'addNetworkMenuPages'));
+        add_action('admin_enqueue_scripts', [$this, 'enqueueAdminStyles']);
+        add_action('admin_enqueue_scripts', [$this, 'enqueueAdminScripts']);
 
-        add_action('all_admin_notices', array($this, 'allAdminNotices'));
+        add_action('admin_menu', [$this, 'addMenuPages']);
+        add_action('network_admin_menu', [$this, 'addNetworkMenuPages']);
 
-        add_filter('plugin_action_links_'.plugin_basename(PLUGIN_FILE), array($this, 'addSettingsLink'));
+        add_action('all_admin_notices', [$this, 'allAdminNotices']);
 
-        add_filter('enable_live_network_counts', array($this, 'updateBlogPaths'));
+        add_filter('plugin_action_links_'.plugin_basename(PLUGIN_FILE), [$this, 'addSettingsLink']);
 
-        add_action('activated_plugin', array($this, 'autoClearOnPluginActivationDeactivation'), 10, 2);
-        add_action('deactivated_plugin', array($this, 'autoClearOnPluginActivationDeactivation'), 10, 2);
-        add_action('admin_init', array($this, 'autoClearCacheOnSettingChanges'));
-        add_action('safecss_save_pre', array($this, 'autoClearCacheOnJetpackCustomCss'), 10, 1);
-        add_action('upgrader_process_complete', array($this, 'autoClearOnUpgraderProcessComplete'), 10, 2);
+        add_filter('enable_live_network_counts', [$this, 'updateBlogPaths']);
 
-        add_action('switch_theme', array($this, 'autoClearCache'));
-        add_action('wp_create_nav_menu', array($this, 'autoClearCache'));
-        add_action('wp_update_nav_menu', array($this, 'autoClearCache'));
-        add_action('wp_delete_nav_menu', array($this, 'autoClearCache'));
+        add_action('activated_plugin', [$this, 'autoClearOnPluginActivationDeactivation'], 10, 2);
+        add_action('deactivated_plugin', [$this, 'autoClearOnPluginActivationDeactivation'], 10, 2);
+        add_action('admin_init', [$this, 'autoClearCacheOnSettingChanges']);
+        add_action('safecss_save_pre', [$this, 'autoClearCacheOnJetpackCustomCss'], 10, 1);
+        add_action('upgrader_process_complete', [$this, 'autoClearOnUpgraderProcessComplete'], 10, 2);
 
-        add_action('save_post', array($this, 'autoClearPostCache'));
-        add_action('delete_post', array($this, 'autoClearPostCache'));
-        add_action('clean_post_cache', array($this, 'autoClearPostCache'));
-        add_action('post_updated', array($this, 'autoClearAuthorPageCache'), 10, 3);
-        add_action('pre_post_update', array($this, 'autoClearPostCacheTransition'), 10, 2);
-        add_action('woocommerce_product_set_stock', array($this, 'autoClearPostCacheOnWooCommerceSetStock'), 10, 1);
+        add_action('switch_theme', [$this, 'autoClearCache']);
+        add_action('wp_create_nav_menu', [$this, 'autoClearCache']);
+        add_action('wp_update_nav_menu', [$this, 'autoClearCache']);
+        add_action('wp_delete_nav_menu', [$this, 'autoClearCache']);
 
-        add_action('added_term_relationship', array($this, 'autoClearPostTermsCache'), 10, 1);
-        add_action('delete_term_relationships', array($this, 'autoClearPostTermsCache'), 10, 1);
+        add_action('save_post', [$this, 'autoClearPostCache']);
+        add_action('delete_post', [$this, 'autoClearPostCache']);
+        add_action('clean_post_cache', [$this, 'autoClearPostCache']);
+        add_action('post_updated', [$this, 'autoClearAuthorPageCache'], 10, 3);
+        add_action('pre_post_update', [$this, 'autoClearPostCacheTransition'], 10, 2);
+        add_action('woocommerce_product_set_stock', [$this, 'autoClearPostCacheOnWooCommerceSetStock'], 10, 1);
 
-        add_action('trackback_post', array($this, 'autoClearCommentPostCache'));
-        add_action('pingback_post', array($this, 'autoClearCommentPostCache'));
-        add_action('comment_post', array($this, 'autoClearCommentPostCache'));
-        add_action('transition_comment_status', array($this, 'autoClearCommentPostCacheTransition'), 10, 3);
+        add_action('added_term_relationship', [$this, 'autoClearPostTermsCache'], 10, 1);
+        add_action('delete_term_relationships', [$this, 'autoClearPostTermsCache'], 10, 1);
 
-        add_action('create_term', array($this, 'autoClearCache'));
-        add_action('edit_terms', array($this, 'autoClearCache'));
-        add_action('delete_term', array($this, 'autoClearCache'));
+        add_action('trackback_post', [$this, 'autoClearCommentPostCache']);
+        add_action('pingback_post', [$this, 'autoClearCommentPostCache']);
+        add_action('comment_post', [$this, 'autoClearCommentPostCache']);
+        add_action('transition_comment_status', [$this, 'autoClearCommentPostCacheTransition'], 10, 3);
 
-        add_action('add_link', array($this, 'autoClearCache'));
-        add_action('edit_link', array($this, 'autoClearCache'));
-        add_action('delete_link', array($this, 'autoClearCache'));
+        add_action('create_term', [$this, 'autoClearCache']);
+        add_action('edit_terms', [$this, 'autoClearCache']);
+        add_action('delete_term', [$this, 'autoClearCache']);
+
+        add_action('add_link', [$this, 'autoClearCache']);
+        add_action('edit_link', [$this, 'autoClearCache']);
+        add_action('delete_link', [$this, 'autoClearCache']);
 
         
 
         if ($this->options['enable'] && $this->applyWpFilters(GLOBAL_NS.'_disable_akismet_comment_nonce', true)) {
-            add_filter('akismet_comment_nonce', function() {
+            add_filter('akismet_comment_nonce', function () {
                 return 'disabled-by-'.SLUG_TD; // MUST return a string literal that is not 'true' or '' (an empty string). See <http://bit.ly/1YItpdE>
             }); // See also why the Akismet nonce should be disabled: <http://jas.xyz/1R23f5c>
         }
@@ -476,8 +502,8 @@ class Plugin extends AbsBaseAp
         /* -------------------------------------------------------------- */
 
         if (!is_multisite() || is_main_site()) { // Main site only.
-            add_filter('cron_schedules', array($this, 'extendCronSchedules'));
-            add_action('_cron_'.GLOBAL_NS.'_cleanup', array($this, 'cleanupCache'));
+            add_filter('cron_schedules', [$this, 'extendCronSchedules']);
+            add_action('_cron_'.GLOBAL_NS.'_cleanup', [$this, 'cleanupCache']);
 
             
         }

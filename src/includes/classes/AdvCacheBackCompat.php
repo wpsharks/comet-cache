@@ -1,5 +1,5 @@
 <?php
-namespace WebSharks\CometCache;
+namespace WebSharks\CometCache\Classes;
 
 /**
  * AC back compat.
@@ -15,11 +15,11 @@ class AdvCacheBackCompat
      */
     public static function zcRequestVars()
     {
-        $super_gs    = array(
+        $super_gs = [
             '_GET'     => &$_GET,
             '_REQUEST' => &$_REQUEST,
-        );
-        $zc_suffixes = array('AC', 'ABC');
+        ];
+        $zc_suffixes = ['AC', 'ABC'];
 
         foreach ($super_gs as $_super_g_key => &$_super_g_value) {
             foreach ($zc_suffixes as $_zc_suffix) {
