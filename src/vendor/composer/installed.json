@@ -295,15 +295,15 @@
         "source": {
             "type": "git",
             "url": "https://github.com/websharks/wp-i18n-tools.git",
-            "reference": "47a2af9f88cfaf0ad33a81c2c882cd70bfed95b6"
+            "reference": "0275dc189293aee71e80a8bde43c4087f81ce9bb"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/websharks/wp-i18n-tools/zipball/47a2af9f88cfaf0ad33a81c2c882cd70bfed95b6",
-            "reference": "47a2af9f88cfaf0ad33a81c2c882cd70bfed95b6",
+            "url": "https://api.github.com/repos/websharks/wp-i18n-tools/zipball/0275dc189293aee71e80a8bde43c4087f81ce9bb",
+            "reference": "0275dc189293aee71e80a8bde43c4087f81ce9bb",
             "shasum": ""
         },
-        "time": "2015-05-11 14:42:39",
+        "time": "2016-04-16 08:29:33",
         "type": "library",
         "installation-source": "dist",
         "notification-url": "https://packagist.org/downloads/",

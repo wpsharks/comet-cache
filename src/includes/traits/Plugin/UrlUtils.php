@@ -29,7 +29,7 @@ trait UrlUtils
     /**
      * Retrieves the home URL for a given site preserving the home URL scheme.
      *
-     * @since 16xxxx Improving Auto-Cache Engine Sitemap routines.
+     * @since 160416 Improving Auto-Cache Engine Sitemap routines.
      *
      * @param int $blog_id (Optional) Blog ID. Default null (current blog).
      *
