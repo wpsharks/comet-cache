@@ -1,13 +1,39 @@
 <?php
-namespace WebSharks\CometCache;
+namespace WebSharks\CometCache\Classes;
+
+use WebSharks\CometCache\Traits;
+use WebSharks\CometCache\Interfaces;
 
 /**
  * Abstract Base for Advanced Cache and Plugin.
  *
  * @since 150422 Rewrite.
  */
-abstract class AbsBaseAp extends AbsBase
+abstract class AbsBaseAp extends AbsBase implements Interfaces\Shared\NcDebugConsts, Interfaces\Shared\CachePathConsts
 {
+    /*[.build.php-auto-generate-use-Traits]*/
+    use Traits\Shared\BlogUtils;
+    use Traits\Shared\CacheDirUtils;
+    use Traits\Shared\CacheLockUtils;
+    use Traits\Shared\CachePathUtils;
+    use Traits\Shared\ConditionalUtils;
+    use Traits\Shared\DomainMappingUtils;
+    use Traits\Shared\EscapeUtils;
+    use Traits\Shared\FsUtils;
+    use Traits\Shared\HookUtils;
+    use Traits\Shared\HttpUtils;
+    use Traits\Shared\I18nUtils;
+    use Traits\Shared\IpAddrUtils;
+    use Traits\Shared\PatternUtils;
+    use Traits\Shared\ReplaceUtils;
+    use Traits\Shared\ServerUtils;
+    use Traits\Shared\StringUtils;
+    use Traits\Shared\SysUtils;
+    use Traits\Shared\TokenUtils;
+    use Traits\Shared\TrimUtils;
+    use Traits\Shared\UrlUtils;
+    /*[/.build.php-auto-generate-use-Traits]*/
+
     /**
      * Class constructor.
      *
@@ -16,16 +42,6 @@ abstract class AbsBaseAp extends AbsBase
     public function __construct()
     {
         parent::__construct();
-
-        $closures_dir = dirname(dirname(__FILE__)).'/closures/Shared';
-        $self         = $this; // Reference for closures.
-
-        foreach (scandir($closures_dir) as $_closure) {
-            if (substr($_closure, -4) === '.php') {
-                require $closures_dir.'/'.$_closure;
-            }
-        }
-        unset($_closure); // Housekeeping.
     }
 
     /**

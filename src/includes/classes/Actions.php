@@ -1,5 +1,5 @@
 <?php
-namespace WebSharks\CometCache;
+namespace WebSharks\CometCache\Classes;
 
 /**
  * Actions.
@@ -13,7 +13,7 @@ class Actions extends AbsBase
      *
      * @since 150422 Rewrite.
      */
-    protected $allowed_actions = array(
+    protected $allowed_actions = [
         'wipeCache',
         'clearCache',
 
@@ -37,7 +37,7 @@ class Actions extends AbsBase
         
 
         'dismissNotice',
-    );
+    ];
 
     /**
      * Class constructor.
@@ -81,7 +81,7 @@ class Actions extends AbsBase
         
 
         $redirect_to = self_admin_url('/admin.php');
-        $query_args  = array('page' => GLOBAL_NS, GLOBAL_NS.'_cache_wiped' => '1');
+        $query_args  = ['page' => GLOBAL_NS, GLOBAL_NS.'_cache_wiped' => '1'];
         $redirect_to = add_query_arg(urlencode_deep($query_args), $redirect_to);
 
         wp_redirect($redirect_to).exit();
@@ -107,7 +107,7 @@ class Actions extends AbsBase
         
 
         $redirect_to = self_admin_url('/admin.php'); // Redirect preparations.
-        $query_args  = array('page' => GLOBAL_NS, GLOBAL_NS.'_cache_cleared' => '1');
+        $query_args  = ['page' => GLOBAL_NS, GLOBAL_NS.'_cache_cleared' => '1'];
         $redirect_to = add_query_arg(urlencode_deep($query_args), $redirect_to);
 
         wp_redirect($redirect_to).exit();
@@ -167,7 +167,7 @@ class Actions extends AbsBase
         delete_transient(GLOBAL_NS.'-'.md5($this->plugin->options['auto_cache_sitemap_url']));
 
         $redirect_to = self_admin_url('/admin.php'); // Redirect preparations.
-        $query_args  = array('page' => GLOBAL_NS, GLOBAL_NS.'_updated' => '1');
+        $query_args  = ['page' => GLOBAL_NS, GLOBAL_NS.'_updated' => '1'];
 
         $this->plugin->autoWipeCache(); // May produce a notice.
 
@@ -232,7 +232,7 @@ class Actions extends AbsBase
         $this->plugin->restoreDefaultOptions(); // Restore defaults.
 
         $redirect_to = self_admin_url('/admin.php'); // Redirect preparations.
-        $query_args  = array('page' => GLOBAL_NS, GLOBAL_NS.'_restored' => '1');
+        $query_args  = ['page' => GLOBAL_NS, GLOBAL_NS.'_restored' => '1'];
 
         $this->plugin->autoWipeCache(); // May produce a notice.
 

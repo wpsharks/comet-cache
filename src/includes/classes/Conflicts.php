@@ -1,5 +1,5 @@
 <?php
-namespace WebSharks\CometCache;
+namespace WebSharks\CometCache\Classes;
 
 /**
  * Conflicts.
@@ -18,6 +18,7 @@ class Conflicts
         if (static::doCheck()) {
             static::maybeEnqueueNotice();
         }
+
         return $GLOBALS[GLOBAL_NS.'_conflicting_plugin'];
     }
 
@@ -31,13 +32,13 @@ class Conflicts
         if (!empty($GLOBALS[GLOBAL_NS.'_conflicting_plugin'])) {
             return $GLOBALS[GLOBAL_NS.'_conflicting_plugin'];
         }
-        $conflicting_plugin_slugs = array(
+        $conflicting_plugin_slugs = [
             'zencache', 'zencache-pro', 'quick-cache', 'quick-cache-pro',
             str_replace('_', '-', GLOBAL_NS).(IS_PRO ? '' : '-pro'),
             'wp-super-cache', 'w3-total-cache', 'hyper-cache', 'wp-rocket',
-        );
-        $active_plugins          = (array) get_option('active_plugins', array());
-        $active_sitewide_plugins = is_multisite() ? array_keys((array) get_site_option('active_sitewide_plugins', array())) : array();
+        ];
+        $active_plugins          = (array) get_option('active_plugins', []);
+        $active_sitewide_plugins = is_multisite() ? array_keys((array) get_site_option('active_sitewide_plugins', [])) : [];
         $active_plugins          = array_unique(array_merge($active_plugins, $active_sitewide_plugins));
 
         foreach ($active_plugins as $_active_plugin_basename) {
@@ -45,16 +46,17 @@ class Conflicts
                 continue; // Nothing to check in this case.
             }
             if (in_array($_active_plugin_slug, $conflicting_plugin_slugs, true)) {
-                if (empty($GLOBALS[GLOBAL_NS.'_uninstalling']) && is_admin() && in_array($_active_plugin_slug, array('comet-cache', 'comet-cache-pro', 'zencache', 'zencache-pro', 'quick-cache', 'quick-cache-pro'), true)) {
+                if (empty($GLOBALS[GLOBAL_NS.'_uninstalling']) && is_admin() && in_array($_active_plugin_slug, ['comet-cache', 'comet-cache-pro', 'zencache', 'zencache-pro', 'quick-cache', 'quick-cache-pro'], true)) {
                     add_action('admin_init', function () use ($_active_plugin_basename) {
                         deactivate_plugins($_active_plugin_basename, true);
-                     }, -1000);
+                    }, -1000);
                 } else {
-                    return ($GLOBALS[GLOBAL_NS.'_conflicting_plugin'] = $_active_plugin_slug);
+                    return $GLOBALS[GLOBAL_NS.'_conflicting_plugin'] = $_active_plugin_slug;
                 }
             }
         }
-        return ($GLOBALS[GLOBAL_NS.'_conflicting_plugin'] = ''); // i.e. No conflicting plugins.
+
+        return $GLOBALS[GLOBAL_NS.'_conflicting_plugin'] = ''; // i.e. No conflicting plugins.
     }
 
     /**

@@ -9,5 +9,7 @@ return array(
     'WebSharks\\JsMinifier\\' => array($vendorDir . '/websharks/js-minifier/src/includes/classes'),
     'WebSharks\\HtmlCompressor\\' => array($vendorDir . '/websharks/html-compressor/src/includes/classes'),
     'WebSharks\\CssMinifier\\' => array($vendorDir . '/websharks/css-minifier/src/includes/classes'),
-    'WebSharks\\CometCache\\' => array($baseDir . '/src/includes/classes'),
+    'WebSharks\\CometCache\\Traits\\' => array($baseDir . '/src/includes/traits'),
+    'WebSharks\\CometCache\\Interfaces\\' => array($baseDir . '/src/includes/interfaces'),
+    'WebSharks\\CometCache\\Classes\\' => array($baseDir . '/src/includes/classes'),
 );

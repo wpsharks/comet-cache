@@ -1,5 +1,5 @@
 <?php
-namespace WebSharks\CometCache;
+namespace WebSharks\CometCache\Classes;
 
 /**
  * Abstract Base.
@@ -20,21 +20,21 @@ abstract class AbsBase
      *
      * @since 150422 Rewrite.
      */
-    protected $cache = array();
+    protected $cache = [];
 
     /**
      * @type array Global static cache ref.
      *
      * @since 150422 Rewrite.
      */
-    protected $static = array();
+    protected $static = [];
 
     /**
      * @type array Global static cache.
      *
      * @since 150422 Rewrite.
      */
-    protected static $global_static = array();
+    protected static $global_static = [];
 
     /**
      * @type \stdClass Overload properties.
@@ -55,7 +55,7 @@ abstract class AbsBase
         $class = get_called_class();
 
         if (empty(static::$global_static[$class])) {
-            static::$global_static[$class] = array();
+            static::$global_static[$class] = [];
         }
         $this->static = &static::$global_static[$class];
 
@@ -76,7 +76,8 @@ abstract class AbsBase
         if (isset($instance)) {
             return $instance;
         }
-        return ($instance = new static());
+
+        return $instance = new static();
     }
 
     /**
@@ -167,7 +168,7 @@ abstract class AbsBase
      * @note This function returns by reference. The use of `&` is highly recommended when calling this utility.
      *    See also: <http://php.net/manual/en/language.references.return.php>
      */
-    public function &cacheKey($function, $args = array(), $___prop = 'cache')
+    public function &cacheKey($function, $args = [], $___prop = 'cache')
     {
         $function = (string) $function;
         $args     = (array) $args;
@@ -210,6 +211,7 @@ abstract class AbsBase
             }
             $cache_key = &$cache_key[$_key];
         }
+
         return $cache_key;
     }
 
@@ -224,7 +226,7 @@ abstract class AbsBase
      * @note This function returns by reference. The use of `&` is highly recommended when calling this utility.
      *    See also: <http://php.net/manual/en/language.references.return.php>
      */
-    public function &staticKey($function, $args = array())
+    public function &staticKey($function, $args = [])
     {
         $key = &$this->cacheKey($function, $args, 'static');
 
