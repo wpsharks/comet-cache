@@ -1,6 +1,6 @@
 === Comet Cache ===
 
-Stable tag: 160417
+Stable tag: 160514-RC
 Requires at least: 4.2
 Tested up to: 4.6-alpha
 Text Domain: comet-cache
@@ -338,7 +338,7 @@ Requires WordPress v4.2+.
 
 = v160417 =
 
-- **Bug Fix**: Fixed a "PHP Fatal error: Undefined class constant 'CACHE_PATH_NO_SCHEME'" with introduced by the previous release (v160416). This issue only affected sites where Feed Caching was enabled (_Comet Cache → Plugin Options → RSS, RDF, and Atom Feeds_). Props to MassimoD and @emanwebdev for reporting. See [Issue #739](https://github.com/websharks/comet-cache/issues/739).
+- **Bug Fix**: Fixed a "PHP Fatal error: Undefined class constant 'CACHE_PATH_NO_SCHEME'" introduced by the previous release (v160416). This issue only affected sites where Feed Caching was enabled (_Comet Cache → Plugin Options → RSS, RDF, and Atom Feeds_). Props to MassimoD and @emanwebdev for reporting. See [Issue #739](https://github.com/websharks/comet-cache/issues/739).
 
 = v160416 =
 
@@ -378,4 +378,4 @@ Requires WordPress v4.2+.
 - **Bug Fix (Multisite)**: Fixed a bug where when Comet Cache was Network Activated the plugin settings link would show up in the plugins list for the Main Site and would lead to a 404 error. The settings link is now only shown when viewing the plugins list from the Network Admin. Props @jaswsinc. See [Issue #675](https://github.com/websharks/zencache/issues/675).
 - **Enhancement**: Added support-related links to the plugin options page. Props @renzms. See [Issue #612](https://github.com/websharks/zencache/issues/612#issuecomment-186827661).
 
-For older Changelog entries going back to 2009, please see the `CHANGELOG.md` file.
+For older changelog history going back to 2009, please see [CHANGELOG.md](https://github.com/websharks/comet-cache/blob/master/CHANGELOG.md).

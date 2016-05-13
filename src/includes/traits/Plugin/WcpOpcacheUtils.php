@@ -64,6 +64,18 @@ trait WcpOpcacheUtils
     }
 
     /**
+     * Wipe the Opcache (by force).
+     *
+     * @since 16xxxx Improving OPCache support.
+     *
+     * @return int Total keys cleared.
+     */
+    public function wipeOpcacheByForce()
+    {
+        return $this->wipeOpcache(false, false);
+    }
+
+    /**
      * Clear AC class file from Opcache (by force).
      *
      * @since 151215 Adding OPCache support.

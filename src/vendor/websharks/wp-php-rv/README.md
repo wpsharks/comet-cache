@@ -2,7 +2,7 @@
 
 Stub for WordPress themes/plugins that require PHP vX.x+ (i.e. a minimum version that you define).
 
-![screenshot](screenshot.png)
+![](assets/screenshot.png)
 
 ---
 
@@ -20,23 +20,23 @@ Stub for WordPress themes/plugins that require PHP vX.x+ (i.e. a minimum version
 	Text Domain: my-plugin
 */
 $GLOBALS['wp_php_rv'] = '5.3'; // Require PHP vX.x+ (you configure this).
-if(require('wp-php-rv/src/includes/check.php')) // `TRUE` if running PHP vX.x+.
+if(require('wp-php-rv/src/includes/check.php')) // `true` if running PHP vX.x+.
 	require dirname(__FILE__).'/my-plugin-code.php'; // It's OK to load your plugin.
 else wp_php_rv_notice(); // Creates a nice PHP vX.x+ dashboard notice for the site owner.
 ```
 
 ---
 
-### Understanding `if(require('wp-php-rv/src/includes/check.php'))`
+### Alternate Approach
 
-The `check.php` file will automatically return `TRUE` upon using `include()` or `require()` in your scripts; i.e., iff the installation site is running PHP vX.x+ (as configured by `$GLOBALS['wp_php_rv']`). Otherwise it returns `FALSE`. Therefore, the simplest way to run your check is to use `if(require('wp-php-rv/src/includes/check.php'))`. **However**, you could also choose to do it this way.
+The `check.php` file will automatically return `true` upon using `include()` or `require()` in your scripts; i.e., iff the installation site is running PHP vX.x+ (as configured by `$GLOBALS['wp_php_rv']`). Otherwise it returns `false`. Therefore, the simplest way to run your check is to use `if(require('wp-php-rv/src/includes/check.php'))`. **However**, you could also choose to do it this way.
 
 ```php
 <?php
 $GLOBALS['wp_php_rv'] = '5.3'; // Require PHP vX.x+.
 require 'wp-php-rv/src/includes/check.php'; // Include.
 
-if(wp_php_rv()) // `TRUE` if running PHP vX.x+.
+if(wp_php_rv()) // `true` if running PHP vX.x+.
 	require dirname(__FILE__).'/my-plugin-code.php'; // It's OK to load your plugin.
 else wp_php_rv_notice(); // Creates a nice PHP vX.x+ dashboard notice for the site owner.
 ```
@@ -48,24 +48,12 @@ else wp_php_rv_notice(); // Creates a nice PHP vX.x+ dashboard notice for the si
 ```php
 <?php
 $GLOBALS['wp_php_rv'] = '5.3'; // Require PHP vX.x+.
-if(require('wp-php-rv/src/includes/check.php')) // `TRUE` if running PHP vX.x+.
+if(require('wp-php-rv/src/includes/check.php')) // `true` if running PHP vX.x+.
 	require dirname(__FILE__).'/my-plugin-code.php'; // It's OK to load your plugin.
 else wp_php_rv_notice('My Plugin'); // Dashboard notice mentions your software specifically.
 ```
 
-_NOTE: If you omit the `$software_name` argument, a default value is used instead. The default value is `ucwords('[calling file basedir]')`; e.g., if `/my-plugin/stub.php` calls `wp-php-rv/src/includes/check.php`, the default `$software_name` automatically becomes `My Plugin`. Nice!_
-
----
-
-### Using a Custom Dashboard Notice
-
-```php
-<?php
-$GLOBALS['wp_php_rv'] = '5.3'; // Require PHP vX.x+.
-if(require('wp-php-rv/src/includes/check.php')) // `TRUE` if running PHP vX.x+.
-	require dirname(__FILE__).'/my-plugin-code.php'; // It's OK to load your plugin.
-else wp_php_rv_custom_notice('My Plugin requires PHP v5.3+'); // Custom Dashboard notice.
-```
+**Note:** If you omit the `$brand_name` argument, a default value is used instead. The default value is `ucwords('[calling file basedir]')`; e.g., if `/my-plugin/stub.php` calls `wp-php-rv/src/includes/check.php`, the default `$software_name` automatically becomes `My Plugin`. Nice!
 
 ---
 
@@ -92,15 +80,15 @@ Yes, `$GLOBALS['wp_php_rv']` can be either a string with a required version, or 
 
 ```php
 <?php
-$GLOBALS['wp_php_rv']['rv'] = '5.3';
-$GLOBALS['wp_php_rv']['re'] = array('curl', 'mbstring');
+$GLOBALS['wp_php_rv']['min'] = '5.3';
+// $GLOBALS['wp_php_rv']['max'] = '7.0.4';
+// $GLOBALS['wp_php_rv']['bits'] = 64;
+$GLOBALS['wp_php_rv']['extensions'] = array('curl', 'mbstring');
 
-if(require('wp-php-rv/src/includes/check.php')) // `TRUE` if running PHP vX.x+ w/ all required extensions.
+if(require('wp-php-rv/src/includes/check.php')) // `true` if running PHP vX.x+ w/ all required extensions.
 	require dirname(__FILE__).'/my-plugin-code.php'; // It's OK to load your plugin.
 else wp_php_rv_notice('My Plugin'); // Dashboard notice mentions your software specifically.
 ```
-
-_**Note**: with this technique, the dashboard notice may vary depending on the scenario. If only the required PHP version is missing, the dashboard notice will mention this only. If the required PHP version is satisified, but the PHP installation is missing one or more required PHP extensions, only those required extensions will be mentioned to a site owner. If neither can be satisfied (i.e. the required version of PHP is missing, AND one or more required PHP extensions are missing too), the dashboard notice will mention both the required version of PHP, and include a list of the required PHP extensions they are missing. ~ Also, when/if missing PHP extensions are listed for a site owner, they're automatically linked up, leading a site owner to the relevant section of the manual at PHP.net._
 
 ---
 

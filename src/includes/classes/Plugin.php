@@ -191,6 +191,8 @@ class Plugin extends AbsBaseAp
             'cache_clear_urls',
 
             'when_logged_in',
+            'when_logged_in_admin_bar',
+
             'version_salt',
 
             'htmlc_enable',
@@ -300,7 +302,7 @@ class Plugin extends AbsBaseAp
 
             'cache_clear_term_category_enable' => '1', // `0|1`.
             'cache_clear_term_post_tag_enable' => '1', // `0|1`.
-            'cache_clear_term_other_enable'    => '0', // `0|1`.
+            'cache_clear_term_other_enable'    => '1', // `0|1`.
 
             /* Misc. cache behaviors. */
 
@@ -340,6 +342,9 @@ class Plugin extends AbsBaseAp
             'htmlc_compress_js_code'               => '1', // `0|1`.
             'htmlc_compress_html_code'             => '1', // `0|1`.
             'htmlc_when_logged_in'                 => '0', // `0|1`; enable when logged in?
+
+            /* Related to Logged-In User Caching */
+            'when_logged_in_admin_bar' => '0', // `0|1`; enable when logged in?
 
             /* Related to auto-cache engine. */
 
@@ -457,6 +462,7 @@ class Plugin extends AbsBaseAp
         add_action('admin_init', [$this, 'autoClearCacheOnSettingChanges']);
         add_action('safecss_save_pre', [$this, 'autoClearCacheOnJetpackCustomCss'], 10, 1);
         add_action('upgrader_process_complete', [$this, 'autoClearOnUpgraderProcessComplete'], 10, 2);
+        add_action('upgrader_process_complete', [$this, 'wipeOpcacheByForce'], PHP_INT_MAX);
 
         add_action('switch_theme', [$this, 'autoClearCache']);
         add_action('wp_create_nav_menu', [$this, 'autoClearCache']);
