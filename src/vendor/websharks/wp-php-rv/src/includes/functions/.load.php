@@ -1,6 +1,6 @@
 <?php
 /**
- * Back compat. file.
+ * PHP vX.x Handlers.
  *
  * @since 160503 Reorganizing structure.
  *
@@ -11,4 +11,5 @@
 /*
  * Load all functions.
  */
-require_once dirname(__FILE__).'/.load.php';
+require_once dirname(__FILE__).'/checks.php';
+require_once dirname(__FILE__).'/notices.php';

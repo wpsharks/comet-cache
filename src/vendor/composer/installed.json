@@ -227,23 +227,23 @@
     },
     {
         "name": "websharks/wp-php-rv",
-        "version": "150511",
-        "version_normalized": "150511",
+        "version": "160504",
+        "version_normalized": "160504",
         "source": {
             "type": "git",
             "url": "https://github.com/websharks/wp-php-rv.git",
-            "reference": "ed0a58f3647e59c740560235da1e61904dca8d84"
+            "reference": "275e387f582ca8bf96354abe0aa10c3e0d7a3fe8"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/websharks/wp-php-rv/zipball/ed0a58f3647e59c740560235da1e61904dca8d84",
-            "reference": "ed0a58f3647e59c740560235da1e61904dca8d84",
+            "url": "https://api.github.com/repos/websharks/wp-php-rv/zipball/275e387f582ca8bf96354abe0aa10c3e0d7a3fe8",
+            "reference": "275e387f582ca8bf96354abe0aa10c3e0d7a3fe8",
             "shasum": ""
         },
         "require": {
             "php": ">=5.2"
         },
-        "time": "2015-05-10 10:30:04",
+        "time": "2016-05-05 07:44:00",
         "type": "library",
         "installation-source": "dist",
         "notification-url": "https://packagist.org/downloads/",

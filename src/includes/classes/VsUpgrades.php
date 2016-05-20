@@ -41,6 +41,7 @@ class VsUpgrades extends AbsBase
         $this->fromLte151107();
         $this->fromLte151114();
         $this->fromZenCache();
+        $this->fromLte160227();
     }
 
     /**
@@ -202,6 +203,24 @@ class VsUpgrades extends AbsBase
                 '<p>'.sprintf(__('NOTE: Your ZenCache options were preserved by %1$s (for more details, visit the <a href="%2$s" target="_blank">Migration FAQ</a>).'.'', 'comet-cache'), esc_html(NAME), esc_attr(IS_PRO ? 'http://cometcache.com/r/zencache-pro-migration-faq/' : 'https://cometcache.com/r/zencache-migration-faq/')).'</p>'.
                 '<p>'.sprintf(__('To review your configuration, please see: <a href="%2$s">%1$s → Plugin Options</a>.'.'', 'comet-cache'), esc_html(NAME), esc_attr(add_query_arg(urlencode_deep(['page' => GLOBAL_NS]), self_admin_url('/admin.php')))).'</p>'
             );
+        }
+    }
+
+    /**
+     * Before we enabled "Auto-Clear Custom Term Archive Views" by default.
+     *
+     * @since 160521
+     */
+    protected function fromLte160227()
+    {
+        if (version_compare($this->prev_version, '160227', '<=')) {
+            if (is_array($existing_options = get_site_option(GLOBAL_NS.'_options'))) {
+                $this->plugin->options['cache_clear_term_other_enable'] = $this->plugin->default_options['cache_clear_term_other_enable'];
+                if ($this->plugin->options !== $existing_options) {
+                    $this->plugin->updateOptions($this->plugin->options); // Save/update options.
+                    $this->plugin->activate(); // Reactivate plugin w/ new options.
+                }
+            }
         }
     }
 }

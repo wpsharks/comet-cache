@@ -1,6 +1,6 @@
 === Comet Cache ===
 
-Stable tag: 160417
+Stable tag: 160521
 Requires at least: 4.2
 Tested up to: 4.6-alpha
 Text Domain: comet-cache
@@ -336,9 +336,17 @@ Requires WordPress v4.2+.
 
 == Changelog ==
 
+= v160521 =
+
+- **Bug Fix**: Fixed a bug that, in some scenarios, resulted in "PHP Fatal error: Undefined class constant 'CACHE_PATH_NO_PATH_INDEX'". This also affected the Cache Statistics feature (Comet Cache Pro), resulting in a blank panel when hovering over the Cache Stats button in the menu bar. See [Issue #752](https://github.com/websharks/comet-cache/issues/752).
+- **Bug Fix**: When the PHP OPCache extension is active, the OPCache is now cleared when a WordPress plugin is upgraded, activated, or deactivated. This works around an issue that could produce a fatal error when the PHP OPCache contains cached PHP code that conflicts with new PHP code introduced by an update. See [Issue #740](https://github.com/websharks/comet-cache/issues/740).
+- **Enhancement** (Pro): It's now possible to disable the WordPress Admin Toolbar when Logged-In User Caching is enabled with a new option in _Comet Cache → Plugin Options → Logged-In Users → Disable the Admin Toolbar for Logged-In Users & Comment Authors?_ Props @renzms and @KTS915. See [Issue #690](https://github.com/websharks/comet-cache/issues/690).
+- **Enhancement**: The the option to automatically clear the cache for Custom Term Archive Views (see _Comet Cache → Plugin Options → Automatic Cache Clearing → Auto-Clear "Custom Term Archives" Too?_) is now enabled by default. This feature was previously disabled by default, which lead to confusion about why those cache files were not being cleared automatically when a Custom Post Type with a Custom Term Archive View was being used. Props @renzms. See [Issue #693](https://github.com/websharks/comet-cache/issues/693).
+- **Enhancement** (Pro): A new filter allows overriding the default behavior to clear the user cache upon login and logout when caching for Logged-In Users is enabled. See [this article](https://cometcache.com/r/kb-article-how-can-i-prevent-the-user-cache-from-being-cleared-upon-login-or-logout/) for details. Props @KTS915. See [Issue #756](https://github.com/websharks/comet-cache/issues/756).
+
 = v160417 =
 
-- **Bug Fix**: Fixed a "PHP Fatal error: Undefined class constant 'CACHE_PATH_NO_SCHEME'" with introduced by the previous release (v160416). This issue only affected sites where Feed Caching was enabled (_Comet Cache → Plugin Options → RSS, RDF, and Atom Feeds_). Props to MassimoD and @emanwebdev for reporting. See [Issue #739](https://github.com/websharks/comet-cache/issues/739).
+- **Bug Fix**: Fixed a "PHP Fatal error: Undefined class constant 'CACHE_PATH_NO_SCHEME'" introduced by the previous release (v160416). This issue only affected sites where Feed Caching was enabled (_Comet Cache → Plugin Options → RSS, RDF, and Atom Feeds_). Props to MassimoD and @emanwebdev for reporting. See [Issue #739](https://github.com/websharks/comet-cache/issues/739).
 
 = v160416 =
 
@@ -378,4 +386,4 @@ Requires WordPress v4.2+.
 - **Bug Fix (Multisite)**: Fixed a bug where when Comet Cache was Network Activated the plugin settings link would show up in the plugins list for the Main Site and would lead to a 404 error. The settings link is now only shown when viewing the plugins list from the Network Admin. Props @jaswsinc. See [Issue #675](https://github.com/websharks/zencache/issues/675).
 - **Enhancement**: Added support-related links to the plugin options page. Props @renzms. See [Issue #612](https://github.com/websharks/zencache/issues/612#issuecomment-186827661).
 
-For older Changelog entries going back to 2009, please see the `CHANGELOG.md` file.
+For older changelog history going back to 2009, please see [CHANGELOG.md](https://github.com/websharks/comet-cache/blob/master/CHANGELOG.md).

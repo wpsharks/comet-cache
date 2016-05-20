@@ -2,14 +2,13 @@
 namespace WebSharks\CometCache\Classes;
 
 use WebSharks\CometCache\Traits;
-use WebSharks\CometCache\Interfaces;
 
 /**
  * Abstract Base for Advanced Cache and Plugin.
  *
  * @since 150422 Rewrite.
  */
-abstract class AbsBaseAp extends AbsBase implements Interfaces\Shared\NcDebugConsts, Interfaces\Shared\CachePathConsts
+abstract class AbsBaseAp extends AbsBase
 {
     /*[.build.php-auto-generate-use-Traits]*/
     use Traits\Shared\BlogUtils;

@@ -1,14 +1,12 @@
 <?php
 namespace WebSharks\CometCache\Classes;
 
-use WebSharks\CometCache\Interfaces;
-
 /**
  * Feed Utils.
  *
  * @since 150422 Rewrite.
  */
-class FeedUtils extends AbsBase implements Interfaces\Shared\CachePathConsts
+class FeedUtils extends AbsBase
 {
     /**
      * @type string WordPress `home_url()`.
