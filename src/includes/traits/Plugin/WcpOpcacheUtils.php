@@ -66,7 +66,7 @@ trait WcpOpcacheUtils
     /**
      * Wipe the Opcache (by force).
      *
-     * @since 16xxxx Improving OPCache support.
+     * @since 160521 Improving OPCache support.
      *
      * @return int Total keys cleared.
      */

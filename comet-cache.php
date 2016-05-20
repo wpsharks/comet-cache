@@ -1,8 +1,8 @@
 <?php
 /*
-Version: 160514-RC
+Version: 160521
 Text Domain: comet-cache
-Plugin Name: Comet Cache Pro
+Plugin Name: Comet Cache
 Network: true
 
 Author: WebSharks, Inc.

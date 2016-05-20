@@ -209,7 +209,7 @@ class VsUpgrades extends AbsBase
     /**
      * Before we enabled "Auto-Clear Custom Term Archive Views" by default.
      *
-     * @since 16xxxx
+     * @since 160521
      */
     protected function fromLte160227()
     {

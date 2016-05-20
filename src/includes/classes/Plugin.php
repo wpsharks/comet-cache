@@ -344,7 +344,7 @@ class Plugin extends AbsBaseAp
             'htmlc_when_logged_in'                 => '0', // `0|1`; enable when logged in?
 
             /* Related to Logged-In User Caching */
-            'when_logged_in_admin_bar' => '0', // `0|1`; enable when logged in?
+            'when_logged_in_admin_bar' => '1', // `0|1`; enable when logged in?
 
             /* Related to auto-cache engine. */
 
