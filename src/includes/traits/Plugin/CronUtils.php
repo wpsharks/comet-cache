@@ -34,7 +34,7 @@ trait CronUtils
      */
     public function checkCronSetup()
     {
-        if ($this->options['crons_setup'] < 1439005906
+        if ((!get_transient('doing_cron') && $this->options['crons_setup'] < 1439005906)
             || $this->options['crons_setup_on_namespace'] !== __NAMESPACE__
             || $this->options['crons_setup_with_cache_cleanup_schedule'] !== $this->options['cache_cleanup_schedule']
             || $this->options['crons_setup_on_wp_with_schedules'] !== sha1(serialize(wp_get_schedules()))

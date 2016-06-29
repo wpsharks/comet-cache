@@ -1,0 +1,131 @@
+.plugin-menu-page-panel {
+  margin:                     1em 0;
+
+  &:first-child {
+    margin-top:               0;
+  }
+
+  .plugin-menu-page-panel-heading {
+    @include user-select(none);
+    @include sharkicon(chevron-down, after);
+
+    text-decoration:          none;
+    padding:                  10px;
+    font-size:                150%;
+    line-height:              1.125em;
+    font-weight:              bold;
+    border-radius:            4px;
+    display:                  block;
+    cursor:                   pointer;
+    background:               $panel-heading-bg-color;
+    background:               linear-gradient(to right, $panel-heading-bg-color , $panel-heading-bg-color-fade);
+    color:                    $panel-heading-color !important;
+    box-shadow:               0 2px 2px 0 $panel-heading-box-shadow-color;
+
+    &:hover,
+    &.open {
+      color:                  $panel-heading-hover-color !important;
+    }
+
+    &::after {
+      font-size:              80%;
+      float:                  right;
+      margin:                 0 0 0 5px;
+    }
+
+    &.open::after {
+      content:                map-get($sharkicons, chevron-up);
+    }
+
+    @at-root .pro-preview-feature {
+      @at-root .plugin-menu-page-panel-heading.pro-preview-feature {
+        background : #216095;
+      }
+
+      &::after {
+        font-variant:         small-caps !important;
+        font-family:          sans-serif !important;
+        content:              'pro version only' !important;
+        margin-left:          15px;
+        background:           #216095;
+        color:                #FFFFFF;
+        padding:              0 5px 2px 5px;
+        font-weight:          normal;
+      }
+    }
+
+    @at-root .pro-preview-additional-features {
+      @at-root .plugin-menu-page-panel-heading.pro-preview-additional-features {
+        background : #216095;
+      }
+      &::after {
+        font-variant:         small-caps !important;
+        font-family:          sans-serif !important;
+        content:              'additional pro features' !important;
+        margin-left:          15px;
+        background:           #216095;
+        color:                #FFFFFF;
+        padding:              0 5px 2px 5px;
+        font-weight:          normal;
+      }
+    }
+
+    > .si {
+      text-align:             center;
+      width:                  1.28571429em;
+      margin-right:          .25em;
+    }
+  }
+
+  .plugin-menu-page-panel-body {
+    width:                    99%;
+    margin:                   0 auto;
+    display:                  none;
+    padding:                  1.2em;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    box-sizing:               border-box;
+    color:                    $panel-body-color;
+    border:                   1px solid $panel-body-border-color;
+    background:               $panel-body-bg-color;
+    box-shadow:               0 1px 1px 0 $panel-body-box-shadow-color-a, 0 3px 1px -1px $panel-body-box-shadow-color-b inset;
+
+    &.open {
+      display:                block;
+    }
+
+    p {
+      font-size:              90%;
+      color:                  $panel-body-p-color;
+    }
+
+    p.notice,
+    p.info,
+    p.warning,
+    p.error {
+      color:                  $panel-body-p-notice-color;
+    }
+
+    h3 {
+      margin:                 0 0 0.5em;
+    }
+
+    h3:first-child {
+      margin-top:             0;
+    }
+
+    h3 + p {
+      margin-top:             0;
+    }
+
+    a.dotted {
+      text-decoration:        none;
+      border-bottom:          1px dotted;
+    }
+
+    &.pro-preview,
+    .pro-preview {
+      opacity:                0.5;
+    }
+  }
+}

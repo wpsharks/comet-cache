@@ -1,0 +1,20 @@
+#wpwrap {
+  position:                   relative;
+
+  &::after {
+    top:                      0;
+    right:                    0;
+    bottom:                   0;
+    left:                     0;
+    z-index:                 -1;
+    position:                 absolute;
+    content:                  '';
+    opacity:                  0.25;
+    background:               url('../images/bg.png');
+  }
+
+  .updated,
+  .error {
+    margin:                   1.25em 1.25em 1.25em 0.25em;
+  }
+}

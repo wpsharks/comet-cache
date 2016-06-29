@@ -32,13 +32,13 @@ trait StringUtils
         $max_length = max(4, $max_length);
 
         $string = strip_tags($string);
-        $string = preg_replace('/\s+/', ' ', strip_tags($string));
+        $string = preg_replace('/\s+/u', ' ', strip_tags($string));
         $string = trim($string); // Trim it up now.
 
-        if (strlen($string) > $max_length) {
-            $string = (string) substr($string, 0, $max_length - 3).'...';
-        } elseif ($force_ellipsis && strlen($string) + 3 > $max_length) {
-            $string = (string) substr($string, 0, $max_length - 3).'...';
+        if (mb_strlen($string) > $max_length) {
+            $string = (string) mb_substr($string, 0, $max_length - 3).'...';
+        } elseif ($force_ellipsis && mb_strlen($string) + 3 > $max_length) {
+            $string = (string) mb_substr($string, 0, $max_length - 3).'...';
         } else {
             $string .= $force_ellipsis ? '...' : '';
         }
@@ -71,10 +71,10 @@ trait StringUtils
         $max_length = max(4, $max_length);
 
         $string = strip_tags($string);
-        $string = preg_replace('/\s+/', ' ', strip_tags($string));
+        $string = preg_replace('/\s+/u', ' ', strip_tags($string));
         $string = trim($string); // Trim it up now.
 
-        if (strlen($string) <= $max_length) {
+        if (mb_strlen($string) <= $max_length) {
             return $string; // Nothing to do.
         }
         $full_string     = $string;
@@ -82,12 +82,12 @@ trait StringUtils
 
         $first_clip = $half_max_length - 3;
         $string     = $first_clip >= 1 // Something?
-            ? substr($full_string, 0, $first_clip).'...'
+            ? mb_substr($full_string, 0, $first_clip).'...'
             : '...'; // Ellipsis only.
 
-        $second_clip = strlen($full_string) - ($max_length - strlen($string));
+        $second_clip = mb_strlen($full_string) - ($max_length - mb_strlen($string));
         $string .= $second_clip >= 0 && $second_clip >= $first_clip
-            ? substr($full_string, $second_clip) : '';
+            ? mb_substr($full_string, $second_clip) : '';
 
         return $string;
     }

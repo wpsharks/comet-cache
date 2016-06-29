@@ -1,0 +1,228 @@
+.plugin-menu-page {
+  min-width:                  800px;
+  margin:                     1.25em 1.25em 1.25em 0.25em;
+
+  &,
+  p {
+    font-size:                14px;
+  }
+
+  a {
+    color:                    $anchor-color;
+
+    &:hover,
+    &:active {
+      color:                  $anchor-hover-active-color;
+    }
+  }
+
+  p:first-child,
+  pre:first-child {
+    margin-top:               0;
+  }
+
+  p:last-child,
+  pre:last-child {
+    margin-bottom:            0;
+  }
+
+  code {
+    border-radius:            3px;
+    padding:                  0.1em 0.25em;
+    background:               $code-bg-color;
+    font-family:              'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace;
+  }
+
+  pre {
+    &.code {
+      padding:                0;
+      background:             none;
+
+      > code {
+        font-size:            90%;
+        overflow-x:           auto;
+        max-width:            100%;
+        border-radius:        4px;
+        padding:              1em;
+        display:              block;
+        color:                $pre-code-color;
+        background:           $pre-code-bg-color;
+        box-shadow:           0 0 5px 1px $pre-code-box-shadow-color inset;
+      }
+    }
+  }
+
+  img {
+    border:                   0;
+
+    &.screenshot {
+      float:                  right;
+      border-radius:          4px;
+      padding:                0.5em;
+      margin:                 0 0 2em 2em;
+      background:             $img-screenshot-bg-color;
+      border:                 1px solid $img-screenshot-border-color;
+      box-shadow:             0 0 5px 0 $img-screenshot-box-shadow-color inset;
+    }
+  }
+
+  hr {
+    border:                   0;
+    padding:                  0;
+    height:                   1px;
+    margin:                   1em 0;
+    background:               linear-gradient(to left, $hr-bg-color-a, $hr-bg-color-b, $hr-bg-color-c);
+  }
+
+  label {
+    @include user-select(none);
+
+    &.switch-primary {
+      font-size:              130%;
+      margin:                 0;
+      padding:                0.5em;
+      border-radius:          4px;
+      display:                inline;
+      color:                  $primary-switch-color;
+      background:             $primary-switch-bg-color;
+      border:                 1px solid $primary-switch-border-color;
+      box-shadow:            -1px -1px 0 0 $primary-switch-box-shadow-color-a inset, 1px 1px 0 0 $primary-switch-box-shadow-color-b inset;
+    }
+  }
+
+  select,
+  textarea,
+  select:focus,
+  textarea:focus,
+  input:not([type='radio']):not([type='checkbox']),
+  input:not([type='radio']):not([type='checkbox']):focus {
+    width:                    100%;
+    line-height:              1.3em;
+    margin:                   0;
+    padding:                  0.25em 0.5em;
+    border-radius:            4px;
+    box-sizing:               border-box;
+    color:                    $input-color;
+    background:               $input-bg-color;
+    border:                   1px solid $input-border-color;
+    box-shadow:               0 0 2px 0 $input-box-shadow-color inset;
+  }
+
+  select,
+  select:focus {
+    box-shadow:               0 1px 0 0 $input-focus-box-shadow-color-a inset, 0 -2px 3px 0 $input-focus-box-shadow-color-b inset;
+  }
+
+  select,
+  select:focus,
+  input:not([type='radio']):not([type='checkbox']),
+  input:not([type='radio']):not([type='checkbox']):focus {
+    height:                   2em;
+  }
+
+  select:focus,
+  textarea:focus,
+  input:not([type='radio']):not([type='checkbox']):focus {
+    color:                    $input-focus-color;
+    background:               $input-focus-bg-color;
+  }
+
+  input[disabled],
+  select[disabled],
+  textarea[disabled] {
+    opacity:                  0.5;
+  }
+
+  input,
+  textarea {
+    @include placeholder {
+      font-style:             italic;
+      color:                  $input-placeholder-color;
+    }
+  }
+
+  table {
+    margin:                   1em 0;
+  }
+
+  button {
+    @include user-select(none);
+
+    font-size:                150%;
+    font-weight:              bold;
+    line-height:              1em;
+    outline:                  none;
+    cursor:                   pointer;
+    border-radius:            4px;
+    margin:                   0;
+    padding:                  0.25em 0.5em;
+    box-sizing:               border-box;
+    color:                    $button-color;
+    background:               $button-bg-color;
+    border:                   1px solid $button-border-color;
+    box-shadow:               0 1px 1px 0 $button-box-shadow-color-a, -1px -1px 0 0 $button-box-shadow-color-b inset, 1px 1px 0 0 $button-box-shadow-color-c inset;
+
+    &:hover {
+      background:             $button-hover-bg-color;
+    }
+
+    &[type='submit'] {
+      background:             $button-submit-bg-color;
+    }
+
+    &[type='submit']:hover {
+      background:             $button-submit-hover-bg-color;
+    }
+
+    &:active {
+      @include transform(scale(0.98, 0.98));
+    }
+  }
+
+  .info,
+  .notice,
+  .warning,
+  .error {
+    border-radius:            4px;
+    padding:                  0.5em;
+    margin:                   1em 0;
+  }
+
+  .info {
+    background:               $info-bg-color;
+    border:                   1px solid $info-border-color;
+  }
+
+  .notice {
+    background:               $notice-bg-color;
+    border:                   1px solid $notice-border-color;
+  }
+
+  .warning {
+    background:               $warning-bg-color;
+    border:                   1px solid $warning-border-color;
+  }
+
+  .error {
+    background:               $error-bg-color;
+    border:                   1px solid $error-border-color;
+  }
+
+  .monospace {
+    font-family:              'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace;
+  }
+
+  textarea.monospace {
+    white-space:              pre;
+  }
+
+  .clearfix::before,
+  .clearfix::after {
+    display:                  table;
+    content:                  ' ';
+  }
+
+  .clearfix::after {
+    clear:                    both;
+  }
+}

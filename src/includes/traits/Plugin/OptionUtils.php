@@ -35,7 +35,7 @@ trait OptionUtils
         unset($_key, $_value); // Housekeeping.
 
         $this->options['base_dir'] = trim($this->options['base_dir'], '\\/'." \t\n\r\0\x0B");
-        if (!$this->options['base_dir'] || strpos(basename($this->options['base_dir']), 'wp-') === 0) {
+        if (!$this->options['base_dir'] || mb_strpos(basename($this->options['base_dir']), 'wp-') === 0) {
             $this->options['base_dir'] = $this->default_options['base_dir'];
         }
         return $this->options; // Plugin options.

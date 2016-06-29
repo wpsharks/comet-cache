@@ -142,15 +142,15 @@ trait CacheDirUtils
 
         $cache_dir_tmp_regex = $regex; // Initialize host-specific regex pattern for the tmp directory.
         $cache_dir_tmp_regex = '\\/'.ltrim($cache_dir_tmp_regex, '^\\/'); // Make sure it begins with an escaped `/`.
-        $cache_dir_tmp_regex = $this->strIreplaceOnce(preg_quote($cache_dir.'/', '/'), '', $cache_dir_tmp_regex);
+        $cache_dir_tmp_regex = preg_replace('/'.preg_quote(preg_quote($cache_dir.'/', '/'), '/').'/ui', '', $cache_dir_tmp_regex, 1);
 
         $cache_dir_tmp_regex = ltrim($cache_dir_tmp_regex, '^\\/');
-        if (strpos($cache_dir_tmp_regex, '(?:\/') === 0 || strpos($cache_dir_tmp_regex, '(\/') === 0) {
+        if (mb_strpos($cache_dir_tmp_regex, '(?:\/') === 0 || mb_strpos($cache_dir_tmp_regex, '(\/') === 0) {
             $cache_dir_tmp_regex = '/^'.preg_quote($cache_dir_tmp, '/').$cache_dir_tmp_regex;
         } else {
             $cache_dir_tmp_regex = '/^'.preg_quote($cache_dir_tmp.'/', '/').$cache_dir_tmp_regex;
         }
-        # if(WP_DEBUG) file_put_contents(WP_CONTENT_DIR.'/'.strtolower(SHORT_NAME).'-debug.log', print_r($regex, TRUE)."\n".print_r($cache_dir_tmp_regex, TRUE)."\n\n", FILE_APPEND);
+        # if(WP_DEBUG) file_put_contents(WP_CONTENT_DIR.'/'.mb_strtolower(SHORT_NAME).'-debug.log', print_r($regex, TRUE)."\n".print_r($cache_dir_tmp_regex, TRUE)."\n\n", FILE_APPEND);
         // Uncomment the above line to debug regex pattern matching used by this routine; and others that call upon it.
 
         if (!rename($cache_dir, $cache_dir_tmp)) {
@@ -161,7 +161,7 @@ trait CacheDirUtils
             $_sub_path_name = $_resource->getSubpathname();
             $_path_name     = $_resource->getPathname();
 
-            if ($_resource_type !== 'dir' && strpos($_sub_path_name, '/') === false) {
+            if ($_resource_type !== 'dir' && mb_strpos($_sub_path_name, '/') === false) {
                 continue; // Don't delete links/files in the immediate directory; e.g. `[SHORT_NAME]-advanced-cache` or `.htaccess`, etc.
                 // Actual `http|https/...` cache links/files are nested. Links/files in the immediate directory are for other purposes.
             }
@@ -269,6 +269,18 @@ trait CacheDirUtils
         if (!is_dir($cache_dir = $this->cacheDir())) {
             return $counter; // Nothing to do.
         }
+        // On a standard installation delete from all hosts.
+        // See: <https://github.com/websharks/comet-cache/issues/608>
+        if (!is_multisite() && !$___considering_domain_mapping) {
+            $regex = ltrim($regex, '^\\/');
+
+            if (mb_strpos($regex, '(?:\/') === 0 || mb_strpos($regex, '(\/') === 0) {
+                $regex = '/^https?\/[^\/]+'.$regex;
+            } else {
+                $regex = '/^https?\/[^\/]+\/'.$regex;
+            }
+            return $this->deleteFilesFromCacheDir($regex, $check_max_age);
+        }
         $cache_dir            = $this->nDirSeps($cache_dir); // Normalize.
         $host_token           = $current_host_token           = $this->hostToken();
         $host_base_dir_tokens = $current_host_base_dir_tokens = $this->hostBaseDirTokens();
@@ -307,16 +319,16 @@ trait CacheDirUtils
 
             $_host_cache_dir_tmp_regex = $regex; // Initialize host-specific regex pattern for the tmp directory.
             $_host_cache_dir_tmp_regex = '\\/'.ltrim($_host_cache_dir_tmp_regex, '^\\/'); // Make sure it begins with an escaped `/`.
-            $_host_cache_dir_tmp_regex = $this->strIreplaceOnce(preg_quote($_host_cache_path.'/', '/'), '', $_host_cache_dir_tmp_regex);
-            $_host_cache_dir_tmp_regex = $this->strIreplaceOnce(preg_quote($_host_cache_dir.'/', '/'), '', $_host_cache_dir_tmp_regex);
+            $_host_cache_dir_tmp_regex = preg_replace('/'.preg_quote(preg_quote($_host_cache_path.'/', '/'), '/').'/ui', '', $_host_cache_dir_tmp_regex, 1);
+            $_host_cache_dir_tmp_regex = preg_replace('/'.preg_quote(preg_quote($_host_cache_dir.'/', '/'), '/').'/ui', '', $_host_cache_dir_tmp_regex, 1);
 
             $_host_cache_dir_tmp_regex = ltrim($_host_cache_dir_tmp_regex, '^\\/');
-            if (strpos($_host_cache_dir_tmp_regex, '(?:\/') === 0 || strpos($_host_cache_dir_tmp_regex, '(\/') === 0) {
+            if (mb_strpos($_host_cache_dir_tmp_regex, '(?:\/') === 0 || mb_strpos($_host_cache_dir_tmp_regex, '(\/') === 0) {
                 $_host_cache_dir_tmp_regex = '/^'.preg_quote($_host_cache_dir_tmp, '/').$_host_cache_dir_tmp_regex;
             } else {
                 $_host_cache_dir_tmp_regex = '/^'.preg_quote($_host_cache_dir_tmp.'/', '/').$_host_cache_dir_tmp_regex;
             }
-            #if(WP_DEBUG) file_put_contents(WP_CONTENT_DIR.'/'.strtolower(SHORT_NAME).'-debug.log', print_r($regex, TRUE)."\n".print_r($_host_cache_dir_tmp_regex, TRUE)."\n\n", FILE_APPEND);
+            #if(WP_DEBUG) file_put_contents(WP_CONTENT_DIR.'/'.mb_strtolower(SHORT_NAME).'-debug.log', print_r($regex, TRUE)."\n".print_r($_host_cache_dir_tmp_regex, TRUE)."\n\n", FILE_APPEND);
             // Uncomment the above line to debug regex pattern matching used by this routine; and others that call upon it.
 
             if (!rename($_host_cache_dir, $_host_cache_dir_tmp)) {
@@ -327,7 +339,7 @@ trait CacheDirUtils
                 $_sub_path_name = $_resource->getSubpathname();
                 $_path_name     = $_resource->getPathname();
 
-                if ($_host_cache_dir === $cache_dir && $_resource_type !== 'dir' && strpos($_sub_path_name, '/') === false) {
+                if ($_host_cache_dir === $cache_dir && $_resource_type !== 'dir' && mb_strpos($_sub_path_name, '/') === false) {
                     continue; // Don't delete links/files in the immediate directory; e.g. `[SHORT_NAME]-advanced-cache` or `.htaccess`, etc.
                     // Actual `http|https/...` cache links/files are nested. Links/files in the immediate directory are for other purposes.
                 }
@@ -458,10 +470,10 @@ trait CacheDirUtils
         $wp_content_dir       = $this->nDirSeps(WP_CONTENT_DIR);
         $wp_content_dir_regex = preg_quote($wp_content_dir, '/');
 
-        if (!preg_match('/^'.$wp_content_dir_regex.'\/[^\/]+/i', $dir)) {
+        if (!preg_match('/^'.$wp_content_dir_regex.'\/[^\/]+/ui', $dir)) {
             return $counter; // Security flag; do nothing in this case.
         }
-        if (preg_match('/^'.$wp_content_dir_regex.'\/(?:mu\-plugins|themes|plugins)(?:\/|$)/i', $dir)) {
+        if (preg_match('/^'.$wp_content_dir_regex.'\/(?:mu\-plugins|themes|plugins)(?:\/|$)/ui', $dir)) {
             return $counter; // Security flag; do nothing in this case.
         }
         /* ------- Begin lock state... ----------- */
@@ -564,10 +576,10 @@ trait CacheDirUtils
         $wp_content_dir       = $this->nDirSeps(WP_CONTENT_DIR);
         $wp_content_dir_regex = preg_quote($wp_content_dir, '/');
 
-        if (!preg_match('/^'.$wp_content_dir_regex.'\/[^\/]+/i', $dir)) {
+        if (!preg_match('/^'.$wp_content_dir_regex.'\/[^\/]+/ui', $dir)) {
             return $counter; // Security flag; do nothing in this case.
         }
-        if (preg_match('/^'.$wp_content_dir_regex.'\/(?:mu\-plugins|themes|plugins)(?:\/|$)/i', $dir)) {
+        if (preg_match('/^'.$wp_content_dir_regex.'\/(?:mu\-plugins|themes|plugins)(?:\/|$)/ui', $dir)) {
             return $counter; // Security flag; do nothing in this case.
         }
         clearstatcache(); // Clear stat cache to be sure we have a fresh start below.

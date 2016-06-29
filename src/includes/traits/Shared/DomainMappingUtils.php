@@ -74,7 +74,7 @@ trait DomainMappingUtils
         if (empty($url_parts['host'])) {
             return $original_url; // Not possible.
         }
-        $blog_domain = strtolower($url_parts['host']); // In the unfiltered URL.
+        $blog_domain = mb_strtolower($url_parts['host']); // In the unfiltered URL.
         $blog_path   = $this->hostDirToken(false, false, !empty($url_parts['path']) ? $url_parts['path'] : '/');
 
         if (!($blog_id = (integer) get_blog_id_from_url($blog_domain, $blog_path))) {
@@ -86,7 +86,7 @@ trait DomainMappingUtils
         $url_parts['host'] = $domain; // Filter the URL now.
         if (!empty($url_parts['path']) && $url_parts['path'] !== '/') {
             if (($host_base_dir_tokens = trim($this->hostBaseDirTokens(false, false, $url_parts['path']), '/'))) {
-                $url_parts['path'] = preg_replace('/^\/'.preg_quote($host_base_dir_tokens, '/').'(\/|$)/i', '${1}', $url_parts['path']);
+                $url_parts['path'] = preg_replace('/^\/'.preg_quote($host_base_dir_tokens, '/').'(\/|$)/ui', '${1}', $url_parts['path']);
             }
         }
         return $url = $this->unParseUrl($url_parts);
@@ -159,9 +159,9 @@ trait DomainMappingUtils
         if (!$url && !$domain && ($blog_details = $this->blogDetails())) {
             $domain = $blog_details->domain;
         }
-        $domain = strtolower(preg_replace('/^www\./i', '', $domain));
+        $domain = mb_strtolower(preg_replace('/^www\./ui', '', $domain));
 
-        if (!$domain || strpos($domain, '.') === false) {
+        if (!$domain || mb_strpos($domain, '.') === false) {
             return 0; // Not possible.
         }
         if (!is_null($blog_id = &$this->staticKey('domainMappingBlogId', $domain))) {
@@ -217,7 +217,7 @@ trait DomainMappingUtils
         if (!$enforcing_primary_domain) {
             if ($this->isDomainMapping() === $blog_id) {
                 $domain = $this->hostToken();
-                $domain = preg_replace('/^www\./i', '', $domain);
+                $domain = preg_replace('/^www\./ui', '', $domain);
                 $domain = (string) $wpdb->get_var('SELECT `domain` FROM `'.esc_sql($wpdb->base_prefix.'domain_mapping').'` WHERE `blog_id` = \''.esc_sql($blog_id).'\' AND `domain` IN(\''.esc_sql('www.'.$domain).'\', \''.esc_sql($domain).'\') ORDER BY CHAR_LENGTH(`domain`) DESC LIMIT 1');
             } elseif (($domains = $this->domainMappingBlogDomains($blog_id))) {
                 $domain = $domains[0]; // Use the first of all possible domains.
@@ -230,7 +230,7 @@ trait DomainMappingUtils
         }
         $wpdb->suppress_errors($suppressing_errors); // Restore.
 
-        return $domain = strtolower((string) $domain);
+        return $domain = mb_strtolower((string) $domain);
     }
 
     /**
@@ -272,6 +272,6 @@ trait DomainMappingUtils
         }
         $wpdb->suppress_errors($suppressing_errors); // Restore.
 
-        return $domains = array_unique(array_map('strtolower', (array) $domains));
+        return $domains = array_unique(array_map('mb_strtolower', (array) $domains));
     }
 }

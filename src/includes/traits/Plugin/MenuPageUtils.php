@@ -14,7 +14,7 @@ trait MenuPageUtils
      */
     public function enqueueAdminStyles()
     {
-        if (empty($_GET['page']) || strpos($_GET['page'], GLOBAL_NS) !== 0) {
+        if (empty($_GET['page']) || mb_strpos($_GET['page'], GLOBAL_NS) !== 0) {
             return; // NOT a plugin page in the administrative area.
         }
         $deps = []; // Plugin dependencies.
@@ -31,7 +31,7 @@ trait MenuPageUtils
      */
     public function enqueueAdminScripts()
     {
-        if (empty($_GET['page']) || strpos($_GET['page'], GLOBAL_NS) !== 0) {
+        if (empty($_GET['page']) || mb_strpos($_GET['page'], GLOBAL_NS) !== 0) {
             return; // NOT a plugin page in the administrative area.
         }
         $deps = ['jquery', 'chartjs']; // Plugin dependencies.
@@ -159,7 +159,7 @@ trait MenuPageUtils
         $current_pagenow = !empty($GLOBALS['pagenow']) ? $GLOBALS['pagenow'] : '';
         $current_page    = !empty($_REQUEST['page']) ? $_REQUEST['page'] : '';
 
-        if (strpos($current_pagenow, GLOBAL_NS) === 0 || strpos($current_page, GLOBAL_NS) === 0) {
+        if (mb_strpos($current_pagenow, GLOBAL_NS) === 0 || mb_strpos($current_page, GLOBAL_NS) === 0) {
             $use_icon_fill_color = $icon_colors['current'];
         }
         return str_replace(' fill="currentColor"', ' fill="'.esc_attr($use_icon_fill_color).'"', $svg);

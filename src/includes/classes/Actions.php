@@ -160,6 +160,7 @@ class Actions extends AbsBase
             unset($args['last_pro_update_check']); // CANNOT be imported!
             unset($args['last_pro_stats_log']); // CANNOT be imported!
         }
+        
         $args = $this->plugin->trimDeep(stripslashes_deep((array) $args));
         $this->plugin->updateOptions($args); // Save/update options.
 
@@ -187,7 +188,7 @@ class Actions extends AbsBase
                 $query_args[GLOBAL_NS.'_advanced_cache_add_failure'] = $add_advanced_cache === null ? 'advanced-cache' : '1';
             }
             if (!$this->plugin->options['auto_cache_enable']) {
-                $this->plugin->dismissMainNotice('allow_url_fopen_disabled'); // Dismiss and check again on `admin_init` via `autoCacheMaybeClearPhpIniError()`
+                $this->plugin->dismissMainNotice('auto_cache_engine_minimum_requirements'); // Dismiss and check again on `admin_init` via `autoCacheMaybeClearPhpReqsError()`
             }
             if (!$this->plugin->options['auto_cache_enable'] || !$this->plugin->options['auto_cache_sitemap_url']) {
                 $this->plugin->dismissMainNotice('xml_sitemap_missing'); // Dismiss and check again on `admin_init` via `autoCacheMaybeClearPrimaryXmlSitemapError()`
@@ -204,7 +205,7 @@ class Actions extends AbsBase
                 $query_args[GLOBAL_NS.'_advanced_cache_remove_failure'] = '1';
             }
             $this->plugin->dismissMainNotice('xml_sitemap_missing'); // Dismiss notice when disabling plugin
-            $this->plugin->dismissMainNotice('allow_url_fopen_disabled'); // Dismiss notice when disabling plugin
+            $this->plugin->dismissMainNotice('auto_cache_engine_minimum_requirements'); // Dismiss notice when disabling plugin
         }
         $redirect_to = add_query_arg(urlencode_deep($query_args), $redirect_to);
 

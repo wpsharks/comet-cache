@@ -71,7 +71,7 @@ trait WcpPostUtils
         }
         if ($post_status === 'draft' && isset($GLOBALS['pagenow'], $_POST['publish'])
             && is_admin() && $GLOBALS['pagenow'] === 'post.php' && current_user_can('publish_posts')
-            && strpos(wp_get_referer(), '/post-new.php') !== false
+            && mb_strpos(wp_get_referer(), '/post-new.php') !== false
         ) {
             $post_status = 'publish'; // A new post being published now.
         }

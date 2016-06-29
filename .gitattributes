@@ -8,6 +8,12 @@
 # Log files.
 *.log text
 
+# YAML files.
+*.yml
+
+# Property files.
+*.properties text
+
 # Translation files.
 *.pot text
 
@@ -148,3 +154,23 @@
 *.exe binary
 *.sh text
 *.so binary
+
+# Archive ignores.
+/assets/ export-ignore
+/phings/ export-ignore
+/tests/ export-ignore
+/.git* export-ignore
+/.tags export-ignore
+/post-receive export-ignore
+/.drone.yml export-ignore
+/.drone.sec export-ignore
+/.travis.yml export-ignore
+/.coveralls.yml export-ignore
+/.scrutinizer.yml export-ignore
+/.build.props export-ignore
+/build.xml export-ignore
+
+# LFS storage locations.
+/assets/** filter=lfs diff=lfs merge=lfs -text
+
+# Custom code reinserted here via [custom] marker. Add your <custom></custom> comment markers here please.

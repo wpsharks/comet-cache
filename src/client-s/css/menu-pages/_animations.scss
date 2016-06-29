@@ -1,0 +1,23 @@
+// Animation :: spin.
+
+@mixin plugin-menu-page-animation-spin {
+  @include animation-duration(0.75s);
+  @include animation-fill-mode(both);
+  @include animation-timing-function(linear);
+  @include animation-iteration-count(infinite);
+  @include animation-name(plugin-menu-page-animation-spin);
+}
+
+.plugin-menu-page-animation-spin {
+  @include plugin-menu-page-animation-spin;
+}
+
+@include keyframes(plugin-menu-page-animation-spin) {
+  0% {
+    @include transform(rotate(0deg));
+  }
+
+  100% {
+    @include transform(rotate(360deg));
+  }
+}

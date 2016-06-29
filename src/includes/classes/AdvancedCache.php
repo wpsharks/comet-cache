@@ -13,7 +13,7 @@ class AdvancedCache extends AbsBaseAp
     /*[.build.php-auto-generate-use-Traits]*/
     use Traits\Ac\AbortUtils;
     use Traits\Ac\AcPluginUtils;
-    use Traits\Ac\BrowserUtils;
+    use Traits\Ac\ClientSideUtils;
     use Traits\Ac\NcDebugUtils;
     use Traits\Ac\ObUtils;
     use Traits\Ac\PostloadUtils;

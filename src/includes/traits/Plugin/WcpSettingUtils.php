@@ -31,6 +31,7 @@ trait WcpSettingUtils
         } elseif ($pagenow === 'options-discussion.php' && $settings_updated) {
             $counter += $this->autoClearCache();
         } elseif ($pagenow === 'options-permalink.php' && $settings_updated) {
+            $this->addWpHtaccess(); // Update .htaccess if applicable
             $counter += $this->autoClearCache();
         }
     }

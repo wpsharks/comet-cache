@@ -44,16 +44,16 @@ class AdvCacheBackCompat
      */
     public static function zenCacheConstants()
     {
-        $_global_ns = strtoupper(GLOBAL_NS);
+        $_global_ns = mb_strtoupper(GLOBAL_NS);
 
         if (!($constants = get_defined_constants(true)) || empty($constants['user'])) {
             return; // Nothing to do; i.e. no user-defined constants.
         }
         foreach ($constants['user'] as $_constant => $_value) {
-            if (stripos($_constant, 'ZENCACHE_') !== 0) {
+            if (mb_stripos($_constant, 'ZENCACHE_') !== 0) {
                 continue; // Nothing to do here.
             }
-            if (!($_constant_sub_name = substr($_constant, 9))) {
+            if (!($_constant_sub_name = mb_substr($_constant, 9))) {
                 continue; // Nothing to do here.
             }
             if (!defined($_global_ns.'_'.$_constant_sub_name)) {
@@ -65,5 +65,19 @@ class AdvCacheBackCompat
         }
 
         unset($_constant, $_value, $_global_ns); // Housekeeping.
+    }
+
+    /**
+     * Back compat. with `COMET_CACHE_ALLOW_BROWSER_CACHE` constants.
+     *
+     * @since 16xxxx Renaming COMET_CACHE_ALLOW_BROWSER_CACHE to COMET_CACHE_ALLOW_CLIENT_SIDE_CACHE
+     */
+    public static function browserCacheConstant()
+    {
+        $_global_ns = mb_strtoupper(GLOBAL_NS);
+
+        if (defined('COMET_CACHE_ALLOW_BROWSER_CACHE')) {
+            define($_global_ns.'_ALLOW_CLIENT_SIDE_CACHE', COMET_CACHE_ALLOW_BROWSER_CACHE);
+        }
     }
 }

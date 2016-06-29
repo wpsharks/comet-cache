@@ -53,7 +53,7 @@ trait IpAddrUtils
             unset($_key, $_source, $_valid_public_ip); // Housekeeping.
         }
         if (!empty($_SERVER['REMOTE_ADDR'])) {
-            return $ip = strtolower((string) $_SERVER['REMOTE_ADDR']);
+            return $ip = mb_strtolower((string) $_SERVER['REMOTE_ADDR']);
         }
         return $ip = 'unknown'; // Not possible.
     }
@@ -79,7 +79,7 @@ trait IpAddrUtils
             return ''; // Not possible; i.e., empty string.
         }
         foreach (preg_split('/[\s;,]+/', $list_of_possible_ips, -1, PREG_SPLIT_NO_EMPTY) as $_key => $_possible_ip) {
-            if (($_valid_public_ip = filter_var(strtolower($_possible_ip), FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE))) {
+            if (($_valid_public_ip = filter_var(mb_strtolower($_possible_ip), FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE))) {
                 return $_valid_public_ip; // A valid public IPv4 or IPv6 address.
             }
         }

@@ -13,11 +13,11 @@ if (!defined('WPINC')) {
 require_once dirname(__DIR__).'/vendor/autoload.php';
 require_once __DIR__.'/functions/i18n-utils.php';
 
-${__FILE__}['version'] = '160521'; //version//
+${__FILE__}['version'] = '160629-RC'; //version//
 ${__FILE__}['plugin']  = dirname(dirname(__DIR__));
 ${__FILE__}['plugin'] .= '/'.basename(${__FILE__}['plugin']).'.php';
 ${__FILE__}['ns_path'] = str_replace('\\', '/', __NAMESPACE__); // To dir/path.
-${__FILE__}['is_pro']  = strtolower(basename(${__FILE__}['ns_path'])) === 'pro';
+${__FILE__}['is_pro']  = mb_strtolower(basename(${__FILE__}['ns_path'])) === 'pro';
 
 define(__NAMESPACE__.'\\SHORT_NAME', 'CC');
 define(__NAMESPACE__.'\\NAME', 'Comet Cache');

@@ -126,7 +126,7 @@ trait ObUtils
         if (isset($_SERVER['DONOTCACHEPAGE'])) {
             return $this->maybeSetDebugInfo($this::NC_DEBUG_DONOTCACHEPAGE_SERVER_VAR);
         }
-        if (isset($_GET[strtolower(SHORT_NAME).'AC']) && !filter_var($_GET[strtolower(SHORT_NAME).'AC'], FILTER_VALIDATE_BOOLEAN)) {
+        if (isset($_GET[mb_strtolower(SHORT_NAME).'AC']) && !filter_var($_GET[mb_strtolower(SHORT_NAME).'AC'], FILTER_VALIDATE_BOOLEAN)) {
             return $this->maybeSetDebugInfo($this::NC_DEBUG_AC_GET_VAR);
         }
         if ($this->isUncacheableRequestMethod()) {
@@ -140,13 +140,13 @@ trait ObUtils
         if (!COMET_CACHE_FEEDS_ENABLE && $this->isFeed()) {
             return $this->maybeSetDebugInfo($this::NC_DEBUG_FEED_REQUEST);
         }
-        if (preg_match('/\/(?:wp\-[^\/]+|xmlrpc)\.php(?:[?]|$)/i', $_SERVER['REQUEST_URI'])) {
+        if (preg_match('/\/(?:wp\-[^\/]+|xmlrpc)\.php(?:[?]|$)/ui', $_SERVER['REQUEST_URI'])) {
             return $this->maybeSetDebugInfo($this::NC_DEBUG_WP_SYSTEMATICS);
         }
-        if (is_admin() || preg_match('/\/wp-admin(?:[\/?]|$)/i', $_SERVER['REQUEST_URI'])) {
+        if (is_admin() || preg_match('/\/wp-admin(?:[\/?]|$)/ui', $_SERVER['REQUEST_URI'])) {
             return $this->maybeSetDebugInfo($this::NC_DEBUG_WP_ADMIN);
         }
-        if (is_multisite() && preg_match('/\/files(?:[\/?]|$)/i', $_SERVER['REQUEST_URI'])) {
+        if (is_multisite() && preg_match('/\/files(?:[\/?]|$)/ui', $_SERVER['REQUEST_URI'])) {
             return $this->maybeSetDebugInfo($this::NC_DEBUG_MS_FILES);
         }
         if ((!IS_PRO || !COMET_CACHE_WHEN_LOGGED_IN) && $this->isLikeUserLoggedIn()) {
@@ -157,6 +157,9 @@ trait ObUtils
         }
         if (!empty($_REQUEST['preview'])) {
             return $this->maybeSetDebugInfo($this::NC_DEBUG_PREVIEW);
+        }
+        if (COMET_CACHE_EXCLUDE_HOSTS && preg_match(COMET_CACHE_EXCLUDE_HOSTS, $_SERVER['HTTP_HOST'])) {
+            return $this->maybeSetDebugInfo($this::NC_DEBUG_EXCLUDED_HOSTS);
         }
         if (COMET_CACHE_EXCLUDE_URIS && preg_match(COMET_CACHE_EXCLUDE_URIS, $_SERVER['REQUEST_URI'])) {
             return $this->maybeSetDebugInfo($this::NC_DEBUG_EXCLUDED_URIS);
@@ -202,7 +205,7 @@ trait ObUtils
 
             $headers_list = $this->headersList();
             foreach (unserialize($headers) as $_header) {
-                if (!in_array($_header, $headers_list, true) && stripos($_header, 'Last-Modified:') !== 0) {
+                if (!in_array($_header, $headers_list, true) && mb_stripos($_header, 'Last-Modified:') !== 0) {
                     header($_header); // Only cacheable/safe headers are stored in the cache.
                 }
             }
@@ -271,7 +274,7 @@ trait ObUtils
         if ((!IS_PRO || !COMET_CACHE_WHEN_LOGGED_IN) && $this->isLikeUserLoggedIn()) {
             return (boolean) $this->maybeSetDebugInfo($this::NC_DEBUG_IS_LIKE_LOGGED_IN_USER);
         }
-        if (!COMET_CACHE_CACHE_NONCE_VALUES && preg_match('/\b(?:_wpnonce|akismet_comment_nonce)\b/', $cache)) {
+        if (!COMET_CACHE_CACHE_NONCE_VALUES && preg_match('/\b(?:_wpnonce|akismet_comment_nonce)\b/u', $cache)) {
             if (IS_PRO && COMET_CACHE_WHEN_LOGGED_IN && $this->isLikeUserLoggedIn()) {
                 if (!COMET_CACHE_CACHE_NONCE_VALUES_WHEN_LOGGED_IN) {
                     return (boolean) $this->maybeSetDebugInfo($this::NC_DEBUG_IS_LOGGED_IN_USER_NONCE);
@@ -283,7 +286,7 @@ trait ObUtils
         if ($this->is_404 && !COMET_CACHE_CACHE_404_REQUESTS) {
             return (boolean) $this->maybeSetDebugInfo($this::NC_DEBUG_404_REQUEST);
         }
-        if (stripos($cache, '<body id="error-page">') !== false) {
+        if (mb_stripos($cache, '<body id="error-page">') !== false) {
             return (boolean) $this->maybeSetDebugInfo($this::NC_DEBUG_WP_ERROR_PAGE);
         }
         if (!$this->hasACacheableContentType()) {
@@ -334,8 +337,9 @@ trait ObUtils
 
         if (COMET_CACHE_DEBUGGING_ENABLE && $this->isHtmlXmlDoc($cache)) {
             $total_time = number_format(microtime(true) - $this->timer, 5, '.', ''); // Based on the original timer.
+            $via = IS_PRO && $this->isAutoCacheEngine() ? __('Auto-Cache Engine', 'comet-cache') : __('HTTP request', 'comet-cache');
             $cache .= "\n".'<!-- '.htmlspecialchars(sprintf(__('%1$s file path: %2$s', 'comet-cache'), NAME, str_replace(WP_CONTENT_DIR, '', $this->is_404 ? $this->cache_file_404 : $this->cache_file))).' -->';
-            $cache .= "\n".'<!-- '.htmlspecialchars(sprintf(__('%1$s file built for (%2$s%3$s) in %4$s seconds, on: %5$s.', 'comet-cache'), NAME, $this->is_404 ? '404 [error document]' : $this->salt_location, (IS_PRO && COMET_CACHE_WHEN_LOGGED_IN && $this->user_token ? '; '.sprintf(__('user token: %1$s', 'comet-cache'), $this->user_token) : ''), $total_time, date('M jS, Y @ g:i a T'))).' -->';
+            $cache .= "\n".'<!-- '.htmlspecialchars(sprintf(__('%1$s file built for (%2$s%3$s) in %4$s seconds, on: %5$s; via %6$s.', 'comet-cache'), NAME, $this->is_404 ? '404 [error document]' : $this->salt_location, (IS_PRO && COMET_CACHE_WHEN_LOGGED_IN && $this->user_token ? '; '.sprintf(__('user token: %1$s', 'comet-cache'), $this->user_token) : ''), $total_time, date('M jS, Y @ g:i a T'), $via)).' -->';
             $cache .= "\n".'<!-- '.htmlspecialchars(sprintf(__('This %1$s file will auto-expire (and be rebuilt) on: %2$s (based on your configured expiration time).', 'comet-cache'), NAME, date('M jS, Y @ g:i a T', strtotime('+'.COMET_CACHE_MAX_AGE)))).' -->';
         }
         if ($this->is_404) {

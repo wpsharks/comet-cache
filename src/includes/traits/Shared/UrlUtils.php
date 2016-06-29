@@ -19,9 +19,9 @@ trait UrlUtils
     {
         $url_uri_qsl = (string) $url_uri_qsl;
         $component   = (integer) $component;
-        ${'//'}      = strpos($url_uri_qsl, '//') === 0;
+        ${'//'}      = mb_strpos($url_uri_qsl, '//') === 0;
 
-        if ($url_uri_qsl && strpos($url_uri_qsl, '&amp;') !== false) {
+        if ($url_uri_qsl && mb_strpos($url_uri_qsl, '&amp;') !== false) {
             $url_uri_qsl = str_replace('&amp;', '&', $url_uri_qsl);
         }
         if ($component > -1) {
@@ -135,6 +135,9 @@ trait UrlUtils
      */
     public function currentUrl()
     {
+        if (empty($_SERVER['HTTP_HOST']) || empty($_SERVER['REQUEST_URI'])) {
+            return ''; // Not possible.
+        }
         return ($this->isSsl() ? 'https://' : 'http://').$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
     }
 }

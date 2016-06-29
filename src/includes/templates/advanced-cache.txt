@@ -37,6 +37,7 @@ if (defined('WP_DEBUG') && WP_DEBUG) {
 }
 Classes\AdvCacheBackCompat::zenCacheConstants();
 Classes\AdvCacheBackCompat::zcRequestVars();
+Classes\AdvCacheBackCompat::browserCacheConstant();
 
 if (!defined('COMET_CACHE_PRO')) {
     /**
@@ -68,7 +69,7 @@ if (!defined('COMET_CACHE_DEBUGGING_ENABLE')) {
      */
     define('COMET_CACHE_DEBUGGING_ENABLE', '%%COMET_CACHE_DEBUGGING_ENABLE%%');
 }
-if (!defined('COMET_CACHE_ALLOW_BROWSER_CACHE')) {
+if (!defined('COMET_CACHE_ALLOW_CLIENT_SIDE_CACHE')) {
     /**
      * Allow browsers to cache each document?
      *
@@ -79,7 +80,7 @@ if (!defined('COMET_CACHE_ALLOW_BROWSER_CACHE')) {
      * @note If this is a `FALSE` (or an empty) value; Comet Cache will send no-cache headers.
      *    If `TRUE`, Comet Cache will NOT send no-cache headers.
      */
-    define('COMET_CACHE_ALLOW_BROWSER_CACHE', '%%COMET_CACHE_ALLOW_BROWSER_CACHE%%');
+    define('COMET_CACHE_ALLOW_CLIENT_SIDE_CACHE', '%%COMET_CACHE_ALLOW_CLIENT_SIDE_CACHE%%');
 }
 if (!defined('COMET_CACHE_GET_REQUESTS')) {
     /**
@@ -153,6 +154,16 @@ if (!defined('COMET_CACHE_MAX_AGE')) {
     define('COMET_CACHE_MAX_AGE', '%%COMET_CACHE_MAX_AGE%%');
 }
 
+if (!defined('COMET_CACHE_EXCLUDE_HOSTS')) {
+    /**
+     * Host exclusions.
+     *
+     * @since 16xxxx Adding host exclusions.
+     *
+     * @var string A regular expression; else an empty string.
+     */
+    define('COMET_CACHE_EXCLUDE_HOSTS', '%%COMET_CACHE_EXCLUDE_HOSTS%%');
+}
 if (!defined('COMET_CACHE_EXCLUDE_URIS')) {
     /**
      * URI exclusions.

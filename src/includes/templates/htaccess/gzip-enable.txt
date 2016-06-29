@@ -1,0 +1,11 @@
+# Enable GZIP compression.
+<IfModule deflate_module>
+  <IfModule filter_module>
+    AddOutputFilterByType DEFLATE text/plain text/html
+    AddOutputFilterByType DEFLATE text/xml application/xml application/xhtml+xml application/xml-dtd
+    AddOutputFilterByType DEFLATE application/rdf+xml application/rss+xml application/atom+xml image/svg+xml
+    AddOutputFilterByType DEFLATE text/css text/javascript application/javascript application/x-javascript
+    AddOutputFilterByType DEFLATE font/opentype application/font-otf application/x-font-otf
+    AddOutputFilterByType DEFLATE font/truetype application/font-ttf application/x-font-ttf
+  </IfModule>
+</IfModule>

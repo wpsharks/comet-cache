@@ -60,8 +60,8 @@ trait HookUtils
     public function addHook($hook, $function, $priority = 10, $accepted_args = 1)
     {
         $hook = (string) $hook;
-        if (stripos($hook, 'zencache') === 0) {
-            $hook = GLOBAL_NS.substr($hook, strlen('zencache'));
+        if (mb_stripos($hook, 'zencache') === 0) {
+            $hook = GLOBAL_NS.mb_substr($hook, mb_strlen('zencache'));
         }
         $priority      = (integer) $priority;
         $accepted_args = max(0, (integer) $accepted_args);
@@ -130,8 +130,8 @@ trait HookUtils
     public function removeHook($hook, $function, $priority = 10)
     {
         $hook = (string) $hook;
-        if (stripos($hook, 'zencache') === 0) {
-            $hook = GLOBAL_NS.substr($hook, strlen('zencache'));
+        if (mb_stripos($hook, 'zencache') === 0) {
+            $hook = GLOBAL_NS.mb_substr($hook, mb_strlen('zencache'));
         }
         $priority = (integer) $priority;
         $hook_id  = $this->hookId($function);
@@ -246,8 +246,8 @@ trait HookUtils
         $args = func_get_args();
         call_user_func_array('do_action', $args);
 
-        if (stripos($hook, GLOBAL_NS) === 0) {
-            $zencache_filter  = 'zencache'.substr($hook, strlen(GLOBAL_NS));
+        if (mb_stripos($hook, GLOBAL_NS) === 0) {
+            $zencache_filter  = 'zencache'.mb_substr($hook, mb_strlen(GLOBAL_NS));
             $zencache_args    = $args; // Use a copy of the args.
             $zencache_args[0] = $zencache_filter;
             call_user_func_array('do_action', $zencache_args);
@@ -269,8 +269,8 @@ trait HookUtils
         $args  = func_get_args();
         $value = call_user_func_array('apply_filters', $args);
 
-        if (stripos($hook, GLOBAL_NS) === 0) {
-            $zencache_hook    = 'zencache'.substr($hook, strlen(GLOBAL_NS));
+        if (mb_stripos($hook, GLOBAL_NS) === 0) {
+            $zencache_hook    = 'zencache'.mb_substr($hook, mb_strlen(GLOBAL_NS));
             $zencache_args    = $args; // Use a copy of the args.
             $zencache_args[0] = $zencache_hook;
             $zencache_args[1] = $value; // Filtered value.

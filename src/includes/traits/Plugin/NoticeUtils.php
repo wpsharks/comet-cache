@@ -151,7 +151,7 @@ trait NoticeUtils
             }
             # Current URI matches a limited scope/context for this notice?
 
-            if ($_notice['only_on_uris'] && !@preg_match($_notice['only_on_uris'], $_SERVER['REQUEST_URI'])) {
+            if ($_notice['only_on_uris'] && (empty($_SERVER['REQUEST_URI']) || !@preg_match($_notice['only_on_uris'], $_SERVER['REQUEST_URI']))) {
                 continue; // Not in the right context at the moment; i.e., does not regex.
             }
             # If persistent, allow a site owner to dismiss.

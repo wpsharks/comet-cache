@@ -18,10 +18,10 @@ trait ServerUtils
             return $is; // Already cached this.
         }
         if (!empty($_SERVER['SERVER_SOFTWARE']) && is_string($_SERVER['SERVER_SOFTWARE'])) {
-            if (stripos($_SERVER['SERVER_SOFTWARE'], 'apache') !== false) {
+            if (mb_stripos($_SERVER['SERVER_SOFTWARE'], 'apache') !== false) {
                 return $is = true;
             }
-            if (stripos($_SERVER['SERVER_SOFTWARE'], 'litespeed') !== false) {
+            if (mb_stripos($_SERVER['SERVER_SOFTWARE'], 'litespeed') !== false) {
                 return $is = true;
             }
         }
@@ -41,7 +41,7 @@ trait ServerUtils
             return $is; // Already cached this.
         }
         if (!empty($_SERVER['SERVER_SOFTWARE']) && is_string($_SERVER['SERVER_SOFTWARE'])) {
-            if (stripos($_SERVER['SERVER_SOFTWARE'], 'nginx') !== false) {
+            if (mb_stripos($_SERVER['SERVER_SOFTWARE'], 'nginx') !== false) {
                 return $is = true;
             }
         }
@@ -61,10 +61,10 @@ trait ServerUtils
             return $is; // Already cached this.
         }
         if (!empty($_SERVER['SERVER_SOFTWARE']) && is_string($_SERVER['SERVER_SOFTWARE'])) {
-            if (stripos($_SERVER['SERVER_SOFTWARE'], 'microsoft-iis') !== false) {
+            if (mb_stripos($_SERVER['SERVER_SOFTWARE'], 'microsoft-iis') !== false) {
                 return $is = true;
             }
-            if (stripos($_SERVER['SERVER_SOFTWARE'], 'expressiondevserver') !== false) {
+            if (mb_stripos($_SERVER['SERVER_SOFTWARE'], 'expressiondevserver') !== false) {
                 return $is = true;
             }
         }

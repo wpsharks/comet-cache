@@ -150,16 +150,16 @@ trait InstallUtils
         if (!($wp_config_file_contents_no_whitespace = php_strip_whitespace($wp_config_file))) {
             return ''; // Failure; file empty
         }
-        if (preg_match('/\bdefine\s*\(\s*([\'"])WP_CACHE\\1\s*,\s*(?:\-?[1-9][0-9\.]*|TRUE|([\'"])(?:[^0\'"]|[^\'"]{2,})\\2)\s*\)\s*;/i', $wp_config_file_contents_no_whitespace)) {
+        if (preg_match('/\bdefine\s*\(\s*([\'"])WP_CACHE\\1\s*,\s*(?:\-?[1-9][0-9\.]*|TRUE|([\'"])(?:[^0\'"]|[^\'"]{2,})\\2)\s*\)\s*;/ui', $wp_config_file_contents_no_whitespace)) {
             return $wp_config_file_contents; // It's already in there; no need to modify this file.
         }
         if (!($wp_config_file_contents = $this->removeWpCacheFromWpConfig())) {
             return ''; // Unable to remove previous value.
         }
-        if (!($wp_config_file_contents = preg_replace('/^\s*(\<\?php|\<\?)\s+/i', '${1}'."\n"."define('WP_CACHE', TRUE);"."\n", $wp_config_file_contents, 1))) {
+        if (!($wp_config_file_contents = preg_replace('/^\s*(\<\?php|\<\?)\s+/ui', '${1}'."\n"."define('WP_CACHE', TRUE);"."\n", $wp_config_file_contents, 1))) {
             return ''; // Failure; something went terribly wrong here.
         }
-        if (strpos($wp_config_file_contents, "define('WP_CACHE', TRUE);") === false) {
+        if (mb_strpos($wp_config_file_contents, "define('WP_CACHE', TRUE);") === false) {
             return ''; // Failure; unable to add; unexpected PHP code.
         }
         if (defined('DISALLOW_FILE_MODS') && DISALLOW_FILE_MODS) {
@@ -196,16 +196,16 @@ trait InstallUtils
         if (!($wp_config_file_contents_no_whitespace = php_strip_whitespace($wp_config_file))) {
             return ''; // Failure; file empty
         }
-        if (!preg_match('/([\'"])WP_CACHE\\1/i', $wp_config_file_contents_no_whitespace)) {
+        if (!preg_match('/([\'"])WP_CACHE\\1/ui', $wp_config_file_contents_no_whitespace)) {
             return $wp_config_file_contents; // Already gone.
         }
-        if (preg_match('/\bdefine\s*\(\s*([\'"])WP_CACHE\\1\s*,\s*(?:0|FALSE|NULL|([\'"])0?\\2)\s*\)\s*;/i', $wp_config_file_contents_no_whitespace) && !is_writable($wp_config_file)) {
+        if (preg_match('/\bdefine\s*\(\s*([\'"])WP_CACHE\\1\s*,\s*(?:0|FALSE|NULL|([\'"])0?\\2)\s*\)\s*;/ui', $wp_config_file_contents_no_whitespace) && !is_writable($wp_config_file)) {
             return $wp_config_file_contents; // It's already disabled, and since we can't write to this file let's let this slide.
         }
-        if (!($wp_config_file_contents = preg_replace('/\bdefine\s*\(\s*([\'"])WP_CACHE\\1\s*,\s*(?:\-?[0-9\.]+|TRUE|FALSE|NULL|([\'"])[^\'"]*\\2)\s*\)\s*;/i', '', $wp_config_file_contents))) {
+        if (!($wp_config_file_contents = preg_replace('/\bdefine\s*\(\s*([\'"])WP_CACHE\\1\s*,\s*(?:\-?[0-9\.]+|TRUE|FALSE|NULL|([\'"])[^\'"]*\\2)\s*\)\s*;/ui', '', $wp_config_file_contents))) {
             return ''; // Failure; something went terribly wrong here.
         }
-        if (preg_match('/([\'"])WP_CACHE\\1/i', $wp_config_file_contents)) {
+        if (preg_match('/([\'"])WP_CACHE\\1/ui', $wp_config_file_contents)) {
             return ''; // Failure; perhaps the `/wp-config.php` file contains syntax we cannot remove safely.
         }
         if (defined('DISALLOW_FILE_MODS') && DISALLOW_FILE_MODS) {
@@ -247,7 +247,7 @@ trait InstallUtils
         }
         $cache_dir                 = $this->cacheDir();
         $advanced_cache_file       = WP_CONTENT_DIR.'/advanced-cache.php';
-        $advanced_cache_check_file = $cache_dir.'/'.strtolower(SHORT_NAME).'-advanced-cache';
+        $advanced_cache_check_file = $cache_dir.'/'.mb_strtolower(SHORT_NAME).'-advanced-cache';
 
         // Fixes zero-byte advanced-cache.php bug related to migrating from ZenCache
         //      See: <https://github.com/websharks/zencache/issues/432>
@@ -277,7 +277,7 @@ trait InstallUtils
         }
         $cache_dir                 = $this->cacheDir();
         $advanced_cache_file       = WP_CONTENT_DIR.'/advanced-cache.php';
-        $advanced_cache_check_file = $cache_dir.'/'.strtolower(SHORT_NAME).'-advanced-cache';
+        $advanced_cache_check_file = $cache_dir.'/'.mb_strtolower(SHORT_NAME).'-advanced-cache';
         $advanced_cache_template   = dirname(dirname(__DIR__)).'/templates/advanced-cache.txt';
 
         if (is_file($advanced_cache_file) && !is_writable($advanced_cache_file)) {
@@ -306,6 +306,7 @@ trait InstallUtils
             $_value = (string) $_value; // Force string.
 
             switch ($_option) {
+                case 'exclude_hosts': // Converts to regex (caSe insensitive).
                 case 'exclude_uris': // Converts to regex (caSe insensitive).
                 case 'exclude_client_side_uris': // Converts to regex (caSe insensitive).
                 case 'exclude_refs': // Converts to regex (caSe insensitive).
@@ -323,25 +324,24 @@ trait InstallUtils
                     $_value = "'".$this->escSq($_value)."'";
                     break; // Break switch handler.
             }
-            $advanced_cache_contents = // Fill replacement codes.
-                str_ireplace(
-                    [
-                        "'%%".GLOBAL_NS.'_'.$_option."%%'",
-                        "'%%".GLOBAL_NS.'_'.preg_replace('/^cache_/i', '', $_option)."%%'",
-                    ],
-                    $_value,
-                    $advanced_cache_contents
-                );
+            $advanced_cache_contents = preg_replace(
+                [
+                    '/'.preg_quote("'%%".GLOBAL_NS.'_'.$_option."%%'", '/').'/ui',
+                    '/'.preg_quote("'%%".GLOBAL_NS.'_'.preg_replace('/^cache_/ui', '', $_option)."%%'", '/').'/ui',
+                ],
+                $_value,
+                $advanced_cache_contents
+            );
         }
         unset($_option, $_value, $_values, $_response); // Housekeeping.
 
-        if (strpos(PLUGIN_FILE, WP_CONTENT_DIR) === 0) {
+        if (mb_strpos(PLUGIN_FILE, WP_CONTENT_DIR) === 0) {
             $plugin_file = "WP_CONTENT_DIR.'".$this->escSq(str_replace(WP_CONTENT_DIR, '', PLUGIN_FILE))."'";
         } else {
             $plugin_file = "'".$this->escSq(PLUGIN_FILE)."'"; // Full absolute path.
         }
         // Make it possible for the `advanced-cache.php` handler to find the plugin directory reliably.
-        $advanced_cache_contents = str_ireplace("'%%".GLOBAL_NS."_PLUGIN_FILE%%'", $plugin_file, $advanced_cache_contents);
+        $advanced_cache_contents = preg_replace('/'.preg_quote("'%%".GLOBAL_NS."_PLUGIN_FILE%%'", '/').'/ui', $plugin_file, $advanced_cache_contents);
 
         // Ignore; this is created by Comet Cache; and we don't need to obey in this case.
         #if(defined('DISALLOW_FILE_MODS') && DISALLOW_FILE_MODS)
@@ -422,7 +422,7 @@ trait InstallUtils
     {
         $cache_dir                 = $this->cacheDir();
         $advanced_cache_file       = WP_CONTENT_DIR.'/advanced-cache.php';
-        $advanced_cache_check_file = $cache_dir.'/'.strtolower(SHORT_NAME).'-advanced-cache';
+        $advanced_cache_check_file = $cache_dir.'/'.mb_strtolower(SHORT_NAME).'-advanced-cache';
 
         if (is_file($advanced_cache_file)) {
             if (!is_writable($advanced_cache_file) || !unlink($advanced_cache_file)) {
@@ -468,7 +468,7 @@ trait InstallUtils
             return; // Skip on plugin actions.
         }
         $cache_dir       = $this->cacheDir();
-        $blog_paths_file = $cache_dir.'/'.strtolower(SHORT_NAME).'-blog-paths';
+        $blog_paths_file = $cache_dir.'/'.mb_strtolower(SHORT_NAME).'-blog-paths';
 
         if (!is_file($blog_paths_file)) {
             $this->updateBlogPaths();
@@ -499,7 +499,7 @@ trait InstallUtils
             return $value; // N/A.
         }
         $cache_dir       = $this->cacheDir();
-        $blog_paths_file = $cache_dir.'/'.strtolower(SHORT_NAME).'-blog-paths';
+        $blog_paths_file = $cache_dir.'/'.mb_strtolower(SHORT_NAME).'-blog-paths';
 
         $cache_lock = $this->cacheLock();
 
@@ -518,7 +518,7 @@ trait InstallUtils
             foreach ($paths as $_key => &$_path) {
                 if ($_path && $_path !== '/' && $host_base_token && $host_base_token !== '/') {
                     // Note that each `path` in the DB looks like: `[/base]/path/` (i.e., it includes base).
-                    $_path = '/'.ltrim(preg_replace('/^'.preg_quote($host_base_token, '/').'/', '', $_path), '/');
+                    $_path = '/'.ltrim(preg_replace('/^'.preg_quote($host_base_token, '/').'/u', '', $_path), '/');
                 }
                 if (!$_path || $_path === '/') {
                     unset($paths[$_key]); // Exclude main site.

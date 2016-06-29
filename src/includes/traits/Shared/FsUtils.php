@@ -23,21 +23,21 @@ trait FsUtils
         if (!isset($dir_file[0])) {
             return ''; // Catch empty string.
         }
-        if (strpos($dir_file, '://' !== false)) {
-            if (preg_match('/^(?P<stream_wrapper>[a-zA-Z0-9]+)\:\/\//', $dir_file, $stream_wrapper)) {
-                $dir_file = preg_replace('/^(?P<stream_wrapper>[a-zA-Z0-9]+)\:\/\//', '', $dir_file);
+        if (mb_strpos($dir_file, '://' !== false)) {
+            if (preg_match('/^(?P<stream_wrapper>[a-zA-Z0-9]+)\:\/\//u', $dir_file, $stream_wrapper)) {
+                $dir_file = preg_replace('/^(?P<stream_wrapper>[a-zA-Z0-9]+)\:\/\//u', '', $dir_file);
             }
         }
-        if (strpos($dir_file, ':' !== false)) {
-            if (preg_match('/^(?P<drive_letter>[a-zA-Z])\:[\/\\\\]/', $dir_file)) {
-                $dir_file = preg_replace_callback('/^(?P<drive_letter>[a-zA-Z])\:[\/\\\\]/', create_function('$m', 'return strtoupper($m[0]);'), $dir_file);
+        if (mb_strpos($dir_file, ':' !== false)) {
+            if (preg_match('/^(?P<drive_letter>[a-zA-Z])\:[\/\\\\]/u', $dir_file)) {
+                $dir_file = preg_replace_callback('/^(?P<drive_letter>[a-zA-Z])\:[\/\\\\]/u', create_function('$m', 'return mb_strtoupper($m[0]);'), $dir_file);
             }
         }
-        $dir_file = preg_replace('/\/+/', '/', str_replace([DIRECTORY_SEPARATOR, '\\', '/'], '/', $dir_file));
+        $dir_file = preg_replace('/\/+/u', '/', str_replace([DIRECTORY_SEPARATOR, '\\', '/'], '/', $dir_file));
         $dir_file = ($allow_trailing_slash) ? $dir_file : rtrim($dir_file, '/'); // Strip trailing slashes.
 
         if (!empty($stream_wrapper[0])) {
-            $dir_file = strtolower($stream_wrapper[0]).$dir_file;
+            $dir_file = mb_strtolower($stream_wrapper[0]).$dir_file;
         }
         return $dir_file; // Normalized now.
     }
@@ -73,10 +73,10 @@ trait FsUtils
         if (!empty($_SERVER['TMP'])) {
             $possible_dirs[] = (string) $_SERVER['TMP'];
         }
-        if (stripos(PHP_OS, 'win') === 0) {
+        if (mb_stripos(PHP_OS, 'win') === 0) {
             $possible_dirs[] = 'C:/Temp';
         }
-        if (stripos(PHP_OS, 'win') !== 0) {
+        if (mb_stripos(PHP_OS, 'win') !== 0) {
             $possible_dirs[] = '/tmp';
         }
         if (defined('WP_CONTENT_DIR')) {
@@ -204,7 +204,7 @@ trait FsUtils
             return (float) 0;
         }
         $value    = (float) $_m['value'];
-        $modifier = strtolower($_m['modifier']);
+        $modifier = mb_strtolower($_m['modifier']);
         unset($_m); // Housekeeping.
 
         switch ($modifier) {
@@ -268,7 +268,7 @@ trait FsUtils
         if (!$dir || !is_dir($dir)) {
             return $stats; // Not possible.
         }
-        $short_name_lc = strtolower(SHORT_NAME); // Once only.
+        $short_name_lc = mb_strtolower(SHORT_NAME); // Once only.
 
         foreach ($this->dirRegexIteration($dir, $regex) as $_resource) {
             $_resource_sub_path = $_resource->getSubpathname();
@@ -280,7 +280,7 @@ trait FsUtils
             if ($_resource_basename === '.htaccess') {
                 continue; // Ignore `.htaccess`.
             }
-            if (stripos($_resource_sub_path, $short_name_lc.'-') === 0) {
+            if (mb_stripos($_resource_sub_path, $short_name_lc.'-') === 0) {
                 continue; // Ignore [SHORT_NAME] files in base.
             }
             switch ($_resource->getType()) { // `link`, `file`, `dir`.

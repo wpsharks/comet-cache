@@ -73,7 +73,7 @@ trait ConditionalUtils
             return $is = true;
         }
         if (!empty($_SERVER['REQUEST_METHOD']) && is_string($_SERVER['REQUEST_METHOD'])) {
-            if (in_array(strtoupper($_SERVER['REQUEST_METHOD']), ['POST', 'PUT', 'DELETE'], true)) {
+            if (in_array(mb_strtoupper($_SERVER['REQUEST_METHOD']), ['POST', 'PUT', 'DELETE'], true)) {
                 return $is = true;
             }
         }
@@ -96,9 +96,9 @@ trait ConditionalUtils
         }
         if (!empty($_GET) || !empty($_SERVER['QUERY_STRING'])) {
             $_get_count         = !empty($_GET) ? count($_GET) : 0;
-            $is_abc_only        = $_get_count === 1 && isset($_GET[strtolower(SHORT_NAME).'ABC']);
+            $is_abc_only        = $_get_count === 1 && isset($_GET[mb_strtolower(SHORT_NAME).'ABC']);
             $is_nginx_q_only    = $_get_count === 1 && isset($_GET['q']) && $this->isNginx();
-            $is_ac_get_var_true = isset($_GET[strtolower(SHORT_NAME).'AC']) && filter_var($_GET[strtolower(SHORT_NAME).'AC'], FILTER_VALIDATE_BOOLEAN);
+            $is_ac_get_var_true = isset($_GET[mb_strtolower(SHORT_NAME).'AC']) && filter_var($_GET[mb_strtolower(SHORT_NAME).'AC'], FILTER_VALIDATE_BOOLEAN);
 
             if (!$is_abc_only && !$is_nginx_q_only && !$is_ac_get_var_true) {
                 return $is = true;
@@ -125,7 +125,7 @@ trait ConditionalUtils
             return $is = true;
         }
         if (!empty($_SERVER['REQUEST_METHOD']) && is_string($_SERVER['REQUEST_METHOD'])) {
-            if (!in_array(strtoupper($_SERVER['REQUEST_METHOD']), ['GET'], true)) {
+            if (!in_array(mb_strtoupper($_SERVER['REQUEST_METHOD']), ['GET'], true)) {
                 return $is = true;
             }
         }
@@ -191,7 +191,7 @@ trait ConditionalUtils
         if (defined('LOCALHOST')) {
             return $is = (boolean) LOCALHOST;
         }
-        if (preg_match('/\b(?:localhost|127\.0\.0\.1)\b/i', $this->hostToken())) {
+        if (preg_match('/\b(?:localhost|127\.0\.0\.1)\b/ui', $this->hostToken())) {
             return $is = true;
         }
         return $is = false;
@@ -241,10 +241,10 @@ trait ConditionalUtils
         if (!is_null($is = &$this->staticKey('isHtmlXmlDoc', $doc_hash))) {
             return $is; // Already cached this.
         }
-        if (stripos($doc, '</html>') !== false) {
+        if (mb_stripos($doc, '</html>') !== false) {
             return $is = true;
         }
-        if (stripos($doc, '<?xml') === 0) {
+        if (mb_stripos($doc, '<?xml') === 0) {
             return $is = true;
         }
         return $is = false;
@@ -267,14 +267,14 @@ trait ConditionalUtils
             return $is; // Already cached this.
         }
         foreach ($this->headersList() as $_key => $_header) {
-            if (stripos($_header, 'Content-Type:') === 0) {
+            if (mb_stripos($_header, 'Content-Type:') === 0) {
                 $content_type = $_header; // Last one.
             }
         }
         unset($_key, $_header); // Housekeeping.
 
-        if (isset($content_type[0]) && stripos($content_type, 'html') === false
-            && stripos($content_type, 'xml') === false && stripos($content_type, GLOBAL_NS) === false
+        if (isset($content_type[0]) && mb_stripos($content_type, 'html') === false
+            && mb_stripos($content_type, 'xml') === false && mb_stripos($content_type, GLOBAL_NS) === false
         ) {
             return $is = false; // Do NOT cache data sent by scripts serving other MIME types.
         }
@@ -301,7 +301,7 @@ trait ConditionalUtils
             return $is = false; // A non-2xx & non-404 status code.
         }
         foreach ($this->headersList() as $_key => $_header) {
-            if (preg_match('/^(?:Retry\-After\:\s+(?P<retry>.+)|Status\:\s+(?P<status>[0-9]+)|HTTP\/[0-9]+(?:\.[0-9]+)?\s+(?P<http_status>[0-9]+))/i', $_header, $_m)) {
+            if (preg_match('/^(?:Retry\-After\:\s+(?P<retry>.+)|Status\:\s+(?P<status>[0-9]+)|HTTP\/[0-9]+(?:\.[0-9]+)?\s+(?P<http_status>[0-9]+))/ui', $_header, $_m)) {
                 if (!empty($_m['retry']) || (!empty($_m['status']) && $_m['status'][0] !== '2' && $_m['status'] !== '404')
                     || (!empty($_m['http_status']) && $_m['http_status'][0] !== '2' && $_m['http_status'] !== '404')
                 ) {
@@ -358,10 +358,10 @@ trait ConditionalUtils
             $disabled_functions = []; // Initialize disabled/blacklisted functions.
 
             if (($disable_functions = trim(ini_get('disable_functions')))) {
-                $disabled_functions = array_merge($disabled_functions, preg_split('/[\s;,]+/', strtolower($disable_functions), -1, PREG_SPLIT_NO_EMPTY));
+                $disabled_functions = array_merge($disabled_functions, preg_split('/[\s;,]+/', mb_strtolower($disable_functions), -1, PREG_SPLIT_NO_EMPTY));
             }
             if (($blacklist_functions = trim(ini_get('suhosin.executor.func.blacklist')))) {
-                $disabled_functions = array_merge($disabled_functions, preg_split('/[\s;,]+/', strtolower($blacklist_functions), -1, PREG_SPLIT_NO_EMPTY));
+                $disabled_functions = array_merge($disabled_functions, preg_split('/[\s;,]+/', mb_strtolower($blacklist_functions), -1, PREG_SPLIT_NO_EMPTY));
             }
             if (filter_var(ini_get('suhosin.executor.disable_eval'), FILTER_VALIDATE_BOOLEAN)) {
                 $disabled_functions = array_merge($disabled_functions, ['eval']);
@@ -372,7 +372,7 @@ trait ConditionalUtils
                 return $is = false; // Not possible.
             }
         }
-        if ($disabled_functions && in_array(strtolower($function), $disabled_functions, true)) {
+        if ($disabled_functions && in_array(mb_strtolower($function), $disabled_functions, true)) {
             return $is = false; // Not possible.
         }
         return $is = true;

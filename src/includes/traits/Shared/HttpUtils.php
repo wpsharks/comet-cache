@@ -18,9 +18,9 @@ trait HttpUtils
             return $protocol; // Already cached this.
         }
         if (!empty($_SERVER['SERVER_PROTOCOL']) && is_string($_SERVER['SERVER_PROTOCOL'])) {
-            $protocol = strtoupper($_SERVER['SERVER_PROTOCOL']);
+            $protocol = mb_strtoupper($_SERVER['SERVER_PROTOCOL']);
         }
-        if (!$protocol || stripos($protocol, 'HTTP/') !== 0) {
+        if (!$protocol || mb_stripos($protocol, 'HTTP/') !== 0) {
             $protocol = 'HTTP/1.0'; // Default value.
         }
         return $protocol;
@@ -110,10 +110,10 @@ trait HttpUtils
             'X-Powered-By',
             'X-UA-Compatible',
         ];
-        $cacheable_headers = array_map('strtolower', $cacheable_headers);
+        $cacheable_headers = array_map('mb_strtolower', $cacheable_headers);
 
         foreach ($headers as $_key => $_header) {
-            $_header = strtolower((string) strstr($_header, ':', true));
+            $_header = mb_strtolower((string) strstr($_header, ':', true));
             if (!$_header || !in_array($_header, $cacheable_headers, true)) {
                 unset($headers[$_key]);
             }

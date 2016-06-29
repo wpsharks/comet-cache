@@ -111,7 +111,7 @@ trait NcDebugUtils
                     break; // Break switch handler.
 
                 case $this::NC_DEBUG_AC_GET_VAR:
-                    $reason = sprintf(__('because `$_GET[\'%1$sAC\']` is set to a boolean-ish FALSE value.', 'comet-cache'), strtolower(SHORT_NAME));
+                    $reason = sprintf(__('because `$_GET[\'%1$sAC\']` is set to a boolean-ish FALSE value.', 'comet-cache'), mb_strtolower(SHORT_NAME));
                     break; // Break switch handler.
 
                 case $this::NC_DEBUG_UNCACHEABLE_REQUEST:
@@ -161,6 +161,10 @@ trait NcDebugUtils
 
                 case $this::NC_DEBUG_PREVIEW:
                     $reason = __('because `$_REQUEST` indicates this is simply a preview of something to come.', 'comet-cache');
+                    break; // Break switch handler.
+
+                case $this::NC_DEBUG_EXCLUDED_HOSTS:
+                    $reason = __('because `$_SERVER[\'HTTP_HOST\']` matches a configured Host Exclusion Pattern on this installation.', 'comet-cache');
                     break; // Break switch handler.
 
                 case $this::NC_DEBUG_EXCLUDED_URIS:

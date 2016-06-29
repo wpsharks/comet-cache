@@ -1,0 +1,348 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
+    ],
+    "hash": "7a3d7d2ad333fe40afad5a5545e322de",
+    "content-hash": "71ff57fa00146645e5fc1a40aa5520b3",
+    "packages": [
+        {
+            "name": "websharks/css-minifier",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/websharks/css-minifier.git",
+                "reference": "da1d0254c41e1f59c7337aa444d743e6056046ff"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/websharks/css-minifier/zipball/da1d0254c41e1f59c7337aa444d743e6056046ff",
+                "reference": "da1d0254c41e1f59c7337aa444d743e6056046ff",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "php": ">=5.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "WebSharks\\CssMinifier\\": "src/includes/classes"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0+"
+            ],
+            "authors": [
+                {
+                    "name": "websharks",
+                    "homepage": "http://websharks-inc.com/",
+                    "role": "company"
+                },
+                {
+                    "name": "jaswsinc",
+                    "homepage": "http://jaswsinc.com/",
+                    "role": "developer"
+                },
+                {
+                    "name": "raamdev",
+                    "homepage": "http://raam.org/",
+                    "role": "developer"
+                }
+            ],
+            "description": "Compresses CSS.",
+            "homepage": "https://github.com/websharks/css-minifier",
+            "keywords": [
+                "compressor",
+                "css",
+                "websharks"
+            ],
+            "time": "2015-08-21 03:19:25"
+        },
+        {
+            "name": "websharks/html-compressor",
+            "version": "160118",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/websharks/html-compressor.git",
+                "reference": "bd1ba2407b9c2c067549600a6ef1faa726c3c2d2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/websharks/html-compressor/zipball/bd1ba2407b9c2c067549600a6ef1faa726c3c2d2",
+                "reference": "bd1ba2407b9c2c067549600a6ef1faa726c3c2d2",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-mbstring": "*",
+                "ext-openssl": "*",
+                "php": ">=5.3",
+                "websharks/css-minifier": "dev-master",
+                "websharks/js-minifier": "dev-master"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "WebSharks\\HtmlCompressor\\": "src/includes/classes"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0+"
+            ],
+            "authors": [
+                {
+                    "name": "websharks",
+                    "homepage": "http://websharks-inc.com/",
+                    "role": "company"
+                },
+                {
+                    "name": "jaswsinc",
+                    "homepage": "http://jaswsinc.com/",
+                    "role": "developer"
+                },
+                {
+                    "name": "raamdev",
+                    "homepage": "http://raam.org/",
+                    "role": "developer"
+                }
+            ],
+            "description": "Combines & compresses CSS/JS/HTML code.",
+            "homepage": "https://github.com/websharks/html-compressor",
+            "keywords": [
+                "compressor",
+                "html",
+                "websharks"
+            ],
+            "time": "2016-01-18 03:17:20"
+        },
+        {
+            "name": "websharks/js-minifier",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/websharks/js-minifier.git",
+                "reference": "3c1e99af6df9df8f691642fbb769a10e49bfba23"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/websharks/js-minifier/zipball/3c1e99af6df9df8f691642fbb769a10e49bfba23",
+                "reference": "3c1e99af6df9df8f691642fbb769a10e49bfba23",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "php": ">=5.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "WebSharks\\JsMinifier\\": "src/includes/classes"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0+"
+            ],
+            "authors": [
+                {
+                    "name": "websharks",
+                    "homepage": "http://websharks-inc.com/",
+                    "role": "company"
+                },
+                {
+                    "name": "jaswsinc",
+                    "homepage": "http://jaswsinc.com/",
+                    "role": "developer"
+                },
+                {
+                    "name": "raamdev",
+                    "homepage": "http://raam.org/",
+                    "role": "developer"
+                }
+            ],
+            "description": "Compresses JavaScript code.",
+            "homepage": "https://github.com/websharks/js-minifier",
+            "keywords": [
+                "JS",
+                "compressor",
+                "javascript",
+                "websharks"
+            ],
+            "time": "2015-05-11 20:53:04"
+        },
+        {
+            "name": "websharks/sharkicons",
+            "version": "160221",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/websharks/sharkicons.git",
+                "reference": "2e6d6663c050f343fe944b424dea1759aa67cd05"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/websharks/sharkicons/zipball/2e6d6663c050f343fe944b424dea1759aa67cd05",
+                "reference": "2e6d6663c050f343fe944b424dea1759aa67cd05",
+                "shasum": ""
+            },
+            "require-dev": {
+                "package/bourbon": "4.2.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": []
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0+"
+            ],
+            "authors": [
+                {
+                    "name": "websharks",
+                    "homepage": "http://websharks-inc.com/",
+                    "role": "company"
+                },
+                {
+                    "name": "jaswsinc",
+                    "homepage": "http://jaswsinc.com/",
+                    "role": "developer"
+                },
+                {
+                    "name": "raamdev",
+                    "homepage": "http://raam.org/",
+                    "role": "developer"
+                }
+            ],
+            "description": "Font containing WebSharks logos/icons.",
+            "homepage": "https://github.com/websharks/sharkicons",
+            "keywords": [
+                "php",
+                "websharks",
+                "wordpress"
+            ],
+            "time": "2016-02-21 15:16:12"
+        },
+        {
+            "name": "websharks/wp-php-rv",
+            "version": "160504",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/websharks/wp-php-rv.git",
+                "reference": "275e387f582ca8bf96354abe0aa10c3e0d7a3fe8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/websharks/wp-php-rv/zipball/275e387f582ca8bf96354abe0aa10c3e0d7a3fe8",
+                "reference": "275e387f582ca8bf96354abe0aa10c3e0d7a3fe8",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2"
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0+"
+            ],
+            "authors": [
+                {
+                    "name": "websharks",
+                    "homepage": "http://websharks-inc.com/",
+                    "role": "company"
+                },
+                {
+                    "name": "jaswsinc",
+                    "homepage": "http://jaswsinc.com/",
+                    "role": "developer"
+                },
+                {
+                    "name": "raamdev",
+                    "homepage": "http://raam.org/",
+                    "role": "developer"
+                }
+            ],
+            "description": "Stub for WordPress themes/plugins that require PHP vX.x+.",
+            "homepage": "https://github.com/websharks/wp-php-rv",
+            "keywords": [
+                "php",
+                "websharks",
+                "wordpress"
+            ],
+            "time": "2016-05-05 07:44:00"
+        }
+    ],
+    "packages-dev": [
+        {
+            "name": "package/bourbon",
+            "version": "4.2.3",
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/thoughtbot/bourbon/releases/download/v4.2.3/bourbon-v4.2.3.zip",
+                "reference": null,
+                "shasum": null
+            },
+            "type": "library"
+        },
+        {
+            "name": "websharks/wp-i18n-tools",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/websharks/wp-i18n-tools.git",
+                "reference": "0275dc189293aee71e80a8bde43c4087f81ce9bb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/websharks/wp-i18n-tools/zipball/0275dc189293aee71e80a8bde43c4087f81ce9bb",
+                "reference": "0275dc189293aee71e80a8bde43c4087f81ce9bb",
+                "shasum": ""
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0+"
+            ],
+            "authors": [
+                {
+                    "name": "websharks",
+                    "homepage": "http://websharks-inc.com/",
+                    "role": "company"
+                },
+                {
+                    "name": "jaswsinc",
+                    "homepage": "http://jaswsinc.com/",
+                    "role": "developer"
+                },
+                {
+                    "name": "raamdev",
+                    "homepage": "http://raam.org/",
+                    "role": "developer"
+                }
+            ],
+            "description": "WordPress i18n/translation tools.",
+            "homepage": "https://github.com/websharks/wp-i18n-tools",
+            "keywords": [
+                "gettext",
+                "i18n",
+                "translation",
+                "websharks",
+                "wordpress"
+            ],
+            "time": "2016-04-16 08:29:33"
+        }
+    ],
+    "aliases": [],
+    "minimum-stability": "dev",
+    "stability-flags": {
+        "websharks/wp-i18n-tools": 20
+    },
+    "prefer-stable": true,
+    "prefer-lowest": false,
+    "platform": {
+        "php": ">=5.4"
+    },
+    "platform-dev": []
+}

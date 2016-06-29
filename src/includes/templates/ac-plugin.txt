@@ -15,9 +15,9 @@ function my_ac_plugin() // Example plugin.
 }
 function my_ac_version_salt_shaker($version_salt)
 {
-    if (stripos($_SERVER['HTTP_USER_AGENT'], 'iphone') !== false) {
+    if (mb_stripos($_SERVER['HTTP_USER_AGENT'], 'iphone') !== false) {
         $version_salt .= 'iphones'; // Give iPhones their own variation of the cache.
-    } elseif (stripos($_SERVER['HTTP_USER_AGENT'], 'android') !== false) {
+    } elseif (mb_stripos($_SERVER['HTTP_USER_AGENT'], 'android') !== false) {
         $version_salt .= 'androids'; // Androic variation.
     } else {
         $version_salt .= 'other'; // A default group.

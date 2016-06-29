@@ -193,6 +193,15 @@ interface NcDebugConsts
     const NC_DEBUG_PREVIEW = 'nc_debug_preview';
 
     /**
+    * No-cache because the current request is excluded by its host name.
+    *
+    * @since 16xxxx Host exclusions.
+    *
+    * @type string A unique string identifier in the set of `NC_DEBUG_` constants.
+    */
+    const NC_DEBUG_EXCLUDED_HOSTS = 'nc_debug_excluded_hosts';
+
+    /**
      * No-cache because the current request excluded by its URI.
      *
      * @since 140422 First documented version.

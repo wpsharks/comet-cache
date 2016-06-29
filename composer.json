@@ -1,0 +1,66 @@
+{
+  "name": "websharks/comet-cache",
+  "homepage": "https://github.com/websharks/comet-cache",
+  "description": "A popular caching plugin for WordPress.",
+  "keywords": [
+    "websharks",
+    "comet cache",
+    "wordpress",
+    "caching",
+    "cache"
+  ],
+  "type": "library",
+  "license": "GPL-3.0+",
+  "authors": [{
+    "name": "websharks",
+    "homepage": "http://websharks-inc.com/",
+    "role": "company"
+  }, {
+    "name": "jaswsinc",
+    "homepage": "http://jaswsinc.com/",
+    "role": "developer"
+  }, {
+    "name": "raamdev",
+    "homepage": "https://raamdev.com/",
+    "role": "developer"
+  }],
+  "support": {
+    "source": "https://github.com/websharks/comet-cache",
+    "issues": "https://github.com/websharks/comet-cache/issues"
+  },
+  "require": {
+    "php": ">=5.4",
+    "websharks/wp-php-rv": "160504",
+    "websharks/sharkicons": "160221"
+  },
+  "require-dev": {
+    "package/bourbon": "4.2.3",
+    "websharks/wp-i18n-tools": "dev-master"
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+
+  "autoload": {
+    "psr-4": {
+      "WebSharks\\CometCache\\Classes\\": "src/includes/classes/",
+      "WebSharks\\CometCache\\Traits\\": "src/includes/traits/",
+      "WebSharks\\CometCache\\Interfaces\\": "src/includes/interfaces/"
+    }
+  },
+  "config": {
+    "vendor-dir": "src/vendor",
+    "preferred-install": "dist"
+  },
+
+  "repositories": [{
+    "type": "package",
+    "package": {
+      "name": "package/bourbon",
+      "version": "4.2.3",
+      "dist": {
+        "url": "https://github.com/thoughtbot/bourbon/releases/download/v4.2.3/bourbon-v4.2.3.zip",
+        "type": "zip"
+      }
+    }
+  }]
+}
