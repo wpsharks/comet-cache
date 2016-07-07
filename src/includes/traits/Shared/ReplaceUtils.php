@@ -8,7 +8,7 @@ trait ReplaceUtils
     /**
      * String replace ONE time.
      *
-     * @deprecated Deprecated since v16xxxx
+     * @deprecated Deprecated since v160706
      * @deprecated Replaced with Multibyte String support; see https://github.com/websharks/comet-cache/issues/703
      *
      * @since 150422 Rewrite.
@@ -37,7 +37,7 @@ trait ReplaceUtils
     /**
      * String replace ONE time (caSe-insensitive).
      *
-     * @deprecated Deprecated since v16xxxx
+     * @deprecated Deprecated since v160706
      * @deprecated Replaced with Multibyte String support; see https://github.com/websharks/comet-cache/issues/703
      *
      * @since 150422 Rewrite.

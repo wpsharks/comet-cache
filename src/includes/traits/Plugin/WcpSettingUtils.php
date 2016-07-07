@@ -25,6 +25,7 @@ trait WcpSettingUtils
         $done = true; // Flag as having been done.
 
         if ($pagenow === 'options-general.php' && $settings_updated) {
+            $this->addWpHtaccess(); // Update .htaccess if applicable
             $counter += $this->autoClearCache();
         } elseif ($pagenow === 'options-reading.php' && $settings_updated) {
             $counter += $this->autoClearCache();

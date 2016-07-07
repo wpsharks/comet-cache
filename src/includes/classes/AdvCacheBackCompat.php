@@ -70,7 +70,7 @@ class AdvCacheBackCompat
     /**
      * Back compat. with `COMET_CACHE_ALLOW_BROWSER_CACHE` constants.
      *
-     * @since 16xxxx Renaming COMET_CACHE_ALLOW_BROWSER_CACHE to COMET_CACHE_ALLOW_CLIENT_SIDE_CACHE
+     * @since 160706 Renaming COMET_CACHE_ALLOW_BROWSER_CACHE to COMET_CACHE_ALLOW_CLIENT_SIDE_CACHE
      */
     public static function browserCacheConstant()
     {

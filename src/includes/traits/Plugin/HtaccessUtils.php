@@ -83,6 +83,7 @@ trait HtaccessUtils
             return true; // Nothing to do, but no failures either.
         }
 
+        $template_blocks           = $this->fillReplacementCodes($template_blocks);
         $template_header           = '# BEGIN '.NAME.' '.$this->htaccess_marker.' (the '.$this->htaccess_marker.' marker is required for '.NAME.'; do not remove)';
         $template_footer           = '# END '.NAME.' '.$this->htaccess_marker;
         $htaccess['file_contents'] = $template_header."\n\n".trim($template_blocks)."\n\n".$template_footer."\n\n".$htaccess['file_contents'];
@@ -197,6 +198,32 @@ trait HtaccessUtils
         }
 
         return true; // Htaccess has the marker
+    }
+
+    /**
+     * Utility method used to update replacement codes in .htaccess templates
+     *
+     * @since 160706 Adding Apache Optimizations
+     *
+     * @param string $template_blocks .htaccess template blocks that may contain replacement codes
+     *
+     * @return string Template blocks with replacement codes filled in
+     */
+    public function fillReplacementCodes($template_blocks)
+    {
+        if (mb_stripos($template_blocks, '%%') === false) {
+            return $template_blocks; // No replacement codes to fill
+        }
+
+        $home_url         = is_multisite() ? network_home_url() : home_url();
+        $replacement_codes = ['%%REWRITE_BASE%%' => trailingslashit(parse_url($home_url, PHP_URL_PATH))];
+
+        foreach ($replacement_codes as $_code => $_replacement) {
+            $template_blocks = preg_replace('/'.preg_quote($_code, '/').'/ui', $_replacement, $template_blocks);
+        }
+        unset($_code, $_replacement);
+
+        return $template_blocks;
     }
 
     /**

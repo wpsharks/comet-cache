@@ -1,7 +1,7 @@
 # Force NO trailing slash on all virtual requests (except WP admin area).
 <IfModule rewrite_module>
   RewriteEngine On
-  RewriteBase /
+  RewriteBase %%REWRITE_BASE%%
 
   # If not a real file or directory.
   RewriteCond %{REQUEST_FILENAME} !-f

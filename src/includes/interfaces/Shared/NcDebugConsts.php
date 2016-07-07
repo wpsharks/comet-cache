@@ -195,7 +195,7 @@ interface NcDebugConsts
     /**
     * No-cache because the current request is excluded by its host name.
     *
-    * @since 16xxxx Host exclusions.
+    * @since 160706 Host exclusions.
     *
     * @type string A unique string identifier in the set of `NC_DEBUG_` constants.
     */

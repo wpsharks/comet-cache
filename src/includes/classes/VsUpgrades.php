@@ -231,7 +231,7 @@ class VsUpgrades extends AbsBase
      * and before we added the `htaccess_access_control_allow_origin` option,
      * and before we renamed COMET_CACHE_ALLOW_BROWSER_CACHE to COMET_CACHE_ALLOW_CLIENT_SIDE_CACHE.
      *
-     * @since 16xxxx
+     * @since 160706
      */
     protected function fromLte160521()
     {
