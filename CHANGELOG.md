@@ -1,3 +1,7 @@
+= v160709 =
+
+- **Bug Fix** (Pro): Fixed a bug in the Auto-Cache Engine that was introduced by the previous release (v160706). The bug produced an error whenever the Auto-Cache Engine ran: "PHP Fatal error: Call to undefined method applyWpFilters()". This had no visible affect on the front-end of the site or in the WordPress Dashboard, but it prevented the Auto-Cache Engine from working behind the scenes. Props @Peter-FB for reporting. See [Issue #795](https://github.com/websharks/comet-cache/issues/795).
+
 = v160706 =
 
 - **New Feature! Apache Optimizations.** This release includes a completely new option panel for Apache Performance Tuning. Current options for Apache tuning include GZIP Compression, Leverage Browser Caching, Enforce Canonical URLs, and Send Access-Control-Allow-Origin Header (for Static CDN Filters). These options automatically add or remove from your `.htaccess` file the appropriate configuration based on the options you enable or disable (all options are disabled by default, so your `.htaccess` file is not modified unless you say so). If you prefer to update your `.htaccess` file manually, the necessary configuration can be viewed beneath each option. Props @jaswsinc, @renzms. See [Issue #789](https://github.com/websharks/comet-cache/issues/789).

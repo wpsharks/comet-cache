@@ -1,6 +1,6 @@
 === Comet Cache ===
 
-Stable tag: 160706
+Stable tag: 160709
 Requires at least: 4.2
 Tested up to: 4.6-alpha
 Text Domain: comet-cache
@@ -336,6 +336,10 @@ Released under the terms of the [GNU General Public License](http://www.gnu.org/
 Requires WordPress v4.2+.
 
 == Changelog ==
+
+= v160709 =
+
+- **Bug Fix** (Pro): Fixed a bug in the Auto-Cache Engine that was introduced by the previous release (v160706). The bug produced an error whenever the Auto-Cache Engine ran: "PHP Fatal error: Call to undefined method applyWpFilters()". This had no visible affect on the front-end of the site or in the WordPress Dashboard, but it prevented the Auto-Cache Engine from working behind the scenes. Props @Peter-FB for reporting. See [Issue #795](https://github.com/websharks/comet-cache/issues/795).
 
 = v160706 =
 
