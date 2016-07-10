@@ -126,7 +126,7 @@ trait InstallUtils
     }
 
     /**
-     * Adds `define('WP_CACHE', TRUE);` to the `/wp-config.php` file.
+     * Adds `define( 'WP_CACHE', true );` to the `/wp-config.php` file.
      *
      * @since 150422 Rewrite.
      *
@@ -156,10 +156,10 @@ trait InstallUtils
         if (!($wp_config_file_contents = $this->removeWpCacheFromWpConfig())) {
             return ''; // Unable to remove previous value.
         }
-        if (!($wp_config_file_contents = preg_replace('/^\s*(\<\?php|\<\?)\s+/ui', '${1}'."\n"."define('WP_CACHE', TRUE);"."\n", $wp_config_file_contents, 1))) {
+        if (!($wp_config_file_contents = preg_replace('/^\s*(\<\?php|\<\?)\s+/ui', '${1}'."\n"."define( 'WP_CACHE', true );"."\n", $wp_config_file_contents, 1))) {
             return ''; // Failure; something went terribly wrong here.
         }
-        if (mb_strpos($wp_config_file_contents, "define('WP_CACHE', TRUE);") === false) {
+        if (mb_strpos($wp_config_file_contents, "define( 'WP_CACHE', true );") === false) {
             return ''; // Failure; unable to add; unexpected PHP code.
         }
         if (defined('DISALLOW_FILE_MODS') && DISALLOW_FILE_MODS) {
@@ -175,7 +175,7 @@ trait InstallUtils
     }
 
     /**
-     * Removes `define('WP_CACHE', TRUE);` from the `/wp-config.php` file.
+     * Removes `define( 'WP_CACHE', true );` from the `/wp-config.php` file.
      *
      * @since 150422 Rewrite.
      *
