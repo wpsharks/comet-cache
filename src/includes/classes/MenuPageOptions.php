@@ -125,15 +125,15 @@ class MenuPageOptions extends MenuPage
         }
         if (!empty($_REQUEST[GLOBAL_NS.'_cache_wiped'])) {
             echo '<div class="plugin-menu-page-notice notice">'."\n";
-            echo '   <img src="'.esc_attr($this->plugin->url('/src/client-s/images/wipe.png')).'" /> '.__('Cache wiped across all sites; recreation will occur automatically over time.', 'comet-cache')."\n";
+            echo '   <img src="'.esc_attr($this->plugin->url('/src/client-s/images/wipe.png')).'" /> '.__('Cache wiped across all sites; re-creation will occur automatically over time.', 'comet-cache')."\n";
             echo '</div>'."\n";
         }
         if (!empty($_REQUEST[GLOBAL_NS.'_cache_cleared'])) {
             echo '<div class="plugin-menu-page-notice notice">'."\n";
             if (is_multisite() && is_main_site()) {
-                echo '<img src="'.esc_attr($this->plugin->url('/src/client-s/images/clear.png')).'" /> '.__('Cache cleared for main site; recreation will occur automatically over time.', 'comet-cache')."\n";
+                echo '<img src="'.esc_attr($this->plugin->url('/src/client-s/images/clear.png')).'" /> '.__('Cache cleared for main site; re-creation will occur automatically over time.', 'comet-cache')."\n";
             } else {
-                echo '<img src="'.esc_attr($this->plugin->url('/src/client-s/images/clear.png')).'" /> '.__('Cache cleared for this site; recreation will occur automatically over time.', 'comet-cache')."\n";
+                echo '<img src="'.esc_attr($this->plugin->url('/src/client-s/images/clear.png')).'" /> '.__('Cache cleared for this site; re-creation will occur automatically over time.', 'comet-cache')."\n";
             }
             echo '</div>'."\n";
         }
