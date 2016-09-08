@@ -19,7 +19,8 @@ class Actions extends AbsBase
 
         
 
-        
+        'ajaxWipeCache',
+        'ajaxClearCache',
 
         
 
@@ -31,8 +32,6 @@ class Actions extends AbsBase
 
         'saveOptions',
         'restoreDefaultOptions',
-
-        
 
         
 
@@ -113,9 +112,62 @@ class Actions extends AbsBase
         wp_redirect($redirect_to).exit();
     }
 
-    
 
-    
+    /**
+     * Action handler.
+     *
+     * @since 150422 Rewrite.
+     *
+     * @param mixed Input action argument(s).
+     */
+    protected function ajaxWipeCache($args)
+    {
+        if (!is_multisite() || !$this->plugin->currentUserCanWipeCache()) {
+            return; // Nothing to do.
+        }
+        if (empty($_REQUEST['_wpnonce']) || !wp_verify_nonce($_REQUEST['_wpnonce'])) {
+            return; // Unauthenticated POST data.
+        }
+        $counter         = $this->plugin->wipeCache(true);
+        
+
+        $response = sprintf(__('<p>Wiped a total of <code>%2$s</code> cache files.</p>', 'comet-cache'), esc_html(NAME), esc_html($counter));
+        $response .= __('<p>Cache wiped for all sites. Re-creation will occur automatically over time.</p>', 'comet-cache');
+
+        
+        exit($response); // JavaScript will take it from here.
+    }
+
+
+
+    /**
+     * Action handler.
+     *
+     * @since 150422 Rewrite.
+     *
+     * @param mixed Input action argument(s).
+     */
+    protected function ajaxClearCache($args)
+    {
+        if (!$this->plugin->currentUserCanClearCache()) {
+            return; // Not allowed to clear.
+        }
+        if (empty($_REQUEST['_wpnonce']) || !wp_verify_nonce($_REQUEST['_wpnonce'])) {
+            return; // Unauthenticated POST data.
+        }
+        $counter         = $this->plugin->clearCache(true);
+        
+        $response = sprintf(__('<p>Cleared a total of <code>%2$s</code> cache files.</p>', 'comet-cache'), esc_html(NAME), esc_html($counter));
+
+        if (is_multisite() && is_main_site()) {
+            $response .= __('<p>Cache cleared for main site. Re-creation will occur automatically over time.</p>', 'comet-cache');
+        } else {
+            $response .= __('<p>Cache cleared for this site. Re-creation will occur automatically over time.</p>', 'comet-cache');
+        }
+        
+        exit($response); // JavaScript will take it from here.
+    }
+
 
     
 
@@ -268,8 +320,6 @@ class Actions extends AbsBase
 
         wp_redirect($redirect_to).exit();
     }
-
-    
 
     
 

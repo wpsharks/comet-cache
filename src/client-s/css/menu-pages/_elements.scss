@@ -78,7 +78,7 @@
     @include user-select(none);
 
     &.switch-primary {
-      font-size:              130%;
+      font-size:              120%;
       margin:                 0;
       padding:                0.5em;
       border-radius:          4px;
@@ -149,7 +149,7 @@
     @include user-select(none);
 
     font-size:                150%;
-    font-weight:              bold;
+    font-weight:              600;
     line-height:              1em;
     outline:                  none;
     cursor:                   pointer;

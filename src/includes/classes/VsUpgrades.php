@@ -43,6 +43,7 @@ class VsUpgrades extends AbsBase
         $this->fromZenCache();
         $this->fromLte160227();
         $this->fromLte160521();
+        $this->fromLte160709();
     }
 
     /**
@@ -76,7 +77,7 @@ class VsUpgrades extends AbsBase
             if (is_array($existing_options = get_site_option(GLOBAL_NS.'_options'))) {
                 if (isset($existing_options['admin_bar_enable'])) {
                     $this->plugin->options['cache_clear_admin_bar_enable'] = $existing_options['admin_bar_enable'];
-                    $this->plugin->updateOptions($this->plugin->options); // Save/update options.
+                    $this->plugin->updateOptions($this->plugin->options, false); // Save/update options.
                 }
             }
         }
@@ -115,7 +116,7 @@ class VsUpgrades extends AbsBase
                     $this->plugin->options['cdn_blacklisted_extensions'] = $this->plugin->default_options['cdn_blacklisted_extensions'];
                 }
                 if ($this->plugin->options !== $existing_options) {
-                    $this->plugin->updateOptions($this->plugin->options); // Save/update options.
+                    $this->plugin->updateOptions($this->plugin->options, false); // Save/update options.
                     $this->plugin->activate(); // Reactivate plugin w/ new options.
                 }
             }
@@ -196,7 +197,7 @@ class VsUpgrades extends AbsBase
             $this->plugin->options['base_dir']    = $this->plugin->default_options['base_dir'];
             $this->plugin->options['crons_setup'] = $this->plugin->default_options['crons_setup'];
 
-            $this->plugin->updateOptions($this->plugin->options); // Save/update options.
+            $this->plugin->updateOptions($this->plugin->options, false); // Save/update options.
             $this->plugin->activate(); // Reactivate plugin w/ new options.
 
             $this->plugin->enqueueMainNotice(
@@ -218,7 +219,7 @@ class VsUpgrades extends AbsBase
             if (is_array($existing_options = get_site_option(GLOBAL_NS.'_options'))) {
                 $this->plugin->options['cache_clear_term_other_enable'] = $this->plugin->default_options['cache_clear_term_other_enable'];
                 if ($this->plugin->options !== $existing_options) {
-                    $this->plugin->updateOptions($this->plugin->options); // Save/update options.
+                    $this->plugin->updateOptions($this->plugin->options, false); // Save/update options.
                     $this->plugin->activate(); // Reactivate plugin w/ new options.
                 }
             }
@@ -249,7 +250,7 @@ class VsUpgrades extends AbsBase
                     $this->plugin->options['htaccess_access_control_allow_origin'] = $existing_options['cdn_enable'];
                 }
                 if ($this->plugin->options !== $existing_options) {
-                    $this->plugin->updateOptions($this->plugin->options); // Save/update options.
+                    $this->plugin->updateOptions($this->plugin->options, false); // Save/update options.
                     $this->plugin->activate(); // Reactivate plugin w/ new options.
                 }
             }
@@ -257,6 +258,18 @@ class VsUpgrades extends AbsBase
             if ($is_apache) {
                 $this->plugin->enqueueMainNotice(sprintf(__('<strong>New %1$s Feature!</strong> This release of %1$s includes a whole new panel for Apache Performance Tuning. Visit the <a href="%2$s">settings</a> and see the new options in <strong>Comet Cache → Plugin Options → Apache Optimizations</strong>.', 'comet-cache'), esc_html(NAME), esc_attr(add_query_arg(urlencode_deep(['page' => GLOBAL_NS]), self_admin_url('/admin.php')))));
             }
+        }
+    }
+
+    /**
+     * Before we replaced the Pro Plugin Updater system with the WordPress Plugin Update system.
+     *
+     * @since $v
+     */
+    protected function fromLte160709()
+    {
+        if (version_compare($this->prev_version, '160709', '<=')) {
+            $this->plugin->dismissMainNotice('new-pro-version-available'); // Dismiss any existing notices like this; upgrade notices are handled by WordPress now.
         }
     }
 }

@@ -1,1 +1,86 @@
 
+
+$ajax-response-text-color: #fff;
+$ajax-response-bg-color: #15181b;
+$ajax-response-bg-hover-color: #000;
+$ajax-response-box-shadow-color: #23282d;
+$ajax-response-code-color: #000;
+$ajax-response-code-bg-color: #eee;
+
+.comet_cache-ajax-response {
+  @include user-select(none);
+  @include sharkicon(times-circle, after);
+
+  display:                    none;
+  left:                       50%;
+  top:                        100px;
+  z-index:                    10000;
+  position:                   fixed;
+  width:                      700px;
+  height:                     auto;
+  min-height:                 64px;
+  padding:                    15px;
+  text-align:                 center;
+  outline:                    none;
+  cursor:                     pointer;
+  border-radius:              5px;
+  box-sizing:                 border-box;
+  margin:                     0 0 0 -350px;
+  background:                 $ajax-response-bg-color;
+  color:                      $ajax-response-text-color;
+  box-shadow:                 0 0 5px 0 $ajax-response-box-shadow-color;
+
+  &:hover,
+  &.-hovered {
+    background-color:         $ajax-response-bg-hover-color;
+  }
+
+  &.-wipe,
+  &.-clear {
+    &::before {
+      left:                   0;
+      top:                    0;
+      width:                  64px;
+      height:                 64px;
+      position:               absolute;
+    }
+  }
+
+  &.-wipe {
+    &::before {
+      content:                url('../images/wipe-response.png');
+    }
+  }
+
+  &.-clear {
+    &::before {
+      content:                url('../images/clear-response.png');
+    }
+  }
+
+  &::after {
+    top:                      5px;
+    right:                    8px;
+    opacity:                  0.5;
+    font-size:                120%;
+    position:                 absolute;
+  }
+
+  p {
+    margin:                   0;
+    padding:                  0;
+    opacity:                  0.35;
+    font:                     15px/1.2em sans-serif;
+  }
+
+  p:first-child {
+    opacity:                  1;
+  }
+
+  code {
+    border-radius:            3px;
+    padding:                  1px 3px;
+    color:                    $ajax-response-code-color;
+    background:               $ajax-response-code-bg-color;
+  }
+}

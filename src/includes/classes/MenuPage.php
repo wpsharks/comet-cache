@@ -28,8 +28,6 @@ class MenuPage extends AbsBase
                     break;
 
                 
-
-                
             }
         }
     }

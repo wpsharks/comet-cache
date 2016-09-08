@@ -84,8 +84,6 @@ trait MenuPageUtils
         add_submenu_page(GLOBAL_NS, __('Plugin Options', 'comet-cache'), __('Plugin Options', 'comet-cache'), $this->network_cap, GLOBAL_NS, [$this, 'menuPageOptions']);
 
         
-
-        
     }
 
     /**
@@ -105,8 +103,6 @@ trait MenuPageUtils
 
         add_menu_page(NAME.(IS_PRO ? ' Pro' : ''), NAME.(IS_PRO ? ' Pro' : ''), $this->cap, GLOBAL_NS, [$this, 'menuPageOptions'], $icon);
         add_submenu_page(GLOBAL_NS, __('Plugin Options', 'comet-cache'), __('Plugin Options', 'comet-cache'), $this->cap, GLOBAL_NS, [$this, 'menuPageOptions']);
-
-        
 
         
     }
@@ -177,14 +173,12 @@ trait MenuPageUtils
 
     
 
-    
-
     /**
      * WordPress admin icon color schemes.
      *
      * @since 150422 Rewrite.
      *
-     * @type array WP admin icon colors.
+     * @var array WP admin icon colors.
      *
      * @note These must be hard-coded, because they don't become available
      *    in core until `admin_init`; i.e., too late for `admin_menu`.

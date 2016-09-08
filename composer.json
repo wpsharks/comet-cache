@@ -30,7 +30,7 @@
   },
   "require": {
     "php": ">=5.4",
-    "websharks/wp-php-rv": "160504",
+    "websharks/wp-php-rv": "160824.6416",
     "websharks/sharkicons": "160221"
   },
   "require-dev": {

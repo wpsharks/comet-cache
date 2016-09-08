@@ -10,11 +10,16 @@ trait OptionUtils
      *
      * @since 151002 Improving multisite compat.
      *
+     * @param bool  $intersect Discard options not present in $this->default_options
+     * @param bool  $refresh   Force-pull options directly from get_site_option()
+     *
      * @return array Plugin options.
+     *
+     * @note $intersect should be `false` when this method is called via a VS upgrade routine or during inital startup on when upgrading. See https://git.io/viGIK
      */
-    public function getOptions()
+    public function getOptions($intersect = true, $refresh = false)
     {
-        if (!($options = $this->options)) { // Not defined yet?
+        if (!($options = $this->options) || $refresh) { // If not defined yet, or if we're forcing a refresh via get_site_option()
             if (!is_array($options = get_site_option(GLOBAL_NS.'_options'))) {
                 $options = []; // Force array.
             }
@@ -27,7 +32,7 @@ trait OptionUtils
         }
         $this->options = array_merge($this->default_options, $options);
         $this->options = $this->applyWpFilters(GLOBAL_NS.'_options', $this->options);
-        $this->options = array_intersect_key($this->options, $this->default_options);
+        $this->options = $intersect ? array_intersect_key($this->options, $this->default_options) : $this->options;
 
         foreach ($this->options as $_key => &$_value) {
             $_value = trim((string) $_value); // Force strings.
@@ -47,10 +52,13 @@ trait OptionUtils
      * @since 151002 Improving multisite compat.
      *
      * @param array $options One or more new options.
+     * @param bool  $intersect Discard options not present in $this->default_options
      *
      * @return array Plugin options after update.
+     *
+     * @note $intersect should be `false` when this method is called via a VS upgrade routine. See https://git.io/viGIK
      */
-    public function updateOptions(array $options)
+    public function updateOptions(array $options, $intersect = true)
     {
         if (!IS_PRO) { // Do not save Pro option keys.
             $options = array_diff_key($options, $this->pro_only_option_keys);
@@ -59,10 +67,10 @@ trait OptionUtils
             $this->tryErasingAllFilesDirsIn($this->wpContentBaseDirTo(''));
         }
         $this->options = array_merge($this->default_options, $this->options, $options);
-        $this->options = array_intersect_key($this->options, $this->default_options);
+        $this->options = $intersect ? array_intersect_key($this->options, $this->default_options) : $this->options;
         update_site_option(GLOBAL_NS.'_options', $this->options);
 
-        return $this->getOptions();
+        return $this->getOptions($intersect);
     }
 
     /**

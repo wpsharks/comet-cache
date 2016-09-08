@@ -13,6 +13,7 @@ class Plugin extends AbsBaseAp
 {
     /*[.build.php-auto-generate-use-Traits]*/
     use Traits\Plugin\ActionUtils;
+    use Traits\Plugin\AdminBarUtils;
     use Traits\Plugin\BbPressUtils;
     use Traits\Plugin\CleanupUtils;
     use Traits\Plugin\CondUtils;
@@ -50,7 +51,7 @@ class Plugin extends AbsBaseAp
      *
      * @since 150422 Rewrite.
      *
-     * @type bool If `FALSE`, run without hooks.
+     * @var bool If `FALSE`, run without hooks.
      */
     public $enable_hooks = true;
 
@@ -59,7 +60,7 @@ class Plugin extends AbsBaseAp
      *
      * @since 150422 Rewrite.
      *
-     * @type array Pro-only option keys.
+     * @var array Pro-only option keys.
      */
     public $pro_only_option_keys = [];
 
@@ -68,7 +69,7 @@ class Plugin extends AbsBaseAp
      *
      * @since 150422 Rewrite.
      *
-     * @type array Default options.
+     * @var array Default options.
      */
     public $default_options = [];
 
@@ -77,7 +78,7 @@ class Plugin extends AbsBaseAp
      *
      * @since 150422 Rewrite.
      *
-     * @type array Configured options.
+     * @var array Configured options.
      */
     public $options = [];
 
@@ -86,7 +87,7 @@ class Plugin extends AbsBaseAp
      *
      * @since 150422 Rewrite.
      *
-     * @type string WordPress capability.
+     * @var string WordPress capability.
      */
     public $cap = 'activate_plugins';
 
@@ -95,7 +96,7 @@ class Plugin extends AbsBaseAp
      *
      * @since 150422 Rewrite.
      *
-     * @type string WordPress capability.
+     * @var string WordPress capability.
      */
     public $update_cap = 'update_plugins';
 
@@ -104,7 +105,7 @@ class Plugin extends AbsBaseAp
      *
      * @since 150422 Rewrite.
      *
-     * @type string WordPress capability.
+     * @var string WordPress capability.
      */
     public $network_cap = 'manage_network_plugins';
 
@@ -113,7 +114,7 @@ class Plugin extends AbsBaseAp
      *
      * @since 150422 Rewrite.
      *
-     * @type string WordPress capability.
+     * @var string WordPress capability.
      */
     public $uninstall_cap = 'delete_plugins';
 
@@ -126,7 +127,7 @@ class Plugin extends AbsBaseAp
      *
      * @since 150422 Rewrite.
      *
-     * @type string Cache directory; relative to the configured base directory.
+     * @var string Cache directory; relative to the configured base directory.
      */
     public $cache_sub_dir = 'cache';
 
@@ -180,7 +181,6 @@ class Plugin extends AbsBaseAp
 
             'change_notifications_enable',
 
-            'cache_clear_admin_bar_enable',
             'cache_clear_admin_bar_options_enable',
             'cache_clear_admin_bar_roles_caps',
 
@@ -244,10 +244,14 @@ class Plugin extends AbsBaseAp
 
             'pro_update_check',
             'pro_update_check_stable',
-            'latest_pro_version',
             'last_pro_update_check',
+
+            'latest_pro_version',
+            'latest_pro_package',
+
             'pro_update_username',
             'pro_update_password',
+
             'last_pro_stats_log',
         ];
         $this->default_options = [
@@ -412,8 +416,10 @@ class Plugin extends AbsBaseAp
 
             'pro_update_check'        => '1', // `0|1`; enable?
             'pro_update_check_stable' => '1', // `0` for beta/RC checks; defaults to `1`
-            'latest_pro_version'      => VERSION, // Latest version.
             'last_pro_update_check'   => '0', // Timestamp.
+
+            'latest_pro_version' => VERSION, // Latest version.
+            'latest_pro_package' => '', // Latest package URL.
 
             'pro_update_username' => '', // Username.
             'pro_update_password' => '', // Password or license key.
@@ -453,9 +459,17 @@ class Plugin extends AbsBaseAp
 
         
 
-        
 
-        
+        add_action('admin_bar_menu', [$this, 'adminBarMenu']);
+        add_action('wp_head', [$this, 'adminBarMetaTags'], 0);
+        add_action('wp_enqueue_scripts', [$this, 'adminBarStyles']);
+        add_action('wp_enqueue_scripts', [$this, 'adminBarScripts']);
+
+
+        add_action('admin_head', [$this, 'adminBarMetaTags'], 0);
+        add_action('admin_enqueue_scripts', [$this, 'adminBarStyles']);
+        add_action('admin_enqueue_scripts', [$this, 'adminBarScripts']);
+
 
         add_action('admin_enqueue_scripts', [$this, 'enqueueAdminStyles']);
         add_action('admin_enqueue_scripts', [$this, 'enqueueAdminScripts']);
