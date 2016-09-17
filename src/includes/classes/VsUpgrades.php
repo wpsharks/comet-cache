@@ -264,7 +264,7 @@ class VsUpgrades extends AbsBase
     /**
      * Before we replaced the Pro Plugin Updater system with the WordPress Plugin Update system.
      *
-     * @since $v
+     * @since 160917
      */
     protected function fromLte160709()
     {

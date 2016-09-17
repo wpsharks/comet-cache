@@ -9,7 +9,7 @@ trait UpdateUtils
      * Checks for a new lite release.
      *
      * @since 151220 Show version number in plugin options.
-     * @since $v Don't check current user.
+     * @since 160917 Don't check current user.
      *
      * @attaches-to `admin_init` hook.
      */
