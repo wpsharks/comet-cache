@@ -11,6 +11,7 @@ use WebSharks\CometCache\Traits;
 abstract class AbsBaseAp extends AbsBase
 {
     /*[.build.php-auto-generate-use-Traits]*/
+    use Traits\Shared\ArrayUtils;
     use Traits\Shared\BlogUtils;
     use Traits\Shared\CacheDirUtils;
     use Traits\Shared\CacheLockUtils;

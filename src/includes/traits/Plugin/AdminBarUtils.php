@@ -1,5 +1,4 @@
 <?php
-
 namespace WebSharks\CometCache\Traits\Plugin;
 
 use WebSharks\CometCache\Classes;
@@ -76,9 +75,9 @@ trait AdminBarUtils
                 [
                     'parent' => 'top-secondary',
                     'id'     => GLOBAL_NS.'-wipe',
-                    'title' => __('Wipe', 'comet-cache'),
-                    'href'  => '#',
-                    'meta' => [
+                    'title'  => __('Wipe', 'comet-cache'),
+                    'href'   => '#',
+                    'meta'   => [
                         'title'    => __('Wipe Cache (Start Fresh). Clears the cache for all sites in this network at once!', 'comet-cache'),
                         'class'    => '-wipe',
                         'tabindex' => -1,
@@ -92,9 +91,9 @@ trait AdminBarUtils
                 [
                     'parent' => 'top-secondary',
                     'id'     => GLOBAL_NS.'-clear',
-                    'title' => __('Clear Cache', 'comet-cache'),
-                    'href'  => '#',
-                    'meta'  => [
+                    'title'  => __('Clear Cache', 'comet-cache'),
+                    'href'   => '#',
+                    'meta'   => [
                         'title' => is_multisite() && current_user_can($this->network_cap)
                             ? __('Clear Cache (Start Fresh). Affects the current site only.', 'comet-cache')
                             : '',
@@ -124,7 +123,7 @@ trait AdminBarUtils
             'isMultisite'              => is_multisite(),
             'currentUserHasCap'        => current_user_can($this->cap),
             'currentUserHasNetworkCap' => current_user_can($this->network_cap),
-            'htmlCompressorEnabled'    => (boolean) $this->options['htmlc_enable'],
+            'htmlCompressorEnabled'    => (bool) $this->options['htmlc_enable'],
             'ajaxURL'                  => site_url('/wp-load.php', is_ssl() ? 'https' : 'http'),
             'i18n'                     => [
                 'name'             => NAME,
@@ -172,7 +171,8 @@ trait AdminBarUtils
             return; // Nothing to do.
         }
         $deps = ['jquery', 'admin-bar']; // Plugin dependencies.
-        if ($this->adminBarShowing('stats')) {
+
+        if (IS_PRO && $this->adminBarShowing('stats')) {
             $deps[] = 'chartjs'; // Add ChartJS dependency.
             wp_enqueue_script('chartjs', set_url_scheme('//cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js'), [], null, true);
         }

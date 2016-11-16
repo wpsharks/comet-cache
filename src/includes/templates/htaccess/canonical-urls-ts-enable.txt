@@ -14,5 +14,5 @@
   RewriteCond %{REQUEST_URI} !/$
 
   # Force a trailing slash on all virtual requests.
-  RewriteRule ^(.*)$ /$1/ [QSA,L,R=301]
+  RewriteRule ^(.*)$ $1/ [QSA,L,R=301]
 </IfModule>

@@ -27,4 +27,27 @@ trait WcpWooCommerceUtils
             $counter += $this->autoClearPostCache($product->id);
         }
     }
+
+    /**
+     * Automatically clears cache file for a WooCommerce Product when its stock status is changed.
+     *
+     * @since 16xxxx Improving WooCommerce Compatibility.
+     *
+     * @attaches-to `woocommerce_product_set_stock_status` hook.
+     *
+     * @param string|int $product_id A WooCommerce product ID.
+     */
+    public function autoClearPostCacheOnWooCommerceSetStockStatus($product_id)
+    {
+        $counter = 0; // Initialize.
+
+        if (!is_null($done = &$this->cacheKey('autoClearPostCacheOnWooCommerceSetStockStatus'))) {
+            return $counter; // Already did this.
+        }
+        $done = true; // Flag as having been done.
+
+        if (class_exists('\\WooCommerce')) {
+            $counter += $this->autoClearPostCache($product_id);
+        }
+    }
 }

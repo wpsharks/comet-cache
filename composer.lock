@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "3142fd8d0c5e3db52ef1be6643ffaf89",
-    "content-hash": "6b4508e98154e658eb4f718fa4b7e7a5",
+    "hash": "99b2420267cefeff6e8a0f5db6370929",
+    "content-hash": "4e8bbf7b85f44fbf23964b75ef313b0e",
     "packages": [
         {
             "name": "websharks/css-minifier",
@@ -63,16 +63,16 @@
         },
         {
             "name": "websharks/html-compressor",
-            "version": "160118",
+            "version": "161108",
             "source": {
                 "type": "git",
                 "url": "https://github.com/websharks/html-compressor.git",
-                "reference": "bd1ba2407b9c2c067549600a6ef1faa726c3c2d2"
+                "reference": "73a047734ab585cfaaa3e54526a484b788d768f5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/websharks/html-compressor/zipball/bd1ba2407b9c2c067549600a6ef1faa726c3c2d2",
-                "reference": "bd1ba2407b9c2c067549600a6ef1faa726c3c2d2",
+                "url": "https://api.github.com/repos/websharks/html-compressor/zipball/73a047734ab585cfaaa3e54526a484b788d768f5",
+                "reference": "73a047734ab585cfaaa3e54526a484b788d768f5",
                 "shasum": ""
             },
             "require": {
@@ -117,7 +117,7 @@
                 "html",
                 "websharks"
             ],
-            "time": "2016-01-18 03:17:20"
+            "time": "2016-11-08 20:56:04"
         },
         {
             "name": "websharks/js-minifier",
@@ -293,12 +293,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/websharks/wp-i18n-tools.git",
-                "reference": "0275dc189293aee71e80a8bde43c4087f81ce9bb"
+                "reference": "51e3a241dacdf34a56bc6999e89cca95885d7824"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/websharks/wp-i18n-tools/zipball/0275dc189293aee71e80a8bde43c4087f81ce9bb",
-                "reference": "0275dc189293aee71e80a8bde43c4087f81ce9bb",
+                "url": "https://api.github.com/repos/websharks/wp-i18n-tools/zipball/51e3a241dacdf34a56bc6999e89cca95885d7824",
+                "reference": "51e3a241dacdf34a56bc6999e89cca95885d7824",
                 "shasum": ""
             },
             "type": "library",
@@ -332,7 +332,7 @@
                 "websharks",
                 "wordpress"
             ],
-            "time": "2016-04-16 08:29:33"
+            "time": "2016-09-08 17:23:41"
         }
     ],
     "aliases": [],

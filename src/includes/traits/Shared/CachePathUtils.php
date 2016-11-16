@@ -6,6 +6,41 @@ use WebSharks\CometCache\Classes;
 trait CachePathUtils
 {
     /**
+     * Filter query vars; e.g., remove those we ignore.
+     *
+     * @since 16xxxx Adding support for ignored GET vars.
+     * @since 16xxxx Adding support for sorted query vars.
+     *
+     * @param array $_vars Query vars to filter.
+     *
+     * @return array Filtered query vars.
+     */
+    public function filterQueryVars($_vars)
+    {
+        $_vars     = (array) $_vars; // Force array.
+        $cache_key = $_vars === $_GET ? md5(serialize($_vars)) : '';
+
+        if ($cache_key && ($vars = &$this->staticKey(__FUNCTION__, $cache_key)) !== null) {
+            return $vars; // Already cached this.
+        }
+        $vars                          = $_vars; // Copy.
+        $short_name_lc                 = mb_strtolower(SHORT_NAME);
+        $ignore_get_request_vars_regex = defined('COMET_CACHE_IGNORE_GET_REQUEST_VARS') ? COMET_CACHE_IGNORE_GET_REQUEST_VARS : '';
+
+        foreach ($vars as $_key => $_value) {
+            if (!is_string($_key)) {
+                continue; // Not applicable.
+            } elseif ($_key === $short_name_lc.'AC' || $_key === $short_name_lc.'ABC') {
+                unset($vars[$_key]);
+            } elseif ($ignore_get_request_vars_regex && preg_match($ignore_get_request_vars_regex, $_key)) {
+                unset($vars[$_key]);
+            }
+        } // unset($_key, $_value); // Housekeeping.
+
+        return $vars = $vars ? $this->ksortDeep($vars) : [];
+    }
+
+    /**
      * Cache-path suffix frag (regex).
      *
      * @since 151220 Enhancing translation support.
@@ -93,11 +128,8 @@ trait CachePathUtils
         $is_url_domain_mapped = $is_multisite && $can_consider_domain_mapping && $this->domainMappingBlogId($url);
         $host_base_dir_tokens = $this->hostBaseDirTokens(false, $is_url_domain_mapped, !empty($url_parts['path']) ? $url_parts['path'] : '/');
 
-        $is_a_multisite_base_dir = $is_multisite && $host_base_dir_tokens && $host_base_dir_tokens !== '/' // Check?
-                                   && mb_stripos(!empty($url_parts['path']) ? rtrim($url_parts['path'], '/').'/' : '/', $host_base_dir_tokens) === 0;
-
-        $is_a_multisite_base_dir_root = $is_multisite && $is_a_multisite_base_dir // Save time by using the previous check here.
-                                        && strcasecmp(trim($host_base_dir_tokens, '/'), trim(!empty($url_parts['path']) ? $url_parts['path'] : '/', '/')) === 0;
+        $is_a_multisite_base_dir      = $is_multisite && $host_base_dir_tokens && $host_base_dir_tokens !== '/' && mb_stripos(!empty($url_parts['path']) ? rtrim($url_parts['path'], '/').'/' : '/', $host_base_dir_tokens) === 0;
+        $is_a_multisite_base_dir_root = $is_multisite && $is_a_multisite_base_dir && strcasecmp(trim($host_base_dir_tokens, '/'), trim(!empty($url_parts['path']) ? $url_parts['path'] : '/', '/')) === 0;
 
         # Build and return the cache path.
 
@@ -106,7 +138,6 @@ trait CachePathUtils
         }
         if (!($flags & $this::CACHE_PATH_NO_HOST)) {
             $cache_path .= $url_parts['host'].'/';
-
             // Put multisite sub-roots into a host directory of their own.
             // e.g., `example-com[[-base]-child1]` instead of `example-com`.
             if ($is_a_multisite_base_dir && $host_base_dir_tokens && $host_base_dir_tokens !== '/') {
@@ -145,15 +176,20 @@ trait CachePathUtils
                 $cache_path .= 'index/';
             }
         }
-        if ($this->isExtensionLoaded('mbstring') && mb_check_encoding($cache_path, 'UTF-8')) {
-            $cache_path = mb_strtolower($cache_path, 'UTF-8');
-        }
         $cache_path = str_replace('.', '-', mb_strtolower($cache_path));
 
         if (!($flags & $this::CACHE_PATH_NO_QUV)) {
             if (!($flags & $this::CACHE_PATH_NO_QUERY)) {
                 if (isset($url_parts['query']) && $url_parts['query'] !== '') {
-                    $cache_path = rtrim($cache_path, '/').'.q/'.md5($url_parts['query']).'/';
+
+                    // Support for ignored GET vars.
+                    parse_str($url_parts['query'], $_query_vars);
+                    $_query_vars = $this->filterQueryVars($_query_vars);
+                    // ↑ Also sorts query vars for smarter caching.
+
+                    if ($_query_vars) { // If we have cacheable query vars.
+                        $cache_path = rtrim($cache_path, '/').'.q/'.md5(serialize($_query_vars)).'/';
+                    } // unset($_query_vars); // Housekeeping.
                 }
             }
             if (!($flags & $this::CACHE_PATH_NO_USER)) {

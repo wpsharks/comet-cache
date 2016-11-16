@@ -11,35 +11,35 @@ use WebSharks\CometCache\Interfaces;
 abstract class AbsBase implements Interfaces\Shared\NcDebugConsts, Interfaces\Shared\CachePathConsts
 {
     /**
-     * @type null|plugin Plugin reference.
+     * @var null|plugin Plugin reference.
      *
      * @since 150422 Rewrite.
      */
     protected $plugin;
 
     /**
-     * @type array Instance cache.
+     * @var array Instance cache.
      *
      * @since 150422 Rewrite.
      */
     protected $cache = [];
 
     /**
-     * @type array Global static cache ref.
+     * @var array Global static cache ref.
      *
      * @since 150422 Rewrite.
      */
     protected $static = [];
 
     /**
-     * @type array Global static cache.
+     * @var array Global static cache.
      *
      * @since 150422 Rewrite.
      */
     protected static $global_static = [];
 
     /**
-     * @type \stdClass Overload properties.
+     * @var \stdClass Overload properties.
      *
      * @since 150422 Rewrite.
      */
@@ -185,7 +185,7 @@ abstract class AbsBase implements Interfaces\Shared\NcDebugConsts, Interfaces\Sh
 
             switch (gettype($_arg)) {
                 case 'integer':
-                    $_key = (integer) $_arg;
+                    $_key = (int) $_arg;
                     break; // Break switch handler.
 
                 case 'double':
@@ -194,7 +194,7 @@ abstract class AbsBase implements Interfaces\Shared\NcDebugConsts, Interfaces\Sh
                     break; // Break switch handler.
 
                 case 'boolean':
-                    $_key = (integer) $_arg;
+                    $_key = (int) $_arg;
                     break; // Break switch handler.
 
                 case 'array':

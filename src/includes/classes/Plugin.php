@@ -147,7 +147,7 @@ class Plugin extends AbsBaseAp
         parent::__construct();
 
         /* -------------------------------------------------------------- */
-        if (!($this->enable_hooks = (boolean) $enable_hooks)) {
+        if (!($this->enable_hooks = (bool) $enable_hooks)) {
             return; // Stop here; construct without hooks.
         }
         /* -------------------------------------------------------------- */
@@ -190,8 +190,10 @@ class Plugin extends AbsBaseAp
             'cache_clear_eval_code',
             'cache_clear_urls',
 
+            'ignore_get_request_vars',
+            'cache_nonce_values_when_logged_in',
+
             'when_logged_in',
-            'when_logged_in_admin_bar',
 
             'version_salt',
 
@@ -317,10 +319,11 @@ class Plugin extends AbsBaseAp
             'allow_client_side_cache'           => '0', // `0|1`.
             'when_logged_in'                    => '0', // `0|1|postload`.
             'get_requests'                      => '0', // `0|1`.
+            'ignore_get_request_vars'           => 'utm_*', // Empty string or line-delimited patterns.
             'feeds_enable'                      => '0', // `0|1`.
             'cache_404_requests'                => '0', // `0|1`.
             'cache_nonce_values'                => '0', // `0|1`.
-            'cache_nonce_values_when_logged_in' => '0', // `0|1`.
+            'cache_nonce_values_when_logged_in' => '1', // `0|1`.
 
             /* Related to exclusions. */
 
@@ -336,8 +339,11 @@ class Plugin extends AbsBaseAp
 
             /* Related to HTML compressor. */
 
-            'htmlc_enable'                => '0', // Enable HTML compression?
-            'htmlc_css_exclusions'        => '', // Empty string or line-delimited patterns.
+            'htmlc_enable' => '0', // Enable HTML compression?
+
+            'htmlc_css_exclusions' => "id='rs-plugin-settings-inline-css'", // Empty string or line-delimited patterns.
+            // This defaults to an exclusion rule that handles compatibility with RevSlider. See: <https://github.com/websharks/comet-cache/issues/614>
+
             'htmlc_js_exclusions'         => '.php?', // Empty string or line-delimited patterns.
             'htmlc_uri_exclusions'        => '', // Empty string or line-delimited patterns.
             'htmlc_cache_expiration_time' => '14 days', // `strtotime()` compatible.
@@ -351,9 +357,6 @@ class Plugin extends AbsBaseAp
             'htmlc_compress_js_code'               => '1', // `0|1`.
             'htmlc_compress_html_code'             => '1', // `0|1`.
             'htmlc_when_logged_in'                 => '0', // `0|1`; enable when logged in?
-
-            /* Related to Logged-In User Caching */
-            'when_logged_in_admin_bar' => '1', // `0|1`; enable when logged in?
 
             /* Related to auto-cache engine. */
 
@@ -459,17 +462,14 @@ class Plugin extends AbsBaseAp
 
         
 
-
         add_action('admin_bar_menu', [$this, 'adminBarMenu']);
         add_action('wp_head', [$this, 'adminBarMetaTags'], 0);
         add_action('wp_enqueue_scripts', [$this, 'adminBarStyles']);
         add_action('wp_enqueue_scripts', [$this, 'adminBarScripts']);
 
-
         add_action('admin_head', [$this, 'adminBarMetaTags'], 0);
         add_action('admin_enqueue_scripts', [$this, 'adminBarStyles']);
         add_action('admin_enqueue_scripts', [$this, 'adminBarScripts']);
-
 
         add_action('admin_enqueue_scripts', [$this, 'enqueueAdminStyles']);
         add_action('admin_enqueue_scripts', [$this, 'enqueueAdminScripts']);
@@ -502,6 +502,7 @@ class Plugin extends AbsBaseAp
         add_action('pre_post_update', [$this, 'autoClearPostCacheTransition'], 10, 2);
 
         add_action('woocommerce_product_set_stock', [$this, 'autoClearPostCacheOnWooCommerceSetStock'], 10, 1);
+        add_action('woocommerce_product_set_stock_status', [$this, 'autoClearPostCacheOnWooCommerceSetStockStatus'], 10, 1);
         add_action('update_option_comment_mail_options', [$this, 'autoClearCache']);
 
         add_action('added_term_relationship', [$this, 'autoClearPostTermsCache'], 10, 1);
@@ -527,11 +528,7 @@ class Plugin extends AbsBaseAp
                 return 'disabled-by-'.SLUG_TD; // MUST return a string literal that is not 'true' or '' (an empty string). See <http://bit.ly/1YItpdE>
             }); // See also why the Akismet nonce should be disabled: <http://jas.xyz/1R23f5c>
         }
-
         
-
-        
-
         
         /* -------------------------------------------------------------- */
 

@@ -1,5 +1,4 @@
 .plugin-menu-page {
-  min-width:                  800px;
   margin:                     1.25em 1.25em 1.25em 0.25em;
 
   &,
@@ -54,6 +53,8 @@
 
   img {
     border:                   0;
+    max-width:                100%;
+    box-sizing:               border-box;
 
     &.screenshot {
       float:                  right;
@@ -63,6 +64,20 @@
       background:             $img-screenshot-bg-color;
       border:                 1px solid $img-screenshot-border-color;
       box-shadow:             0 0 5px 0 $img-screenshot-box-shadow-color inset;
+    }
+
+    @media (max-width: 1199px) {
+      float:                  none !important;
+      display:                block !important;
+      margin:                 1em auto !important;
+
+      &:first-child {
+        margin-top:           0 !important;
+      }
+
+      &:last-child {
+        margin-bottom:        0 !important;
+      }
     }
   }
 
@@ -87,6 +102,11 @@
       background:             $primary-switch-bg-color;
       border:                 1px solid $primary-switch-border-color;
       box-shadow:            -1px -1px 0 0 $primary-switch-box-shadow-color-a inset, 1px 1px 0 0 $primary-switch-box-shadow-color-b inset;
+
+      @media (max-width: 1199px) {
+        margin-bottom:        1em;
+        display:              block;
+      }
     }
   }
 
@@ -106,6 +126,10 @@
     background:               $input-bg-color;
     border:                   1px solid $input-border-color;
     box-shadow:               0 0 2px 0 $input-box-shadow-color inset;
+
+    @media (max-width: 1199px) {
+      width:                  100% !important;
+    }
   }
 
   select,
@@ -176,6 +200,12 @@
 
     &:active {
       @include transform(scale(0.98, 0.98));
+    }
+
+    @media (max-width: 1199px) {
+      img {
+        display:              none !important;
+      }
     }
   }
 

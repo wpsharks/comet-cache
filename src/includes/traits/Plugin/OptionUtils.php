@@ -10,8 +10,8 @@ trait OptionUtils
      *
      * @since 151002 Improving multisite compat.
      *
-     * @param bool  $intersect Discard options not present in $this->default_options
-     * @param bool  $refresh   Force-pull options directly from get_site_option()
+     * @param bool $intersect Discard options not present in $this->default_options
+     * @param bool $refresh   Force-pull options directly from get_site_option()
      *
      * @return array Plugin options.
      *
@@ -24,10 +24,10 @@ trait OptionUtils
                 $options = []; // Force array.
             }
             if (!$options && is_array($zencache_options = get_site_option('zencache_options'))) {
-                $options                = $zencache_options; // Old ZenCache options.
-                $options['crons_setup'] = $this->default_options['crons_setup'];
+                $options                        = $zencache_options; // Old ZenCache options.
+                $options['crons_setup']         = $this->default_options['crons_setup'];
                 $options['latest_lite_version'] = $this->default_options['latest_lite_version'];
-                $options['latest_pro_version'] = $this->default_options['latest_pro_version'];
+                $options['latest_pro_version']  = $this->default_options['latest_pro_version'];
             }
         }
         $this->options = array_merge($this->default_options, $options);
@@ -51,7 +51,7 @@ trait OptionUtils
      *
      * @since 151002 Improving multisite compat.
      *
-     * @param array $options One or more new options.
+     * @param array $options   One or more new options.
      * @param bool  $intersect Discard options not present in $this->default_options
      *
      * @return array Plugin options after update.
@@ -65,6 +65,9 @@ trait OptionUtils
         }
         if (!empty($options['base_dir']) && $options['base_dir'] !== $this->options['base_dir']) {
             $this->tryErasingAllFilesDirsIn($this->wpContentBaseDirTo(''));
+        }
+        if (IS_PRO && !empty($options['pro_update_username']) && !empty($options['pro_update_password'])) {
+            $this->dismissMainNotice('configure-pro-updater');
         }
         $this->options = array_merge($this->default_options, $this->options, $options);
         $this->options = $intersect ? array_intersect_key($this->options, $this->default_options) : $this->options;

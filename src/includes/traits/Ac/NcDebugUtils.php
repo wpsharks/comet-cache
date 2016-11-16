@@ -10,7 +10,7 @@ trait NcDebugUtils
      *
      * @since 150422 Rewrite.
      *
-     * @type array An array of debug info; i.e. `reason_code` and `reason` (optional).
+     * @var array An array of debug info; i.e. `reason_code` and `reason` (optional).
      */
     public $debug_info = ['reason_code' => '', 'reason' => ''];
 
@@ -144,11 +144,11 @@ trait NcDebugUtils
                     break; // Break switch handler.
 
                 case $this::NC_DEBUG_IS_LOGGED_IN_USER_NONCE:
-                    $reason = __('because the current page contains `_wpnonce` or `akismet_comment_nonce`. While your current configuration states that pages SHOULD be cache for logged-in visitors, `*nonce*` values in the markup are not cache-compatible. See http://wsharks.com/1O1Kudy for further details.', 'comet-cache');
+                    $reason = __('because the current page contains `_wpnonce` or `akismet_comment_nonce`. While your current configuration states that pages should be cached for logged-in visitors, it also states that pages with dynamic `*nonce*` values in the markup should not be cached, even for logged-in visitors. See http://wsharks.com/1O1Kudy for further details.', 'comet-cache');
                     break; // Break switch handler.
 
                 case $this::NC_DEBUG_PAGE_CONTAINS_NONCE:
-                    $reason = __('because the current page contains `_wpnonce` or `akismet_comment_nonce`. Note that `*nonce*` values in the markup are not cache-compatible. See http://wsharks.com/1O1Kudy for further details.', 'comet-cache');
+                    $reason = __('because the current page contains `_wpnonce` or `akismet_comment_nonce`. Your current configuration states that pages with dynamic `*nonce*` values in the markup should not be cached. See http://wsharks.com/1O1Kudy for further details.', 'comet-cache');
                     break; // Break switch handler.
 
                 case $this::NC_DEBUG_NO_USER_TOKEN:

@@ -18,7 +18,7 @@
     display:                  block;
     cursor:                   pointer;
     background:               $panel-heading-bg-color;
-    background:               linear-gradient(to right, $panel-heading-bg-color , $panel-heading-bg-color-fade);
+    background:               linear-gradient(to right, $panel-heading-bg-color, $panel-heading-bg-color-fade);
     color:                    $panel-heading-color !important;
     box-shadow:               0 2px 2px 0 $panel-heading-box-shadow-color;
 
@@ -37,15 +37,15 @@
       content:                map-get($sharkicons, chevron-up);
     }
 
-    @at-root .pro-preview-feature {
-      @at-root .plugin-menu-page-panel-heading.pro-preview-feature {
-        background : #216095;
+    @at-root [data-pro-version-only*=' '] {
+      @at-root .plugin-menu-page-panel-heading[data-pro-version-only*=' '] {
+        background:           #216095;
       }
 
       &::after {
         font-variant:         small-caps !important;
         font-family:          sans-serif !important;
-        content:              'pro version only' !important;
+        content:              attr(data-pro-version-only) !important;
         margin-left:          15px;
         background:           #216095;
         color:                #FFFFFF;
@@ -54,14 +54,15 @@
       }
     }
 
-    @at-root .pro-preview-additional-features {
-      @at-root .plugin-menu-page-panel-heading.pro-preview-additional-features {
-        background : #216095;
+    @at-root [data-additional-pro-features*=' '] {
+      @at-root .plugin-menu-page-panel-heading[data-additional-pro-features*=' '] {
+        background:           #216095;
       }
+
       &::after {
         font-variant:         small-caps !important;
         font-family:          sans-serif !important;
-        content:              'additional pro features' !important;
+        content:              attr(data-additional-pro-features) !important;
         margin-left:          15px;
         background:           #216095;
         color:                #FFFFFF;
@@ -97,6 +98,16 @@
     p {
       font-size:              13px;
       color:                  $panel-body-p-color;
+    }
+
+    p.speed {
+      font-size:              120%;
+      font-weight:            bold;
+      float:                  right;
+
+      @media (max-width: 1199px) {
+        display:              none;
+      }
     }
 
     p.notice,

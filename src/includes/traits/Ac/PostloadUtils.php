@@ -10,7 +10,7 @@ trait PostloadUtils
      *
      * @since 150422 Rewrite.
      *
-     * @type bool `TRUE` if main query has been loaded; else `FALSE`.
+     * @var bool `TRUE` if main query has been loaded; else `FALSE`.
      *
      * @see wpMainQueryPostload()
      */
@@ -21,7 +21,7 @@ trait PostloadUtils
      *
      * @since 150422 Rewrite.
      *
-     * @type bool `TRUE` if is a 404 error; else `FALSE`.
+     * @var bool `TRUE` if is a 404 error; else `FALSE`.
      *
      * @see wpMainQueryPostload()
      */
@@ -32,7 +32,7 @@ trait PostloadUtils
      *
      * @since 150422 Rewrite.
      *
-     * @type int Last HTTP status code (if applicable).
+     * @var int Last HTTP status code (if applicable).
      *
      * @see maybeFilterStatusHeaderPostload()
      */
@@ -43,7 +43,7 @@ trait PostloadUtils
      *
      * @since 150422 Rewrite.
      *
-     * @type bool `TRUE` if is a WP content type.
+     * @var bool `TRUE` if is a WP content type.
      *
      * @see wpMainQueryPostload()
      */
@@ -54,7 +54,7 @@ trait PostloadUtils
      *
      * @since 150422 Rewrite.
      *
-     * @type string Current WordPress {@link \content_url()}.
+     * @var string Current WordPress {@link \content_url()}.
      *
      * @see wpMainQueryPostload()
      */
@@ -65,7 +65,7 @@ trait PostloadUtils
      *
      * @since 150422 Rewrite.
      *
-     * @type bool `TRUE` if {@link \is_user_loged_in()} else `FALSE`.
+     * @var bool `TRUE` if {@link \is_user_loged_in()} else `FALSE`.
      *
      * @see wpMainQueryPostload()
      */
@@ -76,7 +76,7 @@ trait PostloadUtils
      *
      * @since 150422 Rewrite.
      *
-     * @type bool `TRUE` if {@link \is_maintenance()} else `FALSE`.
+     * @var bool `TRUE` if {@link \is_maintenance()} else `FALSE`.
      *
      * @see wpMainQueryPostload()
      */
@@ -87,7 +87,7 @@ trait PostloadUtils
      *
      * @since 150422 Rewrite.
      *
-     * @type array Data and/or flags that work with various postload handlers.
+     * @var array Data and/or flags that work with various postload handlers.
      */
     public $postload = [
         
@@ -119,7 +119,7 @@ trait PostloadUtils
             'status_header',
             function ($status_header, $status_code) {
                 if ($status_code > 0) {
-                    $this->http_status = (integer) $status_code;
+                    $this->http_status = (int) $status_code;
                 }
                 return $status_header;
             },

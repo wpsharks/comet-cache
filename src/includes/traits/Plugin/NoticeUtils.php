@@ -15,7 +15,7 @@ trait NoticeUtils
      * @since 150422 Rewrite. Improved 151002.
      *
      * @param string $notice  HTML markup containing the notice itself.
-     * @param array $args    Any additional arguments supported by the notice API in this plugin.
+     * @param array  $args    Any additional arguments supported by the notice API in this plugin.
      * @param int    $blog_id Optional. Defaults to the current blog ID. Use any value `< 0` to indicate the main site.
      *
      * @return string A unique key generated for this notice.
@@ -23,7 +23,7 @@ trait NoticeUtils
     public function enqueueNotice($notice, array $args = [], $blog_id = 0)
     {
         $notice  = trim((string) $notice);
-        $blog_id = (integer) $blog_id;
+        $blog_id = (int) $blog_id;
 
         if (!$notice) {
             return; // Nothing to do.
@@ -58,7 +58,7 @@ trait NoticeUtils
     public function dismissNotice($key_to_dismiss, $blog_id = 0)
     {
         $key_to_dismiss = trim((string) $key_to_dismiss);
-        $blog_id        = (integer) $blog_id; // For multisite compat.
+        $blog_id        = (int) $blog_id; // For multisite compat.
         $notices        = $enqueued_notices        = $this->getNotices($blog_id);
 
         if (!$key_to_dismiss) {
@@ -132,7 +132,7 @@ trait NoticeUtils
      */
     public function allAdminNotices()
     {
-        $notices          = $enqueued_notices = $this->getNotices();
+        $notices          = $enqueued_notices          = $this->getNotices();
         $combined_notices = []; // Initialize
 
         foreach ($notices as $_key => $_notice) {
@@ -166,9 +166,12 @@ trait NoticeUtils
             if ($_notice['combinable'] && !$_notice['persistent_key']) {
                 $combined_notices[] = $_notice['notice']; // Save this for displaying as part of a single, combined notice.
             } else {
-                echo '<div class="'.esc_attr($_notice['class']).'" style="clear:both; padding-right:38px; position: relative;"><p>'.$_notice['notice'].'</p>'.$_dismiss.'</div>';
+                $_notice['notice'] = trim($_notice['notice']);
+                if (!preg_match('/^\<(?:p|div|form|h[1-6]|ul|ol)[\s>]/ui', $_notice['notice'])) {
+                    $_notice['notice'] = '<p>'.$_notice['notice'].'</p>'; // Add `<p>` tag.
+                }
+                echo '<div class="'.esc_attr($_notice['class']).'" style="clear:both; padding-right:38px; position: relative;">'.$_notice['notice'].$_dismiss.'</div>';
             }
-
             if (!$_notice['persistent_key']) { // If not persistent, dismiss.
                 unset($notices[$_key]); // Dismiss; this notice has been displayed now.
             }
@@ -180,13 +183,12 @@ trait NoticeUtils
             foreach ($combined_notices as $_item) {
                 $_line_items .= '<p><span class="dashicons dashicons-yes"></span> '.$_item.'</p>'."\n";
             }
-
-            $_show_details = __('Show details.', 'comet-cache');
+            $_see_details  = __('See details.', 'comet-cache');
             $_hide_details = __('Hide details.', 'comet-cache');
 
             $_combined = '<div class="updated notice is-dismissible" style="clear:both; padding-right:38px; position: relative;">';
             $_combined .= '<p><img src="'.esc_attr($this->url('/src/client-s/images/clear.png')).'" style="float:left; margin:0 10px 0 0; border:0;" />';
-            $_combined .= sprintf(__('<strong>%1$s</strong> detected changes and intelligently cleared the cache to keep your site up-to-date. <a href="#" id="'.SLUG_TD.'-toggle-notices" onclick="jQuery(\'#'.SLUG_TD.'-combined-notices\').toggle();if (jQuery(\'#comet-cache-combined-notices\').is(\':visible\')) { jQuery(this).text(\''.$_hide_details.'\'); } else { jQuery(this).text(\''.$_show_details.'\'); }">'.$_show_details.'</a>', 'comet-cache'), esc_html(NAME)).'</p>';
+            $_combined .= sprintf(__('<strong>%1$s</strong> detected changes and intelligently cleared the cache to keep your site up-to-date.', 'comet-cache'), esc_html(NAME)).' <a href="#" id="'.SLUG_TD.'-toggle-notices" style="text-decoration:none; border-bottom:1px dotted;" onclick="jQuery(\'#'.SLUG_TD.'-combined-notices\').toggle(); if (jQuery(\'#comet-cache-combined-notices\').is(\':visible\')) { jQuery(this).text(\''.$_hide_details.'\'); } else { jQuery(this).text(\''.$_see_details.'\'); }">'.$_see_details.'</a></p>';
             $_combined .= '<div id="'.SLUG_TD.'-combined-notices" style="display: none;">'.$_line_items.'</div>';
             $_combined .= '<button type="button" class="notice-dismiss"><span class="screen-reader-text">'.__('Dismiss this notice.', 'comet-cache').'</span></button>';
             $_combined .= '</div>';
@@ -195,7 +197,6 @@ trait NoticeUtils
 
             unset($_item, $_line_item, $_combined); // Housekeeping.
         }
-
         # Update notices if something changed above.
 
         if ($notices !== $enqueued_notices) { // Something changed?
@@ -220,11 +221,11 @@ trait NoticeUtils
     public function getNotices($blog_id = 0)
     {
         if (is_multisite()) {
-            if (!($blog_id = (integer) $blog_id)) {
-                $blog_id = (integer) get_current_blog_id();
+            if (!($blog_id = (int) $blog_id)) {
+                $blog_id = (int) get_current_blog_id();
             }
             if ($blog_id < 0) { // Blog for main site.
-                $blog_id = (integer) get_current_site()->blog_id;
+                $blog_id = (int) get_current_site()->blog_id;
             }
             $blog_suffix = '_'.$blog_id; // Site option suffix.
             $notices     = get_site_option(GLOBAL_NS.$blog_suffix.'_notices');
@@ -262,11 +263,11 @@ trait NoticeUtils
     public function updateNotices(array $notices, $blog_id = 0)
     {
         if (is_multisite()) {
-            if (!($blog_id = (integer) $blog_id)) {
-                $blog_id = (integer) get_current_blog_id();
+            if (!($blog_id = (int) $blog_id)) {
+                $blog_id = (int) get_current_blog_id();
             }
             if ($blog_id < 0) { // Blog for main site.
-                $blog_id = (integer) get_current_site()->blog_id;
+                $blog_id = (int) get_current_site()->blog_id;
             }
             $blog_suffix = '_'.$blog_id; // Site option suffix.
             update_site_option(GLOBAL_NS.$blog_suffix.'_notices', $notices);
@@ -319,7 +320,7 @@ trait NoticeUtils
                 case 'push_to_top':
                 case 'combinable':
                 case 'dismissable':
-                    $_value = (boolean) $_value;
+                    $_value = (bool) $_value;
                     break; // Stop here.
 
                 case 'class':

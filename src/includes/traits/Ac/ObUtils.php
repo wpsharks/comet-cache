@@ -10,7 +10,7 @@ trait ObUtils
      *
      * @since 150422 Rewrite.
      *
-     * @type float One of `http://` or `https://`.
+     * @var float One of `http://` or `https://`.
      */
     public $protocol = '';
 
@@ -19,7 +19,7 @@ trait ObUtils
      *
      * @since 150821 Improving multisite compat.
      *
-     * @type string Host token for this request.
+     * @var string Host token for this request.
      */
     public $host_token = '';
 
@@ -28,7 +28,7 @@ trait ObUtils
      *
      * @since 150821 Improving multisite compat.
      *
-     * @type string Host base/dir tokens for this request.
+     * @var string Host base/dir tokens for this request.
      */
     public $host_base_dir_tokens = '';
 
@@ -37,7 +37,7 @@ trait ObUtils
      *
      * @since 150422 Rewrite.
      *
-     * @type string|mixed Any scalar value does fine.
+     * @var string|mixed Any scalar value does fine.
      */
     public $version_salt = '';
 
@@ -46,7 +46,7 @@ trait ObUtils
      *
      * @since 150422 Rewrite.
      *
-     * @type string Cache path for the current request.
+     * @var string Cache path for the current request.
      */
     public $cache_path = '';
 
@@ -55,7 +55,7 @@ trait ObUtils
      *
      * @since 150422 Rewrite.
      *
-     * @type string Absolute cache file path for the current request.
+     * @var string Absolute cache file path for the current request.
      */
     public $cache_file = '';
 
@@ -64,7 +64,7 @@ trait ObUtils
      *
      * @since 150422 Rewrite.
      *
-     * @type string 404 cache path for the current request.
+     * @var string 404 cache path for the current request.
      */
     public $cache_path_404 = '';
 
@@ -73,7 +73,7 @@ trait ObUtils
      *
      * @since 150422 Rewrite.
      *
-     * @type string Absolute 404 cache file path for the current request.
+     * @var string Absolute 404 cache file path for the current request.
      */
     public $cache_file_404 = '';
 
@@ -82,7 +82,7 @@ trait ObUtils
      *
      * @since 150422 Rewrite.
      *
-     * @type string Version salt followed by the current request location.
+     * @var string Version salt followed by the current request location.
      */
     public $salt_location = '';
 
@@ -91,9 +91,18 @@ trait ObUtils
      *
      * @since 151002 Load average checks in pro version.
      *
-     * @type int Calculated max age; i.e., before expiration.
+     * @var int Calculated max age; i.e., before expiration.
      */
     public $cache_max_age = 0;
+
+    /**
+     * Calculated 12 hour expiration time.
+     *
+     * @since 16xxxx Calculated 12 hour expiration time.
+     *
+     * @var int Calculated 12 hour expiration time.
+     */
+    public $nonce_cache_max_age = 0;
 
     /**
      * Start output buffering (if applicable); or serve a cache file (if possible).
@@ -120,7 +129,7 @@ trait ObUtils
         if (isset($_SERVER['COMET_CACHE_ALLOWED']) && !$_SERVER['COMET_CACHE_ALLOWED']) {
             return $this->maybeSetDebugInfo($this::NC_DEBUG_COMET_CACHE_ALLOWED_SERVER_VAR);
         }
-        if (defined('DONOTCACHEPAGE')) {
+        if (defined('DONOTCACHEPAGE')) { // Common to most WP cache plugins.
             return $this->maybeSetDebugInfo($this::NC_DEBUG_DONOTCACHEPAGE_CONSTANT);
         }
         if (isset($_SERVER['DONOTCACHEPAGE'])) {
@@ -135,7 +144,7 @@ trait ObUtils
         if (isset($_SERVER['SERVER_ADDR']) && $this->currentIp() === $_SERVER['SERVER_ADDR']) {
             if ((!IS_PRO || !$this->isAutoCacheEngine()) && !$this->isLocalhost()) {
                 return $this->maybeSetDebugInfo($this::NC_DEBUG_SELF_SERVE_REQUEST);
-            }
+            } // Don't trip on requests by the auto-cache engine.
         }
         if (!COMET_CACHE_FEEDS_ENABLE && $this->isFeed()) {
             return $this->maybeSetDebugInfo($this::NC_DEBUG_FEED_REQUEST);
@@ -155,7 +164,7 @@ trait ObUtils
         if (!COMET_CACHE_GET_REQUESTS && $this->requestContainsUncacheableQueryVars()) {
             return $this->maybeSetDebugInfo($this::NC_DEBUG_GET_REQUEST_QUERIES);
         }
-        if (!empty($_REQUEST['preview'])) {
+        if (!empty($_REQUEST['preview'])) { // Don't cache previews under any circumstance.
             return $this->maybeSetDebugInfo($this::NC_DEBUG_PREVIEW);
         }
         if (COMET_CACHE_EXCLUDE_HOSTS && preg_match(COMET_CACHE_EXCLUDE_HOSTS, $_SERVER['HTTP_HOST'])) {
@@ -167,21 +176,21 @@ trait ObUtils
         if (COMET_CACHE_EXCLUDE_AGENTS && !empty($_SERVER['HTTP_USER_AGENT']) && (!IS_PRO || !$this->isAutoCacheEngine())) {
             if (preg_match(COMET_CACHE_EXCLUDE_AGENTS, $_SERVER['HTTP_USER_AGENT'])) {
                 return $this->maybeSetDebugInfo($this::NC_DEBUG_EXCLUDED_AGENTS);
-            }
+            } // Don't trip on requests by the auto-cache engine.
         }
         if (COMET_CACHE_EXCLUDE_REFS && !empty($_REQUEST['_wp_http_referer'])) {
             if (preg_match(COMET_CACHE_EXCLUDE_REFS, stripslashes($_REQUEST['_wp_http_referer']))) {
                 return $this->maybeSetDebugInfo($this::NC_DEBUG_EXCLUDED_REFS);
-            }
+            } // This variable is set by WordPress core in some cases.
         }
         if (COMET_CACHE_EXCLUDE_REFS && !empty($_SERVER['HTTP_REFERER'])) {
             if (preg_match(COMET_CACHE_EXCLUDE_REFS, $_SERVER['HTTP_REFERER'])) {
                 return $this->maybeSetDebugInfo($this::NC_DEBUG_EXCLUDED_REFS);
-            }
+            } // Based on the HTTP referrer in this case.
         }
-        $this->protocol             = $this->isSsl() ? 'https://' : 'http://';
         $this->host_token           = $this->hostToken();
         $this->host_base_dir_tokens = $this->hostBaseDirTokens();
+        $this->protocol             = $this->isSsl() ? 'https://' : 'http://';
 
         $this->version_salt = ''; // Initialize the version salt.
         
@@ -196,8 +205,11 @@ trait ObUtils
 
         $this->salt_location = ltrim($this->version_salt.' '.$this->protocol.$this->host_token.$_SERVER['REQUEST_URI']);
 
-        $this->cache_max_age = strtotime('-'.COMET_CACHE_MAX_AGE);
+        $this->cache_max_age       = strtotime('-'.COMET_CACHE_MAX_AGE); // Initialize; global config.
+        $this->nonce_cache_max_age = strtotime('-12 hours'); // Initialize; based on a fixed expiration time.
+
         
+
         if (IS_PRO && COMET_CACHE_WHEN_LOGGED_IN === 'postload' && $this->isLikeUserLoggedIn()) {
             $this->postload['when_logged_in'] = true; // Enable postload check.
         } elseif (is_file($this->cache_file) && (!$this->cache_max_age || filemtime($this->cache_file) >= $this->cache_max_age)) {
@@ -213,9 +225,16 @@ trait ObUtils
 
             if (COMET_CACHE_DEBUGGING_ENABLE && $this->isHtmlXmlDoc($cache)) {
                 $total_time = number_format(microtime(true) - $this->timer, 5, '.', '');
-                $cache .= "\n".'<!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->';
-                // translators: This string is actually NOT translatable because the `__()` function is not available at this point in the processing.
-                $cache .= "\n".'<!-- '.htmlspecialchars(sprintf(__('%1$s fully functional :-) Cache file served for (%2$s) in %3$s seconds, on: %4$s.', 'comet-cache'), NAME, $this->salt_location, $total_time, date('M jS, Y @ g:i a T'))).' -->';
+
+                $DebugNotes = new Classes\Notes();
+
+                $DebugNotes->addAsciiArt(sprintf(__('%1$s is Fully Functional', 'comet-cache'), NAME));
+                $DebugNotes->addLineBreak();
+
+                $DebugNotes->add(__('Loaded via Cache On', 'comet-cache'), date('M jS, Y @ g:i a T'));
+                $DebugNotes->add(__('Loaded via Cache In', 'comet-cache'), sprintf(__('%1$s seconds', 'comet-cache'), $total_time));
+
+                $cache .= "\n\n".$DebugNotes->asHtmlComments();
             }
             exit($cache); // Exit with cache contents.
         } else {
@@ -254,54 +273,54 @@ trait ObUtils
             return false; // Don't cache an empty buffer.
         }
         if (!isset($GLOBALS[GLOBAL_NS.'_shutdown_flag'])) {
-            return (boolean) $this->maybeSetDebugInfo($this::NC_DEBUG_EARLY_BUFFER_TERMINATION);
+            return (bool) $this->maybeSetDebugInfo($this::NC_DEBUG_EARLY_BUFFER_TERMINATION);
         }
         if (defined('COMET_CACHE_ALLOWED') && !COMET_CACHE_ALLOWED) {
-            return (boolean) $this->maybeSetDebugInfo($this::NC_DEBUG_COMET_CACHE_ALLOWED_CONSTANT);
+            return (bool) $this->maybeSetDebugInfo($this::NC_DEBUG_COMET_CACHE_ALLOWED_CONSTANT);
         }
         if (isset($_SERVER['COMET_CACHE_ALLOWED']) && !$_SERVER['COMET_CACHE_ALLOWED']) {
-            return (boolean) $this->maybeSetDebugInfo($this::NC_DEBUG_COMET_CACHE_ALLOWED_SERVER_VAR);
+            return (bool) $this->maybeSetDebugInfo($this::NC_DEBUG_COMET_CACHE_ALLOWED_SERVER_VAR);
         }
         if (defined('DONOTCACHEPAGE')) {
-            return (boolean) $this->maybeSetDebugInfo($this::NC_DEBUG_DONOTCACHEPAGE_CONSTANT);
+            return (bool) $this->maybeSetDebugInfo($this::NC_DEBUG_DONOTCACHEPAGE_CONSTANT);
         }
         if (isset($_SERVER['DONOTCACHEPAGE'])) {
-            return (boolean) $this->maybeSetDebugInfo($this::NC_DEBUG_DONOTCACHEPAGE_SERVER_VAR);
+            return (bool) $this->maybeSetDebugInfo($this::NC_DEBUG_DONOTCACHEPAGE_SERVER_VAR);
         }
         if ((!IS_PRO || !COMET_CACHE_WHEN_LOGGED_IN) && $this->is_user_logged_in) {
-            return (boolean) $this->maybeSetDebugInfo($this::NC_DEBUG_IS_LOGGED_IN_USER);
+            return (bool) $this->maybeSetDebugInfo($this::NC_DEBUG_IS_LOGGED_IN_USER);
         }
         if ((!IS_PRO || !COMET_CACHE_WHEN_LOGGED_IN) && $this->isLikeUserLoggedIn()) {
-            return (boolean) $this->maybeSetDebugInfo($this::NC_DEBUG_IS_LIKE_LOGGED_IN_USER);
+            return (bool) $this->maybeSetDebugInfo($this::NC_DEBUG_IS_LIKE_LOGGED_IN_USER);
         }
         if (!COMET_CACHE_CACHE_NONCE_VALUES && preg_match('/\b(?:_wpnonce|akismet_comment_nonce)\b/u', $cache)) {
             if (IS_PRO && COMET_CACHE_WHEN_LOGGED_IN && $this->isLikeUserLoggedIn()) {
                 if (!COMET_CACHE_CACHE_NONCE_VALUES_WHEN_LOGGED_IN) {
-                    return (boolean) $this->maybeSetDebugInfo($this::NC_DEBUG_IS_LOGGED_IN_USER_NONCE);
+                    return (bool) $this->maybeSetDebugInfo($this::NC_DEBUG_IS_LOGGED_IN_USER_NONCE);
                 }
             } else { // Use the default debug notice for nonce conflicts.
-                return (boolean) $this->maybeSetDebugInfo($this::NC_DEBUG_PAGE_CONTAINS_NONCE);
+                return (bool) $this->maybeSetDebugInfo($this::NC_DEBUG_PAGE_CONTAINS_NONCE);
             } // An nonce makes the page dynamic; i.e., NOT cache compatible.
         }
         if ($this->is_404 && !COMET_CACHE_CACHE_404_REQUESTS) {
-            return (boolean) $this->maybeSetDebugInfo($this::NC_DEBUG_404_REQUEST);
+            return (bool) $this->maybeSetDebugInfo($this::NC_DEBUG_404_REQUEST);
         }
         if (mb_stripos($cache, '<body id="error-page">') !== false) {
-            return (boolean) $this->maybeSetDebugInfo($this::NC_DEBUG_WP_ERROR_PAGE);
+            return (bool) $this->maybeSetDebugInfo($this::NC_DEBUG_WP_ERROR_PAGE);
         }
         if (!$this->hasACacheableContentType()) {
-            return (boolean) $this->maybeSetDebugInfo($this::NC_DEBUG_UNCACHEABLE_CONTENT_TYPE);
+            return (bool) $this->maybeSetDebugInfo($this::NC_DEBUG_UNCACHEABLE_CONTENT_TYPE);
         }
         if (!$this->hasACacheableStatus()) {
-            return (boolean) $this->maybeSetDebugInfo($this::NC_DEBUG_UNCACHEABLE_STATUS);
+            return (bool) $this->maybeSetDebugInfo($this::NC_DEBUG_UNCACHEABLE_STATUS);
         }
         if ($this->is_maintenance) {
-            return (boolean) $this->maybeSetDebugInfo($this::NC_DEBUG_MAINTENANCE_PLUGIN);
+            return (bool) $this->maybeSetDebugInfo($this::NC_DEBUG_MAINTENANCE_PLUGIN);
         }
         if ($this->functionIsPossible('zlib_get_coding_type') && zlib_get_coding_type()
             && (!($zlib_oc = ini_get('zlib.output_compression')) || !filter_var($zlib_oc, FILTER_VALIDATE_BOOLEAN))
         ) {
-            return (boolean) $this->maybeSetDebugInfo($this::NC_DEBUG_OB_ZLIB_CODING_TYPE);
+            return (bool) $this->maybeSetDebugInfo($this::NC_DEBUG_OB_ZLIB_CODING_TYPE);
         }
         # Lock the cache directory while writes take place here.
 
@@ -329,18 +348,48 @@ trait ObUtils
                 throw new \Exception(sprintf(__('Unable to create symlink: `%1$s` » `%2$s`. Possible permissions issue (or race condition), please check your cache directory: `%3$s`.', 'comet-cache'), $this->cache_file, $this->cache_file_404, COMET_CACHE_DIR));
             }
             $this->cacheUnlock($cache_lock); // Release.
-            return (boolean) $this->maybeSetDebugInfo($this::NC_DEBUG_1ST_TIME_404_SYMLINK);
+            return (bool) $this->maybeSetDebugInfo($this::NC_DEBUG_1ST_TIME_404_SYMLINK);
         }
         /* ------- Otherwise, we need to construct & store a new cache file. ----------------------------------------------- */
 
         
 
         if (COMET_CACHE_DEBUGGING_ENABLE && $this->isHtmlXmlDoc($cache)) {
-            $total_time = number_format(microtime(true) - $this->timer, 5, '.', ''); // Based on the original timer.
-            $via = IS_PRO && $this->isAutoCacheEngine() ? __('Auto-Cache Engine', 'comet-cache') : __('HTTP request', 'comet-cache');
-            $cache .= "\n".'<!-- '.htmlspecialchars(sprintf(__('%1$s file path: %2$s', 'comet-cache'), NAME, str_replace(WP_CONTENT_DIR, '', $this->is_404 ? $this->cache_file_404 : $this->cache_file))).' -->';
-            $cache .= "\n".'<!-- '.htmlspecialchars(sprintf(__('%1$s file built for (%2$s%3$s) in %4$s seconds, on: %5$s; via %6$s.', 'comet-cache'), NAME, $this->is_404 ? '404 [error document]' : $this->salt_location, (IS_PRO && COMET_CACHE_WHEN_LOGGED_IN && $this->user_token ? '; '.sprintf(__('user token: %1$s', 'comet-cache'), $this->user_token) : ''), $total_time, date('M jS, Y @ g:i a T'), $via)).' -->';
-            $cache .= "\n".'<!-- '.htmlspecialchars(sprintf(__('This %1$s file will auto-expire (and be rebuilt) on: %2$s (based on your configured expiration time).', 'comet-cache'), NAME, date('M jS, Y @ g:i a T', strtotime('+'.COMET_CACHE_MAX_AGE)))).' -->';
+            $total_time = number_format(microtime(true) - $this->timer, 5, '.', '');
+            $time       = time(); // Needed below for expiration calculation.
+
+            $DebugNotes = new Classes\Notes();
+            $DebugNotes->addAsciiArt(sprintf(__('%1$s Notes', 'comet-cache'), NAME));
+            $DebugNotes->addLineBreak();
+
+            $DebugNotes->add(__('Cache File Version Salt', 'comet-cache'), $this->version_salt ? $this->version_salt : __('n/a', 'comet-cache'));
+
+            if (IS_PRO && COMET_CACHE_WHEN_LOGGED_IN && $this->user_token) {
+                $DebugNotes->add(__('Cache File User Token', 'comet-cache'), $this->user_token);
+            }
+            $DebugNotes->addLineBreak();
+
+            $DebugNotes->add(__('Cache File URL', 'comet-cache'), $this->is_404 ? __('404 [error document]', 'comet-cache') : $this->protocol.$this->host_token.$_SERVER['REQUEST_URI']);
+            $DebugNotes->add(__('Cache File Path', 'comet-cache'), str_replace(WP_CONTENT_DIR, '', $this->is_404 ? $this->cache_file_404 : $this->cache_file));
+
+            $DebugNotes->addLineBreak();
+
+            $DebugNotes->add(__('Cache File Generated Via', 'comet-cache'), IS_PRO && $this->isAutoCacheEngine() ? __('Auto-Cache Engine', 'comet-cache') : __('HTTP request', 'comet-cache'));
+            $DebugNotes->add(__('Cache File Generated On', 'comet-cache'), date('M jS, Y @ g:i a T'));
+            $DebugNotes->add(__('Cache File Generated In', 'comet-cache'), sprintf(__('%1$s seconds', 'comet-cache'), $total_time));
+
+            $DebugNotes->addLineBreak();
+
+            if (IS_PRO && COMET_CACHE_WHEN_LOGGED_IN && $this->cache_max_age < $this->nonce_cache_max_age
+                    && preg_match('/\b(?:_wpnonce|akismet_comment_nonce)\b/u', $cache)) {
+                $DebugNotes->add(__('Cache File Expires Early', 'comet-cache'), __('yes, due to nonce in markup', 'comet-cache'));
+                $DebugNotes->add(__('Cache File Expires On', 'comet-cache'), date('M jS, Y @ g:i a T', $time + ($time - $this->nonce_cache_max_age)));
+                $DebugNotes->add(__('Cache File Auto-Rebuild On', 'comet-cache'), date('M jS, Y @ g:i a T', $time + ($time - $this->nonce_cache_max_age)));
+            } else {
+                $DebugNotes->add(__('Cache File Expires On', 'comet-cache'), date('M jS, Y @ g:i a T', $time + ($time - $this->cache_max_age)));
+                $DebugNotes->add(__('Cache File Auto-Rebuild On', 'comet-cache'), date('M jS, Y @ g:i a T', $time + ($time - $this->cache_max_age)));
+            }
+            $cache .= "\n".$DebugNotes->asHtmlComments();
         }
         if ($this->is_404) {
             if (file_put_contents($cache_file_tmp, serialize($this->cacheableHeadersList()).'<!--headers-->'.$cache) && rename($cache_file_tmp, $this->cache_file_404)) {
