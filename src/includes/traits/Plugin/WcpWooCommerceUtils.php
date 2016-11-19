@@ -31,7 +31,7 @@ trait WcpWooCommerceUtils
     /**
      * Automatically clears cache file for a WooCommerce Product when its stock status is changed.
      *
-     * @since 16xxxx Improving WooCommerce Compatibility.
+     * @since 161119 Improving WooCommerce Compatibility.
      *
      * @attaches-to `woocommerce_product_set_stock_status` hook.
      *

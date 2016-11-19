@@ -8,7 +8,7 @@ trait ArrayUtils
     /**
      * Sorts by key.
      *
-     * @since 16xxxx Array utils.
+     * @since 161119 Array utils.
      *
      * @param array $array Input array.
      * @param int   $flags Defaults to `SORT_REGULAR`.

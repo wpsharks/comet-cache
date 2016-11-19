@@ -6,14 +6,14 @@ use WebSharks\CometCache\Traits;
 /**
  * Notes.
  *
- * @since 16xxxx Notes.
+ * @since 161119 Notes.
  */
 class Notes extends AbsBase
 {
     use Traits\Shared\StringUtils;
 
     /**
-     * @since 16xxxx
+     * @since 161119
      *
      * @var array
      */
@@ -22,7 +22,7 @@ class Notes extends AbsBase
     /**
      * Class constructor.
      *
-     * @since 16xxxx Notes.
+     * @since 161119 Notes.
      */
     public function __construct()
     {
@@ -34,7 +34,7 @@ class Notes extends AbsBase
     /**
      * Get notes.
      *
-     * @since 16xxxx Notes.
+     * @since 161119 Notes.
      *
      * @return array Notes.
      */
@@ -49,7 +49,7 @@ class Notes extends AbsBase
      * @param string $key  Key.
      * @param string $note Note.
      *
-     * @since 16xxxx Notes.
+     * @since 161119 Notes.
      */
     public function add($key, $note)
     {
@@ -59,7 +59,7 @@ class Notes extends AbsBase
     /**
      * Add line break.
      *
-     * @since 16xxxx Notes.
+     * @since 161119 Notes.
      */
     public function addLineBreak()
     {
@@ -69,7 +69,7 @@ class Notes extends AbsBase
     /**
      * Add divider.
      *
-     * @since 16xxxx Notes.
+     * @since 161119 Notes.
      */
     public function addDivider()
     {
@@ -81,7 +81,7 @@ class Notes extends AbsBase
      *
      * @param string $note Note.
      *
-     * @since 16xxxx Notes.
+     * @since 161119 Notes.
      */
     public function addAsciiArt($note)
     {
@@ -93,7 +93,7 @@ class Notes extends AbsBase
     /**
      * As HTML comments.
      *
-     * @since 16xxxx HTML comments.
+     * @since 161119 HTML comments.
      */
     public function asHtmlComments()
     {

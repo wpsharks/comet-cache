@@ -8,8 +8,8 @@ trait CachePathUtils
     /**
      * Filter query vars; e.g., remove those we ignore.
      *
-     * @since 16xxxx Adding support for ignored GET vars.
-     * @since 16xxxx Adding support for sorted query vars.
+     * @since 161119 Adding support for ignored GET vars.
+     * @since 161119 Adding support for sorted query vars.
      *
      * @param array $_vars Query vars to filter.
      *

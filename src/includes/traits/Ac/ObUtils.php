@@ -98,7 +98,7 @@ trait ObUtils
     /**
      * Calculated 12 hour expiration time.
      *
-     * @since 16xxxx Calculated 12 hour expiration time.
+     * @since 161119 Calculated 12 hour expiration time.
      *
      * @var int Calculated 12 hour expiration time.
      */

@@ -96,7 +96,7 @@ if (!defined('COMET_CACHE_IGNORE_GET_REQUEST_VARS')) {
     /*
      * Ignore `$_GET` request query vars?
      *
-     * @since 16xxxx First documented version.
+     * @since 161119 First documented version.
      *
      * @var string A regular expression; else an empty string.
      */

@@ -95,12 +95,14 @@ trait StringUtils
     /**
      * Multibyte `str_pad()`.
      *
-     * @since 16xxxx Enhancing multibyte support.
+     * @since 161119 Enhancing multibyte support.
      *
      * @param mixed  $value      Any input value.
      * @param int    $pad_length The required length of the string.
      * @param string $pad_string The string to pad with.
      * @param int    $pad_type   `STR_PAD_LEFT`, `STR_PAD_RIGHT`, `STR_PAD_BOTH`.
+     *
+     * @throws \Exception if unexpected `pad_type`
      *
      * @return string|array|object Output value.
      */

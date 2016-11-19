@@ -10,7 +10,7 @@ trait ClientSideUtils
      *
      * @since 150422 Rewrite.
      * @since 151220 Enhancing.
-     * @since 16xxxx Enhancing.
+     * @since 161119 Enhancing.
      */
     public function maybeStopBrowserCaching()
     {
