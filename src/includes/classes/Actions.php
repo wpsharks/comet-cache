@@ -71,8 +71,7 @@ class Actions extends AbsBase
     {
         if (!is_multisite() || !$this->plugin->currentUserCanWipeCache()) {
             return; // Nothing to do.
-        }
-        if (empty($_REQUEST['_wpnonce']) || !wp_verify_nonce($_REQUEST['_wpnonce'])) {
+        } elseif (empty($_REQUEST['_wpnonce']) || !wp_verify_nonce($_REQUEST['_wpnonce'])) {
             return; // Unauthenticated POST data.
         }
         $counter = $this->plugin->wipeCache(true);
@@ -97,8 +96,7 @@ class Actions extends AbsBase
     {
         if (!$this->plugin->currentUserCanClearCache()) {
             return; // Not allowed to clear.
-        }
-        if (empty($_REQUEST['_wpnonce']) || !wp_verify_nonce($_REQUEST['_wpnonce'])) {
+        } elseif (empty($_REQUEST['_wpnonce']) || !wp_verify_nonce($_REQUEST['_wpnonce'])) {
             return; // Unauthenticated POST data.
         }
         $counter = $this->plugin->clearCache(true);
@@ -112,7 +110,6 @@ class Actions extends AbsBase
         wp_redirect($redirect_to).exit();
     }
 
-
     /**
      * Action handler.
      *
@@ -124,8 +121,7 @@ class Actions extends AbsBase
     {
         if (!is_multisite() || !$this->plugin->currentUserCanWipeCache()) {
             return; // Nothing to do.
-        }
-        if (empty($_REQUEST['_wpnonce']) || !wp_verify_nonce($_REQUEST['_wpnonce'])) {
+        } elseif (empty($_REQUEST['_wpnonce']) || !wp_verify_nonce($_REQUEST['_wpnonce'])) {
             return; // Unauthenticated POST data.
         }
         $counter         = $this->plugin->wipeCache(true);
@@ -138,8 +134,6 @@ class Actions extends AbsBase
         exit($response); // JavaScript will take it from here.
     }
 
-
-
     /**
      * Action handler.
      *
@@ -151,8 +145,7 @@ class Actions extends AbsBase
     {
         if (!$this->plugin->currentUserCanClearCache()) {
             return; // Not allowed to clear.
-        }
-        if (empty($_REQUEST['_wpnonce']) || !wp_verify_nonce($_REQUEST['_wpnonce'])) {
+        } elseif (empty($_REQUEST['_wpnonce']) || !wp_verify_nonce($_REQUEST['_wpnonce'])) {
             return; // Unauthenticated POST data.
         }
         $counter         = $this->plugin->clearCache(true);
@@ -167,7 +160,6 @@ class Actions extends AbsBase
         
         exit($response); // JavaScript will take it from here.
     }
-
 
     
 
@@ -196,10 +188,11 @@ class Actions extends AbsBase
      */
     protected function saveOptions($args)
     {
+        global $is_apache, $is_nginx;
+
         if (!current_user_can($this->plugin->cap)) {
             return; // Nothing to do.
-        }
-        if (empty($_REQUEST['_wpnonce']) || !wp_verify_nonce($_REQUEST['_wpnonce'])) {
+        } elseif (empty($_REQUEST['_wpnonce']) || !wp_verify_nonce($_REQUEST['_wpnonce'])) {
             return; // Unauthenticated POST data.
         }
         if (!empty($_FILES[GLOBAL_NS]['tmp_name']['import_options'])) {
@@ -213,18 +206,17 @@ class Actions extends AbsBase
             unset($args['last_pro_stats_log']); // CANNOT be imported!
         }
         
+
         $args = $this->plugin->trimDeep(stripslashes_deep((array) $args));
         $this->plugin->updateOptions($args); // Save/update options.
 
-        // Ensures `autoCacheMaybeClearPrimaryXmlSitemapError()` always validates the XML Sitemap when saving options (when applicable)
+        // Ensures `autoCacheMaybeClearPrimaryXmlSitemapError()` always validates the XML Sitemap when saving options (when applicable).
         delete_transient(GLOBAL_NS.'-'.md5($this->plugin->options['auto_cache_sitemap_url']));
 
         $redirect_to = self_admin_url('/admin.php'); // Redirect preparations.
         $query_args  = ['page' => GLOBAL_NS, GLOBAL_NS.'_updated' => '1'];
 
         $this->plugin->autoWipeCache(); // May produce a notice.
-
-        global $is_apache, $is_nginx;
 
         if ($this->plugin->options['enable']) {
             if (!($add_wp_cache_to_wp_config = $this->plugin->addWpCacheToWpConfig())) {
@@ -233,17 +225,21 @@ class Actions extends AbsBase
             if ($is_apache && !($add_wp_htaccess = $this->plugin->addWpHtaccess())) {
                 $query_args[GLOBAL_NS.'_wp_htaccess_add_failure'] = '1';
             }
-            if ($is_nginx && $this->plugin->applyWpFilters(GLOBAL_NS.'_wp_htaccess_nginx_notice', true) && (!isset($_SERVER['WP_NGINX_CONFIG']) || $_SERVER['WP_NGINX_CONFIG'] !== 'done')) {
+            if ($is_nginx && $this->plugin->applyWpFilters(GLOBAL_NS.'_wp_htaccess_nginx_notice', true)
+                    && (!isset($_SERVER['WP_NGINX_CONFIG']) || $_SERVER['WP_NGINX_CONFIG'] !== 'done')) {
                 $query_args[GLOBAL_NS.'_wp_htaccess_nginx_notice'] = '1';
             }
             if (!($add_advanced_cache = $this->plugin->addAdvancedCache())) {
                 $query_args[GLOBAL_NS.'_advanced_cache_add_failure'] = $add_advanced_cache === null ? 'advanced-cache' : '1';
             }
+            
             if (!$this->plugin->options['auto_cache_enable']) {
-                $this->plugin->dismissMainNotice('auto_cache_engine_minimum_requirements'); // Dismiss and check again on `admin_init` via `autoCacheMaybeClearPhpReqsError()`
+                // Dismiss and check again on `admin_init` via `autoCacheMaybeClearPhpReqsError()`.
+                $this->plugin->dismissMainNotice('auto_cache_engine_minimum_requirements');
             }
             if (!$this->plugin->options['auto_cache_enable'] || !$this->plugin->options['auto_cache_sitemap_url']) {
-                $this->plugin->dismissMainNotice('xml_sitemap_missing'); // Dismiss and check again on `admin_init` via `autoCacheMaybeClearPrimaryXmlSitemapError()`
+                // Dismiss and check again on `admin_init` via `autoCacheMaybeClearPrimaryXmlSitemapError()`.
+                $this->plugin->dismissMainNotice('xml_sitemap_missing');
             }
             $this->plugin->updateBlogPaths(); // Multisite networks only.
         } else {
@@ -256,8 +252,11 @@ class Actions extends AbsBase
             if (!($remove_advanced_cache = $this->plugin->removeAdvancedCache())) {
                 $query_args[GLOBAL_NS.'_advanced_cache_remove_failure'] = '1';
             }
-            $this->plugin->dismissMainNotice('xml_sitemap_missing'); // Dismiss notice when disabling plugin
-            $this->plugin->dismissMainNotice('auto_cache_engine_minimum_requirements'); // Dismiss notice when disabling plugin
+            // Dismiss notice when disabling plugin.
+            $this->plugin->dismissMainNotice('xml_sitemap_missing');
+
+            // Dismiss notice when disabling plugin.
+            $this->plugin->dismissMainNotice('auto_cache_engine_minimum_requirements');
         }
         $redirect_to = add_query_arg(urlencode_deep($query_args), $redirect_to);
 
@@ -273,23 +272,21 @@ class Actions extends AbsBase
      */
     protected function restoreDefaultOptions($args)
     {
+        global $is_apache, $is_nginx;
+
         if (!current_user_can($this->plugin->cap)) {
             return; // Nothing to do.
-        }
-        if (is_multisite() && !current_user_can($this->plugin->network_cap)) {
+        } elseif (is_multisite() && !current_user_can($this->plugin->network_cap)) {
             return; // Nothing to do.
-        }
-        if (empty($_REQUEST['_wpnonce']) || !wp_verify_nonce($_REQUEST['_wpnonce'])) {
+        } elseif (empty($_REQUEST['_wpnonce']) || !wp_verify_nonce($_REQUEST['_wpnonce'])) {
             return; // Unauthenticated POST data.
         }
         $this->plugin->restoreDefaultOptions(); // Restore defaults.
 
-        $redirect_to = self_admin_url('/admin.php'); // Redirect preparations.
+        $redirect_to = self_admin_url('/admin.php'); // Redirect prep.
         $query_args  = ['page' => GLOBAL_NS, GLOBAL_NS.'_restored' => '1'];
 
         $this->plugin->autoWipeCache(); // May produce a notice.
-
-        global $is_apache, $is_nginx;
 
         if ($this->plugin->options['enable']) {
             if (!($add_wp_cache_to_wp_config = $this->plugin->addWpCacheToWpConfig())) {
@@ -298,11 +295,21 @@ class Actions extends AbsBase
             if ($is_apache && !($add_wp_htaccess = $this->plugin->addWpHtaccess())) {
                 $query_args[GLOBAL_NS.'_wp_htaccess_add_failure'] = '1';
             }
-            if ($is_nginx && $this->plugin->applyWpFilters(GLOBAL_NS.'_wp_htaccess_nginx_notice', true) && (!isset($_SERVER['WP_NGINX_CONFIG']) || $_SERVER['WP_NGINX_CONFIG'] !== 'done')) {
+            if ($is_nginx && $this->plugin->applyWpFilters(GLOBAL_NS.'_wp_htaccess_nginx_notice', true)
+                    && (!isset($_SERVER['WP_NGINX_CONFIG']) || $_SERVER['WP_NGINX_CONFIG'] !== 'done')) {
                 $query_args[GLOBAL_NS.'_wp_htaccess_nginx_notice'] = '1';
             }
             if (!($add_advanced_cache = $this->plugin->addAdvancedCache())) {
                 $query_args[GLOBAL_NS.'_advanced_cache_add_failure'] = $add_advanced_cache === null ? 'advanced-cache' : '1';
+            }
+            
+            if (!$this->plugin->options['auto_cache_enable']) {
+                // Dismiss and check again on `admin_init` via `autoCacheMaybeClearPhpReqsError()`.
+                $this->plugin->dismissMainNotice('auto_cache_engine_minimum_requirements');
+            }
+            if (!$this->plugin->options['auto_cache_enable'] || !$this->plugin->options['auto_cache_sitemap_url']) {
+                // Dismiss and check again on `admin_init` via `autoCacheMaybeClearPrimaryXmlSitemapError()`.
+                $this->plugin->dismissMainNotice('xml_sitemap_missing');
             }
             $this->plugin->updateBlogPaths(); // Multisite networks only.
         } else {
@@ -315,6 +322,11 @@ class Actions extends AbsBase
             if (!($remove_advanced_cache = $this->plugin->removeAdvancedCache())) {
                 $query_args[GLOBAL_NS.'_advanced_cache_remove_failure'] = '1';
             }
+            // Dismiss notice when disabling plugin.
+            $this->plugin->dismissMainNotice('xml_sitemap_missing');
+
+            // Dismiss notice when disabling plugin.
+            $this->plugin->dismissMainNotice('auto_cache_engine_minimum_requirements');
         }
         $redirect_to = add_query_arg(urlencode_deep($query_args), $redirect_to);
 
@@ -334,8 +346,7 @@ class Actions extends AbsBase
     {
         if (!current_user_can($this->plugin->cap)) {
             return; // Nothing to do.
-        }
-        if (empty($_REQUEST['_wpnonce']) || !wp_verify_nonce($_REQUEST['_wpnonce'])) {
+        } elseif (empty($_REQUEST['_wpnonce']) || !wp_verify_nonce($_REQUEST['_wpnonce'])) {
             return; // Unauthenticated POST data.
         }
         $args = $this->plugin->trimDeep(stripslashes_deep((array) $args));

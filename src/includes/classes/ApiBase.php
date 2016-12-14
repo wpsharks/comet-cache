@@ -44,6 +44,8 @@ class ApiBase
         return $GLOBALS[GLOBAL_NS]->options;
     }
 
+    
+
     /**
      * Purges expired cache files, leaving all others intact.
      *

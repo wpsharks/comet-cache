@@ -153,6 +153,7 @@ if (!defined('COMET_CACHE_DIR')) {
      */
     define('COMET_CACHE_DIR', WP_CONTENT_DIR.'/'.'%%COMET_CACHE_DIR%%');
 }
+
 if (!defined('COMET_CACHE_MAX_AGE')) {
     /*
      * Cache expiration time.
@@ -225,6 +226,9 @@ if (!defined('COMET_CACHE_404_CACHE_FILENAME')) {
      */
     define('COMET_CACHE_404_CACHE_FILENAME', '----404----');
 }
+
+
+
 
 
 

@@ -27,23 +27,20 @@ trait WcpFeedUtils
         if (!($type = (string) $type)) {
             return $counter; // Nothing we can do.
         }
-        $post_id = (integer) $post_id; // Force integer.
+        $post_id = (int) $post_id; // Force integer.
 
-        if (!is_null($done = &$this->cacheKey('autoClearXmlFeedsCache', [$type, $post_id]))) {
+        if (($done = &$this->cacheKey('autoClearXmlFeedsCache', [$type, $post_id]))) {
             return $counter; // Already did this.
         }
         $done = true; // Flag as having been done.
 
         if (!$this->options['enable']) {
             return $counter; // Nothing to do.
-        }
-        if (!$this->options['feeds_enable']) {
+        } elseif (!$this->options['feeds_enable']) {
             return $counter; // Nothing to do.
-        }
-        if (!$this->options['cache_clear_xml_feeds_enable']) {
+        } elseif (!$this->options['cache_clear_xml_feeds_enable']) {
             return $counter; // Nothing to do.
-        }
-        if (!is_dir($cache_dir = $this->cacheDir())) {
+        } elseif (!is_dir($cache_dir = $this->cacheDir())) {
             return $counter; // Nothing to do.
         }
         $utils      = new Classes\FeedUtils(); // Feed utilities.
@@ -106,12 +103,12 @@ trait WcpFeedUtils
             return $counter; // Nothing to do here.
         }
         $in_sets_of = $this->applyWpFilters(GLOBAL_NS.'_autoClearXmlFeedsCache_in_sets_of', 10, get_defined_vars());
+
         for ($_i = 0; $_i < count($variation_regex_frags); $_i = $_i + $in_sets_of) {
             $_variation_regex_frags = array_slice($variation_regex_frags, $_i, $in_sets_of);
             $_regex                 = '/^\/(?:'.implode('|', $_variation_regex_frags).')\./i';
             $counter += $this->clearFilesFromHostCacheDir($_regex);
-        }
-        unset($_i, $_variation_regex_frags, $_regex); // Housekeeping.
+        } // unset($_i, $_variation_regex_frags, $_regex); // Housekeeping.
 
         if ($counter && is_admin() && (!IS_PRO || $this->options['change_notifications_enable'])) {
             $this->enqueueNotice(sprintf(__('Found %1$s in the cache, for XML feeds of type: <code>%2$s</code>; auto-clearing.', 'comet-cache'), esc_html($this->i18nFiles($counter)), esc_html($type)), ['combinable' => true]);

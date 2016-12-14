@@ -6,92 +6,94 @@ use WebSharks\CometCache\Classes;
 trait ObUtils
 {
     /**
-     * Calculated protocol; one of `http://` or `https://`.
+     * Protocol.
      *
      * @since 150422 Rewrite.
      *
-     * @var float One of `http://` or `https://`.
+     * @type string Protocol
      */
     public $protocol = '';
 
     /**
-     * Host token for this request.
+     * Host token.
      *
      * @since 150821 Improving multisite compat.
      *
-     * @var string Host token for this request.
+     * @type string Host token.
      */
     public $host_token = '';
 
     /**
-     * Host base/dir tokens for this request.
+     * Host base/dir tokens.
      *
      * @since 150821 Improving multisite compat.
      *
-     * @var string Host base/dir tokens for this request.
+     * @type string Host base/dir tokens.
      */
     public $host_base_dir_tokens = '';
 
+    
+
     /**
-     * Calculated version salt; set by site configuration data.
+     * Version salt.
      *
      * @since 150422 Rewrite.
      *
-     * @var string|mixed Any scalar value does fine.
+     * @type string Forced to a string.
      */
     public $version_salt = '';
 
     /**
-     * Relative cache path for the current request.
+     * Relative cache path.
      *
      * @since 150422 Rewrite.
      *
-     * @var string Cache path for the current request.
+     * @type string Cache path.
      */
     public $cache_path = '';
 
     /**
-     * Absolute cache file path for the current request.
+     * Absolute cache file path.
      *
      * @since 150422 Rewrite.
      *
-     * @var string Absolute cache file path for the current request.
+     * @type string Absolute cache file path.
      */
     public $cache_file = '';
 
     /**
-     * Relative 404 cache path for the current request.
+     * Relative 404 cache path.
      *
      * @since 150422 Rewrite.
      *
-     * @var string 404 cache path for the current request.
+     * @type string 404 cache path.
      */
     public $cache_path_404 = '';
 
     /**
-     * Absolute 404 cache file path for the current request.
+     * Absolute 404 cache file path.
      *
      * @since 150422 Rewrite.
      *
-     * @var string Absolute 404 cache file path for the current request.
+     * @type string Absolute 404 cache file path.
      */
     public $cache_file_404 = '';
 
     /**
-     * Version salt followed by the current request location.
+     * Version salt + location.
      *
      * @since 150422 Rewrite.
      *
-     * @var string Version salt followed by the current request location.
+     * @type string Version salt + location.
      */
     public $salt_location = '';
 
     /**
-     * Calculated max age; i.e., before expiration.
+     * Calculated max age.
      *
-     * @since 151002 Load average checks in pro version.
+     * @since 151002 Load average checks.
      *
-     * @var int Calculated max age; i.e., before expiration.
+     * @type int Calculated max age.
      */
     public $cache_max_age = 0;
 
@@ -100,17 +102,16 @@ trait ObUtils
      *
      * @since 161119 Calculated 12 hour expiration time.
      *
-     * @var int Calculated 12 hour expiration time.
+     * @type int Calculated 12 hour expiration time.
      */
     public $nonce_cache_max_age = 0;
 
     /**
-     * Start output buffering (if applicable); or serve a cache file (if possible).
+     * Start output buffering or serve cache.
      *
-     * @since 150422 Rewrite.
-     *
-     * @note This is a vital part of Comet Cache. This method serves existing (fresh) cache files.
-     *    It is also responsible for beginning the process of collecting the output buffer.
+     * @since 150422 Rewrite. This is a vital part of Comet Cache.
+     * This method serves existing (fresh) cache files. It is also responsible
+     * for beginning the process of collecting the output buffer.
      */
     public function maybeStartOutputBuffering()
     {
@@ -193,7 +194,9 @@ trait ObUtils
         $this->protocol             = $this->isSsl() ? 'https://' : 'http://';
 
         $this->version_salt = ''; // Initialize the version salt.
+
         
+
         $this->version_salt = $this->applyFilters(get_class($this).'__version_salt', $this->version_salt);
         $this->version_salt = $this->applyFilters(GLOBAL_NS.'_version_salt', $this->version_salt);
 
@@ -362,11 +365,15 @@ trait ObUtils
             $DebugNotes->addAsciiArt(sprintf(__('%1$s Notes', 'comet-cache'), NAME));
             $DebugNotes->addLineBreak();
 
-            $DebugNotes->add(__('Cache File Version Salt', 'comet-cache'), $this->version_salt ? $this->version_salt : __('n/a', 'comet-cache'));
-
             if (IS_PRO && COMET_CACHE_WHEN_LOGGED_IN && $this->user_token) {
                 $DebugNotes->add(__('Cache File User Token', 'comet-cache'), $this->user_token);
             }
+            if (IS_PRO && COMET_CACHE_MOBILE_ADAPTIVE_SALT_ENABLE && COMET_CACHE_MOBILE_ADAPTIVE_SALT && $this->mobile_adaptive_salt) {
+                // Note: Not using `$this->mobile_adaptive_salt` here. Instead, generating a human readable variation.
+                $DebugNotes->add(__('Cache File for Mobile Device', 'comet-cache'), $this->fillUaTokens(COMET_CACHE_MOBILE_ADAPTIVE_SALT, false));
+            }
+            $DebugNotes->add(__('Cache File Version Salt', 'comet-cache'), $this->version_salt ? $this->version_salt : __('n/a', 'comet-cache'));
+
             $DebugNotes->addLineBreak();
 
             $DebugNotes->add(__('Cache File URL', 'comet-cache'), $this->is_404 ? __('404 [error document]', 'comet-cache') : $this->protocol.$this->host_token.$_SERVER['REQUEST_URI']);

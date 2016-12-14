@@ -1,8 +1,8 @@
 === Comet Cache ===
 
-Stable tag: 161119
+Stable tag: 161214-RC
 Requires at least: 4.2
-Tested up to: 4.7-alpha
+Tested up to: 4.8-alpha
 Text Domain: comet-cache
 
 License: GPLv2 or later
@@ -415,4 +415,4 @@ Requires WordPress v4.2+.
 
 - **Bug Fix**: Fixed a "PHP Fatal error: Undefined class constant 'CACHE_PATH_NO_SCHEME'" introduced by the previous release (v160416). This issue only affected sites where Feed Caching was enabled (_Comet Cache → Plugin Options → RSS, RDF, and Atom Feeds_). Props to MassimoD and @emanwebdev for reporting. See [Issue #739](https://github.com/websharks/comet-cache/issues/739).
 
-For older changelog history going back to 7+ years, please see [CHANGELOG.md](https://github.com/websharks/comet-cache/blob/master/CHANGELOG.md).
+For older changelog history going back more than 7 years, please see [CHANGELOG.md](https://github.com/websharks/comet-cache/blob/master/CHANGELOG.md).

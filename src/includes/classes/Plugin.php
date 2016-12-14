@@ -51,7 +51,7 @@ class Plugin extends AbsBaseAp
      *
      * @since 150422 Rewrite.
      *
-     * @var bool If `FALSE`, run without hooks.
+     * @type bool If `FALSE`, run without hooks.
      */
     public $enable_hooks = true;
 
@@ -60,7 +60,7 @@ class Plugin extends AbsBaseAp
      *
      * @since 150422 Rewrite.
      *
-     * @var array Pro-only option keys.
+     * @type array Pro-only option keys.
      */
     public $pro_only_option_keys = [];
 
@@ -69,7 +69,7 @@ class Plugin extends AbsBaseAp
      *
      * @since 150422 Rewrite.
      *
-     * @var array Default options.
+     * @type array Default options.
      */
     public $default_options = [];
 
@@ -78,7 +78,7 @@ class Plugin extends AbsBaseAp
      *
      * @since 150422 Rewrite.
      *
-     * @var array Configured options.
+     * @type array Configured options.
      */
     public $options = [];
 
@@ -87,7 +87,7 @@ class Plugin extends AbsBaseAp
      *
      * @since 150422 Rewrite.
      *
-     * @var string WordPress capability.
+     * @type string WordPress capability.
      */
     public $cap = 'activate_plugins';
 
@@ -96,7 +96,7 @@ class Plugin extends AbsBaseAp
      *
      * @since 150422 Rewrite.
      *
-     * @var string WordPress capability.
+     * @type string WordPress capability.
      */
     public $update_cap = 'update_plugins';
 
@@ -105,7 +105,7 @@ class Plugin extends AbsBaseAp
      *
      * @since 150422 Rewrite.
      *
-     * @var string WordPress capability.
+     * @type string WordPress capability.
      */
     public $network_cap = 'manage_network_plugins';
 
@@ -114,7 +114,7 @@ class Plugin extends AbsBaseAp
      *
      * @since 150422 Rewrite.
      *
-     * @var string WordPress capability.
+     * @type string WordPress capability.
      */
     public $uninstall_cap = 'delete_plugins';
 
@@ -127,9 +127,11 @@ class Plugin extends AbsBaseAp
      *
      * @since 150422 Rewrite.
      *
-     * @var string Cache directory; relative to the configured base directory.
+     * @type string Cache directory; relative to the configured base directory.
      */
     public $cache_sub_dir = 'cache';
+
+    
 
     
 
@@ -196,6 +198,9 @@ class Plugin extends AbsBaseAp
             'when_logged_in',
 
             'version_salt',
+            'mobile_adaptive_salt',
+            'mobile_adaptive_salt_enable',
+            'ua_info_last_data_update',
 
             'htmlc_enable',
             'htmlc_css_exclusions',
@@ -210,6 +215,7 @@ class Plugin extends AbsBaseAp
             'htmlc_compress_css_code',
             'htmlc_compress_js_code',
             'htmlc_compress_html_code',
+            'htmlc_amp_exclusions_enable',
             'htmlc_when_logged_in',
 
             'auto_cache_enable',
@@ -253,6 +259,8 @@ class Plugin extends AbsBaseAp
 
             'pro_update_username',
             'pro_update_password',
+
+            'pro_auto_update_enable',
 
             'last_pro_stats_log',
         ];
@@ -335,7 +343,15 @@ class Plugin extends AbsBaseAp
 
             /* Related to version salt. */
 
-            'version_salt' => '', // Any string value.
+            'version_salt' => '', // Any string value as a cache path component.
+
+            // This should be set to a `+` delimited string containing any of these tokens:
+            // `os.name + device.type + browser.name + browser.version` (version should be avoided).
+            // There is one additional token (`device.is_mobile`) that can be used stand-alone.
+            // i.e., to indicate that being mobile is the only factor worth considering.
+            'mobile_adaptive_salt'        => 'os.name + device.type + browser.name',
+            'mobile_adaptive_salt_enable' => '0', // `0|1` Enable the mobile adaptive salt?
+            'ua_info_last_data_update'    => '0', // Timestamp.
 
             /* Related to HTML compressor. */
 
@@ -356,6 +372,7 @@ class Plugin extends AbsBaseAp
             'htmlc_compress_css_code'              => '1', // `0|1`.
             'htmlc_compress_js_code'               => '1', // `0|1`.
             'htmlc_compress_html_code'             => '1', // `0|1`.
+            'htmlc_amp_exclusions_enable'          => '1', // `0|1`.
             'htmlc_when_logged_in'                 => '0', // `0|1`; enable when logged in?
 
             /* Related to auto-cache engine. */
@@ -427,6 +444,8 @@ class Plugin extends AbsBaseAp
             'pro_update_username' => '', // Username.
             'pro_update_password' => '', // Password or license key.
 
+            'pro_auto_update_enable' => '0', // `0|1`; enable?
+
             /* Related to stats logging. */
 
             'last_pro_stats_log' => '0', // Timestamp.
@@ -494,6 +513,7 @@ class Plugin extends AbsBaseAp
         add_action('wp_create_nav_menu', [$this, 'autoClearCache']);
         add_action('wp_update_nav_menu', [$this, 'autoClearCache']);
         add_action('wp_delete_nav_menu', [$this, 'autoClearCache']);
+        add_action('update_option_sidebars_widgets', [$this, 'autoClearCache']);
 
         add_action('save_post', [$this, 'autoClearPostCache']);
         add_action('delete_post', [$this, 'autoClearPostCache']);
@@ -523,11 +543,15 @@ class Plugin extends AbsBaseAp
 
         
 
+        add_action('delete_user', [$this, 'autoClearAuthorPageCacheOnUserDeletion'], 10, 2);
+        add_action('remove_user_from_blog', [$this, 'autoClearAuthorPageCacheOnUserDeletion'], 10, 1);
+
         if ($this->options['enable'] && $this->applyWpFilters(GLOBAL_NS.'_disable_akismet_comment_nonce', true)) {
             add_filter('akismet_comment_nonce', function () {
                 return 'disabled-by-'.SLUG_TD; // MUST return a string literal that is not 'true' or '' (an empty string). See <http://bit.ly/1YItpdE>
             }); // See also why the Akismet nonce should be disabled: <http://jas.xyz/1R23f5c>
         }
+        
         
         
         /* -------------------------------------------------------------- */

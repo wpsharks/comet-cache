@@ -151,8 +151,7 @@ trait FsUtils
         $dir_iterator      = new \RecursiveDirectoryIterator($dir, \FilesystemIterator::KEY_AS_PATHNAME | \FilesystemIterator::CURRENT_AS_SELF | \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::UNIX_PATHS);
         $iterator_iterator = new \RecursiveIteratorIterator($dir_iterator, \RecursiveIteratorIterator::CHILD_FIRST);
 
-        if ($regex && $regex !== '/.*/' && $regex !== '/.+/') { // Apply regex filter?
-            // @TODO Optimize calls to this method in order to avoid the regex iterator when not necessary.
+        if ($regex && !in_array(rtrim(str_replace(['^', '$'], '', $regex), 'ui'), ['/.*/', '/.+/'], true)) { // Apply regex filter?
             return new \RegexIterator($iterator_iterator, $regex, \RegexIterator::MATCH, \RegexIterator::USE_KEY);
         }
         return $iterator_iterator; // Iterate everything.
@@ -171,7 +170,7 @@ trait FsUtils
     public function bytesAbbr($bytes, $precision = 2)
     {
         $bytes     = max(0.0, (float) $bytes);
-        $precision = max(0, (integer) $precision);
+        $precision = max(0, (int) $precision);
         $units     = ['bytes', 'kbs', 'MB', 'GB', 'TB'];
 
         $power      = floor(($bytes ? log($bytes) : 0) / log(1024));

@@ -321,7 +321,7 @@ trait ConditionalUtils
      */
     public function functionIsPossible($function)
     {
-        $function = (string) $function;
+        $function = mb_strtolower((string) $function);
 
         if (($is = &$this->staticKey(__FUNCTION__, $function)) !== null) {
             return $is; // Already cached this.
@@ -335,17 +335,16 @@ trait ConditionalUtils
             if (($blacklist_functions = trim(ini_get('suhosin.executor.func.blacklist')))) {
                 $disabled_functions = array_merge($disabled_functions, preg_split('/[\s;,]+/', mb_strtolower($blacklist_functions), -1, PREG_SPLIT_NO_EMPTY));
             }
+            if (($opcache_restrict_api = trim(ini_get('opcache.restrict_api'))) && mb_stripos(__FILE__, $opcache_restrict_api) !== 0) {
+                $disabled_functions = array_merge($disabled_functions, ['opcache_compile_file', 'opcache_get_configuration', 'opcache_get_status', 'opcache_invalidate', 'opcache_is_script_cached', 'opcache_reset']);
+            }
             if (filter_var(ini_get('suhosin.executor.disable_eval'), FILTER_VALIDATE_BOOLEAN)) {
                 $disabled_functions = array_merge($disabled_functions, ['eval']);
             }
         }
-        if (!function_exists($function) || !is_callable($function)) {
-            if (!in_array($function, $this->php_constructs, true)) {
-                return $is = false; // Not possible.
-            }
-        } // In PHP, language constructs cannot be disabled/blacklisted whatsoever.
-
-        if ($disabled_functions && in_array(mb_strtolower($function), $disabled_functions, true)) {
+        if ($disabled_functions && in_array($function, $disabled_functions, true)) {
+            return $is = false; // Not possible.
+        } elseif ((!function_exists($function) || !is_callable($function)) && !in_array($function, $this->php_constructs, true)) {
             return $is = false; // Not possible.
         }
         return $is = true;

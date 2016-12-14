@@ -57,7 +57,7 @@ class VsUpgrades extends AbsBase
         if (version_compare($this->prev_version, '150807', '<=')) {
             delete_site_option(GLOBAL_NS.'_errors'); // No longer necessary.
 
-            if (is_multisite() && is_array($child_blogs = wp_get_sites())) {
+            if (is_multisite() && is_array($child_blogs = $this->plugin->getBlogs())) {
                 $current_site = get_current_site(); // Current site.
                 foreach ($child_blogs as $_child_blog) {
                     switch_to_blog($_child_blog['blog_id']);
