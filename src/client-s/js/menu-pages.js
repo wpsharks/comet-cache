@@ -117,24 +117,6 @@
     $ss.attr('src', $ss.attr('src').replace(/ops[0-9]\-ss\.png$/, 'ops' + val + '-ss.png'));
   };
 
-  plugin.handleCdnHostsChange = function (event) {
-    var $cdnHosts = $(this),
-      $cdnHost = $('input[name$="\[cdn_host\]"]', plugin.$menuPage);
-
-    if ($.trim($cdnHosts.val())) {
-      if ($cdnHost.val()) {
-        $cdnHost.data('hiddenValue', $cdnHost.val());
-      }
-      $cdnHost.attr('disabled', 'disabled').val('');
-    } else {
-      if (!$cdnHost.val()) {
-        $cdnHost.val($cdnHost.data('hiddenValue'));
-      }
-      $cdnHost.removeAttr('disabled');
-      $cdnHosts.val('');
-    }
-  };
-
   
 
   plugin.bytesToSizeLabel = function (bytes, decimals) {

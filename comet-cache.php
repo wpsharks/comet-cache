@@ -1,6 +1,6 @@
 <?php
 /*
-Version: 161214-RC
+Version: 161221
 Text Domain: comet-cache
 Plugin Name: Comet Cache
 Network: true

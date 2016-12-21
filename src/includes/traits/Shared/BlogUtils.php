@@ -8,7 +8,7 @@ trait BlogUtils
     /**
      * Get child blogs.
      *
-     * @since 16xxxx Replacing `wp_get_sites()`.
+     * @since 161221 Replacing `wp_get_sites()`.
      *
      * @return array An array of child blogs (max 100).
      *

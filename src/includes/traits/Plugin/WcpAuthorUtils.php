@@ -92,7 +92,7 @@ trait WcpAuthorUtils
      * @attaches-to `remove_user_from_blog` hook.
      * @attaches-to `delete_user` hook.
      *
-     * @since 16xxxx Adding support for user deletions.
+     * @since 161221 Adding support for user deletions.
      *
      * @param int $user_id     A WordPress user ID.
      * @param int $rat_user_id User ID (reassign via `delete_user` hook).

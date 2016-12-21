@@ -54,15 +54,16 @@ trait MenuPageUtils
                 'emptyStatsCountsImageUrl' => $this->url('/src/client-s/images/stats-fc-empty.png'),
                 'emptyStatsFilesImageUrl'  => $this->url('/src/client-s/images/stats-fs-empty.png'),
                 'i18n'                     => [
-                    'name'           => NAME,
-                    'perSymbol'      => __('%', 'comet-cache'),
-                    'file'           => __('file', 'comet-cache'),
-                    'files'          => __('files', 'comet-cache'),
-                    'pageCache'      => __('Page Cache', 'comet-cache'),
-                    'htmlCompressor' => __('HTML Compressor', 'comet-cache'),
-                    'currentTotal'   => __('Current Total', 'comet-cache'),
-                    'currentSite'    => __('Current Site', 'comet-cache'),
-                    'xDayHigh'       => __('%s Day High', 'comet-cache'),
+                    'name'                    => NAME,
+                    'perSymbol'               => __('%', 'comet-cache'),
+                    'file'                    => __('file', 'comet-cache'),
+                    'files'                   => __('files', 'comet-cache'),
+                    'pageCache'               => __('Page Cache', 'comet-cache'),
+                    'htmlCompressor'          => __('HTML Compressor', 'comet-cache'),
+                    'currentTotal'            => __('Current Total', 'comet-cache'),
+                    'currentSite'             => __('Current Site', 'comet-cache'),
+                    'xDayHigh'                => __('%s Day High', 'comet-cache'),
+                    'mobileAdaptiveSaltError' => __('Invalid Mobile-Adaptive Tokens. This field must contain one or more of the listed Tokens (separated by a + sign). Please use Tokens only, NOT string literals.', 'comet-cache'),
                 ],
             ]
         );
@@ -181,7 +182,7 @@ trait MenuPageUtils
      *
      * @since 150422 Rewrite.
      *
-     * @var array WP admin icon colors.
+     * @type array WP admin icon colors.
      *
      * @note These must be hard-coded, because they don't become available
      *    in core until `admin_init`; i.e., too late for `admin_menu`.

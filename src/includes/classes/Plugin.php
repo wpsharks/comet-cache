@@ -345,10 +345,9 @@ class Plugin extends AbsBaseAp
 
             'version_salt' => '', // Any string value as a cache path component.
 
-            // This should be set to a `+` delimited string containing any of these tokens:
-            // `os.name + device.type + browser.name + browser.version` (version should be avoided).
-            // There is one additional token (`device.is_mobile`) that can be used stand-alone.
-            // i.e., to indicate that being mobile is the only factor worth considering.
+            // This should be set to a `+` delimited string containing any of these tokens: `os.name + device.type + browser.name + browser.version.major`.
+            // There is an additional token (`browser.version`) that contains both the major and minor versions, but this token is not recommended due to many permutations.
+            // There is an additional token (`device.is_mobile`) that can be used stand-alone; i.e., to indicate that being mobile is the only factor worth considering.
             'mobile_adaptive_salt'        => 'os.name + device.type + browser.name',
             'mobile_adaptive_salt_enable' => '0', // `0|1` Enable the mobile adaptive salt?
             'ua_info_last_data_update'    => '0', // Timestamp.
