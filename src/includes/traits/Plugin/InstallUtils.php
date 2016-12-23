@@ -40,11 +40,12 @@ trait InstallUtils
     }
 
     /**
-     * Check current plugin version that is installed in WP.
+     * Check current version.
      *
      * @since 150422 Rewrite.
+     * @since 16xxxx Moved to `init` hook.
      *
-     * @attaches-to `admin_init` hook.
+     * @attaches-to `init` hook.
      */
     public function checkVersion()
     {
@@ -74,8 +75,9 @@ trait InstallUtils
         }
         $this->wipeCache(); // Fresh start now.
 
-        $this->enqueueMainNotice(sprintf(__('<strong>%1$s:</strong> detected a new version of itself. Recompiling w/ latest version... wiping the cache... all done :-)', 'comet-cache'), esc_html(NAME)), ['push_to_top' => true]);
-
+        if (is_admin()) { // Only if in an admin area.
+            $this->enqueueMainNotice(sprintf(__('<strong>%1$s:</strong> detected a new version of itself. Recompiling w/ latest version... wiping the cache... all done :-)', 'comet-cache'), esc_html(NAME)), ['push_to_top' => true]);
+        }
         $this->dismissMainNotice('pro_update_error');
         $this->dismissMainNotice('new-lite-version-available');
         $this->dismissMainNotice('new-pro-version-available');
@@ -292,6 +294,8 @@ trait InstallUtils
                 
 
                 
+
+                'ac_file_version' => VERSION,  // Version when AC file was built.
             ]
         );
         if ($this->applyWpFilters(GLOBAL_NS.'_exclude_uris_client_side_too', true)) {

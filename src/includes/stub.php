@@ -13,7 +13,7 @@ if (!defined('WPINC')) {
 require_once dirname(__DIR__).'/vendor/autoload.php';
 require_once __DIR__.'/functions/i18n-utils.php';
 
-${__FILE__}['version'] = '161221'; //version//
+${__FILE__}['version'] = '161223-RC'; //version//
 ${__FILE__}['plugin']  = dirname(dirname(__DIR__));
 ${__FILE__}['plugin'] .= '/'.basename(${__FILE__}['plugin']).'.php';
 ${__FILE__}['ns_path'] = str_replace('\\', '/', __NAMESPACE__); // To dir/path.

@@ -1,4 +1,5 @@
 <?php
+// @codingStandardsIgnoreFile
 /**
  * Advanced cache stub.
  *
@@ -20,6 +21,16 @@ if (!defined('COMET_CACHE_PLUGIN_FILE')) {
      * @var string Absolute server path to CC plugin file.
      */
     define('COMET_CACHE_PLUGIN_FILE', '%%COMET_CACHE_PLUGIN_FILE%%');
+}
+if (!defined('COMET_CACHE_AC_FILE_VERSION')) {
+    /*
+     * Comet Cache AC file version.
+     *
+     * @since 16xxxx Adding AC file version.
+     *
+     * @var string Plugin version when AC file was built.
+     */
+    define('COMET_CACHE_AC_FILE_VERSION', '%%COMET_CACHE_AC_FILE_VERSION%%');
 }
 if (defined('WP_DEBUG') && WP_DEBUG) {
     if ((include_once(dirname(COMET_CACHE_PLUGIN_FILE).'/src/includes/stub.php')) === false) {
@@ -247,6 +258,7 @@ if (!defined('COMET_CACHE_404_CACHE_FILENAME')) {
 
 $GLOBALS[GLOBAL_NS.'_advanced_cache']  = new Classes\AdvancedCache();
 $GLOBALS[GLOBAL_NS.'__advanced_cache'] = &$GLOBALS[GLOBAL_NS.'_advanced_cache'];
+
 if (!isset($GLOBALS['zencache__advanced_cache'])) {
     $GLOBALS['zencache_advanced_cache']  = &$GLOBALS[GLOBAL_NS.'_advanced_cache'];
     $GLOBALS['zencache__advanced_cache'] = &$GLOBALS[GLOBAL_NS.'_advanced_cache'];

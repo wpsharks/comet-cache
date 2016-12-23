@@ -10,7 +10,7 @@ trait PostloadUtils
      *
      * @since 150422 Rewrite.
      *
-     * @var bool `TRUE` if main query has been loaded; else `FALSE`.
+     * @type bool `TRUE` if main query has been loaded; else `FALSE`.
      *
      * @see wpMainQueryPostload()
      */
@@ -21,7 +21,7 @@ trait PostloadUtils
      *
      * @since 150422 Rewrite.
      *
-     * @var bool `TRUE` if is a 404 error; else `FALSE`.
+     * @type bool `TRUE` if is a 404 error; else `FALSE`.
      *
      * @see wpMainQueryPostload()
      */
@@ -32,7 +32,7 @@ trait PostloadUtils
      *
      * @since 150422 Rewrite.
      *
-     * @var int Last HTTP status code (if applicable).
+     * @type int Last HTTP status code (if applicable).
      *
      * @see maybeFilterStatusHeaderPostload()
      */
@@ -43,7 +43,7 @@ trait PostloadUtils
      *
      * @since 150422 Rewrite.
      *
-     * @var bool `TRUE` if is a WP content type.
+     * @type bool `TRUE` if is a WP content type.
      *
      * @see wpMainQueryPostload()
      */
@@ -54,7 +54,7 @@ trait PostloadUtils
      *
      * @since 150422 Rewrite.
      *
-     * @var string Current WordPress {@link \content_url()}.
+     * @type string Current WordPress {@link \content_url()}.
      *
      * @see wpMainQueryPostload()
      */
@@ -65,7 +65,7 @@ trait PostloadUtils
      *
      * @since 150422 Rewrite.
      *
-     * @var bool `TRUE` if {@link \is_user_loged_in()} else `FALSE`.
+     * @type bool `TRUE` if {@link \is_user_loged_in()} else `FALSE`.
      *
      * @see wpMainQueryPostload()
      */
@@ -76,7 +76,7 @@ trait PostloadUtils
      *
      * @since 150422 Rewrite.
      *
-     * @var bool `TRUE` if {@link \is_maintenance()} else `FALSE`.
+     * @type bool `TRUE` if {@link \is_maintenance()} else `FALSE`.
      *
      * @see wpMainQueryPostload()
      */
@@ -87,7 +87,7 @@ trait PostloadUtils
      *
      * @since 150422 Rewrite.
      *
-     * @var array Data and/or flags that work with various postload handlers.
+     * @type array Data and/or flags that work with various postload handlers.
      */
     public $postload = [
         
