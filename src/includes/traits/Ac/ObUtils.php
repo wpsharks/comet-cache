@@ -100,7 +100,7 @@ trait ObUtils
     /**
      * Max age has been disabled?
      *
-     * @since 16xxxx Load average checks.
+     * @since 161226 Load average checks.
      *
      * @type bool Max age disabled?
      */

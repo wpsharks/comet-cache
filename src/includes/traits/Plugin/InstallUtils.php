@@ -43,7 +43,7 @@ trait InstallUtils
      * Check current version.
      *
      * @since 150422 Rewrite.
-     * @since 16xxxx Moved to `init` hook.
+     * @since 161226 Moved to `init` hook.
      *
      * @attaches-to `init` hook.
      */

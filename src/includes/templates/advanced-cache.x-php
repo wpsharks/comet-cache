@@ -26,7 +26,7 @@ if (!defined('COMET_CACHE_AC_FILE_VERSION')) {
     /*
      * Comet Cache AC file version.
      *
-     * @since 16xxxx Adding AC file version.
+     * @since 161226 Adding AC file version.
      *
      * @var string Plugin version when AC file was built.
      */

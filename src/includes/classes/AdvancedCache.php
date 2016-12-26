@@ -42,7 +42,7 @@ class AdvancedCache extends AbsBaseAp
      * Class constructor.
      *
      * @since 150422 Rewrite.
-     * @since 16xxxx Version check.
+     * @since 161226 Version check.
      */
     public function __construct()
     {

@@ -1,8 +1,10 @@
-= v161223-RC =
+= v161226 =
 
-- **Bug Fix:** Resolves error `Unable to determine UA info directory location` when upgrading to latest release. See [Issue #862](https://github.com/websharks/comet-cache/issues/862).
-- **Bug Fix:** Enhancing compatibility with InfiniteWP, ManageWP, and other remote management tools for WordPress. See [Issue #862](https://github.com/websharks/comet-cache/issues/862).
-- **Bug Fix:** Incorrect time calculations whenever load average checks are enabled in Comet Cache configuration options. See [Issue #853](https://github.com/websharks/comet-cache/issues/853).
+_**Note:** This is a Comet Cache Pro maintenance release._
+
+- **Bug Fix** (Pro): Resolves error `Unable to determine UA info directory location` when upgrading to latest release. See [Issue #862](https://github.com/websharks/comet-cache/issues/862).
+- **Bug Fix** (Pro): Enhancing compatibility with InfiniteWP, ManageWP, and other remote management tools for WordPress. See [Issue #862](https://github.com/websharks/comet-cache/issues/862).
+- **Bug Fix** (Pro): Incorrect time calculations whenever load average checks are enabled in Comet Cache configuration options. See [Issue #853](https://github.com/websharks/comet-cache/issues/853).
 - **Cleanup:** Removed an old API call that checked for a newer lite version. No longer necessary.
 
 = v161221 =
