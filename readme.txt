@@ -1,6 +1,6 @@
 === Comet Cache ===
 
-Stable tag: 161226
+Stable tag: 161227
 Requires at least: 4.2
 Tested up to: 4.8-alpha
 Text Domain: comet-cache
@@ -339,6 +339,12 @@ Released under the terms of the [GNU General Public License](http://www.gnu.org/
 Requires WordPress v4.2+.
 
 == Changelog ==
+
+= v161227 =
+
+_**Note:** This is a Comet Cache Pro maintenance release._
+
+- **Bug Fix** (Pro): Resolves an issue with the previous Pro maintenance release (v161226) where `admin-bar.min.css` was missing, which caused issues with the Admin Bar buttons. This was due to a glitch in our build system. See [Issue #864](https://github.com/websharks/comet-cache/issues/864).
 
 = v161226 =
 

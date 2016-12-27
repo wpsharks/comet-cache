@@ -1,3 +1,9 @@
+= v161227 =
+
+_**Note:** This is a Comet Cache Pro maintenance release._
+
+- **Bug Fix** (Pro): Resolves an issue with the previous Pro maintenance release (v161226) where `admin-bar.min.css` was missing, which caused issues with the Admin Bar buttons. This was due to a glitch in our build system. See [Issue #864](https://github.com/websharks/comet-cache/issues/864).
+
 = v161226 =
 
 _**Note:** This is a Comet Cache Pro maintenance release._
