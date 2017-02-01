@@ -1,0 +1,15 @@
+# Enforce exact host name.
+<IfModule rewrite_module>
+    RewriteEngine on
+    RewriteBase %%REWRITE_BASE%%
+
+    RewriteCond %{HTTP_HOST} !^%%HOST_NAME_AS_REGEX_FRAG%%$
+    RewriteCond %{HTTPS} !^on$ [NC]
+    RewriteCond %{HTTP:X-Forwarded-Proto} !^https$ [NC]
+    RewriteRule .* http://%%HOST_NAME_AS_REGEX_FRAG%%%{REQUEST_URI} [R=301,L]
+
+    RewriteCond %{HTTP_HOST} !^%%HOST_NAME_AS_REGEX_FRAG%%$
+    RewriteCond %{HTTPS} ^on$ [NC,OR]
+    RewriteCond %{HTTP:X-Forwarded-Proto} ^https$ [NC]
+    RewriteRule .* https://%%HOST_NAME_AS_REGEX_FRAG%%%{REQUEST_URI} [R=301,L]
+</IfModule>

@@ -10,7 +10,7 @@ namespace WebSharks\CometCache;
 use WebSharks\CometCache\Classes;
 
 if (!defined('WPINC')) {
-    exit('Do NOT access this file directly: '.basename(__FILE__));
+    exit('Do NOT access this file directly.');
 }
 if (!defined('COMET_CACHE_PLUGIN_FILE')) {
     /*

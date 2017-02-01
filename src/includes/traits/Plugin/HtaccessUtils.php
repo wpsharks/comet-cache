@@ -15,15 +15,20 @@ trait HtaccessUtils
     public $htaccess_marker = 'WmVuQ2FjaGU';
 
     /**
-     * Plugin options that have associated htaccess rules.
+     * Plugin options that have htaccess rules.
      *
      * @since 160103 Improving `.htaccess` tweaks.
      *
-     * @return array Plugin options that have associated htaccess rules
+     * @return array Plugin options that have htaccess rules.
      *
-     * @note We keep track of this to avoid the issue described here: http://git.io/vEFIH
+     * @note This avoids: <http://git.io/vEFIH>
      */
-    public $options_with_htaccess_rules = ['cdn_enable', 'htaccess_browser_caching_enable', 'htaccess_gzip_enable', 'htaccess_enforce_canonical_urls',];
+    public $options_with_htaccess_rules = [
+        'cdn_enable',
+        'htaccess_browser_caching_enable',
+        'htaccess_gzip_enable',
+        'htaccess_enforce_canonical_urls',
+    ];
 
     /**
      * Add template blocks to `/.htaccess` file.
@@ -32,14 +37,13 @@ trait HtaccessUtils
      *
      * @return bool True if added successfully.
      *
-     * @TODO Improve error reporting detail to better catch unexpected failures; see http://git.io/vEFLT
+     * @TODO Improve error reporting detail to better
+     * catch unexpected failures. See: <http://git.io/vEFLT>
      */
     public function addWpHtaccess()
     {
-        global $is_apache; // WP global for web server checks below.
-
-        if (!$is_apache) {
-            return false; // Not running the Apache web server.
+        if (!$this->isApache()) {
+            return false; // Not Apache.
         }
         if (!$this->options['enable']) {
             return true; // Nothing to do.
@@ -54,16 +58,23 @@ trait HtaccessUtils
             return false; // Unable to remove.
         }
         if (!($htaccess = $this->readHtaccessFile())) {
-            return false; // Failure; could not read file or invalid UTF8 encountered, file may be corrupt.
+            return false; // Failure; could not read file.
         }
-
         $template_blocks = ''; // Initialize.
 
-        foreach (array('gzip-enable.txt', 'access-control-allow-origin-enable.txt', 'browser-caching-enable.txt', 'canonical-urls-ts-enable.txt', 'canonical-urls-no-ts-enable.txt') as $_template) {
+        foreach ([
+                'gzip-enable.txt',
+                'access-control-allow-origin-enable.txt',
+                'browser-caching-enable.txt',
+                'enforce-exact-host-name.txt',
+                'canonical-urls-ts-enable.txt',
+                'canonical-urls-no-ts-enable.txt',
+            ] as $_template) {
+            //
             if (!is_file($_template_file = dirname(dirname(dirname(__FILE__))).'/templates/htaccess/'.$_template)) {
                 continue; // Template file missing; bypass.
-            } // ↑ Some files might be missing in the lite version.
-            elseif (!($_template_file_contents = trim(file_get_contents($_template_file)))) {
+                // ↑ Some files might be missing in the lite version.
+            } elseif (!($_template_file_contents = trim(file_get_contents($_template_file)))) {
                 continue; // Template file empty; bypass.
             } // ↑ Some files might be empty in the lite version.
 
@@ -73,16 +84,15 @@ trait HtaccessUtils
                         $template_blocks .= $_template_file_contents."\n\n";
                     } // ↑ Only if GZIP is enabled at this time.
                     break;
+
                 
             }
-        }
-        unset($_template_file); // Housekeeping
+        } // unset($_template_file); // Housekeeping.
 
         if (empty($template_blocks)) { // Do we need to add anything to htaccess?
             $this->closeHtaccessFile($htaccess); // No need to write to htaccess file in this case.
             return true; // Nothing to do, but no failures either.
         }
-
         $template_blocks           = $this->fillReplacementCodes($template_blocks);
         $template_header           = '# BEGIN '.NAME.' '.$this->htaccess_marker.' (the '.$this->htaccess_marker.' marker is required for '.NAME.'; do not remove)';
         $template_footer           = '# END '.NAME.' '.$this->htaccess_marker;
@@ -91,7 +101,6 @@ trait HtaccessUtils
         if (!$this->writeHtaccessFile($htaccess, true)) {
             return false; // Failure; could not write changes.
         }
-
         return true; // Added successfully.
     }
 
@@ -102,32 +111,29 @@ trait HtaccessUtils
      *
      * @return bool True if removed successfully.
      *
-     * @TODO Improve error reporting detail to better catch unexpected failures; see http://git.io/vEFLT
+     * @TODO Improve error reporting detail to better
+     * catch unexpected failures. See: <http://git.io/vEFLT>
      */
     public function removeWpHtaccess()
     {
-        global $is_apache;
-
-        if (!$is_apache) {
-            return false; // Not running the Apache web server.
+        if (!$this->isApache()) {
+            return false; // Not running Apache.
         }
         if (!($htaccess_file = $this->findHtaccessFile())) {
             return true; // File does not exist.
         }
         if (!$this->findHtaccessMarker()) {
-            return true; // Template blocks are already gone.
+            return true; // Template blocks are gone.
         }
         if (!($htaccess = $this->readHtaccessFile())) {
-            return false; // Failure; could not read file, create file, or invalid UTF8 encountered, file may be corrupt.
+            return false; // Failure; could not read file.
         }
-
         $regex                     = '/#\s*BEGIN\s+'.preg_quote(NAME, '/').'\s+'.$this->htaccess_marker.'.*?#\s*END\s+'.preg_quote(NAME, '/').'\s+'.$this->htaccess_marker.'\s*/uis';
         $htaccess['file_contents'] = preg_replace($regex, '', $htaccess['file_contents']);
 
         if (!$this->writeHtaccessFile($htaccess, false)) {
-            return false; // Failure; could not write changes.
+            return false; // Failure; could not write.
         }
-
         return true; // Removed successfully.
     }
 
@@ -136,8 +142,7 @@ trait HtaccessUtils
      *
      * @since 151114 Adding `.htaccess` tweaks.
      *
-     * @return string Absolute server path to `/.htaccess` file;
-     *                else an empty string if unable to locate the file.
+     * @return string Absolute server path to `/.htaccess` file.
      */
     public function findHtaccessFile()
     {
@@ -155,29 +160,30 @@ trait HtaccessUtils
      *
      * @since 160103 Improving `.htaccess` tweaks.
      *
-     * @return bool True when an option is enabled that requires htaccess rules, false otherwise.
+     * @return bool True when an option is enabled that requires htaccess rules.
      */
     public function needHtaccessRules()
     {
         if (!is_array($this->options_with_htaccess_rules)) {
-            return false; // Nothing to do.
+            return false; // Not even possible.
         }
-        foreach ($this->options_with_htaccess_rules as $option) {
-            if ($this->options[$option]) {
-                return true; // Yes, there are options enabled that require htaccess rules.
+        foreach ($this->options_with_htaccess_rules as $_option) {
+            if ($this->options[$_option]) {
+                return true; // Yes.
             }
-        }
-        return false; // No, there are no options enabled that require htaccess rules.
+        } // unset($_option); // Housekeeping.
+
+        return false;
     }
 
     /**
-     * Utility method used to check if htaccess file contains $htaccess_marker.
+     * Utility method used to check if htaccess file contains `$htaccess_marker`.
      *
      * @since 151114 Adding `.htaccess` tweaks.
      *
      * @param string $htaccess_marker Unique comment marker used to identify rules added by this plugin.
      *
-     * @return bool False on failure or when marker does not exist in htaccess, true otherwise.
+     * @return bool False on failure or when marker does not exist in htaccess.
      */
     public function findHtaccessMarker($htaccess_marker = '')
     {
@@ -194,14 +200,13 @@ trait HtaccessUtils
             $htaccess_marker = $this->htaccess_marker;
         }
         if (mb_stripos($htaccess_file_contents, $htaccess_marker) === false) {
-            return false; // Htaccess marker is missing
+            return false; // Htaccess marker is missing.
         }
-
-        return true; // Htaccess has the marker
+        return true; // Htaccess has the marker.
     }
 
     /**
-     * Utility method used to update replacement codes in .htaccess templates
+     * Utility method used to update replacement codes in .htaccess templates.
      *
      * @since 160706 Adding Apache Optimizations
      *
@@ -212,16 +217,16 @@ trait HtaccessUtils
     public function fillReplacementCodes($template_blocks)
     {
         if (mb_stripos($template_blocks, '%%') === false) {
-            return $template_blocks; // No replacement codes to fill
+            return $template_blocks; // No replacement codes to fill.
         }
-
-        $home_url         = is_multisite() ? network_home_url() : home_url();
-        $replacement_codes = ['%%REWRITE_BASE%%' => trailingslashit(parse_url($home_url, PHP_URL_PATH))];
-
+        $replacement_codes = [
+            '%%REWRITE_BASE%%'                      => trailingslashit(parse_url(network_home_url(), PHP_URL_PATH)),
+            '%%HOST_NAME_AS_REGEX_FRAG%%'           => mb_strtolower(parse_url(network_home_url(), PHP_URL_HOST)),
+            '%%REST_REQUEST_PREFIX_AS_REGEX_FRAG%%' => rest_get_url_prefix(),
+        ];
         foreach ($replacement_codes as $_code => $_replacement) {
             $template_blocks = preg_replace('/'.preg_quote($_code, '/').'/ui', $_replacement, $template_blocks);
-        }
-        unset($_code, $_replacement);
+        } // unset($_code, $_replacement);
 
         return $template_blocks;
     }
@@ -257,7 +262,7 @@ trait HtaccessUtils
         if (($file_contents = fread($fp, filesize($htaccess_file))) && ($file_contents === wp_check_invalid_utf8($file_contents))) {
             rewind($fp); // Rewind pointer to beginning of file.
             return compact('fp', 'file_contents');
-        } else { // Failure; could not read file or invalid UTF8 encountered, file may be corrupt.
+        } else { // Failure; could not read file.
             flock($fp, LOCK_UN);
             fclose($fp);
             return false;
@@ -273,7 +278,7 @@ trait HtaccessUtils
      * @param bool   $require_marker  Whether or not to require the marker be present in contents before writing.
      * @param string $htaccess_marker Unique comment marker used to identify rules added by this plugin.
      *
-     * @return bool True on success, false on failure.
+     * @return bool True on success.
      */
     public function writeHtaccessFile(array $htaccess, $require_marker = true, $htaccess_marker = '')
     {
@@ -291,7 +296,7 @@ trait HtaccessUtils
         if (($require_marker && $_have_marker === false) || !rewind($htaccess['fp']) || !ftruncate($htaccess['fp'], 0) || !fwrite($htaccess['fp'], $htaccess['file_contents'])) {
             flock($htaccess['fp'], LOCK_UN);
             fclose($htaccess['fp']);
-            return false; // Failure; could not write changes.
+            return false; // Failure.
         }
         fflush($htaccess['fp']);
         flock($htaccess['fp'], LOCK_UN);
@@ -305,14 +310,14 @@ trait HtaccessUtils
      *
      * @since 151114 Adding `.htaccess` tweaks.
      *
-     * @param array $htaccess Array containing at least an `fp` file resource pointing to htaccess file.
+     * @param array $htaccess Array containing at least an `fp` file resource.
      *
-     * @return bool False on failure, true otherwise.
+     * @return bool False on failure.
      */
     public function closeHtaccessFile(array $htaccess)
     {
         if (!is_resource($htaccess['fp'])) {
-            return false; // Failure; requires a valid file resource.
+            return false; // Failure.
         }
         flock($htaccess['fp'], LOCK_UN);
         fclose($htaccess['fp']);

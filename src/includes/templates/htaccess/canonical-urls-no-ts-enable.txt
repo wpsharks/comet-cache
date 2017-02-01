@@ -10,6 +10,9 @@
   # Not a part of the WP admin area.
   RewriteCond %{REQUEST_URI} !(?:^|/)wp\-admin(?:/|$)
 
+  # Not a REST request, which never redirects.
+  RewriteCond %{REQUEST_URI} !(?:^|/)%%REST_REQUEST_PREFIX_AS_REGEX_FRAG%%(?:/|$)
+
   # If there is a trailing slash.
   RewriteCond %{REQUEST_URI} /$
 

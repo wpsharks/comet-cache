@@ -1,3 +1,16 @@
+= v170201-RC =
+
+- **New Feature:** Comet Cache can now be configured to automatically clear the cache for date-based archive views whenever any single post is cleared due to changes in content, title, etc. See: **Dashboard → Comet Cache → Plugin Options → Automatic Cache Clearing → Auto-Clear "Date-Based Archives" Too?**. See also: [Issue #724](https://github.com/websharks/comet-cache/issues/724).
+- **New Pro Feature:** Apache Optimizations now include a new option that allows site owners to enforce an exact host name for all requests. See: **Dashboard → Comet Cache Pro → Plugin Options → Apache Optimizations → Enforce an Exact Host Name?**. See also: [Issue #101](https://github.com/websharks/comet-cache/issues/101).
+- **Bug Fix:** Apache detection sometimes inaccurate. So instead of using default WP core globals for server detection, Comet Cache now uses it's own set of Apache/Nginx/IIS detection functions. And, this release enhances our Apache and Nginx detection routines; making them smart enough to catch additional edge cases; i.e., to further reduce the likelihood of there being a false-positive. See [Issue #748](https://github.com/websharks/comet-cache/issues/748).
+- **Bug Fix:** Some XML-RPC and REST API requests were being cached inadvertently. See [Issue #855](https://github.com/websharks/comet-cache/issues/855).
+- **Bug Fix:** Broken textarea field due to `white-space:nowrap` in Firefox. See [Issue #866](https://github.com/websharks/comet-cache/issues/866).
+- **Bug Fix:** This release resolves empty directories being left in the cache folder, in some scenarios. See [Thread #866](https://forums.wpsharks.com/t/cache-folders-not-removed-during-clean-up-process/866).
+- **Bug Fix** (Pro): Some REST requests were being redirected incorrectly whenever Apache Optimizations were enabled. See [Issue #855](https://github.com/websharks/comet-cache/issues/855).
+- **Compatibility Bug Fix:** Some Jetpack API calls were being cached inadvertently. See [Issue #855](https://github.com/websharks/comet-cache/issues/855).
+- **Enhancement:** Notes in HTML source now indicate fully functional on first load for improved clarity. See [Issue #860](https://github.com/websharks/comet-cache/issues/860).
+- **Code Cleanup:** Enhancing security by removing `basename(__FILE__)` from direct access notices.
+
 = v161227 =
 
 _**Note:** This is a Comet Cache Pro maintenance release._

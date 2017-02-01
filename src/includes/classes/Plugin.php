@@ -30,6 +30,7 @@ class Plugin extends AbsBaseAp
     use Traits\Plugin\UserUtils;
     use Traits\Plugin\WcpAuthorUtils;
     use Traits\Plugin\WcpCommentUtils;
+    use Traits\Plugin\WcpDateArchiveUtils;
     use Traits\Plugin\WcpFeedUtils;
     use Traits\Plugin\WcpHomeBlogUtils;
     use Traits\Plugin\WcpJetpackUtils;
@@ -226,6 +227,7 @@ class Plugin extends AbsBaseAp
             'auto_cache_user_agent',
 
             'htaccess_browser_caching_enable',
+            'htaccess_enforce_exact_host_name',
             'htaccess_enforce_canonical_urls',
             'htaccess_access_control_allow_origin',
 
@@ -321,6 +323,12 @@ class Plugin extends AbsBaseAp
             'cache_clear_term_post_tag_enable' => '1', // `0|1`.
             'cache_clear_term_other_enable'    => '1', // `0|1`.
 
+            'cache_clear_date_archives_enable' => '1', // `0|1|2|3`.
+            // 0 = No, don't clear any associated Date archive views.
+            // 1 = Yes, if any single Post is cleared/reset, also clear the associated Date archive views.
+            // 2 = Yes, but only clear the associated Day and Month Date archive views.
+            // 3 = Yes, but only clear the associated Day Date archive view.
+
             /* Misc. cache behaviors. */
 
             'allow_client_side_cache'           => '0', // `0|1`.
@@ -387,6 +395,7 @@ class Plugin extends AbsBaseAp
 
             'htaccess_browser_caching_enable'      => '0', // `0|1`; enable browser caching?
             'htaccess_gzip_enable'                 => '0', // `0|1`; enable GZIP compression?
+            'htaccess_enforce_exact_host_name'     => '0', // `0|1`; enforce exact hostname?
             'htaccess_enforce_canonical_urls'      => '0', // `0|1`; enforce canonical URLs?
             'htaccess_access_control_allow_origin' => '0', // `0|1`; send Access-Control-Allow-Origin header?
 

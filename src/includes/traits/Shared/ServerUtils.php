@@ -14,16 +14,19 @@ trait ServerUtils
      */
     public function isApache()
     {
-        if (!is_null($is = &$this->staticKey('isApache'))) {
+        if (!is_null($is = &$this->staticKey(__FUNCTION__))) {
             return $is; // Already cached this.
         }
         if (!empty($_SERVER['SERVER_SOFTWARE']) && is_string($_SERVER['SERVER_SOFTWARE'])) {
             if (mb_stripos($_SERVER['SERVER_SOFTWARE'], 'apache') !== false) {
                 return $is = true;
-            }
-            if (mb_stripos($_SERVER['SERVER_SOFTWARE'], 'litespeed') !== false) {
+            } elseif (mb_stripos($_SERVER['SERVER_SOFTWARE'], 'litespeed') !== false) {
                 return $is = true;
             }
+        } // Checking `SERVER_SOFTWARE` is faster.
+
+        if ($this->functionIsPossible('apache_get_version')) {
+            return $is = true;
         }
         return $is = false;
     }
@@ -37,13 +40,17 @@ trait ServerUtils
      */
     public function isNginx()
     {
-        if (!is_null($is = &$this->staticKey('isNginx'))) {
+        if (!is_null($is = &$this->staticKey(__FUNCTION__))) {
             return $is; // Already cached this.
         }
         if (!empty($_SERVER['SERVER_SOFTWARE']) && is_string($_SERVER['SERVER_SOFTWARE'])) {
             if (mb_stripos($_SERVER['SERVER_SOFTWARE'], 'nginx') !== false) {
                 return $is = true;
             }
+        } // Checking `SERVER_SOFTWARE` is faster.
+
+        if (!empty($_SERVER['WP_NGINX_CONFIG'])) {
+            return $is = true; // See: <http://jas.xyz/2jnfXOF>
         }
         return $is = false;
     }
@@ -57,17 +64,17 @@ trait ServerUtils
      */
     public function isIis()
     {
-        if (!is_null($is = &$this->staticKey('isIis'))) {
+        if (!is_null($is = &$this->staticKey(__FUNCTION__))) {
             return $is; // Already cached this.
         }
         if (!empty($_SERVER['SERVER_SOFTWARE']) && is_string($_SERVER['SERVER_SOFTWARE'])) {
             if (mb_stripos($_SERVER['SERVER_SOFTWARE'], 'microsoft-iis') !== false) {
                 return $is = true;
-            }
-            if (mb_stripos($_SERVER['SERVER_SOFTWARE'], 'expressiondevserver') !== false) {
+            } elseif (mb_stripos($_SERVER['SERVER_SOFTWARE'], 'expressiondevserver') !== false) {
                 return $is = true;
             }
-        }
+        } // Checking `SERVER_SOFTWARE` is faster.
+
         return $is = false;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 if (!defined('WPINC')) {
-    exit('Do NOT access this file directly: '.basename(__FILE__));
+    exit('Do NOT access this file directly.');
 }
 $GLOBALS['wp_php_rv']['rv'] = '5.3.2'; //php-required-version// // Leaving this at v5.3.2 so that we can have more control over Dashboard messages below.
 $GLOBALS['wp_php_rv']['re'] = array('mbstring');

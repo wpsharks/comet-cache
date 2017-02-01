@@ -67,6 +67,24 @@ interface NcDebugConsts
     const NC_DEBUG_DONOTCACHEPAGE_SERVER_VAR = 'nc_debug_donotcachepage_server_var';
 
     /**
+     * No-cache because it's an `XMLRPC_REQUEST`.
+     *
+     * @since 17xxxx Enhancing compatibility with API requests.
+     *
+     * @type string A unique string identifier in the set of `NC_DEBUG_` constants.
+     */
+    const NC_DEBUG_XMLRPC_REQUEST_CONSTANT = 'nc_debug_xmlrpc_request_constant';
+
+    /**
+     * No-cache because it's a `REST_REQUEST`.
+     *
+     * @since 17xxxx Enhancing compatibility with API requests.
+     *
+     * @type string A unique string identifier in the set of `NC_DEBUG_` constants.
+     */
+    const NC_DEBUG_REST_REQUEST_CONSTANT = 'nc_debug_rest_request_constant';
+
+    /**
      * No-cache because the current request includes the `?[SHORT_NAME]AC=0` parameter.
      *
      * @since 140422 First documented version.
@@ -193,12 +211,12 @@ interface NcDebugConsts
     const NC_DEBUG_PREVIEW = 'nc_debug_preview';
 
     /**
-    * No-cache because the current request is excluded by its host name.
-    *
-    * @since 160706 Host exclusions.
-    *
-    * @type string A unique string identifier in the set of `NC_DEBUG_` constants.
-    */
+     * No-cache because the current request is excluded by its hostname.
+     *
+     * @since 160706 Host exclusions.
+     *
+     * @type string A unique string identifier in the set of `NC_DEBUG_` constants.
+     */
     const NC_DEBUG_EXCLUDED_HOSTS = 'nc_debug_excluded_hosts';
 
     /**

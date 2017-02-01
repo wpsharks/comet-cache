@@ -9,7 +9,7 @@ namespace WebSharks\CometCache\Classes;
 class VsUpgrades extends AbsBase
 {
     /**
-     * @var string Version they are upgrading from.
+     * @type string Version they are upgrading from.
      *
      * @since 150422 Rewrite.
      */
@@ -132,9 +132,7 @@ class VsUpgrades extends AbsBase
     protected function fromLte151114()
     {
         if (version_compare($this->prev_version, '151114', '<=')) {
-            global $is_apache;
-
-            if (!$is_apache) {
+            if (!$this->plugin->isApache()) {
                 return; // Not running the Apache web server.
             }
             if (!($htaccess_file = $this->plugin->findHtaccessFile())) {
@@ -187,8 +185,8 @@ class VsUpgrades extends AbsBase
             }
             $this->plugin->deleteBaseDir(); // Let's be extra sure that the old base directory is gone.
 
-            global $is_apache; // Remove htaccess rules added by ZenCache so that they can be re-added by Comet Cache
-            if ($is_apache && $this->plugin->findHtaccessMarker('WmVuQ2FjaGU') && ($htaccess = $this->plugin->readHtaccessFile())) {
+            // Remove htaccess rules added by ZenCache so that they can be re-added by Comet Cache
+            if ($this->plugin->isApache() && $this->plugin->findHtaccessMarker('WmVuQ2FjaGU') && ($htaccess = $this->plugin->readHtaccessFile())) {
                 $regex                     = '/#\s*BEGIN\s+ZenCache\s+WmVuQ2FjaGU.*?#\s*END\s+ZenCache\s+WmVuQ2FjaGU\s*/uis';
                 $htaccess['file_contents'] = preg_replace($regex, '', $htaccess['file_contents']);
 
@@ -238,8 +236,6 @@ class VsUpgrades extends AbsBase
     protected function fromLte160521()
     {
         if (version_compare($this->prev_version, '160521', '<=')) {
-            global $is_apache; // WP global for web server checks below.
-
             $this->plugin->dismissMainNotice('allow_url_fopen_disabled');
             $this->plugin->removeAdvancedCache();
 
@@ -255,8 +251,7 @@ class VsUpgrades extends AbsBase
                     $this->plugin->activate(); // Reactivate plugin w/ new options.
                 }
             }
-
-            if ($is_apache) {
+            if ($this->plugin->isApache()) {
                 $this->plugin->enqueueMainNotice(sprintf(__('<strong>New %1$s Feature!</strong> This release of %1$s includes a whole new panel for Apache Performance Tuning. Visit the <a href="%2$s">settings</a> and see the new options in <strong>Comet Cache → Plugin Options → Apache Optimizations</strong>.', 'comet-cache'), esc_html(NAME), esc_attr(add_query_arg(urlencode_deep(['page' => GLOBAL_NS]), self_admin_url('/admin.php')))));
             }
         }

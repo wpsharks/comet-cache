@@ -272,14 +272,19 @@ trait CacheDirUtils
         // On a standard installation delete from all hosts.
         // See: <https://github.com/websharks/comet-cache/issues/608>
         if (!is_multisite() && !$___considering_domain_mapping) {
-            $regex = ltrim($regex, '^\\/');
+            if (in_array(rtrim(str_replace(['^', '$'], '', $regex), 'ui'), ['/.*/', '/.+/'], true)) {
+                return $this->deleteFilesFromCacheDir($regex, $check_max_age);
+                //
+            } else { // Clearing specifics.
+                $regex = ltrim($regex, '^\\/');
 
-            if (mb_strpos($regex, '(?:\/') === 0 || mb_strpos($regex, '(\/') === 0) {
-                $regex = '/^https?\/[^\/]+'.$regex;
-            } else {
-                $regex = '/^https?\/[^\/]+\/'.$regex;
+                if (mb_strpos($regex, '(?:\/') === 0 || mb_strpos($regex, '(\/') === 0) {
+                    $regex = '/^https?\/[^\/]+'.$regex;
+                } else {
+                    $regex = '/^https?\/[^\/]+\/'.$regex;
+                }
+                return $this->deleteFilesFromCacheDir($regex, $check_max_age);
             }
-            return $this->deleteFilesFromCacheDir($regex, $check_max_age);
         }
         $cache_dir            = $this->nDirSeps($cache_dir); // Normalize.
         $host_token           = $current_host_token           = $this->hostToken();

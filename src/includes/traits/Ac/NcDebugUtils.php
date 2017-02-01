@@ -10,7 +10,7 @@ trait NcDebugUtils
      *
      * @since 150422 Rewrite.
      *
-     * @var array An array of debug info; i.e. `reason_code` and `reason` (optional).
+     * @type array An array of debug info; i.e. `reason_code` and `reason` (optional).
      */
     public $debug_info = ['reason_code' => '', 'reason' => ''];
 
@@ -38,6 +38,7 @@ trait NcDebugUtils
      * Echoes `NC_DEBUG_` info in the WordPress `shutdown` phase (if applicable).
      *
      * @since 150422 Rewrite.
+     * @since 17xxxx Do not display for API requests.
      *
      * @attaches-to `shutdown` hook in WordPress w/ a late priority.
      */
@@ -52,6 +53,12 @@ trait NcDebugUtils
         if (strcasecmp(PHP_SAPI, 'cli') === 0) {
             return; // Let's not run the risk here.
         }
+        if (defined('XMLRPC_REQUEST') && XMLRPC_REQUEST) {
+            return; // Let's not run the risk here.
+        }
+        if (defined('REST_REQUEST') && REST_REQUEST) {
+            return; // Let's not run the risk here.
+        }
         if ($this->debug_info && $this->hasACacheableContentType() && $this->is_a_wp_content_type) {
             echo (string) $this->maybeGetNcDebugInfo($this->debug_info['reason_code'], $this->debug_info['reason']);
         }
@@ -61,6 +68,7 @@ trait NcDebugUtils
      * Gets `NC_DEBUG_` info (if applicable).
      *
      * @since 150422 Rewrite.
+     * @since 17xxxx Adding API request constants.
      *
      * @param string $reason_code One of the `NC_DEBUG_` constants.
      * @param string $reason      Optional; to override the default description with a custom message.
@@ -108,6 +116,14 @@ trait NcDebugUtils
 
                 case $this::NC_DEBUG_DONOTCACHEPAGE_SERVER_VAR:
                     $reason = __('because the environment variable `$_SERVER[\'DONOTCACHEPAGE\']` has been set at runtime. Perhaps by WordPress itself, or by one of your themes/plugins. This usually means that you have a theme/plugin intentionally disabling the cache on this page; and it\'s usually for a very good reason.', 'comet-cache');
+                    break; // Break switch handler.
+
+                case $this::NC_DEBUG_XMLRPC_REQUEST_CONSTANT:
+                    $reason = __('because the PHP constant `XMLRPC_REQUEST` has been set to a boolean-ish `TRUE` value at runtime. XML-RPC requests are never cached, as they are often very dynamic in nature.', 'comet-cache');
+                    break; // Break switch handler.
+
+                case $this::NC_DEBUG_REST_REQUEST_CONSTANT:
+                    $reason = __('because the PHP constant `REST_REQUEST` has been set to a boolean-ish `TRUE` value at runtime. REST requests are never cached, as they are often very dynamic in nature.', 'comet-cache');
                     break; // Break switch handler.
 
                 case $this::NC_DEBUG_AC_GET_VAR:

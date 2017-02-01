@@ -52,11 +52,28 @@ class AdvancedCache extends AbsBaseAp
             return; // Missing; wait for update.
         } elseif (COMET_CACHE_AC_FILE_VERSION !== VERSION) {
             return; // Version mismatch; wait for update.
+            //
         } elseif (!defined('WP_CACHE') || !WP_CACHE || !COMET_CACHE_ENABLE) {
             return; // Not enabled in `wp-config.php` or otherwise.
         } elseif (defined('WP_INSTALLING') || defined('RELOCATE')) {
-            return; // N/A; installing|relocating.
+            return; // Not applicable; installing and/or relocating.
+            //
+        } elseif (defined('XMLRPC_REQUEST') && XMLRPC_REQUEST) {
+            return; // Not applicable; bypass API requests.
+        } elseif (defined('REST_REQUEST') && REST_REQUEST) {
+            return; // Not applicable; bypass API requests.
         }
+        // Note: `REST_REQUEST` is only here as a way of future-proofing the software.
+        // Ideally, we could catch all API requests here to avoid any overhead in processing.
+        // I suspect this will be the case in a future release of WordPress.
+
+        // For now, `REST_REQUEST` is not defined by WP until later in the `parse_request` phase.
+        // Therefore, this check by itself is not enough to avoid all REST requests at this time.
+        // See: `traits/Ac/ObUtils.php` for additional checks for `REST_REQUEST` API calls.
+
+        // `XMLRPC_REQUEST` on the other hand, is set very early via `xmlrpc.php`. So no issue.
+        // -------------------------------------------------------------------------------------------------------------
+
         $this->is_running = true;
         $this->timer      = microtime(true);
 

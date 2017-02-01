@@ -6,7 +6,7 @@
  *    `/wp-content/ac-plugins/my-ac-plugin.php`
  */
 if (!defined('WPINC')) {
-    exit('Do NOT access this file directly: '.basename(__FILE__));
+    exit('Do NOT access this file directly.');
 }
 function my_ac_plugin() // Example plugin.
 {

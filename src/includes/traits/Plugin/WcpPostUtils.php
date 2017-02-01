@@ -100,6 +100,7 @@ trait WcpPostUtils
         $counter += $this->autoClearHomePageCache();
         $counter += $this->autoClearPostsPageCache();
         $counter += $this->autoClearPostTermsCache($post_id, $force);
+        $counter += $this->autoClearDateArchiveCache($post_id, $force);
         $counter += $this->autoClearCustomPostTypeArchiveCache($post_id);
         
 
