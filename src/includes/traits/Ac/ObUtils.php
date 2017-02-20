@@ -119,7 +119,7 @@ trait ObUtils
      * Start output buffering or serve cache.
      *
      * @since 150422 Rewrite.
-     * @since 17xxxx Adding API request constants.
+     * @since 170220 Adding API request constants.
      *
      * @note This is a vital part of Comet Cache.
      *       This method serves existing (fresh) cache files. It is also responsible
@@ -265,7 +265,7 @@ trait ObUtils
      * Output buffer handler; i.e. the cache file generator.
      *
      * @since 150422 Rewrite.
-     * @since 17xxxx Adding API request constants.
+     * @since 170220 Adding API request constants.
      *
      * @param string $buffer The buffer from {@link \ob_start()}.
      * @param int    $phase  A set of bitmask flags.

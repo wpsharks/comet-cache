@@ -1,4 +1,4 @@
-= v170201-RC =
+= v170220 =
 
 - **New Feature:** Comet Cache can now be configured to automatically clear the cache for date-based archive views whenever any single post is cleared due to changes in content, title, etc. See: **Dashboard → Comet Cache → Plugin Options → Automatic Cache Clearing → Auto-Clear "Date-Based Archives" Too?**. See also: [Issue #724](https://github.com/websharks/comet-cache/issues/724).
 - **New Pro Feature:** Apache Optimizations now include a new option that allows site owners to enforce an exact host name for all requests. See: **Dashboard → Comet Cache Pro → Plugin Options → Apache Optimizations → Enforce an Exact Host Name?**. See also: [Issue #101](https://github.com/websharks/comet-cache/issues/101).
@@ -9,7 +9,7 @@
 - **Bug Fix** (Pro): Some REST requests were being redirected incorrectly whenever Apache Optimizations were enabled. See [Issue #855](https://github.com/websharks/comet-cache/issues/855).
 - **Compatibility Bug Fix:** Some Jetpack API calls were being cached inadvertently. See [Issue #855](https://github.com/websharks/comet-cache/issues/855).
 - **Enhancement:** Notes in HTML source now indicate fully functional on first load for improved clarity. See [Issue #860](https://github.com/websharks/comet-cache/issues/860).
-- **Code Cleanup:** Enhancing security by removing `basename(__FILE__)` from direct access notices.
+- **Enhancement:** Enhancing security by removing `basename(__FILE__)` from direct access notices.
 
 = v161227 =
 

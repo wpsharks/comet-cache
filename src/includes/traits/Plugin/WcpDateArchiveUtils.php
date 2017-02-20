@@ -8,7 +8,7 @@ trait WcpDateArchiveUtils
     /**
      * Automatically clears date archives.
      *
-     * @since 17xxxx Date archive clearing.
+     * @since 170220 Date archive clearing.
      *
      * @param int  $post_id A WordPress post ID.
      * @param bool $force   Defaults to a `FALSE` value.
@@ -64,19 +64,19 @@ trait WcpDateArchiveUtils
         $date_archive_urls = []; // Initialize archive urls.
         $publish_time      = get_post_time('U', true, $post_id);
 
-        $Y = strtotime('Y', $publish_time);
-        $m = strtotime('m', $publish_time);
-        $j = strtotime('j', $publish_time);
+        $Y = date('Y', $publish_time);
+        $m = date('m', $publish_time);
+        $j = date('j', $publish_time);
 
         if ($this->options['cache_clear_date_archives_enable'] === '1') {
-            $date_archive_links[sprintf(__('%1$s Date Archive', 'comet-cache'), $Y)]                   = get_year_link($Y);
-            $date_archive_links[sprintf(__('%1$s/%2$s Date Archive', 'comet-cache'), $Y, $m)]          = get_month_link($Y, $m);
-            $date_archive_links[sprintf(__('%1$s/%2$s/%3$s Date Archive', 'comet-cache'), $Y, $m, $j)] = get_day_link($Y, $m, $j);
+            $date_archive_urls[sprintf(__('%1$s Date Archive', 'comet-cache'), $Y)]                   = get_year_link($Y);
+            $date_archive_urls[sprintf(__('%1$s/%2$s Date Archive', 'comet-cache'), $Y, $m)]          = get_month_link($Y, $m);
+            $date_archive_urls[sprintf(__('%1$s/%2$s/%3$s Date Archive', 'comet-cache'), $Y, $m, $j)] = get_day_link($Y, $m, $j);
         } elseif ($this->options['cache_clear_date_archives_enable'] === '2') {
-            $date_archive_links[sprintf(__('%1$s/%2$s Date Archive', 'comet-cache'), $Y, $m)]          = get_month_link($Y, $m);
-            $date_archive_links[sprintf(__('%1$s/%2$s/%3$s Date Archive', 'comet-cache'), $Y, $m, $j)] = get_day_link($Y, $m, $j);
+            $date_archive_urls[sprintf(__('%1$s/%2$s Date Archive', 'comet-cache'), $Y, $m)]          = get_month_link($Y, $m);
+            $date_archive_urls[sprintf(__('%1$s/%2$s/%3$s Date Archive', 'comet-cache'), $Y, $m, $j)] = get_day_link($Y, $m, $j);
         } else { // Assume $this->options['cache_clear_date_archives_enable'] === '3'
-            $date_archive_links[sprintf(__('%1$s/%2$s/%3$s Date Archive', 'comet-cache'), $Y, $m, $j)] = get_day_link($Y, $m, $j);
+            $date_archive_urls[sprintf(__('%1$s/%2$s/%3$s Date Archive', 'comet-cache'), $Y, $m, $j)] = get_day_link($Y, $m, $j);
         }
         foreach ($date_archive_urls as $_label => $_url) {
             $_url_regex   = $this->buildHostCachePathRegex($_url);

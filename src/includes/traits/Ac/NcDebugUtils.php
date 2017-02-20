@@ -38,7 +38,7 @@ trait NcDebugUtils
      * Echoes `NC_DEBUG_` info in the WordPress `shutdown` phase (if applicable).
      *
      * @since 150422 Rewrite.
-     * @since 17xxxx Do not display for API requests.
+     * @since 170220 Do not display for API requests.
      *
      * @attaches-to `shutdown` hook in WordPress w/ a late priority.
      */
@@ -68,7 +68,7 @@ trait NcDebugUtils
      * Gets `NC_DEBUG_` info (if applicable).
      *
      * @since 150422 Rewrite.
-     * @since 17xxxx Adding API request constants.
+     * @since 170220 Adding API request constants.
      *
      * @param string $reason_code One of the `NC_DEBUG_` constants.
      * @param string $reason      Optional; to override the default description with a custom message.

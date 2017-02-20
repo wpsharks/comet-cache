@@ -69,7 +69,7 @@ interface NcDebugConsts
     /**
      * No-cache because it's an `XMLRPC_REQUEST`.
      *
-     * @since 17xxxx Enhancing compatibility with API requests.
+     * @since 170220 Enhancing compatibility with API requests.
      *
      * @type string A unique string identifier in the set of `NC_DEBUG_` constants.
      */
@@ -78,7 +78,7 @@ interface NcDebugConsts
     /**
      * No-cache because it's a `REST_REQUEST`.
      *
-     * @since 17xxxx Enhancing compatibility with API requests.
+     * @since 170220 Enhancing compatibility with API requests.
      *
      * @type string A unique string identifier in the set of `NC_DEBUG_` constants.
      */
