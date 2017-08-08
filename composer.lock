@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d3a2752db4632ed86095a52bafb51993",
-    "content-hash": "32c7193a6b217ec3955e3a3cf9d1c800",
+    "hash": "c99b8a8fa1edbfaa42aea5fc1a5dadb8",
+    "content-hash": "00db94e4f823f342be06a1a6942a80e0",
     "packages": [
         {
             "name": "websharks/sharkicons",

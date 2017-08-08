@@ -317,9 +317,14 @@ trait FsUtils
         unset($_resource, $_resource_sub_path, $_resource_basename); // Housekeeping.
 
         if ($check_disk) { // Check disk also?
-            $stats['disk_total_space'] = disk_total_space($dir);
-            $stats['disk_free_space']  = disk_free_space($dir);
+            if ($this->functionIsPossible('disk_total_space')) {
+                $stats['disk_total_space'] = disk_total_space($dir);
+            }
+            if ($this->functionIsPossible('disk_free_space')) {
+                $stats['disk_free_space'] = disk_free_space($dir);
+            }
         }
+
         return $stats;
     }
 

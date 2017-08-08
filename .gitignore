@@ -1,12 +1,9 @@
-# NOTE: It is not absolutely required (but highly recommended) that you have: `ignorecase = true`
-# in your `.gitconfig` file to maximize compatibility with some of these exclusion patterns.
-
-# NOTE: `/**` does not exclude the directory itself like in Phing.
-# Use only a trailing `/` to achieve that here.
+# Ignore ---------------------------------------------------------------------------------------------------------------
 
 # Local
 
 .~*
+._*
 
 # Logs
 
@@ -17,17 +14,13 @@
 *~
 *.bak
 
-# Vendor
+# Vagrant
 
-vendor/
+.vagrant/
 
-# Node
+# TypeScript
 
-node_modules/
-
-# SASS
-
-.sass-cache/
+typings/
 
 # IntelliJ
 
@@ -35,13 +28,33 @@ node_modules/
 
 # Sublime
 
-*.sublime-workspace
 *.sublime-project
+*.sublime-workspace
 
-# CTags
+# Vendor
 
-*.tags
+vendor/
+
+# NodeJS
+
+node_modules/
+
+# Bower
+
+bower_components/
+
+# SASS
+
+.sass-cache/
+
+# Elastic Beanstalk
+
+.elasticbeanstalk/
+
+# CTAGs
+
 *.ctags
+*.tags
 
 # VCS
 
@@ -89,18 +102,8 @@ Icon?
 !Icons
 ._*
 
-# AWS
+# ----------------------------------------------------------------------------------------------------------------------
 
-.elasticbeanstalk/
-
-# Vagrant
-
-.vagrant/
-
-# For shell glob patterns. This includes Git files too. We simply maintain this list together with `.gitignore`.
-# *~;*.log;*.bak;node_modules;.idea;*.sublime-workspace;*.sublime-project;.git;.gitignore;.gitattributes;.gitmodules;.gitchange;.svn;_svn;CVS;.cvsignore;.bzr;.bzrignore;.hg;.hgignore;SCCS;RCS;$RECYCLE.BIN;Desktop.ini;Thumbs.db;ehthumbs.db;.AppleDB;.AppleDouble;.AppleDesktop;.com.apple.timemachine.donotpresent;Network Trash Folder;Temporary Items;.LSOverride;.Spotlight-V100;.VolumeIcon.icns;.TemporaryItems;.fseventsdv.DS_Store;.Trashes;.apdisk;._*;.elasticbeanstalk;.vagrant
-
-# This list is for IntelliJ IDEA / PhpStorm `File Types` configuration. Some files we actually WANT to work with as part of a project.
-# .sass-cache;.idea;*.sublime-workspace;*.sublime-project;.git;.svn;_svn;CVS;.bzr;.hg;SCCS;RCS;$RECYCLE.BIN;Desktop.ini;Thumbs.db;ehthumbs.db;.AppleDB;.AppleDouble;.AppleDesktop;.com.apple.timemachine.donotpresent;Network Trash Folder;Temporary Items;.LSOverride;.Spotlight-V100;.VolumeIcon.icns;.TemporaryItems;.fseventsdv.DS_Store;.Trashes;.apdisk;._*;.vagrant
-
-# Custom code reinserted here via [custom] marker. Add your <custom></custom> comment markers here please.
+# <custom>
+#   Put your rules in custom comment markers.
+# </custom>

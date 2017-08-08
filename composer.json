@@ -1,6 +1,14 @@
 {
+  "type": "library",
+  "license": "GPL-3.0+",
   "name": "websharks/comet-cache",
+
   "homepage": "https://github.com/websharks/comet-cache",
+  "support": {
+    "source": "https://github.com/websharks/comet-cache",
+    "issues": "https://github.com/websharks/comet-cache/issues"
+  },
+
   "description": "A popular caching plugin for WordPress.",
   "keywords": [
     "websharks",
@@ -9,36 +17,30 @@
     "caching",
     "cache"
   ],
-  "type": "library",
-  "license": "GPL-3.0+",
+
   "authors": [{
     "name": "websharks",
-    "homepage": "http://websharks-inc.com/",
+    "homepage": "http://websharks.org",
     "role": "company"
   }, {
-    "name": "jaswsinc",
-    "homepage": "http://jaswsinc.com/",
+    "name": "jaswrks",
+    "homepage": "http://jaswrks.com",
     "role": "developer"
   }, {
     "name": "raamdev",
-    "homepage": "https://raamdev.com/",
+    "homepage": "https://raamdev.com",
     "role": "developer"
   }],
-  "support": {
-    "source": "https://github.com/websharks/comet-cache",
-    "issues": "https://github.com/websharks/comet-cache/issues"
-  },
+
   "require": {
     "php": ">=5.4",
-    "websharks/wp-php-rv": "160824.6416",
-    "websharks/sharkicons": "160221"
+    "websharks/sharkicons": "160221",
+    "websharks/wp-php-rv": "160824.6416"
   },
   "require-dev": {
     "package/bourbon": "4.2.3",
     "websharks/wp-i18n-tools": "dev-master"
   },
-  "minimum-stability": "dev",
-  "prefer-stable": true,
 
   "autoload": {
     "psr-4": {
@@ -51,6 +53,8 @@
     "vendor-dir": "src/vendor",
     "preferred-install": "dist"
   },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
 
   "repositories": [{
     "type": "package",

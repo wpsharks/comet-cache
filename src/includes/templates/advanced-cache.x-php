@@ -80,6 +80,8 @@ if (!defined('COMET_CACHE_DEBUGGING_ENABLE')) {
      */
     define('COMET_CACHE_DEBUGGING_ENABLE', '%%COMET_CACHE_DEBUGGING_ENABLE%%');
 }
+
+
 if (!defined('COMET_CACHE_ALLOW_CLIENT_SIDE_CACHE')) {
     /*
      * Allow browsers to cache each document?

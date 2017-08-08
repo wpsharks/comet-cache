@@ -1,8 +1,6 @@
 <?php
 namespace WebSharks\CometCache\Classes;
 
-use WebSharks\CometCache\Classes;
-
 /**
  * Menu Page.
  *
@@ -21,14 +19,12 @@ class MenuPage extends AbsBase
     {
         parent::__construct();
 
-        if ($menu_page) {
-            switch ($menu_page) {
-                case 'options':
-                    new Classes\MenuPageOptions();
-                    break;
+        switch ($menu_page) {
+            case 'options':
+                new MenuPageOptions();
+                break;
 
-                
-            }
+            
         }
     }
 }

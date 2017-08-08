@@ -1,3 +1,12 @@
+= v170808-RC =
+
+- **New Feature: Memcached / RAM** (Pro): Comet Cache Pro now includes support for Memcached / AWS ElastiCache to serve the cache directly from RAM. This allows for a faster cache delivery than what is possible when serving the cache via disk. Memcached / AWS ElastiCache can be configured from **Dashboard → Comet Cache Pro → Plugin Options → RAM / Memcached**. See [Issue #47](https://github.com/websharks/comet-cache/issues/47)
+- **Enhancement**: Added `Referrer-Policy` to whitelist for cachable HTTP headers. See [Issue #892](https://github.com/websharks/comet-cache/issues/892).
+- **Bug Fix** (Pro): The Cache Statistics feature was broken when the PHP `disk_total_space()` and/or `disk_free_space()` functions were disabled by the PHP configuration. Comet Cache now handles this scenario gracefully by hiding disk-related stats when those functions are not allowed. See [Issue #775](https://github.com/websharks/comet-cache/issues/775)
+- **Bug Fix** (Pro): The HTML Compressor was returning an empty string upon encountering an invalid UTF-8 sequence. See [Issue #871](https://github.com/websharks/comet-cache/issues/871) reported by a Comet Cache user.
+- **Compatibility** (Pro): Many improvements to the Pro software update system, including changes to the API Endpoints and the Proxy Fallback endpoint. See [Issue #879](https://github.com/websharks/comet-cache/issues/879) and [Issue #315](https://github.com/websharks/comet-cache-pro/pull/315) for full details.
+- **Compatibility**: Fixed a WooCommerce compatibility issue that was generating a "Notice: id was called incorrectly. Product properties should not be accessed directly." Props @vestaxpdx. See [Issue #896](https://github.com/websharks/comet-cache/issues/896).
+
 = v170220 =
 
 - **New Feature:** Comet Cache can now be configured to automatically clear the cache for date-based archive views whenever any single post is cleared due to changes in content, title, etc. See: **Dashboard → Comet Cache → Plugin Options → Automatic Cache Clearing → Auto-Clear "Date-Based Archives" Too?**. See also: [Issue #724](https://github.com/websharks/comet-cache/issues/724).
@@ -5,7 +14,7 @@
 - **Bug Fix:** Apache detection sometimes inaccurate. So instead of using default WP core globals for server detection, Comet Cache now uses it's own set of Apache/Nginx/IIS detection functions. And, this release enhances our Apache and Nginx detection routines; making them smart enough to catch additional edge cases; i.e., to further reduce the likelihood of there being a false-positive. See [Issue #748](https://github.com/websharks/comet-cache/issues/748).
 - **Bug Fix:** Some XML-RPC and REST API requests were being cached inadvertently. See [Issue #855](https://github.com/websharks/comet-cache/issues/855).
 - **Bug Fix:** Broken textarea field due to `white-space:nowrap` in Firefox. See [Issue #866](https://github.com/websharks/comet-cache/issues/866).
-- **Bug Fix:** This release resolves empty directories being left in the cache folder, in some scenarios. See [Thread #866](https://forums.wpsharks.com/t/cache-folders-not-removed-during-clean-up-process/866).
+- **Bug Fix:** This release resolves empty directories being left in the cache folder, in some scenarios. See [Issue #868](https://github.com/websharks/comet-cache/issues/868) and [Thread #866](https://forums.wpsharks.com/t/cache-folders-not-removed-during-clean-up-process/866).
 - **Bug Fix** (Pro): Some REST requests were being redirected incorrectly whenever Apache Optimizations were enabled. See [Issue #855](https://github.com/websharks/comet-cache/issues/855).
 - **Compatibility Bug Fix:** Some Jetpack API calls were being cached inadvertently. See [Issue #855](https://github.com/websharks/comet-cache/issues/855).
 - **Enhancement:** Notes in HTML source now indicate fully functional on first load for improved clarity. See [Issue #860](https://github.com/websharks/comet-cache/issues/860).

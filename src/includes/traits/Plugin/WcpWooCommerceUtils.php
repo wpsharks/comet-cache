@@ -24,7 +24,7 @@ trait WcpWooCommerceUtils
         $done = true; // Flag as having been done.
 
         if (class_exists('\\WooCommerce')) {
-            $counter += $this->autoClearPostCache($product->id);
+            $counter += $this->autoClearPostCache($product->get_id());
         }
     }
 

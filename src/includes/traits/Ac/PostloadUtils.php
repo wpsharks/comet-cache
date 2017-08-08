@@ -114,7 +114,6 @@ trait PostloadUtils
         if (empty($this->postload['filter_status_header'])) {
             return; // Nothing to do in this case.
         }
-
         add_filter(
             'status_header',
             function ($status_header, $status_code) {

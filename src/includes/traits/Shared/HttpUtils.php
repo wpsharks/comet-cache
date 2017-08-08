@@ -89,6 +89,7 @@ trait HttpUtils
             'Pragma',
             'Proxy-Authenticate',
             'Refresh',
+            'Referrer-Policy',
             'Retry-After',
             'Server',
             'Status',
@@ -123,7 +124,7 @@ trait HttpUtils
         if (($status = (string) $this->httpStatus())) {
             array_unshift($headers, $this->httpProtocol().' '.$status);
         }
-        return $headers;
+        return apply_filters(GLOBAL_NS.'_cacheable_headers', $headers);
     }
 
     /**
