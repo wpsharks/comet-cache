@@ -29,6 +29,8 @@ trait WcpUtils
      */
     public function wipeCache($manually = false)
     {
+        do_action('comet_cache_wipe_cache');
+
         $counter = 0; // Initialize.
 
         if (!$manually && $this->disableAutoWipeCacheRoutines()) {
@@ -40,11 +42,11 @@ trait WcpUtils
             $regex = $this->assembleCachePathRegex('', '.+');
             $counter += $this->wipeFilesFromCacheDir($regex);
         }
-        
 
-        
 
-        
+
+
+
         return $counter;
     }
 
@@ -70,6 +72,9 @@ trait WcpUtils
      */
     public function clearCache($manually = false)
     {
+
+        do_action('comet_cache_clear_cache');
+
         $counter = 0; // Initialize.
 
         if (!$manually && $this->disableAutoClearCacheRoutines()) {
@@ -81,11 +86,11 @@ trait WcpUtils
             $regex = $this->buildHostCachePathRegex('', '.+');
             $counter += $this->clearFilesFromHostCacheDir($regex);
         }
-        
 
-        
 
-        
+
+
+
         return $counter;
     }
 
@@ -111,6 +116,8 @@ trait WcpUtils
      */
     public function purgeCache($manually = false)
     {
+        do_action('comet_cache_purge_cache');
+
         $counter = 0; // Initialize.
 
         if (!$manually && $this->disableAutoPurgeCacheRoutines()) {
@@ -122,7 +129,7 @@ trait WcpUtils
             $regex = $this->buildHostCachePathRegex('', '.+');
             $counter += $this->purgeFilesFromHostCacheDir($regex);
         }
-        
+
         return $counter;
     }
 
@@ -159,7 +166,7 @@ trait WcpUtils
             $regex = $this->assembleCachePathRegex('', '.+');
             $counter += $this->wurgeFilesFromCacheDir($regex);
         }
-        
+
         return $counter;
     }
 
